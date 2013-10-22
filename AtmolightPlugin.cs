@@ -20,14 +20,18 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #region Variables
       public static bool Atmo_off = false;
       public int lasteff = 999;
+      public Int64 tickCount = 0;
+      public Int64 lastFrame = 0;
     private IAtmoRemoteControl2 atmoCtrl=null;
     private IAtmoLiveViewControl atmoLiveViewCtrl = null;
     private int captureWidth = 0;
     private int captureHeight = 0;
     private Surface rgbSurface = null;
     private ContentEffect currentEffect = ContentEffect.LEDs_disabled;
-    private bool gap = false;
     #endregion
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+    public static extern Int64 GetTickCount();
 
     [DllImport("AtmoDXUtil.dll", PreserveSig = false, CharSet = CharSet.Auto)]
     private static extern void VideoSurfaceToRGBSurfaceExt(IntPtr src,int srcWidth,int srcHeight, IntPtr dst,int dstWidth,int dstHeight);
@@ -99,6 +103,21 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       System.Threading.Thread.Sleep(1000);
       return ret;
     }
+    private void SetColorMode(ComEffectMode effect)
+    {
+        if (atmoCtrl == null)
+            return;
+        try
+        {
+         ComEffectMode oldEffect;
+         atmoCtrl.setEffect(effect, out oldEffect);
+         Log.Info("atmolight: Switching Profile ");
+        }
+        catch (Exception ex)
+        {
+            Log.Error("atmolight: Failed to switch profile " + Environment.NewLine + ex.Message + Environment.StackTrace);
+        }
+    }
     private void SetAtmoEffect(ComEffectMode effect)
     {
       if (atmoCtrl == null)
@@ -139,10 +158,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       SetAtmoEffect(ComEffectMode.cemDisabled);
       SetAtmoColor(0, 0, 0);
       //SetAtmoEffect(ComEffectMode.cemStaticColor);
-      SetAtmoEffect(ComEffectMode.cemDisabled);
+      //SetAtmoEffect(ComEffectMode.cemDisabled);
     }
     #endregion
 
+    #region Events
     public void OnNewAction(MediaPortal.GUI.Library.Action action)
     {
         if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.killbutton == 2) ||
@@ -195,10 +215,20 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 SetAtmoEffect(ComEffectMode.cemDisabled);
                 SetAtmoColor(0, 0, 0);
                 //SetAtmoEffect(ComEffectMode.cemStaticColor);
-                SetAtmoEffect(ComEffectMode.cemDisabled);
+                //SetAtmoEffect(ComEffectMode.cemDisabled);
             }
             return;
         }
+
+        if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.cmbutton == 2) ||
+            (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.cmbutton == 1) ||
+            (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.cmbutton == 0) ||
+            (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.cmbutton == 3))
+        {
+           SetColorMode(ComEffectMode.cemColorMode);
+           return;
+        }
+
 
         if (action.wID != MediaPortal.GUI.Library.Action.ActionType.ACTION_STOP || g_Player.Playing)
             return;
@@ -229,9 +259,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             }
             else if (dlg.SelectedLabel == 1)
             {
-                // DisableLEDs();
-                // SetAtmoEffect(ComEffectMode.cemDisabled);
-                // AtmolightSettings.effectVideo = ContentEffect.LEDs_disabled;
                 if (Atmo_off)
                 { Atmo_off = false; }
                 else
@@ -248,7 +275,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
     }
     
-    #region Events
+
     void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
     {
       DisableLEDs();
@@ -372,8 +399,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         FrameGrabber.GetInstance().OnNewFrame += new FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
         Log.Info("atmolight: Start() waiting for g_player events...");
         DisableLEDs();
-       // if (!AtmolightSettings.HateTheStopThing) 
-            GUIGraphicsContext.OnNewAction += new OnActionHandler(OnNewAction);
+        GUIGraphicsContext.OnNewAction += new OnActionHandler(OnNewAction);
         if (AtmolightSettings.OffOnStart)
         { Atmo_off = true; }
       }
@@ -381,11 +407,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
     {
-        //if (gap == false && AtmolightSettings.lowCPU)
-        //{
-        //    gap = true;
-        //    return;
-        //}
+        if (AtmolightSettings.lowCPU) tickCount = GetTickCount();
+
         if (currentEffect != ContentEffect.MP_Live_view || Atmo_off)
         {
             return;
@@ -405,7 +428,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
                 Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
 
-
                 BinaryReader reader = new BinaryReader(stream);
                 stream.Position = 0; // ensure that what start at the beginning of the stream. 
                 reader.ReadBytes(14); // skip bitmap file info header
@@ -414,35 +436,25 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 int rgbL = (int)(stream.Length - stream.Position);
                 int rgb =  (int)(rgbL / (captureWidth * captureHeight));
       
-                //byte[] fpixelData = new byte[rgbL];
-
                 byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
 
                 byte[] h1pixelData = new byte[captureWidth * rgb];
                 byte[] h2pixelData = new byte[captureWidth * rgb];
-
+                //now flip horizontally, we do it always to prevent microstudder
                 int i;
                 for (i = 0; i < ((captureHeight / 2) - 1); i++)
                 {
-
                     Array.Copy(pixelData, i * captureWidth * rgb, h1pixelData, 0, captureWidth * rgb);
                     Array.Copy(pixelData, (captureHeight - i - 1) * captureWidth * rgb, h2pixelData, 0, captureWidth * rgb);
-
                     Array.Copy(h1pixelData, 0, pixelData, (captureHeight - i - 1) * captureWidth * rgb, captureWidth * rgb);
                     Array.Copy(h2pixelData, 0, pixelData, i * captureWidth * rgb, captureWidth * rgb);
                 }
-               // Array.Copy(pixelData, 0, fpixelData, 0, rgbL);
-
-                if ((gap == false && AtmolightSettings.lowCPU) || !AtmolightSettings.lowCPU)
+                //send scaled and fliped frame to atmowin
+                if (!AtmolightSettings.lowCPU || (((GetTickCount()-lastFrame)>AtmolightSettings.lowCPUTime) && AtmolightSettings.lowCPU) )
                 {
-
+                    if (AtmolightSettings.lowCPU) lastFrame = GetTickCount();
                     atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
-                    gap = true;
-                    //return;
                 }
-                else gap = false;
-
-                //atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
                 stream.Close();
                 stream.Dispose();
             }
@@ -453,7 +465,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 rgbSurface = null;
             }
         }
-        //gap = false;
   }
 
     public void Stop()
@@ -465,8 +476,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         g_Player.PlayBackStarted -= new g_Player.StartedHandler(g_Player_PlayBackStarted);
         g_Player.PlayBackStopped -= new g_Player.StoppedHandler(g_Player_PlayBackStopped);
         g_Player.PlayBackEnded -= new g_Player.EndedHandler(g_Player_PlayBackEnded);
-        //if (!AtmolightSettings.HateTheStopThing) 
-            GUIGraphicsContext.OnNewAction -= new OnActionHandler(OnNewAction); 
+        GUIGraphicsContext.OnNewAction -= new OnActionHandler(OnNewAction); 
 
         if (AtmolightSettings.disableOnShutdown)
           DisableLEDs();
