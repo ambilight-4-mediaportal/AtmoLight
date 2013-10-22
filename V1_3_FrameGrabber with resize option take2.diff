@@ -1,0 +1,139 @@
+Index: Core.cpp/DXUtil/source/DXUtil.cpp
+===================================================================
+--- Core.cpp/DXUtil/source/DXUtil.cpp	(revision 24717)
++++ Core.cpp/DXUtil/source/DXUtil.cpp	(working copy)
+@@ -22,12 +22,25 @@
+ #include <d3d9types.h>
+ #include <strsafe.h>
+ 
+-extern "C" __declspec(dllexport) HRESULT __stdcall VideoSurfaceToRGBSurface(IDirect3DSurface9* source, IDirect3DSurface9* dest)
++extern "C" __declspec(dllexport) HRESULT __stdcall VideoSurfaceToRGBSurface(IDirect3DSurface9* source,int sourceWidth,int sourceHeight, IDirect3DSurface9* dest, int destWidth,int destHeight)
+ {
+ 	IDirect3DDevice9* device = NULL;
+ 	HRESULT hr = source->GetDevice(&device);
++
++	RECT sourceRect;
++	sourceRect.left=0;
++	sourceRect.right=sourceWidth;
++	sourceRect.top=0;
++	sourceRect.bottom=sourceHeight;
++
++	RECT destRect;
++	destRect.left=0;
++	destRect.right=destWidth;
++	destRect.top=0;
++	destRect.bottom=destHeight;
++
+ 	if(!FAILED(hr)){
+-		hr = device->StretchRect(source,NULL,dest,NULL,D3DTEXF_NONE);
++			hr = device->StretchRect(source,&sourceRect,dest,&destRect,D3DTEXF_NONE);
+ 	}
+ 	//delete device;
+ 	return hr;
+Index: Core/Player/FrameGrabber.cs
+===================================================================
+--- Core/Player/FrameGrabber.cs	(revision 24717)
++++ Core/Player/FrameGrabber.cs	(working copy)
+@@ -34,7 +34,7 @@
+   public class FrameGrabber
+   {
+     [DllImport("DXUtil.dll", PreserveSig = false, CharSet = CharSet.Auto)]
+-    private static extern void VideoSurfaceToRGBSurface(IntPtr src, IntPtr dst);
++    private static extern void VideoSurfaceToRGBSurface(IntPtr src,int srcWidth,int srcHeight, IntPtr dst,int dstWidth, int dstHeight);
+ 
+     private Surface rgbSurface = null; // surface used to hold frame grabs
+     private bool grabSucceeded = false; // indicates success/failure of framegrabs
+@@ -42,6 +42,8 @@
+     private readonly object grabNotifier = new object(); // Wait/Notify object for waiting for the grab to complete
+ 
+     private static FrameGrabber instance = null;
++    private int captureWidth=0;
++    private int captureHeight=0;
+ 
+     private FrameGrabber() {}
+ 
+@@ -61,6 +63,11 @@
+     /// <returns>Returns null on failure or a Bitmap object</returns>
+     public Bitmap GetCurrentImage()
+     {
++
++      return GetCurrentImage(0, 0);
++    }
++    public Bitmap GetCurrentImage(int width,int height)
++    {
+       try
+       {
+         //Log.Debug("GetCurrentImage called");
+@@ -69,21 +76,28 @@
+         {
+           grabSucceeded = false;
+           grabSample = true;
++          captureWidth = width;
++          captureHeight = height;
+           if (!Monitor.Wait(grabNotifier, 500))
+           {
+             Log.Debug("FrameGrabber: Timed-out waiting for grabbed frame!");
++            captureWidth = 0;
++            captureHeight = 0;
+             return null;
+           }
+-
++          captureWidth = 0;
++          captureHeight = 0;
+           if (grabSucceeded)
+           {
+-            GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
+-            Bitmap b = new Bitmap(Image.FromStream(stream));
++            int pitch;
++            GraphicsStream stream = rgbSurface.LockRectangle(LockFlags.Discard, out pitch);
++            Bitmap b = new Bitmap(rgbSurface.Description.Width,rgbSurface.Description.Height, pitch, System.Drawing.Imaging.PixelFormat.Format32bppArgb, stream.InternalData);
+ 
+             // IMPORTANT: Closes and disposes the stream
+             // If this is not done we get a memory leak!
+             stream.Close();
+             stream.Dispose();
++            rgbSurface.UnlockRectangle();
+             return b;
+           }
+           Log.Debug("FrameGrabber: Frame grab failed");
+@@ -129,10 +143,14 @@
+       //Log.Debug("PlaneScene: grabSample is true");
+       try
+       {
++        if (captureWidth == 0)
++          captureWidth = width;
++        if (captureHeight == 0)
++          captureHeight = height;
+         // if we havent already allocated a surface or the surface dimensions dont match
+         // allocate a new surface to store the grabbed frame in
+-        if (rgbSurface == null || rgbSurface.Disposed || rgbSurface.Description.Height != height ||
+-            rgbSurface.Description.Width != width)
++        if (rgbSurface == null || rgbSurface.Disposed || (rgbSurface.Description.Height != height && captureHeight==0) ||
++            (rgbSurface.Description.Width != width && captureWidth==0))
+         {
+           Log.Debug("FrameGrabber: Creating new frame grabbing surface");
+           // Bug fix for Mantis issue: 0001571: AutoCropperr is not working with EVR
+@@ -140,12 +158,12 @@
+           // Old rgbsurface is used for VMR9 since the new surface randomly gave problems with some drivers
+           if (GUIGraphicsContext.IsEvr)
+           {
+-            rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(width, height, Format.A8R8G8B8,
++            rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(captureWidth, captureHeight, Format.A8R8G8B8,
+                                                                          MultiSampleType.None, 0, true);
+           }
+           else
+           {
+-            rgbSurface = GUIGraphicsContext.DX9Device.CreateOffscreenPlainSurface(width, height, Format.A8R8G8B8,
++            rgbSurface = GUIGraphicsContext.DX9Device.CreateOffscreenPlainSurface(captureWidth, captureHeight, Format.A8R8G8B8,
+                                                                                   Pool.Default);
+           }
+         }
+@@ -153,7 +171,7 @@
+         {
+           // copy the YUV video surface to our managed ARGB surface
+           // Log.Debug("Calling VideoSurfaceToRGBSurface");
+-          VideoSurfaceToRGBSurface(new IntPtr(pSurface), (IntPtr)rgbSurface.UnmanagedComPointer);
++          VideoSurfaceToRGBSurface(new IntPtr(pSurface),width,height, (IntPtr)rgbSurface.UnmanagedComPointer,captureWidth,captureHeight);
+           lock (grabNotifier)
+           {
+             grabSample = false;

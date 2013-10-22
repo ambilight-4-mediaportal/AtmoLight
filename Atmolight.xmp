@@ -1,0 +1,157 @@
+﻿<MPinstaler>
+	<ver>1.00.000</ver>
+	<FileList>
+		<File>
+			<FileName>AtmoDXUtil.dll</FileName>
+			<Type>Other</Type>
+			<SubType />
+			<Source>C:\kwasidrive\Devel\Visual Studio 2005\Projects\MPTools\Atmolight\AtmoDXUtil\AtmoDXUtil.dll</Source>
+			<Id>04010</Id>
+			<Option />
+			<Guid>64011b2b-339b-46c3-ad63-a1fcb3dd5940</Guid>
+		</File>
+		<File>
+			<FileName>Atmolight.dll</FileName>
+			<Type>Plugin</Type>
+			<SubType>Process</SubType>
+			<Source>C:\kwasidrive\Devel\Visual Studio 2005\Projects\MPTools\Atmolight\bin\x86\Release\Atmolight.dll</Source>
+			<Id>01020</Id>
+			<Option />
+			<Guid>082f6862-f39c-478b-9c34-1a26982dc4e1</Guid>
+		</File>
+		<File>
+			<FileName>Core.dll</FileName>
+			<Type>Other</Type>
+			<SubType />
+			<Source>C:\kwasidrive\Devel\Visual Studio 2005\Projects\MPTools\Atmolight\Patched_Core_RC3\Core.dll</Source>
+			<Id>04010</Id>
+			<Option />
+			<Guid>5d467b2b-a635-44df-93aa-b05b39265ae1</Guid>
+		</File>
+		<File>
+			<FileName>Interop.AtmoWinRemoteControl.dll</FileName>
+			<Type>Plugin</Type>
+			<SubType>Process</SubType>
+			<Source>C:\kwasidrive\Devel\Visual Studio 2005\Projects\MPTools\Atmolight\bin\x86\Debug\Interop.AtmoWinRemoteControl.dll</Source>
+			<Id>01020</Id>
+			<Option />
+			<Guid>0a976697-8bf5-4450-b8c2-e81d10bb8e14</Guid>
+		</File>
+	</FileList>
+	<StringList />
+	<Actions />
+	<SetupGroups />
+	<SetupGroupMappings />
+	<Option>
+		<BuildFileName>C:\kwasidrive\Devel\Visual Studio 2005\Projects\MPTools\Atmolight\Atmolight V1.6_Patched_Core_24968</BuildFileName>
+		<ProiectFileName>C:\KwasiDrive\Devel\Visual Studio 2005\Projects\MPTools\Atmolight\Atmolight.xmp</ProiectFileName>
+		<ProiectName>Atmolight plugin</ProiectName>
+		<Author>gemx</Author>
+		<UpdateURL>http://www.team-mediaportal.com</UpdateURL>
+		<Version>1.9</Version>
+		<Description>Utilizes the AtmoWinA.exe to toggle live picture mode. 
+
+Requires AtmoWin V0.46 !!!
+
+Installs a patched Core.dll
+</Description>
+		<Group>Others</Group>
+		<Release>Beta</Release>
+		<Script>//css_reference "core.dll";
+//css_reference "Databases.dll";
+//css_reference "utils.dll";
+//css_reference "MPInstaller.Library.dll";
+//css_reference "plugins\Windows\Dialogs.dll";
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows.Forms;
+using System.Text;
+
+using MediaPortal.Dialogs;
+using MediaPortal.GUI.Library;
+using MediaPortal.MPInstaller;
+
+class InstallScript : MPInstallerScript
+  {
+    /// &lt;summary&gt;
+    /// Execute when the package is downloaded via GUI 
+    /// &lt;/summary&gt;
+    public override void GUI_GetOptions()
+    {
+      base.GUI_GetOptions();
+    }
+
+    /// &lt;summary&gt;
+    /// Test if version is compatible and show warning
+    /// This use when installing via GUI
+    /// &lt;/summary&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public override bool GUI_Warning()
+    {
+      return base.GUI_Warning();
+    }
+
+    /// &lt;summary&gt;
+    /// Test if version is compatible and show warning
+    /// &lt;/summary&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public override bool Warning()
+    {
+      return base.Warning();
+    }
+    /// &lt;summary&gt;
+    /// Inits this instance.
+    /// executed when the package it is loaded
+    /// &lt;/summary&gt;
+    public override void Init()
+    {
+      base.Init();
+    }
+
+    /// &lt;summary&gt;
+    /// Installs the current package.
+    /// &lt;/summary&gt;
+    /// &lt;param name="pb"&gt;ProgressBar for overall progress (can bee null) &lt;/param&gt;
+    /// &lt;param name="pb1"&gt;ProgressBar for current copied file (can bee null)&lt;/param&gt;
+    /// &lt;param name="listbox"&gt;Listbox for file listing(can bee null) &lt;/param&gt;
+    public override void Install(ProgressBar pb, ProgressBar pb1, ListBox listbox)
+    {
+      base.Install(pb, pb1, listbox);
+    }
+
+    /// &lt;summary&gt;
+    /// Called when [install file procesed].
+    /// &lt;/summary&gt;
+    /// &lt;param name="mpiFileInfo"&gt;The mpi file info.&lt;/param&gt;
+    public override void OnInstallFileProcesed(MPIFileList mpiFileInfo)
+    {
+
+    }
+
+    /// &lt;summary&gt;
+    /// Called when [install done].
+    /// &lt;/summary&gt;
+    public override void OnInstallDone()
+    {
+
+    }
+
+ }</Script>
+		<Logo>iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAQVJREFUWEftVwEOwyAI1P8/2lUTjLXAnU6yLOmaZktr7w44LMtp81NKKjmn/Hj8um5CautX+SvxfN4wqgDrYMmuENQoNHK51rA9crnniRDi+i3nuD5UwEg6/27BKal/lAJlAEVvijhB7pnTi77fAyIoD1gZgAJ+ngEmetQF2/Wv/mMEIAOGeyBUAOMBVAIrA9CARAlqiWAXiMDZC4wAtBF1TFQGzYiMAMqEAr4qAgnouCc6YScDKP1Lb8NdAaEiTpWgdQJzRHRBL8MrAO2Gu69j1oSuD3bJxwGV3pA0L0QLYCdudR0aSL3J+CviG/AwiltjuSYkVMAx8BUg61/RCsa79q8y8AE78WXnq6d+7gAAAABJRU5ErkJggg==</Logo>
+	</Option>
+	<Properties>
+		<MPMaxVersion>0.00.00.00</MPMaxVersion>
+		<MPMinVersion>0.00.00.00</MPMinVersion>
+		<MinExtensionVersion />
+		<MaxExtensionVersion />
+		<ForumURL>http://forum.team-mediaportal.com/mediaportal-plugins-47/new-plugin-atmolight-process-plugin-75840</ForumURL>
+		<WebURL>http://forum.team-mediaportal.com/mediaportal-plugins-47/new-plugin-atmolight-process-plugin-75840</WebURL>
+		<WikiURL />
+		<CreationDate>07-01-10</CreationDate>
+		<SingleGroupSelect>False</SingleGroupSelect>
+		<ClearSkinCache>False</ClearSkinCache>
+		<UseRealPathInPackage>False</UseRealPathInPackage>
+	</Properties>
+</MPinstaler>
