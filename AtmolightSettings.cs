@@ -1,5 +1,6 @@
 ﻿using System;
 using MediaPortal.Profile;
+using Language;
 
 namespace MediaPortal.ProcessPlugins.Atmolight
 {
@@ -87,6 +88,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         reader.SetValueAsBool("atmolight", "enableInternalLiveView", enableInternalLiveView);
         reader.SetValue("atmolight", "excludeTimeStart", excludeTimeStart.ToString("HH:mm"));
         reader.SetValue("atmolight", "excludeTimeEnd", excludeTimeEnd.ToString("HH:mm"));
+        reader.SetValue("atmolight", "CurrentLanguageFile", LanguageLoader.strCurrentLanguageFile);
       }
     }
   }
