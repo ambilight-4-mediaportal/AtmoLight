@@ -158,7 +158,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       SetAtmoEffect(ComEffectMode.cemDisabled);
       SetAtmoColor(0, 0, 0);
       //SetAtmoEffect(ComEffectMode.cemStaticColor);
-      //SetAtmoEffect(ComEffectMode.cemDisabled);
+      SetAtmoEffect(ComEffectMode.cemDisabled);
     }
     #endregion
 
@@ -289,24 +289,28 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         if ((DateTime.Now.TimeOfDay >= AtmolightSettings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= AtmolightSettings.excludeTimeEnd.TimeOfDay) )
       {
         Log.Debug("atmolight: Playback st_art_ed received but won't do anything because we are in the time where there is enough daylight :)");
-        return;
+        Atmo_off = true;
+            //return;
       }
-      if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording || type == g_Player.MediaType.Unknown)
+        if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording || type == g_Player.MediaType.Unknown || (type == g_Player.MediaType.Music && filename.Contains(".mkv")))
       {
+          Log.Debug("atmolight: video detected)");
         //EnableLivePictureMode(ComLiveViewSource.lvsExternal);
         //currentEffect = ContentEffect.MP_Live_view;
         currentEffect = AtmolightSettings.effectVideo;
         lasteff = 0;
       }
-      else if (type == g_Player.MediaType.Music)
+        else if (type == g_Player.MediaType.Music)
       {
         currentEffect = AtmolightSettings.effectMusic;
         lasteff = 1;
+        Log.Debug("atmolight: Music detected)");
       }
       else if (type == g_Player.MediaType.Radio)
       {
         currentEffect = AtmolightSettings.effectRadio;
         lasteff = 2;
+        Log.Debug("atmolight: Radio detected)");
       }
 
       if (Atmo_off == false)
@@ -396,6 +400,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         g_Player.PlayBackStarted +=  new g_Player.StartedHandler(g_Player_PlayBackStarted);
         g_Player.PlayBackStopped += new g_Player.StoppedHandler(g_Player_PlayBackStopped);
         g_Player.PlayBackEnded += new g_Player.EndedHandler(g_Player_PlayBackEnded);
+ 
         FrameGrabber.GetInstance().OnNewFrame += new FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
         Log.Info("atmolight: Start() waiting for g_player events...");
         DisableLEDs();
@@ -476,6 +481,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         g_Player.PlayBackStarted -= new g_Player.StartedHandler(g_Player_PlayBackStarted);
         g_Player.PlayBackStopped -= new g_Player.StoppedHandler(g_Player_PlayBackStopped);
         g_Player.PlayBackEnded -= new g_Player.EndedHandler(g_Player_PlayBackEnded);
+   
         GUIGraphicsContext.OnNewAction -= new OnActionHandler(OnNewAction); 
 
         if (AtmolightSettings.disableOnShutdown)

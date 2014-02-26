@@ -18,6 +18,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       cbVideo.SelectedIndex = (int)AtmolightSettings.effectVideo;
       cbMusic.SelectedIndex = (int)AtmolightSettings.effectMusic;
       cbRadio.SelectedIndex = (int)AtmolightSettings.effectRadio;
+        //comboBox1.Items[0]=
       comboBox1.SelectedIndex = (int)AtmolightSettings.killbutton;
       comboBox2.SelectedIndex = (int)AtmolightSettings.cmbutton;
       edExcludeStart.Text = AtmolightSettings.excludeTimeStart.ToString("HH:mm");
