@@ -51,11 +51,15 @@
         this.label5 = new System.Windows.Forms.Label();
         this.label7 = new System.Windows.Forms.Label();
         this.groupBox4 = new System.Windows.Forms.GroupBox();
+        this.label10 = new System.Windows.Forms.Label();
+        this.comboBox2 = new System.Windows.Forms.ComboBox();
+        this.label9 = new System.Windows.Forms.Label();
+        this.lowCpuTime = new System.Windows.Forms.TextBox();
+        this.checkBox3 = new System.Windows.Forms.CheckBox();
         this.checkBox2 = new System.Windows.Forms.CheckBox();
         this.checkBox1 = new System.Windows.Forms.CheckBox();
         this.comboBox1 = new System.Windows.Forms.ComboBox();
         this.label8 = new System.Windows.Forms.Label();
-        this.checkBox3 = new System.Windows.Forms.CheckBox();
         this.groupBox2.SuspendLayout();
         this.groupBox1.SuspendLayout();
         this.groupBox3.SuspendLayout();
@@ -94,7 +98,7 @@
         // btnSave
         // 
         this.btnSave.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-        this.btnSave.Location = new System.Drawing.Point(82, 382);
+        this.btnSave.Location = new System.Drawing.Point(82, 409);
         this.btnSave.Name = "btnSave";
         this.btnSave.Size = new System.Drawing.Size(75, 23);
         this.btnSave.TabIndex = 4;
@@ -105,7 +109,7 @@
         // btnCancel
         // 
         this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-        this.btnCancel.Location = new System.Drawing.Point(293, 382);
+        this.btnCancel.Location = new System.Drawing.Point(293, 409);
         this.btnCancel.Name = "btnCancel";
         this.btnCancel.Size = new System.Drawing.Size(75, 23);
         this.btnCancel.TabIndex = 5;
@@ -123,7 +127,7 @@
         // 
         this.groupBox2.Controls.Add(this.rbDisableLEDs);
         this.groupBox2.Controls.Add(this.rbSwitchToLiveView);
-        this.groupBox2.Location = new System.Drawing.Point(9, 291);
+        this.groupBox2.Location = new System.Drawing.Point(9, 314);
         this.groupBox2.Name = "groupBox2";
         this.groupBox2.Size = new System.Drawing.Size(291, 75);
         this.groupBox2.TabIndex = 6;
@@ -291,6 +295,10 @@
         // 
         // groupBox4
         // 
+        this.groupBox4.Controls.Add(this.label10);
+        this.groupBox4.Controls.Add(this.comboBox2);
+        this.groupBox4.Controls.Add(this.label9);
+        this.groupBox4.Controls.Add(this.lowCpuTime);
         this.groupBox4.Controls.Add(this.checkBox3);
         this.groupBox4.Controls.Add(this.checkBox2);
         this.groupBox4.Controls.Add(this.checkBox1);
@@ -298,15 +306,65 @@
         this.groupBox4.Controls.Add(this.label8);
         this.groupBox4.Location = new System.Drawing.Point(9, 170);
         this.groupBox4.Name = "groupBox4";
-        this.groupBox4.Size = new System.Drawing.Size(290, 115);
+        this.groupBox4.Size = new System.Drawing.Size(292, 138);
         this.groupBox4.TabIndex = 11;
         this.groupBox4.TabStop = false;
         this.groupBox4.Text = "Plugin options";
         // 
+        // label10
+        // 
+        this.label10.AutoSize = true;
+        this.label10.Location = new System.Drawing.Point(10, 44);
+        this.label10.Name = "label10";
+        this.label10.Size = new System.Drawing.Size(97, 13);
+        this.label10.TabIndex = 17;
+        this.label10.Text = "Profile RemoteKey:";
+        // 
+        // comboBox2
+        // 
+        this.comboBox2.FormattingEnabled = true;
+        this.comboBox2.Items.AddRange(new object[] {
+            "red",
+            "green",
+            "yellow",
+            "blue"});
+        this.comboBox2.Location = new System.Drawing.Point(140, 41);
+        this.comboBox2.Name = "comboBox2";
+        this.comboBox2.Size = new System.Drawing.Size(143, 21);
+        this.comboBox2.TabIndex = 16;
+        // 
+        // label9
+        // 
+        this.label9.AutoSize = true;
+        this.label9.Location = new System.Drawing.Point(185, 115);
+        this.label9.Name = "label9";
+        this.label9.Size = new System.Drawing.Size(101, 13);
+        this.label9.TabIndex = 15;
+        this.label9.Text = "ms between Frames";
+        // 
+        // lowCpuTime
+        // 
+        this.lowCpuTime.Location = new System.Drawing.Point(140, 113);
+        this.lowCpuTime.MaxLength = 4;
+        this.lowCpuTime.Name = "lowCpuTime";
+        this.lowCpuTime.Size = new System.Drawing.Size(41, 20);
+        this.lowCpuTime.TabIndex = 14;
+        this.lowCpuTime.Text = "100";
+        // 
+        // checkBox3
+        // 
+        this.checkBox3.AutoSize = true;
+        this.checkBox3.Location = new System.Drawing.Point(13, 115);
+        this.checkBox3.Name = "checkBox3";
+        this.checkBox3.Size = new System.Drawing.Size(67, 17);
+        this.checkBox3.TabIndex = 13;
+        this.checkBox3.Text = "low CPU";
+        this.checkBox3.UseVisualStyleBackColor = true;
+        // 
         // checkBox2
         // 
         this.checkBox2.AutoSize = true;
-        this.checkBox2.Location = new System.Drawing.Point(13, 40);
+        this.checkBox2.Location = new System.Drawing.Point(13, 69);
         this.checkBox2.Name = "checkBox2";
         this.checkBox2.Size = new System.Drawing.Size(208, 17);
         this.checkBox2.TabIndex = 12;
@@ -316,7 +374,7 @@
         // checkBox1
         // 
         this.checkBox1.AutoSize = true;
-        this.checkBox1.Location = new System.Drawing.Point(13, 63);
+        this.checkBox1.Location = new System.Drawing.Point(13, 92);
         this.checkBox1.Name = "checkBox1";
         this.checkBox1.Size = new System.Drawing.Size(120, 17);
         this.checkBox1.TabIndex = 11;
@@ -345,21 +403,11 @@
         this.label8.TabIndex = 8;
         this.label8.Text = "LEDs OnOff RemoteKey:";
         // 
-        // checkBox3
-        // 
-        this.checkBox3.AutoSize = true;
-        this.checkBox3.Location = new System.Drawing.Point(13, 86);
-        this.checkBox3.Name = "checkBox3";
-        this.checkBox3.Size = new System.Drawing.Size(67, 17);
-        this.checkBox3.TabIndex = 13;
-        this.checkBox3.Text = "low CPU";
-        this.checkBox3.UseVisualStyleBackColor = true;
-        // 
         // AtmolightSetupForm
         // 
         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(452, 414);
+        this.ClientSize = new System.Drawing.Size(452, 441);
         this.Controls.Add(this.groupBox4);
         this.Controls.Add(this.label7);
         this.Controls.Add(this.groupBox3);
@@ -415,5 +463,9 @@
     private System.Windows.Forms.CheckBox checkBox2;
     private System.Windows.Forms.CheckBox checkBox1;
     private System.Windows.Forms.CheckBox checkBox3;
+    private System.Windows.Forms.Label label9;
+    private System.Windows.Forms.TextBox lowCpuTime;
+    private System.Windows.Forms.ComboBox comboBox2;
+    private System.Windows.Forms.Label label10;
   }
 }
