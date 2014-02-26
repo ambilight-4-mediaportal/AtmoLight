@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
-
+using Language;
 
 namespace MediaPortal.ProcessPlugins.Atmolight
 {
@@ -14,6 +11,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     public AtmolightSetupForm()
     {
       InitializeComponent();
+      UpdateLanguageOnControls();
+
+      lblVersionVal.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
       edFile.Text = AtmolightSettings.atmowinExe;
       cbVideo.SelectedIndex = (int)AtmolightSettings.effectVideo;
       cbMusic.SelectedIndex = (int)AtmolightSettings.effectMusic;
@@ -22,39 +22,91 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       comboBox2.SelectedIndex = (int)AtmolightSettings.cmbutton;
       edExcludeStart.Text = AtmolightSettings.excludeTimeStart.ToString("HH:mm");
       edExcludeEnd.Text = AtmolightSettings.excludeTimeEnd.ToString("HH:mm");
-       
-       lowCpuTime.Text = AtmolightSettings.lowCPUTime.ToString();
-       if (AtmolightSettings.HateTheStopThing)
-          checkBox1.Checked = true;
-       else
-          this.checkBox1.Checked = false;
+      lowCpuTime.Text = AtmolightSettings.lowCPUTime.ToString();
+
+      if (AtmolightSettings.HateTheStopThing)
+        ckDisableStopMenu.Checked = true;
+      else
+        this.ckDisableStopMenu.Checked = false;
 
       if (AtmolightSettings.OffOnStart)
-          checkBox2.Checked = true;
+        ckOnMediaStart.Checked = true;
       else
-          this.checkBox2.Checked = false;
-      if (AtmolightSettings.lowCPU )
-          checkBox3.Checked = true;
+        this.ckOnMediaStart.Checked = false;
+
+      if (AtmolightSettings.lowCPU)
+        ckLowCpu.Checked = true;
       else
-          this.checkBox3.Checked = false;
+        this.ckLowCpu.Checked = false;
+
+      if (AtmolightSettings.startAtmoWin)
+        ckStartAtmoWin.Checked = true;
+      else
+        ckStartAtmoWin.Checked = false;
+
+      if (AtmolightSettings.exitAtmoWin)
+        ckExitAtmoWin.Checked = true;
+      else
+        ckExitAtmoWin.Checked = false;
 
       if (AtmolightSettings.disableOnShutdown)
         rbDisableLEDs.Checked = true;
       else
         rbSwitchToLiveView.Checked = true;
     }
+
+    private void UpdateLanguageOnControls()
+    {
+      // this function places language specific text on all "skin-able" text items.
+      lblPathInfo.Text = LanguageLoader.appStrings.SetupForm_lblPathInfoText;
+      grpMode.Text = LanguageLoader.appStrings.SetupForm_grpModeText;
+      grpPluginOption.Text = LanguageLoader.appStrings.SetupForm_grpPluginOptionText;
+      lblVidTvRec.Text = LanguageLoader.appStrings.SetupForm_lblVidTvRecText;
+      lblMusic.Text = LanguageLoader.appStrings.SetupForm_lblMusicText;
+      lblRadio.Text = LanguageLoader.appStrings.SetupForm_lblRadioText;
+      lblLedsOnOff.Text = LanguageLoader.appStrings.SetupForm_lblLedsOnOffText;
+      lblProfile.Text = LanguageLoader.appStrings.SetupForm_lblProfileText;
+      ckOnMediaStart.Text = LanguageLoader.appStrings.SetupForm_ckOnMediaStartText;
+      ckDisableStopMenu.Text = LanguageLoader.appStrings.SetupForm_ckDisableStopMenuText;
+      ckLowCpu.Text = LanguageLoader.appStrings.SetupForm_ckLowCpuText;
+      ckStartAtmoWin.Text = LanguageLoader.appStrings.SetupForm_ckStartAtmoWinText;
+      ckExitAtmoWin.Text = LanguageLoader.appStrings.SetupForm_ckExitAtmoWinText;
+      grpMPClose.Text = LanguageLoader.appStrings.SetupForm_grpMPCloseText;
+      rbSwitchToLiveView.Text = LanguageLoader.appStrings.SetupForm_rbSwitchToLiveViewText;
+      rbDisableLEDs.Text = LanguageLoader.appStrings.SetupForm_rbDisableLEDsText;
+      btnSave.Text = LanguageLoader.appStrings.SetupForm_btnSaveText;
+      btnCancel.Text = LanguageLoader.appStrings.SetupForm_btnCancelText;
+      btnLanguage.Text = LanguageLoader.appStrings.SetupForm_btnLanguageText;
+      lblHint.Text = LanguageLoader.appStrings.SetupForm_lblHintText;
+      lblFrames.Text = LanguageLoader.appStrings.SetupForm_lblFramesText;
+      lblStart.Text = LanguageLoader.appStrings.SetupForm_lblStartText;
+      lblEnd.Text = LanguageLoader.appStrings.SetupForm_lblEndText;
+      grpDeactivate.Text = LanguageLoader.appStrings.SetupForm_grpDeactivateText;
+    }
+
     private void btnSelectFile_Click(object sender, EventArgs e)
     {
       if (openFileDialog1.ShowDialog() == DialogResult.OK)
-        edFile.Text = openFileDialog1.FileName;
+      {
+        string filenameNoExtension = Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
+        string filename = filenameNoExtension.ToLower();
+        if (filename == "atmowina")
+        {
+          edFile.Text = openFileDialog1.FileName;
+        }
+        else
+        {
+          MessageBox.Show("You have to enter a invalid File, should be AtmoWinA", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          edFile.Text = "";
+          return;
+        }
+      }
     }
 
     private void btnCancel_Click(object sender, EventArgs e)
     {
       this.DialogResult = DialogResult.Cancel;
     }
-
-   
 
     private void btnSave_Click(object sender, EventArgs e)
     {
@@ -64,6 +116,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         MessageBox.Show("You have to enter a valid start time", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
+
       AtmolightSettings.excludeTimeStart = dt;
       DateTime dt2;
       if (!DateTime.TryParse(edExcludeEnd.Text, out dt2))
@@ -75,8 +128,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       int cTime;
       if (!int.TryParse(lowCpuTime.Text, out cTime))
       {
-          MessageBox.Show("You have to enter a valid number of ms", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-          return;
+        MessageBox.Show("You have to enter a valid number of ms", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
       }
 
       AtmolightSettings.lowCPUTime = cTime;
@@ -90,12 +143,25 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       AtmolightSettings.cmbutton = comboBox2.SelectedIndex;
       AtmolightSettings.disableOnShutdown = rbDisableLEDs.Checked;
       AtmolightSettings.enableInternalLiveView = rbSwitchToLiveView.Checked;
-      AtmolightSettings.HateTheStopThing = checkBox1.Checked;
-      AtmolightSettings.OffOnStart = checkBox2.Checked;
-      AtmolightSettings.lowCPU = checkBox3.Checked;
+      AtmolightSettings.HateTheStopThing = ckDisableStopMenu.Checked;
+      AtmolightSettings.OffOnStart = ckOnMediaStart.Checked;
+      AtmolightSettings.lowCPU = ckLowCpu.Checked;
+      AtmolightSettings.startAtmoWin = ckStartAtmoWin.Checked;
+      AtmolightSettings.exitAtmoWin = ckExitAtmoWin.Checked;
       AtmolightSettings.SaveSettings();
       this.DialogResult = DialogResult.OK;
     }
 
+    private void btnLanguage_Click(object sender, EventArgs e)
+    {
+      openFileDialog2.InitialDirectory = Path.GetDirectoryName(LanguageLoader.strCurrentLanguageFile);
+      if (openFileDialog2.ShowDialog() == DialogResult.OK)
+      {        
+        LanguageLoader.LoadLanguageFile(openFileDialog2.FileName);
+        LanguageLoader.strCurrentLanguageFile = openFileDialog2.FileName;
+        UpdateLanguageOnControls();
+        openFileDialog2.FileName = "";
+      }
+    }
   }
 }

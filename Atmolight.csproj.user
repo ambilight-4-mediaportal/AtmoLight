@@ -10,4 +10,8 @@
     <FallbackCulture>de-DE</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Program Files %28x86%29\Team MediaPortal\MediaPortal\Configuration.exe</StartProgram>
+  </PropertyGroup>
 </Project>
