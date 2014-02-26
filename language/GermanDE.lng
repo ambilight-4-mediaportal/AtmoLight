@@ -1,0 +1,25 @@
+[SetupForm]
+lblPathInfoText=Pfad+Dateiname zu AtmoWinA.exe
+grpModeText=Atmolight Modus Einstellungen
+grpPluginOptionText=Plugin Konfiguration
+lblVidTvRecText=Video/Tv/Aufnahme:
+lblMusicText=Musik
+lblRadioText=Radio
+lblLedsOnOffText=LEDs AnAus Fernbedienungstaste:
+lblProfileText=Fernbedienungstasten Provile
+ckOnMediaStartText=LEDs aus beim Media Start (Manueller Modus)
+ckDisableStopMenuText=Stop Menu deaktivieren
+ckLowCpuText=Niedrige CPU
+ckStartAtmoWinText=AtmoWin mit MediaPortal starten
+ckExitAtmoWinText=AtmoWin mit MediaPortal beenden
+grpMPCloseText=MediaPortal schliessen
+rbSwitchToLiveViewText=Zu AtmoWins internen live View Modus wechseln
+rbDisableLEDsText=Alle LEDs ausschalten
+btnSaveText=Speichern
+btnCancelText= Abbrechen
+btnLanguageText=Sprache laden
+lblHintText=Tipp: Sie können die STOP-Taste verwenden wenn nichts spielt um die GDI Live-Ansicht zu aktivieren,  LEDs deaktivieren oder zum 3D-SBS-Modus wechseln.
+lblFramesText=ms zwischen Frames
+lblStartText=Start:
+lblEndText=Ende:
+grpDeactivateText=Deaktivieren zwischen...

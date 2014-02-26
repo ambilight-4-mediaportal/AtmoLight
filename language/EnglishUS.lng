@@ -1,0 +1,25 @@
+[SetupForm]
+lblPathInfoText=Path+Filename of AtmoWinA.exe
+grpModeText=Atmolight Mode per content type
+grpPluginOptionText=Plugin options
+lblVidTvRecText=Video/Tv/Recordings
+lblMusicText=Music
+lblRadioText=Radio
+lblLedsOnOffText=LEDs OnOff RemoteKey:
+lblProfileText=Profile RemoteKey:
+ckOnMediaStartText=LEDs off on media start (manual mode)
+ckDisableStopMenuText=disable STOP menu
+ckLowCpuText=low CPU
+ckStartAtmoWinText=Start AtmoWin with MediaPortal
+ckExitAtmoWinText=Exit AtmoWin with MediaPortal
+grpMPCloseText=MP close...
+rbSwitchToLiveViewText=Switch to AtmoWin's internal live view mode
+rbDisableLEDsText=Switch all LEDs off
+btnSaveText=Save
+btnCancelText=Cancel
+btnLanguageText=Load Language
+lblHintText=Hint: You can use the STOP button when nothing is playing to enable GDI Live-View, disable the LEDs or switch 3D-SBS Mode.
+lblFramesText=ms between Frames
+lblStartText=Start:
+lblEndText=End:
+grpDeactivateText=Deactive between...
