@@ -1,3 +1,6 @@
+Version 1.1.19020.1
+ Correct First plugin start : Default language not set correctly at 1st start.
+
 Version 1.1.19020.0
 Add language translation to Atmolight configuration. 
 English / German 
