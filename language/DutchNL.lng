@@ -1,0 +1,25 @@
+[SetupForm]
+lblPathInfoText=Pad en Bestandsnaam van AtmoWin:
+grpModeText=Atmolight Modus per sectie
+grpPluginOptionText=Plugin opties
+lblVidTvRecText=Video/Tv/Opnames
+lblMusicText=Muziek
+lblRadioText=Radio
+lblLedsOnOffText=LEDs Aan/Uit toets:
+lblProfileText=Profiel toets:
+ckOnMediaStartText=LEDs uit tijdens start media (handmatige modus)
+ckDisableStopMenuText=deactiveer STOP menu
+ckLowCpuText=langzame CPU
+ckStartAtmoWinText=Start AtmoWin met MediaPortal
+ckExitAtmoWinText=Sluit AtmoWin met MediaPortal
+grpMPCloseText=Tijdens afsluiten van MP:
+rbSwitchToLiveViewText=Schakel naar AtmoWin's interne Live modus
+rbDisableLEDsText=Schakel alle LEDs uit
+btnSaveText=Opslaan
+btnCancelText=Annuleren
+btnLanguageText=Laad taal
+lblHintText=Tip: Je kan de STOP knop gebruiken (als er niks speelt) om de GDI Live-View te activeren, de LEDs uit te schakelen of om te schakelen naar 3D-SBS Modus.
+lblFramesText=ms tussen Frames
+lblStartText=Begintijd:
+lblEndText=Eindtijd:
+grpDeactivateText=Uitgeschakeld tussen:
