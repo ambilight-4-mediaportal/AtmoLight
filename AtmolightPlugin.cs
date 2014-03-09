@@ -314,6 +314,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     {
       atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
       SetAtmoEffect(ComEffectMode.cemDisabled);
+      System.Threading.Thread.Sleep(10);
       SetAtmoColor(0, 0, 0);
       SetAtmoEffect(ComEffectMode.cemDisabled);
     }
@@ -418,10 +419,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
               else
               {
                   Atmo_off = true;
-
-                  atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
-                  SetAtmoEffect(ComEffectMode.cemDisabled);
-                  SetAtmoColor(0, 0, 0);
+          DisableLEDs();
               }
               return;
           }
