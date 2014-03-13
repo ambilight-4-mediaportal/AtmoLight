@@ -138,7 +138,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     #region Variables
     public static bool Atmo_off = false;
-    public static bool Atmo_off_Menu = false;
     public int lasteff = 999;
     public Int64 tickCount = 0;
     public Int64 lastFrame = 0;
@@ -361,6 +360,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                     DisableLEDs();
                     Atmo_off = true;
                     break;
+                // Effect is called "MP_Live_view" but it actually is "Static Color".
                 case ContentEffect.MP_Live_view:
                     atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
                     SetAtmoEffect(ComEffectMode.cemDisabled);
@@ -645,7 +645,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         
         Log.Info("atmolight: Start() waiting for g_player events...");
         
-        //DisableLEDs();
         if (CheckForStartRequirements())
         {
             MenuMode();
