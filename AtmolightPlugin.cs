@@ -138,6 +138,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     #region Variables
     public static bool Atmo_off = false;
+    public static bool Atmo_off_Menu = false;
     public int lasteff = 999;
     public Int64 tickCount = 0;
     public Int64 lastFrame = 0;
@@ -147,6 +148,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private int captureHeight = 0;
     private Surface rgbSurface = null;
     private ContentEffect currentEffect = ContentEffect.LEDs_disabled;
+    private ContentEffect MenuEffect = ContentEffect.LEDs_disabled;
     #endregion
 
     [DllImport("AtmoDXUtil.dll", PreserveSig = false, CharSet = CharSet.Auto)]
@@ -315,6 +317,56 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       SetAtmoColor(0, 0, 0);
       SetAtmoEffect(ComEffectMode.cemDisabled);
     }
+
+    private bool CheckForStartRequirements()
+    {
+        if (AtmolightSettings.OffOnStart)
+        {
+            Log.Debug("atmolight: LEDs should be deactivated. (Manual Mode)");
+            Atmo_off = true;
+            return false;
+        }
+        else if ((DateTime.Now.TimeOfDay >= AtmolightSettings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= AtmolightSettings.excludeTimeEnd.TimeOfDay))
+        {
+            Log.Debug("atmolight: LEDs should be deactivated. (Timeframe)");
+            Atmo_off = true;
+            return false;
+        }
+        else
+        {
+            Log.Debug("atmolight: LEDs should be activated.");
+            Atmo_off = false;
+            return true;
+        }
+    }
+
+    private void MenuMode()
+    {
+            MenuEffect = AtmolightSettings.effectMenu;
+            switch (MenuEffect)
+            {
+                case ContentEffect.AtmoWin_GDI_Live_view:
+                    EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                    break;
+                case ContentEffect.Colorchanger:
+                    EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                    SetAtmoEffect(ComEffectMode.cemColorChange);
+                    break;
+                case ContentEffect.Colorchanger_LR:
+                    EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                    SetAtmoEffect(ComEffectMode.cemLrColorChange);
+                    break;
+                case ContentEffect.LEDs_disabled:
+                    DisableLEDs();
+                    Atmo_off = true;
+                    break;
+                case ContentEffect.MP_Live_view:
+                    atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
+                    SetAtmoEffect(ComEffectMode.cemDisabled);
+                    SetAtmoColor((byte)AtmolightSettings.StaticColorRed, (byte)AtmolightSettings.StaticColorGreen, (byte)AtmolightSettings.StaticColorBlue);
+                    break;
+            }
+    }
     #endregion
 
     #region Events
@@ -325,57 +377,69 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.killbutton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.killbutton == 3))
       {
-        if (Atmo_off)
-        {
-          Atmo_off = false;
-
-          if (lasteff == 0)
+          if (g_Player.Playing)
           {
-            currentEffect = AtmolightSettings.effectVideo;
+              if (Atmo_off)
+              {
+                  Atmo_off = false;
+                  if (lasteff == 0)
+                  {
+                      currentEffect = AtmolightSettings.effectVideo;
+                  }
+                  if (lasteff == 1)
+                  {
+                      currentEffect = AtmolightSettings.effectMusic;
+                  }
+                  if (lasteff == 2)
+                  {
+                      currentEffect = AtmolightSettings.effectRadio;
+                  }
+                  switch (currentEffect)
+                  {
+                      case ContentEffect.AtmoWin_GDI_Live_view:
+                          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                          break;
+                      case ContentEffect.Colorchanger:
+                          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                          SetAtmoEffect(ComEffectMode.cemColorChange);
+                          break;
+                      case ContentEffect.Colorchanger_LR:
+                          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                          SetAtmoEffect(ComEffectMode.cemLrColorChange);
+                          break;
+                      case ContentEffect.LEDs_disabled:
+                          DisableLEDs();
+                          break;
+                      case ContentEffect.MP_Live_view:
+                          EnableLivePictureMode(ComLiveViewSource.lvsExternal);
+                          break;
+                  }
+              }
+              else
+              {
+                  Atmo_off = true;
+
+                  atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
+                  SetAtmoEffect(ComEffectMode.cemDisabled);
+                  SetAtmoColor(0, 0, 0);
+              }
+              return;
           }
-
-          if (lasteff == 1)
+          else
           {
-            currentEffect = AtmolightSettings.effectMusic;
-          }
-
-          if (lasteff == 2)
-          {
-            currentEffect = AtmolightSettings.effectRadio;
-          }
-
-          switch (currentEffect)
-          {
-            case ContentEffect.AtmoWin_GDI_Live_view:
-              EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-              break;
-            case ContentEffect.Colorchanger:
-              EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-              SetAtmoEffect(ComEffectMode.cemColorChange);
-              break;
-            case ContentEffect.Colorchanger_LR:
-              EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-              SetAtmoEffect(ComEffectMode.cemLrColorChange);
-              break;
-            case ContentEffect.LEDs_disabled:
-              DisableLEDs();
-              break;
-            case ContentEffect.MP_Live_view:
-              EnableLivePictureMode(ComLiveViewSource.lvsExternal);
-              break;
+              if (Atmo_off)
+              {
+                  Atmo_off = false;
+                  MenuMode();
+              }
+              else
+              {
+                  Atmo_off = true;
+                  DisableLEDs();
+              }
+              
           }
         }
-        else
-        {
-          Atmo_off = true;
-
-          atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
-          SetAtmoEffect(ComEffectMode.cemDisabled);
-          SetAtmoColor(0, 0, 0);
-        }
-        return;
-      }
-
       if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.cmbutton == 2) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.cmbutton == 1) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.cmbutton == 0) ||
@@ -437,21 +501,34 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
     {
-      DisableLEDs();
+        if (CheckForStartRequirements())
+        {
+            MenuMode();
+        }
+        else
+        {
+            DisableLEDs();
+        }
     }
     
     void g_Player_PlayBackStopped(g_Player.MediaType type, int stoptime, string filename)
     {
-      DisableLEDs();
+        if (CheckForStartRequirements())
+        {
+            MenuMode();
+        }
+        else
+        {
+            DisableLEDs();
+        }
     }
     
     void g_Player_PlayBackStarted(g_Player.MediaType type, string filename)
     {
-      if ((DateTime.Now.TimeOfDay >= AtmolightSettings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= AtmolightSettings.excludeTimeEnd.TimeOfDay))
-      {
-        Log.Debug("atmolight: Playback st_art_ed received but won't do anything because we are in the time where there is enough daylight :)");
-        Atmo_off = true;
-      }
+        if (!CheckForStartRequirements())
+        {
+            DisableLEDs();
+        }
       if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording || type == g_Player.MediaType.Unknown || (type == g_Player.MediaType.Music && filename.Contains(".mkv")))
       {
         Log.Debug("atmolight: video detected)");
@@ -570,8 +647,16 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         
         Log.Info("atmolight: Start() waiting for g_player events...");
         
-        DisableLEDs();
-        
+        //DisableLEDs();
+        if (CheckForStartRequirements())
+        {
+            MenuMode();
+        }
+        else
+        {
+            DisableLEDs();
+        }
+
         GUIGraphicsContext.OnNewAction += new OnActionHandler(OnNewAction);
         if (AtmolightSettings.OffOnStart)
         { 

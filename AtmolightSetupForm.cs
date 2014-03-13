@@ -18,11 +18,15 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       cbVideo.SelectedIndex = (int)AtmolightSettings.effectVideo;
       cbMusic.SelectedIndex = (int)AtmolightSettings.effectMusic;
       cbRadio.SelectedIndex = (int)AtmolightSettings.effectRadio;
+      cbMenu.SelectedIndex = (int)AtmolightSettings.effectMenu;
       comboBox1.SelectedIndex = (int)AtmolightSettings.killbutton;
       comboBox2.SelectedIndex = (int)AtmolightSettings.cmbutton;
       edExcludeStart.Text = AtmolightSettings.excludeTimeStart.ToString("HH:mm");
       edExcludeEnd.Text = AtmolightSettings.excludeTimeEnd.ToString("HH:mm");
       lowCpuTime.Text = AtmolightSettings.lowCPUTime.ToString();
+      tbRed.Text = AtmolightSettings.StaticColorRed.ToString();
+      tbGreen.Text = AtmolightSettings.StaticColorGreen.ToString();
+      tbBlue.Text = AtmolightSettings.StaticColorBlue.ToString();
 
       if (AtmolightSettings.HateTheStopThing)
         ckDisableStopMenu.Checked = true;
@@ -132,13 +136,33 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         return;
       }
 
-      AtmolightSettings.lowCPUTime = cTime;
+      int StaticColorRed, StaticColorGreen, StaticColorBlue;
+      if ((!int.TryParse(tbRed.Text, out StaticColorRed)) || (StaticColorRed < 0 || StaticColorRed > 255))
+      {
+          MessageBox.Show("Please enter a number between 0 and 255 for Red.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+      }
+      else if ((!int.TryParse(tbGreen.Text, out StaticColorGreen)) || (StaticColorGreen < 0 || StaticColorGreen > 255))
+      {
+          MessageBox.Show("Please enter a number between 0 and 255 for Green.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+      }
+      else if ((!int.TryParse(tbBlue.Text, out StaticColorBlue)) || (StaticColorBlue < 0 || StaticColorBlue > 255))
+      {
+          MessageBox.Show("Please enter a number between 0 and 255 for Blue.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+      }
 
+      AtmolightSettings.StaticColorRed = StaticColorRed;
+      AtmolightSettings.StaticColorGreen = StaticColorGreen;
+      AtmolightSettings.StaticColorBlue = StaticColorBlue;
+      AtmolightSettings.lowCPUTime = cTime;
       AtmolightSettings.excludeTimeEnd = dt2;
       AtmolightSettings.atmowinExe = edFile.Text;
       AtmolightSettings.effectVideo = (ContentEffect)cbVideo.SelectedIndex;
       AtmolightSettings.effectMusic = (ContentEffect)cbMusic.SelectedIndex;
       AtmolightSettings.effectRadio = (ContentEffect)cbRadio.SelectedIndex;
+      AtmolightSettings.effectMenu = (ContentEffect)cbMenu.SelectedIndex;
       AtmolightSettings.killbutton = comboBox1.SelectedIndex;
       AtmolightSettings.cmbutton = comboBox2.SelectedIndex;
       AtmolightSettings.disableOnShutdown = rbDisableLEDs.Checked;

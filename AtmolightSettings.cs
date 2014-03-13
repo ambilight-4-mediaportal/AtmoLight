@@ -20,6 +20,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     public static ContentEffect effectVideo;
     public static ContentEffect effectMusic;
     public static ContentEffect effectRadio;
+    public static ContentEffect effectMenu;
     public static int killbutton = 0;
     public static int cmbutton = 0;
     public static bool disableOnShutdown = true;
@@ -33,6 +34,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     public static bool exitAtmoWin = true;
     public static DateTime excludeTimeStart;
     public static DateTime excludeTimeEnd;
+    public static int StaticColorRed = 0, StaticColorGreen = 0, StaticColorBlue = 0;
     #endregion
 
     public static DateTime LoadTimeSetting(Settings reader, string name, string defaultTime)
@@ -52,6 +54,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         effectVideo = (ContentEffect)reader.GetValueAsInt("atmolight", "effectVideo", 4);
         effectMusic = (ContentEffect)reader.GetValueAsInt("atmolight", "effectMusic", 1);
         effectRadio = (ContentEffect)reader.GetValueAsInt("atmolight", "effectRadio", 0);
+        effectMenu = (ContentEffect)reader.GetValueAsInt("atmolight", "effectMenu", 0);
         killbutton = reader.GetValueAsInt("atmolight", "killbutton", 0);
         cmbutton = reader.GetValueAsInt("atmolight", "cmbutton", 0);
         disableOnShutdown = reader.GetValueAsBool("atmolight", "disableOnShutdown", true);
@@ -65,6 +68,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         lowCPUTime = reader.GetValueAsInt("atmolight", "lowCPUTime", 0);
         exitAtmoWin = reader.GetValueAsBool("atmolight", "ExitAtmoWin", true);
         startAtmoWin = reader.GetValueAsBool("atmolight", "StartAtmoWin", true);
+        StaticColorRed = reader.GetValueAsInt("atmolight", "StaticColorRed", 0);
+        StaticColorGreen = reader.GetValueAsInt("atmolight", "StaticColorGreen", 0);
+        StaticColorBlue = reader.GetValueAsInt("atmolight", "StaticColorBlue", 0);
       }
     }
     public static void SaveSettings()
@@ -75,6 +81,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         reader.SetValue("atmolight", "effectVideo", (int)effectVideo);
         reader.SetValue("atmolight", "effectMusic", (int)effectMusic);
         reader.SetValue("atmolight", "effectRadio", (int)effectRadio);
+        reader.SetValue("atmolight", "effectMenu", (int)effectMenu);
         reader.SetValue("atmolight", "killbutton", (int)killbutton);
         reader.SetValue("atmolight", "cmbutton", (int)cmbutton);
         reader.SetValueAsBool("atmolight", "disableOnShutdown", disableOnShutdown);
@@ -89,6 +96,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         reader.SetValue("atmolight", "excludeTimeStart", excludeTimeStart.ToString("HH:mm"));
         reader.SetValue("atmolight", "excludeTimeEnd", excludeTimeEnd.ToString("HH:mm"));
         reader.SetValue("atmolight", "CurrentLanguageFile", LanguageLoader.strCurrentLanguageFile);
+        reader.SetValue("atmolight", "StaticColorRed", StaticColorRed);
+        reader.SetValue("atmolight", "StaticColorGreen", StaticColorGreen);
+        reader.SetValue("atmolight", "StaticColorBlue", StaticColorBlue);
       }
     }
   }
