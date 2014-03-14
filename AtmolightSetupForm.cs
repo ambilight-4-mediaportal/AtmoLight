@@ -86,6 +86,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       lblStart.Text = LanguageLoader.appStrings.SetupForm_lblStartText;
       lblEnd.Text = LanguageLoader.appStrings.SetupForm_lblEndText;
       grpDeactivate.Text = LanguageLoader.appStrings.SetupForm_grpDeactivateText;
+        lblMenu.Text = LanguageLoader.appStrings.SetupForm_lblMenu;
+        grpStaticColor.Text = LanguageLoader.appStrings.SetupForm_grpStaticColor;
+        lblRed.Text = LanguageLoader.appStrings.SetupForm_lblRed;
+        lblGreen.Text = LanguageLoader.appStrings.SetupForm_lblGreen;
+        lblBlue.Text = LanguageLoader.appStrings.SetupForm_lblBlue;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)

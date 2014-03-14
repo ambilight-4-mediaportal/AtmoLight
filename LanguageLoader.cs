@@ -222,9 +222,9 @@ namespace Language
     public String SetupForm_lblPathInfoText = "Path+Filename of AtmoWinA.exe";
     public String SetupForm_grpModeText = "Atmolight Mode per content type";
     public String SetupForm_grpPluginOptionText = "Plugin options";
-    public String SetupForm_lblVidTvRecText = "Video/Tv/Recordings:";
-    public String SetupForm_lblMusicText = "Music";
-    public String SetupForm_lblRadioText = "Radio";
+    public String SetupForm_lblVidTvRecText = "Video/TV/Recordings:";
+    public String SetupForm_lblMusicText = "Music:";
+    public String SetupForm_lblRadioText = "Radio:";
     public String SetupForm_lblLedsOnOffText = "LEDs OnOff RemoteKey:";
     public String SetupForm_lblProfileText = "Profile RemoteKey:";
     public String SetupForm_ckOnMediaStartText = "LEDs off on media start (manual mode)";
@@ -243,6 +243,11 @@ namespace Language
     public String SetupForm_lblStartText = "Start:";
     public String SetupForm_lblEndText = "End:";
     public String SetupForm_grpDeactivateText = "Deactive between...";
+    public String SetupForm_lblMenu = "Menu/GUI:";
+    public String SetupForm_grpStaticColor = "Static Color";
+    public String SetupForm_lblRed = "Red:";
+    public String SetupForm_lblGreen = "Green:";
+    public String SetupForm_lblBlue = "Blue:";
   }
 }
 

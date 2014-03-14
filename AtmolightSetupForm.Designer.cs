@@ -40,11 +40,11 @@
         this.grpMode = new System.Windows.Forms.GroupBox();
         this.grpStaticColor = new System.Windows.Forms.GroupBox();
         this.lblRed = new System.Windows.Forms.Label();
-        this.tbBlue = new System.Windows.Forms.TextBox();
         this.tbGreen = new System.Windows.Forms.TextBox();
+        this.tbBlue = new System.Windows.Forms.TextBox();
         this.tbRed = new System.Windows.Forms.TextBox();
-        this.lblBlue = new System.Windows.Forms.Label();
         this.lblGreen = new System.Windows.Forms.Label();
+        this.lblBlue = new System.Windows.Forms.Label();
         this.lblMenu = new System.Windows.Forms.Label();
         this.cbMenu = new System.Windows.Forms.ComboBox();
         this.cbRadio = new System.Windows.Forms.ComboBox();
@@ -203,7 +203,7 @@
         this.grpStaticColor.Size = new System.Drawing.Size(276, 49);
         this.grpStaticColor.TabIndex = 25;
         this.grpStaticColor.TabStop = false;
-        this.grpStaticColor.Text = "Static Color:";
+        this.grpStaticColor.Text = "Static Color";
         // 
         // lblRed
         // 
@@ -214,14 +214,6 @@
         this.lblRed.TabIndex = 19;
         this.lblRed.Text = "Red:";
         // 
-        // tbBlue
-        // 
-        this.tbBlue.Location = new System.Drawing.Point(230, 19);
-        this.tbBlue.Name = "tbBlue";
-        this.tbBlue.Size = new System.Drawing.Size(40, 20);
-        this.tbBlue.TabIndex = 24;
-        this.tbBlue.Text = "0";
-        // 
         // tbGreen
         // 
         this.tbGreen.Location = new System.Drawing.Point(144, 19);
@@ -229,6 +221,14 @@
         this.tbGreen.Size = new System.Drawing.Size(40, 20);
         this.tbGreen.TabIndex = 23;
         this.tbGreen.Text = "0";
+        // 
+        // tbBlue
+        // 
+        this.tbBlue.Location = new System.Drawing.Point(230, 19);
+        this.tbBlue.Name = "tbBlue";
+        this.tbBlue.Size = new System.Drawing.Size(40, 20);
+        this.tbBlue.TabIndex = 24;
+        this.tbBlue.Text = "0";
         // 
         // tbRed
         // 
@@ -238,15 +238,6 @@
         this.tbRed.TabIndex = 22;
         this.tbRed.Text = "0";
         // 
-        // lblBlue
-        // 
-        this.lblBlue.AutoSize = true;
-        this.lblBlue.Location = new System.Drawing.Point(196, 22);
-        this.lblBlue.Name = "lblBlue";
-        this.lblBlue.Size = new System.Drawing.Size(31, 13);
-        this.lblBlue.TabIndex = 21;
-        this.lblBlue.Text = "Blue:";
-        // 
         // lblGreen
         // 
         this.lblGreen.AutoSize = true;
@@ -255,6 +246,15 @@
         this.lblGreen.Size = new System.Drawing.Size(39, 13);
         this.lblGreen.TabIndex = 20;
         this.lblGreen.Text = "Green:";
+        // 
+        // lblBlue
+        // 
+        this.lblBlue.AutoSize = true;
+        this.lblBlue.Location = new System.Drawing.Point(196, 22);
+        this.lblBlue.Name = "lblBlue";
+        this.lblBlue.Size = new System.Drawing.Size(31, 13);
+        this.lblBlue.TabIndex = 21;
+        this.lblBlue.Text = "Blue:";
         // 
         // lblMenu
         // 
