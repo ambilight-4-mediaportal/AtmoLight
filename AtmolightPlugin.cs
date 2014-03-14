@@ -371,6 +371,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region Events
+
     public void OnNewAction(MediaPortal.GUI.Library.Action action)
     {
         // Remote Key to toggle On/Off
@@ -470,6 +471,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 dlg.Add(new GUIListItem("Switch LEDs off"));
             }
 
+            dlg.Add(new GUIListItem("Choose Menu Effect"));
+
             if (AtmolightSettings.SBS_3D_ON)
             {
                 dlg.Add(new GUIListItem("Switch 3D SBS Mode off"));
@@ -496,6 +499,43 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 }
             }
             else if (dlg.SelectedLabel == 1)
+            {
+                GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+                dlgEffect.Reset();
+                dlgEffect.SetHeading("Set Menu Effect");
+                dlgEffect.Add(new GUIListItem("LEDs disabled"));
+                dlgEffect.Add(new GUIListItem("AtmoWin Live Mode"));
+                dlgEffect.Add(new GUIListItem("Colorchanger"));
+                dlgEffect.Add(new GUIListItem("Colorchanger LR"));
+                dlgEffect.Add(new GUIListItem("Static Color"));
+                dlgEffect.SelectedLabel = 0;
+                dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
+
+                switch (dlgEffect.SelectedLabel)
+                {
+                    case 0:
+                        AtmolightSettings.effectMenu = ContentEffect.LEDs_disabled;
+                        DisableLEDs();
+                        break;
+                    case 1:
+                        AtmolightSettings.effectMenu = ContentEffect.AtmoWin_GDI_Live_view;
+                        MenuMode();
+                        break;
+                    case 2:
+                        AtmolightSettings.effectMenu = ContentEffect.Colorchanger;
+                        MenuMode();
+                        break;
+                    case 3:
+                        AtmolightSettings.effectMenu = ContentEffect.Colorchanger_LR;
+                        MenuMode();
+                        break;
+                    case 4:
+                        AtmolightSettings.effectMenu = ContentEffect.MP_Live_view;
+                        MenuMode();
+                        break;
+                }
+            }
+            else if (dlg.SelectedLabel == 2)
             {
                 if (AtmolightSettings.SBS_3D_ON)
                 {
