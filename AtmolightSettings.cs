@@ -23,6 +23,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     public static ContentEffect effectMenu;
     public static int killbutton = 0;
     public static int cmbutton = 0;
+    public static int menubutton = 0;
     public static bool disableOnShutdown = true;
     public static bool enableInternalLiveView = false;
     public static bool HateTheStopThing = false;
@@ -57,6 +58,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         effectMenu = (ContentEffect)reader.GetValueAsInt("atmolight", "effectMenu", 0);
         killbutton = reader.GetValueAsInt("atmolight", "killbutton", 0);
         cmbutton = reader.GetValueAsInt("atmolight", "cmbutton", 0);
+        menubutton = reader.GetValueAsInt("atmolight", "menubutton", 0);
         disableOnShutdown = reader.GetValueAsBool("atmolight", "disableOnShutdown", true);
         enableInternalLiveView = reader.GetValueAsBool("atmolight", "enableInternalLiveView", false);
         excludeTimeStart = LoadTimeSetting(reader, "excludeTimeStart", "08:00");
@@ -84,6 +86,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         reader.SetValue("atmolight", "effectMenu", (int)effectMenu);
         reader.SetValue("atmolight", "killbutton", (int)killbutton);
         reader.SetValue("atmolight", "cmbutton", (int)cmbutton);
+        reader.SetValue("atmolight", "menubutton", (int)menubutton);
         reader.SetValueAsBool("atmolight", "disableOnShutdown", disableOnShutdown);
         reader.SetValueAsBool("atmolight", "dontstop", HateTheStopThing);
         reader.SetValueAsBool("atmolight", "OffOnStart", OffOnStart);

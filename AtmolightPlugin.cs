@@ -138,7 +138,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     #region Variables
     public static bool Atmo_off = false;
-    public int lasteff = 999;
     public Int64 tickCount = 0;
     public Int64 lastFrame = 0;
     private IAtmoRemoteControl2 atmoCtrl = null;
@@ -362,6 +361,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                     break;
                 // Effect is called "MP_Live_view" but it actually is "Static Color".
                 case ContentEffect.MP_Live_view:
+                case ContentEffect.ColorMode:
                     atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
                     SetAtmoEffect(ComEffectMode.cemDisabled);
                     SetAtmoColor((byte)AtmolightSettings.StaticColorRed, (byte)AtmolightSettings.StaticColorGreen, (byte)AtmolightSettings.StaticColorBlue);
@@ -385,18 +385,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 if (Atmo_off)
                 {
                     Atmo_off = false;
-                    switch (lasteff)
-                    {
-                        case 0:
-                            currentEffect = AtmolightSettings.effectVideo;
-                            break;
-                        case 1:
-                            currentEffect = AtmolightSettings.effectMusic;
-                            break;
-                        case 2:
-                            currentEffect = AtmolightSettings.effectRadio;
-                            break;
-                    }
                     switch (currentEffect)
                     {
                         case ContentEffect.AtmoWin_GDI_Live_view:
@@ -415,6 +403,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                             break;
                         case ContentEffect.MP_Live_view:
                             EnableLivePictureMode(ComLiveViewSource.lvsExternal);
+                            break;
+                        case ContentEffect.ColorMode:
+                            atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
+                            SetAtmoEffect(ComEffectMode.cemDisabled);
+                            SetAtmoColor((byte)AtmolightSettings.StaticColorRed, (byte)AtmolightSettings.StaticColorGreen, (byte)AtmolightSettings.StaticColorBlue);
                             break;
                     }
                 }
@@ -449,19 +442,16 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             SetColorMode(ComEffectMode.cemColorMode);
             return;
         }
-        // Any other Remote Keys we are not interessted in
-        else if (action.wID != MediaPortal.GUI.Library.Action.ActionType.ACTION_STOP || g_Player.Playing)
-        {
-            return;
-        }
-        // Stop Menu
-        else if (!AtmolightSettings.HateTheStopThing)
+        // Remote Key to open Menu
+        else if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.menubutton == 2) ||
+            (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.menubutton == 1) ||
+            (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.menubutton == 0) ||
+            (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.menubutton == 3))
         {
             GUIDialogMenu dlg = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
-        
-            dlg.Reset();
-            dlg.SetHeading("Set Atmolight Mode");
 
+            dlg.Reset();
+            dlg.SetHeading("AtmoLight");
             if (Atmo_off)
             {
                 dlg.Add(new GUIListItem("Switch LEDs on"));
@@ -471,7 +461,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 dlg.Add(new GUIListItem("Switch LEDs off"));
             }
 
-            dlg.Add(new GUIListItem("Choose Menu Effect"));
+            dlg.Add(new GUIListItem("Choose Effect"));
 
             if (AtmolightSettings.SBS_3D_ON)
             {
@@ -481,10 +471,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             {
                 dlg.Add(new GUIListItem("Switch 3D SBS Mode on"));
             }
-
             dlg.SelectedLabel = 0;
             dlg.DoModal(GUIWindowManager.ActiveWindow);
-        
+
             if (dlg.SelectedLabel == 0)
             {
                 if (Atmo_off)
@@ -500,39 +489,88 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             }
             else if (dlg.SelectedLabel == 1)
             {
-                GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
-                dlgEffect.Reset();
-                dlgEffect.SetHeading("Set Menu Effect");
-                dlgEffect.Add(new GUIListItem("LEDs disabled"));
-                dlgEffect.Add(new GUIListItem("AtmoWin Live Mode"));
-                dlgEffect.Add(new GUIListItem("Colorchanger"));
-                dlgEffect.Add(new GUIListItem("Colorchanger LR"));
-                dlgEffect.Add(new GUIListItem("Static Color"));
-                dlgEffect.SelectedLabel = 0;
-                dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
-
-                switch (dlgEffect.SelectedLabel)
+                if (g_Player.Playing)
                 {
-                    case 0:
-                        AtmolightSettings.effectMenu = ContentEffect.LEDs_disabled;
-                        DisableLEDs();
-                        break;
-                    case 1:
-                        AtmolightSettings.effectMenu = ContentEffect.AtmoWin_GDI_Live_view;
-                        MenuMode();
-                        break;
-                    case 2:
-                        AtmolightSettings.effectMenu = ContentEffect.Colorchanger;
-                        MenuMode();
-                        break;
-                    case 3:
-                        AtmolightSettings.effectMenu = ContentEffect.Colorchanger_LR;
-                        MenuMode();
-                        break;
-                    case 4:
-                        AtmolightSettings.effectMenu = ContentEffect.MP_Live_view;
-                        MenuMode();
-                        break;
+                    GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+                    dlgEffect.Reset();
+                    dlgEffect.SetHeading("Set Menu Effect");
+                    dlgEffect.Add(new GUIListItem("LEDs disabled"));
+                    dlgEffect.Add(new GUIListItem("MediaPortal Live Mode"));
+                    dlgEffect.Add(new GUIListItem("AtmoWin Live Mode"));
+                    dlgEffect.Add(new GUIListItem("Colorchanger"));
+                    dlgEffect.Add(new GUIListItem("Colorchanger LR"));
+                    dlgEffect.Add(new GUIListItem("Static Color"));
+                    dlgEffect.SelectedLabel = 0;
+                    dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
+
+                    switch (dlgEffect.SelectedLabel)
+                    {
+                        case 0:
+                            currentEffect = ContentEffect.LEDs_disabled;
+                            DisableLEDs();
+                            break;
+                        case 1:
+                            currentEffect = ContentEffect.MP_Live_view;
+                            EnableLivePictureMode(ComLiveViewSource.lvsExternal);
+                            break;
+                        case 2:
+                            currentEffect = ContentEffect.AtmoWin_GDI_Live_view;
+                            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                            break;
+                        case 3:
+                            currentEffect = ContentEffect.Colorchanger;
+                            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                            SetAtmoEffect(ComEffectMode.cemColorChange);
+                            break;
+                        case 4:
+                            currentEffect = ContentEffect.Colorchanger_LR;
+                            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                            SetAtmoEffect(ComEffectMode.cemLrColorChange);
+                            break;
+                        case 5:
+                            currentEffect = ContentEffect.ColorMode;
+                            atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
+                            SetAtmoEffect(ComEffectMode.cemDisabled);
+                            SetAtmoColor((byte)AtmolightSettings.StaticColorRed, (byte)AtmolightSettings.StaticColorGreen, (byte)AtmolightSettings.StaticColorBlue);
+                            break;
+                    }
+                }
+                else
+                {
+                    GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+                    dlgEffect.Reset();
+                    dlgEffect.SetHeading("Set Menu Effect");
+                    dlgEffect.Add(new GUIListItem("LEDs disabled"));
+                    dlgEffect.Add(new GUIListItem("AtmoWin Live Mode"));
+                    dlgEffect.Add(new GUIListItem("Colorchanger"));
+                    dlgEffect.Add(new GUIListItem("Colorchanger LR"));
+                    dlgEffect.Add(new GUIListItem("Static Color"));
+                    dlgEffect.SelectedLabel = 0;
+                    dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
+
+                    switch (dlgEffect.SelectedLabel)
+                    {
+                        case 0:
+                            AtmolightSettings.effectMenu = ContentEffect.LEDs_disabled;
+                            DisableLEDs();
+                            break;
+                        case 1:
+                            AtmolightSettings.effectMenu = ContentEffect.AtmoWin_GDI_Live_view;
+                            MenuMode();
+                            break;
+                        case 2:
+                            AtmolightSettings.effectMenu = ContentEffect.Colorchanger;
+                            MenuMode();
+                            break;
+                        case 3:
+                            AtmolightSettings.effectMenu = ContentEffect.Colorchanger_LR;
+                            MenuMode();
+                            break;
+                        case 4:
+                            AtmolightSettings.effectMenu = ContentEffect.ColorMode;
+                            MenuMode();
+                            break;
+                    }
                 }
             }
             else if (dlg.SelectedLabel == 2)
@@ -580,18 +618,15 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
             Log.Debug("atmolight: Video detected)");
             currentEffect = AtmolightSettings.effectVideo;
-            lasteff = 0;
         }
         else if (type == g_Player.MediaType.Music)
         {
             currentEffect = AtmolightSettings.effectMusic;
-            lasteff = 1;
             Log.Debug("atmolight: Music detected)");
         }
         else if (type == g_Player.MediaType.Radio)
         {
             currentEffect = AtmolightSettings.effectRadio;
-            lasteff = 2;
             Log.Debug("atmolight: Radio detected)");
         }
 
