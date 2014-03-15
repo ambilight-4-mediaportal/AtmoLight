@@ -60,6 +60,8 @@
         this.lblStart = new System.Windows.Forms.Label();
         this.lblHint = new System.Windows.Forms.Label();
         this.grpPluginOption = new System.Windows.Forms.GroupBox();
+        this.lblMenuButton = new System.Windows.Forms.Label();
+        this.cbMenuButton = new System.Windows.Forms.ComboBox();
         this.ckExitAtmoWin = new System.Windows.Forms.CheckBox();
         this.ckStartAtmoWin = new System.Windows.Forms.CheckBox();
         this.lblProfile = new System.Windows.Forms.Label();
@@ -74,8 +76,6 @@
         this.lblVersionVal = new System.Windows.Forms.Label();
         this.btnLanguage = new System.Windows.Forms.Button();
         this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-        this.cbMenuButton = new System.Windows.Forms.ComboBox();
-        this.lblMenuButton = new System.Windows.Forms.Label();
         this.grpMPClose.SuspendLayout();
         this.grpMode.SuspendLayout();
         this.grpStaticColor.SuspendLayout();
@@ -427,6 +427,30 @@
         this.grpPluginOption.TabStop = false;
         this.grpPluginOption.Text = "Plugin options";
         // 
+        // lblMenuButton
+        // 
+        this.lblMenuButton.AutoSize = true;
+        this.lblMenuButton.Location = new System.Drawing.Point(10, 18);
+        this.lblMenuButton.Name = "lblMenuButton";
+        this.lblMenuButton.Size = new System.Drawing.Size(95, 13);
+        this.lblMenuButton.TabIndex = 21;
+        this.lblMenuButton.Text = "Menu RemoteKey:";
+        // 
+        // cbMenuButton
+        // 
+        this.cbMenuButton.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cbMenuButton.FormattingEnabled = true;
+        this.cbMenuButton.Items.AddRange(new object[] {
+            "Red",
+            "Green",
+            "Yellow",
+            "Blue",
+            "None"});
+        this.cbMenuButton.Location = new System.Drawing.Point(188, 15);
+        this.cbMenuButton.Name = "cbMenuButton";
+        this.cbMenuButton.Size = new System.Drawing.Size(96, 21);
+        this.cbMenuButton.TabIndex = 20;
+        // 
         // ckExitAtmoWin
         // 
         this.ckExitAtmoWin.AutoSize = true;
@@ -465,11 +489,11 @@
         this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         this.comboBox2.FormattingEnabled = true;
         this.comboBox2.Items.AddRange(new object[] {
-            "None",
             "Red",
             "Green",
             "Yellow",
-            "Blue"});
+            "Blue",
+            "None"});
         this.comboBox2.Location = new System.Drawing.Point(188, 65);
         this.comboBox2.Name = "comboBox2";
         this.comboBox2.Size = new System.Drawing.Size(96, 21);
@@ -518,11 +542,11 @@
         this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         this.comboBox1.FormattingEnabled = true;
         this.comboBox1.Items.AddRange(new object[] {
-            "None",
             "Red",
             "Green",
             "Yellow",
-            "Blue"});
+            "Blue",
+            "None"});
         this.comboBox1.Location = new System.Drawing.Point(188, 40);
         this.comboBox1.Name = "comboBox1";
         this.comboBox1.Size = new System.Drawing.Size(96, 21);
@@ -570,30 +594,6 @@
         // openFileDialog2
         // 
         this.openFileDialog2.Filter = "files|*.lng";
-        // 
-        // cbMenuButton
-        // 
-        this.cbMenuButton.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-        this.cbMenuButton.FormattingEnabled = true;
-        this.cbMenuButton.Items.AddRange(new object[] {
-            "None",
-            "Red",
-            "Green",
-            "Yellow",
-            "Blue"});
-        this.cbMenuButton.Location = new System.Drawing.Point(188, 15);
-        this.cbMenuButton.Name = "cbMenuButton";
-        this.cbMenuButton.Size = new System.Drawing.Size(96, 21);
-        this.cbMenuButton.TabIndex = 20;
-        // 
-        // lblMenuButton
-        // 
-        this.lblMenuButton.AutoSize = true;
-        this.lblMenuButton.Location = new System.Drawing.Point(10, 18);
-        this.lblMenuButton.Name = "lblMenuButton";
-        this.lblMenuButton.Size = new System.Drawing.Size(95, 13);
-        this.lblMenuButton.TabIndex = 21;
-        this.lblMenuButton.Text = "Menu RemoteKey:";
         // 
         // AtmolightSetupForm
         // 

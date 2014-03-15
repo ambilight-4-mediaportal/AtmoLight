@@ -56,9 +56,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         effectMusic = (ContentEffect)reader.GetValueAsInt("atmolight", "effectMusic", 1);
         effectRadio = (ContentEffect)reader.GetValueAsInt("atmolight", "effectRadio", 0);
         effectMenu = (ContentEffect)reader.GetValueAsInt("atmolight", "effectMenu", 0);
-        killbutton = reader.GetValueAsInt("atmolight", "killbutton", 0);
-        cmbutton = reader.GetValueAsInt("atmolight", "cmbutton", 0);
-        menubutton = reader.GetValueAsInt("atmolight", "menubutton", 0);
+        killbutton = reader.GetValueAsInt("atmolight", "killbutton", 4);
+        cmbutton = reader.GetValueAsInt("atmolight", "cmbutton", 4);
+        menubutton = reader.GetValueAsInt("atmolight", "menubutton", 4);
         disableOnShutdown = reader.GetValueAsBool("atmolight", "disableOnShutdown", true);
         enableInternalLiveView = reader.GetValueAsBool("atmolight", "enableInternalLiveView", false);
         excludeTimeStart = LoadTimeSetting(reader, "excludeTimeStart", "08:00");
