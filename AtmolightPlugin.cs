@@ -310,11 +310,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     
     private void DisableLEDs()
     {
-      atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
-      SetAtmoEffect(ComEffectMode.cemDisabled);
-      System.Threading.Thread.Sleep(10);
-      SetAtmoColor(0, 0, 0);
-      SetAtmoEffect(ComEffectMode.cemDisabled);
+        Atmo_off = true;
+        atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
+        SetAtmoEffect(ComEffectMode.cemDisabled);
+        System.Threading.Thread.Sleep(10);
+        SetAtmoColor(0, 0, 0);
+        SetAtmoEffect(ComEffectMode.cemDisabled);
     }
 
     private bool CheckForStartRequirements()
@@ -345,28 +346,65 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             switch (MenuEffect)
             {
                 case ContentEffect.AtmoWin_GDI_Live_view:
+                    Atmo_off = false;
                     EnableLivePictureMode(ComLiveViewSource.lvsGDI);
                     break;
                 case ContentEffect.Colorchanger:
+                    Atmo_off = false;
                     EnableLivePictureMode(ComLiveViewSource.lvsGDI);
                     SetAtmoEffect(ComEffectMode.cemColorChange);
                     break;
                 case ContentEffect.Colorchanger_LR:
+                    Atmo_off = false;
                     EnableLivePictureMode(ComLiveViewSource.lvsGDI);
                     SetAtmoEffect(ComEffectMode.cemLrColorChange);
                     break;
                 case ContentEffect.LEDs_disabled:
                     DisableLEDs();
-                    Atmo_off = true;
                     break;
                 // Effect is called "MP_Live_view" but it actually is "Static Color".
                 case ContentEffect.MP_Live_view:
                 case ContentEffect.ColorMode:
+                    Atmo_off = false;
                     atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
                     SetAtmoEffect(ComEffectMode.cemDisabled);
                     SetAtmoColor((byte)AtmolightSettings.StaticColorRed, (byte)AtmolightSettings.StaticColorGreen, (byte)AtmolightSettings.StaticColorBlue);
                     break;
             }
+    }
+
+    private void PlaybackMode()
+    {
+        switch (currentEffect)
+        {
+            case ContentEffect.AtmoWin_GDI_Live_view:
+                Atmo_off = false;
+                EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                break;
+            case ContentEffect.Colorchanger:
+                Atmo_off = false;
+                EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                SetAtmoEffect(ComEffectMode.cemColorChange);
+                break;
+            case ContentEffect.Colorchanger_LR:
+                Atmo_off = false;
+                EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                SetAtmoEffect(ComEffectMode.cemLrColorChange);
+                break;
+            case ContentEffect.LEDs_disabled:
+                DisableLEDs();
+                break;
+            case ContentEffect.MP_Live_view:
+                Atmo_off = false;
+                EnableLivePictureMode(ComLiveViewSource.lvsExternal);
+                break;
+            case ContentEffect.ColorMode:
+                Atmo_off = false;
+                atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
+                SetAtmoEffect(ComEffectMode.cemDisabled);
+                SetAtmoColor((byte)AtmolightSettings.StaticColorRed, (byte)AtmolightSettings.StaticColorGreen, (byte)AtmolightSettings.StaticColorBlue);
+                break;
+        }
     }
     #endregion
 
@@ -380,57 +418,20 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.killbutton == 1) ||
             (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.killbutton == 4))
         {
-            if (g_Player.Playing)
+            if (Atmo_off)
             {
-                if (Atmo_off)
+                if (g_Player.Playing)
                 {
-                    Atmo_off = false;
-                    switch (currentEffect)
-                    {
-                        case ContentEffect.AtmoWin_GDI_Live_view:
-                            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-                            break;
-                        case ContentEffect.Colorchanger:
-                            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-                            SetAtmoEffect(ComEffectMode.cemColorChange);
-                            break;
-                        case ContentEffect.Colorchanger_LR:
-                            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-                            SetAtmoEffect(ComEffectMode.cemLrColorChange);
-                            break;
-                        case ContentEffect.LEDs_disabled:
-                            DisableLEDs();
-                            break;
-                        case ContentEffect.MP_Live_view:
-                            EnableLivePictureMode(ComLiveViewSource.lvsExternal);
-                            break;
-                        case ContentEffect.ColorMode:
-                            atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
-                            SetAtmoEffect(ComEffectMode.cemDisabled);
-                            SetAtmoColor((byte)AtmolightSettings.StaticColorRed, (byte)AtmolightSettings.StaticColorGreen, (byte)AtmolightSettings.StaticColorBlue);
-                            break;
-                    }
+                    PlaybackMode();
                 }
                 else
                 {
-                    Atmo_off = true;
-                    DisableLEDs();
+                    MenuMode();
                 }
-                return;
             }
             else
             {
-                if (Atmo_off)
-                {
-                    Atmo_off = false;
-                    MenuMode();
-                }
-                else
-                {
-                    Atmo_off = true;
-                    DisableLEDs();
-                }
-              
+                DisableLEDs();
             }
         }
         // Remote Key to change Profiles
@@ -462,6 +463,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             }
 
             dlg.Add(new GUIListItem("Choose Effect"));
+            dlg.Add(new GUIListItem("Change AtmoWin Profile"));
 
             if (AtmolightSettings.SBS_3D_ON)
             {
@@ -478,12 +480,17 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             {
                 if (Atmo_off)
                 {
-                    Atmo_off = false;
-                    MenuMode();
+                    if (g_Player.Playing)
+                    {
+                        PlaybackMode();
+                    }
+                    else
+                    {
+                        MenuMode();
+                    }
                 }
                 else
                 {
-                    Atmo_off = true;
                     DisableLEDs();
                 }
             }
@@ -511,27 +518,23 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                             break;
                         case 1:
                             currentEffect = ContentEffect.MP_Live_view;
-                            EnableLivePictureMode(ComLiveViewSource.lvsExternal);
+                            PlaybackMode();
                             break;
                         case 2:
                             currentEffect = ContentEffect.AtmoWin_GDI_Live_view;
-                            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                            PlaybackMode();
                             break;
                         case 3:
                             currentEffect = ContentEffect.Colorchanger;
-                            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-                            SetAtmoEffect(ComEffectMode.cemColorChange);
+                            PlaybackMode();
                             break;
                         case 4:
                             currentEffect = ContentEffect.Colorchanger_LR;
-                            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-                            SetAtmoEffect(ComEffectMode.cemLrColorChange);
+                            PlaybackMode();
                             break;
                         case 5:
                             currentEffect = ContentEffect.ColorMode;
-                            atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
-                            SetAtmoEffect(ComEffectMode.cemDisabled);
-                            SetAtmoColor((byte)AtmolightSettings.StaticColorRed, (byte)AtmolightSettings.StaticColorGreen, (byte)AtmolightSettings.StaticColorBlue);
+                            PlaybackMode();
                             break;
                     }
                 }
@@ -574,6 +577,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 }
             }
             else if (dlg.SelectedLabel == 2)
+            {
+                SetColorMode(ComEffectMode.cemColorMode);
+            }
+            else if (dlg.SelectedLabel == 3)
             {
                 if (AtmolightSettings.SBS_3D_ON)
                 {
@@ -632,26 +639,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
         if (CheckForStartRequirements())
         {
-            switch (currentEffect)
-            {
-                case ContentEffect.AtmoWin_GDI_Live_view:
-                    EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-                    break;
-                case ContentEffect.Colorchanger:
-                    EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-                    SetAtmoEffect(ComEffectMode.cemColorChange);
-                    break;
-                case ContentEffect.Colorchanger_LR:
-                    EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-                    SetAtmoEffect(ComEffectMode.cemLrColorChange);
-                    break;
-                case ContentEffect.LEDs_disabled:
-                    DisableLEDs();
-                    break;
-                case ContentEffect.MP_Live_view:
-                    EnableLivePictureMode(ComLiveViewSource.lvsExternal);
-                    break;
-            }
+            PlaybackMode();
         }
         else
         {
