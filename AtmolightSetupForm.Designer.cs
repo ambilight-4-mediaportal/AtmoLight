@@ -406,8 +406,8 @@
         this.lblHint.Name = "lblHint";
         this.lblHint.Size = new System.Drawing.Size(138, 126);
         this.lblHint.TabIndex = 9;
-        this.lblHint.Text = "Hint: You can use the \"STOP\" button when nothing is playing to enable GDI Live-Vi" +
-            "ew, disable the LEDs or switch 3D-SBS Mode.";
+        this.lblHint.Text = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3" +
+            "D-SBS mode.";
         // 
         // grpPluginOption
         // 

@@ -237,7 +237,7 @@ namespace Language
     public String SetupForm_btnSaveText = "Save";
     public String SetupForm_btnCancelText = "Cancel";
     public String SetupForm_btnLanguageText = "Load Language";
-    public String SetupForm_lblHintText = "Hint: You can use the STOP button when nothing is playing to enable GDI Live-View, disable the LEDs or switch 3D-SBS Mode.";
+    public String SetupForm_lblHintText = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3D-SBS mode.";
     public String SetupForm_lblFramesText = "ms between Frames";
     public String SetupForm_lblStartText = "Start:";
     public String SetupForm_lblEndText = "End:";
