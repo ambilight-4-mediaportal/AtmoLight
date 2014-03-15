@@ -147,6 +147,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private Surface rgbSurface = null;
     private ContentEffect currentEffect = ContentEffect.LEDs_disabled;
     private ContentEffect MenuEffect = ContentEffect.LEDs_disabled;
+    private int[] StaticColor = { 0, 0, 0 };
+    private int StaticColorHelper;
     #endregion
 
     [DllImport("AtmoDXUtil.dll", PreserveSig = false, CharSet = CharSet.Auto)]
@@ -342,7 +344,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     private void MenuMode()
     {
-            MenuEffect = AtmolightSettings.effectMenu;
             switch (MenuEffect)
             {
                 case ContentEffect.AtmoWin_GDI_Live_view:
@@ -362,13 +363,14 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 case ContentEffect.LEDs_disabled:
                     DisableLEDs();
                     break;
-                // Effect is called "MP_Live_view" but it actually is "Static Color".
+                // Effect can be called "MP_Live_view" but it actually is "Static Color".
+                // This should not happen anymore, but the case for it stays in for now.
                 case ContentEffect.MP_Live_view:
                 case ContentEffect.ColorMode:
                     Atmo_off = false;
                     atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
                     SetAtmoEffect(ComEffectMode.cemDisabled);
-                    SetAtmoColor((byte)AtmolightSettings.StaticColorRed, (byte)AtmolightSettings.StaticColorGreen, (byte)AtmolightSettings.StaticColorBlue);
+                    SetAtmoColor((byte)StaticColor[0], (byte)StaticColor[1], (byte)StaticColor[2]);
                     break;
             }
     }
@@ -402,8 +404,20 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 Atmo_off = false;
                 atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
                 SetAtmoEffect(ComEffectMode.cemDisabled);
-                SetAtmoColor((byte)AtmolightSettings.StaticColorRed, (byte)AtmolightSettings.StaticColorGreen, (byte)AtmolightSettings.StaticColorBlue);
+                SetAtmoColor((byte)StaticColor[0], (byte)StaticColor[1], (byte)StaticColor[2]);
                 break;
+        }
+    }
+
+    private void StartLEDs()
+    {
+        if (g_Player.Playing)
+        {
+            PlaybackMode();
+        }
+        else
+        {
+            MenuMode();
         }
     }
     #endregion
@@ -420,14 +434,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
             if (Atmo_off)
             {
-                if (g_Player.Playing)
-                {
-                    PlaybackMode();
-                }
-                else
-                {
-                    MenuMode();
-                }
+                StartLEDs();
             }
             else
             {
@@ -473,6 +480,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             {
                 dlg.Add(new GUIListItem("Switch 3D SBS Mode on"));
             }
+            if (((g_Player.Playing) && (currentEffect == ContentEffect.ColorMode) && (!Atmo_off)) ||
+                ((!g_Player.Playing) && (MenuEffect == ContentEffect.ColorMode) && (!Atmo_off)))
+            {
+                dlg.Add(new GUIListItem("Change Static Color"));
+            }
+
             dlg.SelectedLabel = 0;
             dlg.DoModal(GUIWindowManager.ActiveWindow);
 
@@ -480,14 +493,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             {
                 if (Atmo_off)
                 {
-                    if (g_Player.Playing)
-                    {
-                        PlaybackMode();
-                    }
-                    else
-                    {
-                        MenuMode();
-                    }
+                    StartLEDs();
                 }
                 else
                 {
@@ -554,23 +560,23 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                     switch (dlgEffect.SelectedLabel)
                     {
                         case 0:
-                            AtmolightSettings.effectMenu = ContentEffect.LEDs_disabled;
+                            MenuEffect = ContentEffect.LEDs_disabled;
                             DisableLEDs();
                             break;
                         case 1:
-                            AtmolightSettings.effectMenu = ContentEffect.AtmoWin_GDI_Live_view;
+                            MenuEffect = ContentEffect.AtmoWin_GDI_Live_view;
                             MenuMode();
                             break;
                         case 2:
-                            AtmolightSettings.effectMenu = ContentEffect.Colorchanger;
+                            MenuEffect = ContentEffect.Colorchanger;
                             MenuMode();
                             break;
                         case 3:
-                            AtmolightSettings.effectMenu = ContentEffect.Colorchanger_LR;
+                            MenuEffect = ContentEffect.Colorchanger_LR;
                             MenuMode();
                             break;
                         case 4:
-                            AtmolightSettings.effectMenu = ContentEffect.ColorMode;
+                            MenuEffect = ContentEffect.ColorMode;
                             MenuMode();
                             break;
                     }
@@ -590,6 +596,141 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 {
                     AtmolightSettings.SBS_3D_ON = true;
                 }
+            }
+            else if (dlg.SelectedLabel == 4)
+            {
+                GUIDialogMenu dlgStaticColor = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+                dlgStaticColor.Reset();
+                dlgStaticColor.SetHeading("Change Static Color");
+                dlgStaticColor.Add(new GUIListItem("Manual"));
+                dlgStaticColor.Add(new GUIListItem("Saved Color"));
+                dlgStaticColor.Add(new GUIListItem("White"));
+                dlgStaticColor.Add(new GUIListItem("Red"));
+                dlgStaticColor.Add(new GUIListItem("Green"));
+                dlgStaticColor.Add(new GUIListItem("Blue"));
+                dlgStaticColor.Add(new GUIListItem("Cyan"));
+                dlgStaticColor.Add(new GUIListItem("Magenta"));
+                dlgStaticColor.Add(new GUIListItem("Yellow"));
+                dlgStaticColor.SelectedLabel = 0;
+                dlgStaticColor.DoModal(GUIWindowManager.ActiveWindow);
+
+                switch (dlgStaticColor.SelectedLabel)
+                {
+                    case 0:
+                        for (int i = 0; i <= 2; i++)
+                        {
+                            GUIDialogOK dlgOK = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
+                            if (dlgOK != null)
+                            {
+                                dlgOK.SetHeading("Static Color:");
+                                switch (i)
+                                {
+                                    case 0:
+                                        dlgOK.SetLine(1, "Red: N/A (next)");
+                                        dlgOK.SetLine(2, "Green: N/A");
+                                        dlgOK.SetLine(3, "Blue: N/A");
+                                        dlgOK.SetLine(4, "");
+                                        dlgOK.SetLine(5, "Please enter the value for red:");
+                                        break;
+                                    case 1:
+                                        dlgOK.SetLine(1, "Red: " + StaticColor[0]);
+                                        dlgOK.SetLine(2, "Green: N/A (next)");
+                                        dlgOK.SetLine(3, "Blue: N/A");
+                                        dlgOK.SetLine(4, "");
+                                        dlgOK.SetLine(5, "Please enter the value for green:");
+                                        break;
+                                    case 2:
+                                        dlgOK.SetLine(1, "Red: " + StaticColor[0]);
+                                        dlgOK.SetLine(2, "Green: " + StaticColor[1]);
+                                        dlgOK.SetLine(3, "Blue: N/A (next)");
+                                        dlgOK.SetLine(4, "");
+                                        dlgOK.SetLine(5, "Please enter the value for blue:");
+                                        break;
+                                }
+                                dlgOK.DoModal(GUIWindowManager.ActiveWindow);
+                            }
+                            StandardKeyboard keyboard = (StandardKeyboard)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
+                            if (null == keyboard)
+                            {
+                                return;
+                            }
+                            keyboard.Reset();
+                            keyboard.Text = "";
+                            keyboard.DoModal(GUIWindowManager.ActiveWindow);
+                            if (keyboard.IsConfirmed)
+                            {
+                                if ((int.TryParse(keyboard.Text, out StaticColorHelper)) && (StaticColorHelper >= 0) && (StaticColorHelper <= 255))
+                                {
+                                    StaticColor[i] = StaticColorHelper;
+                                }
+                                else
+                                {
+                                    GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
+                                    if (dlgError != null)
+                                    {
+                                        dlgError.SetHeading("Error!");
+                                        dlgError.SetLine(1, "The value has to be a number");
+                                        dlgError.SetLine(2, "and must be between 0 and 255.");
+                                        dlgError.DoModal(GUIWindowManager.ActiveWindow);
+                                    }
+                                    i--;
+                                    continue;
+                                }
+                            }
+
+                        }
+                        GUIDialogOK dlgSuccess = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
+                        if (dlgSuccess != null)
+                        {
+                            dlgSuccess.SetHeading("Success!");
+                            dlgSuccess.SetLine(1, "Red: " + StaticColor[0]);
+                            dlgSuccess.SetLine(2, "Green: " + StaticColor[1]);
+                            dlgSuccess.SetLine(3, "Blue: " + StaticColor[2]);
+                            dlgSuccess.DoModal(GUIWindowManager.ActiveWindow);
+                        }
+                        break;
+                    case 1:
+                        StaticColor[0] = AtmolightSettings.StaticColorRed;
+                        StaticColor[1] = AtmolightSettings.StaticColorGreen;
+                        StaticColor[2] = AtmolightSettings.StaticColorBlue;
+                        break;
+                    case 2:
+                        StaticColor[0] = 255;
+                        StaticColor[1] = 255;
+                        StaticColor[2] = 255;
+                        break;
+                    case 3:
+                        StaticColor[0] = 255;
+                        StaticColor[1] = 0;
+                        StaticColor[2] = 0;
+                        break;
+                    case 4:
+                        StaticColor[0] = 0;
+                        StaticColor[1]  = 255;
+                        StaticColor[2] = 0;
+                        break;
+                    case 5:
+                        StaticColor[0] = 0;
+                        StaticColor[1] = 0;
+                        StaticColor[2] = 255;
+                        break;
+                    case 6:
+                        StaticColor[0] = 0;
+                        StaticColor[1] = 255;
+                        StaticColor[2] = 255;
+                        break;
+                    case 7:
+                        StaticColor[0] = 255;
+                        StaticColor[1] = 0;
+                        StaticColor[2] = 255;
+                        break;
+                    case 8:
+                        StaticColor[0] = 255;
+                        StaticColor[1] = 255;
+                        StaticColor[2] = 0;
+                        break;
+                }
+                StartLEDs();
             }
         }
     }
@@ -720,7 +861,19 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         FrameGrabber.GetInstance().OnNewFrame += new FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
         
         Log.Info("atmolight: Start() waiting for g_player events...");
-        
+
+        // Workaround
+        if (AtmolightSettings.effectMenu == ContentEffect.MP_Live_view)
+        {
+            AtmolightSettings.effectMenu = ContentEffect.ColorMode;
+        }
+
+        MenuEffect = AtmolightSettings.effectMenu;
+
+        StaticColor[0] = AtmolightSettings.StaticColorRed;
+        StaticColor[1] = AtmolightSettings.StaticColorGreen;
+        StaticColor[2] = AtmolightSettings.StaticColorBlue;
+
         if (CheckForStartRequirements())
         {
             MenuMode();
@@ -731,10 +884,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
 
         GUIGraphicsContext.OnNewAction += new OnActionHandler(OnNewAction);
-        if (AtmolightSettings.OffOnStart)
-        { 
-          Atmo_off = true; 
-        }
       }
     }
 
