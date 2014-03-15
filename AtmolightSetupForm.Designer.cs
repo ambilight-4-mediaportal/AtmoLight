@@ -289,7 +289,8 @@
             "LEDs disabled",
             "AtmoWin Live Mode",
             "Colorchanger",
-            "Colorchanger LR"});
+            "Colorchanger LR",
+            "Static Color"});
         this.cbRadio.Location = new System.Drawing.Point(131, 77);
         this.cbRadio.Name = "cbRadio";
         this.cbRadio.Size = new System.Drawing.Size(154, 21);
@@ -312,7 +313,8 @@
             "LEDs disabled",
             "AtmoWin Live Mode",
             "Colorchanger",
-            "Colorchanger LR"});
+            "Colorchanger LR",
+            "Static Color"});
         this.cbMusic.Location = new System.Drawing.Point(131, 50);
         this.cbMusic.Name = "cbMusic";
         this.cbMusic.Size = new System.Drawing.Size(154, 21);
@@ -336,7 +338,8 @@
             "AtmoWin Live Mode",
             "Colorchanger",
             "Colorchanger LR",
-            "MediaPortal Live Mode"});
+            "MediaPortal Live Mode",
+            "Static Color"});
         this.cbVideo.Location = new System.Drawing.Point(131, 23);
         this.cbVideo.Name = "cbVideo";
         this.cbVideo.Size = new System.Drawing.Size(154, 21);

@@ -769,11 +769,21 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         else if (type == g_Player.MediaType.Music)
         {
+            // Workaround
+            if (AtmolightSettings.effectMusic == ContentEffect.MP_Live_view)
+            {
+                AtmolightSettings.effectMusic = ContentEffect.ColorMode;
+            }
             currentEffect = AtmolightSettings.effectMusic;
             Log.Debug("atmolight: Music detected)");
         }
         else if (type == g_Player.MediaType.Radio)
         {
+            // Workaround
+            if (AtmolightSettings.effectRadio == ContentEffect.MP_Live_view)
+            {
+                AtmolightSettings.effectRadio = ContentEffect.ColorMode;
+            }
             currentEffect = AtmolightSettings.effectRadio;
             Log.Debug("atmolight: Radio detected)");
         }
