@@ -228,7 +228,6 @@ namespace Language
     public String SetupForm_lblLedsOnOffText = "LEDs OnOff RemoteKey:";
     public String SetupForm_lblProfileText = "Profile RemoteKey:";
     public String SetupForm_ckOnMediaStartText = "LEDs off on media start (manual mode)";
-    public String SetupForm_ckDisableStopMenuText = "disable STOP menu";
     public String SetupForm_ckLowCpuText = "low CPU";
     public String SetupForm_ckStartAtmoWinText = "Start AtmoWin with MediaPortal";
     public String SetupForm_ckExitAtmoWinText = "Exit AtmoWin with MediaPortal";
@@ -248,6 +247,7 @@ namespace Language
     public String SetupForm_lblRed = "Red:";
     public String SetupForm_lblGreen = "Green:";
     public String SetupForm_lblBlue = "Blue:";
+    public String SetupForm_lblMenuButton = "Menu RemoteKey:";
   }
 }
 

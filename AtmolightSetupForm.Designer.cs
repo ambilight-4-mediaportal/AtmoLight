@@ -68,13 +68,14 @@
         this.lowCpuTime = new System.Windows.Forms.TextBox();
         this.ckLowCpu = new System.Windows.Forms.CheckBox();
         this.ckOnMediaStart = new System.Windows.Forms.CheckBox();
-        this.ckDisableStopMenu = new System.Windows.Forms.CheckBox();
         this.comboBox1 = new System.Windows.Forms.ComboBox();
         this.lblLedsOnOff = new System.Windows.Forms.Label();
         this.lblVersion = new System.Windows.Forms.Label();
         this.lblVersionVal = new System.Windows.Forms.Label();
         this.btnLanguage = new System.Windows.Forms.Button();
         this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+        this.cbMenuButton = new System.Windows.Forms.ComboBox();
+        this.lblMenuButton = new System.Windows.Forms.Label();
         this.grpMPClose.SuspendLayout();
         this.grpMode.SuspendLayout();
         this.grpStaticColor.SuspendLayout();
@@ -407,6 +408,8 @@
         // 
         // grpPluginOption
         // 
+        this.grpPluginOption.Controls.Add(this.lblMenuButton);
+        this.grpPluginOption.Controls.Add(this.cbMenuButton);
         this.grpPluginOption.Controls.Add(this.ckExitAtmoWin);
         this.grpPluginOption.Controls.Add(this.ckStartAtmoWin);
         this.grpPluginOption.Controls.Add(this.lblProfile);
@@ -415,7 +418,6 @@
         this.grpPluginOption.Controls.Add(this.lowCpuTime);
         this.grpPluginOption.Controls.Add(this.ckLowCpu);
         this.grpPluginOption.Controls.Add(this.ckOnMediaStart);
-        this.grpPluginOption.Controls.Add(this.ckDisableStopMenu);
         this.grpPluginOption.Controls.Add(this.comboBox1);
         this.grpPluginOption.Controls.Add(this.lblLedsOnOff);
         this.grpPluginOption.Location = new System.Drawing.Point(10, 249);
@@ -452,7 +454,7 @@
         // lblProfile
         // 
         this.lblProfile.AutoSize = true;
-        this.lblProfile.Location = new System.Drawing.Point(10, 44);
+        this.lblProfile.Location = new System.Drawing.Point(10, 68);
         this.lblProfile.Name = "lblProfile";
         this.lblProfile.Size = new System.Drawing.Size(97, 13);
         this.lblProfile.TabIndex = 17;
@@ -463,13 +465,14 @@
         this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         this.comboBox2.FormattingEnabled = true;
         this.comboBox2.Items.AddRange(new object[] {
-            "red",
-            "green",
-            "yellow",
-            "blue"});
-        this.comboBox2.Location = new System.Drawing.Point(188, 41);
+            "None",
+            "Red",
+            "Green",
+            "Yellow",
+            "Blue"});
+        this.comboBox2.Location = new System.Drawing.Point(188, 65);
         this.comboBox2.Name = "comboBox2";
-        this.comboBox2.Size = new System.Drawing.Size(95, 21);
+        this.comboBox2.Size = new System.Drawing.Size(96, 21);
         this.comboBox2.TabIndex = 16;
         // 
         // lblFrames
@@ -503,33 +506,24 @@
         // ckOnMediaStart
         // 
         this.ckOnMediaStart.AutoSize = true;
-        this.ckOnMediaStart.Location = new System.Drawing.Point(13, 69);
+        this.ckOnMediaStart.Location = new System.Drawing.Point(13, 92);
         this.ckOnMediaStart.Name = "ckOnMediaStart";
         this.ckOnMediaStart.Size = new System.Drawing.Size(208, 17);
         this.ckOnMediaStart.TabIndex = 12;
         this.ckOnMediaStart.Text = "LEDs off on media start (manual mode)";
         this.ckOnMediaStart.UseVisualStyleBackColor = true;
         // 
-        // ckDisableStopMenu
-        // 
-        this.ckDisableStopMenu.AutoSize = true;
-        this.ckDisableStopMenu.Location = new System.Drawing.Point(13, 92);
-        this.ckDisableStopMenu.Name = "ckDisableStopMenu";
-        this.ckDisableStopMenu.Size = new System.Drawing.Size(120, 17);
-        this.ckDisableStopMenu.TabIndex = 11;
-        this.ckDisableStopMenu.Text = "disable STOP menu";
-        this.ckDisableStopMenu.UseVisualStyleBackColor = true;
-        // 
         // comboBox1
         // 
         this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         this.comboBox1.FormattingEnabled = true;
         this.comboBox1.Items.AddRange(new object[] {
-            "red",
-            "green",
-            "yellow",
-            "blue"});
-        this.comboBox1.Location = new System.Drawing.Point(188, 13);
+            "None",
+            "Red",
+            "Green",
+            "Yellow",
+            "Blue"});
+        this.comboBox1.Location = new System.Drawing.Point(188, 40);
         this.comboBox1.Name = "comboBox1";
         this.comboBox1.Size = new System.Drawing.Size(96, 21);
         this.comboBox1.TabIndex = 9;
@@ -537,7 +531,7 @@
         // lblLedsOnOff
         // 
         this.lblLedsOnOff.AutoSize = true;
-        this.lblLedsOnOff.Location = new System.Drawing.Point(9, 16);
+        this.lblLedsOnOff.Location = new System.Drawing.Point(10, 43);
         this.lblLedsOnOff.Name = "lblLedsOnOff";
         this.lblLedsOnOff.Size = new System.Drawing.Size(125, 13);
         this.lblLedsOnOff.TabIndex = 8;
@@ -576,6 +570,30 @@
         // openFileDialog2
         // 
         this.openFileDialog2.Filter = "files|*.lng";
+        // 
+        // cbMenuButton
+        // 
+        this.cbMenuButton.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        this.cbMenuButton.FormattingEnabled = true;
+        this.cbMenuButton.Items.AddRange(new object[] {
+            "None",
+            "Red",
+            "Green",
+            "Yellow",
+            "Blue"});
+        this.cbMenuButton.Location = new System.Drawing.Point(188, 15);
+        this.cbMenuButton.Name = "cbMenuButton";
+        this.cbMenuButton.Size = new System.Drawing.Size(96, 21);
+        this.cbMenuButton.TabIndex = 20;
+        // 
+        // lblMenuButton
+        // 
+        this.lblMenuButton.AutoSize = true;
+        this.lblMenuButton.Location = new System.Drawing.Point(10, 18);
+        this.lblMenuButton.Name = "lblMenuButton";
+        this.lblMenuButton.Size = new System.Drawing.Size(95, 13);
+        this.lblMenuButton.TabIndex = 21;
+        this.lblMenuButton.Text = "Menu RemoteKey:";
         // 
         // AtmolightSetupForm
         // 
@@ -642,7 +660,6 @@
     private System.Windows.Forms.ComboBox comboBox1;
     private System.Windows.Forms.Label lblLedsOnOff;
     private System.Windows.Forms.CheckBox ckOnMediaStart;
-    private System.Windows.Forms.CheckBox ckDisableStopMenu;
     private System.Windows.Forms.CheckBox ckLowCpu;
     private System.Windows.Forms.Label lblFrames;
     private System.Windows.Forms.TextBox lowCpuTime;
@@ -663,5 +680,7 @@
     private System.Windows.Forms.TextBox tbRed;
     private System.Windows.Forms.Label lblBlue;
     private System.Windows.Forms.Label lblGreen;
+    private System.Windows.Forms.Label lblMenuButton;
+    private System.Windows.Forms.ComboBox cbMenuButton;
   }
 }

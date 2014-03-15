@@ -21,17 +21,13 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       cbMenu.SelectedIndex = (int)AtmolightSettings.effectMenu;
       comboBox1.SelectedIndex = (int)AtmolightSettings.killbutton;
       comboBox2.SelectedIndex = (int)AtmolightSettings.cmbutton;
+      cbMenuButton.SelectedIndex = (int)AtmolightSettings.menubutton;
       edExcludeStart.Text = AtmolightSettings.excludeTimeStart.ToString("HH:mm");
       edExcludeEnd.Text = AtmolightSettings.excludeTimeEnd.ToString("HH:mm");
       lowCpuTime.Text = AtmolightSettings.lowCPUTime.ToString();
       tbRed.Text = AtmolightSettings.StaticColorRed.ToString();
       tbGreen.Text = AtmolightSettings.StaticColorGreen.ToString();
       tbBlue.Text = AtmolightSettings.StaticColorBlue.ToString();
-
-      if (AtmolightSettings.HateTheStopThing)
-        ckDisableStopMenu.Checked = true;
-      else
-        this.ckDisableStopMenu.Checked = false;
 
       if (AtmolightSettings.OffOnStart)
         ckOnMediaStart.Checked = true;
@@ -71,7 +67,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       lblLedsOnOff.Text = LanguageLoader.appStrings.SetupForm_lblLedsOnOffText;
       lblProfile.Text = LanguageLoader.appStrings.SetupForm_lblProfileText;
       ckOnMediaStart.Text = LanguageLoader.appStrings.SetupForm_ckOnMediaStartText;
-      ckDisableStopMenu.Text = LanguageLoader.appStrings.SetupForm_ckDisableStopMenuText;
       ckLowCpu.Text = LanguageLoader.appStrings.SetupForm_ckLowCpuText;
       ckStartAtmoWin.Text = LanguageLoader.appStrings.SetupForm_ckStartAtmoWinText;
       ckExitAtmoWin.Text = LanguageLoader.appStrings.SetupForm_ckExitAtmoWinText;
@@ -91,6 +86,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         lblRed.Text = LanguageLoader.appStrings.SetupForm_lblRed;
         lblGreen.Text = LanguageLoader.appStrings.SetupForm_lblGreen;
         lblBlue.Text = LanguageLoader.appStrings.SetupForm_lblBlue;
+        lblMenuButton.Text = LanguageLoader.appStrings.SetupForm_lblMenuButton;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -158,6 +154,14 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           return;
       }
 
+      if ((cbMenuButton.SelectedIndex == comboBox1.SelectedIndex) && (cbMenuButton.SelectedIndex != 0) ||
+          (cbMenuButton.SelectedIndex == comboBox2.SelectedIndex) && (cbMenuButton.SelectedIndex != 0) ||
+          (comboBox1.SelectedIndex == comboBox2.SelectedIndex) && (comboBox1.SelectedIndex != 0))
+      {
+          MessageBox.Show("You cant use the same remote key for more than one task.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+      }
+
       AtmolightSettings.StaticColorRed = StaticColorRed;
       AtmolightSettings.StaticColorGreen = StaticColorGreen;
       AtmolightSettings.StaticColorBlue = StaticColorBlue;
@@ -170,9 +174,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       AtmolightSettings.effectMenu = (ContentEffect)cbMenu.SelectedIndex;
       AtmolightSettings.killbutton = comboBox1.SelectedIndex;
       AtmolightSettings.cmbutton = comboBox2.SelectedIndex;
+      AtmolightSettings.menubutton = cbMenuButton.SelectedIndex;
       AtmolightSettings.disableOnShutdown = rbDisableLEDs.Checked;
       AtmolightSettings.enableInternalLiveView = rbSwitchToLiveView.Checked;
-      AtmolightSettings.HateTheStopThing = ckDisableStopMenu.Checked;
       AtmolightSettings.OffOnStart = ckOnMediaStart.Checked;
       AtmolightSettings.lowCPU = ckLowCpu.Checked;
       AtmolightSettings.startAtmoWin = ckStartAtmoWin.Checked;
