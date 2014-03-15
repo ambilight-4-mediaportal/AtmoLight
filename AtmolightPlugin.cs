@@ -315,9 +315,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         Atmo_off = true;
         atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
         SetAtmoEffect(ComEffectMode.cemDisabled);
+        // Workaround for SEDU
         System.Threading.Thread.Sleep(10);
         SetAtmoColor(0, 0, 0);
-        SetAtmoEffect(ComEffectMode.cemDisabled);
     }
 
     private bool CheckForStartRequirements()
@@ -371,6 +371,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                     atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
                     SetAtmoEffect(ComEffectMode.cemDisabled);
                     SetAtmoColor((byte)StaticColor[0], (byte)StaticColor[1], (byte)StaticColor[2]);
+                    // Workaround for SEDU
+                    System.Threading.Thread.Sleep(10);
+                    SetAtmoColor((byte)StaticColor[0], (byte)StaticColor[1], (byte)StaticColor[2]);
                     break;
             }
     }
@@ -404,6 +407,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 Atmo_off = false;
                 atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
                 SetAtmoEffect(ComEffectMode.cemDisabled);
+                SetAtmoColor((byte)StaticColor[0], (byte)StaticColor[1], (byte)StaticColor[2]);
+                // Workaround for SEDU
+                System.Threading.Thread.Sleep(20);
                 SetAtmoColor((byte)StaticColor[0], (byte)StaticColor[1], (byte)StaticColor[2]);
                 break;
         }
