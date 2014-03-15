@@ -366,7 +366,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 // Effect can be called "MP_Live_view" but it actually is "Static Color".
                 // This should not happen anymore, but the case for it stays in for now.
                 case ContentEffect.MP_Live_view:
-                case ContentEffect.ColorMode:
+                case ContentEffect.StaticColor:
                     Atmo_off = false;
                     atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
                     SetAtmoEffect(ComEffectMode.cemDisabled);
@@ -400,7 +400,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 Atmo_off = false;
                 EnableLivePictureMode(ComLiveViewSource.lvsExternal);
                 break;
-            case ContentEffect.ColorMode:
+            case ContentEffect.StaticColor:
                 Atmo_off = false;
                 atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
                 SetAtmoEffect(ComEffectMode.cemDisabled);
@@ -480,8 +480,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             {
                 dlg.Add(new GUIListItem("Switch 3D SBS Mode on"));
             }
-            if (((g_Player.Playing) && (currentEffect == ContentEffect.ColorMode) && (!Atmo_off)) ||
-                ((!g_Player.Playing) && (MenuEffect == ContentEffect.ColorMode) && (!Atmo_off)))
+            if (((g_Player.Playing) && (currentEffect == ContentEffect.StaticColor) && (!Atmo_off)) ||
+                ((!g_Player.Playing) && (MenuEffect == ContentEffect.StaticColor) && (!Atmo_off)))
             {
                 dlg.Add(new GUIListItem("Change Static Color"));
             }
@@ -539,7 +539,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                             PlaybackMode();
                             break;
                         case 5:
-                            currentEffect = ContentEffect.ColorMode;
+                            currentEffect = ContentEffect.StaticColor;
                             PlaybackMode();
                             break;
                     }
@@ -576,7 +576,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                             MenuMode();
                             break;
                         case 4:
-                            MenuEffect = ContentEffect.ColorMode;
+                            MenuEffect = ContentEffect.StaticColor;
                             MenuMode();
                             break;
                     }
@@ -772,7 +772,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             // Workaround
             if (AtmolightSettings.effectMusic == ContentEffect.MP_Live_view)
             {
-                AtmolightSettings.effectMusic = ContentEffect.ColorMode;
+                AtmolightSettings.effectMusic = ContentEffect.StaticColor;
             }
             currentEffect = AtmolightSettings.effectMusic;
             Log.Debug("atmolight: Music detected)");
@@ -782,7 +782,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             // Workaround
             if (AtmolightSettings.effectRadio == ContentEffect.MP_Live_view)
             {
-                AtmolightSettings.effectRadio = ContentEffect.ColorMode;
+                AtmolightSettings.effectRadio = ContentEffect.StaticColor;
             }
             currentEffect = AtmolightSettings.effectRadio;
             Log.Debug("atmolight: Radio detected)");
@@ -875,7 +875,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         // Workaround
         if (AtmolightSettings.effectMenu == ContentEffect.MP_Live_view)
         {
-            AtmolightSettings.effectMenu = ContentEffect.ColorMode;
+            AtmolightSettings.effectMenu = ContentEffect.StaticColor;
         }
 
         MenuEffect = AtmolightSettings.effectMenu;
