@@ -460,7 +460,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
     }
 
-    private void DialogRGBManualStaticColorChanger(bool Reset, int StartPosition)
+    private void DialogRGBManualStaticColorChanger(bool Reset = true, int StartPosition = 0)
     {
         if (Reset)
         {
@@ -479,29 +479,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         switch (dlgRGB.SelectedLabel)
         {
             case 0:
-                if ((int.TryParse(GetKeyboardString((StaticColorTemp[0] == -1 ? "" : StaticColorTemp[0].ToString())), out StaticColorHelper)) && (StaticColorHelper >= 0) && (StaticColorHelper <= 255))
-                {
-                    StaticColorTemp[0] = StaticColorHelper;
-                }
-                else
-                {
-                    DialogRGBError();
-                }
-                break;
             case 1:
-                if ((int.TryParse(GetKeyboardString((StaticColorTemp[1] == -1 ? "" : StaticColorTemp[1].ToString())), out StaticColorHelper)) && (StaticColorHelper >= 0) && (StaticColorHelper <= 255))
-                {
-                    StaticColorTemp[1] = StaticColorHelper;
-                }
-                else
-                {
-                    DialogRGBError();
-                }
-                break;
             case 2:
-                if ((int.TryParse(GetKeyboardString((StaticColorTemp[2] == -1 ? "" : StaticColorTemp[2].ToString())), out StaticColorHelper)) && (StaticColorHelper >= 0) && (StaticColorHelper <= 255))
+                if ((int.TryParse(GetKeyboardString((StaticColorTemp[dlgRGB.SelectedLabel] == -1 ? "" : StaticColorTemp[dlgRGB.SelectedLabel].ToString())), out StaticColorHelper)) && (StaticColorHelper >= 0) && (StaticColorHelper <= 255))
                 {
-                    StaticColorTemp[2] = StaticColorHelper;
+                    StaticColorTemp[dlgRGB.SelectedLabel] = StaticColorHelper;
                 }
                 else
                 {
@@ -552,7 +534,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.cmbutton == 3))
         {
             SetColorMode(ComEffectMode.cemColorMode);
-            return;
         }
         // Remote Key to open Menu
         else if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.menubutton == 2) ||
@@ -594,178 +575,176 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             dlg.SelectedLabel = 0;
             dlg.DoModal(GUIWindowManager.ActiveWindow);
 
-            if (dlg.SelectedLabel == 0)
+            switch (dlg.SelectedLabel)
             {
-                if (Atmo_off)
-                {
-                    StartLEDs();
-                }
-                else
-                {
-                    DisableLEDs();
-                }
-            }
-            else if (dlg.SelectedLabel == 1)
-            {
-                if (g_Player.Playing)
-                {
-                    GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
-                    dlgEffect.Reset();
-                    dlgEffect.SetHeading("Change Effect");
-                    dlgEffect.Add(new GUIListItem("LEDs disabled"));
-                    dlgEffect.Add(new GUIListItem("MediaPortal Live Mode"));
-                    dlgEffect.Add(new GUIListItem("AtmoWin Live Mode"));
-                    dlgEffect.Add(new GUIListItem("Colorchanger"));
-                    dlgEffect.Add(new GUIListItem("Colorchanger LR"));
-                    dlgEffect.Add(new GUIListItem("Static Color"));
-                    dlgEffect.SelectedLabel = 0;
-                    dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
+                case 0:
+                    if (Atmo_off)
+                    {
+                        StartLEDs();
+                    }
+                    else
+                    {
+                        DisableLEDs();
+                    }
+                    break;
+                case 1:
+                    if (g_Player.Playing)
+                    {
+                        GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+                        dlgEffect.Reset();
+                        dlgEffect.SetHeading("Change Effect");
+                        dlgEffect.Add(new GUIListItem("LEDs disabled"));
+                        dlgEffect.Add(new GUIListItem("MediaPortal Live Mode"));
+                        dlgEffect.Add(new GUIListItem("AtmoWin Live Mode"));
+                        dlgEffect.Add(new GUIListItem("Colorchanger"));
+                        dlgEffect.Add(new GUIListItem("Colorchanger LR"));
+                        dlgEffect.Add(new GUIListItem("Static Color"));
+                        dlgEffect.SelectedLabel = 0;
+                        dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
 
-                    switch (dlgEffect.SelectedLabel)
+                        switch (dlgEffect.SelectedLabel)
+                        {
+                            case 0:
+                                currentEffect = ContentEffect.LEDs_disabled;
+                                DisableLEDs();
+                                break;
+                            case 1:
+                                currentEffect = ContentEffect.MP_Live_view;
+                                PlaybackMode();
+                                break;
+                            case 2:
+                                currentEffect = ContentEffect.AtmoWin_GDI_Live_view;
+                                PlaybackMode();
+                                break;
+                            case 3:
+                                currentEffect = ContentEffect.Colorchanger;
+                                PlaybackMode();
+                                break;
+                            case 4:
+                                currentEffect = ContentEffect.Colorchanger_LR;
+                                PlaybackMode();
+                                break;
+                            case 5:
+                                currentEffect = ContentEffect.StaticColor;
+                                PlaybackMode();
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+                        dlgEffect.Reset();
+                        dlgEffect.SetHeading("Change Effect");
+                        dlgEffect.Add(new GUIListItem("LEDs disabled"));
+                        dlgEffect.Add(new GUIListItem("AtmoWin Live Mode"));
+                        dlgEffect.Add(new GUIListItem("Colorchanger"));
+                        dlgEffect.Add(new GUIListItem("Colorchanger LR"));
+                        dlgEffect.Add(new GUIListItem("Static Color"));
+                        dlgEffect.SelectedLabel = 0;
+                        dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
+
+                        switch (dlgEffect.SelectedLabel)
+                        {
+                            case 0:
+                                MenuEffect = ContentEffect.LEDs_disabled;
+                                DisableLEDs();
+                                break;
+                            case 1:
+                                MenuEffect = ContentEffect.AtmoWin_GDI_Live_view;
+                                MenuMode();
+                                break;
+                            case 2:
+                                MenuEffect = ContentEffect.Colorchanger;
+                                MenuMode();
+                                break;
+                            case 3:
+                                MenuEffect = ContentEffect.Colorchanger_LR;
+                                MenuMode();
+                                break;
+                            case 4:
+                                MenuEffect = ContentEffect.StaticColor;
+                                MenuMode();
+                                break;
+                        }
+                    }
+                    break;
+                case 2:
+                    SetColorMode(ComEffectMode.cemColorMode);
+                    break;
+                case 3:
+                    if (AtmolightSettings.SBS_3D_ON)
+                    {
+                        AtmolightSettings.SBS_3D_ON = false;
+                    }
+                    else
+                    {
+                        AtmolightSettings.SBS_3D_ON = true;
+                    }
+                    break;
+                case 4:
+                    GUIDialogMenu dlgStaticColor = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+                    dlgStaticColor.Reset();
+                    dlgStaticColor.SetHeading("Change Static Color");
+                    dlgStaticColor.Add(new GUIListItem("Manual"));
+                    dlgStaticColor.Add(new GUIListItem("Saved Color"));
+                    dlgStaticColor.Add(new GUIListItem("White"));
+                    dlgStaticColor.Add(new GUIListItem("Red"));
+                    dlgStaticColor.Add(new GUIListItem("Green"));
+                    dlgStaticColor.Add(new GUIListItem("Blue"));
+                    dlgStaticColor.Add(new GUIListItem("Cyan"));
+                    dlgStaticColor.Add(new GUIListItem("Magenta"));
+                    dlgStaticColor.Add(new GUIListItem("Yellow"));
+                    dlgStaticColor.SelectedLabel = 0;
+                    dlgStaticColor.DoModal(GUIWindowManager.ActiveWindow);
+
+                    switch (dlgStaticColor.SelectedLabel)
                     {
                         case 0:
-                            currentEffect = ContentEffect.LEDs_disabled;
-                            DisableLEDs();
+                            DialogRGBManualStaticColorChanger();
                             break;
                         case 1:
-                            currentEffect = ContentEffect.MP_Live_view;
-                            PlaybackMode();
+                            StaticColor[0] = AtmolightSettings.StaticColorRed;
+                            StaticColor[1] = AtmolightSettings.StaticColorGreen;
+                            StaticColor[2] = AtmolightSettings.StaticColorBlue;
                             break;
                         case 2:
-                            currentEffect = ContentEffect.AtmoWin_GDI_Live_view;
-                            PlaybackMode();
+                            StaticColor[0] = 255;
+                            StaticColor[1] = 255;
+                            StaticColor[2] = 255;
                             break;
                         case 3:
-                            currentEffect = ContentEffect.Colorchanger;
-                            PlaybackMode();
+                            StaticColor[0] = 255;
+                            StaticColor[1] = 0;
+                            StaticColor[2] = 0;
                             break;
                         case 4:
-                            currentEffect = ContentEffect.Colorchanger_LR;
-                            PlaybackMode();
+                            StaticColor[0] = 0;
+                            StaticColor[1]  = 255;
+                            StaticColor[2] = 0;
                             break;
                         case 5:
-                            currentEffect = ContentEffect.StaticColor;
-                            PlaybackMode();
+                            StaticColor[0] = 0;
+                            StaticColor[1] = 0;
+                            StaticColor[2] = 255;
+                            break;
+                        case 6:
+                            StaticColor[0] = 0;
+                            StaticColor[1] = 255;
+                            StaticColor[2] = 255;
+                            break;
+                        case 7:
+                            StaticColor[0] = 255;
+                            StaticColor[1] = 0;
+                            StaticColor[2] = 255;
+                            break;
+                        case 8:
+                            StaticColor[0] = 255;
+                            StaticColor[1] = 255;
+                            StaticColor[2] = 0;
                             break;
                     }
-                }
-                else
-                {
-                    GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
-                    dlgEffect.Reset();
-                    dlgEffect.SetHeading("Change Effect");
-                    dlgEffect.Add(new GUIListItem("LEDs disabled"));
-                    dlgEffect.Add(new GUIListItem("AtmoWin Live Mode"));
-                    dlgEffect.Add(new GUIListItem("Colorchanger"));
-                    dlgEffect.Add(new GUIListItem("Colorchanger LR"));
-                    dlgEffect.Add(new GUIListItem("Static Color"));
-                    dlgEffect.SelectedLabel = 0;
-                    dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
-
-                    switch (dlgEffect.SelectedLabel)
-                    {
-                        case 0:
-                            MenuEffect = ContentEffect.LEDs_disabled;
-                            DisableLEDs();
-                            break;
-                        case 1:
-                            MenuEffect = ContentEffect.AtmoWin_GDI_Live_view;
-                            MenuMode();
-                            break;
-                        case 2:
-                            MenuEffect = ContentEffect.Colorchanger;
-                            MenuMode();
-                            break;
-                        case 3:
-                            MenuEffect = ContentEffect.Colorchanger_LR;
-                            MenuMode();
-                            break;
-                        case 4:
-                            MenuEffect = ContentEffect.StaticColor;
-                            MenuMode();
-                            break;
-                    }
-                }
-            }
-            else if (dlg.SelectedLabel == 2)
-            {
-                SetColorMode(ComEffectMode.cemColorMode);
-            }
-            else if (dlg.SelectedLabel == 3)
-            {
-                if (AtmolightSettings.SBS_3D_ON)
-                {
-                    AtmolightSettings.SBS_3D_ON = false;
-                }
-                else
-                {
-                    AtmolightSettings.SBS_3D_ON = true;
-                }
-            }
-            else if (dlg.SelectedLabel == 4)
-            {
-                GUIDialogMenu dlgStaticColor = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
-                dlgStaticColor.Reset();
-                dlgStaticColor.SetHeading("Change Static Color");
-                dlgStaticColor.Add(new GUIListItem("Manual"));
-                dlgStaticColor.Add(new GUIListItem("Saved Color"));
-                dlgStaticColor.Add(new GUIListItem("White"));
-                dlgStaticColor.Add(new GUIListItem("Red"));
-                dlgStaticColor.Add(new GUIListItem("Green"));
-                dlgStaticColor.Add(new GUIListItem("Blue"));
-                dlgStaticColor.Add(new GUIListItem("Cyan"));
-                dlgStaticColor.Add(new GUIListItem("Magenta"));
-                dlgStaticColor.Add(new GUIListItem("Yellow"));
-                dlgStaticColor.SelectedLabel = 0;
-                dlgStaticColor.DoModal(GUIWindowManager.ActiveWindow);
-
-                switch (dlgStaticColor.SelectedLabel)
-                {
-                    case 0:
-                        DialogRGBManualStaticColorChanger(true, 0);
-                        break;
-                    case 1:
-                        StaticColor[0] = AtmolightSettings.StaticColorRed;
-                        StaticColor[1] = AtmolightSettings.StaticColorGreen;
-                        StaticColor[2] = AtmolightSettings.StaticColorBlue;
-                        break;
-                    case 2:
-                        StaticColor[0] = 255;
-                        StaticColor[1] = 255;
-                        StaticColor[2] = 255;
-                        break;
-                    case 3:
-                        StaticColor[0] = 255;
-                        StaticColor[1] = 0;
-                        StaticColor[2] = 0;
-                        break;
-                    case 4:
-                        StaticColor[0] = 0;
-                        StaticColor[1]  = 255;
-                        StaticColor[2] = 0;
-                        break;
-                    case 5:
-                        StaticColor[0] = 0;
-                        StaticColor[1] = 0;
-                        StaticColor[2] = 255;
-                        break;
-                    case 6:
-                        StaticColor[0] = 0;
-                        StaticColor[1] = 255;
-                        StaticColor[2] = 255;
-                        break;
-                    case 7:
-                        StaticColor[0] = 255;
-                        StaticColor[1] = 0;
-                        StaticColor[2] = 255;
-                        break;
-                    case 8:
-                        StaticColor[0] = 255;
-                        StaticColor[1] = 255;
-                        StaticColor[2] = 0;
-                        break;
-                }
-                StartLEDs();
+                    StartLEDs();
+                    break;
             }
         }
     }
