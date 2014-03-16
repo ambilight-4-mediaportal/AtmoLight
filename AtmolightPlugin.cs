@@ -12,6 +12,7 @@ using System.Drawing;
 using System.IO;
 using Microsoft.DirectX.Direct3D;
 using MediaPortal.Dialogs;
+using Language;
 
 namespace MediaPortal.ProcessPlugins.Atmolight
 {
@@ -453,9 +454,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
         if (dlgError != null)
         {
-            dlgError.SetHeading("Error!");
-            dlgError.SetLine(1, "The value has to be a number");
-            dlgError.SetLine(2, "and must be between 0 and 255.");
+            dlgError.SetHeading(LanguageLoader.appStrings.ContextMenu_Error + "!");
+            dlgError.SetLine(1, LanguageLoader.appStrings.ContextMenu_RGBErrorLine1);
+            dlgError.SetLine(2, LanguageLoader.appStrings.ContextMenu_RGBErrorLine2);
             dlgError.DoModal(GUIWindowManager.ActiveWindow);
         }
     }
@@ -468,12 +469,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         GUIDialogMenu dlgRGB = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgRGB.Reset();
-        dlgRGB.SetHeading("Manual Static Color");
-        dlgRGB.Add(new GUIListItem("Red: " + (StaticColorTemp[0] == -1 ? "N/A" : StaticColorTemp[0].ToString())));
-        dlgRGB.Add(new GUIListItem("Green: " + (StaticColorTemp[1] == -1 ? "N/A" : StaticColorTemp[1].ToString())));
-        dlgRGB.Add(new GUIListItem("Blue: " + (StaticColorTemp[2] == -1 ? "N/A" : StaticColorTemp[2].ToString())));
-        dlgRGB.Add(new GUIListItem("Apply"));
-        dlgRGB.Add(new GUIListItem("Cancel"));
+        dlgRGB.SetHeading(LanguageLoader.appStrings.ContextMenu_ManualStaticColor);
+        dlgRGB.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Red + ": " + (StaticColorTemp[0] == -1 ? LanguageLoader.appStrings.ContextMenu_NA : StaticColorTemp[0].ToString())));
+        dlgRGB.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Green + ": " + (StaticColorTemp[1] == -1 ? LanguageLoader.appStrings.ContextMenu_NA : StaticColorTemp[1].ToString())));
+        dlgRGB.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Blue + ": " + (StaticColorTemp[2] == -1 ? LanguageLoader.appStrings.ContextMenu_NA : StaticColorTemp[2].ToString())));
+        dlgRGB.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Apply));
+        dlgRGB.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Cancel));
         dlgRGB.SelectedLabel = StartPosition;
         dlgRGB.DoModal(GUIWindowManager.ActiveWindow);
         switch (dlgRGB.SelectedLabel)
@@ -548,28 +549,28 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             dlg.SetHeading("AtmoLight");
             if (Atmo_off)
             {
-                dlg.Add(new GUIListItem("Switch LEDs on"));
+                dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchLEDsON));
             }
             else
             {
-                dlg.Add(new GUIListItem("Switch LEDs off"));
+                dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchLEDsOFF));
             }
 
-            dlg.Add(new GUIListItem("Change Effect"));
-            dlg.Add(new GUIListItem("Change AtmoWin Profile"));
+            dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeEffect));
+            dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeAWProfile));
 
             if (AtmolightSettings.SBS_3D_ON)
             {
-                dlg.Add(new GUIListItem("Switch 3D SBS Mode off"));
+                dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Switch3DOFF));
             }
             else
             {
-                dlg.Add(new GUIListItem("Switch 3D SBS Mode on"));
+                dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Switch3DON));
             }
             if (((g_Player.Playing) && (currentEffect == ContentEffect.StaticColor) && (!Atmo_off)) ||
                 ((!g_Player.Playing) && (MenuEffect == ContentEffect.StaticColor) && (!Atmo_off)))
             {
-                dlg.Add(new GUIListItem("Change Static Color"));
+                dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeStatic));
             }
 
             dlg.SelectedLabel = 0;
@@ -592,13 +593,13 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                     {
                         GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
                         dlgEffect.Reset();
-                        dlgEffect.SetHeading("Change Effect");
-                        dlgEffect.Add(new GUIListItem("LEDs disabled"));
-                        dlgEffect.Add(new GUIListItem("MediaPortal Live Mode"));
-                        dlgEffect.Add(new GUIListItem("AtmoWin Live Mode"));
-                        dlgEffect.Add(new GUIListItem("Colorchanger"));
-                        dlgEffect.Add(new GUIListItem("Colorchanger LR"));
-                        dlgEffect.Add(new GUIListItem("Static Color"));
+                        dlgEffect.SetHeading(LanguageLoader.appStrings.ContextMenu_ChangeEffect);
+                        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_LEDsDisabled));
+                        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_MPLive));
+                        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_AWLive));
+                        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Colorchanger));
+                        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ColorchangerLR));
+                        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_StaticColor));
                         dlgEffect.SelectedLabel = 0;
                         dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
 
@@ -634,12 +635,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                     {
                         GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
                         dlgEffect.Reset();
-                        dlgEffect.SetHeading("Change Effect");
-                        dlgEffect.Add(new GUIListItem("LEDs disabled"));
-                        dlgEffect.Add(new GUIListItem("AtmoWin Live Mode"));
-                        dlgEffect.Add(new GUIListItem("Colorchanger"));
-                        dlgEffect.Add(new GUIListItem("Colorchanger LR"));
-                        dlgEffect.Add(new GUIListItem("Static Color"));
+                        dlgEffect.SetHeading(LanguageLoader.appStrings.ContextMenu_ChangeEffect);
+                        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_LEDsDisabled));
+                        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_AWLive));
+                        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Colorchanger));
+                        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ColorchangerLR));
+                        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_StaticColor));
                         dlgEffect.SelectedLabel = 0;
                         dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
 
@@ -684,16 +685,16 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 case 4:
                     GUIDialogMenu dlgStaticColor = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
                     dlgStaticColor.Reset();
-                    dlgStaticColor.SetHeading("Change Static Color");
-                    dlgStaticColor.Add(new GUIListItem("Manual"));
-                    dlgStaticColor.Add(new GUIListItem("Saved Color"));
-                    dlgStaticColor.Add(new GUIListItem("White"));
-                    dlgStaticColor.Add(new GUIListItem("Red"));
-                    dlgStaticColor.Add(new GUIListItem("Green"));
-                    dlgStaticColor.Add(new GUIListItem("Blue"));
-                    dlgStaticColor.Add(new GUIListItem("Cyan"));
-                    dlgStaticColor.Add(new GUIListItem("Magenta"));
-                    dlgStaticColor.Add(new GUIListItem("Yellow"));
+                    dlgStaticColor.SetHeading(LanguageLoader.appStrings.ContextMenu_ChangeStatic);
+                    dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Manual));
+                    dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SavedColor));
+                    dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_White));
+                    dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Red));
+                    dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Green));
+                    dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Blue));
+                    dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Cyan));
+                    dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Magenta));
+                    dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Yellow));
                     dlgStaticColor.SelectedLabel = 0;
                     dlgStaticColor.DoModal(GUIWindowManager.ActiveWindow);
 

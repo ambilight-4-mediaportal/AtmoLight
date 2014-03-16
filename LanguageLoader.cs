@@ -248,6 +248,35 @@ namespace Language
     public String SetupForm_lblGreen = "Green:";
     public String SetupForm_lblBlue = "Blue:";
     public String SetupForm_lblMenuButton = "Menu RemoteKey:";
+    public String ContextMenu_SwitchLEDsON = "Switch LEDs on";
+    public String ContextMenu_SwitchLEDsOFF = "Switch LEDs off";
+    public String ContextMenu_ChangeEffect = "Change Effect";
+    public String ContextMenu_ChangeAWProfile = "Change AtmoWin Profile";
+    public String ContextMenu_Switch3DON = "Switch 3D SBS Mode on";
+    public String ContextMenu_Switch3DOFF = "Switch 3D SBS Mode off";
+    public String ContextMenu_ChangeStatic = "Change Static Color";
+    public String ContextMenu_LEDsDisabled = "LEDs disabled";
+    public String ContextMenu_MPLive = "MediaPortal Live Mode";
+    public String ContextMenu_AWLive = "AtmoWin Live Mode";
+    public String ContextMenu_Colorchanger = "Colorchanger";
+    public String ContextMenu_ColorchangerLR = "Colorchanger LR";
+    public String ContextMenu_StaticColor = "Static Color";
+    public String ContextMenu_Manual = "Manual";
+    public String ContextMenu_SavedColor = "Saved Color";
+    public String ContextMenu_White = "White";
+    public String ContextMenu_Red = "Red";
+    public String ContextMenu_Green = "Green";
+    public String ContextMenu_Blue = "Blue";
+    public String ContextMenu_Cyan = "Cyan";
+    public String ContextMenu_Magenta = "Magenta";
+    public String ContextMenu_Yellow = "Yellow";
+    public String ContextMenu_Error = "Error";
+    public String ContextMenu_RGBErrorLine1 = "The value has to be a number";
+    public String ContextMenu_RGBErrorLine2 = "and must be between 0 and 255.";
+    public String ContextMenu_ManualStaticColor = "Manual Static Color";
+    public String ContextMenu_Apply = "Apply";
+    public String ContextMenu_Cancel = "Cancel";
+    public String ContextMenu_NA = "N/A";
   }
 }
 
