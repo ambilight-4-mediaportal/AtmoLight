@@ -448,6 +448,7 @@
             "Green",
             "Yellow",
             "Blue",
+            "Stop",
             "None"});
         this.cbMenuButton.Location = new System.Drawing.Point(188, 15);
         this.cbMenuButton.Name = "cbMenuButton";

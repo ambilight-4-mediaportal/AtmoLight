@@ -58,7 +58,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         effectMenu = (ContentEffect)reader.GetValueAsInt("atmolight", "effectMenu", 0);
         killbutton = reader.GetValueAsInt("atmolight", "killbutton", 4);
         cmbutton = reader.GetValueAsInt("atmolight", "cmbutton", 4);
-        menubutton = reader.GetValueAsInt("atmolight", "menubutton", 4);
+        menubutton = reader.GetValueAsInt("atmolight", "menubutton", 5);
         disableOnShutdown = reader.GetValueAsBool("atmolight", "disableOnShutdown", true);
         enableInternalLiveView = reader.GetValueAsBool("atmolight", "enableInternalLiveView", false);
         excludeTimeStart = LoadTimeSetting(reader, "excludeTimeStart", "08:00");
