@@ -209,6 +209,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #region Utilities
     private bool ConnectToAtmoWinA()
     {
+        // Testcode
+        // Waiting 1 second for atmowin to start properly.
+        System.Threading.Thread.Sleep(1000);
       try
       {
         atmoCtrl = (IAtmoRemoteControl2)Marshal.GetActiveObject("AtmoRemoteControl.1");
