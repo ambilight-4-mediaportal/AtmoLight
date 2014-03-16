@@ -148,6 +148,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private ContentEffect currentEffect = ContentEffect.LEDs_disabled;
     private ContentEffect MenuEffect = ContentEffect.LEDs_disabled;
     private int[] StaticColor = { 0, 0, 0 };
+    private int[] StaticColorTemp = { 0, 0, 0 };
     private int StaticColorHelper;
     #endregion
 
@@ -429,6 +430,100 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             MenuMode();
         }
     }
+
+    private string GetKeyboardString(string KeyboardString)
+    {
+        VirtualKeyboard Keyboard = (VirtualKeyboard)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
+        if (Keyboard == null)
+        {
+            return null;
+        }
+        Keyboard.Reset();
+        Keyboard.Text = KeyboardString;
+        Keyboard.DoModal(GUIWindowManager.ActiveWindow);
+        if (Keyboard.IsConfirmed)
+        {
+            return Keyboard.Text;
+        }
+        return null;
+    }
+
+    private void DialogRGBError()
+    {
+        GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
+        if (dlgError != null)
+        {
+            dlgError.SetHeading("Error!");
+            dlgError.SetLine(1, "The value has to be a number");
+            dlgError.SetLine(2, "and must be between 0 and 255.");
+            dlgError.DoModal(GUIWindowManager.ActiveWindow);
+        }
+    }
+
+    private void DialogRGBManualStaticColorChanger(bool Reset, int StartPosition)
+    {
+        if (Reset)
+        {
+            StaticColorTemp = new int[] { -1, -1, -1 };
+        }
+        GUIDialogMenu dlgRGB = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+        dlgRGB.Reset();
+        dlgRGB.SetHeading("Manual Static Color");
+        dlgRGB.Add(new GUIListItem("Red: " + (StaticColorTemp[0] == -1 ? "N/A" : StaticColorTemp[0].ToString())));
+        dlgRGB.Add(new GUIListItem("Green: " + (StaticColorTemp[1] == -1 ? "N/A" : StaticColorTemp[1].ToString())));
+        dlgRGB.Add(new GUIListItem("Blue: " + (StaticColorTemp[2] == -1 ? "N/A" : StaticColorTemp[2].ToString())));
+        dlgRGB.Add(new GUIListItem("Apply"));
+        dlgRGB.Add(new GUIListItem("Cancel"));
+        dlgRGB.SelectedLabel = StartPosition;
+        dlgRGB.DoModal(GUIWindowManager.ActiveWindow);
+        switch (dlgRGB.SelectedLabel)
+        {
+            case 0:
+                if ((int.TryParse(GetKeyboardString((StaticColorTemp[0] == -1 ? "" : StaticColorTemp[0].ToString())), out StaticColorHelper)) && (StaticColorHelper >= 0) && (StaticColorHelper <= 255))
+                {
+                    StaticColorTemp[0] = StaticColorHelper;
+                }
+                else
+                {
+                    DialogRGBError();
+                }
+                break;
+            case 1:
+                if ((int.TryParse(GetKeyboardString((StaticColorTemp[1] == -1 ? "" : StaticColorTemp[1].ToString())), out StaticColorHelper)) && (StaticColorHelper >= 0) && (StaticColorHelper <= 255))
+                {
+                    StaticColorTemp[1] = StaticColorHelper;
+                }
+                else
+                {
+                    DialogRGBError();
+                }
+                break;
+            case 2:
+                if ((int.TryParse(GetKeyboardString((StaticColorTemp[2] == -1 ? "" : StaticColorTemp[2].ToString())), out StaticColorHelper)) && (StaticColorHelper >= 0) && (StaticColorHelper <= 255))
+                {
+                    StaticColorTemp[2] = StaticColorHelper;
+                }
+                else
+                {
+                    DialogRGBError();
+                }
+                break;
+            case 3:
+                if (StaticColorTemp[0] == -1 || StaticColorTemp[1] == -1 || StaticColorTemp[2] == -1)
+                {
+                    DialogRGBError();
+                    break;
+                }
+                else
+                {
+                    StaticColor = StaticColorTemp;
+                    return;
+                }
+            case 4:
+                return;
+        }
+        DialogRGBManualStaticColorChanger(false, dlgRGB.SelectedLabel);
+    }
     #endregion
 
     #region Events
@@ -627,72 +722,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 switch (dlgStaticColor.SelectedLabel)
                 {
                     case 0:
-                        for (int i = 0; i <= 2; i++)
-                        {
-                            GUIDialogOK dlgOK = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
-                            if (dlgOK != null)
-                            {
-                                dlgOK.SetHeading("Static Color:");
-                                switch (i)
-                                {
-                                    case 0:
-                                        dlgOK.SetLine(1, "Red: N/A (next)");
-                                        dlgOK.SetLine(2, "Green: N/A");
-                                        dlgOK.SetLine(3, "Blue: N/A");
-                                        break;
-                                    case 1:
-                                        dlgOK.SetLine(1, "Red: " + StaticColor[0]);
-                                        dlgOK.SetLine(2, "Green: N/A (next)");
-                                        dlgOK.SetLine(3, "Blue: N/A");
-                                        break;
-                                    case 2:
-                                        dlgOK.SetLine(1, "Red: " + StaticColor[0]);
-                                        dlgOK.SetLine(2, "Green: " + StaticColor[1]);
-                                        dlgOK.SetLine(3, "Blue: N/A (next)");
-                                        break;
-                                }
-                                dlgOK.DoModal(GUIWindowManager.ActiveWindow);
-                            }
-
-                            VirtualKeyboard RGBKeyboard = (VirtualKeyboard)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
-                            if (RGBKeyboard == null)
-                            {
-                                return;
-                            }
-                            RGBKeyboard.Reset();
-                            RGBKeyboard.Text = "";
-                            RGBKeyboard.DoModal(GUIWindowManager.ActiveWindow);
-                            if (RGBKeyboard.IsConfirmed)
-                            {
-                                if ((int.TryParse(RGBKeyboard.Text, out StaticColorHelper)) && (StaticColorHelper >= 0) && (StaticColorHelper <= 255))
-                                {
-                                    StaticColor[i] = StaticColorHelper;
-                                }
-                                else
-                                {
-                                    GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
-                                    if (dlgError != null)
-                                    {
-                                        dlgError.SetHeading("Error!");
-                                        dlgError.SetLine(1, "The value has to be a number");
-                                        dlgError.SetLine(2, "and must be between 0 and 255.");
-                                        dlgError.DoModal(GUIWindowManager.ActiveWindow);
-                                    }
-                                    i--;
-                                    continue;
-                                }
-                            }
-                        }
-
-                        GUIDialogOK dlgSuccess = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
-                        if (dlgSuccess != null)
-                        {
-                            dlgSuccess.SetHeading("Success!");
-                            dlgSuccess.SetLine(1, "Red: " + StaticColor[0]);
-                            dlgSuccess.SetLine(2, "Green: " + StaticColor[1]);
-                            dlgSuccess.SetLine(3, "Blue: " + StaticColor[2]);
-                            dlgSuccess.DoModal(GUIWindowManager.ActiveWindow);
-                        }
+                        DialogRGBManualStaticColorChanger(true, 0);
                         break;
                     case 1:
                         StaticColor[0] = AtmolightSettings.StaticColorRed;
