@@ -372,7 +372,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                     SetAtmoEffect(ComEffectMode.cemDisabled);
                     SetAtmoColor((byte)StaticColor[0], (byte)StaticColor[1], (byte)StaticColor[2]);
                     // Workaround for SEDU
-                    System.Threading.Thread.Sleep(10);
+                    System.Threading.Thread.Sleep(20);
                     SetAtmoColor((byte)StaticColor[0], (byte)StaticColor[1], (byte)StaticColor[2]);
                     break;
             }
@@ -475,7 +475,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 dlg.Add(new GUIListItem("Switch LEDs off"));
             }
 
-            dlg.Add(new GUIListItem("Choose Effect"));
+            dlg.Add(new GUIListItem("Change Effect"));
             dlg.Add(new GUIListItem("Change AtmoWin Profile"));
 
             if (AtmolightSettings.SBS_3D_ON)
@@ -512,7 +512,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 {
                     GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
                     dlgEffect.Reset();
-                    dlgEffect.SetHeading("Set Menu Effect");
+                    dlgEffect.SetHeading("Change Effect");
                     dlgEffect.Add(new GUIListItem("LEDs disabled"));
                     dlgEffect.Add(new GUIListItem("MediaPortal Live Mode"));
                     dlgEffect.Add(new GUIListItem("AtmoWin Live Mode"));
@@ -554,7 +554,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 {
                     GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
                     dlgEffect.Reset();
-                    dlgEffect.SetHeading("Set Menu Effect");
+                    dlgEffect.SetHeading("Change Effect");
                     dlgEffect.Add(new GUIListItem("LEDs disabled"));
                     dlgEffect.Add(new GUIListItem("AtmoWin Live Mode"));
                     dlgEffect.Add(new GUIListItem("Colorchanger"));
@@ -635,37 +635,32 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                                         dlgOK.SetLine(1, "Red: N/A (next)");
                                         dlgOK.SetLine(2, "Green: N/A");
                                         dlgOK.SetLine(3, "Blue: N/A");
-                                        dlgOK.SetLine(4, "");
-                                        dlgOK.SetLine(5, "Please enter the value for red:");
                                         break;
                                     case 1:
                                         dlgOK.SetLine(1, "Red: " + StaticColor[0]);
                                         dlgOK.SetLine(2, "Green: N/A (next)");
                                         dlgOK.SetLine(3, "Blue: N/A");
-                                        dlgOK.SetLine(4, "");
-                                        dlgOK.SetLine(5, "Please enter the value for green:");
                                         break;
                                     case 2:
                                         dlgOK.SetLine(1, "Red: " + StaticColor[0]);
                                         dlgOK.SetLine(2, "Green: " + StaticColor[1]);
                                         dlgOK.SetLine(3, "Blue: N/A (next)");
-                                        dlgOK.SetLine(4, "");
-                                        dlgOK.SetLine(5, "Please enter the value for blue:");
                                         break;
                                 }
                                 dlgOK.DoModal(GUIWindowManager.ActiveWindow);
                             }
-                            StandardKeyboard keyboard = (StandardKeyboard)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
-                            if (null == keyboard)
+
+                            VirtualKeyboard RGBKeyboard = (VirtualKeyboard)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
+                            if (RGBKeyboard == null)
                             {
                                 return;
                             }
-                            keyboard.Reset();
-                            keyboard.Text = "";
-                            keyboard.DoModal(GUIWindowManager.ActiveWindow);
-                            if (keyboard.IsConfirmed)
+                            RGBKeyboard.Reset();
+                            RGBKeyboard.Text = "";
+                            RGBKeyboard.DoModal(GUIWindowManager.ActiveWindow);
+                            if (RGBKeyboard.IsConfirmed)
                             {
-                                if ((int.TryParse(keyboard.Text, out StaticColorHelper)) && (StaticColorHelper >= 0) && (StaticColorHelper <= 255))
+                                if ((int.TryParse(RGBKeyboard.Text, out StaticColorHelper)) && (StaticColorHelper >= 0) && (StaticColorHelper <= 255))
                                 {
                                     StaticColor[i] = StaticColorHelper;
                                 }
@@ -683,8 +678,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                                     continue;
                                 }
                             }
-
                         }
+
                         GUIDialogOK dlgSuccess = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
                         if (dlgSuccess != null)
                         {
