@@ -907,7 +907,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             DisableLEDs();
         }
 
-        GUIGraphicsContext.OnNewAction += new OnActionHandler(OnNewAction);
+        GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
       }
     }
 
@@ -986,7 +986,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         g_Player.PlayBackStopped -= new g_Player.StoppedHandler(g_Player_PlayBackStopped);
         g_Player.PlayBackEnded -= new g_Player.EndedHandler(g_Player_PlayBackEnded);
 
-        GUIGraphicsContext.OnNewAction -= new OnActionHandler(OnNewAction);
+        GUIWindowManager.OnNewAction -= new OnActionHandler(OnNewAction);
 
         if (AtmolightSettings.disableOnShutdown)
           DisableLEDs();
