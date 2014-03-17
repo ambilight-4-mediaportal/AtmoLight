@@ -104,5 +104,13 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         reader.SetValue("atmolight", "StaticColorBlue", StaticColorBlue);
       }
     }
+
+    public static void SaveSpecificSettingInteger(string Setting, int Value)
+    {
+        using (Settings reader = new Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
+        {
+            reader.SetValue("atmolight", Setting, Value);
+        }
+    }
   }
 }

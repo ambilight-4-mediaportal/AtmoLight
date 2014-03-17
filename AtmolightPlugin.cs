@@ -687,7 +687,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                     dlgStaticColor.Reset();
                     dlgStaticColor.SetHeading(LanguageLoader.appStrings.ContextMenu_ChangeStatic);
                     dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Manual));
-                    dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SavedColor));
+                    dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SaveColor));
+                    dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_LoadColor));
                     dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_White));
                     dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Red));
                     dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Green));
@@ -704,41 +705,46 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                             DialogRGBManualStaticColorChanger();
                             break;
                         case 1:
+                            AtmolightSettings.SaveSpecificSettingInteger("StaticColorRed", StaticColor[0]);
+                            AtmolightSettings.SaveSpecificSettingInteger("StaticColorGreen", StaticColor[1]);
+                            AtmolightSettings.SaveSpecificSettingInteger("StaticColorBlue", StaticColor[2]);
+                            break;
+                        case 2:
                             StaticColor[0] = AtmolightSettings.StaticColorRed;
                             StaticColor[1] = AtmolightSettings.StaticColorGreen;
                             StaticColor[2] = AtmolightSettings.StaticColorBlue;
                             break;
-                        case 2:
+                        case 3:
                             StaticColor[0] = 255;
                             StaticColor[1] = 255;
                             StaticColor[2] = 255;
                             break;
-                        case 3:
+                        case 4:
                             StaticColor[0] = 255;
                             StaticColor[1] = 0;
-                            StaticColor[2] = 0;
-                            break;
-                        case 4:
-                            StaticColor[0] = 0;
-                            StaticColor[1]  = 255;
                             StaticColor[2] = 0;
                             break;
                         case 5:
                             StaticColor[0] = 0;
+                            StaticColor[1]  = 255;
+                            StaticColor[2] = 0;
+                            break;
+                        case 6:
+                            StaticColor[0] = 0;
                             StaticColor[1] = 0;
                             StaticColor[2] = 255;
                             break;
-                        case 6:
+                        case 7:
                             StaticColor[0] = 0;
                             StaticColor[1] = 255;
                             StaticColor[2] = 255;
                             break;
-                        case 7:
+                        case 8:
                             StaticColor[0] = 255;
                             StaticColor[1] = 0;
                             StaticColor[2] = 255;
                             break;
-                        case 8:
+                        case 9:
                             StaticColor[0] = 255;
                             StaticColor[1] = 255;
                             StaticColor[2] = 0;

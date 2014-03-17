@@ -262,7 +262,8 @@ namespace Language
     public String ContextMenu_ColorchangerLR = "Colorchanger LR";
     public String ContextMenu_StaticColor = "Static Color";
     public String ContextMenu_Manual = "Manual";
-    public String ContextMenu_SavedColor = "Saved Color";
+    public String ContextMenu_SaveColor = "Save current Color";
+    public String ContextMenu_LoadColor = "Load Color from Settings";
     public String ContextMenu_White = "White";
     public String ContextMenu_Red = "Red";
     public String ContextMenu_Green = "Green";
