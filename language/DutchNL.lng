@@ -22,14 +22,14 @@ lblFramesText=ms tussen Frames
 lblStartText=Begintijd:
 lblEndText=Eindtijd:
 grpDeactivateText=Uitgeschakeld tussen:
+lblMenu=Menu/GUI:Menu/GUI:
+grpStaticColor=Static ColorVaste kleur
+lblRed=Red:Rood:
+lblGreen=Green:Groen:
+lblBlue=Blue:Blauw:
+lblMenuButton=Menu toets:
 
 
-lblMenu=Menu/GUI:
-grpStaticColor=Static Color
-lblRed=Red:
-lblGreen=Green:
-lblBlue=Blue:
-lblMenuButton=Menu RemoteKey:
 [ContextMenu]
 SwitchLEDsON=Switch LEDs on
 SwitchLEDsOFF=Switch LEDs off
