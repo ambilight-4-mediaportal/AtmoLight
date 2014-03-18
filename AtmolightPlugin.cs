@@ -706,8 +706,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                             break;
                         case 1:
                             AtmolightSettings.SaveSpecificSettingInteger("StaticColorRed", StaticColor[0]);
+							AtmolightSettings.StaticColorRed = StaticColor[0];
                             AtmolightSettings.SaveSpecificSettingInteger("StaticColorGreen", StaticColor[1]);
+							AtmolightSettings.StaticColorGreen = StaticColor[1];
                             AtmolightSettings.SaveSpecificSettingInteger("StaticColorBlue", StaticColor[2]);
+							AtmolightSettings.StaticColorBlue = StaticColor[2];
                             break;
                         case 2:
                             StaticColor[0] = AtmolightSettings.StaticColorRed;
