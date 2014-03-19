@@ -1,3 +1,21 @@
+Version 1.1.19021.0
+- Fixed issue where LEDs would not turn off (SEDU)
+- Enhanced the logic to start the ambilight
+- Added "Menu Mode" (using ambilight while in MediaPortal GUI)
+- Added static effect option to Video, Radio and Music
+- Changed "STOP Menu" into "Color Button Menu"
+	* Added possibility to open context menu during playback
+	* Added option to change effects on the fly
+	* Added option to change AtmoWin profile
+	* Added option to change static color on the fly
+- Fixed issue where context menu was not closeable with back button
+- Added language file support to context menu
+- Added option to assign "None" as On/Off, Profile and Menu button (preventing conflicts)
+- Added delay of 1 second between starting AtmoWin and connecting to it (testing)
+- Language file updates
+
+
+
 Version 1.1.19020.1
  Correct First plugin start : Default language not set correctly at 1st start.
 
