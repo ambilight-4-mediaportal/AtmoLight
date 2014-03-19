@@ -762,63 +762,87 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
     {
-        if (CheckForStartRequirements())
+        try
         {
-            MenuMode();
+            if (CheckForStartRequirements())
+            {
+                MenuMode();
+            }
+            else
+            {
+                DisableLEDs();
+            }
         }
-        else
+        catch (Exception ex)
         {
-            DisableLEDs();
+            Log.Error("atmolight: g_Player_PlayBackEnded failed.");
+            Log.Error("atmolight: exception= {0}", ex.Message);
         }
     }
     
     void g_Player_PlayBackStopped(g_Player.MediaType type, int stoptime, string filename)
     {
-        if (CheckForStartRequirements())
+        try
         {
-            MenuMode();
+            if (CheckForStartRequirements())
+            {
+                MenuMode();
+            }
+            else
+            {
+                DisableLEDs();
+            }
         }
-        else
+        catch (Exception ex)
         {
-            DisableLEDs();
+            Log.Error("atmolight: g_Player_PlayBackStopped failed.");
+            Log.Error("atmolight: exception= {0}", ex.Message);
         }
     }
     
     void g_Player_PlayBackStarted(g_Player.MediaType type, string filename)
     {
-        if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording || type == g_Player.MediaType.Unknown || (type == g_Player.MediaType.Music && filename.Contains(".mkv")))
+        try
         {
-            Log.Debug("atmolight: Video detected)");
-            currentEffect = AtmolightSettings.effectVideo;
-        }
-        else if (type == g_Player.MediaType.Music)
-        {
-            // Workaround
-            if (AtmolightSettings.effectMusic == ContentEffect.MP_Live_view)
+            if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording || type == g_Player.MediaType.Unknown || (type == g_Player.MediaType.Music && filename.Contains(".mkv")))
             {
-                AtmolightSettings.effectMusic = ContentEffect.StaticColor;
+                Log.Debug("atmolight: Video detected)");
+                currentEffect = AtmolightSettings.effectVideo;
             }
-            currentEffect = AtmolightSettings.effectMusic;
-            Log.Debug("atmolight: Music detected)");
-        }
-        else if (type == g_Player.MediaType.Radio)
-        {
-            // Workaround
-            if (AtmolightSettings.effectRadio == ContentEffect.MP_Live_view)
+            else if (type == g_Player.MediaType.Music)
             {
-                AtmolightSettings.effectRadio = ContentEffect.StaticColor;
+                // Workaround
+                if (AtmolightSettings.effectMusic == ContentEffect.MP_Live_view)
+                {
+                    AtmolightSettings.effectMusic = ContentEffect.StaticColor;
+                }
+                currentEffect = AtmolightSettings.effectMusic;
+                Log.Debug("atmolight: Music detected)");
             }
-            currentEffect = AtmolightSettings.effectRadio;
-            Log.Debug("atmolight: Radio detected)");
-        }
+            else if (type == g_Player.MediaType.Radio)
+            {
+                // Workaround
+                if (AtmolightSettings.effectRadio == ContentEffect.MP_Live_view)
+                {
+                    AtmolightSettings.effectRadio = ContentEffect.StaticColor;
+                }
+                currentEffect = AtmolightSettings.effectRadio;
+                Log.Debug("atmolight: Radio detected)");
+            }
 
-        if (CheckForStartRequirements())
-        {
-            PlaybackMode();
+            if (CheckForStartRequirements())
+            {
+                PlaybackMode();
+            }
+            else
+            {
+                DisableLEDs();
+            }
         }
-        else
+        catch (Exception ex)
         {
-            DisableLEDs();
+            Log.Error("atmolight: g_Player_PlayBackStarted failed.");
+            Log.Error("atmolight: exception= {0}", ex.Message);
         }
     }
     #endregion
