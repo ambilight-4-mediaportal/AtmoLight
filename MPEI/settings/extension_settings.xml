@@ -1,0 +1,87 @@
+<extension_settings>
+    <disable_entry>
+        <setting entryname="plugins" name="atmolight" displayname="Plugin Enabled" defaultvalue="yes" type="string" listvalues="yes|no" displaylistvalues="Yes|No"/>
+    </disable_entry>
+        <settings section="Configuration">
+		
+		<setting entryname="atmolight" name="atmowinexe" type="string" defaultvalue="" listvalues="" 
+		displayname="Path to AtmoWinA.exe:"
+		description="Please select the path to the AtmoWinA.exe!"
+		displaylistvalues=""/>
+		
+		<setting entryname="atmolight" name="effectVideo" type="string" defaultvalue="4" listvalues="0|1|2|3|4|5" 
+		displayname="Video Effect:"
+		description="Choose the effect you want to use for Video/TV/Recording playback!"
+		displaylistvalues="LEDs disabled|AtmoWin Live Mode|Colorchanger|Colorchanger LR|MediaPortal Live Mode|Static Color"/>
+		
+		<setting entryname="atmolight" name="effectMusic" type="string" defaultvalue="1" listvalues="0|1|2|3|4"
+		displayname="Music Effect:"    
+		description="Choose the effect you want to use for Music playback!"
+		displaylistvalues="LEDs disabled|AtmoWin Live Mode|Colorchanger|Colorchanger LR|Static Color"/> 
+		
+		<setting entryname="atmolight" name="effectRadio" type="string" defaultvalue="0" listvalues="0|1|2|3|4"
+		displayname="Radio Effect:"    
+		description="Choose the effect you want to use for Radio playback!"
+		displaylistvalues="LEDs disabled|AtmoWin Live Mode|Colorchanger|Colorchanger LR|Static Color"/>
+		
+		<setting entryname="atmolight" name="effectMenu" type="string" defaultvalue="0" listvalues="0|1|2|3|4"
+		displayname="Menu/GUI Effect:"    
+		description="Choose the effect you want to use for Radio playback!"
+		displaylistvalues="LEDs disabled|AtmoWin Live Mode|Colorchanger|Colorchanger LR|Static Color"/>
+
+		<setting entryname="atmolight" name="menubutton" type="string" defaultvalue="5" listvalues="0|1|2|3|4|5"
+		displayname="AtmoLight context menu remote button:"    
+		description="Choose the remote button for AtmoLight context menu."
+		displaylistvalues="Red|Green|Yellow|Blue|Stop|None"/>
+		
+		<setting entryname="atmolight" name="killbutton" type="string" defaultvalue="4" listvalues="0|1|2|3|4"
+		displayname="Toggle on/off remote button:"    
+		description="Choose the remote button to enable/disable Ambilight!"
+		displaylistvalues="Red|Green|Yellow|Blue|None"/>		
+		
+		<setting entryname="atmolight" name="cmbutton" type="string" defaultvalue="4" listvalues="0|1|2|3|4"
+		displayname="AtmoWin profile change remote button:"    
+		description="Choose the remote button change AtmoWin profile."
+		displaylistvalues="Red|Green|Yellow|Blue|None"/>
+				
+		<setting entryname="atmolight" name="OffOnStart" type="string" defaultvalue="no" listvalues="yes|no"
+		displayname="Use manual mode:"    
+		description="Do you want to use the manual mode? (Ambilight will not start automatically when playback begins)"
+		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="lowCPU" type="string" defaultvalue="no" listvalues="yes|no"
+		displayname="Low CPU usage:"    
+		description="Select if you want to use the LOW CPU mode"
+		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="StartAtmoWin" type="string" defaultvalue="yes" listvalues="Yes|No"
+		displayname="Start AtmoWin with MediaPortal:"    
+		description="Choose if you want MediaPortal/AtmoLight to start AtmoWin for you on."
+		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="ExitAtmoWin" type="string" defaultvalue="yes" listvalues="Yes|No"
+		displayname="Exit AtmoWin with MediaPortal:"    
+		description="Choose if you want MediaPortal/AtmoLight to close AtmoWin for you."
+		displaylistvalues="Yes|No"/>		
+		
+		<setting entryname="atmolight" name="enableInternalLiveView" type="string" defaultvalue="no" listvalues="Yes|No"
+		displayname="Enable AtmoWin GDI Live-View on MediaPortal close:"    
+		description="Choose what AtmoLight should do if MediaPortal has been closed!"
+		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="disableOnShutdown" type="string" defaultvalue="Yes" listvalues="yes|no"
+		displayname="Disable Atmolight on Shutdown:"    
+		description="Choose what AtmoLight should do if MediaPortal has been closed!"
+		displaylistvalues="Yes|No"/> 
+		
+		<setting entryname="atmolight" name="excludeTimeStart" type="string" defaultvalue="00:00" listvalues="00:00|01:00|02:00|03:00|04:00|05:00|06:00|07:00|08:00|09:00|10:00|11:00|12:00|13:00|14:00|15:00|16:00|17:00|18:00|19:00|20:00|21:00|22:00|23:00|24:00"
+		displayname="Ambilight enabled from:"    
+		description="Enter the Starttime when Ambilight should be enabled automatically!"
+		displaylistvalues="00:00|01:00|02:00|03:00|04:00|05:00|06:00|07:00|08:00|09:00|10:00|11:00|12:00|13:00|14:00|15:00|16:00|17:00|18:00|19:00|20:00|21:00|22:00|23:00|24:00"/> 
+		
+		<setting entryname="atmolight" name="excludeTimeEnd" type="string" defaultvalue="24:00" listvalues="00:00|01:00|02:00|03:00|04:00|05:00|06:00|07:00|08:00|09:00|10:00|11:00|12:00|13:00|14:00|15:00|16:00|17:00|18:00|19:00|20:00|21:00|22:00|23:00|24:00"
+		displayname="Ambilight enabled till:"    
+		description="Enter the Endtime when Ambilight should be disabled automatically!"
+		displaylistvalues="00:00|01:00|02:00|03:00|04:00|05:00|06:00|07:00|08:00|09:00|10:00|11:00|12:00|13:00|14:00|15:00|16:00|17:00|18:00|19:00|20:00|21:00|22:00|23:00|24:00"/>
+	</settings>
+</extension_settings>
