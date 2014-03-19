@@ -105,7 +105,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
-    public static void SaveSpecificSettingInteger(string Setting, int Value)
+    public static void SaveSpecificSetting(string Setting, String Value)
     {
         using (Settings reader = new Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
         {

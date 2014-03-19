@@ -705,11 +705,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                             DialogRGBManualStaticColorChanger();
                             break;
                         case 1:
-                            AtmolightSettings.SaveSpecificSettingInteger("StaticColorRed", StaticColor[0]);
+                            AtmolightSettings.SaveSpecificSetting("StaticColorRed", StaticColor[0].ToString());
 							AtmolightSettings.StaticColorRed = StaticColor[0];
-                            AtmolightSettings.SaveSpecificSettingInteger("StaticColorGreen", StaticColor[1]);
+                            AtmolightSettings.SaveSpecificSetting("StaticColorGreen", StaticColor[1].ToString());
 							AtmolightSettings.StaticColorGreen = StaticColor[1];
-                            AtmolightSettings.SaveSpecificSettingInteger("StaticColorBlue", StaticColor[2]);
+                            AtmolightSettings.SaveSpecificSetting("StaticColorBlue", StaticColor[2].ToString());
 							AtmolightSettings.StaticColorBlue = StaticColor[2];
                             break;
                         case 2:
