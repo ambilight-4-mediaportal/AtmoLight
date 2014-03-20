@@ -508,6 +508,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         DialogRGBManualStaticColorChanger(false, dlgRGB.SelectedLabel);
     }
+
+    private void DoDelay(byte[] bmiInfoHeader, byte[] pixelData)
+    {
+        System.Threading.Thread.Sleep(AtmolightSettings.DelayTime);
+        atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
+    }
     #endregion
 
     #region Events
@@ -994,8 +1000,19 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           //send scaled and fliped frame to atmowin
           if (!AtmolightSettings.lowCPU || (((Win32API.GetTickCount() - lastFrame) > AtmolightSettings.lowCPUTime) && AtmolightSettings.lowCPU))
           {
-            if (AtmolightSettings.lowCPU) lastFrame = Win32API.GetTickCount();
-            atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
+              if (AtmolightSettings.lowCPU)
+              {
+                  lastFrame = Win32API.GetTickCount();
+              }
+              if (!AtmolightSettings.Delay)
+              {
+                  atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
+              }
+              else
+              {
+                  Thread DelayHelperThread = new Thread(() => DoDelay(bmiInfoHeader, pixelData));
+                  DelayHelperThread.Start();
+              }
           }
           stream.Close();
           stream.Dispose();

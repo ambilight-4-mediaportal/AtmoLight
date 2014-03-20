@@ -229,6 +229,7 @@ namespace Language
     public String SetupForm_lblProfileText = "Profile Remote Button:";
     public String SetupForm_ckOnMediaStartText = "LEDs off on media start (manual mode)";
     public String SetupForm_ckLowCpuText = "low CPU";
+    public String SetupForm_ckDelayText = "LED Delay";
     public String SetupForm_ckStartAtmoWinText = "Start AtmoWin with MediaPortal";
     public String SetupForm_ckExitAtmoWinText = "Exit AtmoWin with MediaPortal";
     public String SetupForm_grpMPCloseText = "MP close...";
@@ -239,6 +240,7 @@ namespace Language
     public String SetupForm_btnLanguageText = "Load Language";
     public String SetupForm_lblHintText = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3D-SBS mode.";
     public String SetupForm_lblFramesText = "ms between Frames";
+    public String SetupForm_lblDelay = "ms Delay";
     public String SetupForm_lblStartText = "Start:";
     public String SetupForm_lblEndText = "End:";
     public String SetupForm_grpDeactivateText = "Deactive between...";

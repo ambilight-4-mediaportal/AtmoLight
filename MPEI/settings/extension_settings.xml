@@ -54,6 +54,11 @@
 		description="Select if you want to use the LOW CPU mode"
 		displaylistvalues="Yes|No"/>
 		
+		<setting entryname="atmolight" name="Delay" type="string" defaultvalue="no" listvalues="yes|no"
+		displayname="Use LED Delay:"    
+		description="Select if you want to use a delay"
+		displaylistvalues="Yes|No"/>
+		
 		<setting entryname="atmolight" name="StartAtmoWin" type="string" defaultvalue="yes" listvalues="Yes|No"
 		displayname="Start AtmoWin with MediaPortal:"    
 		description="Choose if you want MediaPortal/AtmoLight to start AtmoWin for you on."

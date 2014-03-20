@@ -31,6 +31,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     public static bool OffOnStart = false;
     public static bool lowCPU = false;
     public static int lowCPUTime = 0;
+    public static bool Delay;
+    public static int DelayTime = 0;
     public static bool startAtmoWin = true;
     public static bool exitAtmoWin = true;
     public static DateTime excludeTimeStart;
@@ -68,6 +70,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         SBS_3D_ON = reader.GetValueAsBool("atmolight", "SBS_3D_ON", false);
         lowCPU = reader.GetValueAsBool("atmolight", "lowCPU", false);
         lowCPUTime = reader.GetValueAsInt("atmolight", "lowCPUTime", 0);
+        Delay = reader.GetValueAsBool("atmolight", "Delay", false);
+        DelayTime = reader.GetValueAsInt("atmolight", "DelayTime", 0);
         exitAtmoWin = reader.GetValueAsBool("atmolight", "ExitAtmoWin", true);
         startAtmoWin = reader.GetValueAsBool("atmolight", "StartAtmoWin", true);
         StaticColorRed = reader.GetValueAsInt("atmolight", "StaticColorRed", 0);
@@ -93,6 +97,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         reader.SetValueAsBool("atmolight", "SBS_3D_ON", SBS_3D_ON);
         reader.SetValueAsBool("atmolight", "lowCPU", lowCPU);
         reader.SetValue("atmolight", "lowCPUTime", lowCPUTime);
+        reader.SetValueAsBool("atmolight", "Delay", Delay);
+        reader.SetValue("atmolight", "DelayTime", DelayTime);
         reader.SetValueAsBool("atmolight", "ExitAtmoWin", exitAtmoWin);
         reader.SetValueAsBool("atmolight", "StartAtmoWin", startAtmoWin);
         reader.SetValueAsBool("atmolight", "enableInternalLiveView", enableInternalLiveView);

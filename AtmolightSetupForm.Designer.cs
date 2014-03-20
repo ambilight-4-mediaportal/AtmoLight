@@ -76,6 +76,9 @@
             this.lblVersionVal = new System.Windows.Forms.Label();
             this.btnLanguage = new System.Windows.Forms.Button();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+            this.ckDelay = new System.Windows.Forms.CheckBox();
+            this.tbDelay = new System.Windows.Forms.TextBox();
+            this.lblDelay = new System.Windows.Forms.Label();
             this.grpMPClose.SuspendLayout();
             this.grpMode.SuspendLayout();
             this.grpStaticColor.SuspendLayout();
@@ -115,7 +118,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnSave.Location = new System.Drawing.Point(9, 521);
+            this.btnSave.Location = new System.Drawing.Point(9, 545);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(89, 23);
             this.btnSave.TabIndex = 4;
@@ -126,7 +129,7 @@
             // btnCancel
             // 
             this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnCancel.Location = new System.Drawing.Point(104, 521);
+            this.btnCancel.Location = new System.Drawing.Point(104, 545);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(86, 23);
             this.btnCancel.TabIndex = 5;
@@ -144,7 +147,7 @@
             // 
             this.grpMPClose.Controls.Add(this.rbDisableLEDs);
             this.grpMPClose.Controls.Add(this.rbSwitchToLiveView);
-            this.grpMPClose.Location = new System.Drawing.Point(10, 440);
+            this.grpMPClose.Location = new System.Drawing.Point(10, 463);
             this.grpMPClose.Name = "grpMPClose";
             this.grpMPClose.Size = new System.Drawing.Size(291, 75);
             this.grpMPClose.TabIndex = 6;
@@ -411,6 +414,9 @@
             // 
             // grpPluginOption
             // 
+            this.grpPluginOption.Controls.Add(this.lblDelay);
+            this.grpPluginOption.Controls.Add(this.tbDelay);
+            this.grpPluginOption.Controls.Add(this.ckDelay);
             this.grpPluginOption.Controls.Add(this.lblMenuButton);
             this.grpPluginOption.Controls.Add(this.cbMenuButton);
             this.grpPluginOption.Controls.Add(this.ckExitAtmoWin);
@@ -425,7 +431,7 @@
             this.grpPluginOption.Controls.Add(this.lblLedsOnOff);
             this.grpPluginOption.Location = new System.Drawing.Point(10, 249);
             this.grpPluginOption.Name = "grpPluginOption";
-            this.grpPluginOption.Size = new System.Drawing.Size(290, 186);
+            this.grpPluginOption.Size = new System.Drawing.Size(290, 208);
             this.grpPluginOption.TabIndex = 11;
             this.grpPluginOption.TabStop = false;
             this.grpPluginOption.Text = "Plugin options";
@@ -459,7 +465,7 @@
             this.ckExitAtmoWin.AutoSize = true;
             this.ckExitAtmoWin.Checked = true;
             this.ckExitAtmoWin.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ckExitAtmoWin.Location = new System.Drawing.Point(13, 161);
+            this.ckExitAtmoWin.Location = new System.Drawing.Point(13, 184);
             this.ckExitAtmoWin.Name = "ckExitAtmoWin";
             this.ckExitAtmoWin.Size = new System.Drawing.Size(173, 17);
             this.ckExitAtmoWin.TabIndex = 19;
@@ -471,7 +477,7 @@
             this.ckStartAtmoWin.AutoSize = true;
             this.ckStartAtmoWin.Checked = true;
             this.ckStartAtmoWin.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ckStartAtmoWin.Location = new System.Drawing.Point(13, 138);
+            this.ckStartAtmoWin.Location = new System.Drawing.Point(13, 161);
             this.ckStartAtmoWin.Name = "ckStartAtmoWin";
             this.ckStartAtmoWin.Size = new System.Drawing.Size(175, 17);
             this.ckStartAtmoWin.TabIndex = 18;
@@ -525,9 +531,9 @@
             this.ckLowCpu.AutoSize = true;
             this.ckLowCpu.Location = new System.Drawing.Point(13, 115);
             this.ckLowCpu.Name = "ckLowCpu";
-            this.ckLowCpu.Size = new System.Drawing.Size(67, 17);
+            this.ckLowCpu.Size = new System.Drawing.Size(71, 17);
             this.ckLowCpu.TabIndex = 13;
-            this.ckLowCpu.Text = "low CPU";
+            this.ckLowCpu.Text = "Low CPU";
             this.ckLowCpu.UseVisualStyleBackColor = true;
             // 
             // ckOnMediaStart
@@ -567,7 +573,7 @@
             // lblVersion
             // 
             this.lblVersion.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.lblVersion.Location = new System.Drawing.Point(350, 521);
+            this.lblVersion.Location = new System.Drawing.Point(350, 545);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(95, 26);
             this.lblVersion.TabIndex = 13;
@@ -577,7 +583,7 @@
             // 
             this.lblVersionVal.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.lblVersionVal.AutoSize = true;
-            this.lblVersionVal.Location = new System.Drawing.Point(392, 534);
+            this.lblVersionVal.Location = new System.Drawing.Point(392, 558);
             this.lblVersionVal.Name = "lblVersionVal";
             this.lblVersionVal.Size = new System.Drawing.Size(40, 13);
             this.lblVersionVal.TabIndex = 14;
@@ -586,7 +592,7 @@
             // btnLanguage
             // 
             this.btnLanguage.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnLanguage.Location = new System.Drawing.Point(196, 521);
+            this.btnLanguage.Location = new System.Drawing.Point(196, 545);
             this.btnLanguage.Name = "btnLanguage";
             this.btnLanguage.Size = new System.Drawing.Size(104, 23);
             this.btnLanguage.TabIndex = 16;
@@ -598,11 +604,38 @@
             // 
             this.openFileDialog2.Filter = "files|*.lng";
             // 
+            // ckDelay
+            // 
+            this.ckDelay.AutoSize = true;
+            this.ckDelay.Location = new System.Drawing.Point(13, 138);
+            this.ckDelay.Name = "ckDelay";
+            this.ckDelay.Size = new System.Drawing.Size(77, 17);
+            this.ckDelay.TabIndex = 22;
+            this.ckDelay.Text = "LED Delay";
+            this.ckDelay.UseVisualStyleBackColor = true;
+            // 
+            // tbDelay
+            // 
+            this.tbDelay.Location = new System.Drawing.Point(118, 136);
+            this.tbDelay.Name = "tbDelay";
+            this.tbDelay.Size = new System.Drawing.Size(41, 20);
+            this.tbDelay.TabIndex = 23;
+            this.tbDelay.Text = "0";
+            // 
+            // lblDelay
+            // 
+            this.lblDelay.AutoSize = true;
+            this.lblDelay.Location = new System.Drawing.Point(165, 139);
+            this.lblDelay.Name = "lblDelay";
+            this.lblDelay.Size = new System.Drawing.Size(50, 13);
+            this.lblDelay.TabIndex = 24;
+            this.lblDelay.Text = "ms Delay";
+            // 
             // AtmolightSetupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(452, 553);
+            this.ClientSize = new System.Drawing.Size(452, 577);
             this.Controls.Add(this.btnLanguage);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lblVersionVal);
@@ -616,8 +649,8 @@
             this.Controls.Add(this.btnSelectFile);
             this.Controls.Add(this.edFile);
             this.Controls.Add(this.lblPathInfo);
-            this.MaximumSize = new System.Drawing.Size(468, 591);
-            this.MinimumSize = new System.Drawing.Size(468, 591);
+            this.MaximumSize = new System.Drawing.Size(468, 615);
+            this.MinimumSize = new System.Drawing.Size(468, 615);
             this.Name = "AtmolightSetupForm";
             this.Text = "Atmolight Setup";
             this.grpMPClose.ResumeLayout(false);
@@ -685,5 +718,8 @@
     private System.Windows.Forms.Label lblGreen;
     private System.Windows.Forms.Label lblMenuButton;
     private System.Windows.Forms.ComboBox cbMenuButton;
+    private System.Windows.Forms.Label lblDelay;
+    private System.Windows.Forms.TextBox tbDelay;
+    private System.Windows.Forms.CheckBox ckDelay;
   }
 }

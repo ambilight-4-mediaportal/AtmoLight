@@ -28,6 +28,8 @@ lblRed=Rot:
 lblGreen=Grün:
 lblBlue=Blau:
 lblMenuButton=Menü Fernbedienungstaste:
+ckDelay=LED Verzögerung
+lblDelay=ms Verzögerung
 [ContextMenu]
 SwitchLEDsON=Schalte LEDs an
 SwitchLEDsOFF=Schalte LEDs aus

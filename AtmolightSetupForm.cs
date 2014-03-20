@@ -25,6 +25,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       edExcludeStart.Text = AtmolightSettings.excludeTimeStart.ToString("HH:mm");
       edExcludeEnd.Text = AtmolightSettings.excludeTimeEnd.ToString("HH:mm");
       lowCpuTime.Text = AtmolightSettings.lowCPUTime.ToString();
+      tbDelay.Text = AtmolightSettings.DelayTime.ToString();
       tbRed.Text = AtmolightSettings.StaticColorRed.ToString();
       tbGreen.Text = AtmolightSettings.StaticColorGreen.ToString();
       tbBlue.Text = AtmolightSettings.StaticColorBlue.ToString();
@@ -38,6 +39,15 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         ckLowCpu.Checked = true;
       else
         this.ckLowCpu.Checked = false;
+
+        if (AtmolightSettings.Delay)
+        {
+            ckDelay.Checked = true;
+        }
+        else
+        {
+            ckDelay.Checked = false;
+        }
 
       if (AtmolightSettings.startAtmoWin)
         ckStartAtmoWin.Checked = true;
@@ -68,6 +78,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       lblProfile.Text = LanguageLoader.appStrings.SetupForm_lblProfileText;
       ckOnMediaStart.Text = LanguageLoader.appStrings.SetupForm_ckOnMediaStartText;
       ckLowCpu.Text = LanguageLoader.appStrings.SetupForm_ckLowCpuText;
+      ckDelay.Text = LanguageLoader.appStrings.SetupForm_ckDelayText;
       ckStartAtmoWin.Text = LanguageLoader.appStrings.SetupForm_ckStartAtmoWinText;
       ckExitAtmoWin.Text = LanguageLoader.appStrings.SetupForm_ckExitAtmoWinText;
       grpMPClose.Text = LanguageLoader.appStrings.SetupForm_grpMPCloseText;
@@ -78,6 +89,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       btnLanguage.Text = LanguageLoader.appStrings.SetupForm_btnLanguageText;
       lblHint.Text = LanguageLoader.appStrings.SetupForm_lblHintText;
       lblFrames.Text = LanguageLoader.appStrings.SetupForm_lblFramesText;
+      lblDelay.Text = LanguageLoader.appStrings.SetupForm_lblDelay;
       lblStart.Text = LanguageLoader.appStrings.SetupForm_lblStartText;
       lblEnd.Text = LanguageLoader.appStrings.SetupForm_lblEndText;
       grpDeactivate.Text = LanguageLoader.appStrings.SetupForm_grpDeactivateText;
@@ -131,10 +143,17 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
 
       int cTime;
-      if (!int.TryParse(lowCpuTime.Text, out cTime))
+      if (!int.TryParse(lowCpuTime.Text, out cTime) || cTime < 0)
       {
         MessageBox.Show("You have to enter a valid number of ms", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
+      }
+
+      int cDelay;
+      if (!int.TryParse(tbDelay.Text, out cDelay) || cDelay < 0)
+      {
+          MessageBox.Show("You have to enter a valid number of ms", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
       }
 
       int StaticColorRed, StaticColorGreen, StaticColorBlue;
@@ -166,6 +185,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       AtmolightSettings.StaticColorGreen = StaticColorGreen;
       AtmolightSettings.StaticColorBlue = StaticColorBlue;
       AtmolightSettings.lowCPUTime = cTime;
+      AtmolightSettings.DelayTime = cDelay;
       AtmolightSettings.excludeTimeEnd = dt2;
       AtmolightSettings.atmowinExe = edFile.Text;
       AtmolightSettings.effectVideo = (ContentEffect)cbVideo.SelectedIndex;
@@ -179,6 +199,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       AtmolightSettings.enableInternalLiveView = rbSwitchToLiveView.Checked;
       AtmolightSettings.OffOnStart = ckOnMediaStart.Checked;
       AtmolightSettings.lowCPU = ckLowCpu.Checked;
+      AtmolightSettings.Delay = ckDelay.Checked;
       AtmolightSettings.startAtmoWin = ckStartAtmoWin.Checked;
       AtmolightSettings.exitAtmoWin = ckExitAtmoWin.Checked;
       AtmolightSettings.SaveSettings();
