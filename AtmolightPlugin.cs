@@ -439,6 +439,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
             return null;
         }
+        Keyboard.IsSearchKeyboard = true;
         Keyboard.Reset();
         Keyboard.Text = KeyboardString;
         Keyboard.DoModal(GUIWindowManager.ActiveWindow);
