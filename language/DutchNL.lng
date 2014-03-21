@@ -28,8 +28,8 @@ lblRed=Rood:
 lblGreen=Groen:
 lblBlue=Blauw:
 lblMenuButton=Menu toets:
-ckDelay=LED Delay
-lblDelay=ms Delay
+ckDelay=LED vertraging
+lblDelay=ms vertraging
 [ContextMenu]
 SwitchLEDsON=Schakel LEDs aan
 SwitchLEDsOFF=Schakel LEDs uit
