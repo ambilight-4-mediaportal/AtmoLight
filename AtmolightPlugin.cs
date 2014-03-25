@@ -208,7 +208,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         catch (Exception ex)
         {
-            Log.Error("AtmoLight: Failed to connect to AtmoWin. Exception: {0}", ex.Message);
+            Log.Error("AtmoLight: Failed to connect to AtmoWin.");
+            Log.Error("AtmoLight: Exception: {0}", ex.Message);
             atmoCtrl = null;
             return false;
         }
@@ -267,7 +268,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         catch (Exception ex)
         {
-            Log.Error("AtmoLight: Failed to switch AtmoWin profile. Exception: " + Environment.NewLine + ex.Message + Environment.StackTrace);
+            Log.Error("AtmoLight: Failed to switch AtmoWin profile.");
+            Log.Error("AtmoLight: Exception: {0}", ex.Message);
         }
     }
     
@@ -281,11 +283,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
             ComEffectMode oldEffect;
             atmoCtrl.setEffect(effect, out oldEffect);
-            Log.Info("AtmoLight: Switching AtmoWin effect to: " + effect.ToString());
+            Log.Info("AtmoLight: Switching AtmoWin effect to: {0}", effect.ToString());
         }
         catch (Exception ex)
         {
-            Log.Error("AtmoLight: Failed switching effect to: " + effect.ToString() + Environment.NewLine + ex.Message + Environment.StackTrace);
+            Log.Error("AtmoLight: Failed switching effect to: {0}", effect.ToString());
+            Log.Error("AtmoLight: Exception: {0}", ex.Message);
         }
     }
     
@@ -302,7 +305,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         catch (Exception ex)
         {
-            Log.Error("AtmoLight: Failed setting static color to RED={0} GREEN={1} BLUE={2}." + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace, red, green, blue);
+            Log.Error("AtmoLight: Failed setting static color to RED={0} GREEN={1} BLUE={2}.", red, green, blue);
+            Log.Error("AtmoLight: Exception: {0}", ex.Message);
         }
     }
     
@@ -316,7 +320,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         catch (Exception ex)
         {
-            Log.Error("AtmoLight: Failed to switch liveview mode to: {0}. Exception: {1}", viewSource.ToString(), ex.Message);
+            Log.Error("AtmoLight: Failed to switch liveview mode to: {0}.", viewSource.ToString());
+            Log.Error("AtmoLight: Exception: {0}", ex.Message);
         }
     }
     
@@ -334,7 +339,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         catch (Exception ex)
         {
-            Log.Error("AtmoLight: Failed to disable LEDs. Exception: {0}", ex.Message);
+            Log.Error("AtmoLight: Failed to disable LEDs.");
+            Log.Error("AtmoLight: Exception: {0}", ex.Message);
         }
     }
 
@@ -526,8 +532,16 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     private void DoDelay(byte[] bmiInfoHeader, byte[] pixelData)
     {
-        System.Threading.Thread.Sleep(AtmolightSettings.DelayTime);
-        atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
+        try
+        {
+            System.Threading.Thread.Sleep(AtmolightSettings.DelayTime);
+            atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
+        }
+        catch (Exception ex)
+        {
+            Log.Error("AtmoLight: Could not send data to AtmoWin (Delayed).");
+            Log.Error("AtmoLight: Exception: {0}", ex.Message);
+        }
     }
     #endregion
 
@@ -1048,7 +1062,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             }
             catch (Exception ex)
             {
-                Log.Error(ex);
+                Log.Error("AtmoLight: Error in AtmolightPlugin_OnNewFrame.");
+                Log.Error("AtmoLight: Exception: {0}", ex.Message);
                 rgbSurface.Dispose();
                 rgbSurface = null;
             }
