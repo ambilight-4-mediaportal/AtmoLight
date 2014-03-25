@@ -13,6 +13,7 @@ Version 1.1.19021.0
 - Added option to assign "None" as On/Off, Profile and Menu button (preventing conflicts)
 - Added delay of 1 second between starting AtmoWin and connecting to it (testing)
 - Added option to set a delay for the leds (if leds change colors before tv does)
+- Enhanced logging capabilities
 - Language file updates
 
 
