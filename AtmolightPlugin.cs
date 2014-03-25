@@ -158,190 +158,203 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     public AtmolightPlugin()
     {
-      if (MPSettings.Instance.GetValueAsBool("plugins", "Atmolight", true))
-      {
-        AtmolightSettings.LoadSettings();
-        if (!Win32API.IsProcessRunning("configuration.exe"))
+        if (MPSettings.Instance.GetValueAsBool("plugins", "Atmolight", true))
         {
-          if (AtmolightSettings.startAtmoWin)
-          {
-            Log.Info("atmolight: Checking for atmowina.exe process");
-            if (!Win32API.IsProcessRunning("atmowina.exe"))
+            Log.Debug("AtmoLight: Loading Settings.");
+            AtmolightSettings.LoadSettings();
+            if (!Win32API.IsProcessRunning("configuration.exe"))
             {
-              Log.Info("atmolight: AtmoWinA.exe not started. Trying to launch...");
-              if (!StartAtmoWinA())
-              {
-                Log.Error("atmolight: Can't start atmowin.exe. Atmolight control won't work :(");
-                return;
-              }
-              else
-              {
-                if (!ConnectToAtmoWinA())
+                if (AtmolightSettings.startAtmoWin)
                 {
-                  Log.Error("atmolight: AtmoWinA started but still can't connect. Atmolight control won't work :(");
-                  return;
+                    Log.Debug("AtmoLight: Checking if AtmoWinA.exe is running.");
+                    if (!Win32API.IsProcessRunning("atmowina.exe"))
+                    {
+                        Log.Debug("AtmoLight: AtmoWinA.exe not running. Trying to start it.");
+                        if (StartAtmoWinA())
+                        {
+                            // Wait 1 second before trying to connect.
+                            System.Threading.Thread.Sleep(1000);
+                            ConnectToAtmoWinA();
+                        }
+                    }
+                    else
+                    {
+                        ConnectToAtmoWinA();
+                    }
                 }
-              }
+                else
+                {
+                    Log.Debug("AtmoLight: Checking if AtmoWinA.exe is running.");
+                    if (Win32API.IsProcessRunning("atmowina.exe"))
+                    {
+                        Log.Debug("AtmoLight: AtmoWinA is running.");
+                        ConnectToAtmoWinA();
+                    }
+                    else
+                    {
+                        Log.Error("AtmoLight: AtmoWinA is not running.");
+                    }
+                }
             }
-            else
-            {
-              if (!ConnectToAtmoWinA())
-              {
-                Log.Error("atmolight: AtmoWinA started but still can't connect. Atmolight control won't work :(");
-                return;
-              }
-            }
-          }
-          else
-          {
-            Log.Info("atmolight: Checking for atmowina.exe process");
-            if (Win32API.IsProcessRunning("atmowina.exe"))
-            {
-              if (!ConnectToAtmoWinA())
-              {
-                Log.Error("atmolight: AtmoWinA started but still can't connect. Atmolight control won't work :(");
-                return;
-              }
-            }
-          }
         }
-      }
     }
 
     #region Utilities
     private bool ConnectToAtmoWinA()
     {
-        // Testcode
-        // Waiting 1 second for atmowin to start properly.
-        System.Threading.Thread.Sleep(1000);
-      try
-      {
-        atmoCtrl = (IAtmoRemoteControl2)Marshal.GetActiveObject("AtmoRemoteControl.1");
-      }
-      catch (Exception ex)
-      {
-        Log.Error("atmolight: exception= {0}", ex.Message);
-        atmoCtrl = null;
-        return false;
-      }
-      ComEffectMode oldEffect;
-      
-      atmoCtrl.setEffect(ComEffectMode.cemLivePicture, out oldEffect);
-      atmoLiveViewCtrl = (IAtmoLiveViewControl)Marshal.GetActiveObject("AtmoRemoteControl.1");
-      atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsExternal);
-      atmoCtrl.getLiveViewRes(out captureWidth, out captureHeight);
-      
-      DisableLEDs();
-      
-      Log.Info("atmolight: successfully connected to AtmoWinA.exe :)");
-      Log.Info("atmolight: live view capture resolution is {0}x{1}. Screenshot will be resized to this dimensions.", captureWidth, captureHeight);
+        try
+        {
+            atmoCtrl = (IAtmoRemoteControl2)Marshal.GetActiveObject("AtmoRemoteControl.1");
+        }
+        catch (Exception ex)
+        {
+            Log.Error("AtmoLight: Failed to connect to AtmoWin. Exception: {0}", ex.Message);
+            atmoCtrl = null;
+            return false;
+        }
 
-      return true;
+        Log.Info("AtmoLight: Successfully connected to AtmoWin.");
+
+        ComEffectMode oldEffect;
+      
+        atmoCtrl.setEffect(ComEffectMode.cemLivePicture, out oldEffect);
+        atmoLiveViewCtrl = (IAtmoLiveViewControl)Marshal.GetActiveObject("AtmoRemoteControl.1");
+        atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsExternal);
+        atmoCtrl.getLiveViewRes(out captureWidth, out captureHeight);
+      
+        DisableLEDs();
+
+        Log.Debug("AtmoLight: Liveview capture resolution is {0}x{1}. Screenshot will be resized to this dimensions.", captureWidth, captureHeight);
+
+        return true;
     }
     private bool StartAtmoWinA()
     {
-      if (!System.IO.File.Exists(AtmolightSettings.atmowinExe))
-      {
-        Log.Error("atmolight: atmowina.exe not found.");
-        return false;
-      }
-      Process app = new Process();
-      app.StartInfo.FileName = AtmolightSettings.atmowinExe;
-      app.StartInfo.UseShellExecute = true;
-      app.StartInfo.Verb = "open";
-      bool ret = true;
-      try
-      {
-        ret = app.Start();
-      }
-      catch (Exception)
-      {
-        return false;
-      }
-      System.Threading.Thread.Sleep(1000);
-      return ret;
+        if (!System.IO.File.Exists(AtmolightSettings.atmowinExe))
+        {
+            Log.Error("AtmoLight: AtmoWinA.exe not found.");
+            return false;
+        }
+        Process app = new Process();
+        app.StartInfo.FileName = AtmolightSettings.atmowinExe;
+        app.StartInfo.UseShellExecute = true;
+        app.StartInfo.Verb = "open";
+        bool ret = true;
+        try
+        {
+            ret = app.Start();
+        }
+        catch (Exception)
+        {
+            Log.Error("AtmoLight: Can't start AtmoWinA.exe.");
+            return false;
+        }
+        Log.Info("AtmoLight: AtmoWinA.exe started.");
+        return ret;
     }
     
     private void SetColorMode(ComEffectMode effect)
     {
-      if (atmoCtrl == null)
-        return;
-      try
-      {
-        ComEffectMode oldEffect;
-        atmoCtrl.setEffect(effect, out oldEffect);
-        Log.Info("atmolight: Switching Profile ");
-      }
-      catch (Exception ex)
-      {
-        Log.Error("atmolight: Failed to switch profile " + Environment.NewLine + ex.Message + Environment.StackTrace);
-      }
+        if (atmoCtrl == null)
+        {
+            return;
+        }
+        try
+        {
+            ComEffectMode oldEffect;
+            atmoCtrl.setEffect(effect, out oldEffect);
+            Log.Info("AtmoLight: Switching AtmoWin profile.");
+        }
+        catch (Exception ex)
+        {
+            Log.Error("AtmoLight: Failed to switch AtmoWin profile. Exception: " + Environment.NewLine + ex.Message + Environment.StackTrace);
+        }
     }
     
     private void SetAtmoEffect(ComEffectMode effect)
     {
-      if (atmoCtrl == null)
-        return;
-      try
-      {
-        ComEffectMode oldEffect;
-        atmoCtrl.setEffect(effect, out oldEffect);
-        Log.Info("atmolight: Set atmoeffect to " + effect.ToString());
-      }
-      catch (Exception ex)
-      {
-        Log.Error("atmolight: Failed to switch effect to " + effect.ToString() + Environment.NewLine + ex.Message + Environment.StackTrace);
-      }
+        if (atmoCtrl == null)
+        {
+            return;
+        }
+        try
+        {
+            ComEffectMode oldEffect;
+            atmoCtrl.setEffect(effect, out oldEffect);
+            Log.Info("AtmoLight: Switching AtmoWin effect to: " + effect.ToString());
+        }
+        catch (Exception ex)
+        {
+            Log.Error("AtmoLight: Failed switching effect to: " + effect.ToString() + Environment.NewLine + ex.Message + Environment.StackTrace);
+        }
     }
     
     private void SetAtmoColor(byte red, byte green, byte blue)
     {
-      if (atmoCtrl == null)
-        return;
-      try
-      {
-        atmoCtrl.setStaticColor(red, green, blue);
-        Log.Info("atmolight: Set static color to RED={0} GREEN={1} BLUE={2}", red, green, blue);
-      }
-      catch (Exception ex)
-      {
-        Log.Error("atmolight: Failed to set static color to RED={0} GREEN={1} BLUE={2}" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace, red, green, blue);
-      }
+        if (atmoCtrl == null)
+        {
+            return;
+        }
+        try
+        {
+            atmoCtrl.setStaticColor(red, green, blue);
+            Log.Debug("AtmoLight: Setting static color to RED={0} GREEN={1} BLUE={2}.", red, green, blue);
+        }
+        catch (Exception ex)
+        {
+            Log.Error("AtmoLight: Failed setting static color to RED={0} GREEN={1} BLUE={2}." + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace, red, green, blue);
+        }
     }
     
     private void EnableLivePictureMode(ComLiveViewSource viewSource)
     {
-      SetAtmoEffect(ComEffectMode.cemLivePicture);
-      atmoLiveViewCtrl.setLiveViewSource(viewSource);
+        try
+        {
+            SetAtmoEffect(ComEffectMode.cemLivePicture);
+            atmoLiveViewCtrl.setLiveViewSource(viewSource);
+            Log.Debug("AtmoLight: Switching liveview mode to: {0}", viewSource.ToString());
+        }
+        catch (Exception ex)
+        {
+            Log.Error("AtmoLight: Failed to switch liveview mode to: {0}. Exception: {1}", viewSource.ToString(), ex.Message);
+        }
     }
     
     private void DisableLEDs()
     {
         Atmo_off = true;
-        atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
-        SetAtmoEffect(ComEffectMode.cemDisabled);
-        // Workaround for SEDU
-        System.Threading.Thread.Sleep(10);
-        SetAtmoColor(0, 0, 0);
+        try
+        {
+            atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
+            SetAtmoEffect(ComEffectMode.cemDisabled);
+            // Workaround for SEDU
+            System.Threading.Thread.Sleep(10);
+            SetAtmoColor(0, 0, 0);
+            Log.Debug("AtmoLight: Disabling LEDs.");
+        }
+        catch (Exception ex)
+        {
+            Log.Error("AtmoLight: Failed to disable LEDs. Exception: {0}", ex.Message);
+        }
     }
 
     private bool CheckForStartRequirements()
     {
         if (AtmolightSettings.OffOnStart)
         {
-            Log.Debug("atmolight: LEDs should be deactivated. (Manual Mode)");
+            Log.Debug("AtmoLight: LEDs should be deactivated. (Manual Mode)");
             Atmo_off = true;
             return false;
         }
         else if ((DateTime.Now.TimeOfDay >= AtmolightSettings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= AtmolightSettings.excludeTimeEnd.TimeOfDay))
         {
-            Log.Debug("atmolight: LEDs should be deactivated. (Timeframe)");
+            Log.Debug("AtmoLight: LEDs should be deactivated. (Timeframe)");
             Atmo_off = true;
             return false;
         }
         else
         {
-            Log.Debug("atmolight: LEDs should be activated.");
+            Log.Debug("AtmoLight: LEDs should be activated.");
             Atmo_off = false;
             return true;
         }
@@ -349,42 +362,44 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     private void MenuMode()
     {
-            switch (MenuEffect)
-            {
-                case ContentEffect.AtmoWin_GDI_Live_view:
-                    Atmo_off = false;
-                    EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-                    break;
-                case ContentEffect.Colorchanger:
-                    Atmo_off = false;
-                    EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-                    SetAtmoEffect(ComEffectMode.cemColorChange);
-                    break;
-                case ContentEffect.Colorchanger_LR:
-                    Atmo_off = false;
-                    EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-                    SetAtmoEffect(ComEffectMode.cemLrColorChange);
-                    break;
-                case ContentEffect.LEDs_disabled:
-                    DisableLEDs();
-                    break;
-                // Effect can be called "MP_Live_view" but it actually is "Static Color".
-                // This should not happen anymore, but the case for it stays in for now.
-                case ContentEffect.MP_Live_view:
-                case ContentEffect.StaticColor:
-                    Atmo_off = false;
-                    atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
-                    SetAtmoEffect(ComEffectMode.cemDisabled);
-                    SetAtmoColor((byte)StaticColor[0], (byte)StaticColor[1], (byte)StaticColor[2]);
-                    // Workaround for SEDU
-                    System.Threading.Thread.Sleep(20);
-                    SetAtmoColor((byte)StaticColor[0], (byte)StaticColor[1], (byte)StaticColor[2]);
-                    break;
-            }
+        Log.Info("AtmoLight: Trying to change AtmoWin effect to: {0}", MenuEffect.ToString());
+        switch (MenuEffect)
+        {
+            case ContentEffect.AtmoWin_GDI_Live_view:
+                Atmo_off = false;
+                EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                break;
+            case ContentEffect.Colorchanger:
+                Atmo_off = false;
+                EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                SetAtmoEffect(ComEffectMode.cemColorChange);
+                break;
+            case ContentEffect.Colorchanger_LR:
+                Atmo_off = false;
+                EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+                SetAtmoEffect(ComEffectMode.cemLrColorChange);
+                break;
+            case ContentEffect.LEDs_disabled:
+                DisableLEDs();
+                break;
+            // Effect can be called "MP_Live_view" but it actually is "Static Color".
+            // This should not happen anymore, but the case for it stays in for now.
+            case ContentEffect.MP_Live_view:
+            case ContentEffect.StaticColor:
+                Atmo_off = false;
+                atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
+                SetAtmoEffect(ComEffectMode.cemDisabled);
+                SetAtmoColor((byte)StaticColor[0], (byte)StaticColor[1], (byte)StaticColor[2]);
+                // Workaround for SEDU
+                System.Threading.Thread.Sleep(20);
+                SetAtmoColor((byte)StaticColor[0], (byte)StaticColor[1], (byte)StaticColor[2]);
+                break;
+        }
     }
 
     private void PlaybackMode()
     {
+        Log.Info("AtmoLight: Trying to change AtmoWin effect to: {0}", currentEffect.ToString());
         switch (currentEffect)
         {
             case ContentEffect.AtmoWin_GDI_Live_view:
@@ -549,6 +564,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.menubutton == 0) ||
             (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.menubutton == 3))
         {
+            Log.Info("AtmoLight: Opening AtmoLight context menu.");
             GUIDialogMenu dlg = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
 
             dlg.Reset();
@@ -681,10 +697,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 case 3:
                     if (AtmolightSettings.SBS_3D_ON)
                     {
+                        Log.Info("AtmoLight: Swtiching SBS 3D mode off.");
                         AtmolightSettings.SBS_3D_ON = false;
                     }
                     else
                     {
+                        Log.Info("AtmoLight: Swtiching SBS 3D mode on.");
                         AtmolightSettings.SBS_3D_ON = true;
                     }
                     break;
@@ -781,8 +799,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         catch (Exception ex)
         {
-            Log.Error("atmolight: g_Player_PlayBackEnded failed.");
-            Log.Error("atmolight: exception= {0}", ex.Message);
+            Log.Error("AtmoLight: g_Player_PlayBackEnded failed.");
+            Log.Error("AtmoLight: Exception= {0}", ex.Message);
         }
     }
     
@@ -801,8 +819,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         catch (Exception ex)
         {
-            Log.Error("atmolight: g_Player_PlayBackStopped failed.");
-            Log.Error("atmolight: exception= {0}", ex.Message);
+            Log.Error("AtmoLight: g_Player_PlayBackStopped failed.");
+            Log.Error("AtmoLight: Exception= {0}", ex.Message);
         }
     }
     
@@ -812,7 +830,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
             if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording || type == g_Player.MediaType.Unknown || (type == g_Player.MediaType.Music && filename.Contains(".mkv")))
             {
-                Log.Debug("atmolight: Video detected)");
+                Log.Debug("AtmoLight: Video detected.");
                 currentEffect = AtmolightSettings.effectVideo;
             }
             else if (type == g_Player.MediaType.Music)
@@ -823,7 +841,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                     AtmolightSettings.effectMusic = ContentEffect.StaticColor;
                 }
                 currentEffect = AtmolightSettings.effectMusic;
-                Log.Debug("atmolight: Music detected)");
+                Log.Debug("AtmoLight: Music detected.");
             }
             else if (type == g_Player.MediaType.Radio)
             {
@@ -833,12 +851,16 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                     AtmolightSettings.effectRadio = ContentEffect.StaticColor;
                 }
                 currentEffect = AtmolightSettings.effectRadio;
-                Log.Debug("atmolight: Radio detected)");
+                Log.Debug("AtmoLight: Radio detected.");
             }
 
             if (CheckForStartRequirements())
             {
                 PlaybackMode();
+                if (AtmolightSettings.Delay)
+                {
+                    Log.Debug("AtmoLight: Adding {0}ms delay to the LEDs.", AtmolightSettings.DelayTime.ToString());
+                }
             }
             else
             {
@@ -847,8 +869,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         catch (Exception ex)
         {
-            Log.Error("atmolight: g_Player_PlayBackStarted failed.");
-            Log.Error("atmolight: exception= {0}", ex.Message);
+            Log.Error("AtmoLight: g_Player_PlayBackStarted failed.");
+            Log.Error("AtmoLight: Exception= {0}", ex.Message);
         }
     }
     #endregion
@@ -895,7 +917,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
    
     public string PluginName()
     {
-      return "Atmolight";
+      return "AtmoLight";
     }
     
     public void ShowPlugin()
@@ -916,146 +938,157 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #region IPlugin implementation
     public void Start()
     {
-      if (atmoCtrl != null)
-      {
-        g_Player.PlayBackStarted += new g_Player.StartedHandler(g_Player_PlayBackStarted);
-        g_Player.PlayBackStopped += new g_Player.StoppedHandler(g_Player_PlayBackStopped);
-        g_Player.PlayBackEnded += new g_Player.EndedHandler(g_Player_PlayBackEnded);
-
-        FrameGrabber.GetInstance().OnNewFrame += new FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
-        
-        Log.Info("atmolight: Start() waiting for g_player events...");
-
-        // Workaround
-        if (AtmolightSettings.effectMenu == ContentEffect.MP_Live_view)
+        if (atmoCtrl != null)
         {
-            AtmolightSettings.effectMenu = ContentEffect.StaticColor;
+            Log.Info("AtmoLight: Plugin started.");
+            g_Player.PlayBackStarted += new g_Player.StartedHandler(g_Player_PlayBackStarted);
+            g_Player.PlayBackStopped += new g_Player.StoppedHandler(g_Player_PlayBackStopped);
+            g_Player.PlayBackEnded += new g_Player.EndedHandler(g_Player_PlayBackEnded);
+
+            FrameGrabber.GetInstance().OnNewFrame += new FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+
+            // Workaround
+            if (AtmolightSettings.effectMenu == ContentEffect.MP_Live_view)
+            {
+                AtmolightSettings.effectMenu = ContentEffect.StaticColor;
+            }
+
+            MenuEffect = AtmolightSettings.effectMenu;
+
+            StaticColor[0] = AtmolightSettings.StaticColorRed;
+            StaticColor[1] = AtmolightSettings.StaticColorGreen;
+            StaticColor[2] = AtmolightSettings.StaticColorBlue;
+
+            if (CheckForStartRequirements())
+            {
+                MenuMode();
+            }
+            else
+            {
+                DisableLEDs();
+            }
+
+            GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
         }
-
-        MenuEffect = AtmolightSettings.effectMenu;
-
-        StaticColor[0] = AtmolightSettings.StaticColorRed;
-        StaticColor[1] = AtmolightSettings.StaticColorGreen;
-        StaticColor[2] = AtmolightSettings.StaticColorBlue;
-
-        if (CheckForStartRequirements())
-        {
-            MenuMode();
-        }
-        else
-        {
-            DisableLEDs();
-        }
-
-        GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
-      }
     }
 
     void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
     {
-      if (AtmolightSettings.lowCPU) tickCount = Win32API.GetTickCount();
+        if (AtmolightSettings.lowCPU) tickCount = Win32API.GetTickCount();
 
-      if (currentEffect != ContentEffect.MP_Live_view || Atmo_off)
-      {
-        return;
-      }
-
-      if (width == 0 || height == 0)
-        return;
-
-      if (rgbSurface == null)
-        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(captureWidth, captureHeight, Format.A8R8G8B8, MultiSampleType.None, 0, true);
-      unsafe
-      {
-        try
+        if (currentEffect != ContentEffect.MP_Live_view || Atmo_off)
         {
-          if (AtmolightSettings.SBS_3D_ON)
-            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer, captureWidth, captureHeight);
-          else
-            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer, captureWidth, captureHeight);
-
-          Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
-
-          BinaryReader reader = new BinaryReader(stream);
-          stream.Position = 0; // ensure that what start at the beginning of the stream. 
-          reader.ReadBytes(14); // skip bitmap file info header
-          byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
-
-          int rgbL = (int)(stream.Length - stream.Position);
-          int rgb = (int)(rgbL / (captureWidth * captureHeight));
-
-          byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
-
-          byte[] h1pixelData = new byte[captureWidth * rgb];
-          byte[] h2pixelData = new byte[captureWidth * rgb];
-          //now flip horizontally, we do it always to prevent microstudder
-          int i;
-          for (i = 0; i < ((captureHeight / 2) - 1); i++)
-          {
-            Array.Copy(pixelData, i * captureWidth * rgb, h1pixelData, 0, captureWidth * rgb);
-            Array.Copy(pixelData, (captureHeight - i - 1) * captureWidth * rgb, h2pixelData, 0, captureWidth * rgb);
-            Array.Copy(h1pixelData, 0, pixelData, (captureHeight - i - 1) * captureWidth * rgb, captureWidth * rgb);
-            Array.Copy(h2pixelData, 0, pixelData, i * captureWidth * rgb, captureWidth * rgb);
-          }
-          //send scaled and fliped frame to atmowin
-          if (!AtmolightSettings.lowCPU || (((Win32API.GetTickCount() - lastFrame) > AtmolightSettings.lowCPUTime) && AtmolightSettings.lowCPU))
-          {
-              if (AtmolightSettings.lowCPU)
-              {
-                  lastFrame = Win32API.GetTickCount();
-              }
-              if (!AtmolightSettings.Delay)
-              {
-                  atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
-              }
-              else
-              {
-                  Thread DelayHelperThread = new Thread(() => DoDelay(bmiInfoHeader, pixelData));
-                  DelayHelperThread.Start();
-              }
-          }
-          stream.Close();
-          stream.Dispose();
+            return;
         }
-        catch (Exception ex)
+
+        if (width == 0 || height == 0)
         {
-          Log.Error(ex);
-          rgbSurface.Dispose();
-          rgbSurface = null;
+            return;
         }
-      }
+
+        if (rgbSurface == null)
+        {
+            rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(captureWidth, captureHeight, Format.A8R8G8B8, MultiSampleType.None, 0, true);
+        }
+        unsafe
+        {
+            try
+            {
+                if (AtmolightSettings.SBS_3D_ON)
+                {
+                    VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer, captureWidth, captureHeight);
+                }
+                else
+                {
+                    VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer, captureWidth, captureHeight);
+                }
+
+                Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
+
+                BinaryReader reader = new BinaryReader(stream);
+                stream.Position = 0; // ensure that what start at the beginning of the stream. 
+                reader.ReadBytes(14); // skip bitmap file info header
+                byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
+
+                int rgbL = (int)(stream.Length - stream.Position);
+                int rgb = (int)(rgbL / (captureWidth * captureHeight));
+
+                byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
+
+                byte[] h1pixelData = new byte[captureWidth * rgb];
+                byte[] h2pixelData = new byte[captureWidth * rgb];
+                //now flip horizontally, we do it always to prevent microstudder
+                int i;
+                for (i = 0; i < ((captureHeight / 2) - 1); i++)
+                {
+                    Array.Copy(pixelData, i * captureWidth * rgb, h1pixelData, 0, captureWidth * rgb);
+                    Array.Copy(pixelData, (captureHeight - i - 1) * captureWidth * rgb, h2pixelData, 0, captureWidth * rgb);
+                    Array.Copy(h1pixelData, 0, pixelData, (captureHeight - i - 1) * captureWidth * rgb, captureWidth * rgb);
+                    Array.Copy(h2pixelData, 0, pixelData, i * captureWidth * rgb, captureWidth * rgb);
+                }
+                //send scaled and fliped frame to atmowin
+                if (!AtmolightSettings.lowCPU || (((Win32API.GetTickCount() - lastFrame) > AtmolightSettings.lowCPUTime) && AtmolightSettings.lowCPU))
+                {
+                    if (AtmolightSettings.lowCPU)
+                    {
+                        lastFrame = Win32API.GetTickCount();
+                    }
+                    if (!AtmolightSettings.Delay)
+                    {
+                        atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
+                    }
+                    else
+                    {
+                        Thread DelayHelperThread = new Thread(() => DoDelay(bmiInfoHeader, pixelData));
+                        DelayHelperThread.Start();
+                    }
+                }
+                stream.Close();
+                stream.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+                rgbSurface.Dispose();
+                rgbSurface = null;
+            }
+        }
     }
 
     public void Stop()
     {
-      Log.Debug("atmolight: Stop()");
-      if (atmoCtrl != null)
-      {
-        FrameGrabber.GetInstance().OnNewFrame += new FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
-        
-        g_Player.PlayBackStarted -= new g_Player.StartedHandler(g_Player_PlayBackStarted);
-        g_Player.PlayBackStopped -= new g_Player.StoppedHandler(g_Player_PlayBackStopped);
-        g_Player.PlayBackEnded -= new g_Player.EndedHandler(g_Player_PlayBackEnded);
-
-        GUIWindowManager.OnNewAction -= new OnActionHandler(OnNewAction);
-
-        if (AtmolightSettings.disableOnShutdown)
-          DisableLEDs();
-        
-        if (AtmolightSettings.enableInternalLiveView)
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-
-        atmoCtrl = null;
-
-        if (AtmolightSettings.exitAtmoWin)
+        if (atmoCtrl != null)
         {
-          foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension("atmowina")))
-          {
-            process.Kill();
-            Win32API.RefreshTrayArea();
-          }
+            FrameGrabber.GetInstance().OnNewFrame += new FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+
+            g_Player.PlayBackStarted -= new g_Player.StartedHandler(g_Player_PlayBackStarted);
+            g_Player.PlayBackStopped -= new g_Player.StoppedHandler(g_Player_PlayBackStopped);
+            g_Player.PlayBackEnded -= new g_Player.EndedHandler(g_Player_PlayBackEnded);
+
+            GUIWindowManager.OnNewAction -= new OnActionHandler(OnNewAction);
+
+            if (AtmolightSettings.disableOnShutdown)
+            {
+                DisableLEDs();
+            }
+
+            if (AtmolightSettings.enableInternalLiveView)
+            {
+                EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+            }
+
+            atmoCtrl = null;
+
+            if (AtmolightSettings.exitAtmoWin)
+            {
+                foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension("atmowina")))
+                {
+                    process.Kill();
+                    Win32API.RefreshTrayArea();
+                }
+            }
         }
-      }
+        Log.Info("AtmoLight: Plugin Stopped.");
     }
     #endregion
   }
