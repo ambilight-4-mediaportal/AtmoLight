@@ -169,7 +169,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                     Log.Debug("AtmoLight: Checking if AtmoWinA.exe is running.");
                     if (!Win32API.IsProcessRunning("atmowina.exe"))
                     {
-                        Log.Debug("AtmoLight: AtmoWinA.exe not running. Trying to start it.");
+                        Log.Debug("AtmoLight: AtmoWinA.exe not running. Starting it.");
                         if (StartAtmoWinA())
                         {
                             // Wait 1 second before trying to connect.
@@ -179,6 +179,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                     }
                     else
                     {
+                        Log.Debug("AtmoLight: AtmoWinA is allready running.");
                         ConnectToAtmoWinA();
                     }
                 }
@@ -262,15 +263,17 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         try
         {
+            Log.Debug("AtmoLight: Changing AtmoWin profile.");
             ComEffectMode oldEffect;
             atmoCtrl.setEffect(effect, out oldEffect);
-            Log.Info("AtmoLight: Switching AtmoWin profile.");
         }
         catch (Exception ex)
         {
-            Log.Error("AtmoLight: Failed to switch AtmoWin profile.");
+            Log.Error("AtmoLight: Failed to change AtmoWin profile.");
             Log.Error("AtmoLight: Exception: {0}", ex.Message);
+            return;
         }
+        Log.Info("AtmoLight: Successfully changed AtmoWin profile.");
     }
     
     private void SetAtmoEffect(ComEffectMode effect)
@@ -281,15 +284,17 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         try
         {
+            Log.Debug("AtmoLight: changing AtmoWin effect to: {0}", effect.ToString());
             ComEffectMode oldEffect;
             atmoCtrl.setEffect(effect, out oldEffect);
-            Log.Info("AtmoLight: Switching AtmoWin effect to: {0}", effect.ToString());
         }
         catch (Exception ex)
         {
-            Log.Error("AtmoLight: Failed switching effect to: {0}", effect.ToString());
+            Log.Error("AtmoLight: Failed changing effect to: {0}", effect.ToString());
             Log.Error("AtmoLight: Exception: {0}", ex.Message);
+            return;
         }
+        Log.Info("AtmoLight: Successfully changed AtmoWin effect to: {0}", effect.ToString());
     }
     
     private void SetAtmoColor(byte red, byte green, byte blue)
@@ -300,29 +305,33 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         try
         {
+            Log.Debug("AtmoLight: Setting static color to R:{0} G:{1} B:{2}.", red, green, blue);
             atmoCtrl.setStaticColor(red, green, blue);
-            Log.Debug("AtmoLight: Setting static color to RED={0} GREEN={1} BLUE={2}.", red, green, blue);
         }
         catch (Exception ex)
         {
-            Log.Error("AtmoLight: Failed setting static color to RED={0} GREEN={1} BLUE={2}.", red, green, blue);
+            Log.Error("AtmoLight: Failed setting static color to R:{0} G:{1} B:{2}.", red, green, blue);
             Log.Error("AtmoLight: Exception: {0}", ex.Message);
+            return;
         }
+        Log.Info("AtmoLight: Successfully set static color to R:{0} G:{1} B:{2}.", red, green, blue);
     }
     
     private void EnableLivePictureMode(ComLiveViewSource viewSource)
     {
         try
         {
+            Log.Debug("AtmoLight: Changing AtmoWin liveview mode to: {0}", viewSource.ToString());
             SetAtmoEffect(ComEffectMode.cemLivePicture);
             atmoLiveViewCtrl.setLiveViewSource(viewSource);
-            Log.Debug("AtmoLight: Switching liveview mode to: {0}", viewSource.ToString());
         }
         catch (Exception ex)
         {
-            Log.Error("AtmoLight: Failed to switch liveview mode to: {0}.", viewSource.ToString());
+            Log.Error("AtmoLight: Failed to change AtmoWin liveview mode to: {0}.", viewSource.ToString());
             Log.Error("AtmoLight: Exception: {0}", ex.Message);
+            return;
         }
+        Log.Debug("AtmoLight: Successfully changed AtmoWin liveview mode to: {0}", viewSource.ToString());
     }
     
     private void DisableLEDs()
@@ -330,18 +339,20 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         Atmo_off = true;
         try
         {
+			Log.Debug("AtmoLight: Disabling LEDs.");
             atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
             SetAtmoEffect(ComEffectMode.cemDisabled);
             // Workaround for SEDU
             System.Threading.Thread.Sleep(10);
             SetAtmoColor(0, 0, 0);
-            Log.Debug("AtmoLight: Disabling LEDs.");
         }
         catch (Exception ex)
         {
             Log.Error("AtmoLight: Failed to disable LEDs.");
             Log.Error("AtmoLight: Exception: {0}", ex.Message);
+            return;
         }
+        Log.Info("AtmoLight: Successfully disabled LEDs.");
     }
 
     private bool CheckForStartRequirements()
@@ -360,7 +371,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         else
         {
-            Log.Debug("AtmoLight: LEDs should be activated.");
+            Log.Debug("AtmoLight: LEDs can be activated.");
             Atmo_off = false;
             return true;
         }
@@ -368,7 +379,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     private void MenuMode()
     {
-        Log.Info("AtmoLight: Trying to change AtmoWin effect to: {0}", MenuEffect.ToString());
+        Log.Info("AtmoLight: Changing AtmoLight effect to: {0}", MenuEffect.ToString());
         switch (MenuEffect)
         {
             case ContentEffect.AtmoWin_GDI_Live_view:
@@ -405,7 +416,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     private void PlaybackMode()
     {
-        Log.Info("AtmoLight: Trying to change AtmoWin effect to: {0}", currentEffect.ToString());
+        Log.Info("AtmoLight: Changing AtmoLight effect to: {0}", currentEffect.ToString());
         switch (currentEffect)
         {
             case ContentEffect.AtmoWin_GDI_Live_view:
@@ -711,12 +722,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 case 3:
                     if (AtmolightSettings.SBS_3D_ON)
                     {
-                        Log.Info("AtmoLight: Swtiching SBS 3D mode off.");
+                        Log.Info("AtmoLight: Switching SBS 3D mode off.");
                         AtmolightSettings.SBS_3D_ON = false;
                     }
                     else
                     {
-                        Log.Info("AtmoLight: Swtiching SBS 3D mode on.");
+                        Log.Info("AtmoLight: Switching SBS 3D mode on.");
                         AtmolightSettings.SBS_3D_ON = true;
                     }
                     break;
@@ -954,7 +965,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     {
         if (atmoCtrl != null)
         {
-            Log.Info("AtmoLight: Plugin started.");
+            Log.Debug("AtmoLight: Plugin started.");
             g_Player.PlayBackStarted += new g_Player.StartedHandler(g_Player_PlayBackStarted);
             g_Player.PlayBackStopped += new g_Player.StoppedHandler(g_Player_PlayBackStopped);
             g_Player.PlayBackEnded += new g_Player.EndedHandler(g_Player_PlayBackEnded);
@@ -1103,7 +1114,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
                 }
             }
         }
-        Log.Info("AtmoLight: Plugin Stopped.");
+        Log.Debug("AtmoLight: Plugin Stopped.");
     }
     #endregion
   }
