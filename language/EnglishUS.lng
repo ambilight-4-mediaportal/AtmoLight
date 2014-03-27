@@ -57,6 +57,7 @@ Yellow=Yellow
 Error=Error
 RGBErrorLine1=The value has to be a number
 RGBErrorLine2=and must be between 0 and 255.
+AtmoWinConnectionLost=Connection to AtmoWin lost!
 ManualStaticColor=Manual Static Color
 Apply=Apply
 Cancel=Cancel

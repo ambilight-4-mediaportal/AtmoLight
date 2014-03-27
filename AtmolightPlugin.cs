@@ -6,6 +6,7 @@ using MediaPortal.Profile;
 using MediaPortal.Player;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using AtmoWinRemoteControl;
 using System.Drawing;
@@ -151,6 +152,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private int[] staticColor = { 0, 0, 0 };
     private int[] staticColorTemp = { 0, 0, 0 };
     private int staticColorHelper;
+    private int comInterfaceTimeout = 2000;
     #endregion
 
     [DllImport("AtmoDXUtil.dll", PreserveSig = false, CharSet = CharSet.Auto)]
@@ -162,11 +164,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         Log.Debug("AtmoLight: Loading Settings.");
         AtmolightSettings.LoadSettings();
-        FirstStartAtmoWinA();
+        InitializeAtmoWinConnection();
       }
     }
 
-    private bool FirstStartAtmoWinA()
+    private bool InitializeAtmoWinConnection()
     {
       if (!Win32API.IsProcessRunning("configuration.exe"))
       {
@@ -349,25 +351,49 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       Log.Debug("AtmoLight: Successfully changed AtmoWin liveview mode to: {0}", viewSource.ToString());
     }
 
-    private void DisableLEDs()
+    private void DisableLEDs(bool timeout = false)
     {
-      atmoOff = true;
-      try
+      if (!timeout)
       {
-        Log.Debug("AtmoLight: Disabling LEDs.");
-        atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
-        SetAtmoEffect(ComEffectMode.cemDisabled);
-        // Workaround for SEDU
-        System.Threading.Thread.Sleep(10);
-        SetAtmoColor(0, 0, 0);
+        var tokenSource = new CancellationTokenSource();
+        CancellationToken token = tokenSource.Token;
+        var task = Task.Factory.StartNew(() => DisableLEDs(true), token);
+
+        if (!task.Wait(comInterfaceTimeout, token))
+        {
+          Log.Error("AtmoLight: DisableLEDs timed out!");
+
+          // Try to reconnect to AtmoWin
+          Log.Debug("AtmoLight: Trying to reconnect to AtmoWin.");
+          if (!InitializeAtmoWinConnection())
+          {
+            atmoCtrl = null;
+            atmoOff = true;
+            Log.Error("AtmoLight: Reconnecting to AtmoWin failed.");
+            DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost);
+          }
+        }
       }
-      catch (Exception ex)
+      else
       {
-        Log.Error("AtmoLight: Failed to disable LEDs.");
-        Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        return;
+        atmoOff = true;
+        try
+        {
+          Log.Debug("AtmoLight: Disabling LEDs.");
+          atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
+          SetAtmoEffect(ComEffectMode.cemDisabled);
+          // Workaround for SEDU
+          System.Threading.Thread.Sleep(10);
+          SetAtmoColor(0, 0, 0);
+        }
+        catch (Exception ex)
+        {
+          Log.Error("AtmoLight: Failed to disable LEDs.");
+          Log.Error("AtmoLight: Exception: {0}", ex.Message);
+          return;
+        }
+        Log.Info("AtmoLight: Successfully disabled LEDs.");
       }
-      Log.Info("AtmoLight: Successfully disabled LEDs.");
     }
 
     private bool CheckForStartRequirements()
@@ -392,78 +418,134 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
-    private void MenuMode()
+    private void MenuMode(bool timeout = false)
     {
-      Log.Info("AtmoLight: Changing AtmoLight effect to: {0}", menuEffect.ToString());
-      switch (menuEffect)
+      if (!timeout)
       {
-        case ContentEffect.AtmoWinLiveMode:
-          atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-          break;
-        case ContentEffect.Colorchanger:
-          atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-          SetAtmoEffect(ComEffectMode.cemColorChange);
-          break;
-        case ContentEffect.ColorchangerLR:
-          atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-          SetAtmoEffect(ComEffectMode.cemLrColorChange);
-          break;
-        case ContentEffect.LEDsDisabled:
-          DisableLEDs();
-          break;
-        // Effect can be called "MP_Live_view" but it actually is "Static Color".
-        // This should not happen anymore, but the case for it stays in for now.
-        case ContentEffect.MediaPortalLiveMode:
-        case ContentEffect.StaticColor:
-          atmoOff = false;
-          atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
-          SetAtmoEffect(ComEffectMode.cemDisabled);
-          SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]);
-          // Workaround for SEDU
-          System.Threading.Thread.Sleep(20);
-          SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]);
-          break;
+        var tokenSource = new CancellationTokenSource();
+        CancellationToken token = tokenSource.Token;
+        var task = Task.Factory.StartNew(() => MenuMode(true), token);
+
+        if (!task.Wait(comInterfaceTimeout, token))
+        {
+          Log.Error("AtmoLight: MenuMode timed out!");
+
+          // Try to reconnect to AtmoWin
+          Log.Debug("AtmoLight: Trying to reconnect to AtmoWin.");
+          if (!InitializeAtmoWinConnection())
+          {
+            atmoCtrl = null;
+            atmoOff = true;
+            Log.Error("AtmoLight: Reconnecting to AtmoWin failed.");
+            DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost);
+          }
+          else
+          {
+            StartLEDs();
+          }
+        }
+      }
+      else
+      {
+        Log.Info("AtmoLight: Changing AtmoLight effect to: {0}", menuEffect.ToString());
+        switch (menuEffect)
+        {
+          case ContentEffect.AtmoWinLiveMode:
+            atmoOff = false;
+            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+            break;
+          case ContentEffect.Colorchanger:
+            atmoOff = false;
+            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+            SetAtmoEffect(ComEffectMode.cemColorChange);
+            break;
+          case ContentEffect.ColorchangerLR:
+            atmoOff = false;
+            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+            SetAtmoEffect(ComEffectMode.cemLrColorChange);
+            break;
+          case ContentEffect.LEDsDisabled:
+            DisableLEDs();
+            break;
+          // Effect can be called "MP_Live_view" but it actually is "Static Color".
+          // This should not happen anymore, but the case for it stays in for now.
+          case ContentEffect.MediaPortalLiveMode:
+          case ContentEffect.StaticColor:
+            atmoOff = false;
+            atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
+            SetAtmoEffect(ComEffectMode.cemDisabled);
+            SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]);
+            // Workaround for SEDU
+            System.Threading.Thread.Sleep(20);
+            SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]);
+            break;
+        }
       }
     }
 
-    private void PlaybackMode()
+    private void PlaybackMode(bool timeout = false)
     {
-      Log.Info("AtmoLight: Changing AtmoLight effect to: {0}", currentEffect.ToString());
-      switch (currentEffect)
+      if (!timeout)
       {
-        case ContentEffect.AtmoWinLiveMode:
-          atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-          break;
-        case ContentEffect.Colorchanger:
-          atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-          SetAtmoEffect(ComEffectMode.cemColorChange);
-          break;
-        case ContentEffect.ColorchangerLR:
-          atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-          SetAtmoEffect(ComEffectMode.cemLrColorChange);
-          break;
-        case ContentEffect.LEDsDisabled:
-          DisableLEDs();
-          break;
-        case ContentEffect.MediaPortalLiveMode:
-          atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsExternal);
-          break;
-        case ContentEffect.StaticColor:
-          atmoOff = false;
-          atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
-          SetAtmoEffect(ComEffectMode.cemDisabled);
-          SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]);
-          // Workaround for SEDU
-          System.Threading.Thread.Sleep(20);
-          SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]);
-          break;
+        var tokenSource = new CancellationTokenSource();
+        CancellationToken token = tokenSource.Token;
+        var task = Task.Factory.StartNew(() => PlaybackMode(true), token);
+
+        if (!task.Wait(comInterfaceTimeout, token))
+        {
+          Log.Error("AtmoLight: PlaybackMode timed out!");
+
+          // Try to reconnect to AtmoWin
+          Log.Debug("AtmoLight: Trying to reconnect to AtmoWin.");
+          if (!InitializeAtmoWinConnection())
+          {
+            atmoCtrl = null;
+            atmoOff = true;
+            Log.Error("AtmoLight: Reconnecting to AtmoWin failed.");
+            DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost);
+          }
+          else
+          {
+            StartLEDs();
+          }
+        }
+      }
+      else
+      {
+        Log.Info("AtmoLight: Changing AtmoLight effect to: {0}", currentEffect.ToString());
+        switch (currentEffect)
+        {
+          case ContentEffect.AtmoWinLiveMode:
+            atmoOff = false;
+            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+            break;
+          case ContentEffect.Colorchanger:
+            atmoOff = false;
+            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+            SetAtmoEffect(ComEffectMode.cemColorChange);
+            break;
+          case ContentEffect.ColorchangerLR:
+            atmoOff = false;
+            EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+            SetAtmoEffect(ComEffectMode.cemLrColorChange);
+            break;
+          case ContentEffect.LEDsDisabled:
+            DisableLEDs();
+            break;
+          case ContentEffect.MediaPortalLiveMode:
+            atmoOff = false;
+            EnableLivePictureMode(ComLiveViewSource.lvsExternal);
+            break;
+          case ContentEffect.StaticColor:
+            atmoOff = false;
+            atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
+            SetAtmoEffect(ComEffectMode.cemDisabled);
+            SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]);
+            // Workaround for SEDU
+            System.Threading.Thread.Sleep(20);
+            SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]);
+            break;
+        }
       }
     }
 
@@ -497,7 +579,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return null;
     }
 
-    private void DialogRGBError()
+    private void DialogError(string setLine1 = null, string setLine2 = null)
     {
       GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
       if (dlgError != null)
@@ -536,13 +618,13 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           }
           else
           {
-            DialogRGBError();
+            DialogError(LanguageLoader.appStrings.ContextMenu_RGBErrorLine1, LanguageLoader.appStrings.ContextMenu_RGBErrorLine2);
           }
           break;
         case 3:
           if (staticColorTemp[0] == -1 || staticColorTemp[1] == -1 || staticColorTemp[2] == -1)
           {
-            DialogRGBError();
+            DialogError(LanguageLoader.appStrings.ContextMenu_RGBErrorLine1, LanguageLoader.appStrings.ContextMenu_RGBErrorLine2);
             break;
           }
           else
@@ -1094,12 +1176,17 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
           Log.Error("AtmoLight: Error in AtmolightPlugin_OnNewFrame.");
           Log.Error("AtmoLight: Exception: {0}", ex.Message);
-          // try to connect atmowinx
-          bool startAtmoWinx = FirstStartAtmoWinA();
-          if (!startAtmoWinx)
+
+          // Try to reconnect to AtmoWin
+          Log.Debug("AtmoLight: Trying to reconnect to AtmoWin.");
+          if (!InitializeAtmoWinConnection())
           {
             rgbSurface.Dispose();
             rgbSurface = null;
+            atmoCtrl = null;
+            atmoOff = true;
+            Log.Error("AtmoLight: Reconnecting to AtmoWin failed.");
+            DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost);
           }
           else
           {

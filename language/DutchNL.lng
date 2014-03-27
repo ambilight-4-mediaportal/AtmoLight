@@ -57,6 +57,7 @@ Yellow=Geel
 Error=Fout
 RGBErrorLine1=De waarde moet een getal zijn
 RGBErrorLine2=tussen de 0 en 255.
+AtmoWinConnectionLost=Connection to AtmoWin lost!
 ManualStaticColor=Handmatige Vaste Kleur
 Apply=Toepassen
 Cancel=Annuleren

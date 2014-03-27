@@ -276,6 +276,7 @@ namespace Language
     public String ContextMenu_Error = "Error";
     public String ContextMenu_RGBErrorLine1 = "The value has to be a number";
     public String ContextMenu_RGBErrorLine2 = "and must be between 0 and 255.";
+    public String ContextMenu_AtmoWinConnectionLost = "Connection to AtmoWin lost!";
     public String ContextMenu_ManualStaticColor = "Manual Static Color";
     public String ContextMenu_Apply = "Apply";
     public String ContextMenu_Cancel = "Cancel";

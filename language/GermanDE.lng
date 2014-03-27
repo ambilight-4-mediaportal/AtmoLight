@@ -57,6 +57,7 @@ Yellow=Gelb
 Error=Fehler
 RGBErrorLine1=Der Wert muss eine Zahl sein
 RGBErrorLine2=und zwischen 0 und 255 liegen.
+AtmoWinConnectionLost=Verbindung zu AtmoWin verloren!
 ManualStaticColor=Manuelle feste Farbe
 Apply=Übernehmen
 Cancel=Abbrechen
