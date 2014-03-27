@@ -19,18 +19,18 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       cbMusic.SelectedIndex = (int)AtmolightSettings.effectMusic;
       cbRadio.SelectedIndex = (int)AtmolightSettings.effectRadio;
       cbMenu.SelectedIndex = (int)AtmolightSettings.effectMenu;
-      comboBox1.SelectedIndex = (int)AtmolightSettings.killbutton;
-      comboBox2.SelectedIndex = (int)AtmolightSettings.cmbutton;
-      cbMenuButton.SelectedIndex = (int)AtmolightSettings.menubutton;
+      comboBox1.SelectedIndex = (int)AtmolightSettings.killButton;
+      comboBox2.SelectedIndex = (int)AtmolightSettings.profileButton;
+      cbMenuButton.SelectedIndex = (int)AtmolightSettings.menuButton;
       edExcludeStart.Text = AtmolightSettings.excludeTimeStart.ToString("HH:mm");
       edExcludeEnd.Text = AtmolightSettings.excludeTimeEnd.ToString("HH:mm");
       lowCpuTime.Text = AtmolightSettings.lowCPUTime.ToString();
-      tbDelay.Text = AtmolightSettings.DelayTime.ToString();
-      tbRed.Text = AtmolightSettings.StaticColorRed.ToString();
-      tbGreen.Text = AtmolightSettings.StaticColorGreen.ToString();
-      tbBlue.Text = AtmolightSettings.StaticColorBlue.ToString();
+      tbDelay.Text = AtmolightSettings.delayTime.ToString();
+      tbRed.Text = AtmolightSettings.staticColorRed.ToString();
+      tbGreen.Text = AtmolightSettings.staticColorGreen.ToString();
+      tbBlue.Text = AtmolightSettings.staticColorBlue.ToString();
 
-      if (AtmolightSettings.OffOnStart)
+      if (AtmolightSettings.manualMode)
         ckOnMediaStart.Checked = true;
       else
         this.ckOnMediaStart.Checked = false;
@@ -40,7 +40,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       else
         this.ckLowCpu.Checked = false;
 
-        if (AtmolightSettings.Delay)
+        if (AtmolightSettings.delay)
         {
             ckDelay.Checked = true;
         }
@@ -181,25 +181,25 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           return;
       }
 
-      AtmolightSettings.StaticColorRed = StaticColorRed;
-      AtmolightSettings.StaticColorGreen = StaticColorGreen;
-      AtmolightSettings.StaticColorBlue = StaticColorBlue;
+      AtmolightSettings.staticColorRed = StaticColorRed;
+      AtmolightSettings.staticColorGreen = StaticColorGreen;
+      AtmolightSettings.staticColorBlue = StaticColorBlue;
       AtmolightSettings.lowCPUTime = cTime;
-      AtmolightSettings.DelayTime = cDelay;
+      AtmolightSettings.delayTime = cDelay;
       AtmolightSettings.excludeTimeEnd = dt2;
       AtmolightSettings.atmowinExe = edFile.Text;
       AtmolightSettings.effectVideo = (ContentEffect)cbVideo.SelectedIndex;
       AtmolightSettings.effectMusic = (ContentEffect)cbMusic.SelectedIndex;
       AtmolightSettings.effectRadio = (ContentEffect)cbRadio.SelectedIndex;
       AtmolightSettings.effectMenu = (ContentEffect)cbMenu.SelectedIndex;
-      AtmolightSettings.killbutton = comboBox1.SelectedIndex;
-      AtmolightSettings.cmbutton = comboBox2.SelectedIndex;
-      AtmolightSettings.menubutton = cbMenuButton.SelectedIndex;
+      AtmolightSettings.killButton = comboBox1.SelectedIndex;
+      AtmolightSettings.profileButton = comboBox2.SelectedIndex;
+      AtmolightSettings.menuButton = cbMenuButton.SelectedIndex;
       AtmolightSettings.disableOnShutdown = rbDisableLEDs.Checked;
       AtmolightSettings.enableInternalLiveView = rbSwitchToLiveView.Checked;
-      AtmolightSettings.OffOnStart = ckOnMediaStart.Checked;
+      AtmolightSettings.manualMode = ckOnMediaStart.Checked;
       AtmolightSettings.lowCPU = ckLowCpu.Checked;
-      AtmolightSettings.Delay = ckDelay.Checked;
+      AtmolightSettings.delay = ckDelay.Checked;
       AtmolightSettings.startAtmoWin = ckStartAtmoWin.Checked;
       AtmolightSettings.exitAtmoWin = ckExitAtmoWin.Checked;
       AtmolightSettings.SaveSettings();

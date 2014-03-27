@@ -122,7 +122,7 @@ namespace Language
       if ((strCurrentLanguageFile == null) || (strCurrentLanguageFile == ""))
       {
         string CommonAppDataDir = Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\Atmolight";
-        
+
         bool ifExists = Directory.Exists(CommonAppDataDir);
         if (!ifExists)
           Directory.CreateDirectory(CommonAppDataDir);
