@@ -158,59 +158,74 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     public AtmolightPlugin()
     {
-        if (MPSettings.Instance.GetValueAsBool("plugins", "Atmolight", true))
+      if (MPSettings.Instance.GetValueAsBool("plugins", "Atmolight", true))
+      {
+        Log.Debug("AtmoLight: Loading Settings.");
+        AtmolightSettings.LoadSettings();
+        FirstStartAtmoWinA();
+      }
+    }
+
+    private bool FirstStartAtmoWinA()
+    {
+      if (!Win32API.IsProcessRunning("configuration.exe"))
+      {
+        if (AtmolightSettings.startAtmoWin)
         {
-            Log.Debug("AtmoLight: Loading Settings.");
-            AtmolightSettings.LoadSettings();
-            if (!Win32API.IsProcessRunning("configuration.exe"))
+          Log.Debug("AtmoLight: Checking if AtmoWinA.exe is running.");
+          if (!Win32API.IsProcessRunning("atmowina.exe"))
+          {
+            Log.Debug("AtmoLight: AtmoWinA.exe not running. Starting it.");
+            if (StartAtmoWinA())
             {
-                if (AtmolightSettings.startAtmoWin)
-                {
-                    Log.Debug("AtmoLight: Checking if AtmoWinA.exe is running.");
-                    if (!Win32API.IsProcessRunning("atmowina.exe"))
-                    {
-                        Log.Debug("AtmoLight: AtmoWinA.exe not running. Starting it.");
-                        if (StartAtmoWinA())
-                        {
-                            // Wait 1 second before trying to connect.
-                            System.Threading.Thread.Sleep(1000);
-                            ConnectToAtmoWinA();
-                        }
-                    }
-                    else
-                    {
-                        Log.Debug("AtmoLight: AtmoWinA is allready running.");
-                        ConnectToAtmoWinA();
-                    }
-                }
-                else
-                {
-                    Log.Debug("AtmoLight: Checking if AtmoWinA.exe is running.");
-                    if (Win32API.IsProcessRunning("atmowina.exe"))
-                    {
-                        Log.Debug("AtmoLight: AtmoWinA is running.");
-                        ConnectToAtmoWinA();
-                    }
-                    else
-                    {
-                        Log.Error("AtmoLight: AtmoWinA is not running.");
-                    }
-                }
+              // Wait 1 second before trying to connect.
+              System.Threading.Thread.Sleep(1000);
+              return ConnectToAtmoWinA();
             }
+          }
+          else
+          {
+            Log.Debug("AtmoLight: AtmoWinA is allready running.");
+            return ConnectToAtmoWinA();
+          }
         }
+        else
+        {
+          Log.Debug("AtmoLight: Checking if AtmoWinA.exe is running.");
+          if (Win32API.IsProcessRunning("atmowina.exe"))
+          {
+            Log.Debug("AtmoLight: AtmoWinA is running.");
+            return ConnectToAtmoWinA();
+          }
+          else
+          {
+            Log.Error("AtmoLight: AtmoWinA is not running.");
+          }
+        }
+      }
+      return ConnectToAtmoWinA();
     }
 
     #region Utilities
     private bool ConnectToAtmoWinA()
     {
-        try
+      try
+      {
+        if (atmoCtrl != null)
         {
-            atmoCtrl = (IAtmoRemoteControl2)Marshal.GetActiveObject("AtmoRemoteControl.1");
+          Marshal.ReleaseComObject(atmoCtrl);
+          atmoCtrl = null;
         }
-        catch (Exception ex)
+        atmoCtrl = (IAtmoRemoteControl2)Marshal.GetActiveObject("AtmoRemoteControl.1");
+      }
+      catch (Exception ex)
+      {
+        Log.Error("AtmoLight: Failed to connect to AtmoWin.");
+        Log.Error("AtmoLight: Exception: {0}", ex.Message);
+        if (atmoCtrl != null)
         {
-            Log.Error("AtmoLight: Failed to connect to AtmoWin.");
-            Log.Error("AtmoLight: Exception: {0}", ex.Message);
+          Marshal.ReleaseComObject(atmoCtrl);
+        }
             atmoCtrl = null;
             return false;
         }
@@ -339,7 +354,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         Atmo_off = true;
         try
         {
-			Log.Debug("AtmoLight: Disabling LEDs.");
+            Log.Debug("AtmoLight: Disabling LEDs.");
             atmoLiveViewCtrl.setLiveViewSource(ComLiveViewSource.lvsGDI);
             SetAtmoEffect(ComEffectMode.cemDisabled);
             // Workaround for SEDU
@@ -997,88 +1012,101 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
     }
 
-    void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
+    private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
     {
-        if (AtmolightSettings.lowCPU) tickCount = Win32API.GetTickCount();
+      if (AtmolightSettings.lowCPU) tickCount = Win32API.GetTickCount();
 
-        if (currentEffect != ContentEffect.MP_Live_view || Atmo_off)
-        {
-            return;
-        }
+      if (currentEffect != ContentEffect.MP_Live_view || Atmo_off)
+      {
+        return;
+      }
 
-        if (width == 0 || height == 0)
-        {
-            return;
-        }
+      if (width == 0 || height == 0)
+      {
+        return;
+      }
 
-        if (rgbSurface == null)
+      if (rgbSurface == null)
+      {
+        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(captureWidth, captureHeight, Format.A8R8G8B8,
+          MultiSampleType.None, 0, true);
+      }
+      unsafe
+      {
+        try
         {
-            rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(captureWidth, captureHeight, Format.A8R8G8B8, MultiSampleType.None, 0, true);
-        }
-        unsafe
-        {
-            try
+          if (AtmolightSettings.SBS_3D_ON)
+          {
+            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width/2, height, (IntPtr) rgbSurface.UnmanagedComPointer,
+              captureWidth, captureHeight);
+          }
+          else
+          {
+            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr) rgbSurface.UnmanagedComPointer,
+              captureWidth, captureHeight);
+          }
+
+          Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
+
+          BinaryReader reader = new BinaryReader(stream);
+          stream.Position = 0; // ensure that what start at the beginning of the stream. 
+          reader.ReadBytes(14); // skip bitmap file info header
+          byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
+
+          int rgbL = (int) (stream.Length - stream.Position);
+          int rgb = (int) (rgbL/(captureWidth*captureHeight));
+
+          byte[] pixelData = reader.ReadBytes((int) (stream.Length - stream.Position));
+
+          byte[] h1pixelData = new byte[captureWidth*rgb];
+          byte[] h2pixelData = new byte[captureWidth*rgb];
+          //now flip horizontally, we do it always to prevent microstudder
+          int i;
+          for (i = 0; i < ((captureHeight/2) - 1); i++)
+          {
+            Array.Copy(pixelData, i*captureWidth*rgb, h1pixelData, 0, captureWidth*rgb);
+            Array.Copy(pixelData, (captureHeight - i - 1)*captureWidth*rgb, h2pixelData, 0, captureWidth*rgb);
+            Array.Copy(h1pixelData, 0, pixelData, (captureHeight - i - 1)*captureWidth*rgb, captureWidth*rgb);
+            Array.Copy(h2pixelData, 0, pixelData, i*captureWidth*rgb, captureWidth*rgb);
+          }
+          //send scaled and fliped frame to atmowin
+          if (!AtmolightSettings.lowCPU ||
+              (((Win32API.GetTickCount() - lastFrame) > AtmolightSettings.lowCPUTime) && AtmolightSettings.lowCPU))
+          {
+            if (AtmolightSettings.lowCPU)
             {
-                if (AtmolightSettings.SBS_3D_ON)
-                {
-                    VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer, captureWidth, captureHeight);
-                }
-                else
-                {
-                    VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer, captureWidth, captureHeight);
-                }
-
-                Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
-
-                BinaryReader reader = new BinaryReader(stream);
-                stream.Position = 0; // ensure that what start at the beginning of the stream. 
-                reader.ReadBytes(14); // skip bitmap file info header
-                byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
-
-                int rgbL = (int)(stream.Length - stream.Position);
-                int rgb = (int)(rgbL / (captureWidth * captureHeight));
-
-                byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
-
-                byte[] h1pixelData = new byte[captureWidth * rgb];
-                byte[] h2pixelData = new byte[captureWidth * rgb];
-                //now flip horizontally, we do it always to prevent microstudder
-                int i;
-                for (i = 0; i < ((captureHeight / 2) - 1); i++)
-                {
-                    Array.Copy(pixelData, i * captureWidth * rgb, h1pixelData, 0, captureWidth * rgb);
-                    Array.Copy(pixelData, (captureHeight - i - 1) * captureWidth * rgb, h2pixelData, 0, captureWidth * rgb);
-                    Array.Copy(h1pixelData, 0, pixelData, (captureHeight - i - 1) * captureWidth * rgb, captureWidth * rgb);
-                    Array.Copy(h2pixelData, 0, pixelData, i * captureWidth * rgb, captureWidth * rgb);
-                }
-                //send scaled and fliped frame to atmowin
-                if (!AtmolightSettings.lowCPU || (((Win32API.GetTickCount() - lastFrame) > AtmolightSettings.lowCPUTime) && AtmolightSettings.lowCPU))
-                {
-                    if (AtmolightSettings.lowCPU)
-                    {
-                        lastFrame = Win32API.GetTickCount();
-                    }
-                    if (!AtmolightSettings.Delay)
-                    {
-                        atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
-                    }
-                    else
-                    {
-                        Thread DelayHelperThread = new Thread(() => DoDelay(bmiInfoHeader, pixelData));
-                        DelayHelperThread.Start();
-                    }
-                }
-                stream.Close();
-                stream.Dispose();
+              lastFrame = Win32API.GetTickCount();
             }
-            catch (Exception ex)
+            if (!AtmolightSettings.Delay)
             {
-                Log.Error("AtmoLight: Error in AtmolightPlugin_OnNewFrame.");
-                Log.Error("AtmoLight: Exception: {0}", ex.Message);
-                rgbSurface.Dispose();
-                rgbSurface = null;
+              atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
             }
+            else
+            {
+              Thread DelayHelperThread = new Thread(() => DoDelay(bmiInfoHeader, pixelData));
+              DelayHelperThread.Start();
+            }
+          }
+          stream.Close();
+          stream.Dispose();
         }
+        catch (Exception ex)
+        {
+          Log.Error("AtmoLight: Error in AtmolightPlugin_OnNewFrame.");
+          Log.Error("AtmoLight: Exception: {0}", ex.Message);
+          // try to connect atmowinx
+          bool startAtmoWinx = FirstStartAtmoWinA();
+          if (!startAtmoWinx)
+          {
+            rgbSurface.Dispose();
+            rgbSurface = null;
+          }
+          else
+          {
+            StartLEDs();
+          }
+        }
+      }
     }
 
     public void Stop()
