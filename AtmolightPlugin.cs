@@ -609,6 +609,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       dlgRGB.DoModal(GUIWindowManager.ActiveWindow);
       switch (dlgRGB.SelectedLabel)
       {
+        case -1:
+          return;
         case 0:
         case 1:
         case 2:
