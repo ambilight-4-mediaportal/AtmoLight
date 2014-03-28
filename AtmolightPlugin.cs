@@ -679,8 +679,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       if (dlgError != null)
       {
         dlgError.SetHeading(LanguageLoader.appStrings.ContextMenu_Error + "!");
-        dlgError.SetLine(1, LanguageLoader.appStrings.ContextMenu_RGBErrorLine1);
-        dlgError.SetLine(2, LanguageLoader.appStrings.ContextMenu_RGBErrorLine2);
+        dlgError.SetLine(1, setLine1);
+        dlgError.SetLine(2, setLine2);
         dlgError.DoModal(GUIWindowManager.ActiveWindow);
       }
     }
