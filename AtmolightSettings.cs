@@ -39,6 +39,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     public static int staticColorRed = 0;
     public static int staticColorGreen = 0;
     public static int staticColorBlue = 0;
+    public static bool restartOnError = true;
     #endregion
 
     public static DateTime LoadTimeSetting(Settings reader, string name, string defaultTime)
@@ -77,6 +78,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         staticColorRed = reader.GetValueAsInt("atmolight", "StaticColorRed", 0);
         staticColorGreen = reader.GetValueAsInt("atmolight", "StaticColorGreen", 0);
         staticColorBlue = reader.GetValueAsInt("atmolight", "StaticColorBlue", 0);
+        restartOnError = reader.GetValueAsBool("atmolight", "RestartOnError", true);
       }
     }
     public static void SaveSettings()
@@ -107,6 +109,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         reader.SetValue("atmolight", "StaticColorRed", staticColorRed);
         reader.SetValue("atmolight", "StaticColorGreen", staticColorGreen);
         reader.SetValue("atmolight", "StaticColorBlue", staticColorBlue);
+        reader.SetValueAsBool("atmolight", "RestartOnError", restartOnError);
       }
     }
 

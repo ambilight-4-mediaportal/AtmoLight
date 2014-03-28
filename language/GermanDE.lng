@@ -30,6 +30,7 @@ lblBlue=Blau:
 lblMenuButton=Menü Fernbedienungstaste:
 ckDelay=LED Verzögerung
 lblDelay=ms Verzögerung
+ckRestartOnError=AtmoWin und Verbindung neustarten bei Fehler
 [ContextMenu]
 SwitchLEDsON=Schalte LEDs an
 SwitchLEDsOFF=Schalte LEDs aus

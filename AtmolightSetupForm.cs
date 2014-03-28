@@ -31,38 +31,68 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       tbBlue.Text = AtmolightSettings.staticColorBlue.ToString();
 
       if (AtmolightSettings.manualMode)
+      {
         ckOnMediaStart.Checked = true;
+      }
       else
+      {
         this.ckOnMediaStart.Checked = false;
+      }
 
       if (AtmolightSettings.lowCPU)
+      {
         ckLowCpu.Checked = true;
+      }
       else
+      {
         this.ckLowCpu.Checked = false;
+      }
 
-        if (AtmolightSettings.delay)
-        {
-            ckDelay.Checked = true;
-        }
-        else
-        {
-            ckDelay.Checked = false;
-        }
+      if (AtmolightSettings.delay)
+      {
+        ckDelay.Checked = true;
+      }
+      else
+      {
+        ckDelay.Checked = false;
+      }
 
       if (AtmolightSettings.startAtmoWin)
+      {
         ckStartAtmoWin.Checked = true;
+      }
       else
+      {
         ckStartAtmoWin.Checked = false;
+      }
 
       if (AtmolightSettings.exitAtmoWin)
+      {
         ckExitAtmoWin.Checked = true;
+      }
       else
+      {
         ckExitAtmoWin.Checked = false;
+      }
 
       if (AtmolightSettings.disableOnShutdown)
+      {
         rbDisableLEDs.Checked = true;
+      }
       else
+      {
         rbSwitchToLiveView.Checked = true;
+      }
+
+      if (AtmolightSettings.restartOnError)
+      {
+        ckRestartOnError.Checked = true;
+      }
+      else
+      {
+        ckRestartOnError.Checked = false;
+      }
+
     }
 
     private void UpdateLanguageOnControls()
@@ -93,12 +123,13 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       lblStart.Text = LanguageLoader.appStrings.SetupForm_lblStartText;
       lblEnd.Text = LanguageLoader.appStrings.SetupForm_lblEndText;
       grpDeactivate.Text = LanguageLoader.appStrings.SetupForm_grpDeactivateText;
-        lblMenu.Text = LanguageLoader.appStrings.SetupForm_lblMenu;
-        grpStaticColor.Text = LanguageLoader.appStrings.SetupForm_grpStaticColor;
-        lblRed.Text = LanguageLoader.appStrings.SetupForm_lblRed;
-        lblGreen.Text = LanguageLoader.appStrings.SetupForm_lblGreen;
-        lblBlue.Text = LanguageLoader.appStrings.SetupForm_lblBlue;
-        lblMenuButton.Text = LanguageLoader.appStrings.SetupForm_lblMenuButton;
+      lblMenu.Text = LanguageLoader.appStrings.SetupForm_lblMenu;
+      grpStaticColor.Text = LanguageLoader.appStrings.SetupForm_grpStaticColor;
+      lblRed.Text = LanguageLoader.appStrings.SetupForm_lblRed;
+      lblGreen.Text = LanguageLoader.appStrings.SetupForm_lblGreen;
+      lblBlue.Text = LanguageLoader.appStrings.SetupForm_lblBlue;
+      lblMenuButton.Text = LanguageLoader.appStrings.SetupForm_lblMenuButton;
+      ckRestartOnError.Text = LanguageLoader.appStrings.SetupForm_ckRestartOnError;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -202,6 +233,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       AtmolightSettings.delay = ckDelay.Checked;
       AtmolightSettings.startAtmoWin = ckStartAtmoWin.Checked;
       AtmolightSettings.exitAtmoWin = ckExitAtmoWin.Checked;
+      AtmolightSettings.restartOnError = ckRestartOnError.Checked;
       AtmolightSettings.SaveSettings();
       this.DialogResult = DialogResult.OK;
     }

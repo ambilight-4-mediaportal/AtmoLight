@@ -250,6 +250,7 @@ namespace Language
     public String SetupForm_lblGreen = "Green:";
     public String SetupForm_lblBlue = "Blue:";
     public String SetupForm_lblMenuButton = "Menu Remote Button:";
+    public String SetupForm_ckRestartOnError = "Restart AtmoWin and Connection on Error";
     public String ContextMenu_SwitchLEDsON = "Switch LEDs on";
     public String ContextMenu_SwitchLEDsOFF = "Switch LEDs off";
     public String ContextMenu_ChangeEffect = "Change Effect";

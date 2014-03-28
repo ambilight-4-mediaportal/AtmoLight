@@ -30,6 +30,7 @@ lblBlue=Blauw:
 lblMenuButton=Menu toets:
 ckDelay=LED vertraging
 lblDelay=ms vertraging
+ckRestartOnError=Herstart AtmoWin (en de verbinding) bij een fout
 [ContextMenu]
 SwitchLEDsON=Schakel LEDs aan
 SwitchLEDsOFF=Schakel LEDs uit
