@@ -138,6 +138,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     }
     #endregion
 
+    #region AtmoDXUtil Import
+    [DllImport("AtmoDXUtil.dll", PreserveSig = false, CharSet = CharSet.Auto)]
+    private static extern void VideoSurfaceToRGBSurfaceExt(IntPtr src, int srcWidth, int srcHeight, IntPtr dst, int dstWidth, int dstHeight);
+    #endregion
+
     #region Variables
     public static bool atmoOff = false;
     public Int64 tickCount = 0;
@@ -155,9 +160,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private int comInterfaceTimeout = 2000;
     #endregion
 
-    [DllImport("AtmoDXUtil.dll", PreserveSig = false, CharSet = CharSet.Auto)]
-    private static extern void VideoSurfaceToRGBSurfaceExt(IntPtr src, int srcWidth, int srcHeight, IntPtr dst, int dstWidth, int dstHeight);
-
+    #region Initialize AtmoLight
     public AtmolightPlugin()
     {
       if (MPSettings.Instance.GetValueAsBool("plugins", "Atmolight", true))
@@ -208,7 +211,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return ConnectToAtmoWinA();
     }
 
-    #region Utilities
     private bool ConnectToAtmoWinA()
     {
       try
@@ -272,6 +274,80 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return ret;
     }
 
+    public void Start()
+    {
+      if (atmoCtrl != null)
+      {
+        Log.Debug("AtmoLight: Plugin started.");
+        g_Player.PlayBackStarted += new g_Player.StartedHandler(g_Player_PlayBackStarted);
+        g_Player.PlayBackStopped += new g_Player.StoppedHandler(g_Player_PlayBackStopped);
+        g_Player.PlayBackEnded += new g_Player.EndedHandler(g_Player_PlayBackEnded);
+
+        FrameGrabber.GetInstance().OnNewFrame += new FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+
+        // Workaround
+        if (AtmolightSettings.effectMenu == ContentEffect.MediaPortalLiveMode)
+        {
+          AtmolightSettings.effectMenu = ContentEffect.StaticColor;
+        }
+
+        menuEffect = AtmolightSettings.effectMenu;
+
+        staticColor[0] = AtmolightSettings.staticColorRed;
+        staticColor[1] = AtmolightSettings.staticColorGreen;
+        staticColor[2] = AtmolightSettings.staticColorBlue;
+
+        if (CheckForStartRequirements())
+        {
+          MenuMode();
+        }
+        else
+        {
+          DisableLEDs();
+        }
+
+        GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
+      }
+    }
+
+    public void Stop()
+    {
+      if (atmoCtrl != null)
+      {
+        FrameGrabber.GetInstance().OnNewFrame += new FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+
+        g_Player.PlayBackStarted -= new g_Player.StartedHandler(g_Player_PlayBackStarted);
+        g_Player.PlayBackStopped -= new g_Player.StoppedHandler(g_Player_PlayBackStopped);
+        g_Player.PlayBackEnded -= new g_Player.EndedHandler(g_Player_PlayBackEnded);
+
+        GUIWindowManager.OnNewAction -= new OnActionHandler(OnNewAction);
+
+        if (AtmolightSettings.disableOnShutdown)
+        {
+          DisableLEDs();
+        }
+
+        if (AtmolightSettings.enableInternalLiveView)
+        {
+          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+        }
+
+        atmoCtrl = null;
+
+        if (AtmolightSettings.exitAtmoWin)
+        {
+          foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension("atmowina")))
+          {
+            process.Kill();
+            Win32API.RefreshTrayArea();
+          }
+        }
+      }
+      Log.Debug("AtmoLight: Plugin Stopped.");
+    }
+    #endregion
+
+    #region COM Interface
     private void SetColorMode(ComEffectMode effect)
     {
       if (atmoCtrl == null)
@@ -350,7 +426,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
       Log.Debug("AtmoLight: Successfully changed AtmoWin liveview mode to: {0}", viewSource.ToString());
     }
+    #endregion
 
+    #region Control LEDs
     private void DisableLEDs(bool timeout = false)
     {
       if (!timeout)
@@ -393,28 +471,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           return;
         }
         Log.Info("AtmoLight: Successfully disabled LEDs.");
-      }
-    }
-
-    private bool CheckForStartRequirements()
-    {
-      if (AtmolightSettings.manualMode)
-      {
-        Log.Debug("AtmoLight: LEDs should be deactivated. (Manual Mode)");
-        atmoOff = true;
-        return false;
-      }
-      else if ((DateTime.Now.TimeOfDay >= AtmolightSettings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= AtmolightSettings.excludeTimeEnd.TimeOfDay))
-      {
-        Log.Debug("AtmoLight: LEDs should be deactivated. (Timeframe)");
-        atmoOff = true;
-        return false;
-      }
-      else
-      {
-        Log.Debug("AtmoLight: LEDs can be activated.");
-        atmoOff = false;
-        return true;
       }
     }
 
@@ -561,6 +617,44 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+    private bool CheckForStartRequirements()
+    {
+      if (AtmolightSettings.manualMode)
+      {
+        Log.Debug("AtmoLight: LEDs should be deactivated. (Manual Mode)");
+        atmoOff = true;
+        return false;
+      }
+      else if ((DateTime.Now.TimeOfDay >= AtmolightSettings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= AtmolightSettings.excludeTimeEnd.TimeOfDay))
+      {
+        Log.Debug("AtmoLight: LEDs should be deactivated. (Timeframe)");
+        atmoOff = true;
+        return false;
+      }
+      else
+      {
+        Log.Debug("AtmoLight: LEDs can be activated.");
+        atmoOff = false;
+        return true;
+      }
+    }
+
+    private void DoDelay(byte[] bmiInfoHeader, byte[] pixelData)
+    {
+      try
+      {
+        System.Threading.Thread.Sleep(AtmolightSettings.delayTime);
+        atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
+      }
+      catch (Exception ex)
+      {
+        Log.Error("AtmoLight: Could not send data to AtmoWin (Delayed).");
+        Log.Error("AtmoLight: Exception: {0}", ex.Message);
+      }
+    }
+    #endregion
+
+    #region Context Menu
     private string GetKeyboardString(string KeyboardString)
     {
       VirtualKeyboard Keyboard = (VirtualKeyboard)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
@@ -639,24 +733,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
       DialogRGBManualStaticColorChanger(false, dlgRGB.SelectedLabel);
     }
-
-    private void DoDelay(byte[] bmiInfoHeader, byte[] pixelData)
-    {
-      try
-      {
-        System.Threading.Thread.Sleep(AtmolightSettings.delayTime);
-        atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
-      }
-      catch (Exception ex)
-      {
-        Log.Error("AtmoLight: Could not send data to AtmoWin (Delayed).");
-        Log.Error("AtmoLight: Exception: {0}", ex.Message);
-      }
-    }
     #endregion
 
-    #region Events
-
+    #region Remote Button Events
     public void OnNewAction(MediaPortal.GUI.Library.Action action)
     {
       // Remote Key to toggle On/Off
@@ -906,8 +985,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
       }
     }
+    #endregion
 
-
+    #region g_player Events
     void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
     {
       try
@@ -995,104 +1075,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         Log.Error("AtmoLight: g_Player_PlayBackStarted failed.");
         Log.Error("AtmoLight: Exception= {0}", ex.Message);
-      }
-    }
-    #endregion
-
-    #region ISetupForm impementation
-    public string Author()
-    {
-      return "gemx";
-    }
-
-    public bool CanEnable()
-    {
-      return true;
-    }
-
-    public bool DefaultEnabled()
-    {
-      return true;
-    }
-
-    public string Description()
-    {
-      return "Interfaces AtmowinA.exe via COM to control the lights";
-    }
-
-    public bool GetHome(out string strButtonText, out string strButtonImage, out string strButtonImageFocus, out string strPictureImage)
-    {
-      strButtonText = null;
-      strButtonImage = null;
-      strButtonImageFocus = null;
-      strPictureImage = null;
-      return false;
-    }
-
-    public int GetWindowId()
-    {
-      return -1;
-    }
-
-    public bool HasSetup()
-    {
-      return true;
-    }
-
-    public string PluginName()
-    {
-      return "AtmoLight";
-    }
-
-    public void ShowPlugin()
-    {
-      new AtmolightSetupForm().ShowDialog();
-    }
-    #endregion
-
-    #region IShowPlugin Member
-
-    public bool ShowDefaultHome()
-    {
-      return false;
-    }
-
-    #endregion
-
-    #region IPlugin implementation
-    public void Start()
-    {
-      if (atmoCtrl != null)
-      {
-        Log.Debug("AtmoLight: Plugin started.");
-        g_Player.PlayBackStarted += new g_Player.StartedHandler(g_Player_PlayBackStarted);
-        g_Player.PlayBackStopped += new g_Player.StoppedHandler(g_Player_PlayBackStopped);
-        g_Player.PlayBackEnded += new g_Player.EndedHandler(g_Player_PlayBackEnded);
-
-        FrameGrabber.GetInstance().OnNewFrame += new FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
-
-        // Workaround
-        if (AtmolightSettings.effectMenu == ContentEffect.MediaPortalLiveMode)
-        {
-          AtmolightSettings.effectMenu = ContentEffect.StaticColor;
-        }
-
-        menuEffect = AtmolightSettings.effectMenu;
-
-        staticColor[0] = AtmolightSettings.staticColorRed;
-        staticColor[1] = AtmolightSettings.staticColorGreen;
-        staticColor[2] = AtmolightSettings.staticColorBlue;
-
-        if (CheckForStartRequirements())
-        {
-          MenuMode();
-        }
-        else
-        {
-          DisableLEDs();
-        }
-
-        GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
       }
     }
 
@@ -1197,42 +1179,66 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
       }
     }
+    #endregion
 
-    public void Stop()
+    #region ISetupForm impementation
+    public string Author()
     {
-      if (atmoCtrl != null)
-      {
-        FrameGrabber.GetInstance().OnNewFrame += new FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
-
-        g_Player.PlayBackStarted -= new g_Player.StartedHandler(g_Player_PlayBackStarted);
-        g_Player.PlayBackStopped -= new g_Player.StoppedHandler(g_Player_PlayBackStopped);
-        g_Player.PlayBackEnded -= new g_Player.EndedHandler(g_Player_PlayBackEnded);
-
-        GUIWindowManager.OnNewAction -= new OnActionHandler(OnNewAction);
-
-        if (AtmolightSettings.disableOnShutdown)
-        {
-          DisableLEDs();
-        }
-
-        if (AtmolightSettings.enableInternalLiveView)
-        {
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
-        }
-
-        atmoCtrl = null;
-
-        if (AtmolightSettings.exitAtmoWin)
-        {
-          foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension("atmowina")))
-          {
-            process.Kill();
-            Win32API.RefreshTrayArea();
-          }
-        }
-      }
-      Log.Debug("AtmoLight: Plugin Stopped.");
+      return "gemx";
     }
+
+    public bool CanEnable()
+    {
+      return true;
+    }
+
+    public bool DefaultEnabled()
+    {
+      return true;
+    }
+
+    public string Description()
+    {
+      return "Interfaces AtmowinA.exe via COM to control the lights";
+    }
+
+    public bool GetHome(out string strButtonText, out string strButtonImage, out string strButtonImageFocus, out string strPictureImage)
+    {
+      strButtonText = null;
+      strButtonImage = null;
+      strButtonImageFocus = null;
+      strPictureImage = null;
+      return false;
+    }
+
+    public int GetWindowId()
+    {
+      return -1;
+    }
+
+    public bool HasSetup()
+    {
+      return true;
+    }
+
+    public string PluginName()
+    {
+      return "AtmoLight";
+    }
+
+    public void ShowPlugin()
+    {
+      new AtmolightSetupForm().ShowDialog();
+    }
+    #endregion
+
+    #region IShowPlugin Member
+
+    public bool ShowDefaultHome()
+    {
+      return false;
+    }
+
     #endregion
   }
 }
