@@ -413,7 +413,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         Log.Error("AtmoLight: {0} timed out!", trace.GetFrame(1).GetMethod().Name);
 
         // Try to reconnect to AtmoWin
-        ReInitializeAtmoWinConnection();
+        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
+        ReInitializeAtmoWinConnectionHelperThread.Start();
       }
 
     }
@@ -435,7 +436,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         Log.Error("AtmoLight: Failed to change AtmoWin profile.");
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        ReInitializeAtmoWinConnection();
+        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
+        ReInitializeAtmoWinConnectionHelperThread.Start();
         return;
       }
       Log.Info("AtmoLight: Successfully changed AtmoWin profile.");
@@ -458,7 +460,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         Log.Error("AtmoLight: Failed changing effect to: {0}", effect.ToString());
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        ReInitializeAtmoWinConnection();
+        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
+        ReInitializeAtmoWinConnectionHelperThread.Start();
         return;
       }
       Log.Info("AtmoLight: Successfully changed AtmoWin effect to: {0}", effect.ToString());
@@ -480,7 +483,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         Log.Error("AtmoLight: Failed setting static color to R:{0} G:{1} B:{2}.", red, green, blue);
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        ReInitializeAtmoWinConnection();
+        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
+        ReInitializeAtmoWinConnectionHelperThread.Start();
         return;
       }
       Log.Info("AtmoLight: Successfully set static color to R:{0} G:{1} B:{2}.", red, green, blue);
@@ -502,7 +506,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         Log.Error("AtmoLight: Failed changing AtmoWin Liveview Source to: {0}", viewSource.ToString());
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        ReInitializeAtmoWinConnection();
+        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
+        ReInitializeAtmoWinConnectionHelperThread.Start();
         return;
       }
       Log.Info("AtmoLight: Successfully changed AtmoWin Liveview Source to: {0}", viewSource.ToString());
@@ -523,7 +528,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         Log.Error("AtmoLight: Error in GetAtmoLiveViewSource.");
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        ReInitializeAtmoWinConnection();
+        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
+        ReInitializeAtmoWinConnectionHelperThread.Start();
         return;
       }
     }
@@ -544,7 +550,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         Log.Error("AtmoLight: Failed to get Liveview Resolution.");
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        ReInitializeAtmoWinConnection();
+        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
+        ReInitializeAtmoWinConnectionHelperThread.Start();
         return;
       }
       Log.Debug("AtmoLight: Liveview capture resolution is {0}x{1}. Screenshot will be resized to this dimensions.", captureWidth, captureHeight);
@@ -707,6 +714,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
 
         // Try to reconnect to AtmoWin.
+        // No new thread needed, as this already is not the main thread.
         ReInitializeAtmoWinConnection();
       }
     }
