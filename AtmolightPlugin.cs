@@ -161,6 +161,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private const int delaySetStaticColor = 20;
     private const int delayAtmoWinConnecting = 1000;
     private bool reInitializeLock = false;
+    private bool getAtmoLiveViewSourceLock = true;
+    private ComLiveViewSource atmoLiveViewSource;
     #endregion
 
     #region Initialize AtmoLight
@@ -383,7 +385,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
         if (AtmolightSettings.enableInternalLiveView)
         {
-          TimeoutHandler(() => EnableLivePictureMode(ComLiveViewSource.lvsGDI));
+          SetAtmoEffect(ComEffectMode.cemLivePicture);
+          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
         }
 
         atmoCtrl = null;
@@ -400,26 +403,19 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #region COM Interface
     private void TimeoutHandler(System.Action method)
     {
-      try
-      {
-        var tokenSource = new CancellationTokenSource();
-        CancellationToken token = tokenSource.Token;
-        var task = Task.Factory.StartNew(() => method(), token);
+      var tokenSource = new CancellationTokenSource();
+      CancellationToken token = tokenSource.Token;
+      var task = Task.Factory.StartNew(() => method(), token);
 
-        if (!task.Wait(comInterfaceTimeout, token))
-        {
-          StackTrace trace = new StackTrace();
-          Log.Error("AtmoLight: {0} timed out!", trace.GetFrame(1).GetMethod().Name);
-
-          // Try to reconnect to AtmoWin
-          ReInitializeAtmoWinConnection();
-        }
-      }
-      catch (Exception ex)
+      if (!task.Wait(comInterfaceTimeout, token))
       {
-        Log.Error("AtmoLight: Error in TimeoutHandler.");
-        Log.Error("AtmoLight: Exception: {0}", ex.Message);
+        StackTrace trace = new StackTrace();
+        Log.Error("AtmoLight: {0} timed out!", trace.GetFrame(1).GetMethod().Name);
+
+        // Try to reconnect to AtmoWin
+        ReInitializeAtmoWinConnection();
       }
+
     }
 
     private void SetColorMode(ComEffectMode effect)
@@ -512,6 +508,26 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       Log.Info("AtmoLight: Successfully changed AtmoWin Liveview Source to: {0}", viewSource.ToString());
     }
 
+    private void GetAtmoLiveViewSource()
+    {
+      if (atmoCtrl == null)
+      {
+        return;
+      }
+
+      try
+      {
+        TimeoutHandler(() => atmoLiveViewCtrl.getCurrentLiveViewSource(out atmoLiveViewSource));
+      }
+      catch (Exception ex)
+      {
+        Log.Error("AtmoLight: Error in GetAtmoLiveViewSource.");
+        Log.Error("AtmoLight: Exception: {0}", ex.Message);
+        ReInitializeAtmoWinConnection();
+        return;
+      }
+    }
+
     private void GetAtmoLiveViewRes()
     {
       if (atmoCtrl == null)
@@ -532,29 +548,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         return;
       }
       Log.Debug("AtmoLight: Liveview capture resolution is {0}x{1}. Screenshot will be resized to this dimensions.", captureWidth, captureHeight);
-    }
-
-    private void EnableLivePictureMode(ComLiveViewSource viewSource)
-    {
-      if (atmoCtrl == null)
-      {
-        return;
-      }
-
-      try
-      {
-        Log.Debug("AtmoLight: Changing AtmoWin liveview mode to: {0}", viewSource.ToString());
-        TimeoutHandler(() => SetAtmoEffect(ComEffectMode.cemLivePicture));
-        TimeoutHandler(() => SetAtmoLiveViewSource(viewSource));
-      }
-      catch (Exception ex)
-      {
-        Log.Error("AtmoLight: Failed to change AtmoWin liveview mode to: {0}.", viewSource.ToString());
-        Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        ReInitializeAtmoWinConnection();
-        return;
-      }
-      Log.Debug("AtmoLight: Successfully changed AtmoWin liveview mode to: {0}", viewSource.ToString());
     }
     #endregion
 
@@ -587,16 +580,19 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         case ContentEffect.AtmoWinLiveMode:
           atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+          SetAtmoEffect(ComEffectMode.cemLivePicture);
+          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
           break;
         case ContentEffect.Colorchanger:
           atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+          SetAtmoEffect(ComEffectMode.cemLivePicture);
+          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
           SetAtmoEffect(ComEffectMode.cemColorChange);
           break;
         case ContentEffect.ColorchangerLR:
           atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+          SetAtmoEffect(ComEffectMode.cemLivePicture);
+          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
           SetAtmoEffect(ComEffectMode.cemLrColorChange);
           break;
         case ContentEffect.LEDsDisabled:
@@ -625,16 +621,19 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         case ContentEffect.AtmoWinLiveMode:
           atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+          SetAtmoEffect(ComEffectMode.cemLivePicture);
+          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
           break;
         case ContentEffect.Colorchanger:
           atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+          SetAtmoEffect(ComEffectMode.cemLivePicture);
+          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
           SetAtmoEffect(ComEffectMode.cemColorChange);
           break;
         case ContentEffect.ColorchangerLR:
           atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsGDI);
+          SetAtmoEffect(ComEffectMode.cemLivePicture);
+          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
           SetAtmoEffect(ComEffectMode.cemLrColorChange);
           break;
         case ContentEffect.LEDsDisabled:
@@ -642,7 +641,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           break;
         case ContentEffect.MediaPortalLiveMode:
           atmoOff = false;
-          EnableLivePictureMode(ComLiveViewSource.lvsExternal);
+          SetAtmoEffect(ComEffectMode.cemLivePicture);
+          SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
           break;
         case ContentEffect.StaticColor:
           atmoOff = false;
@@ -1050,6 +1050,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     {
       try
       {
+        getAtmoLiveViewSourceLock = true;
         if (CheckForStartRequirements())
         {
           MenuMode();
@@ -1070,6 +1071,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     {
       try
       {
+        getAtmoLiveViewSourceLock = true;
         if (CheckForStartRequirements())
         {
           MenuMode();
@@ -1132,6 +1134,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
           DisableLEDs();
         }
+        getAtmoLiveViewSourceLock = false;
       }
       catch (Exception ex)
       {
@@ -1145,6 +1148,15 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       if (currentEffect != ContentEffect.MediaPortalLiveMode || atmoOff || atmoCtrl == null || width == 0 || height == 0)
       {
         return;
+      }
+      if (!getAtmoLiveViewSourceLock)
+      {
+        GetAtmoLiveViewSource();
+        if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
+        {
+          Log.Error("AtmoLight: AtmoWin Liveview Source is not lvsExternal");
+          SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
+        }
       }
 
       if (AtmolightSettings.lowCPU)
