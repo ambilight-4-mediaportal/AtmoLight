@@ -243,7 +243,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       Log.Info("AtmoLight: Successfully connected to AtmoWin.");
 
       SetAtmoEffect(ComEffectMode.cemLivePicture);
-      atmoLiveViewCtrl = (IAtmoLiveViewControl)Marshal.GetActiveObject("AtmoRemoteControl.1");
+      GetAtmoLiveViewCtrl();
       SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
       GetAtmoLiveViewRes();
 
@@ -402,22 +402,39 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region COM Interface
-    private void TimeoutHandler(System.Action method)
+    private bool TimeoutHandler(System.Action method)
     {
-      var tokenSource = new CancellationTokenSource();
-      CancellationToken token = tokenSource.Token;
-      var task = Task.Factory.StartNew(() => method(), token);
+      try
+      {
+        var tokenSource = new CancellationTokenSource();
+        CancellationToken token = tokenSource.Token;
+        var task = Task.Factory.StartNew(() => method(), token);
 
-      if (!task.Wait(comInterfaceTimeout, token))
+        if (!task.Wait(comInterfaceTimeout, token))
+        {
+          StackTrace trace = new StackTrace();
+          Log.Error("AtmoLight: {0} timed out!", trace.GetFrame(1).GetMethod().Name);
+
+          // Try to reconnect to AtmoWin
+          Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
+          ReInitializeAtmoWinConnectionHelperThread.Start();
+
+          return false;
+        }
+        return true;
+      }
+      catch (AggregateException ex)
       {
         StackTrace trace = new StackTrace();
-        Log.Error("AtmoLight: {0} timed out!", trace.GetFrame(1).GetMethod().Name);
-
-        // Try to reconnect to AtmoWin
+        Log.Error("AtmoLight: Error with {0}!", trace.GetFrame(1).GetMethod().Name);
+        foreach (var innerEx in ex.InnerExceptions)
+        {
+          Log.Error("AtmoLight: Exception: {0}", innerEx.Message);
+        }
         Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
         ReInitializeAtmoWinConnectionHelperThread.Start();
+        return false;
       }
-
     }
 
     private void SetColorMode(ComEffectMode effect)
@@ -427,21 +444,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         return;
       }
 
-      try
+      Log.Debug("AtmoLight: Changing AtmoWin profile (SetColorMode).");
+      ComEffectMode oldEffect;
+      if (TimeoutHandler(() => atmoCtrl.setEffect(effect, out oldEffect)))
       {
-        Log.Debug("AtmoLight: Changing AtmoWin profile.");
-        ComEffectMode oldEffect;
-        TimeoutHandler(() => atmoCtrl.setEffect(effect, out oldEffect));
+        Log.Info("AtmoLight: Successfully changed AtmoWin profile.");
       }
-      catch (Exception ex)
-      {
-        Log.Error("AtmoLight: Failed to change AtmoWin profile.");
-        Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
-        ReInitializeAtmoWinConnectionHelperThread.Start();
-        return;
-      }
-      Log.Info("AtmoLight: Successfully changed AtmoWin profile.");
     }
 
     private void SetAtmoEffect(ComEffectMode effect)
@@ -451,21 +459,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         return;
       }
 
-      try
+      Log.Debug("AtmoLight: Changing AtmoWin effect to: {0}", effect.ToString());
+      ComEffectMode oldEffect;
+      if (TimeoutHandler(() => atmoCtrl.setEffect(effect, out oldEffect)))
       {
-        Log.Debug("AtmoLight: Changing AtmoWin effect to: {0}", effect.ToString());
-        ComEffectMode oldEffect;
-        TimeoutHandler(() => atmoCtrl.setEffect(effect, out oldEffect));
+        Log.Info("AtmoLight: Successfully changed AtmoWin effect to: {0}", effect.ToString());
       }
-      catch (Exception ex)
-      {
-        Log.Error("AtmoLight: Failed changing effect to: {0}", effect.ToString());
-        Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
-        ReInitializeAtmoWinConnectionHelperThread.Start();
-        return;
-      }
-      Log.Info("AtmoLight: Successfully changed AtmoWin effect to: {0}", effect.ToString());
     }
 
     private void SetAtmoColor(byte red, byte green, byte blue)
@@ -475,20 +474,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         return;
       }
 
-      try
+      Log.Debug("AtmoLight: Setting static color to R:{0} G:{1} B:{2}.", red, green, blue);
+      if (TimeoutHandler(() => atmoCtrl.setStaticColor(red, green, blue)))
       {
-        Log.Debug("AtmoLight: Setting static color to R:{0} G:{1} B:{2}.", red, green, blue);
-        TimeoutHandler(() => atmoCtrl.setStaticColor(red, green, blue));
+        Log.Info("AtmoLight: Successfully set static color to R:{0} G:{1} B:{2}.", red, green, blue);
       }
-      catch (Exception ex)
-      {
-        Log.Error("AtmoLight: Failed setting static color to R:{0} G:{1} B:{2}.", red, green, blue);
-        Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
-        ReInitializeAtmoWinConnectionHelperThread.Start();
-        return;
-      }
-      Log.Info("AtmoLight: Successfully set static color to R:{0} G:{1} B:{2}.", red, green, blue);
     }
 
     private void SetAtmoLiveViewSource(ComLiveViewSource viewSource)
@@ -498,20 +488,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         return;
       }
 
-      try
+      Log.Debug("AtmoLight: Changing AtmoWin Liveview Source to: {0}", viewSource.ToString());
+      if (TimeoutHandler(() => atmoLiveViewCtrl.setLiveViewSource(viewSource)))
       {
-        Log.Debug("AtmoLight: Changing AtmoWin Liveview Source to: {0}", viewSource.ToString());
-        TimeoutHandler(() => atmoLiveViewCtrl.setLiveViewSource(viewSource));
+        Log.Info("AtmoLight: Successfully changed AtmoWin Liveview Source to: {0}", viewSource.ToString());
       }
-      catch (Exception ex)
-      {
-        Log.Error("AtmoLight: Failed changing AtmoWin Liveview Source to: {0}", viewSource.ToString());
-        Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
-        ReInitializeAtmoWinConnectionHelperThread.Start();
-        return;
-      }
-      Log.Info("AtmoLight: Successfully changed AtmoWin Liveview Source to: {0}", viewSource.ToString());
     }
 
     private void GetAtmoLiveViewSource()
@@ -521,18 +502,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         return;
       }
 
-      try
-      {
-        TimeoutHandler(() => atmoLiveViewCtrl.getCurrentLiveViewSource(out atmoLiveViewSource));
-      }
-      catch (Exception ex)
-      {
-        Log.Error("AtmoLight: Error in GetAtmoLiveViewSource.");
-        Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
-        ReInitializeAtmoWinConnectionHelperThread.Start();
-        return;
-      }
+      TimeoutHandler(() => atmoLiveViewCtrl.getCurrentLiveViewSource(out atmoLiveViewSource));
     }
 
     private void GetAtmoLiveViewRes()
@@ -542,20 +512,26 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         return;
       }
 
-      try
+      Log.Debug("AtmoLight: Getting Liveview Resolution.");
+      if (TimeoutHandler(() => atmoCtrl.getLiveViewRes(out captureWidth, out captureHeight)))
       {
-        Log.Debug("AtmoLight: Getting Liveview Resolution.");
-        TimeoutHandler(() => atmoCtrl.getLiveViewRes(out captureWidth, out captureHeight));
+        Log.Debug("AtmoLight: Liveview capture resolution is {0}x{1}. Screenshot will be resized to this dimensions.", captureWidth, captureHeight);
       }
-      catch (Exception ex)
+    }
+
+    private void GetAtmoLiveViewCtrl()
+    {
+      if (atmoCtrl == null)
       {
-        Log.Error("AtmoLight: Failed to get Liveview Resolution.");
-        Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
-        ReInitializeAtmoWinConnectionHelperThread.Start();
         return;
       }
-      Log.Debug("AtmoLight: Liveview capture resolution is {0}x{1}. Screenshot will be resized to this dimensions.", captureWidth, captureHeight);
+
+      Log.Debug("AtmoLight: Getting AtmoWin Live View Controll.");
+      if (TimeoutHandler(() => atmoLiveViewCtrl = (IAtmoLiveViewControl)Marshal.GetActiveObject("AtmoRemoteControl.1")))
+      {
+        Log.Debug("AtmoLight: Successfully got AtmoWin Live View Controll.");
+      }
+      
     }
     #endregion
 
@@ -705,11 +681,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       try
       {
         System.Threading.Thread.Sleep(AtmolightSettings.delayTime);
-        if (reInitializeLock || atmoCtrl == null)
+        if (!reInitializeLock && atmoCtrl != null)
         {
-          return;
+          atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
         }
-        atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
       }
       catch (Exception ex)
       {
@@ -726,11 +701,14 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     {
       while (g_Player.Playing && !getAtmoLiveViewSourceLock)
       {
-        GetAtmoLiveViewSource();
-        if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
+        if (!reInitializeLock)
         {
-          Log.Error("AtmoLight: AtmoWin Liveview Source is not lvsExternal");
-          SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
+          GetAtmoLiveViewSource();
+          if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
+          {
+            Log.Error("AtmoLight: AtmoWin Liveview Source is not lvsExternal");
+            SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
+          }
         }
         System.Threading.Thread.Sleep(delayGetAtmoLiveViewSource);
       }
