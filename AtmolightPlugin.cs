@@ -276,15 +276,20 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return ret;
     }
 
-    private void KillAtmoWinA()
+    private bool KillAtmoWinA()
     {
       Log.Debug("AtmoLight: Stopping AtmoWinA.exe.");
       foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension("atmowina")))
       {
         process.Kill();
+        if (!TimeoutHandler(() => process.WaitForExit()))
+        {
+          return false;
+        }
         Win32API.RefreshTrayArea();
         Log.Debug("AtmoLight: AtmoWinA.exe stopped.");
       }
+      return true;
     }
 
     private bool ReInitializeAtmoWinConnection()
@@ -313,8 +318,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         Marshal.ReleaseComObject(atmoCtrl);
         atmoCtrl = null;
       }
-      KillAtmoWinA();
-      if (!InitializeAtmoWinConnection())
+      if (!KillAtmoWinA() || !InitializeAtmoWinConnection())
       {
         atmoOff = true;
         Log.Error("AtmoLight: Reconnecting to AtmoWin failed.");
@@ -554,7 +558,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
         return;
       }
-      Log.Info("AtmoLight: Successfully disabled LEDs.");
     }
 
     private void MenuMode()
