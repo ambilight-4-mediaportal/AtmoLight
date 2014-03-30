@@ -160,6 +160,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private const int comInterfaceTimeout = 1000;
     private const int delaySetStaticColor = 20;
     private const int delayAtmoWinConnecting = 1000;
+    private const int delayGetAtmoLiveViewSource = 1000;
     private bool reInitializeLock = false;
     private bool getAtmoLiveViewSourceLock = true;
     private ComLiveViewSource atmoLiveViewSource;
@@ -696,8 +697,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         return true;
       }
     }
+    #endregion
 
-    private void DoDelay(byte[] bmiInfoHeader, byte[] pixelData)
+    #region Threads
+    private void DelayThread(byte[] bmiInfoHeader, byte[] pixelData)
     {
       try
       {
@@ -716,6 +719,20 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         // Try to reconnect to AtmoWin.
         // No new thread needed, as this already is not the main thread.
         ReInitializeAtmoWinConnection();
+      }
+    }
+
+    private void GetAtmoLiveViewSourceThread()
+    {
+      while (g_Player.Playing && !getAtmoLiveViewSourceLock)
+      {
+        GetAtmoLiveViewSource();
+        if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
+        {
+          Log.Error("AtmoLight: AtmoWin Liveview Source is not lvsExternal");
+          SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
+        }
+        System.Threading.Thread.Sleep(delayGetAtmoLiveViewSource);
       }
     }
     #endregion
@@ -1133,6 +1150,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         if (CheckForStartRequirements())
         {
           PlaybackMode();
+          if (currentEffect == AtmolightSettings.effectVideo)
+          {
+            getAtmoLiveViewSourceLock = false;
+            Thread GetAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
+            GetAtmoLiveViewSourceThreadHelper.Start();
+          }
           if (AtmolightSettings.delay)
           {
             Log.Debug("AtmoLight: Adding {0}ms delay to the LEDs.", AtmolightSettings.delayTime.ToString());
@@ -1142,7 +1165,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
           DisableLEDs();
         }
-        getAtmoLiveViewSourceLock = false;
       }
       catch (Exception ex)
       {
@@ -1156,15 +1178,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       if (currentEffect != ContentEffect.MediaPortalLiveMode || atmoOff || atmoCtrl == null || width == 0 || height == 0)
       {
         return;
-      }
-      if (!getAtmoLiveViewSourceLock)
-      {
-        GetAtmoLiveViewSource();
-        if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
-        {
-          Log.Error("AtmoLight: AtmoWin Liveview Source is not lvsExternal");
-          SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
-        }
       }
 
       if (AtmolightSettings.lowCPU)
@@ -1229,8 +1242,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             }
             else
             {
-              Thread DelayHelperThread = new Thread(() => DoDelay(bmiInfoHeader, pixelData));
-              DelayHelperThread.Start();
+              Thread DelayThreadHelper = new Thread(() => DelayThread(bmiInfoHeader, pixelData));
+              DelayThreadHelper.Start();
             }
           }
           stream.Close();
