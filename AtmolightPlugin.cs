@@ -543,6 +543,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private void DisableLEDs()
     {
       atmoOff = true;
+      getAtmoLiveViewSourceLock = true;
       try
       {
         Log.Debug("AtmoLight: Disabling LEDs.");
@@ -608,31 +609,39 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         case ContentEffect.AtmoWinLiveMode:
           atmoOff = false;
+          getAtmoLiveViewSourceLock = true;
           SetAtmoEffect(ComEffectMode.cemLivePicture);
           SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
           break;
         case ContentEffect.Colorchanger:
           atmoOff = false;
+          getAtmoLiveViewSourceLock = true;
           SetAtmoEffect(ComEffectMode.cemLivePicture);
           SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
           SetAtmoEffect(ComEffectMode.cemColorChange);
           break;
         case ContentEffect.ColorchangerLR:
           atmoOff = false;
+          getAtmoLiveViewSourceLock = true;
           SetAtmoEffect(ComEffectMode.cemLivePicture);
           SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
           SetAtmoEffect(ComEffectMode.cemLrColorChange);
           break;
         case ContentEffect.LEDsDisabled:
+          getAtmoLiveViewSourceLock = true;
           DisableLEDs();
           break;
         case ContentEffect.MediaPortalLiveMode:
           atmoOff = false;
           SetAtmoEffect(ComEffectMode.cemLivePicture);
           SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
+          getAtmoLiveViewSourceLock = false;
+          Thread GetAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
+          GetAtmoLiveViewSourceThreadHelper.Start();
           break;
         case ContentEffect.StaticColor:
           atmoOff = false;
+          getAtmoLiveViewSourceLock = true;
           SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
           SetAtmoEffect(ComEffectMode.cemDisabled);
           SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]);
@@ -702,7 +711,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     private void GetAtmoLiveViewSourceThread()
     {
-      while (g_Player.Playing && !getAtmoLiveViewSourceLock)
+      while (g_Player.Playing && !getAtmoLiveViewSourceLock && !atmoOff)
       {
         if (!reInitializeLock)
         {
@@ -1131,12 +1140,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         if (CheckForStartRequirements())
         {
           PlaybackMode();
-          if (currentEffect == AtmolightSettings.effectVideo)
-          {
-            getAtmoLiveViewSourceLock = false;
-            Thread GetAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
-            GetAtmoLiveViewSourceThreadHelper.Start();
-          }
+
           if (AtmolightSettings.delay)
           {
             Log.Debug("AtmoLight: Adding {0}ms delay to the LEDs.", AtmolightSettings.delayTime.ToString());
