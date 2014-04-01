@@ -242,12 +242,26 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
       Log.Info("AtmoLight: Successfully connected to AtmoWin.");
 
-      SetAtmoEffect(ComEffectMode.cemLivePicture);
-      GetAtmoLiveViewCtrl();
-      SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
-      GetAtmoLiveViewRes();
-
-      DisableLEDs();
+      if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
+      {
+        return false;
+      }
+      if (!GetAtmoLiveViewCtrl())
+      {
+        return false;
+      }
+      if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal))
+      {
+        return false;
+      }
+      if (!GetAtmoLiveViewRes())
+      {
+        return false;
+      }
+      if (!DisableLEDs())
+      {
+        return false;
+      }
 
       return true;
     }
@@ -441,11 +455,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
-    private void SetColorMode(ComEffectMode effect)
+    private bool SetColorMode(ComEffectMode effect)
     {
       if (atmoCtrl == null)
       {
-        return;
+        return false;
       }
 
       Log.Debug("AtmoLight: Changing AtmoWin profile (SetColorMode).");
@@ -453,14 +467,16 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       if (TimeoutHandler(() => atmoCtrl.setEffect(effect, out oldEffect)))
       {
         Log.Info("AtmoLight: Successfully changed AtmoWin profile.");
+        return true;
       }
+      return false;
     }
 
-    private void SetAtmoEffect(ComEffectMode effect)
+    private bool SetAtmoEffect(ComEffectMode effect)
     {
       if (atmoCtrl == null)
       {
-        return;
+        return false;
       }
 
       Log.Debug("AtmoLight: Changing AtmoWin effect to: {0}", effect.ToString());
@@ -468,97 +484,120 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       if (TimeoutHandler(() => atmoCtrl.setEffect(effect, out oldEffect)))
       {
         Log.Info("AtmoLight: Successfully changed AtmoWin effect to: {0}", effect.ToString());
+        return true;
       }
+      return false;
     }
 
-    private void SetAtmoColor(byte red, byte green, byte blue)
+    private bool SetAtmoColor(byte red, byte green, byte blue)
     {
       if (atmoCtrl == null)
       {
-        return;
+        return false;
       }
 
       Log.Debug("AtmoLight: Setting static color to R:{0} G:{1} B:{2}.", red, green, blue);
       if (TimeoutHandler(() => atmoCtrl.setStaticColor(red, green, blue)))
       {
         Log.Info("AtmoLight: Successfully set static color to R:{0} G:{1} B:{2}.", red, green, blue);
+        return true;
       }
+      return false;
     }
 
-    private void SetAtmoLiveViewSource(ComLiveViewSource viewSource)
+    private bool SetAtmoLiveViewSource(ComLiveViewSource viewSource)
     {
       if (atmoCtrl == null)
       {
-        return;
+        return false;
       }
 
       Log.Debug("AtmoLight: Changing AtmoWin Liveview Source to: {0}", viewSource.ToString());
       if (TimeoutHandler(() => atmoLiveViewCtrl.setLiveViewSource(viewSource)))
       {
         Log.Info("AtmoLight: Successfully changed AtmoWin Liveview Source to: {0}", viewSource.ToString());
+        return true;
       }
+      return false;
     }
 
-    private void GetAtmoLiveViewSource()
+    private bool GetAtmoLiveViewSource()
     {
       if (atmoCtrl == null)
       {
-        return;
+        return false;
       }
 
-      TimeoutHandler(() => atmoLiveViewCtrl.getCurrentLiveViewSource(out atmoLiveViewSource));
+      if (TimeoutHandler(() => atmoLiveViewCtrl.getCurrentLiveViewSource(out atmoLiveViewSource)))
+      {
+        return true;
+      }
+      return false;
     }
 
-    private void GetAtmoLiveViewRes()
+    private bool GetAtmoLiveViewRes()
     {
       if (atmoCtrl == null)
       {
-        return;
+        return false;
       }
 
       Log.Debug("AtmoLight: Getting Liveview Resolution.");
       if (TimeoutHandler(() => atmoCtrl.getLiveViewRes(out captureWidth, out captureHeight)))
       {
         Log.Debug("AtmoLight: Liveview capture resolution is {0}x{1}. Screenshot will be resized to this dimensions.", captureWidth, captureHeight);
+        return true;
       }
+      return false;
     }
 
-    private void GetAtmoLiveViewCtrl()
+    private bool GetAtmoLiveViewCtrl()
     {
       if (atmoCtrl == null)
       {
-        return;
+        return false;
       }
 
-      Log.Debug("AtmoLight: Getting AtmoWin Live View Controll.");
+      Log.Debug("AtmoLight: Getting AtmoWin Live View Control.");
       if (TimeoutHandler(() => atmoLiveViewCtrl = (IAtmoLiveViewControl)Marshal.GetActiveObject("AtmoRemoteControl.1")))
       {
         Log.Debug("AtmoLight: Successfully got AtmoWin Live View Controll.");
+        return true;
       }
-      
+      return false;      
     }
     #endregion
 
     #region Control LEDs
-    private void DisableLEDs()
+    private bool DisableLEDs()
     {
       atmoOff = true;
       getAtmoLiveViewSourceLock = true;
       try
       {
         Log.Debug("AtmoLight: Disabling LEDs.");
-        SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
-        SetAtmoEffect(ComEffectMode.cemDisabled);
+        if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
+        {
+          return false;
+        }
+        if (!SetAtmoEffect(ComEffectMode.cemDisabled))
+        {
+          return false;
+        }
         // Workaround for SEDU
         System.Threading.Thread.Sleep(delaySetStaticColor);
-        SetAtmoColor(0, 0, 0);
+        if (!SetAtmoColor(0, 0, 0))
+        {
+          return false;
+        }
       }
       catch (Exception ex)
       {
         Log.Error("AtmoLight: Failed to disable LEDs.");
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        return;
+        return false;
       }
+      return true;
     }
 
     private void MenuMode()
@@ -568,20 +607,44 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         case ContentEffect.AtmoWinLiveMode:
           atmoOff = false;
-          SetAtmoEffect(ComEffectMode.cemLivePicture);
-          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
+          {
+            return;
+          }
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
+          {
+            return;
+          }
           break;
         case ContentEffect.Colorchanger:
           atmoOff = false;
-          SetAtmoEffect(ComEffectMode.cemLivePicture);
-          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
-          SetAtmoEffect(ComEffectMode.cemColorChange);
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
+          {
+            return;
+          }
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
+          {
+            return;
+          }
+          if (!SetAtmoEffect(ComEffectMode.cemColorChange))
+          {
+            return;
+          }
           break;
         case ContentEffect.ColorchangerLR:
           atmoOff = false;
-          SetAtmoEffect(ComEffectMode.cemLivePicture);
-          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
-          SetAtmoEffect(ComEffectMode.cemLrColorChange);
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
+          {
+            return;
+          }
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
+          {
+            return;
+          }
+          if (!SetAtmoEffect(ComEffectMode.cemLrColorChange))
+          {
+            return;
+          }
           break;
         case ContentEffect.LEDsDisabled:
           DisableLEDs();
@@ -591,12 +654,24 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         case ContentEffect.MediaPortalLiveMode:
         case ContentEffect.StaticColor:
           atmoOff = false;
-          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
-          SetAtmoEffect(ComEffectMode.cemDisabled);
-          SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]);
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
+          {
+            return;
+          }
+          if (!SetAtmoEffect(ComEffectMode.cemDisabled))
+          {
+            return;
+          }
+          if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]))
+          {
+            return;
+          }
           // Workaround for SEDU
           System.Threading.Thread.Sleep(delaySetStaticColor);
-          SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]);
+          if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]))
+          {
+            return;
+          }
           break;
       }
     }
@@ -610,22 +685,46 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         case ContentEffect.AtmoWinLiveMode:
           atmoOff = false;
           getAtmoLiveViewSourceLock = true;
-          SetAtmoEffect(ComEffectMode.cemLivePicture);
-          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
+          {
+            return;
+          }
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
+          {
+            return;
+          }
           break;
         case ContentEffect.Colorchanger:
           atmoOff = false;
           getAtmoLiveViewSourceLock = true;
-          SetAtmoEffect(ComEffectMode.cemLivePicture);
-          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
-          SetAtmoEffect(ComEffectMode.cemColorChange);
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
+          {
+            return;
+          }
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
+          {
+            return;
+          }
+          if (!SetAtmoEffect(ComEffectMode.cemColorChange))
+          {
+            return;
+          }
           break;
         case ContentEffect.ColorchangerLR:
           atmoOff = false;
           getAtmoLiveViewSourceLock = true;
-          SetAtmoEffect(ComEffectMode.cemLivePicture);
-          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
-          SetAtmoEffect(ComEffectMode.cemLrColorChange);
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
+          {
+            return;
+          }
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
+          {
+            return;
+          }
+          if (!SetAtmoEffect(ComEffectMode.cemLrColorChange))
+          {
+            return;
+          }
           break;
         case ContentEffect.LEDsDisabled:
           getAtmoLiveViewSourceLock = true;
@@ -633,8 +732,14 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           break;
         case ContentEffect.MediaPortalLiveMode:
           atmoOff = false;
-          SetAtmoEffect(ComEffectMode.cemLivePicture);
-          SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
+          {
+            return;
+          }
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal))
+          {
+            return;
+          }
           getAtmoLiveViewSourceLock = false;
           Thread GetAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
           GetAtmoLiveViewSourceThreadHelper.Start();
@@ -642,12 +747,24 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         case ContentEffect.StaticColor:
           atmoOff = false;
           getAtmoLiveViewSourceLock = true;
-          SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI);
-          SetAtmoEffect(ComEffectMode.cemDisabled);
-          SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]);
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
+          {
+            return;
+          }
+          if (!SetAtmoEffect(ComEffectMode.cemDisabled))
+          {
+            return;
+          }
+          if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]))
+          {
+            return;
+          }
           // Workaround for SEDU
           System.Threading.Thread.Sleep(delaySetStaticColor);
-          SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]);
+          if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]))
+          {
+            return;
+          }
           break;
       }
     }
