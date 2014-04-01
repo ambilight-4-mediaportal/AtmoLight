@@ -157,7 +157,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private int[] staticColor = { 0, 0, 0 };
     private int[] staticColorTemp = { 0, 0, 0 };
     private int staticColorHelper;
-    private const int comInterfaceTimeout = 1000;
+    private const int timeoutComInterface = 1000;
+    private const int timeoutSetPixel = 100;
     private const int delaySetStaticColor = 20;
     private const int delayAtmoWinConnecting = 1000;
     private const int delayGetAtmoLiveViewSource = 1000;
@@ -420,7 +421,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region COM Interface
-    private bool TimeoutHandler(System.Action method)
+    private bool TimeoutHandler(System.Action method, int timeout = timeoutComInterface)
     {
       try
       {
@@ -428,7 +429,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         CancellationToken token = tokenSource.Token;
         var task = Task.Factory.StartNew(() => method(), token);
 
-        if (!task.Wait(comInterfaceTimeout, token))
+        if (!task.Wait(timeout, token))
         {
           StackTrace trace = new StackTrace();
           Log.Error("AtmoLight: {0} timed out!", trace.GetFrame(1).GetMethod().Name);
@@ -805,19 +806,22 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region Threads
-    private void DelayThread(byte[] bmiInfoHeader, byte[] pixelData)
+    private void SetPixelDataThread(byte[] bmiInfoHeader, byte[] pixelData)
     {
       try
       {
-        System.Threading.Thread.Sleep(AtmolightSettings.delayTime);
+        if (AtmolightSettings.delay)
+        {
+          System.Threading.Thread.Sleep(AtmolightSettings.delayTime);
+        }
         if (!reInitializeLock && atmoCtrl != null)
         {
-          atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
+          TimeoutHandler(() => atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData), timeoutSetPixel);
         }
       }
       catch (Exception ex)
       {
-        Log.Error("AtmoLight: Could not send data to AtmoWin (Delayed).");
+        Log.Error("AtmoLight: Could not send data to AtmoWin.");
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
 
         // Try to reconnect to AtmoWin.
@@ -1338,15 +1342,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             {
               lastFrame = Win32API.GetTickCount();
             }
-            if (!AtmolightSettings.delay)
-            {
-              atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
-            }
-            else
-            {
-              Thread DelayThreadHelper = new Thread(() => DelayThread(bmiInfoHeader, pixelData));
-              DelayThreadHelper.Start();
-            }
+            Thread SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread(bmiInfoHeader, pixelData));
+            SetPixelDataThreadHelper.Priority = ThreadPriority.AboveNormal;
+            SetPixelDataThreadHelper.Start();
           }
           stream.Close();
           stream.Dispose();
