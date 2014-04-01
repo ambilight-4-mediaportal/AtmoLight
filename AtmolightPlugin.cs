@@ -215,7 +215,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           }
         }
       }
-      return ConnectToAtmoWinA();
+      return false;
     }
 
     private bool ConnectToAtmoWinA()
