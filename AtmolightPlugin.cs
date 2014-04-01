@@ -144,30 +144,34 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region Variables
-    public static bool atmoOff = false;
-    public Int64 tickCount = 0;
-    public Int64 lastFrame = 0;
-    private IAtmoRemoteControl2 atmoCtrl = null;
-    private IAtmoLiveViewControl atmoLiveViewCtrl = null;
-    private int captureWidth = 0;
-    private int captureHeight = 0;
-    private Surface rgbSurface = null;
-    private ContentEffect currentEffect = ContentEffect.LEDsDisabled;
-    private ContentEffect menuEffect = ContentEffect.LEDsDisabled;
-    private int[] staticColor = { 0, 0, 0 };
-    private int[] staticColorTemp = { 0, 0, 0 };
-    private int staticColorHelper;
-    private const int timeoutComInterface = 1000;
-    private const int timeoutSetPixel = 200;
-    private const int delaySetStaticColor = 20;
-    private const int delayAtmoWinConnecting = 1000;
-    private const int delayGetAtmoLiveViewSource = 1000;
-    private bool reInitializeLock = false;
-    private bool getAtmoLiveViewSourceLock = true;
-    private ComLiveViewSource atmoLiveViewSource;
+    public bool atmoOff = false; // State of the LEDs
+    public Int64 lastFrame = 0; // Tick count of the last frame
+    private IAtmoRemoteControl2 atmoCtrl = null; // Com Object to control AtmoWin
+    private IAtmoLiveViewControl atmoLiveViewCtrl = null; // Com Object to control AtmoWins liveview
+    private int captureWidth = 0; // AtmoWins capture width
+    private int captureHeight = 0; // AtmoWins capture height
+    private Surface rgbSurface = null; // RGB Surface
+    private ContentEffect currentEffect = ContentEffect.LEDsDisabled; // Effect for current placback
+    private ContentEffect menuEffect = ContentEffect.LEDsDisabled; // Effect in GUI (no playback)
+    private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
+    private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
+    private int staticColorHelper; // Helper var for static color change
+    private const int timeoutComInterface = 1000; // Timeout for the COM interface
+    private const int timeoutSetPixel = 200; // Timeout to set pixel data
+    private const int delaySetStaticColor = 20; // SEDU workaround delay time
+    private const int delayAtmoWinConnecting = 1000; // Delay between starting AtmoWin and connection to it
+    private const int delayGetAtmoLiveViewSource = 1000; // Delay between liveview source checks
+    private bool reInitializeLock = false; // Lock for the reinitialization process
+    private bool getAtmoLiveViewSourceLock = true; // Lock for liveview source checks
+    private ComLiveViewSource atmoLiveViewSource; // Current liveview source
     #endregion
 
     #region Initialize AtmoLight
+
+    /// <summary>
+    /// AtmoLight constructor.
+    /// Loads the plugin, loads the settings and initializes AtmoWin and the connection.
+    /// </summary>
     public AtmolightPlugin()
     {
       if (MPSettings.Instance.GetValueAsBool("plugins", "Atmolight", true))
@@ -178,8 +182,14 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+
+    /// <summary>
+    /// Starts AmtoWin (if needed and wanted) and connects to it.
+    /// </summary>
+    /// <returns>true if successfull and false if not.</returns>
     private bool InitializeAtmoWinConnection()
     {
+      // Dont start the initialization when in MP Config.
       if (!Win32API.IsProcessRunning("configuration.exe"))
       {
         if (AtmolightSettings.startAtmoWin)
@@ -218,6 +228,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return false;
     }
 
+    /// <summary>
+    /// Connects to AtmoWin.
+    /// </summary>
+    /// <returns>true if successfull and false if not.</returns>
     private bool ConnectToAtmoWinA()
     {
       try
@@ -243,6 +257,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
       Log.Info("AtmoLight: Successfully connected to AtmoWin.");
 
+      // If any of these fail, stop the whole initialization so we dont run into loops.
       if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
       {
         return false;
@@ -266,6 +281,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
       return true;
     }
+
+    /// <summary>
+    /// Starts AtmoWin.
+    /// </summary>
+    /// <returns>true if successfull and false if not.</returns>
     private bool StartAtmoWinA()
     {
       if (!System.IO.File.Exists(AtmolightSettings.atmowinExe))
@@ -291,12 +311,18 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return ret;
     }
 
+    /// <summary>
+    /// Kills AtmoWin.
+    /// </summary>
+    /// <returns>true if successfull and false if not.</returns>
     private bool KillAtmoWinA()
     {
       Log.Debug("AtmoLight: Stopping AtmoWinA.exe.");
       foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension("atmowina")))
       {
         process.Kill();
+        // Wait if the kill succeeded, because sometimes it does not.
+        // If it does not, we stop the whole initialization.
         if (!TimeoutHandler(() => process.WaitForExit()))
         {
           return false;
@@ -307,8 +333,14 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return true;
     }
 
+    /// <summary>
+    /// Kills AtmoWin, restarts it and connects to it.
+    /// Disables AtmoLight if it fails and prompts the user with an error.
+    /// </summary>
+    /// <returns>true if successfull and false if not.</returns>
     private bool ReInitializeAtmoWinConnection()
     {
+      // Lock is needed so we dont try to initialize while another initialize is already running.
       if (reInitializeLock)
       {
         return false;
@@ -349,6 +381,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+    /// <summary>
+    /// Start method for AtmoLight.
+    /// </summary>
     public void Start()
     {
       if (atmoCtrl != null)
@@ -362,6 +397,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         FrameGrabber.GetInstance().OnNewFrame += new FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
 
         // Workaround
+        // Enum says we choose MP Live Mode, but it is actually Static color.
         if (AtmolightSettings.effectMenu == ContentEffect.MediaPortalLiveMode)
         {
           AtmolightSettings.effectMenu = ContentEffect.StaticColor;
@@ -369,6 +405,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
         menuEffect = AtmolightSettings.effectMenu;
 
+        // We use an extra array for the colors so we later can reload the originals if wanted
         staticColor[0] = AtmolightSettings.staticColorRed;
         staticColor[1] = AtmolightSettings.staticColorGreen;
         staticColor[2] = AtmolightSettings.staticColorBlue;
@@ -386,6 +423,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+    /// <summary>
+    /// Stop method for AtmoLight.
+    /// </summary>
     public void Stop()
     {
       if (atmoCtrl != null)
@@ -421,6 +461,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region COM Interface
+    /// <summary>
+    /// Checks if a method times out and starts to reinitialize AtmoWin if needed.
+    /// </summary>
+    /// <param name="method">Method that needs checking for a timeout.</param>
+    /// <param name="timeout">Timeout in ms.</param>
+    /// <returns>true if not timed out and false if timed out.</returns>
     private bool TimeoutHandler(System.Action method, int timeout = timeoutComInterface)
     {
       try
@@ -431,10 +477,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
         if (!task.Wait(timeout, token))
         {
+          // Stacktrace is needed so we can output the name of the method that timed out.
           StackTrace trace = new StackTrace();
           Log.Error("AtmoLight: {0} timed out!", trace.GetFrame(1).GetMethod().Name);
 
-          // Try to reconnect to AtmoWin
+          // Try to reconnect to AtmoWin.
+          // This is done in a new thread, to not halt anything else.
           Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
           ReInitializeAtmoWinConnectionHelperThread.Start();
 
@@ -456,6 +504,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+    /// <summary>
+    /// Changes the AtmoWin profile.
+    /// </summary>
+    /// <returns>true if successfull and false if not.</returns>
     private bool SetColorMode(ComEffectMode effect)
     {
       if (atmoCtrl == null)
@@ -473,6 +525,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return false;
     }
 
+    /// <summary>
+    /// Changes the AtmoWin effect.
+    /// </summary>
+    /// <param name="effect">Effect to change to.</param>
+    /// <returns>true if successfull and false if not.</returns>
     private bool SetAtmoEffect(ComEffectMode effect)
     {
       if (atmoCtrl == null)
@@ -490,6 +547,13 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return false;
     }
 
+    /// <summary>
+    /// Changes the static color in AtmoWin.
+    /// </summary>
+    /// <param name="red">RGB value for red.</param>
+    /// <param name="green">RGB value for green.</param>
+    /// <param name="blue">RGB value for blue.</param>
+    /// <returns>true if successfull and false if not.</returns>
     private bool SetAtmoColor(byte red, byte green, byte blue)
     {
       if (atmoCtrl == null)
@@ -506,6 +570,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return false;
     }
 
+    /// <summary>
+    /// Changes the AtmoWin liveview source.
+    /// </summary>
+    /// <param name="viewSource">The liveview source.</param>
+    /// <returns>true if successfull and false if not.</returns>
     private bool SetAtmoLiveViewSource(ComLiveViewSource viewSource)
     {
       if (atmoCtrl == null)
@@ -522,6 +591,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return false;
     }
 
+    /// <summary>
+    /// Gets the current AtmoWin liveview source.
+    /// </summary>
+    /// <returns>true if successfull and false if not.</returns>
     private bool GetAtmoLiveViewSource()
     {
       if (atmoCtrl == null)
@@ -536,6 +609,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return false;
     }
 
+    /// <summary>
+    /// Gets the current liveview resolution.
+    /// </summary>
+    /// <returns>true if successfull and false if not.</returns>
     private bool GetAtmoLiveViewRes()
     {
       if (atmoCtrl == null)
@@ -552,6 +629,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return false;
     }
 
+    /// <summary>
+    /// Opens the COM interface to AtmoWin.
+    /// </summary>
+    /// <returns>true if successfull and false if not.</returns>
     private bool GetAtmoLiveViewCtrl()
     {
       if (atmoCtrl == null)
@@ -570,6 +651,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region Control LEDs
+    /// <summary>
+    /// Sets the AtmoWin effect to disabled and sets the color of the leds to black.
+    /// </summary>
+    /// <returns>true if successfull and false if not.</returns>
     private bool DisableLEDs()
     {
       atmoOff = true;
@@ -585,7 +670,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
           return false;
         }
-        // Workaround for SEDU
+        // Workaround for SEDU.
+        // Without the sleep it would not change to color.
         System.Threading.Thread.Sleep(delaySetStaticColor);
         if (!SetAtmoColor(0, 0, 0))
         {
@@ -601,6 +687,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return true;
     }
 
+    /// <summary>
+    /// Changes the effect while in the GUI (no playback).
+    /// </summary>
     private void MenuMode()
     {
       Log.Info("AtmoLight: Changing AtmoLight effect to: {0}", menuEffect.ToString());
@@ -667,7 +756,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           {
             return;
           }
-          // Workaround for SEDU
+          // Workaround for SEDU.
+          // Without the sleep it would not change to color.
           System.Threading.Thread.Sleep(delaySetStaticColor);
           if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]))
           {
@@ -677,6 +767,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+    /// <summary>
+    /// Changes the effect during playback.
+    /// </summary>
     private void PlaybackMode()
     {
 
@@ -760,7 +853,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           {
             return;
           }
-          // Workaround for SEDU
+          // Workaround for SEDU.
+          // Without the sleep it would not change to color.
           System.Threading.Thread.Sleep(delaySetStaticColor);
           if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2]))
           {
@@ -770,6 +864,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+    /// <summary>
+    /// Checks if PlaybackMode() or MenuMode() should be used and calls them.
+    /// </summary>
     private void StartLEDs()
     {
       if (g_Player.Playing)
@@ -782,6 +879,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+    /// <summary>
+    /// Checks if the LEDs may be activated or deactivated bacause of the settings.
+    /// </summary>
+    /// <returns>true if LEDs may be activated and false if not.</returns>
     private bool CheckForStartRequirements()
     {
       if (AtmolightSettings.manualMode)
@@ -806,6 +907,13 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region Threads
+    /// <summary>
+    /// Sends pixel data to AtmoWin when MediaPortal liveview is used (external liveview source).
+    /// Also adds a delay if specified in settings.
+    /// This method is designed to run as its own thread.
+    /// </summary>
+    /// <param name="bmiInfoHeader">Info Header.</param>
+    /// <param name="pixelData">Pixel data.</param>
     private void SetPixelDataThread(byte[] bmiInfoHeader, byte[] pixelData)
     {
       try
@@ -830,6 +938,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+    /// <summary>
+    /// Checks if the AtmoWin liveview source is set to external when MediaPortal liveview is used.
+    /// Sets liveview source back to external if needed.
+    /// This method is designed to run as its own thread.
+    /// </summary>
     private void GetAtmoLiveViewSourceThread()
     {
       while (g_Player.Playing && !getAtmoLiveViewSourceLock && !atmoOff)
@@ -849,7 +962,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region Context Menu
-    private string GetKeyboardString(string KeyboardString)
+    /// <summary>
+    /// Prompts the user with an on screen keyboard.
+    /// </summary>
+    /// <param name="keyboardString">String already in the keyboard when opened.</param>
+    /// <returns>String entered by the user.</returns>
+    private string GetKeyboardString(string keyboardString)
     {
       VirtualKeyboard Keyboard = (VirtualKeyboard)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
       if (Keyboard == null)
@@ -858,7 +976,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
       Keyboard.IsSearchKeyboard = true;
       Keyboard.Reset();
-      Keyboard.Text = KeyboardString;
+      Keyboard.Text = keyboardString;
       Keyboard.DoModal(GUIWindowManager.ActiveWindow);
       if (Keyboard.IsConfirmed)
       {
@@ -867,6 +985,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return null;
     }
 
+    /// <summary>
+    /// Prompts the user with an error dialog.
+    /// </summary>
+    /// <param name="setLine1">First line.</param>
+    /// <param name="setLine2">Second line.</param>
     private void DialogError(string setLine1 = null, string setLine2 = null)
     {
       GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
@@ -879,6 +1002,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+    /// <summary>
+    /// Prompts the user with a context menu to set a static color.
+    /// </summary>
+    /// <param name="Reset">Parameter to reset the colors.</param>
+    /// <param name="StartPosition">Element that should be highlighted.</param>
     private void DialogRGBManualStaticColorChanger(bool Reset = true, int StartPosition = 0)
     {
       if (Reset)
@@ -925,11 +1053,16 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         case 4:
           return;
       }
+      // Start the dialog again (without reset) so we can enter the other colors.
       DialogRGBManualStaticColorChanger(false, dlgRGB.SelectedLabel);
     }
     #endregion
 
     #region Remote Button Events
+    /// <summary>
+    /// Event handler for remote button presses.
+    /// </summary>
+    /// <param name="action">Action caused by remote button press.</param>
     public void OnNewAction(MediaPortal.GUI.Library.Action action)
     {
       // Remote Key to toggle On/Off
@@ -1182,6 +1315,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region g_player Events
+    /// <summary>
+    /// Checks what to do when playback is ended.
+    /// </summary>
+    /// <param name="type">Media type.</param>
+    /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
     {
       try
@@ -1203,6 +1341,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+    /// <summary>
+    /// Checks what to do when playback is stopped.
+    /// </summary>
+    /// <param name="type">Media type.</param>
+    /// <param name="stoptime">Media stoptime.</param>
+    /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackStopped(g_Player.MediaType type, int stoptime, string filename)
     {
       try
@@ -1224,6 +1368,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+    /// <summary>
+    /// Checks what to do when playback is started.
+    /// </summary>
+    /// <param name="type">Media type.</param>
+    /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackStarted(g_Player.MediaType type, string filename)
     {
       if (atmoCtrl == null)
@@ -1240,6 +1389,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         else if (type == g_Player.MediaType.Music)
         {
           // Workaround
+          // Enum says we choose MP Live Mode, but it is actually Static color.
           if (AtmolightSettings.effectMusic == ContentEffect.MediaPortalLiveMode)
           {
             AtmolightSettings.effectMusic = ContentEffect.StaticColor;
@@ -1250,6 +1400,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         else if (type == g_Player.MediaType.Radio)
         {
           // Workaround
+          // Enum says we choose MP Live Mode, but it is actually Static color.
           if (AtmolightSettings.effectRadio == ContentEffect.MediaPortalLiveMode)
           {
             AtmolightSettings.effectRadio = ContentEffect.StaticColor;
@@ -1279,16 +1430,20 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+    /// <summary>
+    /// Calculates the pixel data that gets send to AtmoWin.
+    /// And starts the SetPixelDataThread() threads to send the data.
+    /// </summary>
+    /// <param name="width">Frame width.</param>
+    /// <param name="height">Frame height.</param>
+    /// <param name="arWidth">Aspect ratio width.</param>
+    /// <param name="arHeight">Aspect ratio height.</param>
+    /// <param name="pSurface">Surface.</param>
     private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
     {
       if (currentEffect != ContentEffect.MediaPortalLiveMode || atmoOff || atmoCtrl == null || width == 0 || height == 0)
       {
         return;
-      }
-
-      if (AtmolightSettings.lowCPU)
-      {
-        tickCount = Win32API.GetTickCount();
       }
 
       if (rgbSurface == null)
@@ -1342,7 +1497,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             {
               lastFrame = Win32API.GetTickCount();
             }
+            // Creat and start a new thread to send the data to AtmoWin.
+            // This is done so we can use the TimeoutHandler without halting or disturbing the video playback.
             Thread SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread(bmiInfoHeader, pixelData));
+            // Priority gets set higher to ensure that the data gets send as soon as possible.
             SetPixelDataThreadHelper.Priority = ThreadPriority.AboveNormal;
             SetPixelDataThreadHelper.Start();
           }
@@ -1367,26 +1525,50 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region ISetupForm impementation
+    /// <summary>
+    ///  Returns authors name.
+    /// </summary>
+    /// <returns>Authors name.</returns>
     public string Author()
     {
       return "gemx";
     }
 
+    /// <summary>
+    /// Returns if this plugin can be enabled.
+    /// </summary>
+    /// <returns>true</returns>
     public bool CanEnable()
     {
       return true;
     }
 
+    /// <summary>
+    /// Returns if this plugin is enabled by default.
+    /// </summary>
+    /// <returns>true</returns>
     public bool DefaultEnabled()
     {
       return true;
     }
 
+    /// <summary>
+    /// Returns the description of this plugin.
+    /// </summary>
+    /// <returns>Description</returns>
     public string Description()
     {
       return "Interfaces AtmowinA.exe via COM to control the lights";
     }
 
+    /// <summary>
+    /// Standard window plugin method
+    /// </summary>
+    /// <param name="strButtonText"></param>
+    /// <param name="strButtonImage"></param>
+    /// <param name="strButtonImageFocus"></param>
+    /// <param name="strPictureImage"></param>
+    /// <returns>false</returns>
     public bool GetHome(out string strButtonText, out string strButtonImage, out string strButtonImageFocus, out string strPictureImage)
     {
       strButtonText = null;
@@ -1396,34 +1578,49 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       return false;
     }
 
+    /// <summary>
+    /// Returns plugin window id
+    /// </summary>
+    /// <returns>-1</returns>
     public int GetWindowId()
     {
       return -1;
     }
 
+    /// <summary>
+    /// Returns if this plugin has a setup.
+    /// </summary>
+    /// <returns>true</returns>
     public bool HasSetup()
     {
       return true;
     }
 
+    /// <summary>
+    /// Returns the Plugin name.
+    /// </summary>
+    /// <returns>AtmoLight</returns>
     public string PluginName()
     {
       return "AtmoLight";
     }
 
+    /// <summary>
+    /// Opens the AtmoLight setuo form.
+    /// </summary>
     public void ShowPlugin()
     {
       new AtmolightSetupForm().ShowDialog();
     }
-    #endregion
 
-    #region IShowPlugin Member
-
+    /// <summary>
+    /// Returns if this plugin should be shown on home.
+    /// </summary>
+    /// <returns>false</returns>
     public bool ShowDefaultHome()
     {
       return false;
     }
-
     #endregion
   }
 }
