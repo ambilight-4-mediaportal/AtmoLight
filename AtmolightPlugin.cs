@@ -158,7 +158,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private int[] staticColorTemp = { 0, 0, 0 };
     private int staticColorHelper;
     private const int timeoutComInterface = 1000;
-    private const int timeoutSetPixel = 100;
+    private const int timeoutSetPixel = 200;
     private const int delaySetStaticColor = 20;
     private const int delayAtmoWinConnecting = 1000;
     private const int delayGetAtmoLiveViewSource = 1000;
