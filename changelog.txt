@@ -7,6 +7,7 @@ Version 1.9.1.0
 	* Added possibility to open context menu during playback
 	* Added option to change effects on the fly
 	* Added option to change AtmoWin profile
+	* Added option to toggle and set LED delay (see point 10)
 	* Added option to change static color on the fly
 - Fixed issue where context menu was not closeable with back button
 - Added language file support to context menu
