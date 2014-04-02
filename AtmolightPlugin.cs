@@ -158,12 +158,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
     private int staticColorHelper; // Helper var for static color change
     private const int timeoutComInterface = 1000; // Timeout for the COM interface
-    private const int timeoutSetPixel = 200; // Timeout to set pixel data
     private const int delaySetStaticColor = 20; // SEDU workaround delay time
     private const int delayAtmoWinConnecting = 1000; // Delay between starting AtmoWin and connection to it
     private const int delayGetAtmoLiveViewSource = 1000; // Delay between liveview source checks
     private bool reInitializeLock = false; // Lock for the reinitialization process
     private bool getAtmoLiveViewSourceLock = true; // Lock for liveview source checks
+    private bool setPixelDataLock = true; // Lock for SetPixelData thread
     private ComLiveViewSource atmoLiveViewSource; // Current liveview source
     private int delayTimeHelper; // Helper var for delay time change
     #endregion
@@ -276,6 +276,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         return false;
       }
+      currentEffect = ContentEffect.Undefined;
       if (!DisableLEDs())
       {
         return false;
@@ -673,6 +674,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       currentEffect = ContentEffect.Undefined;
       atmoOff = true;
       getAtmoLiveViewSourceLock = true;
+      setPixelDataLock = true;
       try
       {
         Log.Debug("AtmoLight: Disabling LEDs.");
@@ -816,6 +818,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         case ContentEffect.AtmoWinLiveMode:
           atmoOff = false;
           getAtmoLiveViewSourceLock = true;
+          setPixelDataLock = true;
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
           {
             return;
@@ -828,6 +831,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         case ContentEffect.Colorchanger:
           atmoOff = false;
           getAtmoLiveViewSourceLock = true;
+          setPixelDataLock = true;
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
           {
             return;
@@ -844,6 +848,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         case ContentEffect.ColorchangerLR:
           atmoOff = false;
           getAtmoLiveViewSourceLock = true;
+          setPixelDataLock = true;
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
           {
             return;
@@ -859,10 +864,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           break;
         case ContentEffect.LEDsDisabled:
           getAtmoLiveViewSourceLock = true;
+          setPixelDataLock = true;
           DisableLEDs();
           break;
         case ContentEffect.MediaPortalLiveMode:
-          atmoOff = false;
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
           {
             return;
@@ -875,13 +880,16 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           {
             Log.Debug("AtmoLight: Adding {0}ms delay to the LEDs.", AtmolightSettings.delayTime.ToString());
           }
+          atmoOff = false;
           getAtmoLiveViewSourceLock = false;
+          setPixelDataLock = false;
           Thread GetAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
           GetAtmoLiveViewSourceThreadHelper.Start();
           break;
         case ContentEffect.StaticColor:
           atmoOff = false;
           getAtmoLiveViewSourceLock = true;
+          setPixelDataLock = true;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
           {
             return;
@@ -972,9 +980,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
           System.Threading.Thread.Sleep(AtmolightSettings.delayTime);
         }
-        if (!reInitializeLock && atmoCtrl != null)
+        if (g_Player.Playing && !setPixelDataLock && !atmoOff && !reInitializeLock)
         {
-          TimeoutHandler(() => atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData), timeoutSetPixel);
+          TimeoutHandler(() => atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData));
         }
       }
       catch (Exception ex)
@@ -1002,7 +1010,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           GetAtmoLiveViewSource();
           if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
           {
-            Log.Error("AtmoLight: AtmoWin Liveview Source is not lvsExternal");
+            Log.Debug("AtmoLight: AtmoWin Liveview Source is not lvsExternal");
             SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
           }
         }
@@ -1261,8 +1269,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
       else if ((dlg.SelectedLabel == delayChangePos) && (delayChangePos != -1))
       {
-        if ((int.TryParse(GetKeyboardString(AtmolightSettings.delayTime.ToString()), out delayTimeHelper)) && (delayTimeHelper >= 0) && (delayTimeHelper <= 1000))
+        if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) && (delayTimeHelper <= 1000))
         {
+          Log.Info("AtmoLight: Changing LED delay to {0}ms.", delayTimeHelper);
           AtmolightSettings.delayTime = delayTimeHelper;
         }
         else
@@ -1462,6 +1471,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       try
       {
         getAtmoLiveViewSourceLock = true;
+        setPixelDataLock = true;
         if (CheckForStartRequirements())
         {
           MenuMode();
@@ -1493,6 +1503,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       try
       {
         getAtmoLiveViewSourceLock = true;
+        setPixelDataLock = true;
         if (CheckForStartRequirements())
         {
           MenuMode();
