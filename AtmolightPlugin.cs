@@ -643,7 +643,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       Log.Debug("AtmoLight: Getting AtmoWin Live View Control.");
       if (TimeoutHandler(() => atmoLiveViewCtrl = (IAtmoLiveViewControl)Marshal.GetActiveObject("AtmoRemoteControl.1")))
       {
-        Log.Debug("AtmoLight: Successfully got AtmoWin Live View Controll.");
+        Log.Debug("AtmoLight: Successfully got AtmoWin Live View Control.");
         return true;
       }
       return false;      
@@ -1065,8 +1065,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// <param name="action">Action caused by remote button press.</param>
     public void OnNewAction(MediaPortal.GUI.Library.Action action)
     {
+      if (atmoCtrl == null)
+      {
+        return;
+      }
       // Remote Key to toggle On/Off
-      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.killButton == 2) ||
+      else if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.killButton == 2) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.killButton == 1) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.killButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.killButton == 3))
