@@ -471,6 +471,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     {
       try
       {
+        long timeoutStart = Win32API.GetTickCount();
         var tokenSource = new CancellationTokenSource();
         CancellationToken token = tokenSource.Token;
         var task = Task.Factory.StartNew(() => method(), token);
@@ -479,7 +480,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
           // Stacktrace is needed so we can output the name of the method that timed out.
           StackTrace trace = new StackTrace();
-          Log.Error("AtmoLight: {0} timed out!", trace.GetFrame(1).GetMethod().Name);
+          Log.Error("AtmoLight: {0} timed out after {1}ms!", trace.GetFrame(1).GetMethod().Name, Win32API.GetTickCount() - timeoutStart);
 
           // Try to reconnect to AtmoWin.
           // This is done in a new thread, to not halt anything else.
@@ -833,6 +834,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal))
           {
             return;
+          }
+          if (AtmolightSettings.delay)
+          {
+            Log.Debug("AtmoLight: Adding {0}ms delay to the LEDs.", AtmolightSettings.delayTime.ToString());
           }
           getAtmoLiveViewSourceLock = false;
           Thread GetAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
@@ -1416,11 +1421,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         if (CheckForStartRequirements())
         {
           PlaybackMode();
-
-          if (AtmolightSettings.delay)
-          {
-            Log.Debug("AtmoLight: Adding {0}ms delay to the LEDs.", AtmolightSettings.delayTime.ToString());
-          }
         }
         else
         {
@@ -1501,7 +1501,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             {
               lastFrame = Win32API.GetTickCount();
             }
-            // Creat and start a new thread to send the data to AtmoWin.
+            // Create and start a new thread to send the data to AtmoWin.
             // This is done so we can use the TimeoutHandler without halting or disturbing the video playback.
             Thread SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread(bmiInfoHeader, pixelData));
             // Priority gets set higher to ensure that the data gets send as soon as possible.
