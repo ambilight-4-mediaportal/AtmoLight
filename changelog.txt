@@ -23,22 +23,22 @@ Version 1.9.1.0
 
 
 Version 1.1.19020.1
- Correct First plugin start : Default language not set correctly at 1st start.
+ Correct First plugin start : Default language not set correctly at 1st start. (BassFan)
 
 Version 1.1.19020.0
-Add language translation to Atmolight configuration. 
-English / German 
+Add language translation to Atmolight configuration. (BassFan)
+English / German (BassFan)
 
 
 Version 1.1.19019.0 
-1.Change DropDown to DropDownList so do not can rename any from the List.
-2.Checking for Disable/Enable state from Configuration.exe
-3.Add Start and Exit Option to Config Dialog.
-4.Add Versions-Info to Config Dialog
-5.fixed Windowsize of Config Dialog
-6.Moved to lates version from angie05 to
-7.Use latest AtmoWinA from angie05 to
-8.Add check for use the right Filename do for OpenFileDialog
+1.Change DropDown to DropDownList so do not can rename any from the List. (BassFan)
+2.Checking for Disable/Enable state from Configuration.exe (BassFan)
+3.Add Start and Exit Option to Config Dialog. (BassFan)
+4.Add Versions-Info to Config Dialog (BassFan)
+5.fixed Windowsize of Config Dialog (BassFan)
+6.Moved to lates version from angie05 to (BassFan)
+7.Use latest AtmoWinA from angie05 to (BassFan)
+8.Add check for use the right Filename do for OpenFileDialog (BassFan)
 
 Version 1.1.19017.1
 
