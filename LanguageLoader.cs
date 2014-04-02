@@ -282,6 +282,11 @@ namespace Language
     public String ContextMenu_Apply = "Apply";
     public String ContextMenu_Cancel = "Cancel";
     public String ContextMenu_NA = "N/A";
+    public string ContextMenu_DelayOFF = "Switch LED delay off";
+    public string ContextMenu_DelayON = "Swtich LED delay on";
+    public string ContextMenu_ChangeDelay = "Change LED delay";
+    public string ContextMenu_DelayTimeErrorLine1 = "The value has to be a number";
+    public string ContextMenu_DelayTimeErrorLine2 = "and must be between 0 and 1000.";
   }
 }
 
