@@ -669,7 +669,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         Log.Debug("AtmoLight: LEDs already disabled. Nothing to do.");
         return true;
       }
-      currentEffect = ContentEffect.LEDsDisabled;
+      currentEffect = ContentEffect.Undefined;
       atmoOff = true;
       getAtmoLiveViewSourceLock = true;
       try
@@ -697,6 +697,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
         return false;
       }
+      currentEffect = ContentEffect.LEDsDisabled;
       return true;
     }
 
@@ -714,7 +715,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         Log.Debug("AtmoLight: Effect is already active. Nothing to do.");
         return;
       }
-      currentEffect = menuEffect;
+      currentEffect = ContentEffect.Undefined;
       Log.Info("AtmoLight: Changing AtmoLight effect to: {0}", menuEffect.ToString());
       switch (menuEffect)
       {
@@ -788,6 +789,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           }
           break;
       }
+      currentEffect = menuEffect;
     }
 
     /// <summary>
@@ -804,7 +806,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         Log.Debug("AtmoLight: Effect is already active. Nothing to do.");
         return;
       }
-      currentEffect = playbackEffect;
+      currentEffect = ContentEffect.Undefined;
       Log.Info("AtmoLight: Changing AtmoLight effect to: {0}", playbackEffect.ToString());
       switch (playbackEffect)
       {
@@ -898,6 +900,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           }
           break;
       }
+      currentEffect = playbackEffect;
     }
 
     /// <summary>
