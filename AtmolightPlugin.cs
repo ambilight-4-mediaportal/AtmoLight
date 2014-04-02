@@ -711,7 +711,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         return;
       }
-      if (menuEffect == currentEffect)
+      // Static color gets excluded so we can actually change it.
+      if ((menuEffect == currentEffect) && (currentEffect != ContentEffect.StaticColor))
       {
         Log.Debug("AtmoLight: Effect is already active. Nothing to do.");
         return;
@@ -802,7 +803,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         return;
       }
-      if (playbackEffect == currentEffect)
+      // Static color gets excluded so we can actually change it.
+      if ((playbackEffect == currentEffect) && (currentEffect != ContentEffect.StaticColor))
       {
         Log.Debug("AtmoLight: Effect is already active. Nothing to do.");
         return;
