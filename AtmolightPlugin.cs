@@ -660,6 +660,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// <returns>true if successfull and false if not.</returns>
     private bool DisableLEDs()
     {
+      if (atmoCtrl == null)
+      {
+        return false;
+      }
       if (currentEffect == ContentEffect.LEDsDisabled)
       {
         Log.Debug("AtmoLight: LEDs already disabled. Nothing to do.");
@@ -701,6 +705,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// </summary>
     private void MenuMode()
     {
+      if (atmoCtrl == null)
+      {
+        return;
+      }
       if (menuEffect == currentEffect)
       {
         Log.Debug("AtmoLight: Effect is already active. Nothing to do.");
@@ -787,6 +795,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// </summary>
     private void PlaybackMode()
     {
+      if (atmoCtrl == null)
+      {
+        return;
+      }
       if (playbackEffect == currentEffect)
       {
         Log.Debug("AtmoLight: Effect is already active. Nothing to do.");
@@ -893,6 +905,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// </summary>
     private void StartLEDs()
     {
+      if (atmoCtrl == null)
+      {
+        return;
+      }
       if (g_Player.Playing)
       {
         PlaybackMode();
@@ -909,6 +925,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// <returns>true if LEDs may be activated and false if not.</returns>
     private bool CheckForStartRequirements()
     {
+      if (atmoCtrl == null)
+      {
+        return false;
+      }
       if (AtmolightSettings.manualMode)
       {
         Log.Debug("AtmoLight: LEDs should be deactivated. (Manual Mode)");
@@ -1350,6 +1370,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
     {
+      if (atmoCtrl == null)
+      {
+        return;
+      }
       try
       {
         getAtmoLiveViewSourceLock = true;
@@ -1377,6 +1401,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackStopped(g_Player.MediaType type, int stoptime, string filename)
     {
+      if (atmoCtrl == null)
+      {
+        return;
+      }
       try
       {
         getAtmoLiveViewSourceLock = true;
