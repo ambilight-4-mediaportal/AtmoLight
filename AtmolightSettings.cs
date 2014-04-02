@@ -11,7 +11,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     Colorchanger,
     ColorchangerLR,
     MediaPortalLiveMode,
-    StaticColor
+    StaticColor,
+    Undefined = -1
   }
   public class AtmolightSettings
   {

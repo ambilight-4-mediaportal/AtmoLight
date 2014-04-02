@@ -144,15 +144,16 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region Variables
-    public bool atmoOff = false; // State of the LEDs
+    public bool atmoOff = true; // State of the LEDs
     public Int64 lastFrame = 0; // Tick count of the last frame
     private IAtmoRemoteControl2 atmoCtrl = null; // Com Object to control AtmoWin
     private IAtmoLiveViewControl atmoLiveViewCtrl = null; // Com Object to control AtmoWins liveview
     private int captureWidth = 0; // AtmoWins capture width
     private int captureHeight = 0; // AtmoWins capture height
     private Surface rgbSurface = null; // RGB Surface
-    private ContentEffect currentEffect = ContentEffect.LEDsDisabled; // Effect for current placback
-    private ContentEffect menuEffect = ContentEffect.LEDsDisabled; // Effect in GUI (no playback)
+    private ContentEffect playbackEffect = ContentEffect.Undefined; // Effect for current placback
+    private ContentEffect menuEffect = ContentEffect.Undefined; // Effect in GUI (no playback)
+    private ContentEffect currentEffect = ContentEffect.Undefined; // Current aktive effect
     private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
     private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
     private int staticColorHelper; // Helper var for static color change
@@ -359,6 +360,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
 
       reInitializeLock = true;
+      currentEffect = ContentEffect.Undefined;
       Log.Debug("AtmoLight: Trying to restart AtmoWin and reconnect to it.");
       if (atmoCtrl != null)
       {
@@ -658,6 +660,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// <returns>true if successfull and false if not.</returns>
     private bool DisableLEDs()
     {
+      if (currentEffect == ContentEffect.LEDsDisabled)
+      {
+        Log.Debug("AtmoLight: LEDs already disabled. Nothing to do.");
+        return true;
+      }
+      currentEffect = ContentEffect.LEDsDisabled;
       atmoOff = true;
       getAtmoLiveViewSourceLock = true;
       try
@@ -693,6 +701,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// </summary>
     private void MenuMode()
     {
+      if (menuEffect == currentEffect)
+      {
+        Log.Debug("AtmoLight: Effect is already active. Nothing to do.");
+        return;
+      }
+      currentEffect = menuEffect;
       Log.Info("AtmoLight: Changing AtmoLight effect to: {0}", menuEffect.ToString());
       switch (menuEffect)
       {
@@ -773,9 +787,14 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// </summary>
     private void PlaybackMode()
     {
-
-      Log.Info("AtmoLight: Changing AtmoLight effect to: {0}", currentEffect.ToString());
-      switch (currentEffect)
+      if (playbackEffect == currentEffect)
+      {
+        Log.Debug("AtmoLight: Effect is already active. Nothing to do.");
+        return;
+      }
+      currentEffect = playbackEffect;
+      Log.Info("AtmoLight: Changing AtmoLight effect to: {0}", playbackEffect.ToString());
+      switch (playbackEffect)
       {
         case ContentEffect.AtmoWinLiveMode:
           atmoOff = false;
@@ -1128,7 +1147,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
           dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Switch3DON));
         }
-        if (((g_Player.Playing) && (currentEffect == ContentEffect.StaticColor) && (!atmoOff)) ||
+        if (((g_Player.Playing) && (playbackEffect == ContentEffect.StaticColor) && (!atmoOff)) ||
             ((!g_Player.Playing) && (menuEffect == ContentEffect.StaticColor) && (!atmoOff)))
         {
           dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeStatic));
@@ -1167,27 +1186,27 @@ namespace MediaPortal.ProcessPlugins.Atmolight
               switch (dlgEffect.SelectedLabel)
               {
                 case 0:
-                  currentEffect = ContentEffect.LEDsDisabled;
+                  playbackEffect = ContentEffect.LEDsDisabled;
                   DisableLEDs();
                   break;
                 case 1:
-                  currentEffect = ContentEffect.MediaPortalLiveMode;
+                  playbackEffect = ContentEffect.MediaPortalLiveMode;
                   PlaybackMode();
                   break;
                 case 2:
-                  currentEffect = ContentEffect.AtmoWinLiveMode;
+                  playbackEffect = ContentEffect.AtmoWinLiveMode;
                   PlaybackMode();
                   break;
                 case 3:
-                  currentEffect = ContentEffect.Colorchanger;
+                  playbackEffect = ContentEffect.Colorchanger;
                   PlaybackMode();
                   break;
                 case 4:
-                  currentEffect = ContentEffect.ColorchangerLR;
+                  playbackEffect = ContentEffect.ColorchangerLR;
                   PlaybackMode();
                   break;
                 case 5:
-                  currentEffect = ContentEffect.StaticColor;
+                  playbackEffect = ContentEffect.StaticColor;
                   PlaybackMode();
                   break;
               }
@@ -1393,7 +1412,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording || type == g_Player.MediaType.Unknown || (type == g_Player.MediaType.Music && filename.Contains(".mkv")))
         {
           Log.Debug("AtmoLight: Video detected.");
-          currentEffect = AtmolightSettings.effectVideo;
+          playbackEffect = AtmolightSettings.effectVideo;
         }
         else if (type == g_Player.MediaType.Music)
         {
@@ -1403,7 +1422,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           {
             AtmolightSettings.effectMusic = ContentEffect.StaticColor;
           }
-          currentEffect = AtmolightSettings.effectMusic;
+          playbackEffect = AtmolightSettings.effectMusic;
           Log.Debug("AtmoLight: Music detected.");
         }
         else if (type == g_Player.MediaType.Radio)
@@ -1414,7 +1433,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           {
             AtmolightSettings.effectRadio = ContentEffect.StaticColor;
           }
-          currentEffect = AtmolightSettings.effectRadio;
+          playbackEffect = AtmolightSettings.effectRadio;
           Log.Debug("AtmoLight: Radio detected.");
         }
 
@@ -1445,7 +1464,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// <param name="pSurface">Surface.</param>
     private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
     {
-      if (currentEffect != ContentEffect.MediaPortalLiveMode || atmoOff || atmoCtrl == null || width == 0 || height == 0)
+      if (playbackEffect != ContentEffect.MediaPortalLiveMode || atmoOff || atmoCtrl == null || width == 0 || height == 0)
       {
         return;
       }
