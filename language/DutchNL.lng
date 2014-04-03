@@ -67,4 +67,4 @@ DelayOFF=Schakel LED vertraging uit
 DelayON=Schakel LED vertraging in
 ChangeDelay=Wijzig LED vertraging
 DelayTimeErrorLine1=De waarde moet een getal zijn
-DelayTimeErrorLine2=en wel tussen de 0 en 1000.
+DelayTimeErrorLine2=tussen de 0 en 1000.
