@@ -678,10 +678,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       try
       {
         Log.Debug("AtmoLight: Disabling LEDs.");
-        if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
-        {
-          return false;
-        }
         if (!SetAtmoEffect(ComEffectMode.cemDisabled))
         {
           return false;
@@ -736,14 +732,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           break;
         case ContentEffect.Colorchanger:
           atmoOff = false;
-          if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
-          {
-            return;
-          }
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
-          {
-            return;
-          }
           if (!SetAtmoEffect(ComEffectMode.cemColorChange))
           {
             return;
@@ -751,14 +739,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           break;
         case ContentEffect.ColorchangerLR:
           atmoOff = false;
-          if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
-          {
-            return;
-          }
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
-          {
-            return;
-          }
           if (!SetAtmoEffect(ComEffectMode.cemLrColorChange))
           {
             return;
@@ -772,10 +752,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         case ContentEffect.MediaPortalLiveMode:
         case ContentEffect.StaticColor:
           atmoOff = false;
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
-          {
-            return;
-          }
           if (!SetAtmoEffect(ComEffectMode.cemDisabled))
           {
             return;
@@ -832,14 +808,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           atmoOff = false;
           getAtmoLiveViewSourceLock = true;
           setPixelDataLock = true;
-          if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
-          {
-            return;
-          }
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
-          {
-            return;
-          }
           if (!SetAtmoEffect(ComEffectMode.cemColorChange))
           {
             return;
@@ -849,14 +817,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           atmoOff = false;
           getAtmoLiveViewSourceLock = true;
           setPixelDataLock = true;
-          if (!SetAtmoEffect(ComEffectMode.cemLivePicture))
-          {
-            return;
-          }
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
-          {
-            return;
-          }
           if (!SetAtmoEffect(ComEffectMode.cemLrColorChange))
           {
             return;
@@ -890,10 +850,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           atmoOff = false;
           getAtmoLiveViewSourceLock = true;
           setPixelDataLock = true;
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI))
-          {
-            return;
-          }
           if (!SetAtmoEffect(ComEffectMode.cemDisabled))
           {
             return;
