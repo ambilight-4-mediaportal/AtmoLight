@@ -157,7 +157,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
     private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
     private int staticColorHelper; // Helper var for static color change
-    private const int timeoutComInterface = 2000; // Timeout for the COM interface
+    private const int timeoutComInterface = 5000; // Timeout for the COM interface
     private const int delaySetStaticColor = 20; // SEDU workaround delay time
     private const int delayAtmoWinConnecting = 1000; // Delay between starting AtmoWin and connection to it
     private const int delayGetAtmoLiveViewSource = 1000; // Delay between liveview source checks
