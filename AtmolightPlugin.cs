@@ -238,22 +238,14 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     {
       try
       {
-        if (atmoCtrl != null)
-        {
-          Marshal.ReleaseComObject(atmoCtrl);
-          atmoCtrl = null;
-        }
+        ReleaseAtmoControl();
         atmoCtrl = (IAtmoRemoteControl2)Marshal.GetActiveObject("AtmoRemoteControl.1");
       }
       catch (Exception ex)
       {
         Log.Error("AtmoLight: Failed to connect to AtmoWin.");
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
-        if (atmoCtrl != null)
-        {
-          Marshal.ReleaseComObject(atmoCtrl);
-        }
-        atmoCtrl = null;
+        ReleaseAtmoControl();
         return false;
       }
 
@@ -349,13 +341,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         return false;
       }
 
+      // Dont do anything if user doesnt want it.
       if (!AtmolightSettings.restartOnError && !overwriteRestartOnError)
       {
-        if (atmoCtrl != null)
-        {
-          Marshal.ReleaseComObject(atmoCtrl);
-          atmoCtrl = null;
-        }
+        ReleaseAtmoControl();
         atmoOff = true;
         DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost);
         return false;
@@ -364,19 +353,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       reInitializeLock = true;
       currentEffect = ContentEffect.Undefined;
       Log.Debug("AtmoLight: Trying to restart AtmoWin and reconnect to it.");
-      if (atmoCtrl != null)
-      {
-        Marshal.ReleaseComObject(atmoCtrl);
-        atmoCtrl = null;
-      }
+      ReleaseAtmoControl();
       if (!KillAtmoWinA() || !InitializeAtmoWinConnection())
       {
         atmoOff = true;
-        if (atmoCtrl != null)
-        {
-          Marshal.ReleaseComObject(atmoCtrl);
-          atmoCtrl = null;
-        }
+        ReleaseAtmoControl();
         reInitializeLock = false;
         Log.Error("AtmoLight: Reconnecting to AtmoWin failed.");
         DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost);
@@ -387,6 +368,18 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         StartLEDs();
         reInitializeLock = false;
         return true;
+      }
+    }
+
+    /// <summary>
+    /// Releases atmoCtrl COM Object.
+    /// </summary>
+    private void ReleaseAtmoControl()
+    {
+      if (atmoCtrl != null)
+      {
+        Marshal.ReleaseComObject(atmoCtrl);
+        atmoCtrl = null;
       }
     }
 
