@@ -340,17 +340,21 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         return false;
       }
+      reInitializeLock = true;
 
       // Dont do anything if user doesnt want it.
       if (!AtmolightSettings.restartOnError && !overwriteRestartOnError)
       {
         ReleaseAtmoControl();
         atmoOff = true;
+        reInitializeLock = false;
         DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost);
         return false;
       }
 
-      reInitializeLock = true;
+      GUIWaitCursor.Init();
+      GUIWaitCursor.Show();
+      
       currentEffect = ContentEffect.Undefined;
       Log.Debug("AtmoLight: Trying to restart AtmoWin and reconnect to it.");
       ReleaseAtmoControl();
@@ -359,6 +363,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         atmoOff = true;
         ReleaseAtmoControl();
         reInitializeLock = false;
+        GUIWaitCursor.Hide();
         Log.Error("AtmoLight: Reconnecting to AtmoWin failed.");
         DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost);
         return false;
@@ -366,6 +371,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       else
       {
         StartLEDs();
+        GUIWaitCursor.Hide();
         reInitializeLock = false;
         return true;
       }
