@@ -68,3 +68,5 @@ DelayON=Schakel LED vertraging in
 ChangeDelay=Wijzig LED vertraging
 DelayTimeErrorLine1=De waarde moet een getal zijn
 DelayTimeErrorLine2=tussen de 0 en 1000.
+ConnectLine1=Do you want to try to start
+ConnectLine2=AtmoWin and reconnect to it?

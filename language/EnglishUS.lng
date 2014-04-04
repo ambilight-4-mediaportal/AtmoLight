@@ -68,3 +68,5 @@ DelayON=Swtich LED delay on
 ChangeDelay=Change LED delay
 DelayTimeErrorLine1=The value has to be a number
 DelayTimeErrorLine2=and must be between 0 and 1000.
+ConnectLine1=Do you want to try to start
+ConnectLine2=AtmoWin and reconnect to it?

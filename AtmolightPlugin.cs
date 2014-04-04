@@ -341,7 +341,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// Disables AtmoLight if it fails and prompts the user with an error.
     /// </summary>
     /// <returns>true if successfull and false if not.</returns>
-    private bool ReInitializeAtmoWinConnection()
+    private bool ReInitializeAtmoWinConnection(bool overwriteRestartOnError = false)
     {
       // Lock is needed so we dont try to initialize while another initialize is already running.
       if (reInitializeLock)
@@ -349,7 +349,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         return false;
       }
 
-      if (!AtmolightSettings.restartOnError)
+      if (!AtmolightSettings.restartOnError && !overwriteRestartOnError)
       {
         if (atmoCtrl != null)
         {
@@ -1021,6 +1021,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
     }
 
+    /// <summary>
+    /// Prompts the user with the context menu.
+    /// </summary>
     private void DialogContextMenu()
     {
       int delayTogglePos = 4;
@@ -1317,6 +1320,31 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     }
 
     /// <summary>
+    /// Prompts the user with a Yes/No dialog.
+    /// </summary>
+    /// <param name="setLine1">String for the first line.</param>
+    /// <param name="setLine2">String for the second line.</param>
+    /// <returns>true for yes and false for no.</returns>
+    private bool DialogYesNo(string setLine1, string setLine2 = "")
+    {
+      Log.Info("AtmoLight: Opening AtmoLight Yes/No dialog.");
+
+      // Showing Yes/No dialog
+      GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
+      if (dlgYesNo != null)
+      {
+        dlgYesNo.Reset();
+        dlgYesNo.SetHeading("AtmoLight");
+        dlgYesNo.SetLine(1, setLine1);
+        dlgYesNo.SetLine(2, setLine2);
+        dlgYesNo.SetDefaultToYes(true);
+        dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
+        return dlgYesNo.IsConfirmed;
+      }
+      return false;
+    }
+
+    /// <summary>
     /// Prompts the user with a context menu to set a static color.
     /// </summary>
     /// <param name="Reset">Parameter to reset the colors.</param>
@@ -1379,12 +1407,33 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// <param name="action">Action caused by remote button press.</param>
     public void OnNewAction(MediaPortal.GUI.Library.Action action)
     {
+      // Remote Key to open Menu
+      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.menuButton == 2) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.menuButton == 1) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.menuButton == 0) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.menuButton == 3))
+      {
+        if (atmoCtrl == null)
+        {
+          if (DialogYesNo(LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2))
+          {
+            ReInitializeAtmoWinConnection(true);
+          }
+        }
+        else
+        {
+          DialogContextMenu();
+        }
+      }
+
+      // No connection
       if (atmoCtrl == null)
       {
         return;
       }
+
       // Remote Key to toggle On/Off
-      else if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.killButton == 2) ||
+      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.killButton == 2) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.killButton == 1) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.killButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.killButton == 3))
@@ -1398,6 +1447,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           DisableLEDs();
         }
       }
+
       // Remote Key to change Profiles
       else if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.profileButton == 2) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.profileButton == 1) ||
@@ -1405,14 +1455,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.profileButton == 3))
       {
         SetColorMode(ComEffectMode.cemColorMode);
-      }
-      // Remote Key to open Menu
-      else if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.menuButton == 2) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.menuButton == 1) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.menuButton == 0) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.menuButton == 3))
-      {
-        DialogContextMenu();
       }
     }
     #endregion

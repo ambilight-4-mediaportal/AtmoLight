@@ -68,3 +68,5 @@ DelayON=Délais LEDs > ON
 ChangeDelay=Modifier le délais
 DelayTimeErrorLine1=La valeur doit être un nombre
 DelayTimeErrorLine2=compris entre 0 et 1000 ms.
+ConnectLine1=Do you want to try to start
+ConnectLine2=AtmoWin and reconnect to it?
