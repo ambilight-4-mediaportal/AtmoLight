@@ -372,9 +372,14 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       if (!KillAtmoWinA() || !InitializeAtmoWinConnection())
       {
         atmoOff = true;
+        if (atmoCtrl != null)
+        {
+          Marshal.ReleaseComObject(atmoCtrl);
+          atmoCtrl = null;
+        }
+        reInitializeLock = false;
         Log.Error("AtmoLight: Reconnecting to AtmoWin failed.");
         DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost);
-        reInitializeLock = false;
         return false;
       }
       else
