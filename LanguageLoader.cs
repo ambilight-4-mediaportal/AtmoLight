@@ -240,7 +240,7 @@ namespace Language
     public String SetupForm_btnLanguageText = "Load Language";
     public String SetupForm_lblHintText = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3D-SBS mode.";
     public String SetupForm_lblFramesText = "ms between Frames";
-    public String SetupForm_lblDelay = "ms Delay";
+    public String SetupForm_lblDelay = "ms Delay at";
     public String SetupForm_lblStartText = "Start:";
     public String SetupForm_lblEndText = "End:";
     public String SetupForm_grpDeactivateText = "Deactive between...";
@@ -289,6 +289,7 @@ namespace Language
     public string ContextMenu_DelayTimeErrorLine2 = "and must be between 0 and 1000.";
     public string ContextMenu_ConnectLine1 = "Do you want to try to start";
     public string ContextMenu_ConnectLine2 = "AtmoWin and reconnect to it?";
+    public string SetupForm_lblRefreshRate = "Hz";
   }
 }
 

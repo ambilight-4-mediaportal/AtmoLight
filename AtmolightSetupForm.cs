@@ -25,7 +25,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       edExcludeStart.Text = AtmolightSettings.excludeTimeStart.ToString("HH:mm");
       edExcludeEnd.Text = AtmolightSettings.excludeTimeEnd.ToString("HH:mm");
       lowCpuTime.Text = AtmolightSettings.lowCPUTime.ToString();
-      tbDelay.Text = AtmolightSettings.delayTime.ToString();
+      tbDelay.Text = AtmolightSettings.delayReferenceTime.ToString();
+      tbRefreshRate.Text = AtmolightSettings.delayReferenceRefreshRate.ToString();
       tbRed.Text = AtmolightSettings.staticColorRed.ToString();
       tbGreen.Text = AtmolightSettings.staticColorGreen.ToString();
       tbBlue.Text = AtmolightSettings.staticColorBlue.ToString();
@@ -130,6 +131,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       lblBlue.Text = LanguageLoader.appStrings.SetupForm_lblBlue;
       lblMenuButton.Text = LanguageLoader.appStrings.SetupForm_lblMenuButton;
       ckRestartOnError.Text = LanguageLoader.appStrings.SetupForm_ckRestartOnError;
+      lblRefreshRate.Text = LanguageLoader.appStrings.SetupForm_lblRefreshRate;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -187,6 +189,13 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           return;
       }
 
+      int cRefreshRate;
+      if (!int.TryParse(tbRefreshRate.Text, out cRefreshRate) || cRefreshRate < 0)
+      {
+        MessageBox.Show("You have to enter a valid number of Hz", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       int StaticColorRed, StaticColorGreen, StaticColorBlue;
       if ((!int.TryParse(tbRed.Text, out StaticColorRed)) || (StaticColorRed < 0 || StaticColorRed > 255))
       {
@@ -216,7 +225,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       AtmolightSettings.staticColorGreen = StaticColorGreen;
       AtmolightSettings.staticColorBlue = StaticColorBlue;
       AtmolightSettings.lowCPUTime = cTime;
-      AtmolightSettings.delayTime = cDelay;
+      AtmolightSettings.delayReferenceTime = cDelay;
+      AtmolightSettings.delayReferenceRefreshRate = cRefreshRate;
       AtmolightSettings.excludeTimeEnd = dt2;
       AtmolightSettings.atmowinExe = edFile.Text;
       AtmolightSettings.effectVideo = (ContentEffect)cbVideo.SelectedIndex;

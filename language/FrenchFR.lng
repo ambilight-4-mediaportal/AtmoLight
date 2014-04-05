@@ -31,6 +31,7 @@ lblMenuButton=Menu par Télécommande :
 ckDelay=LED Délais
 lblDelay=ms Délais
 ckRestartOnError=Relancé Atmowin et la Connexion sur Erreur.
+lblRefreshRate=Hz
 [ContextMenu]
 SwitchLEDsON=LEDs > ON
 SwitchLEDsOFF=LEDs > OFF

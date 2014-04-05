@@ -29,8 +29,9 @@ lblGreen=Green:
 lblBlue=Blue:
 lblMenuButton=Menu Remote Button:
 ckDelay=LED Delay
-lblDelay=ms Delay
+lblDelay=ms Delay at
 ckRestartOnError=Restart AtmoWin and Connection on Error
+lblRefreshRate=Hz
 [ContextMenu]
 SwitchLEDsON=Switch LEDs on
 SwitchLEDsOFF=Switch LEDs off

@@ -167,6 +167,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private bool onRestartAtmoWin = false; // Need to be set only after the first start of plugin
     private ComLiveViewSource atmoLiveViewSource; // Current liveview source
     private int delayTimeHelper; // Helper var for delay time change
+    private int delayRefreshRateDependant; // Variable that hold the actual delay
     #endregion
 
     #region Initialize AtmoLight
@@ -682,6 +683,15 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     #region Control LEDs
     /// <summary>
+    /// Returns the current refresh rate.
+    /// </summary>
+    /// <returns>Current refresh rate.</returns>
+    private int GetRefreshRate()
+    {
+      return Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].CurrentDisplayMode.RefreshRate;
+    }
+
+    /// <summary>
     /// Sets the AtmoWin effect to disabled and sets the color of the leds to black.
     /// </summary>
     /// <returns>true if successfull and false if not.</returns>
@@ -863,7 +873,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           }
           if (AtmolightSettings.delay)
           {
-            Log.Debug("AtmoLight: Adding {0}ms delay to the LEDs.", AtmolightSettings.delayTime.ToString());
+            delayRefreshRateDependant = (int)(((float)AtmolightSettings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)AtmolightSettings.delayReferenceTime);
+            Log.Debug("AtmoLight: Adding {0}ms delay to the LEDs.", delayRefreshRateDependant);
           }
           atmoOff = false;
           getAtmoLiveViewSourceLock = false;
@@ -964,7 +975,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         if (AtmolightSettings.delay)
         {
-          System.Threading.Thread.Sleep(AtmolightSettings.delayTime);
+          System.Threading.Thread.Sleep(delayRefreshRateDependant);
         }
         if (g_Player.Playing && !setPixelDataLock && !atmoOff && !reInitializeLock)
         {
@@ -1104,7 +1115,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         // Change Delay
         if (AtmolightSettings.delay)
         {
-          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + AtmolightSettings.delayTime + "ms)"));
+          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + delayRefreshRateDependant + "ms)"));
           staticColorPos++;
         }
         else
@@ -1254,6 +1265,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
           Log.Info("AtmoLight: Switching LED delay on.");
           AtmolightSettings.delay = true;
+          delayRefreshRateDependant = (int)(((float)AtmolightSettings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)AtmolightSettings.delayReferenceTime);
+          Log.Debug("AtmoLight: Adding {0}ms delay to the LEDs.", delayRefreshRateDependant);
         }
       }
       else if ((dlg.SelectedLabel == delayChangePos) && (delayChangePos != -1))
@@ -1261,7 +1274,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) && (delayTimeHelper <= 1000))
         {
           Log.Info("AtmoLight: Changing LED delay to {0}ms.", delayTimeHelper);
-          AtmolightSettings.delayTime = delayTimeHelper;
+          delayRefreshRateDependant = delayTimeHelper;
+          AtmolightSettings.delayReferenceTime = (int)(((float)delayRefreshRateDependant * (float)GetRefreshRate()) / AtmolightSettings.delayReferenceRefreshRate);
+          //AtmolightSettings.SaveSpecificSetting("delayTime", AtmolightSettings.delayReferenceTime.ToString());
         }
         else
         {

@@ -32,7 +32,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     public static bool lowCPU = false;
     public static int lowCPUTime = 0;
     public static bool delay = false;
-    public static int delayTime = 0;
+    public static int delayReferenceTime = 0;
+    public static int delayReferenceRefreshRate = 0;
     public static bool startAtmoWin = true;
     public static bool exitAtmoWin = true;
     public static DateTime excludeTimeStart;
@@ -73,13 +74,14 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         lowCPU = reader.GetValueAsBool("atmolight", "lowCPU", false);
         lowCPUTime = reader.GetValueAsInt("atmolight", "lowCPUTime", 0);
         delay = reader.GetValueAsBool("atmolight", "Delay", false);
-        delayTime = reader.GetValueAsInt("atmolight", "DelayTime", 0);
+        delayReferenceTime = reader.GetValueAsInt("atmolight", "DelayTime", 0);
         exitAtmoWin = reader.GetValueAsBool("atmolight", "ExitAtmoWin", true);
         startAtmoWin = reader.GetValueAsBool("atmolight", "StartAtmoWin", true);
         staticColorRed = reader.GetValueAsInt("atmolight", "StaticColorRed", 0);
         staticColorGreen = reader.GetValueAsInt("atmolight", "StaticColorGreen", 0);
         staticColorBlue = reader.GetValueAsInt("atmolight", "StaticColorBlue", 0);
         restartOnError = reader.GetValueAsBool("atmolight", "RestartOnError", true);
+        delayReferenceRefreshRate = reader.GetValueAsInt("atmolight", "DelayRefreshRate", 50);
       }
     }
     public static void SaveSettings()
@@ -100,7 +102,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         reader.SetValueAsBool("atmolight", "lowCPU", lowCPU);
         reader.SetValue("atmolight", "lowCPUTime", lowCPUTime);
         reader.SetValueAsBool("atmolight", "Delay", delay);
-        reader.SetValue("atmolight", "DelayTime", delayTime);
+        reader.SetValue("atmolight", "DelayTime", delayReferenceTime);
         reader.SetValueAsBool("atmolight", "ExitAtmoWin", exitAtmoWin);
         reader.SetValueAsBool("atmolight", "StartAtmoWin", startAtmoWin);
         reader.SetValueAsBool("atmolight", "enableInternalLiveView", enableInternalLiveView);
@@ -111,6 +113,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         reader.SetValue("atmolight", "StaticColorGreen", staticColorGreen);
         reader.SetValue("atmolight", "StaticColorBlue", staticColorBlue);
         reader.SetValueAsBool("atmolight", "RestartOnError", restartOnError);
+        reader.SetValue("atmolight", "DelayRefreshRate", delayReferenceRefreshRate);
       }
     }
 

@@ -60,6 +60,7 @@
       this.lblStart = new System.Windows.Forms.Label();
       this.lblHint = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
+      this.ckRestartOnError = new System.Windows.Forms.CheckBox();
       this.lblDelay = new System.Windows.Forms.Label();
       this.tbDelay = new System.Windows.Forms.TextBox();
       this.ckDelay = new System.Windows.Forms.CheckBox();
@@ -79,7 +80,8 @@
       this.lblVersionVal = new System.Windows.Forms.Label();
       this.btnLanguage = new System.Windows.Forms.Button();
       this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-      this.ckRestartOnError = new System.Windows.Forms.CheckBox();
+      this.tbRefreshRate = new System.Windows.Forms.TextBox();
+      this.lblRefreshRate = new System.Windows.Forms.Label();
       this.grpMPClose.SuspendLayout();
       this.grpMode.SuspendLayout();
       this.grpStaticColor.SuspendLayout();
@@ -415,6 +417,8 @@
       // 
       // grpPluginOption
       // 
+      this.grpPluginOption.Controls.Add(this.lblRefreshRate);
+      this.grpPluginOption.Controls.Add(this.tbRefreshRate);
       this.grpPluginOption.Controls.Add(this.ckRestartOnError);
       this.grpPluginOption.Controls.Add(this.lblDelay);
       this.grpPluginOption.Controls.Add(this.tbDelay);
@@ -438,18 +442,30 @@
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
       // 
+      // ckRestartOnError
+      // 
+      this.ckRestartOnError.AutoSize = true;
+      this.ckRestartOnError.Checked = true;
+      this.ckRestartOnError.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.ckRestartOnError.Location = new System.Drawing.Point(13, 208);
+      this.ckRestartOnError.Name = "ckRestartOnError";
+      this.ckRestartOnError.Size = new System.Drawing.Size(224, 17);
+      this.ckRestartOnError.TabIndex = 25;
+      this.ckRestartOnError.Text = "Restart AtmoWin and Connection on Error";
+      this.ckRestartOnError.UseVisualStyleBackColor = true;
+      // 
       // lblDelay
       // 
       this.lblDelay.AutoSize = true;
-      this.lblDelay.Location = new System.Drawing.Point(165, 139);
+      this.lblDelay.Location = new System.Drawing.Point(143, 139);
       this.lblDelay.Name = "lblDelay";
-      this.lblDelay.Size = new System.Drawing.Size(50, 13);
+      this.lblDelay.Size = new System.Drawing.Size(62, 13);
       this.lblDelay.TabIndex = 24;
-      this.lblDelay.Text = "ms Delay";
+      this.lblDelay.Text = "ms Delay at";
       // 
       // tbDelay
       // 
-      this.tbDelay.Location = new System.Drawing.Point(118, 136);
+      this.tbDelay.Location = new System.Drawing.Point(96, 136);
       this.tbDelay.Name = "tbDelay";
       this.tbDelay.Size = new System.Drawing.Size(41, 20);
       this.tbDelay.TabIndex = 23;
@@ -540,7 +556,7 @@
       // lblFrames
       // 
       this.lblFrames.AutoSize = true;
-      this.lblFrames.Location = new System.Drawing.Point(165, 116);
+      this.lblFrames.Location = new System.Drawing.Point(143, 116);
       this.lblFrames.Name = "lblFrames";
       this.lblFrames.Size = new System.Drawing.Size(101, 13);
       this.lblFrames.TabIndex = 15;
@@ -548,7 +564,7 @@
       // 
       // lowCpuTime
       // 
-      this.lowCpuTime.Location = new System.Drawing.Point(118, 113);
+      this.lowCpuTime.Location = new System.Drawing.Point(96, 113);
       this.lowCpuTime.MaxLength = 4;
       this.lowCpuTime.Name = "lowCpuTime";
       this.lowCpuTime.Size = new System.Drawing.Size(41, 20);
@@ -633,17 +649,22 @@
       // 
       this.openFileDialog2.Filter = "files|*.lng";
       // 
-      // ckRestartOnError
+      // tbRefreshRate
       // 
-      this.ckRestartOnError.AutoSize = true;
-      this.ckRestartOnError.Checked = true;
-      this.ckRestartOnError.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckRestartOnError.Location = new System.Drawing.Point(13, 208);
-      this.ckRestartOnError.Name = "ckRestartOnError";
-      this.ckRestartOnError.Size = new System.Drawing.Size(224, 17);
-      this.ckRestartOnError.TabIndex = 25;
-      this.ckRestartOnError.Text = "Restart AtmoWin and Connection on Error";
-      this.ckRestartOnError.UseVisualStyleBackColor = true;
+      this.tbRefreshRate.Location = new System.Drawing.Point(211, 136);
+      this.tbRefreshRate.Name = "tbRefreshRate";
+      this.tbRefreshRate.Size = new System.Drawing.Size(41, 20);
+      this.tbRefreshRate.TabIndex = 26;
+      this.tbRefreshRate.Text = "50";
+      // 
+      // lblRefreshRate
+      // 
+      this.lblRefreshRate.AutoSize = true;
+      this.lblRefreshRate.Location = new System.Drawing.Point(258, 139);
+      this.lblRefreshRate.Name = "lblRefreshRate";
+      this.lblRefreshRate.Size = new System.Drawing.Size(20, 13);
+      this.lblRefreshRate.TabIndex = 27;
+      this.lblRefreshRate.Text = "Hz";
       // 
       // AtmolightSetupForm
       // 
@@ -736,5 +757,7 @@
     private System.Windows.Forms.TextBox tbDelay;
     private System.Windows.Forms.CheckBox ckDelay;
     private System.Windows.Forms.CheckBox ckRestartOnError;
+    private System.Windows.Forms.Label lblRefreshRate;
+    private System.Windows.Forms.TextBox tbRefreshRate;
   }
 }
