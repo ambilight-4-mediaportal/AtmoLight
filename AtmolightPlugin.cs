@@ -144,6 +144,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region Variables
+    private bool atmoLightPluginStarted = false; // State of the plugin
     public bool atmoOff = true; // State of the LEDs
     public Int64 lastFrame = 0; // Tick count of the last frame
     private IAtmoRemoteControl2 atmoCtrl = null; // Com Object to control AtmoWin
@@ -167,7 +168,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private bool onRestartAtmoWin = false; // Need to be set only after the first start of plugin
     private ComLiveViewSource atmoLiveViewSource; // Current liveview source
     private int delayTimeHelper; // Helper var for delay time change
-    private int delayRefreshRateDependant; // Variable that hold the actual delay
+    private int delayRefreshRateDependant; // Variable that holds the actual delay
     #endregion
 
     #region Initialize AtmoLight
@@ -418,7 +419,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     {
       if (atmoCtrl != null)
       {
-        Log.Debug("AtmoLight: Plugin started.");
+        Log.Debug("AtmoLight: Initializing Event Handler.");
 
         g_Player.PlayBackStarted += new g_Player.StartedHandler(g_Player_PlayBackStarted);
         g_Player.PlayBackStopped += new g_Player.StoppedHandler(g_Player_PlayBackStopped);
@@ -448,9 +449,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
           DisableLEDs();
         }
-
-        GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
+        atmoLightPluginStarted = true;
       }
+      GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
     }
 
     /// <summary>
@@ -1457,7 +1458,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
           if (DialogYesNo(LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2))
           {
-            ReInitializeAtmoWinConnection(true);
+            if (ReInitializeAtmoWinConnection(true) && !atmoLightPluginStarted)
+            {
+              Start();
+            }
           }
         }
         else
