@@ -164,6 +164,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private bool reInitializeLock = false; // Lock for the reinitialization process
     private bool getAtmoLiveViewSourceLock = true; // Lock for liveview source checks
     private bool setPixelDataLock = true; // Lock for SetPixelData thread
+    private bool onRestartAtmoWin = false; // Need to be set only after the first start of plugin
     private ComLiveViewSource atmoLiveViewSource; // Current liveview source
     private int delayTimeHelper; // Helper var for delay time change
     #endregion
@@ -219,7 +220,27 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           if (Win32API.IsProcessRunning("atmowina.exe"))
           {
             Log.Debug("AtmoLight: AtmoWinA is running.");
+            onRestartAtmoWin = true;
             return ConnectToAtmoWinA();
+          }
+          else if (AtmolightSettings.restartOnError && onRestartAtmoWin)
+          {
+            Log.Debug("AtmoLight: Checking if AtmoWinA.exe is running.");
+            if (!Win32API.IsProcessRunning("atmowina.exe"))
+            {
+              Log.Debug("AtmoLight: AtmoWinA.exe not running. Starting it.");
+              if (StartAtmoWinA())
+              {
+                // Wait 1 second before trying to connect.
+                System.Threading.Thread.Sleep(delayAtmoWinConnecting);
+                return ConnectToAtmoWinA();
+              }
+            }
+            else
+            {
+              Log.Debug("AtmoLight: AtmoWinA is allready running.");
+              return ConnectToAtmoWinA();
+            }
           }
           else
           {
@@ -925,6 +946,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region Threads
+
     /// <summary>
     /// Sends pixel data to AtmoWin when MediaPortal liveview is used (external liveview source).
     /// Also adds a delay if specified in settings.
@@ -934,6 +956,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// <param name="pixelData">Pixel data.</param>
     private void SetPixelDataThread(byte[] bmiInfoHeader, byte[] pixelData)
     {
+      if (atmoCtrl == null)
+      {
+        return;
+      }
       try
       {
         if (AtmolightSettings.delay)
@@ -942,7 +968,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         if (g_Player.Playing && !setPixelDataLock && !atmoOff && !reInitializeLock)
         {
-          TimeoutHandler(() => atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData));
+            atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
         }
       }
       catch (Exception ex)
