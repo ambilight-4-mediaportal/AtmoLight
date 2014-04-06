@@ -1,0 +1,749 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExtensionCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Items>
+    <PackageClass>
+      <Version>2.0</Version>
+      <Groups>
+        <Items>
+          <GroupItem Name="Plugin Files">
+            <DisplayName>Plugin Files</DisplayName>
+            <DefaulChecked>true</DefaulChecked>
+            <Description>Plugin Files</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+          <GroupItem Name="ExtensionsPlugin">
+            <DisplayName>ExtensionsPlugin</DisplayName>
+            <DefaulChecked>false</DefaulChecked>
+            <Description>ExtensionsPlugin</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+        </Items>
+      </Groups>
+      <Sections>
+        <Items />
+      </Sections>
+      <Dependencies>
+        <Items>
+          <DependencyItem>
+            <Type>MediaPortal</Type>
+            <Id />
+            <MinVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MinVersion>
+            <MaxVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MaxVersion>
+            <WarnOnly>false</WarnOnly>
+            <Message>requires MediaPortal version 1.1.6.27644 to 1.1.6.27644.</Message>
+            <Name>MediaPortal</Name>
+          </DependencyItem>
+        </Items>
+      </Dependencies>
+      <PluginDependencies>
+        <Items />
+      </PluginDependencies>
+      <GeneralInfo>
+        <Name>AtmoLight</Name>
+        <Id>8d2c6d9d-03c8-4144-b0b8-85e3a2b0e001</Id>
+        <Author>gemx (plugin) / Angie05 (plugin,Atmowin), RickDB (Atmoduino), legnod (installer), azzuro (Teensy)</Author>
+        <HomePage>https://code.google.com/p/ambilight-4-mediaportal/</HomePage>
+        <ForumPage>http://forum.team-mediaportal.com/threads/new-plugin-atmolight-process-plugin-update-25-05-2010-v1-9.75840/</ForumPage>
+        <UpdateUrl>http://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/Atmolight_update.xml</UpdateUrl>
+        <Version>
+          <Major>1</Major>
+          <Minor>0</Minor>
+          <Build>19016</Build>
+          <Revision>0</Revision>
+        </Version>
+        <ExtensionDescription>Plugin for using AtmoWin Ambilight Software with MediaPortal. No need to switch AERO off anymore! 
+
+
+
+AtmoLight needs an additional plugin (MPCoreChanger &amp; Atmowin) which will be installed/updated automatically while installing!!! </ExtensionDescription>
+        <VersionDescription>Version 1.1.19016.0
+
+
+
+	- Installer changes: 
+
+* Atmowin splitted to own installers (for easy update)
+
+		
+
+
+
+	- Plugin updated to 19016 :
+
+*  processus times is slowdown for reduce CPU usage</VersionDescription>
+        <DevelopmentStatus>Stable</DevelopmentStatus>
+        <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.0.19016.0.mpe1</OnlineLocation>
+        <ReleaseDate>2013-08-25T10:45:58</ReleaseDate>
+        <Tags>sedu-board, atmowin, ws2801, ambilight, teensy 2, atmoduino, ambilight, led</Tags>
+        <Location>..\..\MPEI Release\Atmolight\[Name]_[Version].mpe1</Location>
+        <Params>
+          <Items>
+            <SectionParam Name="Online Icon">
+              <Value>http://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/image/atmolight.png</Value>
+              <ValueType>String</ValueType>
+              <Description>The icon file of the package stored online (jpg,png,bmp)</Description>
+            </SectionParam>
+            <SectionParam Name="Configuration file">
+              <Value>%Plugins%\process\Atmolight.dll</Value>
+              <ValueType>Template</ValueType>
+              <Description>The file used to configure the extension.
+ If it has .exe extension the will be executed.
+ If it has .dll extension it's started like MP plugin configuration.</Description>
+            </SectionParam>
+            <SectionParam Name="Online Screenshots">
+              <Value />
+              <ValueType>String</ValueType>
+              <Description>Online stored screenshot urls separated by ; </Description>
+            </SectionParam>
+            <SectionParam Name="Force to uninstall on update">
+              <Value>YES</Value>
+              <ValueType>Bool</ValueType>
+              <Description>Show dialog and force to uninstall previous version when updating an extension. Should only be disabled if you are using an NSIS/MSI installer.</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+      </GeneralInfo>
+      <UniqueFileList>
+        <Items />
+      </UniqueFileList>
+      <ProjectSettings>
+        <FolderGroups />
+      </ProjectSettings>
+      <IsSkin>false</IsSkin>
+    </PackageClass>
+    <PackageClass>
+      <Version>2.0</Version>
+      <Groups>
+        <Items>
+          <GroupItem Name="Plugin Files">
+            <DisplayName>Plugin Files</DisplayName>
+            <DefaulChecked>true</DefaulChecked>
+            <Description>Plugin Files</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+          <GroupItem Name="ExtensionsPlugin">
+            <DisplayName>ExtensionsPlugin</DisplayName>
+            <DefaulChecked>false</DefaulChecked>
+            <Description>ExtensionsPlugin</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+        </Items>
+      </Groups>
+      <Sections>
+        <Items />
+      </Sections>
+      <Dependencies>
+        <Items>
+          <DependencyItem>
+            <Type>MediaPortal</Type>
+            <Id />
+            <MinVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MinVersion>
+            <MaxVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MaxVersion>
+            <WarnOnly>false</WarnOnly>
+            <Message>requires MediaPortal version 1.1.6.27644 to 1.1.6.27644.</Message>
+            <Name>MediaPortal</Name>
+          </DependencyItem>
+        </Items>
+      </Dependencies>
+      <PluginDependencies>
+        <Items />
+      </PluginDependencies>
+      <GeneralInfo>
+        <Name>AtmoLight</Name>
+        <Id>8d2c6d9d-03c8-4144-b0b8-85e3a2b0e001</Id>
+        <Author>gemx (plugin) / Angie05 (plugin,Atmowin), RickDB (Atmoduino), legnod (installer), azzuro (Teensy)</Author>
+        <HomePage>https://code.google.com/p/ambilight-4-mediaportal/</HomePage>
+        <ForumPage>http://forum.team-mediaportal.com/threads/new-plugin-atmolight-process-plugin-update-25-05-2010-v1-9.75840/</ForumPage>
+        <UpdateUrl>http://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/Atmolight_update.xml</UpdateUrl>
+        <Version>
+          <Major>1</Major>
+          <Minor>0</Minor>
+          <Build>19017</Build>
+          <Revision>1</Revision>
+        </Version>
+        <ExtensionDescription>Plugin for using AtmoWin Ambilight Software with MediaPortal. No need to switch AERO off anymore! 
+
+
+
+AtmoLight needs an additional plugin (MPCoreChanger &amp; Atmowin) which will be installed/updated automatically while installing!!! </ExtensionDescription>
+        <VersionDescription>Version 1.1.19017.1
+
+angie05 rework alpha fix 09
+
+thanks to him. </VersionDescription>
+        <DevelopmentStatus>Stable</DevelopmentStatus>
+        <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.0.19017.1.mpe1</OnlineLocation>
+        <ReleaseDate>2014-02-23T10:45:58</ReleaseDate>
+        <Tags>sedu-board, atmowin, ws2801, ambilight, teensy 2, atmoduino, ambilight, led</Tags>
+        <Location>..\..\MPEI Release\Atmolight\[Name]_[Version].mpe1</Location>
+        <Params>
+          <Items>
+            <SectionParam Name="Online Icon">
+              <Value>http://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/image/atmolight.png</Value>
+              <ValueType>String</ValueType>
+              <Description>The icon file of the package stored online (jpg,png,bmp)</Description>
+            </SectionParam>
+            <SectionParam Name="Configuration file">
+              <Value>%Plugins%\process\Atmolight.dll</Value>
+              <ValueType>Template</ValueType>
+              <Description>The file used to configure the extension.
+ If it has .exe extension the will be executed.
+ If it has .dll extension it's started like MP plugin configuration.</Description>
+            </SectionParam>
+            <SectionParam Name="Online Screenshots">
+              <Value />
+              <ValueType>String</ValueType>
+              <Description>Online stored screenshot urls separated by ; </Description>
+            </SectionParam>
+            <SectionParam Name="Force to uninstall on update">
+              <Value>YES</Value>
+              <ValueType>Bool</ValueType>
+              <Description>Show dialog and force to uninstall previous version when updating an extension. Should only be disabled if you are using an NSIS/MSI installer.</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+      </GeneralInfo>
+      <UniqueFileList>
+        <Items />
+      </UniqueFileList>
+      <ProjectSettings>
+        <FolderGroups />
+      </ProjectSettings>
+      <IsSkin>false</IsSkin>
+    </PackageClass>
+    <PackageClass>
+      <Version>2.0</Version>
+      <Groups>
+        <Items>
+          <GroupItem Name="Plugin Files">
+            <DisplayName>Plugin Files</DisplayName>
+            <DefaulChecked>true</DefaulChecked>
+            <Description>Plugin Files</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+          <GroupItem Name="ExtensionsPlugin">
+            <DisplayName>ExtensionsPlugin</DisplayName>
+            <DefaulChecked>false</DefaulChecked>
+            <Description>ExtensionsPlugin</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+        </Items>
+      </Groups>
+      <Sections>
+        <Items />
+      </Sections>
+      <Dependencies>
+        <Items>
+          <DependencyItem>
+            <Type>MediaPortal</Type>
+            <Id />
+            <MinVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MinVersion>
+            <MaxVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MaxVersion>
+            <WarnOnly>false</WarnOnly>
+            <Message>requires MediaPortal version 1.1.6.27644 to 1.1.6.27644.</Message>
+            <Name>MediaPortal</Name>
+          </DependencyItem>
+        </Items>
+      </Dependencies>
+      <PluginDependencies>
+        <Items />
+      </PluginDependencies>
+      <GeneralInfo>
+        <Name>AtmoLight</Name>
+        <Id>8d2c6d9d-03c8-4144-b0b8-85e3a2b0e001</Id>
+        <Author>gemx (plugin) / Angie05 (plugin,Atmowin), RickDB (Atmoduino), legnod (installer), azzuro (Teensy)</Author>
+        <HomePage>https://code.google.com/p/ambilight-4-mediaportal/</HomePage>
+        <ForumPage>http://forum.team-mediaportal.com/threads/new-plugin-atmolight-process-plugin-update-25-05-2010-v1-9.75840/</ForumPage>
+        <UpdateUrl>https://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/Atmolight_update.xml</UpdateUrl>
+        <Version>
+          <Major>1</Major>
+          <Minor>0</Minor>
+          <Build>19019</Build>
+          <Revision>0</Revision>
+        </Version>
+        <ExtensionDescription>Plugin for using AtmoWin Ambilight Software with MediaPortal. No need to switch AERO off anymore! 
+
+
+
+AtmoLight needs an additional plugin (MPCoreChanger &amp; Atmowin) which will be installed/updated automatically while installing!!! </ExtensionDescription>
+        <VersionDescription>Version 1.1.19019.0
+
+BassFan add :
+1.Change DropDown to DropDownList so do not can rename any from the List.
+2.Checking for Disable/Enable state from Configuration.exe
+3.Add Start and Exit Option to Config Dialog.
+4.Add Versions-Info to Config Dialog
+5.fixed Windowsize of Config Dialog
+6.Moved to lates version from angie05 to
+7.Use latest AtmoWinA from angie05 to
+8.Add check for use the right Filename do for OpenFileDialog</VersionDescription>
+        <DevelopmentStatus>Stable</DevelopmentStatus>
+        <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.0.19019.0.mpe1</OnlineLocation>
+        <ReleaseDate>2014-02-24T10:45:58</ReleaseDate>
+        <Tags>sedu-board, atmowin, ws2801, ambilight, teensy 2, atmoduino, ambilight, led</Tags>
+        <Location>..\..\MPEI Release\Atmolight\[Name]_[Version].mpe1</Location>
+        <Params>
+          <Items>
+            <SectionParam Name="Online Icon">
+              <Value>http://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/image/atmolight.png</Value>
+              <ValueType>String</ValueType>
+              <Description>The icon file of the package stored online (jpg,png,bmp)</Description>
+            </SectionParam>
+            <SectionParam Name="Configuration file">
+              <Value>%Plugins%\process\Atmolight.dll</Value>
+              <ValueType>Template</ValueType>
+              <Description>The file used to configure the extension.
+ If it has .exe extension the will be executed.
+ If it has .dll extension it's started like MP plugin configuration.</Description>
+            </SectionParam>
+            <SectionParam Name="Online Screenshots">
+              <Value />
+              <ValueType>String</ValueType>
+              <Description>Online stored screenshot urls separated by ; </Description>
+            </SectionParam>
+            <SectionParam Name="Force to uninstall on update">
+              <Value>YES</Value>
+              <ValueType>Bool</ValueType>
+              <Description>Show dialog and force to uninstall previous version when updating an extension. Should only be disabled if you are using an NSIS/MSI installer.</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+      </GeneralInfo>
+      <UniqueFileList>
+        <Items />
+      </UniqueFileList>
+      <ProjectSettings>
+        <FolderGroups />
+      </ProjectSettings>
+      <IsSkin>false</IsSkin>
+    </PackageClass>
+    <PackageClass>
+      <Version>2.0</Version>
+      <Groups>
+        <Items>
+          <GroupItem Name="Plugin Files">
+            <DisplayName>Plugin Files</DisplayName>
+            <DefaulChecked>true</DefaulChecked>
+            <Description>Plugin Files</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+          <GroupItem Name="ExtensionsPlugin">
+            <DisplayName>ExtensionsPlugin</DisplayName>
+            <DefaulChecked>false</DefaulChecked>
+            <Description>ExtensionsPlugin</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+          <GroupItem Name="Language files">
+            <DisplayName>Language files</DisplayName>
+            <DefaulChecked>true</DefaulChecked>
+            <Description>Language files</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+        </Items>
+      </Groups>
+      <Sections>
+        <Items />
+      </Sections>
+      <Dependencies>
+        <Items>
+          <DependencyItem>
+            <Type>MediaPortal</Type>
+            <Id />
+            <MinVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MinVersion>
+            <MaxVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MaxVersion>
+            <WarnOnly>false</WarnOnly>
+            <Message>requires MediaPortal version 1.1.6.27644 to 1.1.6.27644.</Message>
+            <Name>MediaPortal</Name>
+          </DependencyItem>
+        </Items>
+      </Dependencies>
+      <PluginDependencies>
+        <Items />
+      </PluginDependencies>
+      <GeneralInfo>
+        <Name>AtmoLight</Name>
+        <Id>8d2c6d9d-03c8-4144-b0b8-85e3a2b0e001</Id>
+        <Author>gemx (plugin) / Angie05 (plugin,Atmowin), RickDB (Atmoduino), legnod (installer), azzuro (Teensy)</Author>
+        <HomePage>https://code.google.com/p/ambilight-4-mediaportal/</HomePage>
+        <ForumPage>http://forum.team-mediaportal.com/threads/new-plugin-atmolight-process-plugin-update-25-05-2010-v1-9.75840/</ForumPage>
+        <UpdateUrl>https://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/Atmolight_update.xml</UpdateUrl>
+        <Version>
+          <Major>1</Major>
+          <Minor>0</Minor>
+          <Build>19020</Build>
+          <Revision>0</Revision>
+        </Version>
+        <ExtensionDescription>Plugin for using AtmoWin Ambilight Software with MediaPortal. No need to switch AERO off anymore! 
+
+
+
+AtmoLight needs an additional plugin :
+Atmowin : which will be installed/updated automatically while installing!!! 
+
+MPCoreChanger  : MediaPortal 1.5 or older
+Since MediaPortal 1.6 : Change are available in Official build. </ExtensionDescription>
+        <VersionDescription>Version 1.1.19020.0
+
+BassFan add :
+add language file for Atmolight configuration. </VersionDescription>
+        <DevelopmentStatus>Stable</DevelopmentStatus>
+        <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.0.19020.0.mpe1</OnlineLocation>
+        <ReleaseDate>2014-02-26T10:45:58</ReleaseDate>
+        <Tags>sedu-board, atmowin, ws2801, ambilight, teensy 2, atmoduino, ambilight, led</Tags>
+        <Location>..\..\MPEI Release\Atmolight\[Name]_[Version].mpe1</Location>
+        <Params>
+          <Items>
+            <SectionParam Name="Online Icon">
+              <Value>http://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/image/atmolight.png</Value>
+              <ValueType>String</ValueType>
+              <Description>The icon file of the package stored online (jpg,png,bmp)</Description>
+            </SectionParam>
+            <SectionParam Name="Configuration file">
+              <Value />
+              <ValueType>Template</ValueType>
+              <Description>The file used to configure the extension.
+ If it has .exe extension the will be executed.
+ If it has .dll extension it's started like MP plugin configuration.</Description>
+            </SectionParam>
+            <SectionParam Name="Online Screenshots">
+              <Value />
+              <ValueType>String</ValueType>
+              <Description>Online stored screenshot urls separated by ; </Description>
+            </SectionParam>
+            <SectionParam Name="Force to uninstall on update">
+              <Value>YES</Value>
+              <ValueType>Bool</ValueType>
+              <Description>Show dialog and force to uninstall previous version when updating an extension. Should only be disabled if you are using an NSIS/MSI installer.</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+      </GeneralInfo>
+      <UniqueFileList>
+        <Items />
+      </UniqueFileList>
+      <ProjectSettings>
+        <FolderGroups />
+      </ProjectSettings>
+      <IsSkin>false</IsSkin>
+    </PackageClass>
+    <PackageClass>
+      <Version>2.0</Version>
+      <Groups>
+        <Items>
+          <GroupItem Name="Plugin Files">
+            <DisplayName>Plugin Files</DisplayName>
+            <DefaulChecked>true</DefaulChecked>
+            <Description>Plugin Files</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+          <GroupItem Name="ExtensionsPlugin">
+            <DisplayName>ExtensionsPlugin</DisplayName>
+            <DefaulChecked>false</DefaulChecked>
+            <Description>ExtensionsPlugin</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+          <GroupItem Name="Language files">
+            <DisplayName>Language files</DisplayName>
+            <DefaulChecked>true</DefaulChecked>
+            <Description>Language files</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+        </Items>
+      </Groups>
+      <Sections>
+        <Items />
+      </Sections>
+      <Dependencies>
+        <Items>
+          <DependencyItem>
+            <Type>MediaPortal</Type>
+            <Id />
+            <MinVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MinVersion>
+            <MaxVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MaxVersion>
+            <WarnOnly>false</WarnOnly>
+            <Message>requires MediaPortal version 1.1.6.27644 to 1.1.6.27644.</Message>
+            <Name>MediaPortal</Name>
+          </DependencyItem>
+        </Items>
+      </Dependencies>
+      <PluginDependencies>
+        <Items />
+      </PluginDependencies>
+      <GeneralInfo>
+        <Name>AtmoLight</Name>
+        <Id>8d2c6d9d-03c8-4144-b0b8-85e3a2b0e001</Id>
+        <Author>gemx (plugin) / Angie05 (plugin,Atmowin), RickDB (Atmoduino), legnod (installer), azzuro (Teensy)</Author>
+        <HomePage>https://code.google.com/p/ambilight-4-mediaportal/</HomePage>
+        <ForumPage>http://forum.team-mediaportal.com/threads/new-plugin-atmolight-process-plugin-update-25-05-2010-v1-9.75840/</ForumPage>
+        <UpdateUrl>https://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/Atmolight_update.xml</UpdateUrl>
+        <Version>
+          <Major>1</Major>
+          <Minor>0</Minor>
+          <Build>19020</Build>
+          <Revision>1</Revision>
+        </Version>
+        <ExtensionDescription>Plugin for using AtmoWin Ambilight Software with MediaPortal. No need to switch AERO off anymore! 
+
+
+
+AtmoLight needs an additional plugin :
+Atmowin : which will be installed/updated automatically while installing!!! 
+
+MPCoreChanger  : MediaPortal 1.5 or older
+Since MediaPortal 1.6 : Change are available in Official build. </ExtensionDescription>
+        <VersionDescription>Version 1.1.19020.01
+
+BassFan add :
+add language file for Atmolight configuration. 
+
+Solving bug for load default language at first start.</VersionDescription>
+        <DevelopmentStatus>Stable</DevelopmentStatus>
+        <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.0.19020.1.mpe1</OnlineLocation>
+        <ReleaseDate>2014-02-26T10:45:58</ReleaseDate>
+        <Tags>sedu-board, atmowin, ws2801, ambilight, teensy 2, atmoduino, ambilight, led</Tags>
+        <Location>..\..\MPEI Release\Atmolight\[Name]_[Version].mpe1</Location>
+        <Params>
+          <Items>
+            <SectionParam Name="Online Icon">
+              <Value>http://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/image/atmolight.png</Value>
+              <ValueType>String</ValueType>
+              <Description>The icon file of the package stored online (jpg,png,bmp)</Description>
+            </SectionParam>
+            <SectionParam Name="Configuration file">
+              <Value />
+              <ValueType>Template</ValueType>
+              <Description>The file used to configure the extension.
+ If it has .exe extension the will be executed.
+ If it has .dll extension it's started like MP plugin configuration.</Description>
+            </SectionParam>
+            <SectionParam Name="Online Screenshots">
+              <Value />
+              <ValueType>String</ValueType>
+              <Description>Online stored screenshot urls separated by ; </Description>
+            </SectionParam>
+            <SectionParam Name="Force to uninstall on update">
+              <Value>YES</Value>
+              <ValueType>Bool</ValueType>
+              <Description>Show dialog and force to uninstall previous version when updating an extension. Should only be disabled if you are using an NSIS/MSI installer.</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+      </GeneralInfo>
+      <UniqueFileList>
+        <Items />
+      </UniqueFileList>
+      <ProjectSettings>
+        <FolderGroups />
+      </ProjectSettings>
+      <IsSkin>false</IsSkin>
+    </PackageClass>
+    <PackageClass>
+      <Version>2.0</Version>
+      <Groups>
+        <Items>
+          <GroupItem Name="Plugin Files">
+            <DisplayName>Plugin Files</DisplayName>
+            <DefaulChecked>true</DefaulChecked>
+            <Description>Plugin Files</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+          <GroupItem Name="ExtensionsPlugin">
+            <DisplayName>ExtensionsPlugin</DisplayName>
+            <DefaulChecked>false</DefaulChecked>
+            <Description>ExtensionsPlugin</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
+        </Items>
+      </Groups>
+      <Sections>
+        <Items />
+      </Sections>
+      <Dependencies>
+        <Items>
+          <DependencyItem>
+            <Type>MediaPortal</Type>
+            <Id />
+            <MinVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MinVersion>
+            <MaxVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MaxVersion>
+            <WarnOnly>false</WarnOnly>
+            <Message>requires MediaPortal version 1.1.6.27644 to 1.1.6.27644.</Message>
+            <Name>MediaPortal</Name>
+          </DependencyItem>
+          <DependencyItem>
+            <Type>Extension</Type>
+            <Id>15db8e0f-9516-43a9-bffc-80c00d8b21f0</Id>
+            <MinVersion>
+              <Major>1</Major>
+              <Minor>0</Minor>
+              <Build>0</Build>
+              <Revision>1</Revision>
+            </MinVersion>
+            <MaxVersion>
+              <Major>1</Major>
+              <Minor>0</Minor>
+              <Build>0</Build>
+              <Revision>3</Revision>
+            </MaxVersion>
+            <WarnOnly>false</WarnOnly>
+            <Message>The AtmoLight Plugin requires MPCoreChanger Extension! --&gt; download and installation will be executed!</Message>
+            <Name>Extension</Name>
+          </DependencyItem>
+        </Items>
+      </Dependencies>
+      <PluginDependencies>
+        <Items />
+      </PluginDependencies>
+      <GeneralInfo>
+        <Name>AtmoLight process plugin</Name>
+        <Id>8d2c6d9d-03c8-4144-b0b8-85e3a2b0e001</Id>
+        <Author>gemx /plugin) / Angie05 (plugin,Atmowin), RickDB (Atmoduino), legnod (installer), azzuro(Teensy)</Author>
+        <HomePage>https://code.google.com/p/ambilight-4-mediaportal/</HomePage>
+        <ForumPage>http://forum.team-mediaportal.com/threads/new-plugin-atmolight-process-plugin-update-25-05-2010-v1-9.75840/</ForumPage>
+        <UpdateUrl>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;task=att_download&amp;link_id=262&amp;cf_id=52</UpdateUrl>
+        <Version>
+          <Major>1</Major>
+          <Minor>0</Minor>
+          <Build>19014</Build>
+          <Revision>1</Revision>
+        </Version>
+        <ExtensionDescription>Plugin for using AtmoWin Ambilight Software with MediaPortal. No need to switch AERO off anymore! 
+AtmoLight needs an additional plugin (MPCoreChanger) which will be installed/updated automatically while installing!!! </ExtensionDescription>
+        <VersionDescription>- Installer changes: 
+*MPCoreChanger is now a stand alone plugin to provide better update support for new core.dll files - automatic downloaded/installation will be started if needed!
+*A shortcut to the installed AtmoWinA.exe will be created on the desktop!
+*better uninstall handling!
+*new version system
+
+- Plugin:
+*added support for extensions plugin (atmolight configuration inside MP GUI)!
+*the path to AtmoWinA.exe will be entered automatically inside the MediaPortal.xml file!</VersionDescription>
+        <DevelopmentStatus>Stable</DevelopmentStatus>
+        <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.0.19014.1.mpe1</OnlineLocation>
+        <ReleaseDate>2013-01-21T10:45:58.3479813+01:00</ReleaseDate>
+        <Tags>sedu-board, atmowin, ws2801, ambilight, teensy 2, atmoduino, ambilight, led</Tags>
+        <Location>AtmoLight_1.0.19016.02.mpe1</Location>
+        <Params>
+          <Items>
+            <SectionParam Name="Online Icon">
+              <Value>http://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/image/atmolight.png</Value>
+              <ValueType>String</ValueType>
+              <Description>The icon file of the package stored online (jpg,png,bmp)</Description>
+            </SectionParam>
+            <SectionParam Name="Configuration file">
+              <Value>%Plugins%\process\Atmolight.dll</Value>
+              <ValueType>Template</ValueType>
+              <Description>The file used to configure the extension.
+ If it has .exe extension the will be executed.
+ If it has .dll extension it's started like MP plugin configuration.</Description>
+            </SectionParam>
+            <SectionParam Name="Online Screenshots">
+              <Value />
+              <ValueType>String</ValueType>
+              <Description>Online stored screenshot urls separated by ; </Description>
+            </SectionParam>
+            <SectionParam Name="Force to uninstall on update">
+              <Value>YES</Value>
+              <ValueType>Bool</ValueType>
+              <Description>Show dialog and force to uninstall previous version when updating an extension. Should only be disabled if you are using an NSIS/MSI installer.</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+      </GeneralInfo>
+      <UniqueFileList>
+        <Items />
+      </UniqueFileList>
+      <ProjectSettings>
+        <FolderGroups />
+      </ProjectSettings>
+      <IsSkin>false</IsSkin>
+    </PackageClass>
+  </Items>
+</ExtensionCollection>

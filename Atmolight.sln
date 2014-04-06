@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atmolight", "Atmolight.csproj", "{1A2ADEB0-CEB7-40F2-A146-91724EA884E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atmolight", "AtmoLight\Atmolight.csproj", "{1A2ADEB0-CEB7-40F2-A146-91724EA884E0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AtmoDXUtil", "AtmoDXUtil\AtmoDXUtil.vcxproj", "{AEEC4404-A93E-419E-9799-6BD201B649F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmoWinRemoteControl", "Interop.AtmoWinRemoteControl\AtmoWinRemoteControl.csproj", "{E0DA6AD7-F692-4645-88FA-356065806A57}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmoWinRemoteControl", "AtmoWinRemoteControl\AtmoWinRemoteControl.csproj", "{E0DA6AD7-F692-4645-88FA-356065806A57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

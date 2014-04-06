@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Version>2.0</Version>
+  <Groups>
+    <Items>
+      <GroupItem Name="Plugin Files">
+        <ParentGroup />
+        <DisplayName>AtmoLight process plugin</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>Installs the AtmoLight MediaPortal plugin files!</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\AtmoLight\bin\Release\Atmolight.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ff9439ea-1574-4049-b97f-584f58c66f7e}-Atmolight.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\process\Atmolight.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\AtmoDXUtil\bin\Release\AtmoDXUtil.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{830936a6-1f0e-41a6-8c11-3f7a1efcd82c}-AtmoDXUtil.dll</ZipFileName>
+              <DestinationFilename>%Base%\AtmoDXUtil.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\AtmoWinRemoteControl\bin\Release\AtmoWinRemoteControl.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{7acda226-b77b-42b7-af7e-89c521f99c1c}-AtmoWinRemoteControl.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\process\AtmoWinRemoteControl.dll</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+      <GroupItem Name="ExtensionsPlugin">
+        <ParentGroup>Plugin Files</ParentGroup>
+        <DisplayName>Extensions Plugin</DisplayName>
+        <DefaulChecked>false</DefaulChecked>
+        <Description>The Extensions Plugin allows configuration and update (and other Plugins) from within MediaPortal.</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>settings\extension_settings.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{846d9761-bfa4-4c0a-9eab-c9c64898df2c}-extension_settings.xml</ZipFileName>
+              <DestinationFilename>%Base%\extension_settings.xml</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+      <GroupItem Name="Language files">
+        <ParentGroup />
+        <DisplayName>language files</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>Language files</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\AtmoLight\language\DutchNL.lng</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{f46daaa7-c40e-4682-81dc-7bad08072764}-DutchNL.lng</ZipFileName>
+              <DestinationFilename>%Language%\Atmolight\DutchNL.lng</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\AtmoLight\language\EnglishUS.lng</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{1ffea1f5-268c-4f70-a762-595146636eaf}-EnglishUS.lng</ZipFileName>
+              <DestinationFilename>%Language%\Atmolight\EnglishUS.lng</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\AtmoLight\language\FrenchFR.lng</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{664fd53b-edd7-442c-8ecf-09d9bec83b6d}-FrenchFR.lng</ZipFileName>
+              <DestinationFilename>%Language%\Atmolight\FrenchFR.lng</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\AtmoLight\language\GermanDE.lng</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{b29cd1d7-9ab7-46f5-85c0-596eab1d48a0}-GermanDE.lng</ZipFileName>
+              <DestinationFilename>%Language%\Atmolight\GermanDE.lng</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+    </Items>
+  </Groups>
+  <Sections>
+    <Items>
+      <SectionItem Guid="dec25a5a-b476-41f9-92ad-9455f72b5f86" Name="Welcome Screen" ConditionGroup="">
+        <Params>
+          <Items>
+            <SectionParam Name="Header text">
+              <Value>Welcome to the Extension Installer for [Name]</Value>
+              <ValueType>String</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Description">
+              <Value>This will install [Name] version [Version] on your computer.
+It is recommended that you close all other applications before continuing.
+Click Next to continue or Cancel to exit Setup.</Value>
+              <ValueType>String</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Left part image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Header image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description>Image in upper right part</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+        <Actions>
+          <Items />
+        </Actions>
+        <IncludedGroups />
+        <PanelName>Welcome Screen</PanelName>
+        <WizardButtonsEnum>NextCancel</WizardButtonsEnum>
+      </SectionItem>
+      <SectionItem Guid="985c0ac3-86d0-49ee-97cd-06a8c2419add" Name="Install Section" ConditionGroup="">
+        <Params>
+          <Items>
+            <SectionParam Name="Header Title">
+              <Value>AtmoLight process plugin installer!</Value>
+              <ValueType>String</ValueType>
+              <Description>Header title</Description>
+            </SectionParam>
+            <SectionParam Name="Header description">
+              <Value>Wait until your selected components has been installed</Value>
+              <ValueType>String</ValueType>
+              <Description>Description of section, shown in under section title</Description>
+            </SectionParam>
+            <SectionParam Name="Header image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description>Image in upper right part</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+        <Actions>
+          <Items>
+            <ActionItem Name="Script: kill atmowin process" ActionType="Script" ConditionGroup="">
+              <Params>
+                <Items>
+                  <SectionParam Name="Script">
+                    <Value>//css_reference "MpeCore.dll";
+
+using MpeCore.Classes;
+using MpeCore;
+using System;
+using System.Diagnostics;
+using System.Windows.Forms;
+
+public class Script
+{
+    public static void Main(PackageClass packageClass, ActionItem actionItem)
+    {
+    }
+}
+</Value>
+                    <ValueType>Script</ValueType>
+                    <Description />
+                  </SectionParam>
+                  <SectionParam Name="Uninstall Script">
+                    <Value>//css_reference "MpeCore.dll";
+
+using MpeCore.Classes;
+using MpeCore;
+
+public class Script
+{
+    public static void Main(PackageClass packageClass, UnInstallItem item)
+    {
+        return;
+    }
+}
+</Value>
+                    <ValueType>Script</ValueType>
+                    <Description />
+                  </SectionParam>
+                </Items>
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
+            <ActionItem Name="InstallFiles" ActionType="InstallFiles" ConditionGroup="">
+              <Params>
+                <Items />
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
+            <ActionItem Name="Extension Installer : Atmowin" ActionType="Extension Installer" ConditionGroup="">
+              <Params>
+                <Items>
+                  <SectionParam Name="Extension package">
+                    <Value />
+                    <ValueType>File</ValueType>
+                    <Description>Location of the extension package</Description>
+                  </SectionParam>
+                  <SectionParam Name="Extension Id">
+                    <Value>e0802934-4e24-4b0c-bf8c-a6f35af1093a</Value>
+                    <ValueType>String</ValueType>
+                    <Description>Global Id of the extension package - it will be downloaded when no file is set.</Description>
+                  </SectionParam>
+                  <SectionParam Name="Extension Version">
+                    <Value>0.0.0.1</Value>
+                    <ValueType>String</ValueType>
+                    <Description>Minimum Version of the extension package - older versions will be updated (only used when downloading via Id).</Description>
+                  </SectionParam>
+                  <SectionParam Name="Silent Install">
+                    <Value>YES</Value>
+                    <ValueType>Bool</ValueType>
+                    <Description>Silent install, No wizard screen will be displayed </Description>
+                  </SectionParam>
+                </Items>
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
+            <ActionItem Name="Script : configure Atmolight to Atmowin path" ActionType="Script" ConditionGroup="">
+              <Params>
+                <Items>
+                  <SectionParam Name="Script">
+                    <Value>//css_reference "MpeCore.dll";
+//css_reference "Utils.dll";
+
+using MpeCore.Classes;
+using MpeCore;
+using MediaPortal.Profile;
+using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
+
+public class Script
+{
+  public static void Main(PackageClass packageClass, ActionItem actionItem)
+  {
+if (File.Exists(Path.Combine(MpeInstaller.TransformInRealPath("%Config%"), "AtmoWin\\AtmoWinA.exe")))
+{
+    using (MediaPortal.Profile.Settings xmlwriter = new MPSettings())
+    {
+      xmlwriter.SetValue("atmolight", "atmowinexe",  Path.Combine(MpeInstaller.TransformInRealPath("%Config%"), "AtmoWin\\AtmoWinA.exe"));
+    }
+    MediaPortal.Profile.Settings.SaveCache();
+}
+else
+{
+MessageBox.Show("No AtmoWin installation found! Please install AtmoWin and select the path to AtmoWinA.exe manually!");
+}
+    return;
+  }
+}
+</Value>
+                    <ValueType>Script</ValueType>
+                    <Description />
+                  </SectionParam>
+                  <SectionParam Name="Uninstall Script">
+                    <Value>//css_reference "MpeCore.dll";
+
+using MpeCore.Classes;
+using MpeCore;
+using System.IO;
+using System;
+using System.Windows.Forms;
+using System.Diagnostics;
+
+public class Script
+{
+public static void Main(PackageClass packageClass, UnInstallItem item)
+        {
+            String SourceFilePath;
+            SourceFilePath = Path.Combine(MpeInstaller.TransformInRealPath("%Config%"), "Atmowin");
+
+            String SourceFilePath_plugin;
+            SourceFilePath_plugin = MpeInstaller.TransformInRealPath("%Base%");
+
+            try
+            {
+
+                if (File.Exists(Path.Combine(SourceFilePath_plugin, "AtmoDXUtil.dll")))
+                {
+                    File.Delete(Path.Combine(SourceFilePath_plugin, "AtmoDXUtil.dll"));
+                }
+
+                if (File.Exists(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Atmolight.dll")))
+                {
+                    File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Atmolight.dll"));
+                }
+
+                if (File.Exists(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Interop.AtmoWinRemoteControl.dll")))
+                {
+                    File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Interop.AtmoWinRemoteControl.dll"));
+                }
+				
+				if (File.Exists(Path.Combine(SourceFilePath_plugin, "plugins\\process\\AtmoWinRemoteControl.dll")))
+                {
+                    File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\AtmoWinRemoteControl.dll"));
+                }
+           }
+           catch { }
+        }
+}
+</Value>
+                    <ValueType>Script</ValueType>
+                    <Description />
+                  </SectionParam>
+                </Items>
+              </Params>
+              <ExecuteLocation>AfterPanelHide</ExecuteLocation>
+            </ActionItem>
+          </Items>
+        </Actions>
+        <IncludedGroups />
+        <PanelName>Install Section</PanelName>
+        <WizardButtonsEnum>Next</WizardButtonsEnum>
+      </SectionItem>
+      <SectionItem Guid="ab83691d-0379-4037-a457-7b24dfa20e80" Name="Setup Complete" ConditionGroup="">
+        <Params>
+          <Items>
+            <SectionParam Name="Header text">
+              <Value>The Extension Installer Wizard has successfully installed [Name].</Value>
+              <ValueType>String</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Left part image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Show radio buttons">
+              <Value>NO</Value>
+              <ValueType>Bool</ValueType>
+              <Description>Use radiobutton in place of combobox</Description>
+            </SectionParam>
+            <SectionParam Name="Header image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description>Image in upper right part</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+        <Actions>
+          <Items />
+        </Actions>
+        <IncludedGroups />
+        <PanelName>Setup Complete</PanelName>
+        <WizardButtonsEnum>Finish</WizardButtonsEnum>
+      </SectionItem>
+    </Items>
+  </Sections>
+  <Dependencies>
+    <Items>
+      <DependencyItem>
+        <Type>MediaPortal</Type>
+        <Id />
+        <MinVersion>
+          <Major>1</Major>
+          <Minor>1</Minor>
+          <Build>6</Build>
+          <Revision>27644</Revision>
+        </MinVersion>
+        <MaxVersion>
+          <Major>1</Major>
+          <Minor>1</Minor>
+          <Build>6</Build>
+          <Revision>27644</Revision>
+        </MaxVersion>
+        <WarnOnly>true</WarnOnly>
+        <Message>This version of AtmoLight requires MediaPortal 1.2.0 Beta or higher!</Message>
+        <Name>MediaPortal</Name>
+      </DependencyItem>
+    </Items>
+  </Dependencies>
+  <PluginDependencies>
+    <Items>
+      <PluginDependencyItem AssemblyName="Atmolight.dll">
+        <CompatibleVersion>
+          <Items>
+            <CompatibleVersionItem>
+              <MinRequiredVersion>1.1.6.27652</MinRequiredVersion>
+              <DesignedForVersion>1.1.6.27652</DesignedForVersion>
+            </CompatibleVersionItem>
+          </Items>
+        </CompatibleVersion>
+        <SubSystemsUsed>
+          <Items>
+            <SubSystemItem Name="MP.Config" />
+          </Items>
+        </SubSystemsUsed>
+      </PluginDependencyItem>
+    </Items>
+  </PluginDependencies>
+  <GeneralInfo>
+    <Name>AtmoLight</Name>
+    <Id>8d2c6d9d-03c8-4144-b0b8-85e3a2b0e001</Id>
+    <Author>gemx, Angie05, RickDB, legnod, azzuro, BassFan, Lightning303, HomeY, Sebastiii</Author>
+    <HomePage>https://code.google.com/p/ambilight-4-mediaportal/</HomePage>
+    <ForumPage>http://forum.team-mediaportal.com/threads/atmolight-plugin-improvement-discussion.125070/</ForumPage>
+    <UpdateUrl>https://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/Atmolight_update.xml</UpdateUrl>
+    <Version>
+      <Major>1</Major>
+      <Minor>10</Minor>
+      <Build>0</Build>
+      <Revision>0</Revision>
+    </Version>
+    <ExtensionDescription>AtmoLight is a process plugin that interfaces with AtmoWin and brings Ambilight to MediaPortal.
+The main function is to send the needed data directly to AtmoWin to reduce the CPU load drastically, making Ambilight and smooth playback possible.
+
+For this plugin to work you will also need AtmoWin. It will be installed automatically.
+
+MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed. </ExtensionDescription>
+    <VersionDescription>Version 1.10.0.0
+- Fixed issue where LEDs would not turn off (SEDU)
+- Enhanced the logic to start the ambilight
+- Added "Menu Mode" (using ambilight while in MediaPortal GUI)
+- Added static effect option to Video, Radio and Music
+- Changed "STOP Menu" into "Color Button Menu"
+	* Added possibility to open context menu during playback
+	* Added option to change effects on the fly
+	* Added option to change AtmoWin profile
+	* Added option to toggle and set LED delay (see point 10)
+	* Added option to change static color on the fly
+- Fixed issue where context menu was not closeable with back button
+- Added language file support to context menu
+- Added option to assign "None" as On/Off, Profile and Menu button (preventing conflicts)
+- Added delay of 1 second between starting AtmoWin and connecting to it (testing)
+- Added option to set a delay for the leds (if leds change colors before tv does)
+- Enhanced logging capabilities
+- Added lots of error handling routines
+- Added possibility to restart AtmoWin and reconnect to it if something goes wrong
+- Added synchronisation for liveview source with AtmoWin
+- Added French language file
+- Language file updates</VersionDescription>
+    <DevelopmentStatus>Stable</DevelopmentStatus>
+    <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.10.0.0.mpe1</OnlineLocation>
+    <ReleaseDate>2014-04-05T10:45:58</ReleaseDate>
+    <Tags>sedu-board, atmowin, ws2801, ambilight, teensy 2, atmoduino, ambilight, led</Tags>
+    <Location>..\MPEI Release\[Name]_[Version].mpe1</Location>
+    <Params>
+      <Items>
+        <SectionParam Name="Icon">
+          <Value>image\atmolight.png</Value>
+          <ValueType>File</ValueType>
+          <Description>The icon file of the package (jpg,png,bmp)</Description>
+        </SectionParam>
+        <SectionParam Name="Online Icon">
+          <Value>http://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/image/atmolight.png</Value>
+          <ValueType>String</ValueType>
+          <Description>The icon file of the package stored online (jpg,png,bmp)</Description>
+        </SectionParam>
+        <SectionParam Name="Configuration file">
+          <Value />
+          <ValueType>Template</ValueType>
+          <Description>The file used to configure the extension.
+ If it has .exe extension the will be executed.
+ If it has .dll extension it's started like MP plugin configuration.</Description>
+        </SectionParam>
+        <SectionParam Name="Online Screenshots">
+          <Value />
+          <ValueType>String</ValueType>
+          <Description>Online stored screenshot urls separated by ; </Description>
+        </SectionParam>
+        <SectionParam Name="Force to uninstall on update">
+          <Value>YES</Value>
+          <ValueType>Bool</ValueType>
+          <Description>Show dialog and force to uninstall previous version when updating an extension. Should only be disabled if you are using an NSIS/MSI installer.</Description>
+        </SectionParam>
+      </Items>
+    </Params>
+  </GeneralInfo>
+  <UniqueFileList>
+    <Items>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\AtmoLight\bin\Release\Atmolight.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ff9439ea-1574-4049-b97f-584f58c66f7e}-Atmolight.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\process\Atmolight.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\AtmoDXUtil\bin\Release\AtmoDXUtil.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{830936a6-1f0e-41a6-8c11-3f7a1efcd82c}-AtmoDXUtil.dll</ZipFileName>
+        <DestinationFilename>%Base%\AtmoDXUtil.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\AtmoWinRemoteControl\bin\Release\AtmoWinRemoteControl.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{7acda226-b77b-42b7-af7e-89c521f99c1c}-AtmoWinRemoteControl.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\process\AtmoWinRemoteControl.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>settings\extension_settings.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{846d9761-bfa4-4c0a-9eab-c9c64898df2c}-extension_settings.xml</ZipFileName>
+        <DestinationFilename>%Base%\extension_settings.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\AtmoLight\language\DutchNL.lng</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{f46daaa7-c40e-4682-81dc-7bad08072764}-DutchNL.lng</ZipFileName>
+        <DestinationFilename>%Language%\Atmolight\DutchNL.lng</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\AtmoLight\language\EnglishUS.lng</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{1ffea1f5-268c-4f70-a762-595146636eaf}-EnglishUS.lng</ZipFileName>
+        <DestinationFilename>%Language%\Atmolight\EnglishUS.lng</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\AtmoLight\language\FrenchFR.lng</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{664fd53b-edd7-442c-8ecf-09d9bec83b6d}-FrenchFR.lng</ZipFileName>
+        <DestinationFilename>%Language%\Atmolight\FrenchFR.lng</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\AtmoLight\language\GermanDE.lng</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{b29cd1d7-9ab7-46f5-85c0-596eab1d48a0}-GermanDE.lng</ZipFileName>
+        <DestinationFilename>%Language%\Atmolight\GermanDE.lng</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="true" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>image\atmolight.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{58191526-1ddf-4606-a48c-ffd6ef558310}-atmolight.png</ZipFileName>
+        <DestinationFilename />
+      </FileItem>
+    </Items>
+  </UniqueFileList>
+  <ProjectSettings>
+    <FolderGroups />
+    <ProjectFilename>AtmoLight.xmp2</ProjectFilename>
+    <UpdatePath1>D:\Software Development\AtmoLight\MPEI\Atmolight_update.xml</UpdatePath1>
+    <UpdatePath2 />
+    <UpdatePath3 />
+  </ProjectSettings>
+  <IsSkin>false</IsSkin>
+</PackageClass>

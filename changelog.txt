@@ -1,4 +1,4 @@
-Version 1.9.1.0
+Version 1.10.0.0
 - Fixed issue where LEDs would not turn off (SEDU)
 - Enhanced the logic to start the ambilight
 - Added "Menu Mode" (using ambilight while in MediaPortal GUI)
