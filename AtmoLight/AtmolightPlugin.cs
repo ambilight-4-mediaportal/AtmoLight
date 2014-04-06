@@ -171,6 +171,98 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private int delayRefreshRateDependant; // Variable that holds the actual delay
     #endregion
 
+    #region Utilities
+    /// <summary>
+    /// Checks if a method times out and starts to reinitialize AtmoWin if needed.
+    /// </summary>
+    /// <param name="method">Method that needs checking for a timeout.</param>
+    /// <param name="timeout">Timeout in ms.</param>
+    /// <returns>true if not timed out and false if timed out.</returns>
+    private bool TimeoutHandler(System.Action method, int timeout = timeoutComInterface)
+    {
+      try
+      {
+        long timeoutStart = Win32API.GetTickCount();
+        var tokenSource = new CancellationTokenSource();
+        CancellationToken token = tokenSource.Token;
+        var task = Task.Factory.StartNew(() => method(), token);
+
+        if (!task.Wait(timeout, token))
+        {
+          // Stacktrace is needed so we can output the name of the method that timed out.
+          StackTrace trace = new StackTrace();
+          Log.Error("AtmoLight: {0} timed out after {1}ms!", trace.GetFrame(1).GetMethod().Name, Win32API.GetTickCount() - timeoutStart);
+
+          // Try to reconnect to AtmoWin.
+          // This is done in a new thread, to not halt anything else.
+          Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
+          ReInitializeAtmoWinConnectionHelperThread.Start();
+
+          return false;
+        }
+        return true;
+      }
+      catch (AggregateException ex)
+      {
+        StackTrace trace = new StackTrace();
+        Log.Error("AtmoLight: Error with {0}!", trace.GetFrame(1).GetMethod().Name);
+        foreach (var innerEx in ex.InnerExceptions)
+        {
+          Log.Error("AtmoLight: Exception: {0}", innerEx.Message);
+        }
+        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
+        ReInitializeAtmoWinConnectionHelperThread.Start();
+        return false;
+      }
+    }
+
+    /// <summary>
+    /// Returns the current refresh rate.
+    /// </summary>
+    /// <returns>Current refresh rate.</returns>
+    private int GetRefreshRate()
+    {
+      if (GUIGraphicsContext.currentMonitorIdx == -1)
+      {
+        return Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].CurrentDisplayMode.RefreshRate;
+      }
+      else
+      {
+        return Manager.Adapters[GUIGraphicsContext.currentMonitorIdx].CurrentDisplayMode.RefreshRate;
+      }
+    }
+
+    /// <summary>
+    /// Checks if the LEDs may be activated or deactivated bacause of the settings.
+    /// </summary>
+    /// <returns>true if LEDs may be activated and false if not.</returns>
+    private bool CheckForStartRequirements()
+    {
+      if (atmoCtrl == null)
+      {
+        return false;
+      }
+      if (AtmolightSettings.manualMode)
+      {
+        Log.Debug("AtmoLight: LEDs should be deactivated. (Manual Mode)");
+        atmoOff = true;
+        return false;
+      }
+      else if ((DateTime.Now.TimeOfDay >= AtmolightSettings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= AtmolightSettings.excludeTimeEnd.TimeOfDay))
+      {
+        Log.Debug("AtmoLight: LEDs should be deactivated. (Timeframe)");
+        atmoOff = true;
+        return false;
+      }
+      else
+      {
+        Log.Debug("AtmoLight: LEDs can be activated.");
+        atmoOff = false;
+        return true;
+      }
+    }
+    #endregion
+
     #region Initialize AtmoLight
 
     /// <summary>
@@ -493,50 +585,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
     #region COM Interface
     /// <summary>
-    /// Checks if a method times out and starts to reinitialize AtmoWin if needed.
-    /// </summary>
-    /// <param name="method">Method that needs checking for a timeout.</param>
-    /// <param name="timeout">Timeout in ms.</param>
-    /// <returns>true if not timed out and false if timed out.</returns>
-    private bool TimeoutHandler(System.Action method, int timeout = timeoutComInterface)
-    {
-      try
-      {
-        long timeoutStart = Win32API.GetTickCount();
-        var tokenSource = new CancellationTokenSource();
-        CancellationToken token = tokenSource.Token;
-        var task = Task.Factory.StartNew(() => method(), token);
-
-        if (!task.Wait(timeout, token))
-        {
-          // Stacktrace is needed so we can output the name of the method that timed out.
-          StackTrace trace = new StackTrace();
-          Log.Error("AtmoLight: {0} timed out after {1}ms!", trace.GetFrame(1).GetMethod().Name, Win32API.GetTickCount() - timeoutStart);
-
-          // Try to reconnect to AtmoWin.
-          // This is done in a new thread, to not halt anything else.
-          Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
-          ReInitializeAtmoWinConnectionHelperThread.Start();
-
-          return false;
-        }
-        return true;
-      }
-      catch (AggregateException ex)
-      {
-        StackTrace trace = new StackTrace();
-        Log.Error("AtmoLight: Error with {0}!", trace.GetFrame(1).GetMethod().Name);
-        foreach (var innerEx in ex.InnerExceptions)
-        {
-          Log.Error("AtmoLight: Exception: {0}", innerEx.Message);
-        }
-        Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
-        ReInitializeAtmoWinConnectionHelperThread.Start();
-        return false;
-      }
-    }
-
-    /// <summary>
     /// Changes the AtmoWin profile.
     /// </summary>
     /// <returns>true if successfull and false if not.</returns>
@@ -683,15 +731,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region Control LEDs
-    /// <summary>
-    /// Returns the current refresh rate.
-    /// </summary>
-    /// <returns>Current refresh rate.</returns>
-    private int GetRefreshRate()
-    {
-      return Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].CurrentDisplayMode.RefreshRate;
-    }
-
     /// <summary>
     /// Sets the AtmoWin effect to disabled and sets the color of the leds to black.
     /// </summary>
@@ -925,36 +964,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         MenuMode();
       }
     }
-
-    /// <summary>
-    /// Checks if the LEDs may be activated or deactivated bacause of the settings.
-    /// </summary>
-    /// <returns>true if LEDs may be activated and false if not.</returns>
-    private bool CheckForStartRequirements()
-    {
-      if (atmoCtrl == null)
-      {
-        return false;
-      }
-      if (AtmolightSettings.manualMode)
-      {
-        Log.Debug("AtmoLight: LEDs should be deactivated. (Manual Mode)");
-        atmoOff = true;
-        return false;
-      }
-      else if ((DateTime.Now.TimeOfDay >= AtmolightSettings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= AtmolightSettings.excludeTimeEnd.TimeOfDay))
-      {
-        Log.Debug("AtmoLight: LEDs should be deactivated. (Timeframe)");
-        atmoOff = true;
-        return false;
-      }
-      else
-      {
-        Log.Debug("AtmoLight: LEDs can be activated.");
-        atmoOff = false;
-        return true;
-      }
-    }
     #endregion
 
     #region Threads
@@ -1013,6 +1022,283 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           }
         }
         System.Threading.Thread.Sleep(delayGetAtmoLiveViewSource);
+      }
+    }
+    #endregion
+
+    #region g_player Events
+    /// <summary>
+    /// Checks what to do when playback is ended.
+    /// </summary>
+    /// <param name="type">Media type.</param>
+    /// <param name="filename">Media filename.</param>
+    void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
+    {
+      if (atmoCtrl == null)
+      {
+        return;
+      }
+      try
+      {
+        getAtmoLiveViewSourceLock = true;
+        setPixelDataLock = true;
+        if (CheckForStartRequirements())
+        {
+          MenuMode();
+        }
+        else
+        {
+          DisableLEDs();
+        }
+      }
+      catch (Exception ex)
+      {
+        Log.Error("AtmoLight: g_Player_PlayBackEnded failed.");
+        Log.Error("AtmoLight: Exception= {0}", ex.Message);
+      }
+    }
+
+    /// <summary>
+    /// Checks what to do when playback is stopped.
+    /// </summary>
+    /// <param name="type">Media type.</param>
+    /// <param name="stoptime">Media stoptime.</param>
+    /// <param name="filename">Media filename.</param>
+    void g_Player_PlayBackStopped(g_Player.MediaType type, int stoptime, string filename)
+    {
+      if (atmoCtrl == null)
+      {
+        return;
+      }
+      try
+      {
+        getAtmoLiveViewSourceLock = true;
+        setPixelDataLock = true;
+        if (CheckForStartRequirements())
+        {
+          MenuMode();
+        }
+        else
+        {
+          DisableLEDs();
+        }
+      }
+      catch (Exception ex)
+      {
+        Log.Error("AtmoLight: g_Player_PlayBackStopped failed.");
+        Log.Error("AtmoLight: Exception= {0}", ex.Message);
+      }
+    }
+
+    /// <summary>
+    /// Checks what to do when playback is started.
+    /// </summary>
+    /// <param name="type">Media type.</param>
+    /// <param name="filename">Media filename.</param>
+    void g_Player_PlayBackStarted(g_Player.MediaType type, string filename)
+    {
+      if (atmoCtrl == null)
+      {
+        return;
+      }
+      try
+      {
+        if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording || type == g_Player.MediaType.Unknown || (type == g_Player.MediaType.Music && filename.Contains(".mkv")))
+        {
+          Log.Debug("AtmoLight: Video detected.");
+          playbackEffect = AtmolightSettings.effectVideo;
+        }
+        else if (type == g_Player.MediaType.Music)
+        {
+          // Workaround
+          // Enum says we choose MP Live Mode, but it is actually Static color.
+          if (AtmolightSettings.effectMusic == ContentEffect.MediaPortalLiveMode)
+          {
+            AtmolightSettings.effectMusic = ContentEffect.StaticColor;
+          }
+          playbackEffect = AtmolightSettings.effectMusic;
+          Log.Debug("AtmoLight: Music detected.");
+        }
+        else if (type == g_Player.MediaType.Radio)
+        {
+          // Workaround
+          // Enum says we choose MP Live Mode, but it is actually Static color.
+          if (AtmolightSettings.effectRadio == ContentEffect.MediaPortalLiveMode)
+          {
+            AtmolightSettings.effectRadio = ContentEffect.StaticColor;
+          }
+          playbackEffect = AtmolightSettings.effectRadio;
+          Log.Debug("AtmoLight: Radio detected.");
+        }
+
+        if (CheckForStartRequirements())
+        {
+          PlaybackMode();
+        }
+        else
+        {
+          DisableLEDs();
+        }
+      }
+      catch (Exception ex)
+      {
+        Log.Error("AtmoLight: g_Player_PlayBackStarted failed.");
+        Log.Error("AtmoLight: Exception= {0}", ex.Message);
+      }
+    }
+
+    /// <summary>
+    /// Calculates the pixel data that gets send to AtmoWin.
+    /// And starts the SetPixelDataThread() threads to send the data.
+    /// </summary>
+    /// <param name="width">Frame width.</param>
+    /// <param name="height">Frame height.</param>
+    /// <param name="arWidth">Aspect ratio width.</param>
+    /// <param name="arHeight">Aspect ratio height.</param>
+    /// <param name="pSurface">Surface.</param>
+    private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
+    {
+      if (playbackEffect != ContentEffect.MediaPortalLiveMode || atmoOff || atmoCtrl == null || width == 0 || height == 0)
+      {
+        return;
+      }
+
+      if (rgbSurface == null)
+      {
+        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(captureWidth, captureHeight, Format.A8R8G8B8,
+          MultiSampleType.None, 0, true);
+      }
+      unsafe
+      {
+        try
+        {
+          if (AtmolightSettings.sbs3dOn)
+          {
+            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer,
+              captureWidth, captureHeight);
+          }
+          else
+          {
+            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer,
+              captureWidth, captureHeight);
+          }
+
+          Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
+
+          BinaryReader reader = new BinaryReader(stream);
+          stream.Position = 0; // ensure that what start at the beginning of the stream. 
+          reader.ReadBytes(14); // skip bitmap file info header
+          byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
+
+          int rgbL = (int)(stream.Length - stream.Position);
+          int rgb = (int)(rgbL / (captureWidth * captureHeight));
+
+          byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
+
+          byte[] h1pixelData = new byte[captureWidth * rgb];
+          byte[] h2pixelData = new byte[captureWidth * rgb];
+          //now flip horizontally, we do it always to prevent microstudder
+          int i;
+          for (i = 0; i < ((captureHeight / 2) - 1); i++)
+          {
+            Array.Copy(pixelData, i * captureWidth * rgb, h1pixelData, 0, captureWidth * rgb);
+            Array.Copy(pixelData, (captureHeight - i - 1) * captureWidth * rgb, h2pixelData, 0, captureWidth * rgb);
+            Array.Copy(h1pixelData, 0, pixelData, (captureHeight - i - 1) * captureWidth * rgb, captureWidth * rgb);
+            Array.Copy(h2pixelData, 0, pixelData, i * captureWidth * rgb, captureWidth * rgb);
+          }
+          //send scaled and fliped frame to atmowin
+          if (!AtmolightSettings.lowCPU ||
+              (((Win32API.GetTickCount() - lastFrame) > AtmolightSettings.lowCPUTime) && AtmolightSettings.lowCPU))
+          {
+            if (AtmolightSettings.lowCPU)
+            {
+              lastFrame = Win32API.GetTickCount();
+            }
+            // Create and start a new thread to send the data to AtmoWin.
+            // This is done so we can use the TimeoutHandler without halting or disturbing the video playback.
+            Thread SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread(bmiInfoHeader, pixelData));
+            // Priority gets set higher to ensure that the data gets send as soon as possible.
+            SetPixelDataThreadHelper.Priority = ThreadPriority.AboveNormal;
+            SetPixelDataThreadHelper.Start();
+          }
+          stream.Close();
+          stream.Dispose();
+        }
+        catch (Exception ex)
+        {
+          Log.Error("AtmoLight: Error in AtmolightPlugin_OnNewFrame.");
+          Log.Error("AtmoLight: Exception: {0}", ex.Message);
+
+          rgbSurface.Dispose();
+          rgbSurface = null;
+
+          // Try to reconnect to AtmoWin.
+          // Thread needed to not halt the general playback.
+          Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
+          ReInitializeAtmoWinConnectionHelperThread.Start();
+        }
+      }
+    }
+    #endregion
+
+    #region Remote Button Events
+    /// <summary>
+    /// Event handler for remote button presses.
+    /// </summary>
+    /// <param name="action">Action caused by remote button press.</param>
+    public void OnNewAction(MediaPortal.GUI.Library.Action action)
+    {
+      // Remote Key to open Menu
+      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.menuButton == 2) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.menuButton == 1) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.menuButton == 0) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.menuButton == 3))
+      {
+        if (atmoCtrl == null)
+        {
+          if (DialogYesNo(LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2))
+          {
+            if (ReInitializeAtmoWinConnection(true) && !atmoLightPluginStarted)
+            {
+              Start();
+            }
+          }
+        }
+        else
+        {
+          DialogContextMenu();
+        }
+      }
+
+      // No connection
+      if (atmoCtrl == null)
+      {
+        return;
+      }
+
+      // Remote Key to toggle On/Off
+      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.killButton == 2) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.killButton == 1) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.killButton == 0) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.killButton == 3))
+      {
+        if (atmoOff)
+        {
+          StartLEDs();
+        }
+        else
+        {
+          DisableLEDs();
+        }
+      }
+
+      // Remote Key to change Profiles
+      else if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.profileButton == 2) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.profileButton == 1) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.profileButton == 0) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.profileButton == 3))
+      {
+        SetColorMode(ComEffectMode.cemColorMode);
       }
     }
     #endregion
@@ -1255,7 +1541,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           AtmolightSettings.sbs3dOn = true;
         }
       }
-      else if ((dlg.SelectedLabel == delayTogglePos) &&(delayTogglePos != -1))
+      else if ((dlg.SelectedLabel == delayTogglePos) && (delayTogglePos != -1))
       {
         if (AtmolightSettings.delay)
         {
@@ -1438,283 +1724,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
       // Start the dialog again (without reset) so we can enter the other colors.
       DialogRGBManualStaticColorChanger(false, dlgRGB.SelectedLabel);
-    }
-    #endregion
-
-    #region Remote Button Events
-    /// <summary>
-    /// Event handler for remote button presses.
-    /// </summary>
-    /// <param name="action">Action caused by remote button press.</param>
-    public void OnNewAction(MediaPortal.GUI.Library.Action action)
-    {
-      // Remote Key to open Menu
-      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.menuButton == 2) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.menuButton == 1) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.menuButton == 0) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.menuButton == 3))
-      {
-        if (atmoCtrl == null)
-        {
-          if (DialogYesNo(LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2))
-          {
-            if (ReInitializeAtmoWinConnection(true) && !atmoLightPluginStarted)
-            {
-              Start();
-            }
-          }
-        }
-        else
-        {
-          DialogContextMenu();
-        }
-      }
-
-      // No connection
-      if (atmoCtrl == null)
-      {
-        return;
-      }
-
-      // Remote Key to toggle On/Off
-      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.killButton == 2) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.killButton == 1) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.killButton == 0) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.killButton == 3))
-      {
-        if (atmoOff)
-        {
-          StartLEDs();
-        }
-        else
-        {
-          DisableLEDs();
-        }
-      }
-
-      // Remote Key to change Profiles
-      else if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.profileButton == 2) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.profileButton == 1) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.profileButton == 0) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.profileButton == 3))
-      {
-        SetColorMode(ComEffectMode.cemColorMode);
-      }
-    }
-    #endregion
-
-    #region g_player Events
-    /// <summary>
-    /// Checks what to do when playback is ended.
-    /// </summary>
-    /// <param name="type">Media type.</param>
-    /// <param name="filename">Media filename.</param>
-    void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
-    {
-      if (atmoCtrl == null)
-      {
-        return;
-      }
-      try
-      {
-        getAtmoLiveViewSourceLock = true;
-        setPixelDataLock = true;
-        if (CheckForStartRequirements())
-        {
-          MenuMode();
-        }
-        else
-        {
-          DisableLEDs();
-        }
-      }
-      catch (Exception ex)
-      {
-        Log.Error("AtmoLight: g_Player_PlayBackEnded failed.");
-        Log.Error("AtmoLight: Exception= {0}", ex.Message);
-      }
-    }
-
-    /// <summary>
-    /// Checks what to do when playback is stopped.
-    /// </summary>
-    /// <param name="type">Media type.</param>
-    /// <param name="stoptime">Media stoptime.</param>
-    /// <param name="filename">Media filename.</param>
-    void g_Player_PlayBackStopped(g_Player.MediaType type, int stoptime, string filename)
-    {
-      if (atmoCtrl == null)
-      {
-        return;
-      }
-      try
-      {
-        getAtmoLiveViewSourceLock = true;
-        setPixelDataLock = true;
-        if (CheckForStartRequirements())
-        {
-          MenuMode();
-        }
-        else
-        {
-          DisableLEDs();
-        }
-      }
-      catch (Exception ex)
-      {
-        Log.Error("AtmoLight: g_Player_PlayBackStopped failed.");
-        Log.Error("AtmoLight: Exception= {0}", ex.Message);
-      }
-    }
-
-    /// <summary>
-    /// Checks what to do when playback is started.
-    /// </summary>
-    /// <param name="type">Media type.</param>
-    /// <param name="filename">Media filename.</param>
-    void g_Player_PlayBackStarted(g_Player.MediaType type, string filename)
-    {
-      if (atmoCtrl == null)
-      { 
-        return;
-      }
-      try
-      {
-        if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording || type == g_Player.MediaType.Unknown || (type == g_Player.MediaType.Music && filename.Contains(".mkv")))
-        {
-          Log.Debug("AtmoLight: Video detected.");
-          playbackEffect = AtmolightSettings.effectVideo;
-        }
-        else if (type == g_Player.MediaType.Music)
-        {
-          // Workaround
-          // Enum says we choose MP Live Mode, but it is actually Static color.
-          if (AtmolightSettings.effectMusic == ContentEffect.MediaPortalLiveMode)
-          {
-            AtmolightSettings.effectMusic = ContentEffect.StaticColor;
-          }
-          playbackEffect = AtmolightSettings.effectMusic;
-          Log.Debug("AtmoLight: Music detected.");
-        }
-        else if (type == g_Player.MediaType.Radio)
-        {
-          // Workaround
-          // Enum says we choose MP Live Mode, but it is actually Static color.
-          if (AtmolightSettings.effectRadio == ContentEffect.MediaPortalLiveMode)
-          {
-            AtmolightSettings.effectRadio = ContentEffect.StaticColor;
-          }
-          playbackEffect = AtmolightSettings.effectRadio;
-          Log.Debug("AtmoLight: Radio detected.");
-        }
-
-        if (CheckForStartRequirements())
-        {
-          PlaybackMode();
-        }
-        else
-        {
-          DisableLEDs();
-        }
-      }
-      catch (Exception ex)
-      {
-        Log.Error("AtmoLight: g_Player_PlayBackStarted failed.");
-        Log.Error("AtmoLight: Exception= {0}", ex.Message);
-      }
-    }
-
-    /// <summary>
-    /// Calculates the pixel data that gets send to AtmoWin.
-    /// And starts the SetPixelDataThread() threads to send the data.
-    /// </summary>
-    /// <param name="width">Frame width.</param>
-    /// <param name="height">Frame height.</param>
-    /// <param name="arWidth">Aspect ratio width.</param>
-    /// <param name="arHeight">Aspect ratio height.</param>
-    /// <param name="pSurface">Surface.</param>
-    private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
-    {
-      if (playbackEffect != ContentEffect.MediaPortalLiveMode || atmoOff || atmoCtrl == null || width == 0 || height == 0)
-      {
-        return;
-      }
-
-      if (rgbSurface == null)
-      {
-        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(captureWidth, captureHeight, Format.A8R8G8B8,
-          MultiSampleType.None, 0, true);
-      }
-      unsafe
-      {
-        try
-        {
-          if (AtmolightSettings.sbs3dOn)
-          {
-            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              captureWidth, captureHeight);
-          }
-          else
-          {
-            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              captureWidth, captureHeight);
-          }
-
-          Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
-
-          BinaryReader reader = new BinaryReader(stream);
-          stream.Position = 0; // ensure that what start at the beginning of the stream. 
-          reader.ReadBytes(14); // skip bitmap file info header
-          byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
-
-          int rgbL = (int)(stream.Length - stream.Position);
-          int rgb = (int)(rgbL / (captureWidth * captureHeight));
-
-          byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
-
-          byte[] h1pixelData = new byte[captureWidth * rgb];
-          byte[] h2pixelData = new byte[captureWidth * rgb];
-          //now flip horizontally, we do it always to prevent microstudder
-          int i;
-          for (i = 0; i < ((captureHeight / 2) - 1); i++)
-          {
-            Array.Copy(pixelData, i * captureWidth * rgb, h1pixelData, 0, captureWidth * rgb);
-            Array.Copy(pixelData, (captureHeight - i - 1) * captureWidth * rgb, h2pixelData, 0, captureWidth * rgb);
-            Array.Copy(h1pixelData, 0, pixelData, (captureHeight - i - 1) * captureWidth * rgb, captureWidth * rgb);
-            Array.Copy(h2pixelData, 0, pixelData, i * captureWidth * rgb, captureWidth * rgb);
-          }
-          //send scaled and fliped frame to atmowin
-          if (!AtmolightSettings.lowCPU ||
-              (((Win32API.GetTickCount() - lastFrame) > AtmolightSettings.lowCPUTime) && AtmolightSettings.lowCPU))
-          {
-            if (AtmolightSettings.lowCPU)
-            {
-              lastFrame = Win32API.GetTickCount();
-            }
-            // Create and start a new thread to send the data to AtmoWin.
-            // This is done so we can use the TimeoutHandler without halting or disturbing the video playback.
-            Thread SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread(bmiInfoHeader, pixelData));
-            // Priority gets set higher to ensure that the data gets send as soon as possible.
-            SetPixelDataThreadHelper.Priority = ThreadPriority.AboveNormal;
-            SetPixelDataThreadHelper.Start();
-          }
-          stream.Close();
-          stream.Dispose();
-        }
-        catch (Exception ex)
-        {
-          Log.Error("AtmoLight: Error in AtmolightPlugin_OnNewFrame.");
-          Log.Error("AtmoLight: Exception: {0}", ex.Message);
-
-          rgbSurface.Dispose();
-          rgbSurface = null;
-
-          // Try to reconnect to AtmoWin.
-          // Thread needed to not halt the general playback.
-          Thread ReInitializeAtmoWinConnectionHelperThread = new Thread(() => ReInitializeAtmoWinConnection());
-          ReInitializeAtmoWinConnectionHelperThread.Start();
-        }
-      }
     }
     #endregion
 
