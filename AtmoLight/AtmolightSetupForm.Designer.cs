@@ -28,6 +28,7 @@
     /// </summary>
     private void InitializeComponent()
     {
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AtmolightSetupForm));
       this.lblPathInfo = new System.Windows.Forms.Label();
       this.edFile = new System.Windows.Forms.TextBox();
       this.btnSelectFile = new System.Windows.Forms.Button();
@@ -60,6 +61,8 @@
       this.lblStart = new System.Windows.Forms.Label();
       this.lblHint = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
+      this.lblRefreshRate = new System.Windows.Forms.Label();
+      this.tbRefreshRate = new System.Windows.Forms.TextBox();
       this.ckRestartOnError = new System.Windows.Forms.CheckBox();
       this.lblDelay = new System.Windows.Forms.Label();
       this.tbDelay = new System.Windows.Forms.TextBox();
@@ -80,8 +83,6 @@
       this.lblVersionVal = new System.Windows.Forms.Label();
       this.btnLanguage = new System.Windows.Forms.Button();
       this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-      this.tbRefreshRate = new System.Windows.Forms.TextBox();
-      this.lblRefreshRate = new System.Windows.Forms.Label();
       this.grpMPClose.SuspendLayout();
       this.grpMode.SuspendLayout();
       this.grpStaticColor.SuspendLayout();
@@ -442,6 +443,23 @@
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
       // 
+      // lblRefreshRate
+      // 
+      this.lblRefreshRate.AutoSize = true;
+      this.lblRefreshRate.Location = new System.Drawing.Point(258, 139);
+      this.lblRefreshRate.Name = "lblRefreshRate";
+      this.lblRefreshRate.Size = new System.Drawing.Size(20, 13);
+      this.lblRefreshRate.TabIndex = 27;
+      this.lblRefreshRate.Text = "Hz";
+      // 
+      // tbRefreshRate
+      // 
+      this.tbRefreshRate.Location = new System.Drawing.Point(211, 136);
+      this.tbRefreshRate.Name = "tbRefreshRate";
+      this.tbRefreshRate.Size = new System.Drawing.Size(41, 20);
+      this.tbRefreshRate.TabIndex = 26;
+      this.tbRefreshRate.Text = "50";
+      // 
       // ckRestartOnError
       // 
       this.ckRestartOnError.AutoSize = true;
@@ -649,23 +667,6 @@
       // 
       this.openFileDialog2.Filter = "files|*.lng";
       // 
-      // tbRefreshRate
-      // 
-      this.tbRefreshRate.Location = new System.Drawing.Point(211, 136);
-      this.tbRefreshRate.Name = "tbRefreshRate";
-      this.tbRefreshRate.Size = new System.Drawing.Size(41, 20);
-      this.tbRefreshRate.TabIndex = 26;
-      this.tbRefreshRate.Text = "50";
-      // 
-      // lblRefreshRate
-      // 
-      this.lblRefreshRate.AutoSize = true;
-      this.lblRefreshRate.Location = new System.Drawing.Point(258, 139);
-      this.lblRefreshRate.Name = "lblRefreshRate";
-      this.lblRefreshRate.Size = new System.Drawing.Size(20, 13);
-      this.lblRefreshRate.TabIndex = 27;
-      this.lblRefreshRate.Text = "Hz";
-      // 
       // AtmolightSetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -684,10 +685,11 @@
       this.Controls.Add(this.btnSelectFile);
       this.Controls.Add(this.edFile);
       this.Controls.Add(this.lblPathInfo);
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MaximumSize = new System.Drawing.Size(468, 640);
       this.MinimumSize = new System.Drawing.Size(468, 640);
       this.Name = "AtmolightSetupForm";
-      this.Text = "Atmolight Setup";
+      this.Text = "AtmoLight Setup";
       this.grpMPClose.ResumeLayout(false);
       this.grpMPClose.PerformLayout();
       this.grpMode.ResumeLayout(false);
