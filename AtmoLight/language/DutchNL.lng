@@ -29,7 +29,7 @@ lblGreen=Groen:
 lblBlue=Blauw:
 lblMenuButton=Menu toets:
 ckDelay=LED vertraging
-lblDelay=ms vertraging
+lblDelay=ms vertraging op
 ckRestartOnError=Herstart AtmoWin (en de verbinding) bij een fout
 lblRefreshRate=Hz
 [ContextMenu]

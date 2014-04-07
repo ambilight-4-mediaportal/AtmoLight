@@ -59,7 +59,6 @@
       this.lblEnd = new System.Windows.Forms.Label();
       this.edExcludeStart = new System.Windows.Forms.TextBox();
       this.lblStart = new System.Windows.Forms.Label();
-      this.lblHint = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
       this.lblRefreshRate = new System.Windows.Forms.Label();
       this.tbRefreshRate = new System.Windows.Forms.TextBox();
@@ -83,6 +82,7 @@
       this.lblVersionVal = new System.Windows.Forms.Label();
       this.btnLanguage = new System.Windows.Forms.Button();
       this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+      this.lblHint = new System.Windows.Forms.Label();
       this.grpMPClose.SuspendLayout();
       this.grpMode.SuspendLayout();
       this.grpStaticColor.SuspendLayout();
@@ -153,7 +153,7 @@
       this.grpMPClose.Controls.Add(this.rbSwitchToLiveView);
       this.grpMPClose.Location = new System.Drawing.Point(9, 490);
       this.grpMPClose.Name = "grpMPClose";
-      this.grpMPClose.Size = new System.Drawing.Size(291, 70);
+      this.grpMPClose.Size = new System.Drawing.Size(436, 70);
       this.grpMPClose.TabIndex = 6;
       this.grpMPClose.TabStop = false;
       this.grpMPClose.Text = "On MP close...";
@@ -283,9 +283,9 @@
             "Colorchanger",
             "Colorchanger LR",
             "Static Color"});
-      this.cbMenu.Location = new System.Drawing.Point(131, 104);
+      this.cbMenu.Location = new System.Drawing.Point(145, 104);
       this.cbMenu.Name = "cbMenu";
-      this.cbMenu.Size = new System.Drawing.Size(154, 21);
+      this.cbMenu.Size = new System.Drawing.Size(140, 21);
       this.cbMenu.TabIndex = 17;
       // 
       // cbRadio
@@ -298,9 +298,9 @@
             "Colorchanger",
             "Colorchanger LR",
             "Static Color"});
-      this.cbRadio.Location = new System.Drawing.Point(131, 77);
+      this.cbRadio.Location = new System.Drawing.Point(145, 77);
       this.cbRadio.Name = "cbRadio";
-      this.cbRadio.Size = new System.Drawing.Size(154, 21);
+      this.cbRadio.Size = new System.Drawing.Size(140, 21);
       this.cbRadio.TabIndex = 5;
       // 
       // lblRadio
@@ -322,9 +322,9 @@
             "Colorchanger",
             "Colorchanger LR",
             "Static Color"});
-      this.cbMusic.Location = new System.Drawing.Point(131, 50);
+      this.cbMusic.Location = new System.Drawing.Point(145, 50);
       this.cbMusic.Name = "cbMusic";
-      this.cbMusic.Size = new System.Drawing.Size(154, 21);
+      this.cbMusic.Size = new System.Drawing.Size(140, 21);
       this.cbMusic.TabIndex = 3;
       // 
       // lblMusic
@@ -347,9 +347,9 @@
             "Colorchanger LR",
             "MediaPortal Live Mode",
             "Static Color"});
-      this.cbVideo.Location = new System.Drawing.Point(131, 23);
+      this.cbVideo.Location = new System.Drawing.Point(145, 23);
       this.cbVideo.Name = "cbVideo";
-      this.cbVideo.Size = new System.Drawing.Size(154, 21);
+      this.cbVideo.Size = new System.Drawing.Size(140, 21);
       this.cbVideo.TabIndex = 1;
       // 
       // lblVidTvRec
@@ -376,9 +376,9 @@
       // 
       // edExcludeEnd
       // 
-      this.edExcludeEnd.Location = new System.Drawing.Point(58, 47);
+      this.edExcludeEnd.Location = new System.Drawing.Point(75, 47);
       this.edExcludeEnd.Name = "edExcludeEnd";
-      this.edExcludeEnd.Size = new System.Drawing.Size(67, 20);
+      this.edExcludeEnd.Size = new System.Drawing.Size(50, 20);
       this.edExcludeEnd.TabIndex = 3;
       // 
       // lblEnd
@@ -392,9 +392,9 @@
       // 
       // edExcludeStart
       // 
-      this.edExcludeStart.Location = new System.Drawing.Point(58, 21);
+      this.edExcludeStart.Location = new System.Drawing.Point(75, 21);
       this.edExcludeStart.Name = "edExcludeStart";
-      this.edExcludeStart.Size = new System.Drawing.Size(67, 20);
+      this.edExcludeStart.Size = new System.Drawing.Size(50, 20);
       this.edExcludeStart.TabIndex = 1;
       // 
       // lblStart
@@ -405,16 +405,6 @@
       this.lblStart.Size = new System.Drawing.Size(32, 13);
       this.lblStart.TabIndex = 0;
       this.lblStart.Text = "Start:";
-      // 
-      // lblHint
-      // 
-      this.lblHint.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHint.Location = new System.Drawing.Point(307, 152);
-      this.lblHint.Name = "lblHint";
-      this.lblHint.Size = new System.Drawing.Size(138, 126);
-      this.lblHint.TabIndex = 9;
-      this.lblHint.Text = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3" +
-    "D-SBS mode.";
       // 
       // grpPluginOption
       // 
@@ -438,7 +428,7 @@
       this.grpPluginOption.Controls.Add(this.lblLedsOnOff);
       this.grpPluginOption.Location = new System.Drawing.Point(10, 249);
       this.grpPluginOption.Name = "grpPluginOption";
-      this.grpPluginOption.Size = new System.Drawing.Size(290, 235);
+      this.grpPluginOption.Size = new System.Drawing.Size(435, 235);
       this.grpPluginOption.TabIndex = 11;
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
@@ -446,7 +436,7 @@
       // lblRefreshRate
       // 
       this.lblRefreshRate.AutoSize = true;
-      this.lblRefreshRate.Location = new System.Drawing.Point(258, 139);
+      this.lblRefreshRate.Location = new System.Drawing.Point(315, 139);
       this.lblRefreshRate.Name = "lblRefreshRate";
       this.lblRefreshRate.Size = new System.Drawing.Size(20, 13);
       this.lblRefreshRate.TabIndex = 27;
@@ -454,7 +444,7 @@
       // 
       // tbRefreshRate
       // 
-      this.tbRefreshRate.Location = new System.Drawing.Point(211, 136);
+      this.tbRefreshRate.Location = new System.Drawing.Point(270, 136);
       this.tbRefreshRate.Name = "tbRefreshRate";
       this.tbRefreshRate.Size = new System.Drawing.Size(41, 20);
       this.tbRefreshRate.TabIndex = 26;
@@ -475,7 +465,7 @@
       // lblDelay
       // 
       this.lblDelay.AutoSize = true;
-      this.lblDelay.Location = new System.Drawing.Point(143, 139);
+      this.lblDelay.Location = new System.Drawing.Point(165, 139);
       this.lblDelay.Name = "lblDelay";
       this.lblDelay.Size = new System.Drawing.Size(62, 13);
       this.lblDelay.TabIndex = 24;
@@ -483,7 +473,7 @@
       // 
       // tbDelay
       // 
-      this.tbDelay.Location = new System.Drawing.Point(96, 136);
+      this.tbDelay.Location = new System.Drawing.Point(120, 136);
       this.tbDelay.Name = "tbDelay";
       this.tbDelay.Size = new System.Drawing.Size(41, 20);
       this.tbDelay.TabIndex = 23;
@@ -574,7 +564,7 @@
       // lblFrames
       // 
       this.lblFrames.AutoSize = true;
-      this.lblFrames.Location = new System.Drawing.Point(143, 116);
+      this.lblFrames.Location = new System.Drawing.Point(165, 116);
       this.lblFrames.Name = "lblFrames";
       this.lblFrames.Size = new System.Drawing.Size(101, 13);
       this.lblFrames.TabIndex = 15;
@@ -582,7 +572,7 @@
       // 
       // lowCpuTime
       // 
-      this.lowCpuTime.Location = new System.Drawing.Point(96, 113);
+      this.lowCpuTime.Location = new System.Drawing.Point(120, 113);
       this.lowCpuTime.MaxLength = 4;
       this.lowCpuTime.Name = "lowCpuTime";
       this.lowCpuTime.Size = new System.Drawing.Size(41, 20);
@@ -667,17 +657,27 @@
       // 
       this.openFileDialog2.Filter = "files|*.lng";
       // 
+      // lblHint
+      // 
+      this.lblHint.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblHint.Location = new System.Drawing.Point(307, 140);
+      this.lblHint.Name = "lblHint";
+      this.lblHint.Size = new System.Drawing.Size(138, 103);
+      this.lblHint.TabIndex = 18;
+      this.lblHint.Text = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3" +
+    "D-SBS mode.";
+      // 
       // AtmolightSetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(452, 602);
+      this.Controls.Add(this.lblHint);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
       this.Controls.Add(this.lblVersionVal);
       this.Controls.Add(this.lblVersion);
       this.Controls.Add(this.grpPluginOption);
-      this.Controls.Add(this.lblHint);
       this.Controls.Add(this.grpDeactivate);
       this.Controls.Add(this.grpMode);
       this.Controls.Add(this.grpMPClose);
@@ -728,7 +728,6 @@
     private System.Windows.Forms.Label lblEnd;
     private System.Windows.Forms.TextBox edExcludeStart;
     private System.Windows.Forms.Label lblStart;
-    private System.Windows.Forms.Label lblHint;
     private System.Windows.Forms.GroupBox grpPluginOption;
     private System.Windows.Forms.ComboBox comboBox1;
     private System.Windows.Forms.Label lblLedsOnOff;
@@ -761,5 +760,6 @@
     private System.Windows.Forms.CheckBox ckRestartOnError;
     private System.Windows.Forms.Label lblRefreshRate;
     private System.Windows.Forms.TextBox tbRefreshRate;
+    private System.Windows.Forms.Label lblHint;
   }
 }

@@ -163,7 +163,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       DateTime dt;
       if (!DateTime.TryParse(edExcludeStart.Text, out dt))
       {
-        MessageBox.Show("You have to enter a valid start time", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show("You have to enter a valid start time.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -171,28 +171,28 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       DateTime dt2;
       if (!DateTime.TryParse(edExcludeEnd.Text, out dt2))
       {
-        MessageBox.Show("You have to enter a valid end time", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show("You have to enter a valid end time.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       int cTime;
       if (!int.TryParse(lowCpuTime.Text, out cTime) || cTime < 0)
       {
-        MessageBox.Show("You have to enter a valid number of ms", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show("You have to enter a valid number of ms.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       int cDelay;
       if (!int.TryParse(tbDelay.Text, out cDelay) || cDelay < 0)
       {
-          MessageBox.Show("You have to enter a valid number of ms", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show("You have to enter a valid number of ms.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
       }
 
       int cRefreshRate;
-      if (!int.TryParse(tbRefreshRate.Text, out cRefreshRate) || cRefreshRate < 0)
+      if (!int.TryParse(tbRefreshRate.Text, out cRefreshRate) || cRefreshRate <= 0)
       {
-        MessageBox.Show("You have to enter a valid number of Hz", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show("You have to enter a valid refresh rate.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
