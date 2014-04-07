@@ -13,10 +13,12 @@ using System.Drawing;
 using System.IO;
 using Microsoft.DirectX.Direct3D;
 using MediaPortal.Dialogs;
+using MediaPortal.Configuration;
 using Language;
 
 namespace MediaPortal.ProcessPlugins.Atmolight
 {
+  [PluginIcons("Atmolight.Enabled.png", "Atmolight.Disabled.png")]
   public class AtmolightPlugin : ISetupForm, IPlugin
   {
     #region class Win32API
