@@ -32,6 +32,16 @@ ckDelay=LED vertraging
 lblDelay=ms vertraging op
 ckRestartOnError=Herstart AtmoWin (en de verbinding) bij een fout
 lblRefreshRate=Hz
+Error=Error
+ErrorAtmoWinA=Invalid Filename. Please choose path to AtmoWinA.exe.
+ErrorStartTime=You have to enter a valid start time.
+ErrorEndTime=You have to enter a valid end time.
+ErrorMiliseconds=You have to enter a valid number of ms.
+ErrorRefreshRate=You have to enter a valid refresh rate.
+ErrorRed=Please enter a number between 0 and 255 for Red.
+ErrorGreen=Please enter a number between 0 and 255 for Green.
+ErrorBlue=Please enter a number between 0 and 255 for Blue.
+ErrorRemoteButtons=You cant use the same remote key for more than one task.
 [ContextMenu]
 SwitchLEDsON=Schakel LEDs aan
 SwitchLEDsOFF=Schakel LEDs uit

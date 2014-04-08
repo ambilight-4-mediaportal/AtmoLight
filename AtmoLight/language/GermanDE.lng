@@ -32,6 +32,16 @@ ckDelay=LED Verzögerung
 lblDelay=ms Verzögerung bei
 ckRestartOnError=AtmoWin und Verbindung neustarten bei Fehler
 lblRefreshRate=Hz
+Error=Fehler
+ErrorAtmoWinA=Unzulässiger Dateiname. Bitte wählen Sie den Pfad zu AtmoWinA.exe.
+ErrorStartTime=Bitte geben Sie eine zulässige Startzeit an.
+ErrorEndTime=Bitte geben Sie eine zulässige Endzeit an.
+ErrorMiliseconds=Bitte geben Sie eine zulässige Millisekunden Zahl an.
+ErrorRefreshRate=Bitte geben Sie eine zulässige Bildwiederholungsfrequenz an.
+ErrorRed=Bitte geben Sie eine Zahl zwischen 0 und 255 für Rot an.
+ErrorGreen=Bitte geben Sie eine Zahl zwischen 0 und 255 für Grün an.
+ErrorBlue=Bitte geben Sie eine Zahl zwischen 0 und 255 für Blau an.
+ErrorRemoteButtons=Sie können jede Fernbedienungstaste jeweils nur einmal zuweisen.
 [ContextMenu]
 SwitchLEDsON=Schalte LEDs an
 SwitchLEDsOFF=Schalte LEDs aus

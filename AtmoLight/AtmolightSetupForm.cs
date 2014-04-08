@@ -146,7 +146,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         else
         {
-          MessageBox.Show("You have to enter a invalid File, should be AtmoWinA", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorAtmoWinA, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
           edFile.Text = "";
           return;
         }
@@ -163,7 +163,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       DateTime dt;
       if (!DateTime.TryParse(edExcludeStart.Text, out dt))
       {
-        MessageBox.Show("You have to enter a valid start time.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorStartTime, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -171,54 +171,54 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       DateTime dt2;
       if (!DateTime.TryParse(edExcludeEnd.Text, out dt2))
       {
-        MessageBox.Show("You have to enter a valid end time.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorEndTime, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       int cTime;
       if (!int.TryParse(lowCpuTime.Text, out cTime) || cTime < 0)
       {
-        MessageBox.Show("You have to enter a valid number of ms.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       int cDelay;
       if (!int.TryParse(tbDelay.Text, out cDelay) || cDelay < 0)
       {
-          MessageBox.Show("You have to enter a valid number of ms.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-          return;
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
       }
 
       int cRefreshRate;
       if (!int.TryParse(tbRefreshRate.Text, out cRefreshRate) || cRefreshRate <= 0)
       {
-        MessageBox.Show("You have to enter a valid refresh rate.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRefreshRate, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       int StaticColorRed, StaticColorGreen, StaticColorBlue;
       if ((!int.TryParse(tbRed.Text, out StaticColorRed)) || (StaticColorRed < 0 || StaticColorRed > 255))
       {
-          MessageBox.Show("Please enter a number between 0 and 255 for Red.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-          return;
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRed, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
       }
       else if ((!int.TryParse(tbGreen.Text, out StaticColorGreen)) || (StaticColorGreen < 0 || StaticColorGreen > 255))
       {
-          MessageBox.Show("Please enter a number between 0 and 255 for Green.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-          return;
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorGreen, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
       }
       else if ((!int.TryParse(tbBlue.Text, out StaticColorBlue)) || (StaticColorBlue < 0 || StaticColorBlue > 255))
       {
-          MessageBox.Show("Please enter a number between 0 and 255 for Blue.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-          return;
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorBlue, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
       }
 
       if ((cbMenuButton.SelectedIndex == comboBox1.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
           (cbMenuButton.SelectedIndex == comboBox2.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
           (comboBox1.SelectedIndex == comboBox2.SelectedIndex) && (comboBox1.SelectedIndex != 4))
       {
-          MessageBox.Show("You cant use the same remote key for more than one task.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-          return;
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRemoteButtons, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
       }
 
       AtmolightSettings.staticColorRed = StaticColorRed;
@@ -252,7 +252,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     {
       openFileDialog2.InitialDirectory = Path.GetDirectoryName(LanguageLoader.strCurrentLanguageFile);
       if (openFileDialog2.ShowDialog() == DialogResult.OK)
-      {        
+      {
         LanguageLoader.LoadLanguageFile(openFileDialog2.FileName);
         LanguageLoader.strCurrentLanguageFile = openFileDialog2.FileName;
         UpdateLanguageOnControls();

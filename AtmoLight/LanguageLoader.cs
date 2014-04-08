@@ -251,6 +251,16 @@ namespace Language
     public String SetupForm_lblBlue = "Blue:";
     public String SetupForm_lblMenuButton = "Menu Remote Button:";
     public String SetupForm_ckRestartOnError = "Restart AtmoWin and Connection on Error";
+    public String SetupForm_Error = "Error";
+    public String SetupForm_ErrorAtmoWinA = "Invalid Filename. Please choose path to AtmoWinA.exe.";
+    public String SetupForm_ErrorStartTime = "You have to enter a valid start time.";
+    public String SetupForm_ErrorEndTime = "You have to enter a valid end time.";
+    public String SetupForm_ErrorMiliseconds = "You have to enter a valid number of ms.";
+    public String SetupForm_ErrorRefreshRate = "You have to enter a valid refresh rate.";
+    public String SetupForm_ErrorRed = "Please enter a number between 0 and 255 for Red.";
+    public String SetupForm_ErrorGreen = "Please enter a number between 0 and 255 for Green.";
+    public String SetupForm_ErrorBlue = "Please enter a number between 0 and 255 for Blue.";
+    public String SetupForm_ErrorRemoteButtons = "You cant use the same remote key for more than one task.";
     public String ContextMenu_SwitchLEDsON = "Switch LEDs on";
     public String ContextMenu_SwitchLEDsOFF = "Switch LEDs off";
     public String ContextMenu_ChangeEffect = "Change Effect";
@@ -282,14 +292,14 @@ namespace Language
     public String ContextMenu_Apply = "Apply";
     public String ContextMenu_Cancel = "Cancel";
     public String ContextMenu_NA = "N/A";
-    public string ContextMenu_DelayOFF = "Switch LED delay off";
-    public string ContextMenu_DelayON = "Swtich LED delay on";
-    public string ContextMenu_ChangeDelay = "Change LED delay";
-    public string ContextMenu_DelayTimeErrorLine1 = "The value has to be a number";
-    public string ContextMenu_DelayTimeErrorLine2 = "and must be between 0 and 1000.";
-    public string ContextMenu_ConnectLine1 = "Do you want to try to start";
-    public string ContextMenu_ConnectLine2 = "AtmoWin and reconnect to it?";
-    public string SetupForm_lblRefreshRate = "Hz";
+    public String ContextMenu_DelayOFF = "Switch LED delay off";
+    public String ContextMenu_DelayON = "Swtich LED delay on";
+    public String ContextMenu_ChangeDelay = "Change LED delay";
+    public String ContextMenu_DelayTimeErrorLine1 = "The value has to be a number";
+    public String ContextMenu_DelayTimeErrorLine2 = "and must be between 0 and 1000.";
+    public String ContextMenu_ConnectLine1 = "Do you want to try to start";
+    public String ContextMenu_ConnectLine2 = "AtmoWin and reconnect to it?";
+    public String SetupForm_lblRefreshRate = "Hz";
   }
 }
 
