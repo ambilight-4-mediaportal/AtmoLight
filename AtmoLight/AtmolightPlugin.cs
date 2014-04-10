@@ -455,6 +455,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       // Lock is needed so we dont try to initialize while another initialize is already running.
       if (reInitializeLock)
       {
+        Log.Debug("AtmoLight: Reinitialization locked, already running.");
         return false;
       }
       reInitializeLock = true;
@@ -989,7 +990,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
           System.Threading.Thread.Sleep(delayRefreshRateDependant);
         }
-        if (g_Player.Playing && !setPixelDataLock && !atmoOff && !reInitializeLock)
+        if (g_Player.Playing && !setPixelDataLock && !atmoOff && !reInitializeLock && atmoCtrl != null)
         {
             atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
         }
@@ -1012,18 +1013,30 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// </summary>
     private void GetAtmoLiveViewSourceThread()
     {
-      while (g_Player.Playing && !getAtmoLiveViewSourceLock && !atmoOff)
+      try
       {
-        if (!reInitializeLock)
+        while (g_Player.Playing && !getAtmoLiveViewSourceLock && !atmoOff)
         {
-          GetAtmoLiveViewSource();
-          if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
+          if (!reInitializeLock && atmoCtrl != null)
           {
-            Log.Debug("AtmoLight: AtmoWin Liveview Source is not lvsExternal");
-            SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
+            GetAtmoLiveViewSource();
+            if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
+            {
+              Log.Debug("AtmoLight: AtmoWin Liveview Source is not lvsExternal");
+              SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
+            }
           }
+          System.Threading.Thread.Sleep(delayGetAtmoLiveViewSource);
         }
-        System.Threading.Thread.Sleep(delayGetAtmoLiveViewSource);
+      }
+      catch (Exception ex)
+      {
+        Log.Error("AtmoLight: Error in GetAtmoLiveViewSourceThread.");
+        Log.Error("AtmoLight: Exception: {0}", ex.Message);
+
+        // Try to reconnect to AtmoWin.
+        // No new thread needed, as this already is not the main thread.
+        ReInitializeAtmoWinConnection();
       }
     }
     #endregion
@@ -1160,7 +1173,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// <param name="pSurface">Surface.</param>
     private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
     {
-      if (playbackEffect != ContentEffect.MediaPortalLiveMode || atmoOff || atmoCtrl == null || width == 0 || height == 0)
+      if (playbackEffect != ContentEffect.MediaPortalLiveMode || atmoOff || atmoCtrl == null || width == 0 || height == 0 || reInitializeLock)
       {
         return;
       }
@@ -1233,6 +1246,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
 
           rgbSurface.Dispose();
           rgbSurface = null;
+
+          if (!reInitializeLock)
+          {
+            ReleaseAtmoControl();
+          }
 
           // Try to reconnect to AtmoWin.
           // Thread needed to not halt the general playback.
