@@ -478,6 +478,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       
       currentEffect = ContentEffect.Undefined;
       Log.Debug("AtmoLight: Trying to restart AtmoWin and reconnect to it.");
+      StackTrace trace = new StackTrace();
+      Log.Debug("AtmoLight: ReInitializeAtmoWinConnection called from {0}.", trace.GetFrame(1).GetMethod());
       ReleaseAtmoControl();
       if (!KillAtmoWinA() || !InitializeAtmoWinConnection())
       {
