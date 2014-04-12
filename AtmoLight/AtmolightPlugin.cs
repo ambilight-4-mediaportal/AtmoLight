@@ -929,8 +929,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           setPixelDataLock = false;
           Thread GetAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
           GetAtmoLiveViewSourceThreadHelper.Start();
-          Thread SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread());
-          SetPixelDataThreadHelper.Start();
+          if (AtmolightSettings.delay)
+          {
+            Thread SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread());
+            SetPixelDataThreadHelper.Start();
+          }
           break;
         case ContentEffect.StaticColor:
           atmoOff = false;
@@ -1597,12 +1600,16 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         {
           Log.Info("AtmoLight: Switching LED delay off.");
           AtmolightSettings.delay = false;
+          setPixelDataLock = true;
         }
         else
         {
           Log.Info("AtmoLight: Switching LED delay on.");
           AtmolightSettings.delay = true;
           delayRefreshRateDependant = (int)(((float)AtmolightSettings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)AtmolightSettings.delayReferenceTime);
+          setPixelDataLock = false;
+          Thread SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread());
+          SetPixelDataThreadHelper.Start();
           Log.Debug("AtmoLight: Adding {0}ms delay to the LEDs.", delayRefreshRateDependant);
         }
       }
