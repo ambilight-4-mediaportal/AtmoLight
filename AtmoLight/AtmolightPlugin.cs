@@ -171,6 +171,9 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private ComLiveViewSource atmoLiveViewSource; // Current liveview source
     private int delayTimeHelper; // Helper var for delay time change
     private int delayRefreshRateDependant; // Variable that holds the actual delay
+    private List<byte[]> pixelDataList = new List<byte[]>();
+    private List<byte[]> bmiInfoHeaderList = new List<byte[]>();
+    private List<long> delayTimingList = new List<long>();
     #endregion
 
     #region Utilities
@@ -924,6 +927,8 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           setPixelDataLock = false;
           Thread GetAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
           GetAtmoLiveViewSourceThreadHelper.Start();
+          Thread SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread());
+          SetPixelDataThreadHelper.Start();
           break;
         case ContentEffect.StaticColor:
           atmoOff = false;
@@ -978,7 +983,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// </summary>
     /// <param name="bmiInfoHeader">Info Header.</param>
     /// <param name="pixelData">Pixel data.</param>
-    private void SetPixelDataThread(byte[] bmiInfoHeader, byte[] pixelData)
+    private void SetPixelDataThread()
     {
       if (atmoCtrl == null)
       {
@@ -986,18 +991,26 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
       try
       {
-        if (AtmolightSettings.delay)
+        while (g_Player.Playing && !setPixelDataLock && !atmoOff && !reInitializeLock && atmoCtrl != null)
         {
-          System.Threading.Thread.Sleep(delayRefreshRateDependant);
+          if (delayTimingList.Count >= 1)
+          {
+            if (Win32API.GetTickCount() >= (delayTimingList[0] + delayRefreshRateDependant))
+            {
+              atmoLiveViewCtrl.setPixelData(bmiInfoHeaderList[0], pixelDataList[0]);
+              delayTimingList.RemoveAt(0);
+              pixelDataList.RemoveAt(0);
+              bmiInfoHeaderList.RemoveAt(0);
+            }
+          }
         }
-        if (g_Player.Playing && !setPixelDataLock && !atmoOff && !reInitializeLock && atmoCtrl != null)
-        {
-            atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
-        }
+        delayTimingList.Clear();
+        pixelDataList.Clear();
+        bmiInfoHeaderList.Clear();
       }
       catch (Exception ex)
       {
-        Log.Error("AtmoLight: Could not send data to AtmoWin.");
+        Log.Error("AtmoLight: Could not send data to AtmoWin. {0} - {1}", delayTimingList.Count, setPixelDataLock);
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
 
         // Try to reconnect to AtmoWin.
@@ -1229,12 +1242,24 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             {
               lastFrame = Win32API.GetTickCount();
             }
-            // Create and start a new thread to send the data to AtmoWin.
-            // This is done so we can use the TimeoutHandler without halting or disturbing the video playback.
-            Thread SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread(bmiInfoHeader, pixelData));
-            // Priority gets set higher to ensure that the data gets send as soon as possible.
-            SetPixelDataThreadHelper.Priority = ThreadPriority.AboveNormal;
-            SetPixelDataThreadHelper.Start();
+
+            if (AtmolightSettings.delay)
+            {
+              if (delayTimingList.Count <= 60)
+              {
+                delayTimingList.Add(Win32API.GetTickCount());
+                pixelDataList.Add(pixelData);
+                bmiInfoHeaderList.Add(bmiInfoHeader);
+              }
+              else
+              {
+                throw new Exception("Delay buffer overflow.");
+              }
+            }
+            else
+            {
+              atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData); 
+            }
           }
           stream.Close();
           stream.Dispose();
