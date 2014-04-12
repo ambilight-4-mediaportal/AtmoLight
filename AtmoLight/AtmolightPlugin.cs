@@ -1012,6 +1012,16 @@ namespace MediaPortal.ProcessPlugins.Atmolight
               pixelDataList.RemoveAt(0);
               bmiInfoHeaderList.RemoveAt(0);
             }
+            else
+            {
+              // Sleep 10ms to reduce cpu load
+              System.Threading.Thread.Sleep(5);
+            }
+          }
+          else
+          {
+            // Sleep 10ms to reduce cpu load
+            System.Threading.Thread.Sleep(5);
           }
         }
         delayTimingList.Clear();
