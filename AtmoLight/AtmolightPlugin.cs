@@ -1301,11 +1301,14 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       {
         if (atmoCtrl == null)
         {
-          if (DialogYesNo(LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2))
+          if (!reInitializeLock)
           {
-            if (ReInitializeAtmoWinConnection(true) && !atmoLightPluginStarted)
+            if (DialogYesNo(LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2))
             {
-              Start();
+              if (ReInitializeAtmoWinConnection(true) && !atmoLightPluginStarted)
+              {
+                Start();
+              }
             }
           }
         }
