@@ -171,9 +171,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private ComLiveViewSource atmoLiveViewSource; // Current liveview source
     private int delayTimeHelper; // Helper var for delay time change
     private int delayRefreshRateDependant; // Variable that holds the actual delay
-    private List<byte[]> pixelDataList = new List<byte[]>();
-    private List<byte[]> bmiInfoHeaderList = new List<byte[]>();
-    private List<long> delayTimingList = new List<long>();
+    private List<byte[]> pixelDataList = new List<byte[]>(); // List for pixelData (Delay)
+    private List<byte[]> bmiInfoHeaderList = new List<byte[]>(); // List for bmiInfoHeader (Delay)
+    private List<long> delayTimingList = new List<long>(); // List for timings (Delay)
+    private bool onActionHandlerLock = false; // Lock so only one OnNewAction Handler gets added
     #endregion
 
     #region Utilities
@@ -551,7 +552,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         atmoLightPluginStarted = true;
       }
-      GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
+      if (!onActionHandlerLock)
+      {
+        GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
+        onActionHandlerLock = true;
+      }
     }
 
     /// <summary>
