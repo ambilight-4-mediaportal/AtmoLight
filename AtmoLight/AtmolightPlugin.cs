@@ -1015,13 +1015,13 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             }
             else
             {
-              // Sleep 10ms to reduce cpu load
+              // Sleep 5ms to reduce cpu load
               System.Threading.Thread.Sleep(5);
             }
           }
           else
           {
-            // Sleep 10ms to reduce cpu load
+            // Sleep 5ms to reduce cpu load
             System.Threading.Thread.Sleep(5);
           }
         }
