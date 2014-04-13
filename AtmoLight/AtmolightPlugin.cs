@@ -1009,19 +1009,25 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             if (Win32API.GetTickCount() >= (delayTimingList[0] + delayRefreshRateDependant))
             {
               atmoLiveViewCtrl.setPixelData(bmiInfoHeaderList[0], pixelDataList[0]);
+
               delayTimingList.RemoveAt(0);
               pixelDataList.RemoveAt(0);
               bmiInfoHeaderList.RemoveAt(0);
+
+              // Trim the lists, to prevent a memory leak.
+              delayTimingList.TrimExcess();
+              pixelDataList.TrimExcess();
+              bmiInfoHeaderList.TrimExcess();
             }
             else
             {
-              // Sleep 5ms to reduce cpu load
+              // Sleep 5ms to reduce cpu load.
               System.Threading.Thread.Sleep(5);
             }
           }
           else
           {
-            // Sleep 5ms to reduce cpu load
+            // Sleep 5ms to reduce cpu load.
             System.Threading.Thread.Sleep(5);
           }
         }
