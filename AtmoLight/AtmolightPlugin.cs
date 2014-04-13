@@ -1153,10 +1153,6 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackStarted(g_Player.MediaType type, string filename)
     {
-      if (atmoCtrl == null)
-      {
-        return;
-      }
       try
       {
         if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording || type == g_Player.MediaType.Unknown || (type == g_Player.MediaType.Music && filename.Contains(".mkv")))
@@ -1185,6 +1181,14 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           }
           playbackEffect = AtmolightSettings.effectRadio;
           Log.Debug("AtmoLight: Radio detected.");
+        }
+
+        // playbackEffect has to be set even when no connection to AtmoWin is established.
+        // Otherwise a connecting to AtmoWin during playback would result in the leds not working until playback is restarted.
+        // Thats why the check if atmoCtrl is null happens down here and not first.
+        if (atmoCtrl == null)
+        {
+          return;
         }
 
         if (CheckForStartRequirements())
