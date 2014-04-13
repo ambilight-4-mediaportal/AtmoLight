@@ -1001,6 +1001,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       }
       try
       {
+        Log.Debug("AtmoLight: Starting delay thread.");
         while (g_Player.Playing && !setPixelDataLock && !atmoOff && !reInitializeLock && atmoCtrl != null)
         {
           if (delayTimingList.Count >= 1)
@@ -1024,14 +1025,21 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             System.Threading.Thread.Sleep(5);
           }
         }
+        Log.Debug("AtmoLight: Clearing delay lists.");
         delayTimingList.Clear();
         pixelDataList.Clear();
         bmiInfoHeaderList.Clear();
+        Log.Debug("AtmoLight: Delay thread ended.");
       }
       catch (Exception ex)
       {
-        Log.Error("AtmoLight: Could not send data to AtmoWin. {0} - {1}", delayTimingList.Count, setPixelDataLock);
+        Log.Error("AtmoLight: Could not send data to AtmoWin.");
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
+
+        Log.Debug("AtmoLight: Clearing delay lists.");
+        delayTimingList.Clear();
+        pixelDataList.Clear();
+        bmiInfoHeaderList.Clear();
 
         // Try to reconnect to AtmoWin.
         // No new thread needed, as this already is not the main thread.
