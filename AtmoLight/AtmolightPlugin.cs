@@ -1062,16 +1062,13 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     {
       try
       {
-        while (g_Player.Playing && !getAtmoLiveViewSourceLock && !atmoOff)
+        while (g_Player.Playing && !getAtmoLiveViewSourceLock && !atmoOff && !reInitializeLock && atmoCtrl != null)
         {
-          if (!reInitializeLock && atmoCtrl != null)
+          GetAtmoLiveViewSource();
+          if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
           {
-            GetAtmoLiveViewSource();
-            if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
-            {
-              Log.Debug("AtmoLight: AtmoWin Liveview Source is not lvsExternal");
-              SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
-            }
+            Log.Debug("AtmoLight: AtmoWin Liveview Source is not lvsExternal");
+            SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
           }
           System.Threading.Thread.Sleep(delayGetAtmoLiveViewSource);
         }
