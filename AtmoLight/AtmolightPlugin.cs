@@ -613,6 +613,11 @@ namespace MediaPortal.ProcessPlugins.Atmolight
       if (TimeoutHandler(() => atmoCtrl.setEffect(effect, out oldEffect)))
       {
         Log.Info("AtmoLight: Successfully changed AtmoWin profile.");
+
+        // Change the effect to the desired effect.
+        // Needed for AtmoWin 1.0.0.5+
+        currentEffect = ContentEffect.Undefined;
+        StartLEDs();
         return true;
       }
       return false;
