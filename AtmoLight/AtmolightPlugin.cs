@@ -175,6 +175,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     private List<byte[]> bmiInfoHeaderList = new List<byte[]>(); // List for bmiInfoHeader (Delay)
     private List<long> delayTimingList = new List<long>(); // List for timings (Delay)
     private bool onActionHandlerLock = false; // Lock so only one OnNewAction Handler gets added
+    private readonly object listLock = new object(); // Lock objective for the above lists
     #endregion
 
     #region Utilities
@@ -1014,32 +1015,29 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             if (Win32API.GetTickCount() >= (delayTimingList[0] + delayRefreshRateDependant))
             {
               atmoLiveViewCtrl.setPixelData(bmiInfoHeaderList[0], pixelDataList[0]);
+              lock (listLock)
+              {
+                delayTimingList.RemoveAt(0);
+                pixelDataList.RemoveAt(0);
+                bmiInfoHeaderList.RemoveAt(0);
 
-              delayTimingList.RemoveAt(0);
-              pixelDataList.RemoveAt(0);
-              bmiInfoHeaderList.RemoveAt(0);
-
-              // Trim the lists, to prevent a memory leak.
-              delayTimingList.TrimExcess();
-              pixelDataList.TrimExcess();
-              bmiInfoHeaderList.TrimExcess();
-            }
-            else
-            {
-              // Sleep 5ms to reduce cpu load.
-              System.Threading.Thread.Sleep(5);
+                // Trim the lists, to prevent a memory leak.
+                delayTimingList.TrimExcess();
+                pixelDataList.TrimExcess();
+                bmiInfoHeaderList.TrimExcess();
+              }
             }
           }
-          else
-          {
-            // Sleep 5ms to reduce cpu load.
-            System.Threading.Thread.Sleep(5);
-          }
+          // Sleep 5ms to reduce cpu load.
+          System.Threading.Thread.Sleep(5);
         }
         Log.Debug("AtmoLight: Clearing delay lists.");
-        delayTimingList.Clear();
-        pixelDataList.Clear();
-        bmiInfoHeaderList.Clear();
+        lock (listLock)
+        {
+          delayTimingList.Clear();
+          pixelDataList.Clear();
+          bmiInfoHeaderList.Clear();
+        }
         Log.Debug("AtmoLight: Delay thread ended.");
       }
       catch (Exception ex)
@@ -1048,9 +1046,12 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         Log.Error("AtmoLight: Exception: {0}", ex.Message);
 
         Log.Debug("AtmoLight: Clearing delay lists.");
-        delayTimingList.Clear();
-        pixelDataList.Clear();
-        bmiInfoHeaderList.Clear();
+        lock (listLock)
+        {
+          delayTimingList.Clear();
+          pixelDataList.Clear();
+          bmiInfoHeaderList.Clear();
+        }
 
         // Try to reconnect to AtmoWin.
         // No new thread needed, as this already is not the main thread.
@@ -1287,18 +1288,22 @@ namespace MediaPortal.ProcessPlugins.Atmolight
             {
               if (delayTimingList.Count <= 60)
               {
-                delayTimingList.Add(Win32API.GetTickCount());
-                pixelDataList.Add(pixelData);
-                bmiInfoHeaderList.Add(bmiInfoHeader);
+                lock (listLock)
+                {
+                  delayTimingList.Add(Win32API.GetTickCount());
+                  pixelDataList.Add(pixelData);
+                  bmiInfoHeaderList.Add(bmiInfoHeader);
+                }
               }
               else
               {
                 throw new Exception("Delay buffer overflow.");
               }
+
             }
             else
             {
-              atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData); 
+              atmoLiveViewCtrl.setPixelData(bmiInfoHeader, pixelData);
             }
           }
           stream.Close();
