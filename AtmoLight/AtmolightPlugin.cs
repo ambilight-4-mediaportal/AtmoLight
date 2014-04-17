@@ -146,36 +146,51 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     #endregion
 
     #region Variables
-    private bool atmoLightPluginStarted = false; // State of the plugin
-    public bool atmoOff = true; // State of the LEDs
-    public Int64 lastFrame = 0; // Tick count of the last frame
+    // Com  Objects
     private IAtmoRemoteControl2 atmoCtrl = null; // Com Object to control AtmoWin
     private IAtmoLiveViewControl atmoLiveViewCtrl = null; // Com Object to control AtmoWins liveview
-    private int captureWidth = 0; // AtmoWins capture width
-    private int captureHeight = 0; // AtmoWins capture height
-    private Surface rgbSurface = null; // RGB Surface
+
+    // States
+    private bool atmoLightPluginStarted = false; // State of the plugin
+    private bool onActionHandlerStarted = false; // State of the OnNewAction Handler
+    private bool onRestartAtmoWin = false; // Need to be set only after the first start of plugin
+    private volatile bool atmoOff = true; // State of the LEDs
     private ContentEffect playbackEffect = ContentEffect.Undefined; // Effect for current placback
     private ContentEffect menuEffect = ContentEffect.Undefined; // Effect in GUI (no playback)
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current aktive effect
-    private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
-    private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
-    private int staticColorHelper; // Helper var for static color change
+    private ComLiveViewSource atmoLiveViewSource; // Current liveview source
+
+    // Timings
     private const int timeoutComInterface = 5000; // Timeout for the COM interface
     private const int delaySetStaticColor = 20; // SEDU workaround delay time
     private const int delayAtmoWinConnecting = 1000; // Delay between starting AtmoWin and connection to it
     private const int delayGetAtmoLiveViewSource = 1000; // Delay between liveview source checks
-    private bool reInitializeLock = false; // Lock for the reinitialization process
-    private bool getAtmoLiveViewSourceLock = true; // Lock for liveview source checks
-    private bool setPixelDataLock = true; // Lock for SetPixelData thread
-    private bool onRestartAtmoWin = false; // Need to be set only after the first start of plugin
-    private ComLiveViewSource atmoLiveViewSource; // Current liveview source
-    private int delayTimeHelper; // Helper var for delay time change
-    private int delayRefreshRateDependant; // Variable that holds the actual delay
+
+    // Lists
     private List<byte[]> pixelDataList = new List<byte[]>(); // List for pixelData (Delay)
     private List<byte[]> bmiInfoHeaderList = new List<byte[]>(); // List for bmiInfoHeader (Delay)
     private List<long> delayTimingList = new List<long>(); // List for timings (Delay)
-    private bool onActionHandlerLock = false; // Lock so only one OnNewAction Handler gets added
-    private readonly object listLock = new object(); // Lock objective for the above lists
+
+    // Locks
+    private readonly object listLock = new object(); // Lock object for the above lists
+    private volatile bool reInitializeLock = false; // Lock for the reinitialization process
+    private volatile bool getAtmoLiveViewSourceLock = true; // Lock for liveview source checks
+    private volatile bool setPixelDataLock = true; // Lock for SetPixelData thread
+    
+    // Frame Fields
+    private Surface rgbSurface = null; // RGB Surface
+    private Int64 lastFrame = 0; // Tick count of the last frame
+    private int captureWidth = 0; // AtmoWins capture width
+    private int captureHeight = 0; // AtmoWins capture height
+    
+    // Static Color
+    private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
+    private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
+    private int staticColorHelper; // Helper var for static color change
+    
+    // Delay Feature
+    private int delayTimeHelper; // Helper var for delay time change
+    private int delayRefreshRateDependant; // Variable that holds the actual delay
     #endregion
 
     #region Utilities
@@ -553,10 +568,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
         }
         atmoLightPluginStarted = true;
       }
-      if (!onActionHandlerLock)
+      if (!onActionHandlerStarted)
       {
         GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
-        onActionHandlerLock = true;
+        onActionHandlerStarted = true;
       }
     }
 
