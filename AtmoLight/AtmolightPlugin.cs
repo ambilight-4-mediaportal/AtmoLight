@@ -204,6 +204,10 @@ namespace MediaPortal.ProcessPlugins.Atmolight
     {
       try
       {
+#if DEBUG
+        method();
+        return true;
+#else
         long timeoutStart = Win32API.GetTickCount();
         var tokenSource = new CancellationTokenSource();
         CancellationToken token = tokenSource.Token;
@@ -223,6 +227,7 @@ namespace MediaPortal.ProcessPlugins.Atmolight
           return false;
         }
         return true;
+#endif
       }
       catch (AggregateException ex)
       {
