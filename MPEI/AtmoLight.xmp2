@@ -441,7 +441,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
 - Language file updates</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.10.0.0.mpe1</OnlineLocation>
-    <ReleaseDate>2014-04-05T10:45:58</ReleaseDate>
+    <ReleaseDate>2014-04-19T10:45:58</ReleaseDate>
     <Tags>sedu-board, atmowin, ws2801, ambilight, teensy 2, atmoduino, ambilight, led</Tags>
     <Location>..\MPEI Release\[Name]_[Version].mpe1</Location>
     <Params>
@@ -546,7 +546,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
   <ProjectSettings>
     <FolderGroups />
     <ProjectFilename>AtmoLight.xmp2</ProjectFilename>
-    <UpdatePath1>D:\Software Development\AtmoLight\MPEI\Atmolight_update.xml</UpdatePath1>
+    <UpdatePath1>Atmolight_update.xml</UpdatePath1>
     <UpdatePath2 />
     <UpdatePath3 />
   </ProjectSettings>
