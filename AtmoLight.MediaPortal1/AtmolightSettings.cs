@@ -2,18 +2,8 @@
 using MediaPortal.Profile;
 using Language;
 
-namespace MediaPortal.ProcessPlugins.Atmolight
+namespace AtmoLight
 {
-  public enum ContentEffect
-  {
-    LEDsDisabled = 0,
-    AtmoWinLiveMode,
-    Colorchanger,
-    ColorchangerLR,
-    MediaPortalLiveMode,
-    StaticColor,
-    Undefined = -1
-  }
   public class AtmolightSettings
   {
     #region Config variables

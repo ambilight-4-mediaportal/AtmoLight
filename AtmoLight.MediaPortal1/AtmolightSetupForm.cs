@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Language;
 
-namespace MediaPortal.ProcessPlugins.Atmolight
+namespace AtmoLight
 {
   public partial class AtmolightSetupForm : Form
   {

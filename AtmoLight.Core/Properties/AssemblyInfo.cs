@@ -1,9 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using MediaPortal.Common.Utils;
-[assembly: CompatibleVersion("1.1.6.27652", "1.1.6.27652")]
-[assembly: UsesSubsystem("MP.Config")]
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -11,9 +8,9 @@ using MediaPortal.Common.Utils;
 [assembly: AssemblyTitle("MediaPortal Atmolight Plugin")]
 [assembly: AssemblyDescription("Utilizes the AtmoWinA.exe to toggle live picture mode")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Andreas Kwasnik")]
+[assembly: AssemblyCompany("Andreas Kwasnik and MediaPortal Community Member")]
 [assembly: AssemblyProduct("MediaPortal Atmolight Plugin")]
-[assembly: AssemblyCopyright("Copyright © Andreas Kwasnik 2010")]
+[assembly: AssemblyCopyright("Copyright © Andreas Kwasnik and MediaPortal Community Member 2010-2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -1,4 +1,4 @@
-﻿namespace MediaPortal.ProcessPlugins.Atmolight
+﻿namespace AtmoLight
 {
   partial class AtmolightSetupForm
   {

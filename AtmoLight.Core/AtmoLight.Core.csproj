@@ -8,8 +8,8 @@
     <ProjectGuid>{1A2ADEB0-CEB7-40F2-A146-91724EA884E0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Atmolight</RootNamespace>
-    <AssemblyName>Atmolight</AssemblyName>
+    <RootNamespace>AtmoLight</RootNamespace>
+    <AssemblyName>AtmoLight.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -73,47 +73,15 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Utils">
-      <HintPath>C:\Program Files (x86)\Team MediaPortal\MediaPortal\Common.Utils.dll</HintPath>
-    </Reference>
-    <Reference Include="Core">
-      <HintPath>C:\Program Files (x86)\Team MediaPortal\MediaPortal\Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Dialogs, Version=1.0.6.35292, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Team MediaPortal\MediaPortal\plugins\Windows\Dialogs.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.DirectX, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-    <Reference Include="Microsoft.DirectX.Direct3D, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-    <Reference Include="Microsoft.DirectX.Direct3DX, Version=1.0.2911.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Utils, Version=1.1.7.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Team MediaPortal\MediaPortal\Utils.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AtmolightPlugin.cs" />
-    <Compile Include="AtmolightSettings.cs" />
-    <Compile Include="AtmolightSetupForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AtmolightSetupForm.Designer.cs">
-      <DependentUpon>AtmolightSetupForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="IniAccess.cs" />
-    <Compile Include="LanguageLoader.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="AtmolightSetupForm.resx">
-      <DependentUpon>AtmolightSetupForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -137,10 +105,6 @@
       <Project>{e0da6ad7-f692-4645-88fa-356065806a57}</Project>
       <Name>AtmoWinRemoteControl</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Disabled.png" />
-    <EmbeddedResource Include="Enabled.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
