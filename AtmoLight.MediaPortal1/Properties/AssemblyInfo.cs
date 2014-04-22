@@ -8,12 +8,12 @@ using MediaPortal.Common.Utils;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MediaPortal Atmolight Plugin")]
+[assembly: AssemblyTitle("MediaPortal AtmoLight Plugin")]
 [assembly: AssemblyDescription("Utilizes the AtmoWinA.exe to toggle live picture mode")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Andreas Kwasnik and MediaPortal Community Member")]
-[assembly: AssemblyProduct("MediaPortal Atmolight Plugin")]
-[assembly: AssemblyCopyright("Copyright © Andreas Kwasnik and MediaPortal Community Member 2010-2014")]
+[assembly: AssemblyCompany("Andreas Kwasnik and MediaPortal Community Members")]
+[assembly: AssemblyProduct("MediaPortal AtmoLight Plugin")]
+[assembly: AssemblyCopyright("Copyright © Andreas Kwasnik and MediaPortal Community Members 2010-2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

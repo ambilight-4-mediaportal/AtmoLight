@@ -179,10 +179,13 @@ namespace AtmoLight
     {
       if (MPSettings.Instance.GetValueAsBool("plugins", "AtmoLight", true))
       {
+        // Log Handler
+        Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
+
         var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
-        MediaPortal.GUI.Library.Log.Info("AtmoLight Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
-        MediaPortal.GUI.Library.Log.Debug("AtmoLight: Loading settings.");
+        Log.Info("AtmoLight: Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
+        Log.Debug("AtmoLight: Loading settings.");
         Settings.LoadSettings();
       }
     }
@@ -193,10 +196,7 @@ namespace AtmoLight
     /// </summary>
     public void Start()
     {
-      MediaPortal.GUI.Library.Log.Debug("AtmoLight: Initialising event handler.");
-
-      // Log Handler
-      Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
+      Log.Debug("AtmoLight: Initialising event handler.");
 
       // g_Player Handler
       g_Player.PlayBackStarted += new g_Player.StartedHandler(g_Player_PlayBackStarted);
