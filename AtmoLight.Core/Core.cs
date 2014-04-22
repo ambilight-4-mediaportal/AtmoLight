@@ -583,7 +583,7 @@ namespace AtmoLight
     /// Changes the AtmoWin profile.
     /// </summary>
     /// <returns>true if successfull and false if not.</returns>
-    public bool SetColorMode(ComEffectMode effect)
+    private bool SetColorMode(ComEffectMode effect)
     {
       if (!IsConnected())
       {
@@ -595,10 +595,6 @@ namespace AtmoLight
       if (TimeoutHandler(() => atmoRemoteControl.setEffect(effect, out oldEffect)))
       {
         Log.Info("Successfully changed AtmoWin profile.");
-
-        // Change the effect to the desired effect.
-        // Needed for AtmoWin 1.0.0.5+
-        ChangeEffect(currentEffect, true);
         return true;
       }
       return false;
@@ -792,6 +788,20 @@ namespace AtmoLight
           break;
       }
       currentEffect = effect;
+      return true;
+    }
+
+    /// <summary>
+    /// Change to AtmoWin profile.
+    /// </summary>
+    /// <returns>true or false</returns>
+    public bool ChangeAtmoWinProfile()
+    {
+      if (!SetColorMode(ComEffectMode.cemColorMode)) return false;
+
+      // Change the effect to the desired effect.
+      // Needed for AtmoWin 1.0.0.5+
+      if (!ChangeEffect(currentEffect, true)) return false;
       return true;
     }
     #endregion

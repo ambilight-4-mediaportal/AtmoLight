@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
-using AtmoWinRemoteControl;
+//using AtmoWinRemoteControl;
 //using System.Drawing;
 using System.IO;
 using Microsoft.DirectX.Direct3D;
@@ -629,7 +629,7 @@ namespace AtmoLight
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.profileButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.profileButton == 3))
       {
-        AtmoLightObject.SetColorMode(ComEffectMode.cemColorMode);
+        AtmoLightObject.ChangeAtmoWinProfile();
       }
     }
     #endregion
@@ -855,7 +855,7 @@ namespace AtmoLight
       }
       else if (dlg.SelectedLabel == 2)
       {
-        AtmoLightObject.SetColorMode(ComEffectMode.cemColorMode);
+        AtmoLightObject.ChangeAtmoWinProfile();
       }
       else if (dlg.SelectedLabel == 3)
       {
