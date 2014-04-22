@@ -305,32 +305,33 @@ namespace AtmoLight
     /// <param name="force">Force the reinitialising and discard user settings.</param>
     public void Reinitialise(bool force = false)
     {
+      if (reinitialiseLock)
+      {
+        Log.Debug("Reinitialising locked.");
+        return;
+      }
       if (!reinitialiseOnError && !force)
       {
         Disconnect();
         OnNewConnectionLost();
         return;
       }
-      if (!reinitialiseLock)
+
+      reinitialiseLock = true;
+      Log.Debug("Reinitialising.");
+
+      if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(currentEffect, true))
       {
-        reinitialiseLock = true;
-        Log.Debug("Reinitialising.");
-
-        if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(currentEffect, true))
-        {
-          Disconnect();
-          StopAtmoWin();
-          Log.Error("Reinitialising failed.");
-          reinitialiseLock = false;
-          OnNewConnectionLost();
-          return;
-        }
-
-        Log.Debug("Reinitialising successfull.");
+        Disconnect();
+        StopAtmoWin();
+        Log.Error("Reinitialising failed.");
         reinitialiseLock = false;
+        OnNewConnectionLost();
         return;
       }
-      Log.Debug("Reinitialising locked.");
+
+      Log.Debug("Reinitialising successfull.");
+      reinitialiseLock = false;
       return;
     }
 
