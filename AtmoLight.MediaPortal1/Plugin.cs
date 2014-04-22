@@ -187,6 +187,10 @@ namespace AtmoLight
       }
     }
 
+    /// <summary>
+    /// Start point of the plugin.
+    /// This method gets called by MediaPortal.
+    /// </summary>
     public void Start()
     {
       MediaPortal.GUI.Library.Log.Debug("AtmoLight: Initialising event handler.");
@@ -237,6 +241,10 @@ namespace AtmoLight
        }
     }
 
+    /// <summary>
+    /// Stop point of the plugin.
+    /// This method gets called by MediaPortal.
+    /// </summary>
     public void Stop()
     {
       MediaPortal.FrameGrabber.GetInstance().OnNewFrame -= new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
@@ -269,6 +277,10 @@ namespace AtmoLight
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
     }
 
+    /// <summary>
+    /// Check if LEDs should be activated.
+    /// </summary>
+    /// <returns>true or false</returns>
     private bool CheckForStartRequirements()
     {
       if (!AtmoLightObject.IsConnected())
@@ -293,7 +305,7 @@ namespace AtmoLight
     }
 
     /// <summary>
-    /// Returns the current refresh rate.
+    /// Return the current refresh rate.
     /// </summary>
     /// <returns>Current refresh rate.</returns>
     private int GetRefreshRate()
@@ -309,6 +321,13 @@ namespace AtmoLight
     }
 
     #region Log Event Handler
+    /// <summary>
+    /// Event Handler for logging.
+    /// This event gets called if logging is done from Core or from Plugin.
+    /// </summary>
+    /// <param name="logLevel">Log level</param>
+    /// <param name="format">Format</param>
+    /// <param name="args">Arguments</param>
     private void OnNewLog(Log.LogLevel logLevel, string format, params object[] args)
     {
       switch (logLevel)
@@ -330,6 +349,10 @@ namespace AtmoLight
     #endregion
 
     #region Connection List Handler
+    /// <summary>
+    /// Connection lost event handler.
+    /// This event gets called if connection to AtmoWin is lost and not recoverable.
+    /// </summary>
     private void OnNewConnectionLost()
     {
       DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost);
@@ -337,6 +360,12 @@ namespace AtmoLight
     #endregion
 
     #region g_Player Event Handler
+    /// <summary>
+    /// Playback started event handler.
+    /// This event handler gets called when playback starts.
+    /// </summary>
+    /// <param name="type">Media type</param>
+    /// <param name="filename">Media filename</param>
     void g_Player_PlayBackStarted(g_Player.MediaType type, string filename)
     {
       try
@@ -514,7 +543,7 @@ namespace AtmoLight
 
             if (AtmoLightObject.delayEnabled)
             {
-              AtmoLightObject.AddDelayListItem(pixelData, bmiInfoHeader, Win32API.GetTickCount());
+              AtmoLightObject.AddDelayListItem(bmiInfoHeader, pixelData);
             }
             else
             {

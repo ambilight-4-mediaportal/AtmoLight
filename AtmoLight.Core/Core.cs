@@ -202,6 +202,10 @@ namespace AtmoLight
     #endregion
 
     #region Connect
+    /// <summary>
+    /// Connect to AtmoWin.
+    /// </summary>
+    /// <returns>true or false</returns>
     public bool Connect()
     {
       Log.Debug("Trying to connect to AtmoWin.");
@@ -215,6 +219,10 @@ namespace AtmoLight
       return true;
     }
 
+    /// <summary>
+    /// Disconnect from AtmoWin.
+    /// </summary>
+    /// <returns>true or false</returns>
     public bool Disconnect()
     {
       Log.Debug("Disconnecting from AtmoWin.");
@@ -234,6 +242,11 @@ namespace AtmoLight
       }
       return true;
     }
+
+    /// <summary>
+    /// Reconnect to AtmoWin.
+    /// </summary>
+    /// <returns>true or false</returns>
     public bool Reconnect()
     {
       Log.Debug("Trying to reconnect to AtmoWin.");
@@ -242,6 +255,10 @@ namespace AtmoLight
       return true;
     }
 
+    /// <summary>
+    /// Return if a connection to AtmoWin is established.
+    /// </summary>
+    /// <returns>true or false</returns>
     public bool IsConnected()
     {
       if (atmoRemoteControl == null || atmoLiveViewControl == null)
@@ -253,6 +270,10 @@ namespace AtmoLight
     #endregion
 
     #region Initialise
+    /// <summary>
+    /// Start AtmoWin and connects to it.
+    /// </summary>
+    /// <returns>true or false</returns>
     public bool Initialise()
     {
       Log.Debug("Initialising.");
@@ -268,6 +289,10 @@ namespace AtmoLight
       return true;
     }
 
+    /// <summary>
+    /// Restart AtmoWin and reconnects to it.
+    /// </summary>
+    /// <param name="force">Force the reinitialising and discard user settings.</param>
     public void Reinitialise(bool force = false)
     {
       if (!reinitialiseOnError && !force)
@@ -299,6 +324,10 @@ namespace AtmoLight
       return;
     }
 
+    /// <summary>
+    /// Start reinitialising in a new thread.
+    /// </summary>
+    /// <param name="force">Force the reinitialising and discard user settings.</param>
     public void ReinitialiseThreaded(bool force = false)
     {
       if (!reinitialiseLock)
@@ -315,6 +344,10 @@ namespace AtmoLight
     #endregion
 
     #region AtmoWin
+    /// <summary>
+    /// Start AtmoWin.
+    /// </summary>
+    /// <returns>true or false</returns>
     public bool StartAtmoWin()
     {
       Log.Debug("Trying to start AtmoWin.");
@@ -339,6 +372,10 @@ namespace AtmoLight
       return true;
     }
 
+    /// <summary>
+    /// Stop AtmoWin.
+    /// </summary>
+    /// <returns>true or false</returns>
     public bool StopAtmoWin()
     {
       Log.Info("Trying to stop AtmoWin.");
@@ -358,6 +395,9 @@ namespace AtmoLight
       return true;
     }
 
+    /// <summary>
+    /// Restart AtmoWin.
+    /// </summary>
     public void RestartAtmoWin()
     {
       Log.Debug("Trying to restart AtmoWin.");
@@ -367,7 +407,12 @@ namespace AtmoLight
     #endregion
 
     #region Delay Lists
-    public bool AddDelayListItem(byte[] pixelData, byte[] bmiInfoHeader, long delayTiming)
+    /// <summary>
+    /// Add new Items to the delay lists.
+    /// </summary>
+    /// <param name="bmiInfoHeader">Info Header</param>
+    /// <param name="pixelData">Pixel Data</param>
+    public void AddDelayListItem(byte[] bmiInfoHeader, byte[] pixelData)
     {
       if (delayTimingList.Count <= 60)
       {
@@ -382,9 +427,11 @@ namespace AtmoLight
       {
         throw new Exception("Delay buffer overflow.");
       }
-      return true;
     }
 
+    /// <summary>
+    /// Clear all delay lists.
+    /// </summary>
     public void ClearDelayLists()
     {
       Log.Debug("Clearing delay lists.");
@@ -397,6 +444,9 @@ namespace AtmoLight
       Log.Debug("Delay lists cleared.");
     }
 
+    /// <summary>
+    /// Trim all delay lists.
+    /// </summary>
     public void TrimDelayLists()
     {
       lock (listLock)
@@ -407,6 +457,9 @@ namespace AtmoLight
       }
     }
 
+    /// <summary>
+    /// Delete first entry in all delay lists.
+    /// </summary>
     public void DeleteFirstDelayListsItems()
     {
       lock (listLock)
@@ -420,7 +473,7 @@ namespace AtmoLight
 
     #region Utilities
     /// <summary>
-    /// Checks if a method times out and starts to reinitialize AtmoWin if needed.
+    /// Check if a method times out and starts to reinitialise AtmoWin if needed.
     /// </summary>
     /// <param name="method">Method that needs checking for a timeout.</param>
     /// <param name="timeout">Timeout in ms.</param>
@@ -649,8 +702,11 @@ namespace AtmoLight
 
     #region Control LEDs
     /// <summary>
-    /// Changes the effect during playback.
+    /// Change effect.
     /// </summary>
+    /// <param name="effect">Effect to change to</param>
+    /// <param name="force">Force the effect change</param>
+    /// <returns></returns>
     public bool ChangeEffect(ContentEffect effect, bool force = false)
     {
       if (!IsConnected())
@@ -728,6 +784,9 @@ namespace AtmoLight
     #endregion
 
     #region Threads
+    /// <summary>
+    /// Start the SetPixelData thread.
+    /// </summary>
     public void StartSetPixelDataThread()
     {
       setPixelDataLock = false;
@@ -735,11 +794,17 @@ namespace AtmoLight
       SetPixelDataThreadHelper.Start();
     }
 
+    /// <summary>
+    /// Stop the SetPixelData thread.
+    /// </summary>
     public void StopSetPixelDataThread()
     {
       setPixelDataLock = true;
     }
 
+    /// <summary>
+    /// Start the GetAtmoLiveViewSource thread.
+    /// </summary>
     public void StartGetAtmoLiveViewSourceThread()
     {
       getAtmoLiveViewSourceLock = false;
@@ -747,18 +812,19 @@ namespace AtmoLight
       GetAtmoLiveViewSourceThreadHelper.Start();
     }
 
+    /// <summary>
+    /// Stop the GetAtmoLiveViewSource thread.
+    /// </summary>
     public void StopGetAtmoLiveViewSourceThread()
     {
       getAtmoLiveViewSourceLock = true;
     }
 
     /// <summary>
-    /// Sends pixel data to AtmoWin when MediaPortal liveview is used (external liveview source).
-    /// Also adds a delay if specified in settings.
+    /// Send pixel data to AtmoWin when MediaPortal liveview is used (external liveview source).
+    /// Also add a delay specified in settings.
     /// This method is designed to run as its own thread.
     /// </summary>
-    /// <param name="bmiInfoHeader">Info Header.</param>
-    /// <param name="pixelData">Pixel data.</param>
     private void SetPixelDataThread()
     {
       if (atmoRemoteControl == null)
@@ -797,8 +863,8 @@ namespace AtmoLight
     }
 
     /// <summary>
-    /// Checks if the AtmoWin liveview source is set to external when MediaPortal liveview is used.
-    /// Sets liveview source back to external if needed.
+    /// Check if the AtmoWin liveview source is set to external when MediaPortal liveview is used.
+    /// Set liveview source back to external if needed.
     /// This method is designed to run as its own thread.
     /// </summary>
     private void GetAtmoLiveViewSourceThread()
