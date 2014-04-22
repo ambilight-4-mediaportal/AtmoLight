@@ -29,7 +29,8 @@ namespace AtmoLight
     private string pathAtmoWin = "";
     public bool delayEnabled = false;
     public int delayTime = 0;    
-    public bool reinitialiseOnError = false;
+    private bool reinitialiseOnError = true;
+    private bool startAtmoWin = true;
     public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
 
     private Thread SetPixelDataThreadHelper;
@@ -190,11 +191,12 @@ namespace AtmoLight
     #endregion
 
     #region Constructor
-    public Core(string pathAtmoWin, bool noReinitialising, int[] staticColor, bool delayEnabled, int delayTime)
+    public Core(string pathAtmoWin, bool reinitialiseOnError, bool startAtmoWin, int[] staticColor, bool delayEnabled, int delayTime)
     {
       Log.Debug("AtmoLight: ctor");
       this.pathAtmoWin = pathAtmoWin;
-      this.reinitialiseOnError = noReinitialising; 
+      this.reinitialiseOnError = reinitialiseOnError;
+      this.startAtmoWin = startAtmoWin;
       this.staticColor = staticColor;
       this.delayEnabled = delayEnabled;
       this.delayTime = delayTime;
@@ -274,13 +276,21 @@ namespace AtmoLight
     /// Start AtmoWin and connects to it.
     /// </summary>
     /// <returns>true or false</returns>
-    public bool Initialise()
+    public bool Initialise(bool force = false)
     {
       Log.Debug("Initialising.");
       if (!Win32API.IsProcessRunning("atmowina.exe"))
       {
-        if (!StartAtmoWin()) return false;
-        System.Threading.Thread.Sleep(delayAtmoWinConnect);
+        if (startAtmoWin || force)
+        {
+          if (!StartAtmoWin()) return false;
+          System.Threading.Thread.Sleep(delayAtmoWinConnect);
+        }
+        else
+        {
+          Log.Error("AtmoWin is not running.");
+          return false;
+        }
       }
 
       if (!Connect()) return false;
@@ -306,7 +316,7 @@ namespace AtmoLight
         reinitialiseLock = true;
         Log.Debug("Reinitialising.");
 
-        if (!Disconnect() || !StopAtmoWin() || !Initialise() || !ChangeEffect(currentEffect, true))
+        if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(currentEffect, true))
         {
           Disconnect();
           StopAtmoWin();

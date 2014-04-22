@@ -226,10 +226,13 @@ namespace AtmoLight
       staticColorTemp[2] = Settings.staticColorBlue;
 
       Log.Debug("Generating new AtmoLight.Core instance.");
-      AtmoLightObject = new Core(Settings.atmowinExe, Settings.restartOnError, staticColorTemp, Settings.delay, Settings.delayReferenceTime);
+      AtmoLightObject = new Core(Settings.atmowinExe, Settings.restartOnError, Settings.startAtmoWin, staticColorTemp, Settings.delay, Settings.delayReferenceTime);
 
-      AtmoLightObject.Initialise();
-      AtmoLightObject.ChangeEffect(menuEffect);
+      if (!AtmoLightObject.Initialise())
+      {
+        Log.Error("Initialising failed.");
+        return; 
+      }
 
       if (CheckForStartRequirements())
        {
