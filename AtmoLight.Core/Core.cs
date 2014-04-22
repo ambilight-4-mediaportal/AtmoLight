@@ -28,9 +28,9 @@ namespace AtmoLight
 
     private string pathAtmoWin = "";
     public bool delayEnabled = false;
-    public int delayTime = 0;
-    private bool reinitialiseLock = false;
+    public int delayTime = 0;    
     public bool reinitialiseOnError = false;
+    public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
 
     private Thread SetPixelDataThreadHelper;
     private Thread GetAtmoLiveViewSourceThreadHelper;
@@ -41,7 +41,7 @@ namespace AtmoLight
     private IAtmoLiveViewControl atmoLiveViewControl = null; // Com Object to control AtmoWins liveview
 
     // States
-    public bool currentState = true; // State of the LEDs
+    public bool currentState = false; // State of the LEDs
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current aktive effect
     private ComLiveViewSource atmoLiveViewSource; // Current liveview source
 
@@ -58,11 +58,9 @@ namespace AtmoLight
 
     // Locks
     private readonly object listLock = new object(); // Lock object for the above lists
-    //private volatile bool reInitializeLock = false; // Lock for the reinitialization process
     private volatile bool getAtmoLiveViewSourceLock = true; // Lock for liveview source checks
     private volatile bool setPixelDataLock = true; // Lock for SetPixelData thread
-
-    public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
+    private volatile bool reinitialiseLock = false;
 
     public int captureWidth = 0; // AtmoWins capture width
     public int captureHeight = 0; // AtmoWins capture height
@@ -483,7 +481,7 @@ namespace AtmoLight
     /// <returns>true if successfull and false if not.</returns>
     private bool GetAtmoLiveViewControl()
     {
-      if (atmoRemoteControl == null)
+      if (!IsConnected())
       {
         return false;
       }
@@ -503,7 +501,7 @@ namespace AtmoLight
     /// <returns>true if successfull and false if not.</returns>
     private bool GetAtmoLiveViewSource()
     {
-      if (atmoRemoteControl == null)
+      if (!IsConnected())
       {
         return false;
       }
@@ -521,7 +519,7 @@ namespace AtmoLight
     /// <returns>true if successfull and false if not.</returns>
     public bool SetColorMode(ComEffectMode effect)
     {
-      if (atmoRemoteControl == null)
+      if (!IsConnected())
       {
         return false;
       }
@@ -547,7 +545,7 @@ namespace AtmoLight
     /// <returns>true if successfull and false if not.</returns>
     private bool SetAtmoEffect(ComEffectMode effect)
     {
-      if (atmoRemoteControl == null)
+      if (!IsConnected())
       {
         return false;
       }
@@ -571,7 +569,7 @@ namespace AtmoLight
     /// <returns>true if successfull and false if not.</returns>
     private bool SetAtmoColor(byte red, byte green, byte blue)
     {
-      if (atmoRemoteControl == null)
+      if (!IsConnected())
       {
         return false;
       }
@@ -592,7 +590,7 @@ namespace AtmoLight
     /// <returns>true if successfull and false if not.</returns>
     private bool SetAtmoLiveViewSource(ComLiveViewSource viewSource)
     {
-      if (atmoRemoteControl == null)
+      if (!IsConnected())
       {
         return false;
       }
@@ -614,7 +612,7 @@ namespace AtmoLight
     /// <returns>true if successfull and false if not.</returns>
     private bool GetAtmoLiveViewRes()
     {
-      if (atmoRemoteControl == null)
+      if (!IsConnected())
       {
         return false;
       }
@@ -630,7 +628,7 @@ namespace AtmoLight
 
     public void SetPixelData(byte[] bmiInfoHeader, byte[] pixelData)
     {
-      if (atmoRemoteControl == null)
+      if (!IsConnected())
       {
         return;
       }
@@ -655,7 +653,7 @@ namespace AtmoLight
     /// </summary>
     public bool ChangeEffect(ContentEffect effect, bool force = false)
     {
-      if (atmoRemoteControl == null)
+      if (!IsConnected())
       {
         return false;
       }
