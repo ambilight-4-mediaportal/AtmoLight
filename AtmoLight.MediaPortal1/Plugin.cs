@@ -146,8 +146,6 @@ namespace AtmoLight
     #endregion
 
     #region Variables
-
-
     // States
     private ContentEffect playbackEffect = ContentEffect.Undefined; // Effect for current placback
     private ContentEffect menuEffect = ContentEffect.Undefined; // Effect in GUI (no playback)
@@ -158,7 +156,6 @@ namespace AtmoLight
     private const int delayAtmoWinConnecting = 1000; // Delay between starting AtmoWin and connection to it
     private const int delayGetAtmoLiveViewSource = 1000; // Delay between liveview source checks
 
-    
     // Frame Fields
     private Surface rgbSurface = null; // RGB Surface
     private Int64 lastFrame = 0; // Tick count of the last frame
@@ -185,7 +182,7 @@ namespace AtmoLight
         var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
         MediaPortal.GUI.Library.Log.Info("AtmoLight Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
-        MediaPortal.GUI.Library.Log.Debug("Loading settings.");
+        MediaPortal.GUI.Library.Log.Debug("AtmoLight: Loading settings.");
         Settings.LoadSettings();
       }
     }
@@ -280,17 +277,17 @@ namespace AtmoLight
       }
       if (Settings.manualMode)
       {
-        Log.Debug("AtmoLight: LEDs should be deactivated. (Manual Mode)");
+        Log.Debug("LEDs should be deactivated. (Manual Mode)");
         return false;
       }
       else if ((DateTime.Now.TimeOfDay >= Settings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= Settings.excludeTimeEnd.TimeOfDay))
       {
-        Log.Debug("AtmoLight: LEDs should be deactivated. (Timeframe)");
+        Log.Debug("LEDs should be deactivated. (Timeframe)");
         return false;
       }
       else
       {
-        Log.Debug("AtmoLight: LEDs can be activated.");
+        Log.Debug("LEDs can be activated.");
         return true;
       }
     }
@@ -529,8 +526,8 @@ namespace AtmoLight
         }
         catch (Exception ex)
         {
-          Log.Error("AtmoLight: Error in AtmolightPlugin_OnNewFrame.");
-          Log.Error("AtmoLight: Exception: {0}", ex.Message);
+          Log.Error("Error in AtmolightPlugin_OnNewFrame.");
+          Log.Error("Exception: {0}", ex.Message);
 
           rgbSurface.Dispose();
           rgbSurface = null;
@@ -654,7 +651,7 @@ namespace AtmoLight
       int delayTogglePos = 4;
       int delayChangePos = 5;
       int staticColorPos = 4;
-      Log.Info("AtmoLight: Opening AtmoLight context menu.");
+      Log.Info("Opening AtmoLight context menu.");
 
       // Showing context menu
       GUIDialogMenu dlg = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
@@ -832,12 +829,12 @@ namespace AtmoLight
       {
         if (Settings.sbs3dOn)
         {
-          Log.Info("AtmoLight: Switching SBS 3D mode off.");
+          Log.Info("Switching SBS 3D mode off.");
           Settings.sbs3dOn = false;
         }
         else
         {
-          Log.Info("AtmoLight: Switching SBS 3D mode on.");
+          Log.Info("Switching SBS 3D mode on.");
           Settings.sbs3dOn = true;
         }
       }
@@ -845,24 +842,24 @@ namespace AtmoLight
       {
         if (AtmoLightObject.delayEnabled)
         {
-          Log.Info("AtmoLight: Switching LED delay off.");
+          Log.Info("Switching LED delay off.");
           AtmoLightObject.delayEnabled = false;
           AtmoLightObject.StopSetPixelDataThread();
         }
         else
         {
-          Log.Info("AtmoLight: Switching LED delay on.");
+          Log.Info("Switching LED delay on.");
           AtmoLightObject.delayEnabled = true;
           AtmoLightObject.delayTime = (int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime);
           AtmoLightObject.StartSetPixelDataThread();
-          Log.Debug("AtmoLight: Adding {0}ms delay to the LEDs.", AtmoLightObject.delayTime);
+          Log.Debug("Adding {0}ms delay to the LEDs.", AtmoLightObject.delayTime);
         }
       }
       else if ((dlg.SelectedLabel == delayChangePos) && (delayChangePos != -1))
       {
         if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) && (delayTimeHelper <= 1000))
         {
-          Log.Info("AtmoLight: Changing LED delay to {0}ms.", delayTimeHelper);
+          Log.Info("Changing LED delay to {0}ms.", delayTimeHelper);
           AtmoLightObject.delayTime = delayTimeHelper;
           Settings.delayReferenceTime = (int)(((float)delayTimeHelper * (float)GetRefreshRate()) / Settings.delayReferenceRefreshRate);
         }
@@ -955,7 +952,7 @@ namespace AtmoLight
     /// <returns>true for yes and false for no.</returns>
     private bool DialogYesNo(string setLine1, string setLine2 = "")
     {
-      Log.Info("AtmoLight: Opening AtmoLight Yes/No dialog.");
+      Log.Info("Opening AtmoLight Yes/No dialog.");
 
       // Showing Yes/No dialog
       GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
