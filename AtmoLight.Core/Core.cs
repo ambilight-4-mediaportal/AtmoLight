@@ -425,7 +425,8 @@ namespace AtmoLight
       }
       else
       {
-        throw new Exception("Delay buffer overflow.");
+        Log.Error("Delay buffer overflow.");
+        ReinitialiseThreaded();
       }
     }
 
