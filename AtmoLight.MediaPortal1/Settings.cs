@@ -4,7 +4,7 @@ using Language;
 
 namespace AtmoLight
 {
-  public class AtmolightSettings
+  public class Settings
   {
     #region Config variables
     public static string atmowinExe = "";
@@ -34,7 +34,7 @@ namespace AtmoLight
     public static bool restartOnError = true;
     #endregion
 
-    public static DateTime LoadTimeSetting(Settings reader, string name, string defaultTime)
+    public static DateTime LoadTimeSetting(MediaPortal.Profile.Settings reader, string name, string defaultTime)
     {
       string s = reader.GetValueAsString("atmolight", name, defaultTime);
       DateTime dt;
@@ -45,7 +45,7 @@ namespace AtmoLight
 
     public static void LoadSettings()
     {
-      using (Settings reader = new Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
+      using (MediaPortal.Profile.Settings reader = new MediaPortal.Profile.Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
       {
         atmowinExe = reader.GetValueAsString("atmolight", "atmowinexe", "");
         effectVideo = (ContentEffect)reader.GetValueAsInt("atmolight", "effectVideo", 4);
@@ -76,7 +76,7 @@ namespace AtmoLight
     }
     public static void SaveSettings()
     {
-      using (Settings reader = new Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
+      using (MediaPortal.Profile.Settings reader = new MediaPortal.Profile.Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
       {
         reader.SetValue("atmolight", "atmowinexe", atmowinExe);
         reader.SetValue("atmolight", "effectVideo", (int)effectVideo);
@@ -109,7 +109,7 @@ namespace AtmoLight
 
     public static void SaveSpecificSetting(string Setting, String Value)
     {
-      using (Settings reader = new Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
+      using (MediaPortal.Profile.Settings reader = new MediaPortal.Profile.Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
       {
         reader.SetValue("atmolight", Setting, Value);
       }

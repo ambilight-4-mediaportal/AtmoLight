@@ -1,6 +1,6 @@
 ﻿namespace AtmoLight
 {
-  partial class AtmolightSetupForm
+  partial class SetupForm
   {
     /// <summary>
     /// Required designer variable.
@@ -28,7 +28,7 @@
     /// </summary>
     private void InitializeComponent()
     {
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AtmolightSetupForm));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetupForm));
       this.lblPathInfo = new System.Windows.Forms.Label();
       this.edFile = new System.Windows.Forms.TextBox();
       this.btnSelectFile = new System.Windows.Forms.Button();

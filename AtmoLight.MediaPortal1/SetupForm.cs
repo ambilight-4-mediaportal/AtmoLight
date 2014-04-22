@@ -6,32 +6,32 @@ using Language;
 
 namespace AtmoLight
 {
-  public partial class AtmolightSetupForm : Form
+  public partial class SetupForm : Form
   {
-    public AtmolightSetupForm()
+    public SetupForm()
     {
       InitializeComponent();
       UpdateLanguageOnControls();
 
       lblVersionVal.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-      edFile.Text = AtmolightSettings.atmowinExe;
-      cbVideo.SelectedIndex = (int)AtmolightSettings.effectVideo;
-      cbMusic.SelectedIndex = (int)AtmolightSettings.effectMusic;
-      cbRadio.SelectedIndex = (int)AtmolightSettings.effectRadio;
-      cbMenu.SelectedIndex = (int)AtmolightSettings.effectMenu;
-      comboBox1.SelectedIndex = (int)AtmolightSettings.killButton;
-      comboBox2.SelectedIndex = (int)AtmolightSettings.profileButton;
-      cbMenuButton.SelectedIndex = (int)AtmolightSettings.menuButton;
-      edExcludeStart.Text = AtmolightSettings.excludeTimeStart.ToString("HH:mm");
-      edExcludeEnd.Text = AtmolightSettings.excludeTimeEnd.ToString("HH:mm");
-      lowCpuTime.Text = AtmolightSettings.lowCPUTime.ToString();
-      tbDelay.Text = AtmolightSettings.delayReferenceTime.ToString();
-      tbRefreshRate.Text = AtmolightSettings.delayReferenceRefreshRate.ToString();
-      tbRed.Text = AtmolightSettings.staticColorRed.ToString();
-      tbGreen.Text = AtmolightSettings.staticColorGreen.ToString();
-      tbBlue.Text = AtmolightSettings.staticColorBlue.ToString();
+      edFile.Text = Settings.atmowinExe;
+      cbVideo.SelectedIndex = (int)Settings.effectVideo;
+      cbMusic.SelectedIndex = (int)Settings.effectMusic;
+      cbRadio.SelectedIndex = (int)Settings.effectRadio;
+      cbMenu.SelectedIndex = (int)Settings.effectMenu;
+      comboBox1.SelectedIndex = (int)Settings.killButton;
+      comboBox2.SelectedIndex = (int)Settings.profileButton;
+      cbMenuButton.SelectedIndex = (int)Settings.menuButton;
+      edExcludeStart.Text = Settings.excludeTimeStart.ToString("HH:mm");
+      edExcludeEnd.Text = Settings.excludeTimeEnd.ToString("HH:mm");
+      lowCpuTime.Text = Settings.lowCPUTime.ToString();
+      tbDelay.Text = Settings.delayReferenceTime.ToString();
+      tbRefreshRate.Text = Settings.delayReferenceRefreshRate.ToString();
+      tbRed.Text = Settings.staticColorRed.ToString();
+      tbGreen.Text = Settings.staticColorGreen.ToString();
+      tbBlue.Text = Settings.staticColorBlue.ToString();
 
-      if (AtmolightSettings.manualMode)
+      if (Settings.manualMode)
       {
         ckOnMediaStart.Checked = true;
       }
@@ -40,7 +40,7 @@ namespace AtmoLight
         this.ckOnMediaStart.Checked = false;
       }
 
-      if (AtmolightSettings.lowCPU)
+      if (Settings.lowCPU)
       {
         ckLowCpu.Checked = true;
       }
@@ -49,7 +49,7 @@ namespace AtmoLight
         this.ckLowCpu.Checked = false;
       }
 
-      if (AtmolightSettings.delay)
+      if (Settings.delay)
       {
         ckDelay.Checked = true;
       }
@@ -58,7 +58,7 @@ namespace AtmoLight
         ckDelay.Checked = false;
       }
 
-      if (AtmolightSettings.startAtmoWin)
+      if (Settings.startAtmoWin)
       {
         ckStartAtmoWin.Checked = true;
       }
@@ -67,7 +67,7 @@ namespace AtmoLight
         ckStartAtmoWin.Checked = false;
       }
 
-      if (AtmolightSettings.exitAtmoWin)
+      if (Settings.exitAtmoWin)
       {
         ckExitAtmoWin.Checked = true;
       }
@@ -76,7 +76,7 @@ namespace AtmoLight
         ckExitAtmoWin.Checked = false;
       }
 
-      if (AtmolightSettings.disableOnShutdown)
+      if (Settings.disableOnShutdown)
       {
         rbDisableLEDs.Checked = true;
       }
@@ -85,7 +85,7 @@ namespace AtmoLight
         rbSwitchToLiveView.Checked = true;
       }
 
-      if (AtmolightSettings.restartOnError)
+      if (Settings.restartOnError)
       {
         ckRestartOnError.Checked = true;
       }
@@ -167,7 +167,7 @@ namespace AtmoLight
         return;
       }
 
-      AtmolightSettings.excludeTimeStart = dt;
+      Settings.excludeTimeStart = dt;
       DateTime dt2;
       if (!DateTime.TryParse(edExcludeEnd.Text, out dt2))
       {
@@ -221,30 +221,30 @@ namespace AtmoLight
         return;
       }
 
-      AtmolightSettings.staticColorRed = StaticColorRed;
-      AtmolightSettings.staticColorGreen = StaticColorGreen;
-      AtmolightSettings.staticColorBlue = StaticColorBlue;
-      AtmolightSettings.lowCPUTime = cTime;
-      AtmolightSettings.delayReferenceTime = cDelay;
-      AtmolightSettings.delayReferenceRefreshRate = cRefreshRate;
-      AtmolightSettings.excludeTimeEnd = dt2;
-      AtmolightSettings.atmowinExe = edFile.Text;
-      AtmolightSettings.effectVideo = (ContentEffect)cbVideo.SelectedIndex;
-      AtmolightSettings.effectMusic = (ContentEffect)cbMusic.SelectedIndex;
-      AtmolightSettings.effectRadio = (ContentEffect)cbRadio.SelectedIndex;
-      AtmolightSettings.effectMenu = (ContentEffect)cbMenu.SelectedIndex;
-      AtmolightSettings.killButton = comboBox1.SelectedIndex;
-      AtmolightSettings.profileButton = comboBox2.SelectedIndex;
-      AtmolightSettings.menuButton = cbMenuButton.SelectedIndex;
-      AtmolightSettings.disableOnShutdown = rbDisableLEDs.Checked;
-      AtmolightSettings.enableInternalLiveView = rbSwitchToLiveView.Checked;
-      AtmolightSettings.manualMode = ckOnMediaStart.Checked;
-      AtmolightSettings.lowCPU = ckLowCpu.Checked;
-      AtmolightSettings.delay = ckDelay.Checked;
-      AtmolightSettings.startAtmoWin = ckStartAtmoWin.Checked;
-      AtmolightSettings.exitAtmoWin = ckExitAtmoWin.Checked;
-      AtmolightSettings.restartOnError = ckRestartOnError.Checked;
-      AtmolightSettings.SaveSettings();
+      Settings.staticColorRed = StaticColorRed;
+      Settings.staticColorGreen = StaticColorGreen;
+      Settings.staticColorBlue = StaticColorBlue;
+      Settings.lowCPUTime = cTime;
+      Settings.delayReferenceTime = cDelay;
+      Settings.delayReferenceRefreshRate = cRefreshRate;
+      Settings.excludeTimeEnd = dt2;
+      Settings.atmowinExe = edFile.Text;
+      Settings.effectVideo = (ContentEffect)cbVideo.SelectedIndex;
+      Settings.effectMusic = (ContentEffect)cbMusic.SelectedIndex;
+      Settings.effectRadio = (ContentEffect)cbRadio.SelectedIndex;
+      Settings.effectMenu = (ContentEffect)cbMenu.SelectedIndex;
+      Settings.killButton = comboBox1.SelectedIndex;
+      Settings.profileButton = comboBox2.SelectedIndex;
+      Settings.menuButton = cbMenuButton.SelectedIndex;
+      Settings.disableOnShutdown = rbDisableLEDs.Checked;
+      Settings.enableInternalLiveView = rbSwitchToLiveView.Checked;
+      Settings.manualMode = ckOnMediaStart.Checked;
+      Settings.lowCPU = ckLowCpu.Checked;
+      Settings.delay = ckDelay.Checked;
+      Settings.startAtmoWin = ckStartAtmoWin.Checked;
+      Settings.exitAtmoWin = ckExitAtmoWin.Checked;
+      Settings.restartOnError = ckRestartOnError.Checked;
+      Settings.SaveSettings();
       this.DialogResult = DialogResult.OK;
     }
 

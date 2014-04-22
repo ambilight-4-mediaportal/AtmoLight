@@ -19,7 +19,7 @@ using Language;
 namespace AtmoLight
 {
   [PluginIcons("AtmoLight.Resources.Enabled.png", "AtmoLight.Resources.Disabled.png")]
-  public class MediaPortal1Plugin : ISetupForm, IPlugin
+  public class Plugin : ISetupForm, IPlugin
   {
     #region class Win32API
     public sealed class Win32API
@@ -178,7 +178,7 @@ namespace AtmoLight
     /// AtmoLight constructor.
     /// Loads the plugin, loads the settings and initializes AtmoWin and the connection.
     /// </summary>
-    public MediaPortal1Plugin()
+    public Plugin()
     {
       if (MPSettings.Instance.GetValueAsBool("plugins", "AtmoLight", true))
       {
@@ -186,7 +186,7 @@ namespace AtmoLight
         DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
         MediaPortal.GUI.Library.Log.Info("AtmoLight Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
         MediaPortal.GUI.Library.Log.Debug("Loading settings.");
-        AtmolightSettings.LoadSettings();
+        Settings.LoadSettings();
       }
     }
 
@@ -214,18 +214,18 @@ namespace AtmoLight
 
       // Workaround
       // Enum says we choose MP Live Mode, but it is actually Static color.
-      if (AtmolightSettings.effectMenu == ContentEffect.MediaPortalLiveMode)
+      if (Settings.effectMenu == ContentEffect.MediaPortalLiveMode)
       {
-        AtmolightSettings.effectMenu = ContentEffect.StaticColor;
+        Settings.effectMenu = ContentEffect.StaticColor;
       }
-      menuEffect = AtmolightSettings.effectMenu;
+      menuEffect = Settings.effectMenu;
 
-      staticColorTemp[0] = AtmolightSettings.staticColorRed;
-      staticColorTemp[1] = AtmolightSettings.staticColorGreen;
-      staticColorTemp[2] = AtmolightSettings.staticColorBlue;
+      staticColorTemp[0] = Settings.staticColorRed;
+      staticColorTemp[1] = Settings.staticColorGreen;
+      staticColorTemp[2] = Settings.staticColorBlue;
 
       Log.Debug("Generating new AtmoLight.Core instance.");
-      AtmoLightObject = new Core(AtmolightSettings.atmowinExe, AtmolightSettings.restartOnError, staticColorTemp, AtmolightSettings.delay, AtmolightSettings.delayReferenceTime);
+      AtmoLightObject = new Core(Settings.atmowinExe, Settings.restartOnError, staticColorTemp, Settings.delay, Settings.delayReferenceTime);
 
       AtmoLightObject.Initialise();
       AtmoLightObject.ChangeEffect(menuEffect);
@@ -250,19 +250,19 @@ namespace AtmoLight
 
       GUIWindowManager.OnNewAction -= new OnActionHandler(OnNewAction);
 
-      if (AtmolightSettings.disableOnShutdown)
+      if (Settings.disableOnShutdown)
       {
         AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
       }
 
-      if (AtmolightSettings.enableInternalLiveView)
+      if (Settings.enableInternalLiveView)
       {
         AtmoLightObject.ChangeEffect(ContentEffect.AtmoWinLiveMode);
       }
 
       AtmoLightObject.Disconnect();
 
-      if (AtmolightSettings.exitAtmoWin)
+      if (Settings.exitAtmoWin)
       {
         AtmoLightObject.StopAtmoWin();
       }
@@ -278,12 +278,12 @@ namespace AtmoLight
       {
         return false;
       }
-      if (AtmolightSettings.manualMode)
+      if (Settings.manualMode)
       {
         Log.Debug("AtmoLight: LEDs should be deactivated. (Manual Mode)");
         return false;
       }
-      else if ((DateTime.Now.TimeOfDay >= AtmolightSettings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= AtmolightSettings.excludeTimeEnd.TimeOfDay))
+      else if ((DateTime.Now.TimeOfDay >= Settings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= Settings.excludeTimeEnd.TimeOfDay))
       {
         Log.Debug("AtmoLight: LEDs should be deactivated. (Timeframe)");
         return false;
@@ -347,28 +347,28 @@ namespace AtmoLight
         if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording || type == g_Player.MediaType.Unknown || (type == g_Player.MediaType.Music && filename.Contains(".mkv")))
         {
           Log.Debug("Video detected.");
-          playbackEffect = AtmolightSettings.effectVideo;
+          playbackEffect = Settings.effectVideo;
         }
         else if (type == g_Player.MediaType.Music)
         {
           // Workaround
           // Enum says we choose MP Live Mode, but it is actually Static color.
-          if (AtmolightSettings.effectMusic == ContentEffect.MediaPortalLiveMode)
+          if (Settings.effectMusic == ContentEffect.MediaPortalLiveMode)
           {
-            AtmolightSettings.effectMusic = ContentEffect.StaticColor;
+            Settings.effectMusic = ContentEffect.StaticColor;
           }
-          playbackEffect = AtmolightSettings.effectMusic;
+          playbackEffect = Settings.effectMusic;
           Log.Debug("Music detected.");
         }
         else if (type == g_Player.MediaType.Radio)
         {
           // Workaround
           // Enum says we choose MP Live Mode, but it is actually Static color.
-          if (AtmolightSettings.effectRadio == ContentEffect.MediaPortalLiveMode)
+          if (Settings.effectRadio == ContentEffect.MediaPortalLiveMode)
           {
-            AtmolightSettings.effectRadio = ContentEffect.StaticColor;
+            Settings.effectRadio = ContentEffect.StaticColor;
           }
-          playbackEffect = AtmolightSettings.effectRadio;
+          playbackEffect = Settings.effectRadio;
           Log.Debug("Radio detected.");
         }
 
@@ -472,7 +472,7 @@ namespace AtmoLight
       {
         try
         {
-          if (AtmolightSettings.sbs3dOn)
+          if (Settings.sbs3dOn)
           {
             VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer,
               AtmoLightObject.captureWidth, AtmoLightObject.captureHeight);
@@ -507,10 +507,10 @@ namespace AtmoLight
             Array.Copy(h2pixelData, 0, pixelData, i * AtmoLightObject.captureWidth * rgb, AtmoLightObject.captureWidth * rgb);
           }
           //send scaled and fliped frame to atmowin
-          if (!AtmolightSettings.lowCPU ||
-              (((Win32API.GetTickCount() - lastFrame) > AtmolightSettings.lowCPUTime) && AtmolightSettings.lowCPU))
+          if (!Settings.lowCPU ||
+              (((Win32API.GetTickCount() - lastFrame) > Settings.lowCPUTime) && Settings.lowCPU))
           {
-            if (AtmolightSettings.lowCPU)
+            if (Settings.lowCPU)
             {
               lastFrame = Win32API.GetTickCount();
             }
@@ -547,10 +547,10 @@ namespace AtmoLight
     public void OnNewAction(MediaPortal.GUI.Library.Action action)
     {
       // Remote Key to open Menu
-      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.menuButton == 2) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.menuButton == 1) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.menuButton == 0) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.menuButton == 3))
+      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && Settings.menuButton == 2) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && Settings.menuButton == 1) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.menuButton == 0) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.menuButton == 3))
       {
         if (!AtmoLightObject.IsConnected())
         {
@@ -572,10 +572,10 @@ namespace AtmoLight
       }
 
       // Remote Key to toggle On/Off
-      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.killButton == 2) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.killButton == 1) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.killButton == 0) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.killButton == 3))
+      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && Settings.killButton == 2) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && Settings.killButton == 1) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.killButton == 0) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.killButton == 3))
       {
         if (!AtmoLightObject.currentState)
         {
@@ -595,10 +595,10 @@ namespace AtmoLight
       }
 
       // Remote Key to change Profiles
-      else if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && AtmolightSettings.profileButton == 2) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && AtmolightSettings.profileButton == 1) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && AtmolightSettings.profileButton == 0) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && AtmolightSettings.profileButton == 3))
+      else if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && Settings.profileButton == 2) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && Settings.profileButton == 1) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.profileButton == 0) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.profileButton == 3))
       {
         AtmoLightObject.SetColorMode(ComEffectMode.cemColorMode);
       }
@@ -678,7 +678,7 @@ namespace AtmoLight
       dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeAWProfile));
 
       // Toggle 3D Mode
-      if (AtmolightSettings.sbs3dOn)
+      if (Settings.sbs3dOn)
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Switch3DOFF));
       }
@@ -830,15 +830,15 @@ namespace AtmoLight
       }
       else if (dlg.SelectedLabel == 3)
       {
-        if (AtmolightSettings.sbs3dOn)
+        if (Settings.sbs3dOn)
         {
           Log.Info("AtmoLight: Switching SBS 3D mode off.");
-          AtmolightSettings.sbs3dOn = false;
+          Settings.sbs3dOn = false;
         }
         else
         {
           Log.Info("AtmoLight: Switching SBS 3D mode on.");
-          AtmolightSettings.sbs3dOn = true;
+          Settings.sbs3dOn = true;
         }
       }
       else if ((dlg.SelectedLabel == delayTogglePos) && (delayTogglePos != -1))
@@ -853,7 +853,7 @@ namespace AtmoLight
         {
           Log.Info("AtmoLight: Switching LED delay on.");
           AtmoLightObject.delayEnabled = true;
-          AtmoLightObject.delayTime = (int)(((float)AtmolightSettings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)AtmolightSettings.delayReferenceTime);
+          AtmoLightObject.delayTime = (int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime);
           AtmoLightObject.StartSetPixelDataThread();
           Log.Debug("AtmoLight: Adding {0}ms delay to the LEDs.", AtmoLightObject.delayTime);
         }
@@ -864,7 +864,7 @@ namespace AtmoLight
         {
           Log.Info("AtmoLight: Changing LED delay to {0}ms.", delayTimeHelper);
           AtmoLightObject.delayTime = delayTimeHelper;
-          AtmolightSettings.delayReferenceTime = (int)(((float)delayTimeHelper * (float)GetRefreshRate()) / AtmolightSettings.delayReferenceRefreshRate);
+          Settings.delayReferenceTime = (int)(((float)delayTimeHelper * (float)GetRefreshRate()) / Settings.delayReferenceRefreshRate);
         }
         else
         {
@@ -895,17 +895,17 @@ namespace AtmoLight
             DialogRGBManualStaticColorChanger();
             break;
           case 1:
-            AtmolightSettings.SaveSpecificSetting("StaticColorRed", AtmoLightObject.staticColor[0].ToString());
-            AtmolightSettings.staticColorRed = AtmoLightObject.staticColor[0];
-            AtmolightSettings.SaveSpecificSetting("StaticColorGreen", AtmoLightObject.staticColor[1].ToString());
-            AtmolightSettings.staticColorGreen = AtmoLightObject.staticColor[1];
-            AtmolightSettings.SaveSpecificSetting("StaticColorBlue", AtmoLightObject.staticColor[2].ToString());
-            AtmolightSettings.staticColorBlue = AtmoLightObject.staticColor[2];
+            Settings.SaveSpecificSetting("StaticColorRed", AtmoLightObject.staticColor[0].ToString());
+            Settings.staticColorRed = AtmoLightObject.staticColor[0];
+            Settings.SaveSpecificSetting("StaticColorGreen", AtmoLightObject.staticColor[1].ToString());
+            Settings.staticColorGreen = AtmoLightObject.staticColor[1];
+            Settings.SaveSpecificSetting("StaticColorBlue", AtmoLightObject.staticColor[2].ToString());
+            Settings.staticColorBlue = AtmoLightObject.staticColor[2];
             break;
           case 2:
-            AtmoLightObject.staticColor[0] = AtmolightSettings.staticColorRed;
-            AtmoLightObject.staticColor[1] = AtmolightSettings.staticColorGreen;
-            AtmoLightObject.staticColor[2] = AtmolightSettings.staticColorBlue;
+            AtmoLightObject.staticColor[0] = Settings.staticColorRed;
+            AtmoLightObject.staticColor[1] = Settings.staticColorGreen;
+            AtmoLightObject.staticColor[2] = Settings.staticColorBlue;
             break;
           case 3:
             AtmoLightObject.staticColor[0] = 255;
@@ -1114,7 +1114,7 @@ namespace AtmoLight
     /// </summary>
     public void ShowPlugin()
     {
-      new AtmolightSetupForm().ShowDialog();
+      new SetupForm().ShowDialog();
     }
 
     /// <summary>
