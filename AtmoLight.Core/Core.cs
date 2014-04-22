@@ -497,6 +497,7 @@ namespace AtmoLight
           // Stacktrace is needed so we can output the name of the method that timed out.
           StackTrace trace = new StackTrace();
           Log.Error("{0} timed out after {1}ms!", trace.GetFrame(1).GetMethod().Name, Win32API.GetTickCount() - timeoutStart);
+          ReinitialiseThreaded();
           return false;
         }
         return true;
