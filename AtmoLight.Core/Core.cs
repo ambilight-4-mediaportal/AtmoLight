@@ -212,7 +212,7 @@ namespace AtmoLight
     {
       Log.Debug("Trying to connect to AtmoWin.");
       if (!GetAtmoRemoteControl()) return false;
-      if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
+      if (!SetAtmoEffect(ComEffectMode.cemLivePicture, true)) return false;
       if (!GetAtmoLiveViewControl()) return false;
       if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
       if (!GetAtmoLiveViewRes()) return false;
@@ -604,10 +604,11 @@ namespace AtmoLight
     /// Changes the AtmoWin effect.
     /// </summary>
     /// <param name="effect">Effect to change to.</param>
+    /// <param name="force">Currently initialising.</param>
     /// <returns>true if successfull and false if not.</returns>
-    private bool SetAtmoEffect(ComEffectMode effect)
+    private bool SetAtmoEffect(ComEffectMode effect, bool init = false)
     {
-      if (!IsConnected())
+      if (!IsConnected() && !init)
       {
         return false;
       }
