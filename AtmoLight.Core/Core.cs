@@ -671,20 +671,28 @@ namespace AtmoLight
       {
         case ContentEffect.AtmoWinLiveMode:
           currentState = true;
+          StopSetPixelDataThread();
+          StopGetAtmoLiveViewSourceThread();
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI)) return false;
           break;
         case ContentEffect.Colorchanger:
           currentState = true;
+          StopSetPixelDataThread();
+          StopGetAtmoLiveViewSourceThread();
           if (!SetAtmoEffect(ComEffectMode.cemColorChange)) return false;
           break;
         case ContentEffect.ColorchangerLR:
           currentState = true;
+          StopSetPixelDataThread();
+          StopGetAtmoLiveViewSourceThread();
           if (!SetAtmoEffect(ComEffectMode.cemLrColorChange)) return false;
           break;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
           currentState = false;
+          StopSetPixelDataThread();
+          StopGetAtmoLiveViewSourceThread();
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           // Workaround for SEDU.
           // Without the sleep it would not change to color.
@@ -706,6 +714,8 @@ namespace AtmoLight
           break;
         case ContentEffect.StaticColor:
           currentState = true;
+          StopSetPixelDataThread();
+          StopGetAtmoLiveViewSourceThread();
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
           // Workaround for SEDU.
@@ -760,7 +770,7 @@ namespace AtmoLight
       try
       {
         Log.Debug("Starting delay thread.");
-        while (!setPixelDataLock)
+        while (!setPixelDataLock && IsConnected())
         {
           if (delayTimingList.Count >= 1)
           {
@@ -797,7 +807,7 @@ namespace AtmoLight
     {
       try
       {
-        while (!getAtmoLiveViewSourceLock)
+        while (!getAtmoLiveViewSourceLock && IsConnected())
         {
           GetAtmoLiveViewSource();
           if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
