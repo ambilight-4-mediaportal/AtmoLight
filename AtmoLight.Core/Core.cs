@@ -536,7 +536,7 @@ namespace AtmoLight
     /// <returns>true if successfull and false if not.</returns>
     private bool GetAtmoLiveViewControl()
     {
-      if (!IsConnected())
+      if (atmoRemoteControl == null)
       {
         return false;
       }
