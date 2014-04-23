@@ -1,0 +1,18 @@
+﻿<Plugin
+    DescriptorVersion="1.0"
+    Name="AtmoLight"
+	PluginId="{c4c349f8-2c98-47b3-be24-6aa1da552f5d}"
+    AutoActivate="True"
+    Author="Lightning303"
+    Copyright="GPL"
+    Description="AtmoLight Plugin"
+    PluginVersion="2.0">
+    
+  <Runtime>
+    <Assembly FileName="AtmoLight.MediaPortal2.dll"/>
+    <Assembly FileName="AtmoLight.Core.dll"/>
+	<Assembly FileName="AtmoWinRemoteControl.dll"/>
+	<PluginStateTracker ClassName="AtmoLight.Plugin"/>
+  </Runtime>
+  
+</Plugin>
