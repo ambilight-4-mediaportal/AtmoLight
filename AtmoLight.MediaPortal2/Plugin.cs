@@ -51,6 +51,15 @@ namespace AtmoLight
     private bool delay = false;
     private int delayReferenceTime = 0;
 
+    private int surfacePollingRate = 60;
+
+    private SharpDX.Direct3D9.Surface rgbSurface;
+    private SharpDX.Direct3D9.Surface rgbSurfaceDest;
+    private SharpDX.Direct3D9.Device sharpDXDevice;
+    private IPlayerManager pm;
+    private ISharpDXVideoPlayer player;
+
+
     #endregion
 
     #region IPluginStateTracker implementation
@@ -108,48 +117,32 @@ namespace AtmoLight
     }
 
     #endregion
-    private SharpDX.Direct3D9.Surface rgbSurface;    
-    private SharpDX.Direct3D9.Surface rgbSurfaceDest;
 
 
-    private IPlayerManager pm;
-    private ISharpDXVideoPlayer player;
-
-    private SharpDX.Direct3D9.Device sharpDXDevice;
-    private void MyThread()
+    
+    private void SurfacePolling()
     {
-      
+      Rectangle rect = new Rectangle(0, 0, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight);
+
+      pm = ServiceRegistration.Get<IPlayerManager>();
+      pm.ForEach(psc =>
+      {
+        player = psc.CurrentPlayer as ISharpDXVideoPlayer;
+        if (player == null || player.Surface == null)
+          return;
+
+        rgbSurface = player.Surface;
+      });
+
+      sharpDXDevice = rgbSurface.Device;
+      rgbSurfaceDest = SharpDX.Direct3D9.Surface.CreateRenderTarget(sharpDXDevice, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight, SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
+
       while (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
       {
         try
         {
-          pm = ServiceRegistration.Get<IPlayerManager>();
-          pm.ForEach(psc =>
-          {
-            player = psc.CurrentPlayer as ISharpDXVideoPlayer;
-            if (player == null || player.Surface == null)
-              return;
-
-            rgbSurface = player.Surface;
-          });
-          SharpDX.Direct3D9.PresentParameters present_params = new SharpDX.Direct3D9.PresentParameters();
-          present_params.Windowed = true;
-          present_params.SwapEffect = SharpDX.Direct3D9.SwapEffect.Discard;
-          sharpDXDevice = new SharpDX.Direct3D9.Device(new SharpDX.Direct3D9.Direct3D(), 0, SharpDX.Direct3D9.DeviceType.Hardware, IntPtr.Zero, SharpDX.Direct3D9.CreateFlags.SoftwareVertexProcessing, present_params);
-
-          rgbSurfaceDest = SharpDX.Direct3D9.Surface.CreateRenderTarget(sharpDXDevice, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight, SharpDX.Direct3D9.Format.A8R8G8B8,
-          SharpDX.Direct3D9.MultisampleType.None, 0, true);
-
-          Rectangle rect = new Rectangle(0, 0, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight);
-
-          Stopwatch stopwatch = new Stopwatch();
-          stopwatch.Start();
-
-          
           sharpDXDevice.StretchRectangle(rgbSurface, null, rgbSurfaceDest, rect, SharpDX.Direct3D9.TextureFilter.None);
           DataStream stream = SharpDX.Direct3D9.Surface.ToStream(rgbSurfaceDest, SharpDX.Direct3D9.ImageFileFormat.Bmp);
-          stopwatch.Stop();
-          Log.Error("Time: {0}", stopwatch.Elapsed);
 
           BinaryReader reader = new BinaryReader(stream);
           stream.Position = 0; // ensure that what start at the beginning of the stream. 
@@ -181,10 +174,10 @@ namespace AtmoLight
         }
         catch (Exception ex)
         {
-          Log.Error("ex: {0}", ex.Message);
+          Log.Error("Exception: {0}", ex.Message);
         }
       }
-      System.Threading.Thread.Sleep(10);
+      System.Threading.Thread.Sleep(1000/surfacePollingRate);
     }
 
     #region Message Handler
@@ -200,8 +193,8 @@ namespace AtmoLight
           {
             Log.Info("AtmoLight: Video started.");
             AtmoLightObject.ChangeEffect(ContentEffect.MediaPortalLiveMode);
-            Thread MyThreadHelper = new Thread(() => MyThread());
-            MyThreadHelper.Start();
+            Thread SurfacePollingHelper = new Thread(() => SurfacePolling());
+            SurfacePollingHelper.Start();
           }
         }
         else if (messageType == PlayerManagerMessaging.MessageType.PlayerStopped)
