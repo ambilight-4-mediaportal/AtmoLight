@@ -31,7 +31,7 @@ namespace AtmoLight
     private int delayTime = 0;    
     private bool reinitialiseOnError = true;
     private bool startAtmoWin = true;
-    public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
+    private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
 
     private Thread SetPixelDataThreadHelper;
     private Thread GetAtmoLiveViewSourceThreadHelper;
@@ -865,6 +865,34 @@ namespace AtmoLight
     public int GetDelayTime()
     {
       return delayTime;
+    }
+
+    /// <summary>
+    /// Changes the static color.
+    /// </summary>
+    /// <param name="red">Red in RGB format.</param>
+    /// <param name="green">Green  in RGB format.</param>
+    /// <param name="blue">Blue  in RGB format.</param>
+    /// <returns>true or false</returns>
+    public bool ChangeStaticColor(int red, int green, int blue)
+    {
+      if ((red >= 0 && red <= 255) && (green >= 0 && green <= 255) && (blue >= 0 && blue <= 255))
+      {
+        staticColor[0] = red;
+        staticColor[1] = green;
+        staticColor[2] = blue;
+        return true;
+      }
+      return false;
+    }
+
+    /// <summary>
+    /// Returns the static color.
+    /// </summary>
+    /// <returns>Static Color as int array</returns>
+    public int[] GetStaticColor()
+    {
+      return staticColor;
     }
     #endregion
 

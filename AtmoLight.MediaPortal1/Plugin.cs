@@ -910,52 +910,36 @@ namespace AtmoLight
             DialogRGBManualStaticColorChanger();
             break;
           case 1:
-            Settings.SaveSpecificSetting("StaticColorRed", AtmoLightObject.staticColor[0].ToString());
-            Settings.staticColorRed = AtmoLightObject.staticColor[0];
-            Settings.SaveSpecificSetting("StaticColorGreen", AtmoLightObject.staticColor[1].ToString());
-            Settings.staticColorGreen = AtmoLightObject.staticColor[1];
-            Settings.SaveSpecificSetting("StaticColorBlue", AtmoLightObject.staticColor[2].ToString());
-            Settings.staticColorBlue = AtmoLightObject.staticColor[2];
+            Settings.SaveSpecificSetting("StaticColorRed", AtmoLightObject.GetStaticColor()[0].ToString());
+            Settings.staticColorRed = AtmoLightObject.GetStaticColor()[0];
+            Settings.SaveSpecificSetting("StaticColorGreen", AtmoLightObject.GetStaticColor()[1].ToString());
+            Settings.staticColorGreen = AtmoLightObject.GetStaticColor()[1];
+            Settings.SaveSpecificSetting("StaticColorBlue", AtmoLightObject.GetStaticColor()[2].ToString());
+            Settings.staticColorBlue = AtmoLightObject.GetStaticColor()[2];
             break;
           case 2:
-            AtmoLightObject.staticColor[0] = Settings.staticColorRed;
-            AtmoLightObject.staticColor[1] = Settings.staticColorGreen;
-            AtmoLightObject.staticColor[2] = Settings.staticColorBlue;
+            AtmoLightObject.ChangeStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
             break;
           case 3:
-            AtmoLightObject.staticColor[0] = 255;
-            AtmoLightObject.staticColor[1] = 255;
-            AtmoLightObject.staticColor[2] = 255;
+            AtmoLightObject.ChangeStaticColor(255, 255, 255);
             break;
           case 4:
-            AtmoLightObject.staticColor[0] = 255;
-            AtmoLightObject.staticColor[1] = 0;
-            AtmoLightObject.staticColor[2] = 0;
+            AtmoLightObject.ChangeStaticColor(255, 0, 0);
             break;
           case 5:
-            AtmoLightObject.staticColor[0] = 0;
-            AtmoLightObject.staticColor[1] = 255;
-            AtmoLightObject.staticColor[2] = 0;
+            AtmoLightObject.ChangeStaticColor(0, 255, 0);
             break;
           case 6:
-            AtmoLightObject.staticColor[0] = 0;
-            AtmoLightObject.staticColor[1] = 0;
-            AtmoLightObject.staticColor[2] = 255;
+            AtmoLightObject.ChangeStaticColor(0, 0, 255);
             break;
           case 7:
-            AtmoLightObject.staticColor[0] = 0;
-            AtmoLightObject.staticColor[1] = 255;
-            AtmoLightObject.staticColor[2] = 255;
+            AtmoLightObject.ChangeStaticColor(0, 255, 255);
             break;
           case 8:
-            AtmoLightObject.staticColor[0] = 255;
-            AtmoLightObject.staticColor[1] = 0;
-            AtmoLightObject.staticColor[2] = 255;
+            AtmoLightObject.ChangeStaticColor(255, 0, 255);
             break;
           case 9:
-            AtmoLightObject.staticColor[0] = 255;
-            AtmoLightObject.staticColor[1] = 255;
-            AtmoLightObject.staticColor[2] = 0;
+            AtmoLightObject.ChangeStaticColor(255, 255, 0);
             break;
         }
         AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
@@ -1032,7 +1016,7 @@ namespace AtmoLight
           }
           else
           {
-            AtmoLightObject.staticColor = staticColorTemp;
+            AtmoLightObject.ChangeStaticColor(staticColorTemp[0], staticColorTemp[1], staticColorTemp[2]);
             return;
           }
         case 4:
