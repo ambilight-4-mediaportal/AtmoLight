@@ -27,11 +27,11 @@ namespace AtmoLight
     #region Fields
 
     private string pathAtmoWin = "";
-    public bool delayEnabled = false;
-    public int delayTime = 0;    
+    private bool delayEnabled = false;
+    private int delayTime = 0;    
     private bool reinitialiseOnError = true;
     private bool startAtmoWin = true;
-    public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
+    private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
 
     private Thread SetPixelDataThreadHelper;
     private Thread GetAtmoLiveViewSourceThreadHelper;
@@ -805,13 +805,102 @@ namespace AtmoLight
       if (!ChangeEffect(currentEffect, true)) return false;
       return true;
     }
+
+    /// <summary>
+    /// Changes the delay time.
+    /// </summary>
+    /// <param name="delay">Delay in ms.</param>
+    /// <returns>true or false</returns>
+    public bool ChangeDelay(int delay)
+    {
+      if (delay > 0)
+      {
+        Log.Debug("Changing delay to {0}ms.", delay);
+        delayTime = delay;
+        return true;
+      }
+      return false;
+    }
+
+    /// <summary>
+    /// Enables the delay.
+    /// </summary>
+    /// <param name="delay">Delay in ms.</param>
+    /// <returns>true or false</returns>
+    public bool EnableDelay(int delay)
+    {
+      if (delay > 0)
+      {
+        Log.Info("Adding {0}ms delay to LEDs.", delay);
+        delayEnabled = true;
+        delayTime = delay;
+        StartSetPixelDataThread();
+      }
+      return false;
+    }
+
+    /// <summary>
+    /// Disables the delay.
+    /// </summary>
+    public void DisableDelay()
+    {
+      Log.Info("Removing delay.");
+      delayEnabled = false;
+      StopSetPixelDataThread();
+    }
+
+    /// <summary>
+    /// Returns if the delay in enabled.
+    /// </summary>
+    /// <returns>true or false</returns>
+    public bool IsDelayEnabled()
+    {
+      return delayEnabled;
+    }
+
+    /// <summary>
+    /// Returns the delay time.
+    /// </summary>
+    /// <returns>Delay in ms.</returns>
+    public int GetDelayTime()
+    {
+      return delayTime;
+    }
+
+    /// <summary>
+    /// Changes the static color.
+    /// </summary>
+    /// <param name="red">Red in RGB format.</param>
+    /// <param name="green">Green  in RGB format.</param>
+    /// <param name="blue">Blue  in RGB format.</param>
+    /// <returns>true or false</returns>
+    public bool ChangeStaticColor(int red, int green, int blue)
+    {
+      if ((red >= 0 && red <= 255) && (green >= 0 && green <= 255) && (blue >= 0 && blue <= 255))
+      {
+        staticColor[0] = red;
+        staticColor[1] = green;
+        staticColor[2] = blue;
+        return true;
+      }
+      return false;
+    }
+
+    /// <summary>
+    /// Returns the static color.
+    /// </summary>
+    /// <returns>Static Color as int array</returns>
+    public int[] GetStaticColor()
+    {
+      return staticColor;
+    }
     #endregion
 
     #region Threads
     /// <summary>
     /// Start the SetPixelData thread.
     /// </summary>
-    public void StartSetPixelDataThread()
+    private void StartSetPixelDataThread()
     {
       setPixelDataLock = false;
       SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread());
@@ -821,7 +910,7 @@ namespace AtmoLight
     /// <summary>
     /// Stop the SetPixelData thread.
     /// </summary>
-    public void StopSetPixelDataThread()
+    private void StopSetPixelDataThread()
     {
       setPixelDataLock = true;
     }
@@ -829,7 +918,7 @@ namespace AtmoLight
     /// <summary>
     /// Start the GetAtmoLiveViewSource thread.
     /// </summary>
-    public void StartGetAtmoLiveViewSourceThread()
+    private void StartGetAtmoLiveViewSourceThread()
     {
       getAtmoLiveViewSourceLock = false;
       GetAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
@@ -839,7 +928,7 @@ namespace AtmoLight
     /// <summary>
     /// Stop the GetAtmoLiveViewSource thread.
     /// </summary>
-    public void StopGetAtmoLiveViewSourceThread()
+    private void StopGetAtmoLiveViewSourceThread()
     {
       getAtmoLiveViewSourceLock = true;
     }

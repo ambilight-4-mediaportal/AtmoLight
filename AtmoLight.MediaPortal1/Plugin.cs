@@ -544,7 +544,7 @@ namespace AtmoLight
               lastFrame = Win32API.GetTickCount();
             }
 
-            if (AtmoLightObject.delayEnabled)
+            if (AtmoLightObject.IsDelayEnabled())
             {
               AtmoLightObject.AddDelayListItem(bmiInfoHeader, pixelData);
             }
@@ -719,27 +719,19 @@ namespace AtmoLight
       // Delay
       if ((g_Player.Playing) && (playbackEffect == ContentEffect.MediaPortalLiveMode))
       {
-        // Toggle Delay
-        if (AtmoLightObject.delayEnabled)
+        // Toggle Delay and Change Delay
+        if (AtmoLightObject.IsDelayEnabled())
         {
           dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_DelayOFF));
-        }
-        else
-        {
-          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_DelayON));
-        }
-        staticColorPos++;
-
-        // Change Delay
-        if (AtmoLightObject.delayEnabled)
-        {
-          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + AtmoLightObject.delayTime + "ms)"));
+          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + AtmoLightObject.GetDelayTime() + "ms)"));
           staticColorPos++;
         }
         else
         {
+          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_DelayON));
           delayChangePos = -1;
         }
+        staticColorPos++;
       }
       else
       {
@@ -872,27 +864,21 @@ namespace AtmoLight
       }
       else if ((dlg.SelectedLabel == delayTogglePos) && (delayTogglePos != -1))
       {
-        if (AtmoLightObject.delayEnabled)
+        if (AtmoLightObject.IsDelayEnabled())
         {
           Log.Info("Switching LED delay off.");
-          AtmoLightObject.delayEnabled = false;
-          AtmoLightObject.StopSetPixelDataThread();
+          AtmoLightObject.DisableDelay();
         }
         else
         {
-          Log.Info("Switching LED delay on.");
-          AtmoLightObject.delayEnabled = true;
-          AtmoLightObject.delayTime = (int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime);
-          AtmoLightObject.StartSetPixelDataThread();
-          Log.Debug("Adding {0}ms delay to the LEDs.", AtmoLightObject.delayTime);
+          AtmoLightObject.EnableDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
         }
       }
       else if ((dlg.SelectedLabel == delayChangePos) && (delayChangePos != -1))
       {
         if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) && (delayTimeHelper <= 1000))
         {
-          Log.Info("Changing LED delay to {0}ms.", delayTimeHelper);
-          AtmoLightObject.delayTime = delayTimeHelper;
+          AtmoLightObject.ChangeDelay(delayTimeHelper);
           Settings.delayReferenceTime = (int)(((float)delayTimeHelper * (float)GetRefreshRate()) / Settings.delayReferenceRefreshRate);
         }
         else
@@ -924,52 +910,36 @@ namespace AtmoLight
             DialogRGBManualStaticColorChanger();
             break;
           case 1:
-            Settings.SaveSpecificSetting("StaticColorRed", AtmoLightObject.staticColor[0].ToString());
-            Settings.staticColorRed = AtmoLightObject.staticColor[0];
-            Settings.SaveSpecificSetting("StaticColorGreen", AtmoLightObject.staticColor[1].ToString());
-            Settings.staticColorGreen = AtmoLightObject.staticColor[1];
-            Settings.SaveSpecificSetting("StaticColorBlue", AtmoLightObject.staticColor[2].ToString());
-            Settings.staticColorBlue = AtmoLightObject.staticColor[2];
+            Settings.SaveSpecificSetting("StaticColorRed", AtmoLightObject.GetStaticColor()[0].ToString());
+            Settings.staticColorRed = AtmoLightObject.GetStaticColor()[0];
+            Settings.SaveSpecificSetting("StaticColorGreen", AtmoLightObject.GetStaticColor()[1].ToString());
+            Settings.staticColorGreen = AtmoLightObject.GetStaticColor()[1];
+            Settings.SaveSpecificSetting("StaticColorBlue", AtmoLightObject.GetStaticColor()[2].ToString());
+            Settings.staticColorBlue = AtmoLightObject.GetStaticColor()[2];
             break;
           case 2:
-            AtmoLightObject.staticColor[0] = Settings.staticColorRed;
-            AtmoLightObject.staticColor[1] = Settings.staticColorGreen;
-            AtmoLightObject.staticColor[2] = Settings.staticColorBlue;
+            AtmoLightObject.ChangeStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
             break;
           case 3:
-            AtmoLightObject.staticColor[0] = 255;
-            AtmoLightObject.staticColor[1] = 255;
-            AtmoLightObject.staticColor[2] = 255;
+            AtmoLightObject.ChangeStaticColor(255, 255, 255);
             break;
           case 4:
-            AtmoLightObject.staticColor[0] = 255;
-            AtmoLightObject.staticColor[1] = 0;
-            AtmoLightObject.staticColor[2] = 0;
+            AtmoLightObject.ChangeStaticColor(255, 0, 0);
             break;
           case 5:
-            AtmoLightObject.staticColor[0] = 0;
-            AtmoLightObject.staticColor[1] = 255;
-            AtmoLightObject.staticColor[2] = 0;
+            AtmoLightObject.ChangeStaticColor(0, 255, 0);
             break;
           case 6:
-            AtmoLightObject.staticColor[0] = 0;
-            AtmoLightObject.staticColor[1] = 0;
-            AtmoLightObject.staticColor[2] = 255;
+            AtmoLightObject.ChangeStaticColor(0, 0, 255);
             break;
           case 7:
-            AtmoLightObject.staticColor[0] = 0;
-            AtmoLightObject.staticColor[1] = 255;
-            AtmoLightObject.staticColor[2] = 255;
+            AtmoLightObject.ChangeStaticColor(0, 255, 255);
             break;
           case 8:
-            AtmoLightObject.staticColor[0] = 255;
-            AtmoLightObject.staticColor[1] = 0;
-            AtmoLightObject.staticColor[2] = 255;
+            AtmoLightObject.ChangeStaticColor(255, 0, 255);
             break;
           case 9:
-            AtmoLightObject.staticColor[0] = 255;
-            AtmoLightObject.staticColor[1] = 255;
-            AtmoLightObject.staticColor[2] = 0;
+            AtmoLightObject.ChangeStaticColor(255, 255, 0);
             break;
         }
         AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
@@ -1046,7 +1016,7 @@ namespace AtmoLight
           }
           else
           {
-            AtmoLightObject.staticColor = staticColorTemp;
+            AtmoLightObject.ChangeStaticColor(staticColorTemp[0], staticColorTemp[1], staticColorTemp[2]);
             return;
           }
         case 4:
