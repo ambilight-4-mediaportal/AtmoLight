@@ -34,13 +34,6 @@ namespace AtmoLight
 {
   public class Plugin : IPluginStateTracker
   {
-    /*
-    #region AtmoDXUtil Import
-    [DllImport("AtmoDXUtil.dll", PreserveSig = false, CharSet = CharSet.Auto)]
-    private static extern void VideoSurfaceToRGBSurfaceExt(IntPtr src, int srcWidth, int srcHeight, IntPtr dst, int dstWidth, int dstHeight);
-    #endregion
-     * */
-
     #region Fields
     protected AsynchronousMessageQueue messageQueue;
     public Core AtmoLightObject;
