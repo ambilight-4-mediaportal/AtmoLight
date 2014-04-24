@@ -56,7 +56,7 @@ namespace AtmoLight
     private SharpDX.Direct3D9.Surface rgbSurface;
     private SharpDX.Direct3D9.Surface rgbSurfaceDest;
     private SharpDX.Direct3D9.Device sharpDXDevice;
-    private IPlayerManager pm;
+    private IPlayerManager playerManager;
     private ISharpDXVideoPlayer player;
 
 
@@ -124,21 +124,25 @@ namespace AtmoLight
     {
       Rectangle rect = new Rectangle(0, 0, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight);
 
-      pm = ServiceRegistration.Get<IPlayerManager>();
-      pm.ForEach(psc =>
+      playerManager = ServiceRegistration.Get<IPlayerManager>();
+      playerManager.ForEach(psc =>
       {
         player = psc.CurrentPlayer as ISharpDXVideoPlayer;
         if (player == null || player.Surface == null)
+        {
           return;
-
+        }
         rgbSurface = player.Surface;
       });
 
       sharpDXDevice = rgbSurface.Device;
-      rgbSurfaceDest = SharpDX.Direct3D9.Surface.CreateRenderTarget(sharpDXDevice, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight, SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
 
       while (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
       {
+        if (rgbSurfaceDest == null)
+        {
+          rgbSurfaceDest = SharpDX.Direct3D9.Surface.CreateRenderTarget(sharpDXDevice, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight, SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
+        }
         try
         {
           sharpDXDevice.StretchRectangle(rgbSurface, null, rgbSurfaceDest, rect, SharpDX.Direct3D9.TextureFilter.None);
@@ -174,10 +178,14 @@ namespace AtmoLight
         }
         catch (Exception ex)
         {
+          rgbSurfaceDest.Dispose();
+          rgbSurfaceDest = null;
           Log.Error("Exception: {0}", ex.Message);
         }
+        System.Threading.Thread.Sleep(1000 / surfacePollingRate);
       }
-      System.Threading.Thread.Sleep(1000/surfacePollingRate);
+      rgbSurfaceDest.Dispose();
+      rgbSurfaceDest = null;
     }
 
     #region Message Handler
