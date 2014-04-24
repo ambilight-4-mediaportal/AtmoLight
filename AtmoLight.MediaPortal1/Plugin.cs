@@ -544,7 +544,7 @@ namespace AtmoLight
               lastFrame = Win32API.GetTickCount();
             }
 
-            if (AtmoLightObject.delayEnabled)
+            if (AtmoLightObject.IsDelayEnabled())
             {
               AtmoLightObject.AddDelayListItem(bmiInfoHeader, pixelData);
             }
@@ -719,27 +719,19 @@ namespace AtmoLight
       // Delay
       if ((g_Player.Playing) && (playbackEffect == ContentEffect.MediaPortalLiveMode))
       {
-        // Toggle Delay
-        if (AtmoLightObject.delayEnabled)
+        // Toggle Delay and Change Delay
+        if (AtmoLightObject.IsDelayEnabled())
         {
           dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_DelayOFF));
-        }
-        else
-        {
-          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_DelayON));
-        }
-        staticColorPos++;
-
-        // Change Delay
-        if (AtmoLightObject.delayEnabled)
-        {
-          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + AtmoLightObject.delayTime + "ms)"));
+          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + AtmoLightObject.GetDelayTime() + "ms)"));
           staticColorPos++;
         }
         else
         {
+          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_DelayON));
           delayChangePos = -1;
         }
+        staticColorPos++;
       }
       else
       {
@@ -872,27 +864,21 @@ namespace AtmoLight
       }
       else if ((dlg.SelectedLabel == delayTogglePos) && (delayTogglePos != -1))
       {
-        if (AtmoLightObject.delayEnabled)
+        if (AtmoLightObject.IsDelayEnabled())
         {
           Log.Info("Switching LED delay off.");
-          AtmoLightObject.delayEnabled = false;
-          AtmoLightObject.StopSetPixelDataThread();
+          AtmoLightObject.DisableDelay();
         }
         else
         {
-          Log.Info("Switching LED delay on.");
-          AtmoLightObject.delayEnabled = true;
-          AtmoLightObject.delayTime = (int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime);
-          AtmoLightObject.StartSetPixelDataThread();
-          Log.Debug("Adding {0}ms delay to the LEDs.", AtmoLightObject.delayTime);
+          AtmoLightObject.EnableDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
         }
       }
       else if ((dlg.SelectedLabel == delayChangePos) && (delayChangePos != -1))
       {
         if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) && (delayTimeHelper <= 1000))
         {
-          Log.Info("Changing LED delay to {0}ms.", delayTimeHelper);
-          AtmoLightObject.delayTime = delayTimeHelper;
+          AtmoLightObject.ChangeDelay(delayTimeHelper);
           Settings.delayReferenceTime = (int)(((float)delayTimeHelper * (float)GetRefreshRate()) / Settings.delayReferenceRefreshRate);
         }
         else
