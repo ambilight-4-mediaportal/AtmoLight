@@ -12,7 +12,9 @@
     <Assembly FileName="AtmoLight.MediaPortal2.dll"/>
     <Assembly FileName="AtmoLight.Core.dll"/>
 	<Assembly FileName="AtmoWinRemoteControl.dll"/>
+	<Assembly FileName="../SkinEngine/SkinEngine.dll"/>
 	<PluginStateTracker ClassName="AtmoLight.Plugin"/>
   </Runtime>
+
   
 </Plugin>
