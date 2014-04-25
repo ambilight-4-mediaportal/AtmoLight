@@ -44,6 +44,7 @@ namespace AtmoLight
     protected AsynchronousMessageQueue messageQueue;
     public Core AtmoLightObject;
 
+    // Settings
     private string atmoWinPath = "C:\\ProgramData\\Team MediaPortal\\MediaPortal\\AtmoWin\\AtmoWinA.exe";
     private bool restartOnError = true;
     private bool startAtmoWin = true;
@@ -51,14 +52,18 @@ namespace AtmoLight
     private bool delay = false;
     private int delayReferenceTime = 0;
 
-    private int surfacePollingRate = 60;
+    // Surfaces
+    private SharpDX.Direct3D9.Surface surfaceSkinEngine; // Surface of the whole UI
+    private SharpDX.Direct3D9.Surface surfacePlayer; // Surface from the Player
+    private SharpDX.Direct3D9.Surface surfaceDestination; // Destination Surface (resized)
 
-    private SharpDX.Direct3D9.Surface rgbSurface;
-    private SharpDX.Direct3D9.Surface rgbSurfaceDest;
-    private SharpDX.Direct3D9.Device sharpDXDevice;
+    // Player helper
     private IPlayerManager playerManager;
     private ISharpDXVideoPlayer player;
 
+    // Depracted
+    private SharpDX.Direct3D9.Device sharpDXDevice;
+    private int surfacePollingRate = 60;
 
     #endregion
 
@@ -107,8 +112,8 @@ namespace AtmoLight
       AtmoLightObject.Disconnect();
       AtmoLightObject.StopAtmoWin();
       SkinContext.DeviceSceneEnd -= UICapture;
-      rgbSurfaceDest.Dispose();
-      rgbSurfaceDest = null;
+      surfaceDestination.Dispose();
+      surfaceDestination = null;
       messageQueue.MessageReceived -= OnMessageReceived;
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
       return;
@@ -156,19 +161,44 @@ namespace AtmoLight
     #region UI Capture Event Handler
     public void UICapture(object sender, EventArgs args)
     {
-      Rectangle rect = new Rectangle(0, 0, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight);
-      rgbSurface = SkinContext.Device.GetRenderTarget(0);
-      if (rgbSurfaceDest == null)
+      if (!AtmoLightObject.IsConnected() || !AtmoLightObject.currentState || AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
       {
-        rgbSurfaceDest = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight, SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
+        return;
       }
-
+      Rectangle rectangleDestination = new Rectangle(0, 0, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight);
       try
       {
-        SkinContext.Device.StretchRectangle(rgbSurface, null, rgbSurfaceDest, rect, SharpDX.Direct3D9.TextureFilter.None);
-        DataStream stream = SharpDX.Direct3D9.Surface.ToStream(rgbSurfaceDest, SharpDX.Direct3D9.ImageFileFormat.Bmp);
+        if (surfaceDestination == null)
+        {
+          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight, SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
+        }
 
+        // Use the Player Surface if video is playing.
+        // This results in lower time to calculate aswell as blackbar removal
+        if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
+        {
+          playerManager = ServiceRegistration.Get<IPlayerManager>();
+          playerManager.ForEach(psc =>
+          {
+            player = psc.CurrentPlayer as ISharpDXVideoPlayer;
+            if (player == null || player.Surface == null)
+            {
+              return;
+            }
+            surfacePlayer = player.Surface;
+          });
+          surfacePlayer.Device.StretchRectangle(surfacePlayer, null, surfaceDestination, rectangleDestination, SharpDX.Direct3D9.TextureFilter.None);
+        }
+        else
+        {
+          surfaceSkinEngine = SkinContext.Device.GetRenderTarget(0);
+          surfaceSkinEngine.Device.StretchRectangle(surfaceSkinEngine, null, surfaceDestination, rectangleDestination, SharpDX.Direct3D9.TextureFilter.None);
+        }
+
+
+        DataStream stream = SharpDX.Direct3D9.Surface.ToStream(surfaceDestination, SharpDX.Direct3D9.ImageFileFormat.Bmp);
         BinaryReader reader = new BinaryReader(stream);
+
         stream.Position = 0; // ensure that what start at the beginning of the stream. 
         reader.ReadBytes(14); // skip bitmap file info header
         byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
@@ -197,8 +227,8 @@ namespace AtmoLight
       }
       catch (Exception ex)
       {
-        rgbSurfaceDest.Dispose();
-        rgbSurfaceDest = null;
+        surfaceDestination.Dispose();
+        surfaceDestination = null;
         Log.Error("Exception: {0}", ex.Message);
       }
     }
@@ -232,6 +262,7 @@ namespace AtmoLight
     }
     #endregion
 
+    #region Key Bindings
     private void RegisterKeyBindings()
     {
       IInputManager manager = ServiceRegistration.Get<IInputManager>(false);
@@ -261,6 +292,7 @@ namespace AtmoLight
         AtmoLightObject.ChangeEffect(ContentEffect.MediaPortalLiveMode);
       }
     }
+    #endregion
 
     #region Old depracted code
     // Not needed anymore?!
@@ -276,21 +308,25 @@ namespace AtmoLight
         {
           return;
         }
-        rgbSurface = player.Surface;
+        surfaceSkinEngine = player.Surface;
       });
 
-      sharpDXDevice = rgbSurface.Device;
+      sharpDXDevice = surfaceSkinEngine.Device;
 
       while (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
       {
-        if (rgbSurfaceDest == null)
+        if (surfaceDestination == null)
         {
-          rgbSurfaceDest = SharpDX.Direct3D9.Surface.CreateRenderTarget(sharpDXDevice, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight, SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
+          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(sharpDXDevice, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight, SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
         }
         try
         {
-          sharpDXDevice.StretchRectangle(rgbSurface, null, rgbSurfaceDest, rect, SharpDX.Direct3D9.TextureFilter.None);
-          DataStream stream = SharpDX.Direct3D9.Surface.ToStream(rgbSurfaceDest, SharpDX.Direct3D9.ImageFileFormat.Bmp);
+          Stopwatch stopwatch = new Stopwatch();
+          stopwatch.Start();
+          sharpDXDevice.StretchRectangle(surfaceSkinEngine, null, surfaceDestination, rect, SharpDX.Direct3D9.TextureFilter.None);
+          DataStream stream = SharpDX.Direct3D9.Surface.ToStream(surfaceDestination, SharpDX.Direct3D9.ImageFileFormat.Bmp);
+          stopwatch.Stop();
+          Log.Error("{0}", stopwatch.ElapsedMilliseconds);
 
           BinaryReader reader = new BinaryReader(stream);
           stream.Position = 0; // ensure that what start at the beginning of the stream. 
@@ -322,14 +358,14 @@ namespace AtmoLight
         }
         catch (Exception ex)
         {
-          rgbSurfaceDest.Dispose();
-          rgbSurfaceDest = null;
+          surfaceDestination.Dispose();
+          surfaceDestination = null;
           Log.Error("Exception: {0}", ex.Message);
         }
         System.Threading.Thread.Sleep(1000 / surfacePollingRate);
       }
-      rgbSurfaceDest.Dispose();
-      rgbSurfaceDest = null;
+      surfaceDestination.Dispose();
+      surfaceDestination = null;
     }
     #endregion
   }
