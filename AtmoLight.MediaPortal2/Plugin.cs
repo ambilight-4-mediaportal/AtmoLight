@@ -23,11 +23,17 @@ using MediaPortal.Common.PluginManager;
 using MediaPortal.UI.SkinEngine;
 using MediaPortal.UI.SkinEngine.Players;
 using MediaPortal.UI.SkinEngine.SkinManagement;
-using SharpDX;
-using SharpDX.Direct3D9;
 
 using MediaPortal.Common.Messaging;
 using MediaPortal.Common.Runtime;
+
+// SharpDX
+using SharpDX;
+using SharpDX.Direct3D9;
+
+// Key binding
+using MediaPortal.UI.Control.InputManager;
+using MediaPortal.UI.Presentation.Actions;
 
 
 namespace AtmoLight
@@ -72,6 +78,8 @@ namespace AtmoLight
       messageQueue.MessageReceived += OnMessageReceived;
       messageQueue.Start();
 
+      RegisterKeyBindings();
+
       Log.Debug("Generating new AtmoLight.Core instance.");
       AtmoLightObject = new Core(atmoWinPath, restartOnError, startAtmoWin, staticColorTemp, delay, delayReferenceTime);
 
@@ -94,6 +102,7 @@ namespace AtmoLight
 
     public void Shutdown()
     {
+      UnregisterKeyBindings();
       AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
       AtmoLightObject.Disconnect();
       AtmoLightObject.StopAtmoWin();
@@ -222,6 +231,36 @@ namespace AtmoLight
       }
     }
     #endregion
+
+    private void RegisterKeyBindings()
+    {
+      IInputManager manager = ServiceRegistration.Get<IInputManager>(false);
+      if (manager != null)
+      {
+        manager.AddKeyBinding(Key.F3, new VoidKeyActionDlgt(ToggleEffect));
+      }
+    }
+
+    private void UnregisterKeyBindings()
+    {
+      IInputManager manager = ServiceRegistration.Get<IInputManager>(false);
+      if (manager != null)
+      {
+        manager.RemoveKeyBinding(Key.F3);
+      }
+    }
+
+    private void ToggleEffect()
+    {
+      if (AtmoLightObject.currentState)
+      {
+        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+      }
+      else
+      {
+        AtmoLightObject.ChangeEffect(ContentEffect.MediaPortalLiveMode);
+      }
+    }
 
     #region Old depracted code
     // Not needed anymore?!
