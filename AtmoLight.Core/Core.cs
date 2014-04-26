@@ -63,8 +63,8 @@ namespace AtmoLight
     private volatile bool setPixelDataLock = true; // Lock for SetPixelData thread
     private volatile bool reinitialiseLock = false;
 
-    public int captureWidth = 0; // AtmoWins capture width
-    public int captureHeight = 0; // AtmoWins capture height
+    private int captureWidth = 0; // AtmoWins capture width
+    private int captureHeight = 0; // AtmoWins capture height
 
     public delegate void NewConnectionLostHandler();
     public static event NewConnectionLostHandler OnNewConnectionLost;
@@ -577,6 +577,24 @@ namespace AtmoLight
         return true;
       }
       return false;
+    }
+
+    /// <summary>
+    /// Returns the capture width of AtmoWin
+    /// </summary>
+    /// <returns>Capture width of AtmoWin</returns>
+    public int GetCaptureWidth()
+    {
+      return captureWidth;
+    }
+
+    /// <summary>
+    /// Returns the capture height of AtmoWin
+    /// </summary>
+    /// <returns>Capture height of AtmoWin</returns>
+    public int GetCaptureHeight()
+    {
+      return captureHeight;
     }
 
     /// <summary>
