@@ -487,14 +487,14 @@ namespace AtmoLight
     /// <param name="pSurface">Surface.</param>
     private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
     {
-      if (playbackEffect != ContentEffect.MediaPortalLiveMode || !AtmoLightObject.IsConnected() || !AtmoLightObject.currentState || width == 0 || height == 0)
+      if (AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || width == 0 || height == 0)
       {
         return;
       }
 
       if (rgbSurface == null)
       {
-        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(AtmoLightObject.captureWidth, AtmoLightObject.captureHeight, Format.A8R8G8B8,
+        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight(), Format.A8R8G8B8,
           MultiSampleType.None, 0, true);
       }
       unsafe
@@ -504,12 +504,12 @@ namespace AtmoLight
           if (Settings.sbs3dOn)
           {
             VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              AtmoLightObject.captureWidth, AtmoLightObject.captureHeight);
+              AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
           }
           else
           {
             VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              AtmoLightObject.captureWidth, AtmoLightObject.captureHeight);
+              AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
           }
 
           Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
@@ -520,20 +520,20 @@ namespace AtmoLight
           byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
 
           int rgbL = (int)(stream.Length - stream.Position);
-          int rgb = (int)(rgbL / (AtmoLightObject.captureWidth * AtmoLightObject.captureHeight));
+          int rgb = (int)(rgbL / (AtmoLightObject.GetCaptureWidth() * AtmoLightObject.GetCaptureHeight()));
 
           byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
 
-          byte[] h1pixelData = new byte[AtmoLightObject.captureWidth * rgb];
-          byte[] h2pixelData = new byte[AtmoLightObject.captureWidth * rgb];
+          byte[] h1pixelData = new byte[AtmoLightObject.GetCaptureWidth() * rgb];
+          byte[] h2pixelData = new byte[AtmoLightObject.GetCaptureWidth() * rgb];
           //now flip horizontally, we do it always to prevent microstudder
           int i;
-          for (i = 0; i < ((AtmoLightObject.captureHeight / 2) - 1); i++)
+          for (i = 0; i < ((AtmoLightObject.GetCaptureHeight() / 2) - 1); i++)
           {
-            Array.Copy(pixelData, i * AtmoLightObject.captureWidth * rgb, h1pixelData, 0, AtmoLightObject.captureWidth * rgb);
-            Array.Copy(pixelData, (AtmoLightObject.captureHeight - i - 1) * AtmoLightObject.captureWidth * rgb, h2pixelData, 0, AtmoLightObject.captureWidth * rgb);
-            Array.Copy(h1pixelData, 0, pixelData, (AtmoLightObject.captureHeight - i - 1) * AtmoLightObject.captureWidth * rgb, AtmoLightObject.captureWidth * rgb);
-            Array.Copy(h2pixelData, 0, pixelData, i * AtmoLightObject.captureWidth * rgb, AtmoLightObject.captureWidth * rgb);
+            Array.Copy(pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, h1pixelData, 0, AtmoLightObject.GetCaptureWidth() * rgb);
+            Array.Copy(pixelData, (AtmoLightObject.GetCaptureHeight() - i - 1) * AtmoLightObject.GetCaptureWidth() * rgb, h2pixelData, 0, AtmoLightObject.GetCaptureWidth() * rgb);
+            Array.Copy(h1pixelData, 0, pixelData, (AtmoLightObject.GetCaptureHeight() - i - 1) * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
+            Array.Copy(h2pixelData, 0, pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
           }
           //send scaled and fliped frame to atmowin
           if (!Settings.lowCPU ||
@@ -606,7 +606,7 @@ namespace AtmoLight
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.killButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.killButton == 3))
       {
-        if (!AtmoLightObject.currentState)
+        if (!AtmoLightObject.IsAtmoLightOn())
         {
           if (g_Player.Playing)
           {
@@ -691,7 +691,7 @@ namespace AtmoLight
       dlg.SetHeading("AtmoLight");
 
       // Toggle On/Off
-      if (!AtmoLightObject.currentState)
+      if (!AtmoLightObject.IsAtmoLightOn())
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchLEDsON));
       }
@@ -740,8 +740,8 @@ namespace AtmoLight
       }
 
       // Change Static Color
-      if (((g_Player.Playing) && (playbackEffect == ContentEffect.StaticColor) && (AtmoLightObject.currentState)) ||
-          ((!g_Player.Playing) && (menuEffect == ContentEffect.StaticColor) && (AtmoLightObject.currentState)))
+      if (((g_Player.Playing) && (playbackEffect == ContentEffect.StaticColor) && (AtmoLightObject.IsAtmoLightOn())) ||
+          ((!g_Player.Playing) && (menuEffect == ContentEffect.StaticColor) && (AtmoLightObject.IsAtmoLightOn())))
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeStatic));
       }
@@ -756,7 +756,7 @@ namespace AtmoLight
       // Do stuff
       if (dlg.SelectedLabel == 0)
       {
-        if (!AtmoLightObject.currentState)
+        if (!AtmoLightObject.IsAtmoLightOn())
         {
           if (g_Player.Playing)
           {

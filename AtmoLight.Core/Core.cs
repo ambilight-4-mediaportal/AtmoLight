@@ -42,7 +42,7 @@ namespace AtmoLight
     private IAtmoLiveViewControl atmoLiveViewControl = null; // Com Object to control AtmoWins liveview
 
     // States
-    public bool currentState = false; // State of the LEDs
+    private bool currentState = false; // State of the LEDs
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current aktive effect
     private ComLiveViewSource atmoLiveViewSource; // Current liveview source
 
@@ -63,8 +63,8 @@ namespace AtmoLight
     private volatile bool setPixelDataLock = true; // Lock for SetPixelData thread
     private volatile bool reinitialiseLock = false;
 
-    public int captureWidth = 0; // AtmoWins capture width
-    public int captureHeight = 0; // AtmoWins capture height
+    private int captureWidth = 0; // AtmoWins capture width
+    private int captureHeight = 0; // AtmoWins capture height
 
     public delegate void NewConnectionLostHandler();
     public static event NewConnectionLostHandler OnNewConnectionLost;
@@ -580,6 +580,24 @@ namespace AtmoLight
     }
 
     /// <summary>
+    /// Returns the capture width of AtmoWin
+    /// </summary>
+    /// <returns>Capture width of AtmoWin</returns>
+    public int GetCaptureWidth()
+    {
+      return captureWidth;
+    }
+
+    /// <summary>
+    /// Returns the capture height of AtmoWin
+    /// </summary>
+    /// <returns>Capture height of AtmoWin</returns>
+    public int GetCaptureHeight()
+    {
+      return captureHeight;
+    }
+
+    /// <summary>
     /// Changes the AtmoWin profile.
     /// </summary>
     /// <returns>true if successfull and false if not.</returns>
@@ -801,6 +819,15 @@ namespace AtmoLight
       return currentEffect;
     }
 
+    /// <summary>
+    /// Returns if AtmoLight/LEDs are on.
+    /// </summary>
+    /// <returns>true or false</returns>
+    public bool IsAtmoLightOn()
+    {
+      return currentState;
+    }
+ 
     /// <summary>
     /// Change to AtmoWin profile.
     /// </summary>
