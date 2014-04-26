@@ -487,7 +487,7 @@ namespace AtmoLight
     /// <param name="pSurface">Surface.</param>
     private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
     {
-      if (AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !AtmoLightObject.IsConnected() || !AtmoLightObject.currentState || width == 0 || height == 0)
+      if (AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || width == 0 || height == 0)
       {
         return;
       }
@@ -606,7 +606,7 @@ namespace AtmoLight
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.killButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.killButton == 3))
       {
-        if (!AtmoLightObject.currentState)
+        if (!AtmoLightObject.IsAtmoLightOn())
         {
           if (g_Player.Playing)
           {
@@ -691,7 +691,7 @@ namespace AtmoLight
       dlg.SetHeading("AtmoLight");
 
       // Toggle On/Off
-      if (!AtmoLightObject.currentState)
+      if (!AtmoLightObject.IsAtmoLightOn())
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchLEDsON));
       }
@@ -740,8 +740,8 @@ namespace AtmoLight
       }
 
       // Change Static Color
-      if (((g_Player.Playing) && (playbackEffect == ContentEffect.StaticColor) && (AtmoLightObject.currentState)) ||
-          ((!g_Player.Playing) && (menuEffect == ContentEffect.StaticColor) && (AtmoLightObject.currentState)))
+      if (((g_Player.Playing) && (playbackEffect == ContentEffect.StaticColor) && (AtmoLightObject.IsAtmoLightOn())) ||
+          ((!g_Player.Playing) && (menuEffect == ContentEffect.StaticColor) && (AtmoLightObject.IsAtmoLightOn())))
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeStatic));
       }
@@ -756,7 +756,7 @@ namespace AtmoLight
       // Do stuff
       if (dlg.SelectedLabel == 0)
       {
-        if (!AtmoLightObject.currentState)
+        if (!AtmoLightObject.IsAtmoLightOn())
         {
           if (g_Player.Playing)
           {

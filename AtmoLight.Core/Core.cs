@@ -42,7 +42,7 @@ namespace AtmoLight
     private IAtmoLiveViewControl atmoLiveViewControl = null; // Com Object to control AtmoWins liveview
 
     // States
-    public bool currentState = false; // State of the LEDs
+    private bool currentState = false; // State of the LEDs
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current aktive effect
     private ComLiveViewSource atmoLiveViewSource; // Current liveview source
 
@@ -799,6 +799,15 @@ namespace AtmoLight
     public ContentEffect GetCurrentEffect()
     {
       return currentEffect;
+    }
+
+    /// <summary>
+    /// Returns if AtmoLight/LEDs are on.
+    /// </summary>
+    /// <returns>true or false</returns>
+    public bool IsAtmoLightOn()
+    {
+      return currentState;
     }
  
     /// <summary>
