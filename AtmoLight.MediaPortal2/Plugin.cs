@@ -62,8 +62,8 @@ namespace AtmoLight
     private ISharpDXVideoPlayer player;
 
     // Depracted
-    private SharpDX.Direct3D9.Device sharpDXDevice;
-    private int surfacePollingRate = 60;
+    //private SharpDX.Direct3D9.Device sharpDXDevice;
+    //private int surfacePollingRate = 60;
 
     #endregion
 
@@ -161,16 +161,16 @@ namespace AtmoLight
     #region UI Capture Event Handler
     public void UICapture(object sender, EventArgs args)
     {
-      if (!AtmoLightObject.IsConnected() || !AtmoLightObject.currentState || AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
+      if (!AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
       {
         return;
       }
-      Rectangle rectangleDestination = new Rectangle(0, 0, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight);
+      Rectangle rectangleDestination = new Rectangle(0, 0, AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
       try
       {
         if (surfaceDestination == null)
         {
-          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight, SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
+          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device, AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight(), SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
         }
 
         // Use the Player Surface if video is playing.
@@ -204,20 +204,20 @@ namespace AtmoLight
         byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
 
         int rgbL = (int)(stream.Length - stream.Position);
-        int rgb = (int)(rgbL / (AtmoLightObject.captureWidth * AtmoLightObject.captureHeight));
+        int rgb = (int)(rgbL / (AtmoLightObject.GetCaptureWidth() * AtmoLightObject.GetCaptureHeight()));
 
         byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
 
-        byte[] h1pixelData = new byte[AtmoLightObject.captureWidth * rgb];
-        byte[] h2pixelData = new byte[AtmoLightObject.captureWidth * rgb];
+        byte[] h1pixelData = new byte[AtmoLightObject.GetCaptureWidth() * rgb];
+        byte[] h2pixelData = new byte[AtmoLightObject.GetCaptureWidth() * rgb];
         //now flip horizontally, we do it always to prevent microstudder
         int i;
-        for (i = 0; i < ((AtmoLightObject.captureHeight / 2) - 1); i++)
+        for (i = 0; i < ((AtmoLightObject.GetCaptureHeight() / 2) - 1); i++)
         {
-          Array.Copy(pixelData, i * AtmoLightObject.captureWidth * rgb, h1pixelData, 0, AtmoLightObject.captureWidth * rgb);
-          Array.Copy(pixelData, (AtmoLightObject.captureHeight - i - 1) * AtmoLightObject.captureWidth * rgb, h2pixelData, 0, AtmoLightObject.captureWidth * rgb);
-          Array.Copy(h1pixelData, 0, pixelData, (AtmoLightObject.captureHeight - i - 1) * AtmoLightObject.captureWidth * rgb, AtmoLightObject.captureWidth * rgb);
-          Array.Copy(h2pixelData, 0, pixelData, i * AtmoLightObject.captureWidth * rgb, AtmoLightObject.captureWidth * rgb);
+          Array.Copy(pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, h1pixelData, 0, AtmoLightObject.GetCaptureWidth() * rgb);
+          Array.Copy(pixelData, (AtmoLightObject.GetCaptureHeight() - i - 1) * AtmoLightObject.GetCaptureWidth() * rgb, h2pixelData, 0, AtmoLightObject.GetCaptureWidth() * rgb);
+          Array.Copy(h1pixelData, 0, pixelData, (AtmoLightObject.GetCaptureHeight() - i - 1) * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
+          Array.Copy(h2pixelData, 0, pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
         }
 
         AtmoLightObject.SetPixelData(bmiInfoHeader, pixelData);
@@ -283,7 +283,7 @@ namespace AtmoLight
 
     private void ToggleEffect()
     {
-      if (AtmoLightObject.currentState)
+      if (AtmoLightObject.IsAtmoLightOn())
       {
         AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
       }
@@ -295,6 +295,7 @@ namespace AtmoLight
     #endregion
 
     #region Old depracted code
+    /*
     // Not needed anymore?!
     private void SurfacePolling()
     {
@@ -367,6 +368,7 @@ namespace AtmoLight
       surfaceDestination.Dispose();
       surfaceDestination = null;
     }
+    */
     #endregion
   }
 }
