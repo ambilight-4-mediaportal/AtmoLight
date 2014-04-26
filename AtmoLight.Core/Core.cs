@@ -793,6 +793,15 @@ namespace AtmoLight
     }
 
     /// <summary>
+    /// Returns the current effect.
+    /// </summary>
+    /// <returns>Current effect</returns>
+    public ContentEffect GetCurrentEffect()
+    {
+      return currentEffect;
+    }
+ 
+    /// <summary>
     /// Change to AtmoWin profile.
     /// </summary>
     /// <returns>true or false</returns>
