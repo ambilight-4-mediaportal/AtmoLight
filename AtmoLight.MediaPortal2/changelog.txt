@@ -1,0 +1,9 @@
+Version 2.0.0.0 Alpha 3
+- Fixed memory leak
+- Added possibility to use MediaPortal liveview mode for the whole UI
+
+Version 2.0.0.0 Alpha 2
+- Added MediaPortal liveview mode
+
+Version 2.0.0.0 Alpha 1
+- Initial Release
