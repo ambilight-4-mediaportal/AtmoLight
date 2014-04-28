@@ -13,17 +13,17 @@ namespace AtmoLight
     [Setting(SettingScope.User, "C:\\ProgramData\\Team MediaPortal\\MediaPortal\\AtmoWin\\AtmoWinA.exe")]
     public string AtmoWinExe { get; set; }
 
-    [Setting(SettingScope.User, 4)]
-    public int EffectVideo { get; set; }
+    [Setting(SettingScope.User, ContentEffect.MediaPortalLiveMode)]
+    public ContentEffect EffectVideo { get; set; }
 
-    [Setting(SettingScope.User, 0)]
-    public int EffectMusic { get; set; }
+    [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
+    public ContentEffect EffectMusic { get; set; }
 
-    [Setting(SettingScope.User, 0)]
-    public int EffectRadio { get; set; }
+    [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
+    public ContentEffect EffectRadio { get; set; }
 
-    [Setting(SettingScope.User, 0)]
-    public int EffectMenu { get; set; }
+    [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
+    public ContentEffect EffectMenu { get; set; }
 
     [Setting(SettingScope.User, 1)]
     public int ButtonMenu { get; set; }
