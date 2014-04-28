@@ -45,12 +45,7 @@ namespace AtmoLight
     public Core AtmoLightObject;
 
     // Settings
-    private string atmoWinPath = "C:\\ProgramData\\Team MediaPortal\\MediaPortal\\AtmoWin\\AtmoWinA.exe";
-    private bool restartOnError = true;
-    private bool startAtmoWin = true;
     private int[] staticColorTemp = { 0, 0, 0 };
-    private bool delay = false;
-    private int delayReferenceTime = 0;
 
     // Surfaces
     private SharpDX.Direct3D9.Surface surfaceSkinEngine; // Surface of the whole UI
@@ -70,6 +65,10 @@ namespace AtmoLight
     #region IPluginStateTracker implementation
     public void Activated(PluginRuntime pluginRuntime)
     {
+      AtmoLight.Settings settings = new AtmoLight.Settings();
+      settings.LoadAll();
+      settings.SaveAll();
+
       // Log Handler
       Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
 
@@ -86,7 +85,10 @@ namespace AtmoLight
       RegisterKeyBindings();
 
       Log.Debug("Generating new AtmoLight.Core instance.");
-      AtmoLightObject = new Core(atmoWinPath, restartOnError, startAtmoWin, staticColorTemp, delay, delayReferenceTime);
+      staticColorTemp[0] = settings.StaticColorRed;
+      staticColorTemp[1] = settings.StaticColorGreen;
+      staticColorTemp[2] = settings.StaticColorBlue;
+      AtmoLightObject = new Core(settings.AtmoWinExe, settings.RestartAtmoWinOnError, settings.StartAtmoWinOnStart, staticColorTemp, settings.Delay, settings.DelayTime);
 
       if (!AtmoLightObject.Initialise())
       {
