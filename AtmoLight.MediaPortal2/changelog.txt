@@ -1,3 +1,11 @@
+Version 2.0.0.0 Alpha 4
+- Added settings
+- Added automatic mode
+	* Video effect, Music effect and Menu effect
+	* Timeframe where leds should be off (exclude time)
+	* Manual Mode (currently no way to change effects manually)
+- Added Low CPU feature
+
 Version 2.0.0.0 Alpha 3
 - Fixed memory leak
 - Added possibility to use MediaPortal liveview mode for the whole UI
