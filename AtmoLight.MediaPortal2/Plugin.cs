@@ -50,6 +50,8 @@ namespace AtmoLight
     private ContentEffect menuEffect = ContentEffect.Undefined;
     private ContentEffect playbackEffect = ContentEffect.Undefined;
 
+    private Int64 lastFrame = 0;
+
     // Surfaces
     private SharpDX.Direct3D9.Surface surfaceSource; // Source Surface
     private SharpDX.Direct3D9.Surface surfaceDestination; // Destination Surface (resized)
@@ -63,6 +65,12 @@ namespace AtmoLight
     //private int surfacePollingRate = 60;
 
     #endregion
+
+    public sealed class Win32API
+    {
+      [DllImport("kernel32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+      public static extern Int64 GetTickCount();
+    }
 
     #region IPluginStateTracker implementation
     public void Activated(PluginRuntime pluginRuntime)
@@ -251,6 +259,22 @@ namespace AtmoLight
       {
         return;
       }
+
+      // Low CPU setting.
+      // Skip frame if LowCPUTime has not yet passed since last frame.
+      if (settings.LowCPU)
+      {
+        if ((Win32API.GetTickCount() - lastFrame) < settings.LowCPUTime)
+        {
+          return;
+        }
+        else
+        {
+          lastFrame = Win32API.GetTickCount();
+        }
+      }
+
+
       Rectangle rectangleDestination = new Rectangle(0, 0, AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
       try
       {
