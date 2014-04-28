@@ -51,8 +51,7 @@ namespace AtmoLight
     private ContentEffect playbackEffect = ContentEffect.Undefined;
 
     // Surfaces
-    private SharpDX.Direct3D9.Surface surfaceSkinEngine; // Surface of the whole UI
-    private SharpDX.Direct3D9.Surface surfacePlayer; // Surface from the Player
+    private SharpDX.Direct3D9.Surface surfaceSource; // Source Surface
     private SharpDX.Direct3D9.Surface surfaceDestination; // Destination Surface (resized)
 
     // Player helper
@@ -272,17 +271,15 @@ namespace AtmoLight
             {
               return;
             }
-            surfacePlayer = player.Surface;
+            surfaceSource = player.Surface;
           });
-          surfacePlayer.Device.StretchRectangle(surfacePlayer, null, surfaceDestination, rectangleDestination, SharpDX.Direct3D9.TextureFilter.None);
         }
         else
         {
-          surfaceSkinEngine = SkinContext.Device.GetRenderTarget(0);
-          surfaceSkinEngine.Device.StretchRectangle(surfaceSkinEngine, null, surfaceDestination, rectangleDestination, SharpDX.Direct3D9.TextureFilter.None);
+          surfaceSource = SkinContext.Device.GetRenderTarget(0);
         }
 
-
+        surfaceSource.Device.StretchRectangle(surfaceSource, null, surfaceDestination, rectangleDestination, SharpDX.Direct3D9.TextureFilter.None);
         DataStream stream = SharpDX.Direct3D9.Surface.ToStream(surfaceDestination, SharpDX.Direct3D9.ImageFileFormat.Bmp);
         BinaryReader reader = new BinaryReader(stream);
 
