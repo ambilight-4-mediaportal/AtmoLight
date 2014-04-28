@@ -14,25 +14,25 @@ namespace AtmoLight
     public string AtmoWinExe { get; set; }
 
     [Setting(SettingScope.User, ContentEffect.MediaPortalLiveMode)]
-    public ContentEffect EffectVideo { get; set; }
+    public ContentEffect VideoEffect { get; set; }
 
     [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
-    public ContentEffect EffectMusic { get; set; }
+    public ContentEffect MusicEffect { get; set; }
 
     [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
-    public ContentEffect EffectRadio { get; set; }
+    public ContentEffect RadioEffect { get; set; }
 
     [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
-    public ContentEffect EffectMenu { get; set; }
+    public ContentEffect MenuEffect { get; set; }
 
     [Setting(SettingScope.User, 1)]
-    public int ButtonMenu { get; set; }
+    public int MenuButton { get; set; }
 
     [Setting(SettingScope.User, 2)]
-    public int ButtonOnOff { get; set; }
+    public int OnOffButton { get; set; }
 
     [Setting(SettingScope.User, 3)]
-    public int ButtonProfile { get; set; }
+    public int ProfileButton { get; set; }
 
     [Setting(SettingScope.User, true)]
     public bool DisableLEDsOnExit { get; set; }
@@ -92,13 +92,13 @@ namespace AtmoLight
     {
       settings = settingsManager.Load<Settings>();
       AtmoWinExe = settings.AtmoWinExe;
-      EffectVideo = settings.EffectVideo;
-      EffectRadio = settings.EffectRadio;
-      EffectMusic = settings.EffectMusic;
-      EffectMenu = settings.EffectMenu;
-      ButtonMenu = settings.ButtonMenu;
-      ButtonOnOff = settings.ButtonOnOff;
-      ButtonProfile = settings.ButtonProfile;
+      VideoEffect = settings.VideoEffect;
+      RadioEffect = settings.RadioEffect;
+      MusicEffect = settings.MusicEffect;
+      MenuEffect = settings.MenuEffect;
+      MenuButton = settings.MenuButton;
+      OnOffButton = settings.OnOffButton;
+      ProfileButton = settings.ProfileButton;
       DisableLEDsOnExit = settings.DisableLEDsOnExit;
       EnableLiveviewonExit = settings.EnableLiveviewonExit;
       ExcludeTimeStart = settings.ExcludeTimeStart;
@@ -122,13 +122,13 @@ namespace AtmoLight
     public bool SaveAll()
     {
       settings.AtmoWinExe = AtmoWinExe;
-      settings.EffectVideo = EffectVideo;
-      settings.EffectRadio = EffectRadio;
-      settings.EffectMusic = EffectMusic;
-      settings.EffectMenu = EffectMenu;
-      settings.ButtonMenu = ButtonMenu;
-      settings.ButtonOnOff = ButtonOnOff;
-      settings.ButtonProfile = ButtonProfile;
+      settings.VideoEffect = VideoEffect;
+      settings.RadioEffect = RadioEffect;
+      settings.MusicEffect = MusicEffect;
+      settings.MenuEffect = MenuEffect;
+      settings.MenuButton = MenuButton;
+      settings.OnOffButton = OnOffButton;
+      settings.ProfileButton = ProfileButton;
       settings.DisableLEDsOnExit = DisableLEDsOnExit;
       settings.EnableLiveviewonExit = EnableLiveviewonExit;
       settings.ExcludeTimeStart = ExcludeTimeStart;

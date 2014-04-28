@@ -45,7 +45,10 @@ namespace AtmoLight
     public Core AtmoLightObject;
 
     // Settings
+    AtmoLight.Settings settings;
     private int[] staticColorTemp = { 0, 0, 0 };
+    private ContentEffect menuEffect = ContentEffect.Undefined;
+    private ContentEffect playbackEffect = ContentEffect.Undefined;
 
     // Surfaces
     private SharpDX.Direct3D9.Surface surfaceSkinEngine; // Surface of the whole UI
@@ -65,17 +68,27 @@ namespace AtmoLight
     #region IPluginStateTracker implementation
     public void Activated(PluginRuntime pluginRuntime)
     {
-      AtmoLight.Settings settings = new AtmoLight.Settings();
-      settings.LoadAll();
-      settings.SaveAll();
-
       // Log Handler
       Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
 
+      // Version Infos
       var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
       DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
       Log.Info("AtmoLight: Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
 
+      // Settings
+      Log.Debug("Loading settings.");
+      settings = new AtmoLight.Settings();
+      settings.LoadAll();
+      settings.SaveAll();
+
+      staticColorTemp[0] = settings.StaticColorRed;
+      staticColorTemp[1] = settings.StaticColorGreen;
+      staticColorTemp[2] = settings.StaticColorBlue;
+
+      menuEffect = settings.MenuEffect;
+
+      // Handler
       Log.Debug("AtmoLight: Initialising event handler.");
 
       messageQueue = new AsynchronousMessageQueue(this, new string[] { PlayerManagerMessaging.CHANNEL });
@@ -84,10 +97,9 @@ namespace AtmoLight
 
       RegisterKeyBindings();
 
+      // AtmoLight init
       Log.Debug("Generating new AtmoLight.Core instance.");
-      staticColorTemp[0] = settings.StaticColorRed;
-      staticColorTemp[1] = settings.StaticColorGreen;
-      staticColorTemp[2] = settings.StaticColorBlue;
+
       AtmoLightObject = new Core(settings.AtmoWinExe, settings.RestartAtmoWinOnError, settings.StartAtmoWinOnStart, staticColorTemp, settings.Delay, settings.DelayTime);
 
       if (!AtmoLightObject.Initialise())
@@ -96,7 +108,14 @@ namespace AtmoLight
         return;
       }
 
-      AtmoLightObject.ChangeEffect(ContentEffect.MediaPortalLiveMode);
+      if (CheckForStartRequirements())
+      {
+        AtmoLightObject.ChangeEffect(menuEffect);
+      }
+      else
+      {
+        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+      }
 
       // Handler for UI capture
       SkinContext.DeviceSceneEnd += UICapture;
@@ -109,16 +128,33 @@ namespace AtmoLight
 
     public void Shutdown()
     {
+      // Unregister handlers
       UnregisterKeyBindings();
-      AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
-      AtmoLightObject.Disconnect();
-      AtmoLightObject.StopAtmoWin();
+
       SkinContext.DeviceSceneEnd -= UICapture;
       surfaceDestination.Dispose();
       surfaceDestination = null;
+
       messageQueue.MessageReceived -= OnMessageReceived;
+
+      // Disconnect from AtmoWin
+      if (settings.DisableLEDsOnExit)
+      {
+        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+      }
+      else if (settings.EnableLiveviewonExit)
+      {
+        AtmoLightObject.ChangeEffect(ContentEffect.AtmoWinLiveMode);
+      }
+      AtmoLightObject.Disconnect();
+
+      if (settings.StopAtmoWinOnExit)
+      {
+        AtmoLightObject.StopAtmoWin();
+      }
+
+      // Unregister Log Handler
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
-      return;
     }
 
     public void Continue()
@@ -134,6 +170,35 @@ namespace AtmoLight
 
     #endregion
 
+    #region Utilities
+    /// <summary>
+    /// Check if LEDs should be activated.
+    /// </summary>
+    /// <returns>true or false</returns>
+    private bool CheckForStartRequirements()
+    {
+      if (!AtmoLightObject.IsConnected())
+      {
+        return false;
+      }
+      if (settings.ManualMode)
+      {
+        Log.Debug("LEDs should be deactivated. (Manual Mode)");
+        return false;
+      }
+      else if ((DateTime.Now >= Convert.ToDateTime(settings.ExcludeTimeStart) && DateTime.Now <= Convert.ToDateTime(settings.ExcludeTimeEnd)))
+      {
+        Log.Debug("LEDs should be deactivated. (Timeframe)");
+        return false;
+      }
+      else
+      {
+        Log.Debug("LEDs can be activated.");
+        return true;
+      }
+    }
+    #endregion
+
     #region Message Handler
     void OnMessageReceived(AsynchronousMessageQueue queue, SystemMessage message)
     {
@@ -142,19 +207,39 @@ namespace AtmoLight
         PlayerManagerMessaging.MessageType messageType = (PlayerManagerMessaging.MessageType)message.MessageType;
         if (messageType == PlayerManagerMessaging.MessageType.PlayerStarted)
         {
-          Log.Info("AtmoLight: Playback started.");
+          // What kind of playback?
           if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
           {
-            Log.Info("AtmoLight: Video started.");
-            //AtmoLightObject.ChangeEffect(ContentEffect.MediaPortalLiveMode);
-            //Thread SurfacePollingHelper = new Thread(() => SurfacePolling());
-            //SurfacePollingHelper.Start();
+            Log.Info("Video started.");
+            playbackEffect = settings.VideoEffect;
+          }
+          else if (ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
+          {
+            Log.Info("Audio started.");
+            playbackEffect = settings.MusicEffect;
+          }
+
+          // Start the right effect.
+          if (CheckForStartRequirements())
+          {
+            AtmoLightObject.ChangeEffect(playbackEffect);
+          }
+          else
+          {
+            AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
           }
         }
         else if (messageType == PlayerManagerMessaging.MessageType.PlayerStopped)
         {
-          Log.Info("AtmoLight: Playback stopped.");
-          //AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          Log.Info("Playback stopped.");
+          if (CheckForStartRequirements())
+          {
+            AtmoLightObject.ChangeEffect(menuEffect);
+          }
+          else
+          {
+            AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          }
         }
       }
     }
