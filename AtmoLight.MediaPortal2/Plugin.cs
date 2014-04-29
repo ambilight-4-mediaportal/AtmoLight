@@ -66,11 +66,13 @@ namespace AtmoLight
 
     #endregion
 
+    #region Win32API
     public sealed class Win32API
     {
       [DllImport("kernel32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
       public static extern Int64 GetTickCount();
     }
+    #endregion
 
     #region IPluginStateTracker implementation
     public void Activated(PluginRuntime pluginRuntime)
@@ -95,15 +97,6 @@ namespace AtmoLight
 
       menuEffect = settings.MenuEffect;
 
-      // Handler
-      Log.Debug("AtmoLight: Initialising event handler.");
-
-      messageQueue = new AsynchronousMessageQueue(this, new string[] { PlayerManagerMessaging.CHANNEL });
-      messageQueue.MessageReceived += OnMessageReceived;
-      messageQueue.Start();
-
-      RegisterKeyBindings();
-
       // AtmoLight init
       Log.Debug("Generating new AtmoLight.Core instance.");
 
@@ -124,7 +117,13 @@ namespace AtmoLight
         AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
       }
 
-      // Handler for UI capture
+      // Handler init
+      Log.Debug("AtmoLight: Initialising event handler.");
+
+      messageQueue = new AsynchronousMessageQueue(this, new string[] { SystemMessaging.CHANNEL, PlayerManagerMessaging.CHANNEL });
+      messageQueue.MessageReceived += OnMessageReceived;
+      messageQueue.Start();
+
       SkinContext.DeviceSceneEnd += UICapture;
     }
 
@@ -212,7 +211,19 @@ namespace AtmoLight
     #region Message Handler
     void OnMessageReceived(AsynchronousMessageQueue queue, SystemMessage message)
     {
-      if (message.ChannelName == PlayerManagerMessaging.CHANNEL)
+      if (message.ChannelName == SystemMessaging.CHANNEL)
+      {
+        SystemMessaging.MessageType messageType = (SystemMessaging.MessageType)message.MessageType;
+        if (messageType == SystemMessaging.MessageType.SystemStateChanged)
+        {
+          SystemState newState = (SystemState)message.MessageData[SystemMessaging.NEW_STATE];
+          if (newState == SystemState.Running)
+          {
+            RegisterKeyBindings();
+          }
+        }
+      }
+      else if (message.ChannelName == PlayerManagerMessaging.CHANNEL)
       {
         PlayerManagerMessaging.MessageType messageType = (PlayerManagerMessaging.MessageType)message.MessageType;
         if (messageType == PlayerManagerMessaging.MessageType.PlayerStarted)
@@ -379,7 +390,56 @@ namespace AtmoLight
       IInputManager manager = ServiceRegistration.Get<IInputManager>(false);
       if (manager != null)
       {
-        manager.AddKeyBinding(Key.F3, new VoidKeyActionDlgt(ToggleEffect));
+        if (settings.MenuButton == "Red")
+        {
+          manager.AddKeyBinding(Key.Red, new VoidKeyActionDlgt(ContextMenu));
+        }
+        else if (settings.MenuButton == "Green")
+        {
+          manager.AddKeyBinding(Key.Green, new VoidKeyActionDlgt(ContextMenu));
+        }
+        else if (settings.MenuButton == "Yellow")
+        {
+          manager.AddKeyBinding(Key.Yellow, new VoidKeyActionDlgt(ContextMenu));
+        }
+        else if (settings.MenuButton == "Blue")
+        {
+          manager.AddKeyBinding(Key.Blue, new VoidKeyActionDlgt(ContextMenu));
+        }
+
+        if (settings.OnOffButton == "Red")
+        {
+          manager.AddKeyBinding(Key.Red, new VoidKeyActionDlgt(ToggleEffectOnOff));
+        }
+        else if (settings.OnOffButton == "Green")
+        {
+          manager.AddKeyBinding(Key.Green, new VoidKeyActionDlgt(ToggleEffectOnOff));
+        }
+        else if (settings.OnOffButton == "Yellow")
+        {
+          manager.AddKeyBinding(Key.Yellow, new VoidKeyActionDlgt(ToggleEffectOnOff));
+        }
+        else if (settings.OnOffButton == "Blue")
+        {
+          manager.AddKeyBinding(Key.Blue, new VoidKeyActionDlgt(ToggleEffectOnOff));
+        }
+
+        if (settings.ProfileButton == "Red")
+        {
+          manager.AddKeyBinding(Key.Red, new VoidKeyActionDlgt(ChangeAtmoWinProfile));
+        }
+        else if (settings.ProfileButton == "Green")
+        {
+          manager.AddKeyBinding(Key.Green, new VoidKeyActionDlgt(ChangeAtmoWinProfile));
+        }
+        else if (settings.ProfileButton == "Yellow")
+        {
+          manager.AddKeyBinding(Key.Yellow, new VoidKeyActionDlgt(ChangeAtmoWinProfile));
+        }
+        else if (settings.ProfileButton == "Blue")
+        {
+          manager.AddKeyBinding(Key.Blue, new VoidKeyActionDlgt(ChangeAtmoWinProfile));
+        }
       }
     }
 
@@ -388,20 +448,39 @@ namespace AtmoLight
       IInputManager manager = ServiceRegistration.Get<IInputManager>(false);
       if (manager != null)
       {
-        manager.RemoveKeyBinding(Key.F3);
+        manager.RemoveKeyBinding(Key.Red);
+        manager.RemoveKeyBinding(Key.Green);
+        manager.RemoveKeyBinding(Key.Yellow);
+        manager.RemoveKeyBinding(Key.Blue);
       }
     }
 
-    private void ToggleEffect()
+    private void ToggleEffectOnOff()
     {
-      if (AtmoLightObject.IsAtmoLightOn())
+      if (AtmoLightObject.IsConnected())
       {
-        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+        if (AtmoLightObject.IsAtmoLightOn())
+        {
+          AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+        }
+        else
+        {
+          AtmoLightObject.ChangeEffect(ContentEffect.MediaPortalLiveMode);
+        }
       }
-      else
+    }
+
+    private void ChangeAtmoWinProfile()
+    {
+      if (AtmoLightObject.IsConnected())
       {
-        AtmoLightObject.ChangeEffect(ContentEffect.MediaPortalLiveMode);
+        AtmoLightObject.ChangeAtmoWinProfile();
       }
+    }
+
+    private void ContextMenu()
+    {
+
     }
     #endregion
 
