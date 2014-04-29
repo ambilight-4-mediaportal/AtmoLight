@@ -1,3 +1,8 @@
+Version 2.0.0.0 Alpha 5
+- Fixed bug where AtmoWin would not be stopped on MP2 exit
+- Added color button support
+	* Default: Red=ContextMenu (not implemented yet), Green=Toggle LEDs, Yellow=Change AtmoWin Profile
+
 Version 2.0.0.0 Alpha 4
 - Changed UICapture to use player surface on videoplayback (faster and no blackbar problems)
 - Added settings
