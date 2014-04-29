@@ -139,8 +139,11 @@ namespace AtmoLight
       UnregisterKeyBindings();
 
       SkinContext.DeviceSceneEnd -= UICapture;
-      surfaceDestination.Dispose();
-      surfaceDestination = null;
+      if (surfaceDestination != null)
+      {
+        surfaceDestination.Dispose();
+        surfaceDestination = null;
+      }
 
       messageQueue.MessageReceived -= OnMessageReceived;
 
