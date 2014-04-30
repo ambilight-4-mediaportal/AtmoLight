@@ -495,6 +495,20 @@ namespace AtmoLight
         return;
       }
 
+      // Low CPU setting.
+      // Skip frame if LowCPUTime has not yet passed since last frame.
+      if (Settings.lowCPU)
+      {
+        if ((Win32API.GetTickCount() - lastFrame) < Settings.lowCPUTime)
+        {
+          return;
+        }
+        else
+        {
+          lastFrame = Win32API.GetTickCount();
+        }
+      }
+
       if (rgbSurface == null)
       {
         rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight(), Format.A8R8G8B8,
@@ -539,22 +553,14 @@ namespace AtmoLight
             Array.Copy(h2pixelData, 0, pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
           }
           //send scaled and fliped frame to atmowin
-          if (!Settings.lowCPU ||
-              (((Win32API.GetTickCount() - lastFrame) > Settings.lowCPUTime) && Settings.lowCPU))
-          {
-            if (Settings.lowCPU)
-            {
-              lastFrame = Win32API.GetTickCount();
-            }
 
-            if (AtmoLightObject.IsDelayEnabled())
-            {
-              AtmoLightObject.AddDelayListItem(bmiInfoHeader, pixelData);
-            }
-            else
-            {
-              AtmoLightObject.SetPixelData(bmiInfoHeader, pixelData);
-            }
+          if (AtmoLightObject.IsDelayEnabled())
+          {
+            AtmoLightObject.AddDelayListItem(bmiInfoHeader, pixelData);
+          }
+          else
+          {
+            AtmoLightObject.SetPixelData(bmiInfoHeader, pixelData);
           }
           stream.Close();
           stream.Dispose();
