@@ -423,7 +423,7 @@ namespace AtmoLight
     /// </summary>
     /// <param name="bmiInfoHeader">Info Header</param>
     /// <param name="pixelData">Pixel Data</param>
-    public void AddDelayListItem(byte[] bmiInfoHeader, byte[] pixelData)
+    private void AddDelayListItem(byte[] bmiInfoHeader, byte[] pixelData)
     {
       if (delayTimingList.Count <= 60)
       {
@@ -444,7 +444,7 @@ namespace AtmoLight
     /// <summary>
     /// Clear all delay lists.
     /// </summary>
-    public void ClearDelayLists()
+    private void ClearDelayLists()
     {
       Log.Debug("Clearing delay lists.");
       lock (listLock)
@@ -459,7 +459,7 @@ namespace AtmoLight
     /// <summary>
     /// Trim all delay lists.
     /// </summary>
-    public void TrimDelayLists()
+    private void TrimDelayLists()
     {
       lock (listLock)
       {
@@ -472,7 +472,7 @@ namespace AtmoLight
     /// <summary>
     /// Delete first entry in all delay lists.
     /// </summary>
-    public void DeleteFirstDelayListsItems()
+    private void DeleteFirstDelayListsItems()
     {
       lock (listLock)
       {
@@ -715,7 +715,14 @@ namespace AtmoLight
       }
       try
       {
-        atmoLiveViewControl.setPixelData(bmiInfoHeader, pixelData);
+        if (IsDelayEnabled())
+        {
+          AddDelayListItem(bmiInfoHeader, pixelData);
+        }
+        else
+        {
+          atmoLiveViewControl.setPixelData(bmiInfoHeader, pixelData);
+        }
       }
       catch (Exception ex)
       {

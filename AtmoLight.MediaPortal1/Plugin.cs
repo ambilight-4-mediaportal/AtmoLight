@@ -170,7 +170,7 @@ namespace AtmoLight
     public Core AtmoLightObject;
     #endregion
 
-
+    #region Plugin Ctor/Start/Stop
     /// <summary>
     /// AtmoLight constructor.
     /// Loads the plugin, loads the settings and initializes AtmoWin and the connection.
@@ -213,14 +213,6 @@ namespace AtmoLight
 
       Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
 
-      // Workaround
-      // Enum says we choose MP Live Mode, but it is actually Static color.
-      if (Settings.effectMenu == ContentEffect.MediaPortalLiveMode)
-      {
-        Settings.effectMenu = ContentEffect.StaticColor;
-      }
-      menuEffect = Settings.effectMenu;
-
       staticColorTemp[0] = Settings.staticColorRed;
       staticColorTemp[1] = Settings.staticColorGreen;
       staticColorTemp[2] = Settings.staticColorBlue;
@@ -234,6 +226,7 @@ namespace AtmoLight
         return; 
       }
 
+      menuEffect = Settings.effectMenu;
       if (CheckForStartRequirements())
        {
          AtmoLightObject.ChangeEffect(menuEffect);
@@ -279,7 +272,9 @@ namespace AtmoLight
 
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
     }
+    #endregion
 
+    #region Utilities
     /// <summary>
     /// Check if LEDs should be activated.
     /// </summary>
@@ -322,6 +317,7 @@ namespace AtmoLight
         return Manager.Adapters[GUIGraphicsContext.currentMonitorIdx].CurrentDisplayMode.RefreshRate;
       }
     }
+    #endregion
 
     #region Log Event Handler
     /// <summary>
@@ -351,7 +347,7 @@ namespace AtmoLight
     }
     #endregion
 
-    #region Connection List Handler
+    #region Connection Lost Handler
     /// <summary>
     /// Connection lost event handler.
     /// This event gets called if connection to AtmoWin is lost and not recoverable.
@@ -380,23 +376,11 @@ namespace AtmoLight
         }
         else if (type == g_Player.MediaType.Music)
         {
-          // Workaround
-          // Enum says we choose MP Live Mode, but it is actually Static color.
-          if (Settings.effectMusic == ContentEffect.MediaPortalLiveMode)
-          {
-            Settings.effectMusic = ContentEffect.StaticColor;
-          }
           playbackEffect = Settings.effectMusic;
           Log.Debug("Music detected.");
         }
         else if (type == g_Player.MediaType.Radio)
         {
-          // Workaround
-          // Enum says we choose MP Live Mode, but it is actually Static color.
-          if (Settings.effectRadio == ContentEffect.MediaPortalLiveMode)
-          {
-            Settings.effectRadio = ContentEffect.StaticColor;
-          }
           playbackEffect = Settings.effectRadio;
           Log.Debug("Radio detected.");
         }
@@ -492,6 +476,20 @@ namespace AtmoLight
         return;
       }
 
+      // Low CPU setting.
+      // Skip frame if LowCPUTime has not yet passed since last frame.
+      if (Settings.lowCPU)
+      {
+        if ((Win32API.GetTickCount() - lastFrame) < Settings.lowCPUTime)
+        {
+          return;
+        }
+        else
+        {
+          lastFrame = Win32API.GetTickCount();
+        }
+      }
+
       if (rgbSurface == null)
       {
         rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight(), Format.A8R8G8B8,
@@ -536,23 +534,9 @@ namespace AtmoLight
             Array.Copy(h2pixelData, 0, pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
           }
           //send scaled and fliped frame to atmowin
-          if (!Settings.lowCPU ||
-              (((Win32API.GetTickCount() - lastFrame) > Settings.lowCPUTime) && Settings.lowCPU))
-          {
-            if (Settings.lowCPU)
-            {
-              lastFrame = Win32API.GetTickCount();
-            }
 
-            if (AtmoLightObject.IsDelayEnabled())
-            {
-              AtmoLightObject.AddDelayListItem(bmiInfoHeader, pixelData);
-            }
-            else
-            {
-              AtmoLightObject.SetPixelData(bmiInfoHeader, pixelData);
-            }
-          }
+          AtmoLightObject.SetPixelData(bmiInfoHeader, pixelData);
+
           stream.Close();
           stream.Dispose();
         }
