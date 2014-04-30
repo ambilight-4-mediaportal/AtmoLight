@@ -170,7 +170,7 @@ namespace AtmoLight
     public Core AtmoLightObject;
     #endregion
 
-
+    #region Plugin Ctor/Start/Stop
     /// <summary>
     /// AtmoLight constructor.
     /// Loads the plugin, loads the settings and initializes AtmoWin and the connection.
@@ -279,7 +279,9 @@ namespace AtmoLight
 
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
     }
+    #endregion
 
+    #region Utilities
     /// <summary>
     /// Check if LEDs should be activated.
     /// </summary>
@@ -322,6 +324,7 @@ namespace AtmoLight
         return Manager.Adapters[GUIGraphicsContext.currentMonitorIdx].CurrentDisplayMode.RefreshRate;
       }
     }
+    #endregion
 
     #region Log Event Handler
     /// <summary>
@@ -351,7 +354,7 @@ namespace AtmoLight
     }
     #endregion
 
-    #region Connection List Handler
+    #region Connection Lost Handler
     /// <summary>
     /// Connection lost event handler.
     /// This event gets called if connection to AtmoWin is lost and not recoverable.
