@@ -213,14 +213,6 @@ namespace AtmoLight
 
       Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
 
-      // Workaround
-      // Enum says we choose MP Live Mode, but it is actually Static color.
-      if (Settings.effectMenu == ContentEffect.MediaPortalLiveMode)
-      {
-        Settings.effectMenu = ContentEffect.StaticColor;
-      }
-      menuEffect = Settings.effectMenu;
-
       staticColorTemp[0] = Settings.staticColorRed;
       staticColorTemp[1] = Settings.staticColorGreen;
       staticColorTemp[2] = Settings.staticColorBlue;
@@ -234,6 +226,7 @@ namespace AtmoLight
         return; 
       }
 
+      menuEffect = Settings.effectMenu;
       if (CheckForStartRequirements())
        {
          AtmoLightObject.ChangeEffect(menuEffect);
@@ -383,23 +376,11 @@ namespace AtmoLight
         }
         else if (type == g_Player.MediaType.Music)
         {
-          // Workaround
-          // Enum says we choose MP Live Mode, but it is actually Static color.
-          if (Settings.effectMusic == ContentEffect.MediaPortalLiveMode)
-          {
-            Settings.effectMusic = ContentEffect.StaticColor;
-          }
           playbackEffect = Settings.effectMusic;
           Log.Debug("Music detected.");
         }
         else if (type == g_Player.MediaType.Radio)
         {
-          // Workaround
-          // Enum says we choose MP Live Mode, but it is actually Static color.
-          if (Settings.effectRadio == ContentEffect.MediaPortalLiveMode)
-          {
-            Settings.effectRadio = ContentEffect.StaticColor;
-          }
           playbackEffect = Settings.effectRadio;
           Log.Debug("Radio detected.");
         }

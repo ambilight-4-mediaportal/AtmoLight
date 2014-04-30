@@ -282,6 +282,7 @@
             "AtmoWin Live Mode",
             "Colorchanger",
             "Colorchanger LR",
+            "MediaPortal Live Mode",
             "Static Color"});
       this.cbMenu.Location = new System.Drawing.Point(145, 104);
       this.cbMenu.Name = "cbMenu";
@@ -297,6 +298,7 @@
             "AtmoWin Live Mode",
             "Colorchanger",
             "Colorchanger LR",
+            "MediaPortal Live Mode",
             "Static Color"});
       this.cbRadio.Location = new System.Drawing.Point(145, 77);
       this.cbRadio.Name = "cbRadio";
@@ -321,6 +323,7 @@
             "AtmoWin Live Mode",
             "Colorchanger",
             "Colorchanger LR",
+            "MediaPortal Live Mode",
             "Static Color"});
       this.cbMusic.Location = new System.Drawing.Point(145, 50);
       this.cbMusic.Name = "cbMusic";
@@ -667,7 +670,7 @@
       this.lblHint.Text = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3" +
     "D-SBS mode.";
       // 
-      // AtmolightSetupForm
+      // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -688,7 +691,7 @@
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MaximumSize = new System.Drawing.Size(468, 640);
       this.MinimumSize = new System.Drawing.Size(468, 640);
-      this.Name = "AtmolightSetupForm";
+      this.Name = "SetupForm";
       this.Text = "AtmoLight Setup";
       this.grpMPClose.ResumeLayout(false);
       this.grpMPClose.PerformLayout();
