@@ -17,10 +17,7 @@ namespace AtmoLight
     public ContentEffect VideoEffect { get; set; }
 
     [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
-    public ContentEffect MusicEffect { get; set; }
-
-    [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
-    public ContentEffect RadioEffect { get; set; }
+    public ContentEffect AudioEffect { get; set; }
 
     [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
     public ContentEffect MenuEffect { get; set; }
@@ -93,8 +90,7 @@ namespace AtmoLight
       settings = settingsManager.Load<Settings>();
       AtmoWinExe = settings.AtmoWinExe;
       VideoEffect = settings.VideoEffect;
-      RadioEffect = settings.RadioEffect;
-      MusicEffect = settings.MusicEffect;
+      AudioEffect = settings.AudioEffect;
       MenuEffect = settings.MenuEffect;
       MenuButton = settings.MenuButton;
       OnOffButton = settings.OnOffButton;
@@ -123,8 +119,7 @@ namespace AtmoLight
     {
       settings.AtmoWinExe = AtmoWinExe;
       settings.VideoEffect = VideoEffect;
-      settings.RadioEffect = RadioEffect;
-      settings.MusicEffect = MusicEffect;
+      settings.AudioEffect = AudioEffect;
       settings.MenuEffect = MenuEffect;
       settings.MenuButton = MenuButton;
       settings.OnOffButton = OnOffButton;

@@ -237,7 +237,7 @@ namespace AtmoLight
           else if (ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
           {
             Log.Info("Audio started.");
-            playbackEffect = settings.MusicEffect;
+            playbackEffect = settings.AudioEffect;
           }
 
           // Start the right effect.
