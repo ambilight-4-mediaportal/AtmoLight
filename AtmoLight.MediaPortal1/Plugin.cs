@@ -554,14 +554,8 @@ namespace AtmoLight
           }
           //send scaled and fliped frame to atmowin
 
-          if (AtmoLightObject.IsDelayEnabled())
-          {
-            AtmoLightObject.AddDelayListItem(bmiInfoHeader, pixelData);
-          }
-          else
-          {
-            AtmoLightObject.SetPixelData(bmiInfoHeader, pixelData);
-          }
+          AtmoLightObject.SetPixelData(bmiInfoHeader, pixelData);
+
           stream.Close();
           stream.Dispose();
         }
