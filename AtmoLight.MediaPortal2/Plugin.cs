@@ -77,6 +77,38 @@ namespace AtmoLight
     #region IPluginStateTracker implementation
     public void Activated(PluginRuntime pluginRuntime)
     {
+      messageQueue = new AsynchronousMessageQueue(this, new string[] { SystemMessaging.CHANNEL, PlayerManagerMessaging.CHANNEL });
+      messageQueue.MessageReceived += OnMessageReceived;
+      messageQueue.Start();
+    }
+
+    public void Stop()
+    {
+      return;
+    }
+
+    public void Shutdown()
+    {
+      Dispose();
+      return;
+    }
+
+    public void Continue()
+    {
+      return;
+    }
+
+    public bool RequestEnd()
+    {
+      Dispose();
+      return true;
+    }
+
+    #endregion
+
+    #region Initialise
+    private void Initialise()
+    {
       // Log Handler
       Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
 
@@ -111,28 +143,17 @@ namespace AtmoLight
       if (CheckForStartRequirements())
       {
         AtmoLightObject.ChangeEffect(menuEffect);
+        CalculateDelay();
       }
       else
       {
         AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
       }
-
-      // Handler init
-      Log.Debug("AtmoLight: Initialising event handler.");
-
-      messageQueue = new AsynchronousMessageQueue(this, new string[] { SystemMessaging.CHANNEL, PlayerManagerMessaging.CHANNEL });
-      messageQueue.MessageReceived += OnMessageReceived;
-      messageQueue.Start();
-
       SkinContext.DeviceSceneEnd += UICapture;
+      RegisterKeyBindings();
     }
 
-    public void Stop()
-    {
-      return;
-    }
-
-    public void Shutdown()
+    private void Dispose()
     {
       // Unregister handlers
       UnregisterKeyBindings();
@@ -165,18 +186,6 @@ namespace AtmoLight
       // Unregister Log Handler
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
     }
-
-    public void Continue()
-    {
-      return;
-    }
-
-    public bool RequestEnd()
-    {
-      Shutdown();
-      return true;
-    }
-
     #endregion
 
     #region Utilities
@@ -206,6 +215,18 @@ namespace AtmoLight
         return true;
       }
     }
+
+    /// <summary>
+    /// Calculates the delay dependent on the refresh rate.
+    /// </summary>
+    private void CalculateDelay()
+    {
+      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
+      {
+        int refreshRate = SkinContext.Direct3D.GetAdapterDisplayModeEx(0).RefreshRate;
+        AtmoLightObject.ChangeDelay((int)(((float)settings.DelayRefreshRate / (float)refreshRate) * (float)settings.DelayTime));
+      }
+    }
     #endregion
 
     #region Message Handler
@@ -219,7 +240,7 @@ namespace AtmoLight
           SystemState newState = (SystemState)message.MessageData[SystemMessaging.NEW_STATE];
           if (newState == SystemState.Running)
           {
-            RegisterKeyBindings();
+            Initialise();
           }
         }
       }
@@ -244,6 +265,7 @@ namespace AtmoLight
           if (CheckForStartRequirements())
           {
             AtmoLightObject.ChangeEffect(playbackEffect);
+            CalculateDelay();
           }
           else
           {
@@ -256,6 +278,7 @@ namespace AtmoLight
           if (CheckForStartRequirements())
           {
             AtmoLightObject.ChangeEffect(menuEffect);
+            CalculateDelay();
           }
           else
           {
@@ -466,6 +489,7 @@ namespace AtmoLight
         else
         {
           AtmoLightObject.ChangeEffect(ContentEffect.MediaPortalLiveMode);
+          CalculateDelay();
         }
       }
     }
