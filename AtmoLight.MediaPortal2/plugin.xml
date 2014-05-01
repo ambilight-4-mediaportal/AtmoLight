@@ -100,35 +100,7 @@
         Text="[AtmoLight.OnMediaPortalExit]"
         ClassName="AtmoLight.Configuration.OnMediaPortalExit"/>
   </Register>
-  
-  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
-    <ConfigSetting
-        Id="ExcludeTimeStartHour"
-        Text="[AtmoLight.ExcludeTimeStartHour]"
-        ClassName="AtmoLight.Configuration.ExcludeTimeStartHour"/>
-  </Register>
-  
-  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
-    <ConfigSetting
-        Id="ExcludeTimeStartMinutes"
-        Text="[AtmoLight.ExcludeTimeStartMinutes]"
-        ClassName="AtmoLight.Configuration.ExcludeTimeStartMinutes"/>
-  </Register>
-  
-  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
-    <ConfigSetting
-        Id="ExcludeTimeEndHour"
-        Text="[AtmoLight.ExcludeTimeEndHour]"
-        ClassName="AtmoLight.Configuration.ExcludeTimeEndHour"/>
-  </Register>
-  
-  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
-    <ConfigSetting
-        Id="ExcludeTimeEndMinutes"
-        Text="[AtmoLight.ExcludeTimeEndMinutes]"
-        ClassName="AtmoLight.Configuration.ExcludeTimeEndMinutes"/>
-  </Register>
-        
+         
   <!-- Effects -->
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
     <ConfigSetting
@@ -177,6 +149,34 @@
         Id="ManualMode"
         Text="[AtmoLight.ManualMode]"
         ClassName="AtmoLight.Configuration.ManualMode"/>
+  </Register>
+
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
+        Id="ExcludeTimeStartHour"
+        Text="[AtmoLight.ExcludeTimeStartHour]"
+        ClassName="AtmoLight.Configuration.ExcludeTimeStartHour"/>
+  </Register>
+
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
+        Id="ExcludeTimeStartMinutes"
+        Text="[AtmoLight.ExcludeTimeStartMinutes]"
+        ClassName="AtmoLight.Configuration.ExcludeTimeStartMinutes"/>
+  </Register>
+
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
+        Id="ExcludeTimeEndHour"
+        Text="[AtmoLight.ExcludeTimeEndHour]"
+        ClassName="AtmoLight.Configuration.ExcludeTimeEndHour"/>
+  </Register>
+
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
+        Id="ExcludeTimeEndMinutes"
+        Text="[AtmoLight.ExcludeTimeEndMinutes]"
+        ClassName="AtmoLight.Configuration.ExcludeTimeEndMinutes"/>
   </Register>
   
   <!-- Buttons -->
