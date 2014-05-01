@@ -508,7 +508,7 @@ namespace AtmoLight.Configuration
       _type = NumberType.Integer;
       _step = 1;
       _lowerLimit = 0;
-      _upperLimit = 23;
+      _upperLimit = 59;
       string excludeTimeStart = SettingsManager.Load<Settings>().ExcludeTimeStart;
       int pos = excludeTimeStart.IndexOf(":");
       int.TryParse(excludeTimeStart.Substring(pos + 1, 2), out value);
@@ -532,7 +532,7 @@ namespace AtmoLight.Configuration
       _type = NumberType.Integer;
       _step = 1;
       _lowerLimit = 0;
-      _upperLimit = 23;
+      _upperLimit = 59;
       string excludeTimeStart = SettingsManager.Load<Settings>().ExcludeTimeStart;
       int pos = excludeTimeStart.IndexOf(":");
       int.TryParse(excludeTimeStart.Substring(pos + 1, 2), out value);
