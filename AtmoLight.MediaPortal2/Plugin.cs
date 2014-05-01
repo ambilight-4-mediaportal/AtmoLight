@@ -18,6 +18,7 @@ using MediaPortal.UI.Presentation.DataObjects;
 using MediaPortal.UI.Presentation.Models;
 using MediaPortal.UI.Presentation.Screens;
 using MediaPortal.UI.Presentation.Players;
+using MediaPortal.UI.Presentation.UiNotifications;
 using MediaPortal.Common.Logging;
 using MediaPortal.Common.PluginManager;
 using MediaPortal.UI.SkinEngine;
@@ -34,6 +35,7 @@ using SharpDX.Direct3D9;
 // Key binding
 using MediaPortal.UI.Control.InputManager;
 using MediaPortal.UI.Presentation.Actions;
+
 
 
 namespace AtmoLight
@@ -111,6 +113,9 @@ namespace AtmoLight
     {
       // Log Handler
       Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
+
+      // Connection Lost Handler
+      Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
 
       // Version Infos
       var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
@@ -505,6 +510,17 @@ namespace AtmoLight
     private void ContextMenu()
     {
 
+    }
+    #endregion
+
+    #region Connection Lost Handler
+    /// <summary>
+    /// Connection lost event handler.
+    /// This event gets called if connection to AtmoWin is lost and not recoverable.
+    /// </summary>
+    private void OnNewConnectionLost()
+    {
+      ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", "[AtmoLight.AtmoWinConnectionLost]", true);
     }
     #endregion
 

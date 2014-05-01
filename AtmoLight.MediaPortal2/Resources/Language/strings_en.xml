@@ -42,4 +42,5 @@
   <string name="AtmoLight.DelayRefreshRate">Delay reference refreshrate</string>
   <string name="AtmoLight.DisableLEDsOnExit">Disabled LEDs</string>
   <string name="AtmoLight.EnableLiveviewOnExit">Enable AtmoWin Liveview</string>
+  <string name="AtmoLight.AtmoWinConnectionLost">Connection to AtmoWin lost!</string>
 </resources>
