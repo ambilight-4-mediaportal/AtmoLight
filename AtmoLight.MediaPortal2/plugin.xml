@@ -8,6 +8,13 @@
     Description="AtmoLight Plugin"
     PluginVersion="2.0">
     
+  <DependsOn>
+    <PluginReference PluginId="{D87D92F0-5E71-470a-A2A4-430F90A28BF3}"/> <!-- SkinEngine -->
+    <PluginReference PluginId="{A965AFE5-44F9-46e0-980E-40BBE17F25CA}"/> <!-- VideoPlayers -->
+    <PluginReference PluginId="{1AFF4467-64B0-4ca1-AF28-9AEDF3525BCE}"/> <!-- ConfigurationManager -->
+    <PluginReference PluginId="{B765A4B6-F455-4941-BDAE-2CE45208BFEB}"/> <!-- Configuration plugin -->
+  </DependsOn>
+    
   <Runtime>
     <Assembly FileName="AtmoLight.MediaPortal2.dll"/>
     <Assembly FileName="AtmoLight.Core.dll"/>
@@ -15,5 +22,219 @@
     <Assembly FileName="../SkinEngine/SkinEngine.dll"/>
     <PluginStateTracker ClassName="AtmoLight.Plugin"/>
   </Runtime>
+
+  <Register Location="/Resources/Language">
+    <Resource Id="AtmoLightLanguage" Directory="Language" Type="Language"/>
+  </Register>
+  
+  <!-- Root Sections -->
+  <Register Location="/Configuration/Settings/Plugins">
+    <ConfigSection
+        Id="AtmoLight"
+        Redundant="true"
+        Text="[AtmoLight.Name]"/>
+  </Register>
+  
+  <!-- Sections -->
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight">
+    <ConfigSection
+        Id="General"
+        Redundant="true"
+        Text="[AtmoLight.General]"/>
+  </Register>   
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight">
+    <ConfigSection
+        Id="Effects"
+        Redundant="true"
+        Text="[AtmoLight.Effects]"/>
+  </Register> 
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight">
+    <ConfigSection
+        Id="Buttons"
+        Redundant="true"
+        Text="[AtmoLight.Buttons]"/>
+  </Register> 
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight">
+    <ConfigSection
+        Id="Advanced"
+        Redundant="true"
+        Text="[AtmoLight.Advanced]"/>
+  </Register> 
+  
+  <!-- Entries-->  
+  <!-- General -->
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
+    <ConfigSetting
+        Id="AtmoWinExe"
+        Text="[AtmoLight.AtmoWinExe]"
+        ClassName="AtmoLight.Configuration.AtmoWinExe"/>
+  </Register>
+    
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
+    <ConfigSetting
+        Id="StartAtmoWinOnStart"
+        Text="[AtmoLight.StartAtmoWinOnStart]"
+        ClassName="AtmoLight.Configuration.StartAtmoWinOnStart"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
+    <ConfigSetting
+        Id="StopAtmoWinOnExit"
+        Text="[AtmoLight.StopAtmoWinOnExit]"
+        ClassName="AtmoLight.Configuration.StopAtmoWinOnExit"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
+    <ConfigSetting
+        Id="RestartAtmoWinOnError"
+        Text="[AtmoLight.RestartAtmoWinOnError]"
+        ClassName="AtmoLight.Configuration.RestartAtmoWinOnError"/>
+  </Register>
+    
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
+    <ConfigSetting
+        Id="OnMediaPortalExit"
+        Text="[AtmoLight.OnMediaPortalExit]"
+        ClassName="AtmoLight.Configuration.OnMediaPortalExit"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
+    <ConfigSetting
+        Id="ExcludeTimeStartHour"
+        Text="[AtmoLight.ExcludeTimeStartHour]"
+        ClassName="AtmoLight.Configuration.ExcludeTimeStartHour"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
+    <ConfigSetting
+        Id="ExcludeTimeStartMinutes"
+        Text="[AtmoLight.ExcludeTimeStartMinutes]"
+        ClassName="AtmoLight.Configuration.ExcludeTimeStartMinutes"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
+    <ConfigSetting
+        Id="ExcludeTimeStopHour"
+        Text="[AtmoLight.ExcludeTimeStopHour]"
+        ClassName="AtmoLight.Configuration.ExcludeTimeStopHour"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
+    <ConfigSetting
+        Id="ExcludeTimeStopMinutes"
+        Text="[AtmoLight.ExcludeTimeStopMinutes]"
+        ClassName="AtmoLight.Configuration.ExcludeTimeStopMinutes"/>
+  </Register>
+        
+  <!-- Effects -->
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
+        Id="VideoEffect"
+        Text="[AtmoLight.VideoEffect]"
+        ClassName="AtmoLight.Configuration.VideoEffect"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
+        Id="AudioEffect"
+        Text="[AtmoLight.AudioEffect]"
+        ClassName="AtmoLight.Configuration.AudioEffect"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
+        Id="MenuEffect"
+        Text="[AtmoLight.MenuEffect]"
+        ClassName="AtmoLight.Configuration.MenuEffect"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
+        Id="StaticColorRed"
+        Text="[AtmoLight.StaticColorRed]"
+        ClassName="AtmoLight.Configuration.StaticColorRed"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
+        Id="StaticColorGreen"
+        Text="[AtmoLight.StaticColorGreen]"
+        ClassName="AtmoLight.Configuration.StaticColorGreen"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
+        Id="StaticColorBlue"
+        Text="[AtmoLight.StaticColorBlue]"
+        ClassName="AtmoLight.Configuration.StaticColorBlue"/>
+  </Register>
+    
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
+        Id="ManualMode"
+        Text="[AtmoLight.ManualMode]"
+        ClassName="AtmoLight.Configuration.ManualMode"/>
+  </Register>
+  
+  <!-- Buttons -->
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Buttons">
+    <ConfigSetting
+        Id="MenuButton"
+        Text="[AtmoLight.MenuButton]"
+        ClassName="AtmoLight.Configuration.MenuButton"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Buttons">
+    <ConfigSetting
+        Id="OnOffButton"
+        Text="[AtmoLight.OnOffButton]"
+        ClassName="AtmoLight.Configuration.OnOffButton"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Buttons">
+    <ConfigSetting
+        Id="ProfileButton"
+        Text="[AtmoLight.ProfileButton]"
+        ClassName="AtmoLight.Configuration.ProfileButton"/>
+  </Register>
+  
+  <!-- Advanced -->
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Advanced">
+    <ConfigSetting
+        Id="LowCPU"
+        Text="[AtmoLight.LowCPU]"
+        ClassName="AtmoLight.Configuration.LowCPU"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Advanced">
+    <ConfigSetting
+        Id="LowCPUTime"
+        Text="[AtmoLight.LowCPUTime]"
+        ClassName="AtmoLight.Configuration.LowCPUTime"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Advanced">
+    <ConfigSetting
+        Id="Delay"
+        Text="[AtmoLight.Delay]"
+        ClassName="AtmoLight.Configuration.Delay"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Advanced">
+    <ConfigSetting
+        Id="DelayTime"
+        Text="[AtmoLight.DelayTime]"
+        ClassName="AtmoLight.Configuration.DelayTime"/>
+  </Register>
+
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Advanced">
+    <ConfigSetting
+        Id="DelayRefreshRate"
+        Text="[AtmoLight.DelayRefreshRate]"
+        ClassName="AtmoLight.Configuration.DelayRefreshRate"/>
+  </Register>
 
 </Plugin>

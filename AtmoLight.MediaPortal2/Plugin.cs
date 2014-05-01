@@ -151,7 +151,7 @@ namespace AtmoLight
       {
         AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
       }
-      else if (settings.EnableLiveviewonExit)
+      else if (settings.EnableLiveviewOnExit)
       {
         AtmoLightObject.ChangeEffect(ContentEffect.AtmoWinLiveMode);
       }

@@ -1,3 +1,7 @@
+Version 2.0.0.0 Alpha 6
+- Added delay feature
+- Added AtmoLight configuration wihtin MP2
+
 Version 2.0.0.0 Alpha 5
 - Fixed bug where AtmoWin would not be stopped on MP2 exit
 - Added color button support

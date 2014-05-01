@@ -35,9 +35,9 @@ namespace AtmoLight
     public bool DisableLEDsOnExit { get; set; }
 
     [Setting(SettingScope.User, false)]
-    public bool EnableLiveviewonExit { get; set; }
+    public bool EnableLiveviewOnExit { get; set; }
 
-    [Setting(SettingScope.User, "08:00")]
+    [Setting(SettingScope.User, "8:00")]
     public string ExcludeTimeStart { get; set; }
 
     [Setting(SettingScope.User, "21:00")]
@@ -96,7 +96,7 @@ namespace AtmoLight
       OnOffButton = settings.OnOffButton;
       ProfileButton = settings.ProfileButton;
       DisableLEDsOnExit = settings.DisableLEDsOnExit;
-      EnableLiveviewonExit = settings.EnableLiveviewonExit;
+      EnableLiveviewOnExit = settings.EnableLiveviewOnExit;
       ExcludeTimeStart = settings.ExcludeTimeStart;
       ExcludeTimeEnd = settings.ExcludeTimeEnd;
       ManualMode = settings.ManualMode;
@@ -125,7 +125,7 @@ namespace AtmoLight
       settings.OnOffButton = OnOffButton;
       settings.ProfileButton = ProfileButton;
       settings.DisableLEDsOnExit = DisableLEDsOnExit;
-      settings.EnableLiveviewonExit = EnableLiveviewonExit;
+      settings.EnableLiveviewOnExit = EnableLiveviewOnExit;
       settings.ExcludeTimeStart = ExcludeTimeStart;
       settings.ExcludeTimeEnd = ExcludeTimeEnd;
       settings.ManualMode = ManualMode;

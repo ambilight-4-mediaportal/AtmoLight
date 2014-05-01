@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="AtmoLight.Name">AtmoLight</string>
+  <string name="AtmoLight.AtmoWinExe">Path to AtmoWinA.exe</string>
+  <string name="AtmoLight.LEDsDisabled">LEDs disabled</string>
+  <string name="AtmoLight.AtmoWinLiveMode">AtmoWin liveview mode</string>
+  <string name="AtmoLight.Colorchanger">Colorchanger</string>
+  <string name="AtmoLight.ColorchangerLR">Colorchanger LR</string>
+  <string name="AtmoLight.MediaPortalLiveMode">MediaPortal liveivew mode</string>
+  <string name="AtmoLight.StaticColor">Static Color</string>
+  <string name="AtmoLight.None">None</string>
+  <string name="AtmoLight.Red">Red</string>
+  <string name="AtmoLight.Green">Green</string>
+  <string name="AtmoLight.Yellow">Yellow</string>
+  <string name="AtmoLight.Blue">Blue</string>
+  <string name="AtmoLight.General">General settings</string>
+  <string name="AtmoLight.Effects">Content effects</string>
+  <string name="AtmoLight.Buttons">Remote Buttons</string>
+  <string name="AtmoLight.Advanced">Advanced settings</string>
+  <string name="AtmoLight.StartAtmoWinOnStart">Start AtmoWin with MediaPortal</string>
+  <string name="AtmoLight.StopAtmoWinOnExit">Stop AtmoWin with MediaPortal</string>
+  <string name="AtmoLight.RestartAtmoWinOnError">Restart AtmoWin on error</string>
+  <string name="AtmoLight.OnMediaPortalExit">AtmoWin behaviour on MediaPortal exit</string>
+  <string name="AtmoLight.ExcludeTimeStartHour">Excluded timeframe (start hour)</string>
+  <string name="AtmoLight.ExcludeTimeStartMinutes">Excluded timeframe (start minutes)</string>
+  <string name="AtmoLight.ExcludeTimeStopHour">Excluded timeframe (stop hour)</string>
+  <string name="AtmoLight.ExcludeTimeStopMinutes">Excluded timeframe (stop minutes)</string>
+  <string name="AtmoLight.VideoEffect">Video effect</string>
+  <string name="AtmoLight.AudioEffect">Audio effect</string>
+  <string name="AtmoLight.MenuEffect">Menu/GUI effect</string>
+  <string name="AtmoLight.StaticColorRed">Static color (red)</string>
+  <string name="AtmoLight.StaticColorGreen">Static color (green)</string>
+  <string name="AtmoLight.StaticColorBlue">Static color (blue)</string>
+  <string name="AtmoLight.ManualMode">Manual mode</string>
+  <string name="AtmoLight.MenuButton">Context menu button</string>
+  <string name="AtmoLight.OnOffButton">Toggle LEDs button</string>
+  <string name="AtmoLight.ProfileButton">Change AtmoWin profile button</string>
+  <string name="AtmoLight.LowCPU">Low CPU</string>
+  <string name="AtmoLight.LowCPUTime">Low CPU delay</string>
+  <string name="AtmoLight.Delay">Delay</string>
+  <string name="AtmoLight.DelayTime">Delay time</string>
+  <string name="AtmoLight.DelayRefreshRate">Delay reference refreshrate</string>
+  <string name="AtmoLight.DisableLEDsOnExit">Disabled LEDs</string>
+  <string name="AtmoLight.EnableLiveviewOnExit">Enable AtmoWin Liveview</string>
+</resources>
