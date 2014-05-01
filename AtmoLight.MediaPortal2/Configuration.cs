@@ -454,96 +454,96 @@ namespace AtmoLight.Configuration
 
   public class ExcludeTimeStartHour : LimitedNumberSelect
   {
-    int value;
+    int pos;
+    string excludeTimeStart;
     public override void Load()
     {
       _type = NumberType.Integer;
       _step = 1;
       _lowerLimit = 0;
       _upperLimit = 23;
-      string excludeTimeStart = SettingsManager.Load<Settings>().ExcludeTimeStart;
-      int pos = excludeTimeStart.IndexOf(":");
-      int.TryParse(excludeTimeStart.Substring(0, pos), out value);
-      _value = value;
+      excludeTimeStart = SettingsManager.Load<Settings>().ExcludeTimeStart;
+      pos = excludeTimeStart.IndexOf(":");
+      double.TryParse(excludeTimeStart.Substring(0, pos), out _value);
     }
 
     public override void Save()
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.ExcludeTimeStart = settings.ExcludeTimeStart.Replace(value + ":", _value + ":");
+      settings.ExcludeTimeStart = ((_value < 10) ? "0" : "") + _value + ":" + excludeTimeStart.Substring(pos + 1, 2);
       SettingsManager.Save(settings);
     }
   }
 
-  public class ExcludeTimeStopHour : LimitedNumberSelect
+  public class ExcludeTimeEndHour : LimitedNumberSelect
   {
-    int value;
+    int pos;
+    string excludeTimeEnd;
     public override void Load()
     {
       _type = NumberType.Integer;
       _step = 1;
       _lowerLimit = 0;
       _upperLimit = 23;
-      string excludeTimeStart = SettingsManager.Load<Settings>().ExcludeTimeStart;
-      int pos = excludeTimeStart.IndexOf(":");
-      int.TryParse(excludeTimeStart.Substring(0, pos), out value);
-      _value = value;
+      excludeTimeEnd = SettingsManager.Load<Settings>().ExcludeTimeEnd;
+      pos = excludeTimeEnd.IndexOf(":");
+      double.TryParse(excludeTimeEnd.Substring(0, pos), out _value);
     }
 
     public override void Save()
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.ExcludeTimeStart = settings.ExcludeTimeStart.Replace(value + ":", _value + ":");
+      settings.ExcludeTimeEnd = ((_value < 10) ? "0" : "") + _value + ":" + excludeTimeEnd.Substring(pos + 1, 2);
       SettingsManager.Save(settings);
     }
   }
 
   public class ExcludeTimeStartMinutes : LimitedNumberSelect
   {
-    int value;
+    int pos;
+    string excludeTimeStart;
     public override void Load()
     {
       _type = NumberType.Integer;
       _step = 1;
       _lowerLimit = 0;
       _upperLimit = 59;
-      string excludeTimeStart = SettingsManager.Load<Settings>().ExcludeTimeStart;
-      int pos = excludeTimeStart.IndexOf(":");
-      int.TryParse(excludeTimeStart.Substring(pos + 1, 2), out value);
-      _value = value;
+      excludeTimeStart = SettingsManager.Load<Settings>().ExcludeTimeStart;
+      pos = excludeTimeStart.IndexOf(":");
+      double.TryParse(excludeTimeStart.Substring(pos + 1, 2), out _value);
     }
 
     public override void Save()
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.ExcludeTimeStart = settings.ExcludeTimeStart.Replace(":" + value, ":" + _value);
+      settings.ExcludeTimeStart = excludeTimeStart.Substring(0, pos) + ":" + ((_value < 10) ? "0" : "") + _value;
       SettingsManager.Save(settings);
     }
   }
 
-  public class ExcludeTimeStopMinutes : LimitedNumberSelect
+  public class ExcludeTimeEndMinutes : LimitedNumberSelect
   {
-    int value;
+    int pos;
+    string excludeTimeEnd;
     public override void Load()
     {
       _type = NumberType.Integer;
       _step = 1;
       _lowerLimit = 0;
       _upperLimit = 59;
-      string excludeTimeStart = SettingsManager.Load<Settings>().ExcludeTimeStart;
-      int pos = excludeTimeStart.IndexOf(":");
-      int.TryParse(excludeTimeStart.Substring(pos + 1, 2), out value);
-      _value = value;
+      excludeTimeEnd = SettingsManager.Load<Settings>().ExcludeTimeEnd;
+      pos = excludeTimeEnd.IndexOf(":");
+      double.TryParse(excludeTimeEnd.Substring(pos + 1, 2), out _value);
     }
 
     public override void Save()
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.ExcludeTimeStart = settings.ExcludeTimeStart.Replace(":" + value, ":" + _value);
+      settings.ExcludeTimeEnd = excludeTimeEnd.Substring(0, pos) + ":" + ((_value < 10) ? "0" : "") + _value;
       SettingsManager.Save(settings);
     }
   }

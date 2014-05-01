@@ -23,8 +23,8 @@
   <string name="AtmoLight.OnMediaPortalExit">AtmoWin behaviour on MediaPortal exit</string>
   <string name="AtmoLight.ExcludeTimeStartHour">Excluded timeframe (start hour)</string>
   <string name="AtmoLight.ExcludeTimeStartMinutes">Excluded timeframe (start minutes)</string>
-  <string name="AtmoLight.ExcludeTimeStopHour">Excluded timeframe (stop hour)</string>
-  <string name="AtmoLight.ExcludeTimeStopMinutes">Excluded timeframe (stop minutes)</string>
+  <string name="AtmoLight.ExcludeTimeEndHour">Excluded timeframe (stop hour)</string>
+  <string name="AtmoLight.ExcludeTimeEndMinutes">Excluded timeframe (stop minutes)</string>
   <string name="AtmoLight.VideoEffect">Video effect</string>
   <string name="AtmoLight.AudioEffect">Audio effect</string>
   <string name="AtmoLight.MenuEffect">Menu/GUI effect</string>

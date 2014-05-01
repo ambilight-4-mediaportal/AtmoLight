@@ -117,16 +117,16 @@
   
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
     <ConfigSetting
-        Id="ExcludeTimeStopHour"
-        Text="[AtmoLight.ExcludeTimeStopHour]"
-        ClassName="AtmoLight.Configuration.ExcludeTimeStopHour"/>
+        Id="ExcludeTimeEndHour"
+        Text="[AtmoLight.ExcludeTimeEndHour]"
+        ClassName="AtmoLight.Configuration.ExcludeTimeEndHour"/>
   </Register>
   
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
     <ConfigSetting
-        Id="ExcludeTimeStopMinutes"
-        Text="[AtmoLight.ExcludeTimeStopMinutes]"
-        ClassName="AtmoLight.Configuration.ExcludeTimeStopMinutes"/>
+        Id="ExcludeTimeEndMinutes"
+        Text="[AtmoLight.ExcludeTimeEndMinutes]"
+        ClassName="AtmoLight.Configuration.ExcludeTimeEndMinutes"/>
   </Register>
         
   <!-- Effects -->

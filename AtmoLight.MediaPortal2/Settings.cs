@@ -37,7 +37,7 @@ namespace AtmoLight
     [Setting(SettingScope.User, false)]
     public bool EnableLiveviewOnExit { get; set; }
 
-    [Setting(SettingScope.User, "8:00")]
+    [Setting(SettingScope.User, "08:00")]
     public string ExcludeTimeStart { get; set; }
 
     [Setting(SettingScope.User, "21:00")]
