@@ -707,7 +707,7 @@ namespace AtmoLight
       return false;
     }
 
-    public void SetPixelData(byte[] bmiInfoHeader, byte[] pixelData)
+    public void SetPixelData(byte[] bmiInfoHeader, byte[] pixelData, bool force = false)
     {
       if (!IsConnected())
       {
@@ -715,7 +715,7 @@ namespace AtmoLight
       }
       try
       {
-        if (IsDelayEnabled())
+        if (IsDelayEnabled() && !force)
         {
           AddDelayListItem(bmiInfoHeader, pixelData);
         }
@@ -996,8 +996,7 @@ namespace AtmoLight
           {
             if (Win32API.GetTickCount() >= (delayTimingList[0] + delayTime))
             {
-              SetPixelData(bmiInfoHeaderList[0], pixelDataList[0]);
-
+              SetPixelData(bmiInfoHeaderList[0], pixelDataList[0], true);
               DeleteFirstDelayListsItems();
 
               // Trim the lists, to prevent a memory leak.
