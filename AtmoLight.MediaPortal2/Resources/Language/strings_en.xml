@@ -6,7 +6,7 @@
   <string name="AtmoLight.AtmoWinLiveMode">AtmoWin liveview mode</string>
   <string name="AtmoLight.Colorchanger">Colorchanger</string>
   <string name="AtmoLight.ColorchangerLR">Colorchanger LR</string>
-  <string name="AtmoLight.MediaPortalLiveMode">MediaPortal liveivew mode</string>
+  <string name="AtmoLight.MediaPortalLiveMode">MediaPortal liveview mode</string>
   <string name="AtmoLight.StaticColor">Static Color</string>
   <string name="AtmoLight.None">None</string>
   <string name="AtmoLight.Red">Red</string>
@@ -15,7 +15,7 @@
   <string name="AtmoLight.Blue">Blue</string>
   <string name="AtmoLight.General">General settings</string>
   <string name="AtmoLight.Effects">Content effects</string>
-  <string name="AtmoLight.Buttons">Remote Buttons</string>
+  <string name="AtmoLight.Buttons">Remote buttons</string>
   <string name="AtmoLight.Advanced">Advanced settings</string>
   <string name="AtmoLight.StartAtmoWinOnStart">Start AtmoWin with MediaPortal</string>
   <string name="AtmoLight.StopAtmoWinOnExit">Stop AtmoWin with MediaPortal</string>
