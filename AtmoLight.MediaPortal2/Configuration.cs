@@ -19,7 +19,7 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.AtmoWinExe = _path;
+      settings.AtmoWinExe = _path + "AtmoWinA.exe";
       SettingsManager.Save(settings);
     }
   }
