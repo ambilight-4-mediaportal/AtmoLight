@@ -1,0 +1,31 @@
+Index: Core/Player/FrameGrabber.cs
+===================================================================
+--- Core/Player/FrameGrabber.cs    (revision 24717)
++++ Core/Player/FrameGrabber.cs    (working copy)
+@@ -45,6 +45,9 @@
+ 
+     private FrameGrabber() {}
+ 
++    public delegate void NewFrameHandler(Int16 width, Int16 height, Int16 arWidth, Int16 arHeight, uint pSurface);
++    public event NewFrameHandler OnNewFrame;
++
+     public static FrameGrabber GetInstance()
+     {
+       if (instance == null)
+@@ -120,6 +123,16 @@
+     /// <param name="pSurface"></param>
+     public void OnFrame(Int16 width, Int16 height, Int16 arWidth, Int16 arHeight, uint pSurface)
+     {
++      if (OnNewFrame != null)
++      {
++        try
++        {
++          OnNewFrame(width, height, arWidth, arHeight, pSurface);
++        }
++        catch(Exception)
++        {
++        }
++      }
+       // Is GetCurrentImage() requesting a frame grab?
+       if (!grabSample)
+       {
