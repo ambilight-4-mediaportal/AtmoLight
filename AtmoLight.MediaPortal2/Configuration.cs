@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using MediaPortal.Common.Configuration.ConfigurationClasses;
 using MediaPortal.Common.Localization;
 
+using MediaPortal.UI.Presentation.Players;
+using MediaPortal.Common;
+
 namespace AtmoLight.Configuration
 {
   public class AtmoWinExe : PathEntry
@@ -44,6 +47,11 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.VideoEffect = (ContentEffect)Selected;
       SettingsManager.Save(settings);
+
+      if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
+      {
+        AtmoLight.Plugin.AtmoLightObject.ChangeEffect((ContentEffect)Selected);
+      }
     }
   }
 
@@ -68,6 +76,11 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.AudioEffect = (ContentEffect)Selected;
       SettingsManager.Save(settings);
+
+      if (ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
+      {
+        AtmoLight.Plugin.AtmoLightObject.ChangeEffect((ContentEffect)Selected);
+      }
     }
   }
 
@@ -92,6 +105,11 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.MenuEffect = (ContentEffect)Selected;
       SettingsManager.Save(settings);
+
+      if (!ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive && !ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
+      {
+        AtmoLight.Plugin.AtmoLightObject.ChangeEffect((ContentEffect)Selected);
+      }
     }
   }
 
@@ -297,6 +315,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.RestartAtmoWinOnError = _yes;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.ChangeAtmoWinRestartOnError(_yes);
     }
   }
 
@@ -322,7 +342,7 @@ namespace AtmoLight.Configuration
     {
       _type = NumberType.Integer;
       _step = 1;
-      _lowerLimit = 0;
+      _lowerLimit = 1;
       _upperLimit = 1000;
       _value = SettingsManager.Load<Settings>().LowCPUTime;
     }
@@ -347,6 +367,19 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
+
+      if (settings.Delay != _yes && AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      {
+        if (_yes)
+        {
+          AtmoLight.Plugin.AtmoLightObject.EnableDelay();
+        }
+        else
+        {
+          AtmoLight.Plugin.AtmoLightObject.DisableDelay();
+        }
+      }
+
       settings.Delay = _yes;
       SettingsManager.Save(settings);
     }
@@ -358,7 +391,7 @@ namespace AtmoLight.Configuration
     {
       _type = NumberType.Integer;
       _step = 1;
-      _lowerLimit = 0;
+      _lowerLimit = 1;
       _upperLimit = 1000;
       _value = SettingsManager.Load<Settings>().DelayTime;
     }
@@ -369,6 +402,11 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.DelayTime = (int)_value;
       SettingsManager.Save(settings);
+
+      if (AtmoLight.Plugin.AtmoLightObject.IsDelayEnabled() && AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      {
+        AtmoLight.Plugin.AtmoLightObject.ChangeDelay((int)_value);
+      }
     }
   }
 
@@ -378,7 +416,7 @@ namespace AtmoLight.Configuration
     {
       _type = NumberType.Integer;
       _step = 1;
-      _lowerLimit = 0;
+      _lowerLimit = 1;
       _upperLimit = 120;
       _value = SettingsManager.Load<Settings>().DelayRefreshRate;
     }
@@ -409,6 +447,12 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.StaticColorRed = (int)_value;
       SettingsManager.Save(settings);
+
+      if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
+      {
+        AtmoLight.Plugin.AtmoLightObject.ChangeStaticColor((int)_value, settings.StaticColorGreen, settings.StaticColorBlue);
+        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
+      }
     }
   }
 
@@ -429,6 +473,12 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.StaticColorGreen = (int)_value;
       SettingsManager.Save(settings);
+
+      if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
+      {
+        AtmoLight.Plugin.AtmoLightObject.ChangeStaticColor(settings.StaticColorRed, (int)_value, settings.StaticColorBlue);
+        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
+      }
     }
   }
 
@@ -449,6 +499,12 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.StaticColorBlue = (int)_value;
       SettingsManager.Save(settings);
+
+      if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
+      {
+        AtmoLight.Plugin.AtmoLightObject.ChangeStaticColor(settings.StaticColorRed, settings.StaticColorGreen, (int)_value);
+        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
+      }
     }
   }
 
