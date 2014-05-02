@@ -870,15 +870,15 @@ namespace AtmoLight
     /// </summary>
     /// <param name="delay">Delay in ms.</param>
     /// <returns>true or false</returns>
-    public bool EnableDelay(int delay)
+    public bool EnableDelay(int delay = -1)
     {
       if (delay > 0)
       {
-        Log.Info("Adding {0}ms delay to LEDs.", delay);
-        delayEnabled = true;
         delayTime = delay;
-        StartSetPixelDataThread();
       }
+      Log.Info("Adding {0}ms delay to LEDs.", delayTime);
+      delayEnabled = true;
+      StartSetPixelDataThread();
       return false;
     }
 
