@@ -230,6 +230,7 @@ namespace AtmoLight
       if (CheckForStartRequirements())
        {
          AtmoLightObject.ChangeEffect(menuEffect);
+         CalculateDelay();
        }
        else
        {
@@ -317,6 +318,17 @@ namespace AtmoLight
         return Manager.Adapters[GUIGraphicsContext.currentMonitorIdx].CurrentDisplayMode.RefreshRate;
       }
     }
+
+    /// <summary>
+    /// Calculates the delay dependent on the refresh rate.
+    /// </summary>
+    private void CalculateDelay()
+    {
+      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
+      {
+        AtmoLightObject.ChangeDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
+      }
+    }
     #endregion
 
     #region Log Event Handler
@@ -388,6 +400,7 @@ namespace AtmoLight
         if (CheckForStartRequirements())
         {
           AtmoLightObject.ChangeEffect(playbackEffect);
+          CalculateDelay();
         }
         else
         {
@@ -417,6 +430,7 @@ namespace AtmoLight
         if (CheckForStartRequirements())
         {
           AtmoLightObject.ChangeEffect(menuEffect);
+          CalculateDelay();
         }
         else
         {
@@ -447,6 +461,7 @@ namespace AtmoLight
         if (CheckForStartRequirements())
         {
           AtmoLightObject.ChangeEffect(menuEffect);
+          CalculateDelay();
         }
         else
         {
@@ -595,10 +610,12 @@ namespace AtmoLight
           if (g_Player.Playing)
           {
             AtmoLightObject.ChangeEffect(playbackEffect);
+            CalculateDelay();
           }
           else
           {
             AtmoLightObject.ChangeEffect(menuEffect);
+            CalculateDelay();
           }
         }
         else
@@ -744,10 +761,12 @@ namespace AtmoLight
           if (g_Player.Playing)
           {
             AtmoLightObject.ChangeEffect(playbackEffect);
+            CalculateDelay();
           }
           else
           {
             AtmoLightObject.ChangeEffect(menuEffect);
+            CalculateDelay();
           }
         }
         else
@@ -801,6 +820,7 @@ namespace AtmoLight
           menuEffect = temp;
         }
         AtmoLightObject.ChangeEffect(temp);
+        CalculateDelay();
       }
       else if (dlg.SelectedLabel == 2)
       {
