@@ -104,6 +104,13 @@
   <!-- Effects -->
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
     <ConfigSetting
+        Id="LEDsEnabled"
+        Text="[AtmoLight.LEDsEnabled]"
+        ClassName="AtmoLight.Configuration.LEDsEnabled"/>
+  </Register>
+
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
         Id="VideoEffect"
         Text="[AtmoLight.VideoEffect]"
         ClassName="AtmoLight.Configuration.VideoEffect"/>
@@ -180,12 +187,14 @@
   </Register>
   
   <!-- Buttons -->
+  <!-- Menu Button currently not supported
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/Buttons">
     <ConfigSetting
         Id="MenuButton"
         Text="[AtmoLight.MenuButton]"
         ClassName="AtmoLight.Configuration.MenuButton"/>
   </Register>
+  -->
   
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/Buttons">
     <ConfigSetting

@@ -603,4 +603,39 @@ namespace AtmoLight.Configuration
       SettingsManager.Save(settings);
     }
   }
+
+  public class LEDsEnabled : YesNo
+  {
+    public override void Load()
+    {
+      _yes = AtmoLight.Plugin.AtmoLightObject.IsAtmoLightOn();
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      if (_yes)
+      {
+        ContentEffect temp;
+        if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
+        {
+          temp = settings.VideoEffect;
+        }
+        else if (ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
+        {
+          temp = settings.AudioEffect;
+        }
+        else
+        {
+          temp = settings.MenuEffect;
+        }
+        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(temp);
+      }
+      else
+      {
+        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+      }
+    }
+  }
 }
