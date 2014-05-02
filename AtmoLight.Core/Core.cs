@@ -415,6 +415,11 @@ namespace AtmoLight
       StopAtmoWin();
       StartAtmoWin();
     }
+
+    public void ChangeAtmoWinRestartOnError(bool restartOnError)
+    {
+      reinitialiseOnError = restartOnError;
+    }
     #endregion
 
     #region Delay Lists
