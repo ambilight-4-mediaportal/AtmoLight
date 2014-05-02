@@ -493,7 +493,20 @@ namespace AtmoLight
         }
         else
         {
-          AtmoLightObject.ChangeEffect(ContentEffect.MediaPortalLiveMode);
+          ContentEffect temp;
+          if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
+          {
+            temp = settings.VideoEffect;
+          }
+          else if (ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
+          {
+            temp = settings.AudioEffect;
+          }
+          else
+          {
+            temp = settings.MenuEffect;
+          }
+          AtmoLightObject.ChangeEffect(temp);
           CalculateDelay();
         }
       }
