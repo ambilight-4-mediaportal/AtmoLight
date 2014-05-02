@@ -701,7 +701,7 @@ namespace AtmoLight
       }
 
       // Delay
-      if ((g_Player.Playing) && (playbackEffect == ContentEffect.MediaPortalLiveMode))
+      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
         // Toggle Delay and Change Delay
         if (AtmoLightObject.IsDelayEnabled())
@@ -724,8 +724,7 @@ namespace AtmoLight
       }
 
       // Change Static Color
-      if (((g_Player.Playing) && (playbackEffect == ContentEffect.StaticColor) && (AtmoLightObject.IsAtmoLightOn())) ||
-          ((!g_Player.Playing) && (menuEffect == ContentEffect.StaticColor) && (AtmoLightObject.IsAtmoLightOn())))
+      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeStatic));
       }
@@ -758,76 +757,50 @@ namespace AtmoLight
       }
       else if (dlg.SelectedLabel == 1)
       {
+        GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+        dlgEffect.Reset();
+        dlgEffect.SetHeading(LanguageLoader.appStrings.ContextMenu_ChangeEffect);
+        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_LEDsDisabled));
+        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_MPLive));
+        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_AWLive));
+        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Colorchanger));
+        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ColorchangerLR));
+        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_StaticColor));
+        dlgEffect.SelectedLabel = 0;
+        dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
+
+        ContentEffect temp = ContentEffect.Undefined;
+
+        switch (dlgEffect.SelectedLabel)
+        {
+          case 0:
+            temp = ContentEffect.LEDsDisabled;
+            break;
+          case 1:
+            temp = ContentEffect.MediaPortalLiveMode;
+            break;
+          case 2:
+            temp = ContentEffect.AtmoWinLiveMode;
+            break;
+          case 3:
+            temp = ContentEffect.Colorchanger;
+            break;
+          case 4:
+            temp = ContentEffect.ColorchangerLR;
+            break;
+          case 5:
+            temp = ContentEffect.StaticColor;
+            break;
+        }
         if (g_Player.Playing)
         {
-          GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
-          dlgEffect.Reset();
-          dlgEffect.SetHeading(LanguageLoader.appStrings.ContextMenu_ChangeEffect);
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_LEDsDisabled));
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_MPLive));
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_AWLive));
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Colorchanger));
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ColorchangerLR));
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_StaticColor));
-          dlgEffect.SelectedLabel = 0;
-          dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
-
-          switch (dlgEffect.SelectedLabel)
-          {
-            case 0:
-              playbackEffect = ContentEffect.LEDsDisabled;
-              break;
-            case 1:
-              playbackEffect = ContentEffect.MediaPortalLiveMode;
-              break;
-            case 2:
-              playbackEffect = ContentEffect.AtmoWinLiveMode;
-              break;
-            case 3:
-              playbackEffect = ContentEffect.Colorchanger;
-              break;
-            case 4:
-              playbackEffect = ContentEffect.ColorchangerLR;
-              break;
-            case 5:
-              playbackEffect = ContentEffect.StaticColor;
-              break;
-          }
-          AtmoLightObject.ChangeEffect(playbackEffect);
+          playbackEffect = temp;
         }
         else
         {
-          GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
-          dlgEffect.Reset();
-          dlgEffect.SetHeading(LanguageLoader.appStrings.ContextMenu_ChangeEffect);
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_LEDsDisabled));
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_AWLive));
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Colorchanger));
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ColorchangerLR));
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_StaticColor));
-          dlgEffect.SelectedLabel = 0;
-          dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
-
-          switch (dlgEffect.SelectedLabel)
-          {
-            case 0:
-              menuEffect = ContentEffect.LEDsDisabled;
-              break;
-            case 1:
-              menuEffect = ContentEffect.AtmoWinLiveMode;
-              break;
-            case 2:
-              menuEffect = ContentEffect.Colorchanger;
-              break;
-            case 3:
-              menuEffect = ContentEffect.ColorchangerLR;
-              break;
-            case 4:
-              menuEffect = ContentEffect.StaticColor;
-              break;
-          }
-          AtmoLightObject.ChangeEffect(menuEffect);
+          menuEffect = temp;
         }
+        AtmoLightObject.ChangeEffect(temp);
       }
       else if (dlg.SelectedLabel == 2)
       {
