@@ -7,35 +7,19 @@ using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.IO;
-
 using MediaPortal.Common;
-using MediaPortal.Common.General;
-using MediaPortal.Common.Localization;
-using MediaPortal.Common.PathManager;
-using MediaPortal.Common.Services.Settings;
-using MediaPortal.Common.Settings;
-using MediaPortal.UI.Presentation.DataObjects;
-using MediaPortal.UI.Presentation.Models;
-using MediaPortal.UI.Presentation.Screens;
 using MediaPortal.UI.Presentation.Players;
 using MediaPortal.UI.Presentation.UiNotifications;
 using MediaPortal.Common.Logging;
 using MediaPortal.Common.PluginManager;
-using MediaPortal.UI.SkinEngine;
 using MediaPortal.UI.SkinEngine.Players;
 using MediaPortal.UI.SkinEngine.SkinManagement;
-
 using MediaPortal.Common.Messaging;
 using MediaPortal.Common.Runtime;
-
-// SharpDX
-using SharpDX;
-using SharpDX.Direct3D9;
-
-// Key binding
 using MediaPortal.UI.Control.InputManager;
 using MediaPortal.UI.Presentation.Actions;
-
+using SharpDX;
+using SharpDX.Direct3D9;
 
 
 namespace AtmoLight
@@ -61,11 +45,6 @@ namespace AtmoLight
     // Player helper
     private IPlayerManager playerManager;
     private ISharpDXVideoPlayer player;
-
-    // Depracted
-    //private SharpDX.Direct3D9.Device sharpDXDevice;
-    //private int surfacePollingRate = 60;
-
     #endregion
 
     #region Win32API
@@ -535,83 +514,6 @@ namespace AtmoLight
     {
       ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", "[AtmoLight.AtmoWinConnectionLost]", true);
     }
-    #endregion
-
-    #region Old depracted code
-    /*
-    // Not needed anymore?!
-    private void SurfacePolling()
-    {
-      Rectangle rect = new Rectangle(0, 0, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight);
-
-      playerManager = ServiceRegistration.Get<IPlayerManager>();
-      playerManager.ForEach(psc =>
-      {
-        player = psc.CurrentPlayer as ISharpDXVideoPlayer;
-        if (player == null || player.Surface == null)
-        {
-          return;
-        }
-        surfaceSkinEngine = player.Surface;
-      });
-
-      sharpDXDevice = surfaceSkinEngine.Device;
-
-      while (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
-      {
-        if (surfaceDestination == null)
-        {
-          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(sharpDXDevice, AtmoLightObject.captureWidth, AtmoLightObject.captureHeight, SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
-        }
-        try
-        {
-          Stopwatch stopwatch = new Stopwatch();
-          stopwatch.Start();
-          sharpDXDevice.StretchRectangle(surfaceSkinEngine, null, surfaceDestination, rect, SharpDX.Direct3D9.TextureFilter.None);
-          DataStream stream = SharpDX.Direct3D9.Surface.ToStream(surfaceDestination, SharpDX.Direct3D9.ImageFileFormat.Bmp);
-          stopwatch.Stop();
-          Log.Error("{0}", stopwatch.ElapsedMilliseconds);
-
-          BinaryReader reader = new BinaryReader(stream);
-          stream.Position = 0; // ensure that what start at the beginning of the stream. 
-          reader.ReadBytes(14); // skip bitmap file info header
-          byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
-
-          int rgbL = (int)(stream.Length - stream.Position);
-          int rgb = (int)(rgbL / (AtmoLightObject.captureWidth * AtmoLightObject.captureHeight));
-
-          byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
-
-          byte[] h1pixelData = new byte[AtmoLightObject.captureWidth * rgb];
-          byte[] h2pixelData = new byte[AtmoLightObject.captureWidth * rgb];
-          //now flip horizontally, we do it always to prevent microstudder
-          int i;
-          for (i = 0; i < ((AtmoLightObject.captureHeight / 2) - 1); i++)
-          {
-            Array.Copy(pixelData, i * AtmoLightObject.captureWidth * rgb, h1pixelData, 0, AtmoLightObject.captureWidth * rgb);
-            Array.Copy(pixelData, (AtmoLightObject.captureHeight - i - 1) * AtmoLightObject.captureWidth * rgb, h2pixelData, 0, AtmoLightObject.captureWidth * rgb);
-            Array.Copy(h1pixelData, 0, pixelData, (AtmoLightObject.captureHeight - i - 1) * AtmoLightObject.captureWidth * rgb, AtmoLightObject.captureWidth * rgb);
-            Array.Copy(h2pixelData, 0, pixelData, i * AtmoLightObject.captureWidth * rgb, AtmoLightObject.captureWidth * rgb);
-          }
-
-          AtmoLightObject.SetPixelData(bmiInfoHeader, pixelData);
-
-          stream.Close();
-          stream.Dispose();
-
-        }
-        catch (Exception ex)
-        {
-          surfaceDestination.Dispose();
-          surfaceDestination = null;
-          Log.Error("Exception: {0}", ex.Message);
-        }
-        System.Threading.Thread.Sleep(1000 / surfacePollingRate);
-      }
-      surfaceDestination.Dispose();
-      surfaceDestination = null;
-    }
-    */
     #endregion
   }
 }
