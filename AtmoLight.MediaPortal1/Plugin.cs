@@ -675,6 +675,8 @@ namespace AtmoLight
 
         switch (dlgEffect.SelectedLabel)
         {
+          case -1:
+            return;
           case 0:
             temp = ContentEffect.LEDsDisabled;
             break;
@@ -766,6 +768,8 @@ namespace AtmoLight
 
         switch (dlgStaticColor.SelectedLabel)
         {
+          case -1:
+            return;
           case 0:
             DialogRGBManualStaticColorChanger();
             break;
