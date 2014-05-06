@@ -93,9 +93,6 @@ namespace AtmoLight
       // Log Handler
       Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
 
-      // Connection Lost Handler
-      Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
-
       // Version Infos
       var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
       DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
@@ -106,18 +103,21 @@ namespace AtmoLight
       settings = new AtmoLight.Settings();
       settings.LoadAll();
       settings.SaveAll();
-
       staticColorTemp[0] = settings.StaticColorRed;
       staticColorTemp[1] = settings.StaticColorGreen;
       staticColorTemp[2] = settings.StaticColorBlue;
-
       menuEffect = settings.MenuEffect;
 
-      // AtmoLight init
+      // AtmoLight object creation
       Log.Debug("Generating new AtmoLight.Core instance.");
-
       AtmoLightObject = new Core(settings.AtmoWinExe, settings.RestartAtmoWinOnError, settings.StartAtmoWinOnStart, staticColorTemp, settings.Delay, settings.DelayTime);
 
+      // Handlers
+      Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
+      SkinContext.DeviceSceneEnd += UICapture;
+      RegisterKeyBindings();
+
+      // AtmoLight initialisation
       if (!AtmoLightObject.Initialise())
       {
         Log.Error("Initialising failed.");
@@ -133,8 +133,6 @@ namespace AtmoLight
       {
         AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
       }
-      SkinContext.DeviceSceneEnd += UICapture;
-      RegisterKeyBindings();
     }
 
     private void Dispose()
@@ -489,6 +487,10 @@ namespace AtmoLight
           CalculateDelay();
         }
       }
+      else
+      {
+        AtmoLightObject.ReinitialiseThreaded();
+      }
     }
 
     private void ChangeAtmoWinProfile()
@@ -496,6 +498,10 @@ namespace AtmoLight
       if (AtmoLightObject.IsConnected())
       {
         AtmoLightObject.ChangeAtmoWinProfile();
+      }
+      else
+      {
+        AtmoLightObject.ReinitialiseThreaded();
       }
     }
 
