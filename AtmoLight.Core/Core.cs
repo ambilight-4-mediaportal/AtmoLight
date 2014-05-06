@@ -344,6 +344,7 @@ namespace AtmoLight
       if (!reinitialiseLock)
       {
         ReinitialiseThreadHelper = new Thread(() => Reinitialise(force));
+        ReinitialiseThreadHelper.Name = "AtmoLight Reinitialise";
         ReinitialiseThreadHelper.Start();
       }
       else
@@ -952,6 +953,7 @@ namespace AtmoLight
     {
       setPixelDataLock = false;
       SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread());
+      SetPixelDataThreadHelper.Name = "AtmoLight SetPixelData";
       SetPixelDataThreadHelper.Start();
     }
 
@@ -970,6 +972,7 @@ namespace AtmoLight
     {
       getAtmoLiveViewSourceLock = false;
       GetAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
+      GetAtmoLiveViewSourceThreadHelper.Name = "AtmoLight GetAtmoLiveViewSource";
       GetAtmoLiveViewSourceThreadHelper.Start();
     }
 
