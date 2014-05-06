@@ -1,6 +1,8 @@
-Version 2.0.0.0 Alpha 6
+Version 2.0.0.0 Beta 1
 - Added delay feature
-- Added AtmoLight configuration wihtin MP2
+- Added AtmoLight configuration within MP2
+- Added notification if connection to AtmoWin is lost
+- Added possibility to reconnect to AtmoWin using the remote buttons
 
 Version 2.0.0.0 Alpha 5
 - Fixed bug where AtmoWin would not be stopped on MP2 exit
