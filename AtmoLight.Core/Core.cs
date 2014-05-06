@@ -193,7 +193,7 @@ namespace AtmoLight
     #region Constructor
     public Core(string pathAtmoWin, bool reinitialiseOnError, bool startAtmoWin, int[] staticColor, bool delayEnabled, int delayTime)
     {
-      Log.Debug("AtmoLight: ctor");
+      Log.Debug("ctor");
       this.pathAtmoWin = pathAtmoWin;
       this.reinitialiseOnError = reinitialiseOnError;
       this.startAtmoWin = startAtmoWin;
