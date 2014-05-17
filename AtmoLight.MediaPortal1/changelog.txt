@@ -1,3 +1,12 @@
+Version 1.11.0.0
+- Split AtmoLight into a Core and MediaPortal1 Plugin library (needed for MediaPortal 2 version of AtmoLight)
+- Improved LowCPU
+- Added UI (no playback) capture to use MediaPortal Liveview Mode in GUI (patched MediaPortal.exe neede)
+- Fixed a mix up in MPExtensions settings
+- Fixed some small context menu bugs
+- Fixed bug with deactivate between time
+
+
 Version 1.10.0.0
 - Fixed issue where LEDs would not turn off (SEDU)
 - Enhanced the logic to start the ambilight
