@@ -13,13 +13,6 @@
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\AtmoLight\bin\Release\Atmolight.dll</LocalFileName>
-              <ZipFileName>Installer{CopyFile}\{ff9439ea-1574-4049-b97f-584f58c66f7e}-Atmolight.dll</ZipFileName>
-              <DestinationFilename>%Plugins%\process\Atmolight.dll</DestinationFilename>
-            </FileItem>
-            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
-              <Param1 />
-              <UpdateOption>OverwriteIfOlder</UpdateOption>
               <LocalFileName>..\AtmoDXUtil\bin\Release\AtmoDXUtil.dll</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{830936a6-1f0e-41a6-8c11-3f7a1efcd82c}-AtmoDXUtil.dll</ZipFileName>
               <DestinationFilename>%Base%\AtmoDXUtil.dll</DestinationFilename>
@@ -27,9 +20,23 @@
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\AtmoWinRemoteControl\bin\Release\AtmoWinRemoteControl.dll</LocalFileName>
+              <LocalFileName>..\AtmoWinRemoteControl\bin\x86\Release\AtmoWinRemoteControl.dll</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{7acda226-b77b-42b7-af7e-89c521f99c1c}-AtmoWinRemoteControl.dll</ZipFileName>
               <DestinationFilename>%Plugins%\process\AtmoWinRemoteControl.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\AtmoLight.Core\bin\Release\AtmoLight.Core.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ac5ce745-0ef6-4baf-b108-24ac2875e6d8}-AtmoLight.Core.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\process\AtmoLight.Core.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\AtmoLight.MediaPortal1\bin\x86\Release\AtmoLight.MediaPortal1.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{50c503aa-16a9-4e24-904b-3482fb265b64}-AtmoLight.MediaPortal1.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\process\AtmoLight.MediaPortal1.dll</DestinationFilename>
             </FileItem>
           </Items>
         </Files>
@@ -61,28 +68,28 @@
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\AtmoLight\language\DutchNL.lng</LocalFileName>
+              <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\DutchNL.lng</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{f46daaa7-c40e-4682-81dc-7bad08072764}-DutchNL.lng</ZipFileName>
               <DestinationFilename>%Language%\Atmolight\DutchNL.lng</DestinationFilename>
             </FileItem>
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\AtmoLight\language\EnglishUS.lng</LocalFileName>
+              <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\EnglishUS.lng</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{1ffea1f5-268c-4f70-a762-595146636eaf}-EnglishUS.lng</ZipFileName>
               <DestinationFilename>%Language%\Atmolight\EnglishUS.lng</DestinationFilename>
             </FileItem>
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\AtmoLight\language\FrenchFR.lng</LocalFileName>
+              <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\FrenchFR.lng</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{664fd53b-edd7-442c-8ecf-09d9bec83b6d}-FrenchFR.lng</ZipFileName>
               <DestinationFilename>%Language%\Atmolight\FrenchFR.lng</DestinationFilename>
             </FileItem>
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\AtmoLight\language\GermanDE.lng</LocalFileName>
+              <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\GermanDE.lng</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{b29cd1d7-9ab7-46f5-85c0-596eab1d48a0}-GermanDE.lng</ZipFileName>
               <DestinationFilename>%Language%\Atmolight\GermanDE.lng</DestinationFilename>
             </FileItem>
@@ -294,6 +301,16 @@ public static void Main(PackageClass packageClass, UnInstallItem item)
                 {
                     File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Atmolight.dll"));
                 }
+				
+				if (File.Exists(Path.Combine(SourceFilePath_plugin, "plugins\\process\\AtmoLight.Core.dll")))
+                {
+                    File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\AtmoLight.Core.dll"));
+                }
+				
+				if (File.Exists(Path.Combine(SourceFilePath_plugin, "plugins\\process\\AtmoLight.MediaPortal1.dll")))
+                {
+                    File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\AtmoLight.MediaPortal1.dll"));
+                }
 
                 if (File.Exists(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Interop.AtmoWinRemoteControl.dll")))
                 {
@@ -381,7 +398,7 @@ public static void Main(PackageClass packageClass, UnInstallItem item)
   </Dependencies>
   <PluginDependencies>
     <Items>
-      <PluginDependencyItem AssemblyName="Atmolight.dll">
+      <PluginDependencyItem AssemblyName="AtmoLight.MediaPortal1.dll">
         <CompatibleVersion>
           <Items>
             <CompatibleVersionItem>
@@ -403,45 +420,35 @@ public static void Main(PackageClass packageClass, UnInstallItem item)
     <Id>8d2c6d9d-03c8-4144-b0b8-85e3a2b0e001</Id>
     <Author>gemx, Angie05, RickDB, legnod, azzuro, BassFan, Lightning303, HomeY, Sebastiii</Author>
     <HomePage>https://code.google.com/p/ambilight-4-mediaportal/</HomePage>
-    <ForumPage>http://forum.team-mediaportal.com/threads/atmolight-plugin-improvement-discussion.125070/</ForumPage>
+    <ForumPage>http:/http://forum.team-mediaportal.com/threads/atmolight-1-10-0-0-2014-04-19.125633/</ForumPage>
     <UpdateUrl>https://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/Atmolight_update.xml</UpdateUrl>
     <Version>
       <Major>1</Major>
-      <Minor>10</Minor>
+      <Minor>11</Minor>
       <Build>0</Build>
       <Revision>0</Revision>
     </Version>
     <ExtensionDescription>AtmoLight is a process plugin that interfaces with AtmoWin and brings Ambilight to MediaPortal.
+
 The main function is to send the needed data directly to AtmoWin to reduce the CPU load drastically, making Ambilight and smooth playback possible.
+
+
 
 For this plugin to work you will also need AtmoWin. It will be installed automatically.
 
+
+
 MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed. </ExtensionDescription>
-    <VersionDescription>Version 1.10.0.0
-- Fixed issue where LEDs would not turn off (SEDU)
-- Enhanced the logic to start the ambilight
-- Added "Menu Mode" (using ambilight while in MediaPortal GUI)
-- Added static effect option to Video, Radio and Music
-- Changed "STOP Menu" into "Color Button Menu"
-	* Added possibility to open context menu during playback
-	* Added option to change effects on the fly
-	* Added option to change AtmoWin profile
-	* Added option to toggle and set LED delay (see point 10)
-	* Added option to change static color on the fly
-- Fixed issue where context menu was not closeable with back button
-- Added language file support to context menu
-- Added option to assign "None" as On/Off, Profile and Menu button (preventing conflicts)
-- Added delay of 1 second between starting AtmoWin and connecting to it (testing)
-- Added option to set a delay for the leds (if leds change colors before tv does)
-- Enhanced logging capabilities
-- Added lots of error handling routines
-- Added possibility to restart AtmoWin and reconnect to it if something goes wrong
-- Added synchronisation for liveview source with AtmoWin
-- Added French language file
-- Language file updates</VersionDescription>
+    <VersionDescription>Version 1.11.0.0
+- Split AtmoLight into a Core and MediaPortal1 Plugin library (needed for MediaPortal 2 version of AtmoLight)
+- Improved LowCPU
+- Added UI (no playback) capture to use MediaPortal Liveview Mode in GUI (patched MediaPortal.exe neede)
+- Fixed a mix up in MPExtensions settings
+- Fixed some small context menu bugs
+- Fixed bug with deactivate between time</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
-    <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.10.0.0.mpe1</OnlineLocation>
-    <ReleaseDate>2014-04-19T10:45:58</ReleaseDate>
+    <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.11.0.0.mpe1</OnlineLocation>
+    <ReleaseDate>2014-05-17T10:45:58</ReleaseDate>
     <Tags>sedu-board, atmowin, ws2801, ambilight, teensy 2, atmoduino, ambilight, led</Tags>
     <Location>..\MPEI Release\[Name]_[Version].mpe1</Location>
     <Params>
@@ -481,13 +488,6 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\AtmoLight\bin\Release\Atmolight.dll</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{ff9439ea-1574-4049-b97f-584f58c66f7e}-Atmolight.dll</ZipFileName>
-        <DestinationFilename>%Plugins%\process\Atmolight.dll</DestinationFilename>
-      </FileItem>
-      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
-        <Param1 />
-        <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\AtmoDXUtil\bin\Release\AtmoDXUtil.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{830936a6-1f0e-41a6-8c11-3f7a1efcd82c}-AtmoDXUtil.dll</ZipFileName>
         <DestinationFilename>%Base%\AtmoDXUtil.dll</DestinationFilename>
@@ -495,9 +495,23 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\AtmoWinRemoteControl\bin\Release\AtmoWinRemoteControl.dll</LocalFileName>
+        <LocalFileName>..\AtmoWinRemoteControl\bin\x86\Release\AtmoWinRemoteControl.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{7acda226-b77b-42b7-af7e-89c521f99c1c}-AtmoWinRemoteControl.dll</ZipFileName>
         <DestinationFilename>%Plugins%\process\AtmoWinRemoteControl.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\AtmoLight.Core\bin\Release\AtmoLight.Core.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ac5ce745-0ef6-4baf-b108-24ac2875e6d8}-AtmoLight.Core.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\process\AtmoLight.Core.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\AtmoLight.MediaPortal1\bin\x86\Release\AtmoLight.MediaPortal1.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{50c503aa-16a9-4e24-904b-3482fb265b64}-AtmoLight.MediaPortal1.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\process\AtmoLight.MediaPortal1.dll</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
@@ -509,28 +523,28 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\AtmoLight\language\DutchNL.lng</LocalFileName>
+        <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\DutchNL.lng</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{f46daaa7-c40e-4682-81dc-7bad08072764}-DutchNL.lng</ZipFileName>
         <DestinationFilename>%Language%\Atmolight\DutchNL.lng</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\AtmoLight\language\EnglishUS.lng</LocalFileName>
+        <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\EnglishUS.lng</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{1ffea1f5-268c-4f70-a762-595146636eaf}-EnglishUS.lng</ZipFileName>
         <DestinationFilename>%Language%\Atmolight\EnglishUS.lng</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\AtmoLight\language\FrenchFR.lng</LocalFileName>
+        <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\FrenchFR.lng</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{664fd53b-edd7-442c-8ecf-09d9bec83b6d}-FrenchFR.lng</ZipFileName>
         <DestinationFilename>%Language%\Atmolight\FrenchFR.lng</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\AtmoLight\language\GermanDE.lng</LocalFileName>
+        <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\GermanDE.lng</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{b29cd1d7-9ab7-46f5-85c0-596eab1d48a0}-GermanDE.lng</ZipFileName>
         <DestinationFilename>%Language%\Atmolight\GermanDE.lng</DestinationFilename>
       </FileItem>
@@ -538,7 +552,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>image\atmolight.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{58191526-1ddf-4606-a48c-ffd6ef558310}-atmolight.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{40e196a1-6fd3-4330-a424-9a86c0fc3167}-atmolight.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>

@@ -31,7 +31,7 @@ echo Building AtmoLight
 echo Build mode: %BUILD_TYPE%
 echo.
 
-"%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBUILD.exe" /target:Rebuild /property:VisualStudioVersion=12.0;Configuration=%BUILD_TYPE% "..\Atmolight.sln" >> %LOG%
+"%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBUILD.exe" /target:Rebuild /property:VisualStudioVersion=12.0;Configuration=%BUILD_TYPE% "..\AtmoLight.MediaPortal1.sln" >> %LOG%
 
 echo Building MPEI
 copy "..\MPEI\AtmoLight.xmp2" "..\MPEI\AtmoLight_COPY.xmp2"
