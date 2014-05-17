@@ -174,7 +174,11 @@ namespace AtmoLight
         Log.Debug("LEDs should be deactivated. (Manual Mode)");
         return false;
       }
-      else if ((DateTime.Now.TimeOfDay >= Settings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= Settings.excludeTimeEnd.TimeOfDay))
+      // If starttime is bigger than endtime, then now has to be smaller than both or bigger than both to deactive the leds 
+      else if ((DateTime.Now.TimeOfDay >= Settings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= Settings.excludeTimeEnd.TimeOfDay) ||
+              ((Settings.excludeTimeStart.TimeOfDay > Settings.excludeTimeEnd.TimeOfDay) && 
+              ((DateTime.Now.TimeOfDay <= Settings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= Settings.excludeTimeEnd.TimeOfDay) ||
+              (DateTime.Now.TimeOfDay >= Settings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay >= Settings.excludeTimeEnd.TimeOfDay))))
       {
         Log.Debug("LEDs should be deactivated. (Timeframe)");
         return false;
