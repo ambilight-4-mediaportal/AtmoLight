@@ -393,15 +393,24 @@ namespace AtmoLight
       Log.Info("Trying to stop AtmoWin.");
       foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension("atmowina")))
       {
-        process.Kill();
-        // Wait if the kill succeeded, because sometimes it does not.
-        // If it does not, we stop the whole initialization.
-        if (!TimeoutHandler(() => process.WaitForExit()))
+        try
+        {
+          process.Kill();
+          // Wait if the kill succeeded, because sometimes it does not.
+          // If it does not, we stop the whole initialization.
+          if (!TimeoutHandler(() => process.WaitForExit()))
+          {
+            Log.Error("Stopping AtmoWin failed.");
+            return false;
+          }
+          Win32API.RefreshTrayArea();
+        }
+        catch (Exception ex)
         {
           Log.Error("Stopping AtmoWin failed.");
+          Log.Error("Exception: {0}", ex.Message);
           return false;
         }
-        Win32API.RefreshTrayArea();
       }
       Log.Info("AtmoWin successfully stopped.");
       return true;
