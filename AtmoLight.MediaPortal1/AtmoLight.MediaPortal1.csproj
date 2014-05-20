@@ -34,9 +34,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AtmoLight.Core">
-      <HintPath>..\AtmoLight.Core\bin\Release\AtmoLight.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Utils">
       <HintPath>C:\Program Files (x86)\Team MediaPortal\MediaPortal\Common.Utils.dll</HintPath>
     </Reference>
@@ -89,6 +86,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Disabled.png" />
     <EmbeddedResource Include="Resources\Enabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AtmoLight.Core\AtmoLight.Core.csproj">
+      <Project>{1a2adeb0-ceb7-40f2-a146-91724ea884e0}</Project>
+      <Name>AtmoLight.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
