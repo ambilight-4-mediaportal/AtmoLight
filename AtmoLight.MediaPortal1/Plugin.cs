@@ -434,10 +434,12 @@ namespace AtmoLight
           // Analyzing the frame for black bars.
           // Has to be done in low res, as it would be to cpu heavy otherwise (0-2ms vs. 1000ms).
           Rectangle bounds = new Rectangle();
-          object[] arguments = new Object[] { new Bitmap(stream), null };
+          Bitmap streamBitmap = new Bitmap(stream);
+          object[] arguments = new Object[] { streamBitmap, null };
 
           // Call FindBounds.
           bool blackbarblackbarAnalyzerSuccess = (bool)blackbarAnalyzerMethodInfo.Invoke(blackbarAnalyzerClass, arguments);
+          streamBitmap.Dispose();
 
           if (blackbarblackbarAnalyzerSuccess)
           {
@@ -455,6 +457,7 @@ namespace AtmoLight
 
             // Saving cropped and resized bitmap to stream
             target.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+            target.Dispose();
           }
 
 
