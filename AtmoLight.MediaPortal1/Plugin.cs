@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing;
 using MediaPortal.GUI.Library;
 using MediaPortal.Profile;
 using MediaPortal.Player;
@@ -15,6 +17,7 @@ using Microsoft.DirectX.Direct3D;
 using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
 using Language;
+using ProcessPlugins.ViewModeSwitcher;
 
 namespace AtmoLight
 {
@@ -42,6 +45,12 @@ namespace AtmoLight
     // Frame Fields
     private Surface rgbSurface = null; // RGB Surface
     private Int64 lastFrame = 0; // Tick count of the last frame
+
+    // Blackbar detection
+    private object blackbarAnalyzerClass;
+    private Assembly blackbarAnalyzerAssembly;
+    private Type blackbarAnalyzerType;
+    private MethodInfo blackbarAnalyzerMethodInfo;
     
     // Static Color
     private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
@@ -93,8 +102,15 @@ namespace AtmoLight
       GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
 
       // Connection Lost Handler
-
       Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
+
+      // Frameanalyzer
+      // Reflection needed to access the FrameAnalyzer as it is an internal class
+      blackbarAnalyzerAssembly = Assembly.LoadFrom("plugins\\process\\ProcessPlugins.dll");
+      blackbarAnalyzerClass = blackbarAnalyzerAssembly.CreateInstance("ProcessPlugins.ViewModeSwitcher.FrameAnalyzer");
+      blackbarAnalyzerType = blackbarAnalyzerClass.GetType();
+      blackbarAnalyzerMethodInfo = blackbarAnalyzerType.GetMethod("FindBounds");
+
 
       staticColorTemp[0] = Settings.staticColorRed;
       staticColorTemp[1] = Settings.staticColorGreen;
@@ -102,6 +118,7 @@ namespace AtmoLight
 
       Log.Debug("Generating new AtmoLight.Core instance.");
       AtmoLightObject = new Core(Settings.atmowinExe, Settings.restartOnError, Settings.startAtmoWin, staticColorTemp, Settings.delay, Settings.delayReferenceTime);
+
 
       if (!AtmoLightObject.Initialise())
       {
@@ -413,6 +430,33 @@ namespace AtmoLight
           }
 
           Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
+
+          // Analyzing the frame for black bars.
+          // Has to be done in low res, as it would be to cpu heavy otherwise (0-2ms vs. 1000ms).
+          Rectangle bounds = new Rectangle();
+          object[] arguments = new Object[] { new Bitmap(stream), null };
+
+          // Call FindBounds.
+          bool blackbarblackbarAnalyzerSuccess = (bool)blackbarAnalyzerMethodInfo.Invoke(blackbarAnalyzerClass, arguments);
+
+          if (blackbarblackbarAnalyzerSuccess)
+          {
+            // Retrieving the bounds.
+            bounds = (System.Drawing.Rectangle)arguments[1];
+
+            // New bitmap that has to have to dimensions AtmoWin expects.
+            Bitmap target = new Bitmap(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
+
+            using (Graphics g = Graphics.FromImage(target))
+            {
+              // Cropping and resizing the original bitmap
+              g.DrawImage(new Bitmap(stream), new Rectangle(0, 0, target.Width, target.Height), bounds, GraphicsUnit.Pixel);
+            }
+
+            // Saving cropped and resized bitmap to stream
+            target.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+          }
+
 
           BinaryReader reader = new BinaryReader(stream);
           stream.Position = 0; // ensure that what start at the beginning of the stream. 
