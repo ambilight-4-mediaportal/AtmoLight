@@ -186,7 +186,10 @@ namespace AtmoLight
         Log.Debug("LEDs should be deactivated. (Manual Mode)");
         return false;
       }
-      else if ((DateTime.Now >= Convert.ToDateTime(settings.ExcludeTimeStart) && DateTime.Now <= Convert.ToDateTime(settings.ExcludeTimeEnd)))
+      else if ((DateTime.Now >= Convert.ToDateTime(settings.ExcludeTimeStart) && DateTime.Now <= Convert.ToDateTime(settings.ExcludeTimeEnd)) ||
+              ((Convert.ToDateTime(settings.ExcludeTimeStart) > Convert.ToDateTime(settings.ExcludeTimeEnd)) &&
+              ((DateTime.Now <= Convert.ToDateTime(settings.ExcludeTimeStart) && DateTime.Now <= Convert.ToDateTime(settings.ExcludeTimeEnd)) ||
+              (DateTime.Now >= Convert.ToDateTime(settings.ExcludeTimeStart) && DateTime.Now >= Convert.ToDateTime(settings.ExcludeTimeEnd)))))
       {
         Log.Debug("LEDs should be deactivated. (Timeframe)");
         return false;
