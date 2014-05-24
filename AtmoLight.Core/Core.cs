@@ -44,6 +44,7 @@ namespace AtmoLight
     // States
     private bool currentState = false; // State of the LEDs
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current aktive effect
+    private ContentEffect changeEffect = ContentEffect.Undefined; // Effect ChangeEffect() should change to (need for Reinitialise() if ChangeEffect() fails)
     private ComLiveViewSource atmoLiveViewSource; // Current liveview source
 
     // Timings
@@ -320,7 +321,7 @@ namespace AtmoLight
       reinitialiseLock = true;
       Log.Debug("Reinitialising.");
 
-      if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(currentEffect, true))
+      if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(changeEffect != ContentEffect.Undefined ? changeEffect : currentEffect, true))
       {
         Disconnect();
         StopAtmoWin();
@@ -761,6 +762,7 @@ namespace AtmoLight
         return false;
       }
       currentEffect = ContentEffect.Undefined;
+      changeEffect = effect;
       Log.Info("Changing AtmoLight effect to: {0}", effect.ToString());
       switch (effect)
       {
@@ -819,7 +821,8 @@ namespace AtmoLight
           if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
           break;
       }
-      currentEffect = effect;
+      currentEffect = changeEffect;
+      changeEffect = ContentEffect.Undefined;
       return true;
     }
 
