@@ -42,6 +42,7 @@ ErrorRed=Please enter a number between 0 and 255 for Red.
 ErrorGreen=Please enter a number between 0 and 255 for Green.
 ErrorBlue=Please enter a number between 0 and 255 for Blue.
 ErrorRemoteButtons=You cant use the same remote key for more than one task.
+ckBlackbarDetection=Blackbar Detection every
 [ContextMenu]
 SwitchLEDsON=Switch LEDs on
 SwitchLEDsOFF=Switch LEDs off
