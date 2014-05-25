@@ -623,9 +623,9 @@ namespace AtmoLight
     /// </summary>
     private void DialogContextMenu()
     {
-      int delayTogglePos = 4;
-      int delayChangePos = 5;
-      int staticColorPos = 4;
+      int delayTogglePos = 5;
+      int delayChangePos = 6;
+      int staticColorPos = 5;
       Log.Info("Opening AtmoLight context menu.");
 
       // Showing context menu
@@ -657,6 +657,16 @@ namespace AtmoLight
       else
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Switch3DON));
+      }
+
+      // Toggle Blackbar Detection
+      if (Settings.blackbarDetection)
+      {
+        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchBlackbarDetectionOFF));
+      }
+      else
+      {
+        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchBlackbarDetectionON));
       }
 
       // Delay
@@ -781,6 +791,19 @@ namespace AtmoLight
         {
           Log.Info("Switching SBS 3D mode on.");
           Settings.sbs3dOn = true;
+        }
+      }
+      else if (dlg.SelectedLabel == 4)
+      {
+        if (Settings.blackbarDetection)
+        {
+          Log.Info("Switching blackbar detection off.");
+          Settings.blackbarDetection = false;
+        }
+        else
+        {
+          Log.Info("Switching blackbar detection on.");
+          Settings.blackbarDetection = true;
         }
       }
       else if ((dlg.SelectedLabel == delayTogglePos) && (delayTogglePos != -1))

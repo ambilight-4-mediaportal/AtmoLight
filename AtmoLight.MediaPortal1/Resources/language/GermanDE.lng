@@ -82,3 +82,5 @@ DelayTimeErrorLine1=Der Wert muss eine Zahl sein
 DelayTimeErrorLine2=und zwischen 0 und 1000 liegen.
 ConnectLine1=Möchten Sie versuchen AtmoWin
 ConnectLine2=zu starten und zu verbinden?
+SwitchBlackbarDetectionON=Schalte schwarze Balken Erkennung an
+SwitchBlackbarDetectionOFF=Schalte schwarze Balken Erkennung aus
