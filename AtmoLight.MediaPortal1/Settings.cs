@@ -32,6 +32,8 @@ namespace AtmoLight
     public static int staticColorGreen = 0;
     public static int staticColorBlue = 0;
     public static bool restartOnError = true;
+    public static bool blackbarDetection = false;
+    public static int blackbarDetectionTime = 0;
     #endregion
 
     public static DateTime LoadTimeSetting(MediaPortal.Profile.Settings reader, string name, string defaultTime)
@@ -72,6 +74,8 @@ namespace AtmoLight
         staticColorBlue = reader.GetValueAsInt("atmolight", "StaticColorBlue", 0);
         restartOnError = reader.GetValueAsBool("atmolight", "RestartOnError", true);
         delayReferenceRefreshRate = reader.GetValueAsInt("atmolight", "DelayRefreshRate", 50);
+        blackbarDetection = reader.GetValueAsBool("atmolight", "BlackbarDetection", false);
+        blackbarDetectionTime = reader.GetValueAsInt("atmolight", "BlackbarDetectionTime", 0);
       }
     }
     public static void SaveSettings()
@@ -104,6 +108,8 @@ namespace AtmoLight
         reader.SetValue("atmolight", "StaticColorBlue", staticColorBlue);
         reader.SetValueAsBool("atmolight", "RestartOnError", restartOnError);
         reader.SetValue("atmolight", "DelayRefreshRate", delayReferenceRefreshRate);
+        reader.SetValueAsBool("atmolight", "BlackbarDetection", blackbarDetection);
+        reader.SetValue("atmolight", "BlackbarDetectionTime", blackbarDetectionTime);
       }
     }
 

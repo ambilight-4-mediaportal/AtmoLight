@@ -47,10 +47,12 @@ namespace AtmoLight
     private Int64 lastFrame = 0; // Tick count of the last frame
 
     // Blackbar detection
-    private object blackbarAnalyzerClass;
-    private Assembly blackbarAnalyzerAssembly;
-    private Type blackbarAnalyzerType;
-    private MethodInfo blackbarAnalyzerMethodInfo;
+    private object blackbarAnalyzerClass; // Helper for reflection
+    private Assembly blackbarAnalyzerAssembly; // Helper for reflection
+    private Type blackbarAnalyzerType; // Helper for reflection
+    private MethodInfo blackbarAnalyzerMethodInfo; // Helper for reflection
+    private Rectangle blackbarDetechtionRect = new Rectangle(); // Rectangle with the dimensions of the picture (without blackbars)
+    private Int64 blackbarDetechtionLastTime = 0; // Last time blackbar detection was run
     
     // Static Color
     private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
@@ -431,20 +433,27 @@ namespace AtmoLight
 
           Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
 
-          // Analyzing the frame for black bars.
-          // Has to be done in low res, as it would be to cpu heavy otherwise (0-2ms vs. 1000ms).
-          Rectangle bounds = new Rectangle();
-          Bitmap streamBitmap = new Bitmap(stream);
-          object[] arguments = new Object[] { streamBitmap, null };
-
-          // Call FindBounds.
-          bool blackbarblackbarAnalyzerSuccess = (bool)blackbarAnalyzerMethodInfo.Invoke(blackbarAnalyzerClass, arguments);
-          streamBitmap.Dispose();
-
-          if (blackbarblackbarAnalyzerSuccess)
+          if (Settings.blackbarDetection)
           {
-            // Retrieving the bounds.
-            bounds = (System.Drawing.Rectangle)arguments[1];
+            if (Win32API.GetTickCount() >= (blackbarDetechtionLastTime + Settings.blackbarDetectionTime))
+            {
+              blackbarDetechtionLastTime = Win32API.GetTickCount();
+
+              // Analyzing the frame for black bars.
+              // Has to be done in low res, as it would be to cpu heavy otherwise (0-2ms vs. 1000ms).
+              Bitmap streamBitmap = new Bitmap(stream);
+              object[] arguments = new Object[] { streamBitmap, null };
+
+              // Call FindBounds.
+              bool blackbarblackbarAnalyzerSuccess = (bool)blackbarAnalyzerMethodInfo.Invoke(blackbarAnalyzerClass, arguments);
+              streamBitmap.Dispose();
+
+              if (blackbarblackbarAnalyzerSuccess)
+              {
+                // Retrieving the bounds.
+                blackbarDetechtionRect = (System.Drawing.Rectangle)arguments[1];
+              }
+            }
 
             // New bitmap that has to have to dimensions AtmoWin expects.
             Bitmap target = new Bitmap(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
@@ -452,14 +461,13 @@ namespace AtmoLight
             using (Graphics g = Graphics.FromImage(target))
             {
               // Cropping and resizing the original bitmap
-              g.DrawImage(new Bitmap(stream), new Rectangle(0, 0, target.Width, target.Height), bounds, GraphicsUnit.Pixel);
+              g.DrawImage(new Bitmap(stream), new Rectangle(0, 0, target.Width, target.Height), blackbarDetechtionRect, GraphicsUnit.Pixel);
             }
 
             // Saving cropped and resized bitmap to stream
             target.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
             target.Dispose();
           }
-
 
           BinaryReader reader = new BinaryReader(stream);
           stream.Position = 0; // ensure that what start at the beginning of the stream. 
