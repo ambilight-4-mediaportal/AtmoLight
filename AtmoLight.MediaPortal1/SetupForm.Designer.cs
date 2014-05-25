@@ -83,6 +83,9 @@
       this.btnLanguage = new System.Windows.Forms.Button();
       this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
       this.lblHint = new System.Windows.Forms.Label();
+      this.ckBlackbarDetection = new System.Windows.Forms.CheckBox();
+      this.tbBlackbarDetectionTime = new System.Windows.Forms.TextBox();
+      this.lblBlackarDetectionMS = new System.Windows.Forms.Label();
       this.grpMPClose.SuspendLayout();
       this.grpMode.SuspendLayout();
       this.grpStaticColor.SuspendLayout();
@@ -122,7 +125,7 @@
       // btnSave
       // 
       this.btnSave.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-      this.btnSave.Location = new System.Drawing.Point(9, 570);
+      this.btnSave.Location = new System.Drawing.Point(9, 585);
       this.btnSave.Name = "btnSave";
       this.btnSave.Size = new System.Drawing.Size(89, 23);
       this.btnSave.TabIndex = 4;
@@ -133,7 +136,7 @@
       // btnCancel
       // 
       this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-      this.btnCancel.Location = new System.Drawing.Point(104, 570);
+      this.btnCancel.Location = new System.Drawing.Point(104, 585);
       this.btnCancel.Name = "btnCancel";
       this.btnCancel.Size = new System.Drawing.Size(86, 23);
       this.btnCancel.TabIndex = 5;
@@ -151,9 +154,9 @@
       // 
       this.grpMPClose.Controls.Add(this.rbDisableLEDs);
       this.grpMPClose.Controls.Add(this.rbSwitchToLiveView);
-      this.grpMPClose.Location = new System.Drawing.Point(9, 490);
+      this.grpMPClose.Location = new System.Drawing.Point(10, 508);
       this.grpMPClose.Name = "grpMPClose";
-      this.grpMPClose.Size = new System.Drawing.Size(436, 70);
+      this.grpMPClose.Size = new System.Drawing.Size(435, 70);
       this.grpMPClose.TabIndex = 6;
       this.grpMPClose.TabStop = false;
       this.grpMPClose.Text = "On MP close...";
@@ -411,6 +414,9 @@
       // 
       // grpPluginOption
       // 
+      this.grpPluginOption.Controls.Add(this.lblBlackarDetectionMS);
+      this.grpPluginOption.Controls.Add(this.tbBlackbarDetectionTime);
+      this.grpPluginOption.Controls.Add(this.ckBlackbarDetection);
       this.grpPluginOption.Controls.Add(this.lblRefreshRate);
       this.grpPluginOption.Controls.Add(this.tbRefreshRate);
       this.grpPluginOption.Controls.Add(this.ckRestartOnError);
@@ -431,7 +437,7 @@
       this.grpPluginOption.Controls.Add(this.lblLedsOnOff);
       this.grpPluginOption.Location = new System.Drawing.Point(10, 249);
       this.grpPluginOption.Name = "grpPluginOption";
-      this.grpPluginOption.Size = new System.Drawing.Size(435, 235);
+      this.grpPluginOption.Size = new System.Drawing.Size(435, 253);
       this.grpPluginOption.TabIndex = 11;
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
@@ -439,7 +445,7 @@
       // lblRefreshRate
       // 
       this.lblRefreshRate.AutoSize = true;
-      this.lblRefreshRate.Location = new System.Drawing.Point(315, 139);
+      this.lblRefreshRate.Location = new System.Drawing.Point(398, 139);
       this.lblRefreshRate.Name = "lblRefreshRate";
       this.lblRefreshRate.Size = new System.Drawing.Size(20, 13);
       this.lblRefreshRate.TabIndex = 27;
@@ -447,7 +453,7 @@
       // 
       // tbRefreshRate
       // 
-      this.tbRefreshRate.Location = new System.Drawing.Point(270, 136);
+      this.tbRefreshRate.Location = new System.Drawing.Point(351, 136);
       this.tbRefreshRate.Name = "tbRefreshRate";
       this.tbRefreshRate.Size = new System.Drawing.Size(41, 20);
       this.tbRefreshRate.TabIndex = 26;
@@ -458,7 +464,7 @@
       this.ckRestartOnError.AutoSize = true;
       this.ckRestartOnError.Checked = true;
       this.ckRestartOnError.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckRestartOnError.Location = new System.Drawing.Point(13, 208);
+      this.ckRestartOnError.Location = new System.Drawing.Point(13, 230);
       this.ckRestartOnError.Name = "ckRestartOnError";
       this.ckRestartOnError.Size = new System.Drawing.Size(224, 17);
       this.ckRestartOnError.TabIndex = 25;
@@ -468,7 +474,7 @@
       // lblDelay
       // 
       this.lblDelay.AutoSize = true;
-      this.lblDelay.Location = new System.Drawing.Point(165, 139);
+      this.lblDelay.Location = new System.Drawing.Point(218, 139);
       this.lblDelay.Name = "lblDelay";
       this.lblDelay.Size = new System.Drawing.Size(62, 13);
       this.lblDelay.TabIndex = 24;
@@ -476,7 +482,7 @@
       // 
       // tbDelay
       // 
-      this.tbDelay.Location = new System.Drawing.Point(120, 136);
+      this.tbDelay.Location = new System.Drawing.Point(171, 136);
       this.tbDelay.Name = "tbDelay";
       this.tbDelay.Size = new System.Drawing.Size(41, 20);
       this.tbDelay.TabIndex = 23;
@@ -521,7 +527,7 @@
       this.ckExitAtmoWin.AutoSize = true;
       this.ckExitAtmoWin.Checked = true;
       this.ckExitAtmoWin.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckExitAtmoWin.Location = new System.Drawing.Point(13, 184);
+      this.ckExitAtmoWin.Location = new System.Drawing.Point(13, 207);
       this.ckExitAtmoWin.Name = "ckExitAtmoWin";
       this.ckExitAtmoWin.Size = new System.Drawing.Size(173, 17);
       this.ckExitAtmoWin.TabIndex = 19;
@@ -533,7 +539,7 @@
       this.ckStartAtmoWin.AutoSize = true;
       this.ckStartAtmoWin.Checked = true;
       this.ckStartAtmoWin.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckStartAtmoWin.Location = new System.Drawing.Point(13, 161);
+      this.ckStartAtmoWin.Location = new System.Drawing.Point(13, 184);
       this.ckStartAtmoWin.Name = "ckStartAtmoWin";
       this.ckStartAtmoWin.Size = new System.Drawing.Size(175, 17);
       this.ckStartAtmoWin.TabIndex = 18;
@@ -567,7 +573,7 @@
       // lblFrames
       // 
       this.lblFrames.AutoSize = true;
-      this.lblFrames.Location = new System.Drawing.Point(165, 116);
+      this.lblFrames.Location = new System.Drawing.Point(218, 116);
       this.lblFrames.Name = "lblFrames";
       this.lblFrames.Size = new System.Drawing.Size(101, 13);
       this.lblFrames.TabIndex = 15;
@@ -575,7 +581,7 @@
       // 
       // lowCpuTime
       // 
-      this.lowCpuTime.Location = new System.Drawing.Point(120, 113);
+      this.lowCpuTime.Location = new System.Drawing.Point(171, 113);
       this.lowCpuTime.MaxLength = 4;
       this.lowCpuTime.Name = "lowCpuTime";
       this.lowCpuTime.Size = new System.Drawing.Size(41, 20);
@@ -629,7 +635,7 @@
       // lblVersion
       // 
       this.lblVersion.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-      this.lblVersion.Location = new System.Drawing.Point(350, 570);
+      this.lblVersion.Location = new System.Drawing.Point(350, 585);
       this.lblVersion.Name = "lblVersion";
       this.lblVersion.Size = new System.Drawing.Size(95, 26);
       this.lblVersion.TabIndex = 13;
@@ -639,7 +645,7 @@
       // 
       this.lblVersionVal.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
       this.lblVersionVal.AutoSize = true;
-      this.lblVersionVal.Location = new System.Drawing.Point(392, 583);
+      this.lblVersionVal.Location = new System.Drawing.Point(392, 598);
       this.lblVersionVal.Name = "lblVersionVal";
       this.lblVersionVal.Size = new System.Drawing.Size(40, 13);
       this.lblVersionVal.TabIndex = 14;
@@ -648,7 +654,7 @@
       // btnLanguage
       // 
       this.btnLanguage.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-      this.btnLanguage.Location = new System.Drawing.Point(196, 570);
+      this.btnLanguage.Location = new System.Drawing.Point(196, 585);
       this.btnLanguage.Name = "btnLanguage";
       this.btnLanguage.Size = new System.Drawing.Size(104, 23);
       this.btnLanguage.TabIndex = 16;
@@ -670,11 +676,38 @@
       this.lblHint.Text = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3" +
     "D-SBS mode.";
       // 
+      // ckBlackbarDetection
+      // 
+      this.ckBlackbarDetection.AutoSize = true;
+      this.ckBlackbarDetection.Location = new System.Drawing.Point(13, 161);
+      this.ckBlackbarDetection.Name = "ckBlackbarDetection";
+      this.ckBlackbarDetection.Size = new System.Drawing.Size(146, 17);
+      this.ckBlackbarDetection.TabIndex = 28;
+      this.ckBlackbarDetection.Text = "Blackbar Detection every";
+      this.ckBlackbarDetection.UseVisualStyleBackColor = true;
+      // 
+      // tbBlackbarDetectionTime
+      // 
+      this.tbBlackbarDetectionTime.Location = new System.Drawing.Point(171, 159);
+      this.tbBlackbarDetectionTime.Name = "tbBlackbarDetectionTime";
+      this.tbBlackbarDetectionTime.Size = new System.Drawing.Size(41, 20);
+      this.tbBlackbarDetectionTime.TabIndex = 29;
+      this.tbBlackbarDetectionTime.Text = "0";
+      // 
+      // lblBlackarDetectionMS
+      // 
+      this.lblBlackarDetectionMS.AutoSize = true;
+      this.lblBlackarDetectionMS.Location = new System.Drawing.Point(218, 162);
+      this.lblBlackarDetectionMS.Name = "lblBlackarDetectionMS";
+      this.lblBlackarDetectionMS.Size = new System.Drawing.Size(20, 13);
+      this.lblBlackarDetectionMS.TabIndex = 30;
+      this.lblBlackarDetectionMS.Text = "ms";
+      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(452, 602);
+      this.ClientSize = new System.Drawing.Size(452, 617);
       this.Controls.Add(this.lblHint);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
@@ -689,8 +722,8 @@
       this.Controls.Add(this.edFile);
       this.Controls.Add(this.lblPathInfo);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-      this.MaximumSize = new System.Drawing.Size(468, 640);
-      this.MinimumSize = new System.Drawing.Size(468, 640);
+      this.MaximumSize = new System.Drawing.Size(468, 655);
+      this.MinimumSize = new System.Drawing.Size(468, 655);
       this.Name = "SetupForm";
       this.Text = "AtmoLight Setup";
       this.grpMPClose.ResumeLayout(false);
@@ -764,5 +797,8 @@
     private System.Windows.Forms.Label lblRefreshRate;
     private System.Windows.Forms.TextBox tbRefreshRate;
     private System.Windows.Forms.Label lblHint;
+    private System.Windows.Forms.Label lblBlackarDetectionMS;
+    private System.Windows.Forms.TextBox tbBlackbarDetectionTime;
+    private System.Windows.Forms.CheckBox ckBlackbarDetection;
   }
 }

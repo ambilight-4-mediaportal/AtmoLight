@@ -300,6 +300,7 @@ namespace Language
     public String ContextMenu_ConnectLine1 = "Do you want to try to start";
     public String ContextMenu_ConnectLine2 = "AtmoWin and reconnect to it?";
     public String SetupForm_lblRefreshRate = "Hz";
+    public String SetupForm_ckBlackbarDetection = "Blackbar Detection every";
   }
 }
 
