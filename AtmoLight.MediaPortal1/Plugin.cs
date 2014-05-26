@@ -51,8 +51,8 @@ namespace AtmoLight
     private Assembly blackbarAnalyzerAssembly; // Helper for reflection
     private Type blackbarAnalyzerType; // Helper for reflection
     private MethodInfo blackbarAnalyzerMethodInfo; // Helper for reflection
-    private Rectangle blackbarDetechtionRect = new Rectangle(); // Rectangle with the dimensions of the picture (without blackbars)
-    private Int64 blackbarDetechtionLastTime = 0; // Last time blackbar detection was run
+    private Rectangle blackbarDetectionRect = new Rectangle(); // Rectangle with the dimensions of the picture (without blackbars)
+    private Int64 blackbarDetectionLastTime = 0; // Last time blackbar detection was run
     
     // Static Color
     private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
@@ -435,9 +435,9 @@ namespace AtmoLight
 
           if (Settings.blackbarDetection)
           {
-            if (Win32API.GetTickCount() >= (blackbarDetechtionLastTime + Settings.blackbarDetectionTime))
+            if (Win32API.GetTickCount() >= (blackbarDetectionLastTime + Settings.blackbarDetectionTime))
             {
-              blackbarDetechtionLastTime = Win32API.GetTickCount();
+              blackbarDetectionLastTime = Win32API.GetTickCount();
 
               // Analyzing the frame for black bars.
               // Has to be done in low res, as it would be to cpu heavy otherwise (0-2ms vs. 1000ms).
@@ -451,7 +451,7 @@ namespace AtmoLight
               if (blackbarblackbarAnalyzerSuccess)
               {
                 // Retrieving the bounds.
-                blackbarDetechtionRect = (System.Drawing.Rectangle)arguments[1];
+                blackbarDetectionRect = (System.Drawing.Rectangle)arguments[1];
               }
             }
 
@@ -461,7 +461,7 @@ namespace AtmoLight
             using (Graphics g = Graphics.FromImage(target))
             {
               // Cropping and resizing the original bitmap
-              g.DrawImage(new Bitmap(stream), new Rectangle(0, 0, target.Width, target.Height), blackbarDetechtionRect, GraphicsUnit.Pixel);
+              g.DrawImage(new Bitmap(stream), new Rectangle(0, 0, target.Width, target.Height), blackbarDetectionRect, GraphicsUnit.Pixel);
             }
 
             // Saving cropped and resized bitmap to stream
