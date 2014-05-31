@@ -1,6 +1,6 @@
 [SetupForm]
-lblPathInfoText=Dossier+Nom de Atmowina.exe
-grpModeText=Atmolight Mode par média
+lblPathInfoText=Dossier+Nom de AtmoWinA.exe
+grpModeText=Atmolight Mode par type de média
 grpPluginOptionText=Plugin options
 lblVidTvRecText=Video/TV/Enregistrement:
 lblMusicText=Musique:
@@ -42,6 +42,7 @@ ErrorRed==Veuillez saisir une chiffre compris entre 0 et 255 pour le Rouge.
 ErrorGreen=Veuillez saisir une chiffre compris entre 0 et 255 pour le Vert.
 ErrorBlue=Veuillez saisir une chiffre compris entre 0 et 255 pour le Bleu.
 ErrorRemoteButtons=Vous ne pouvez pas utiliser le même bouton pour plusieurs actions.
+ckBlackbarDetection=Blackbar Detection toute les
 [ContextMenu]
 SwitchLEDsON=LEDs > ON
 SwitchLEDsOFF=LEDs > OFF
@@ -81,3 +82,5 @@ DelayTimeErrorLine1=La valeur doit être un nombre
 DelayTimeErrorLine2=compris entre 0 et 1000 ms.
 ConnectLine1=Voulez-vous essayer de démarrer
 ConnectLine2=AtmoWin et de se reconnecter à lui ?
+SwitchBlackbarDetectionON=Blackbar Detection > ON
+SwitchBlackbarDetectionOFF=Blackbar Detection > OFF
