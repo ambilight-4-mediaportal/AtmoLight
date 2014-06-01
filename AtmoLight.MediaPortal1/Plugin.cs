@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Drawing.Imaging;
 using MediaPortal.GUI.Library;
 using MediaPortal.Profile;
 using MediaPortal.Player;
@@ -18,6 +19,9 @@ using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
 using Language;
 using ProcessPlugins.ViewModeSwitcher;
+
+using System.Windows.Media.Imaging;
+
 
 namespace AtmoLight
 {
@@ -41,6 +45,7 @@ namespace AtmoLight
     // States
     private ContentEffect playbackEffect = ContentEffect.Undefined; // Effect for current placback
     private ContentEffect menuEffect = ContentEffect.Undefined; // Effect in GUI (no playback)
+    private bool GifReaderLock = false; // Lock for GifReader Thread
 
     // Frame Fields
     private Surface rgbSurface = null; // RGB Surface
@@ -125,19 +130,24 @@ namespace AtmoLight
       if (!AtmoLightObject.Initialise())
       {
         Log.Error("Initialising failed.");
-        return; 
+        return;
       }
 
       menuEffect = Settings.effectMenu;
       if (CheckForStartRequirements())
-       {
-         AtmoLightObject.ChangeEffect(menuEffect);
-         CalculateDelay();
-       }
-       else
-       {
-         AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
-       }
+      {
+        AtmoLightObject.ChangeEffect(menuEffect);
+        CalculateDelay();
+      }
+      else
+      {
+        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+      }
+
+      // For testing only
+      // Start gifreader
+      Thread GifReaderThreadHelper = new Thread(() => GifReader());
+      GifReaderThreadHelper.Start();
     }
 
     /// <summary>
@@ -469,30 +479,8 @@ namespace AtmoLight
             target.Dispose();
           }
 
-          BinaryReader reader = new BinaryReader(stream);
-          stream.Position = 0; // ensure that what start at the beginning of the stream. 
-          reader.ReadBytes(14); // skip bitmap file info header
-          byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
-
-          int rgbL = (int)(stream.Length - stream.Position);
-          int rgb = (int)(rgbL / (AtmoLightObject.GetCaptureWidth() * AtmoLightObject.GetCaptureHeight()));
-
-          byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
-
-          byte[] h1pixelData = new byte[AtmoLightObject.GetCaptureWidth() * rgb];
-          byte[] h2pixelData = new byte[AtmoLightObject.GetCaptureWidth() * rgb];
-          //now flip horizontally, we do it always to prevent microstudder
-          int i;
-          for (i = 0; i < ((AtmoLightObject.GetCaptureHeight() / 2) - 1); i++)
-          {
-            Array.Copy(pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, h1pixelData, 0, AtmoLightObject.GetCaptureWidth() * rgb);
-            Array.Copy(pixelData, (AtmoLightObject.GetCaptureHeight() - i - 1) * AtmoLightObject.GetCaptureWidth() * rgb, h2pixelData, 0, AtmoLightObject.GetCaptureWidth() * rgb);
-            Array.Copy(h1pixelData, 0, pixelData, (AtmoLightObject.GetCaptureHeight() - i - 1) * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
-            Array.Copy(h2pixelData, 0, pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
-          }
-          //send scaled and fliped frame to atmowin
-
-          AtmoLightObject.SetPixelData(bmiInfoHeader, pixelData);
+          // Disabled for testing purposes (GifReader)
+          //CalculateBitmap(stream);
 
           stream.Close();
           stream.Dispose();
@@ -1071,5 +1059,134 @@ namespace AtmoLight
       return false;
     }
     #endregion
+
+    private void GifReader()
+    {
+      // Old try
+      // SelectActiveFrame gets slower and slower after a while
+      // Further investigation?
+      /*     
+      Image gifImage = Image.FromFile("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\mygif.gif"); //initialize
+      Image gifTemp = null;
+      FrameDimension gifDimension = new FrameDimension(gifImage.FrameDimensionsList[0]); //gets the GUID
+      int gifFrameCount = gifImage.GetFrameCount(gifDimension); //total frames in the animation
+      Stopwatch stopwatch = new Stopwatch();
+      for (int index = 0; index < gifFrameCount; index++)
+      {
+        stopwatch.Start();
+
+
+        gifImage.SelectActiveFrame(gifDimension, index);
+        gifTemp = (Image)gifImage.Clone();
+
+
+        // Resize
+        if (gifTemp.Width != AtmoLightObject.GetCaptureWidth() || gifTemp.Height != AtmoLightObject.GetCaptureHeight())
+        {
+          gifTemp = (Image)new Bitmap(gifTemp, new Size(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight()));
+        }
+
+        System.IO.MemoryStream gifStream = new System.IO.MemoryStream();
+        gifTemp.Save(gifStream, ImageFormat.Bmp);
+
+        CalculateBitmap(gifStream);
+
+        gifStream.Close();
+        gifStream.Dispose();
+
+
+        Log.Error("{0}", stopwatch.ElapsedMilliseconds);
+        stopwatch.Reset();
+
+
+        System.Threading.Thread.Sleep(20);
+      }
+      gifTemp.Dispose();
+      gifImage.Dispose();*/
+
+
+
+
+      // New code
+
+
+      // Get gif as stream
+      Stream gifSource = new FileStream("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\mygif2.gif", FileMode.Open, FileAccess.Read, FileShare.Read);
+      // Decode gif
+      GifBitmapDecoder gifDecoder = new GifBitmapDecoder(gifSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+
+      // Maybe fps information
+      // Needs further investigation
+      //BitmapMetadata bmd = gifDecoder.Frames[0].Metadata as BitmapMetadata;
+      //Log.Error("fps {0}", bmd.GetQuery("/grctlext/Delay"));   
+
+      while (!GifReaderLock)
+      {
+        for (int index = 0; index < gifDecoder.Frames.Count; index++)
+        {
+          // Select frame
+          BitmapSource gifBitmapSource = gifDecoder.Frames[index];
+          System.Drawing.Bitmap gifBitmap;
+          // Convert frame to Bitmap
+          using (MemoryStream outStream = new MemoryStream())
+          {
+            BitmapEncoder enc = new BmpBitmapEncoder();
+            enc.Frames.Add(BitmapFrame.Create(gifBitmapSource));
+            enc.Save(outStream);
+            gifBitmap = new System.Drawing.Bitmap(outStream);
+          }
+
+          // Resize
+          /*if (gifBitmap.Width != AtmoLightObject.GetCaptureWidth() || gifBitmap.Height != AtmoLightObject.GetCaptureHeight())
+          {
+            gifBitmap = new Bitmap(gifBitmap, new Size(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight()));
+          }*/
+          // For some reason i have to always resize this image, otherwise an exception is thrown.
+          gifBitmap = new Bitmap(gifBitmap, new Size(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight()));
+
+          // Convert Bitmap to stream
+          System.IO.MemoryStream gifStream = new System.IO.MemoryStream();
+          gifBitmap.Save(gifStream, ImageFormat.Bmp);
+
+          // Calculations to prepare data for AtmoWin and then send data
+          CalculateBitmap(gifStream);
+
+          // Cleanup
+          gifBitmap.Dispose();
+
+          // Sleep until next frame
+          // Currently locked at 25fps
+          System.Threading.Thread.Sleep(40);
+        }
+      }
+    }
+
+    private void CalculateBitmap(Stream stream)
+    {
+      BinaryReader reader = new BinaryReader(stream);
+      stream.Position = 0; // ensure that what start at the beginning of the stream. 
+      reader.ReadBytes(14); // skip bitmap file info header
+      byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
+
+      int rgbL = (int)(stream.Length - stream.Position);
+      int rgb = (int)(rgbL / (AtmoLightObject.GetCaptureWidth() * AtmoLightObject.GetCaptureHeight()));
+
+      byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
+
+      byte[] h1pixelData = new byte[AtmoLightObject.GetCaptureWidth() * rgb];
+      byte[] h2pixelData = new byte[AtmoLightObject.GetCaptureWidth() * rgb];
+      //now flip horizontally, we do it always to prevent microstudder
+      int i;
+      for (i = 0; i < ((AtmoLightObject.GetCaptureHeight() / 2) - 1); i++)
+      {
+        Array.Copy(pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, h1pixelData, 0, AtmoLightObject.GetCaptureWidth() * rgb);
+        Array.Copy(pixelData, (AtmoLightObject.GetCaptureHeight() - i - 1) * AtmoLightObject.GetCaptureWidth() * rgb, h2pixelData, 0, AtmoLightObject.GetCaptureWidth() * rgb);
+        Array.Copy(h1pixelData, 0, pixelData, (AtmoLightObject.GetCaptureHeight() - i - 1) * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
+        Array.Copy(h2pixelData, 0, pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
+      }
+      //send scaled and fliped frame to atmowin
+
+      AtmoLightObject.SetPixelData(bmiInfoHeader, pixelData);
+    }
   }
 }
