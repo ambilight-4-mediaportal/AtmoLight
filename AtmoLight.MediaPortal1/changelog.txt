@@ -1,3 +1,10 @@
+Version 1.12.0.0
+- Fixed bug where MediaPortal could crash to Desktop
+- Fixed issue where AtmoLight would always disable LEDs after reconnect
+- Fixed visual bug in the plugin configuration form
+- Added blackbar detection and removal feature
+
+
 Version 1.11.0.0
 - Split AtmoLight into a Core and MediaPortal1 Plugin library (needed for MediaPortal 2 version of AtmoLight)
 - Improved LowCPU
