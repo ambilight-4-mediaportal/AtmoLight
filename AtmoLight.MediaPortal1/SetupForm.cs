@@ -30,6 +30,7 @@ namespace AtmoLight
       tbRed.Text = Settings.staticColorRed.ToString();
       tbGreen.Text = Settings.staticColorGreen.ToString();
       tbBlue.Text = Settings.staticColorBlue.ToString();
+      tbBlackbarDetectionTime.Text = Settings.blackbarDetectionTime.ToString();
 
       if (Settings.manualMode)
       {
@@ -94,6 +95,14 @@ namespace AtmoLight
         ckRestartOnError.Checked = false;
       }
 
+      if (Settings.blackbarDetection)
+      {
+        ckBlackbarDetection.Checked = true;
+      }
+      else
+      {
+        ckBlackbarDetection.Checked = false;
+      }
     }
 
     private void UpdateLanguageOnControls()
@@ -132,6 +141,7 @@ namespace AtmoLight
       lblMenuButton.Text = LanguageLoader.appStrings.SetupForm_lblMenuButton;
       ckRestartOnError.Text = LanguageLoader.appStrings.SetupForm_ckRestartOnError;
       lblRefreshRate.Text = LanguageLoader.appStrings.SetupForm_lblRefreshRate;
+      ckBlackbarDetection.Text = LanguageLoader.appStrings.SetupForm_ckBlackbarDetection;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -196,6 +206,13 @@ namespace AtmoLight
         return;
       }
 
+      int cBlackbarDetectionTime;
+      if (!int.TryParse(tbBlackbarDetectionTime.Text, out cBlackbarDetectionTime) || cBlackbarDetectionTime <= 0)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       int StaticColorRed, StaticColorGreen, StaticColorBlue;
       if ((!int.TryParse(tbRed.Text, out StaticColorRed)) || (StaticColorRed < 0 || StaticColorRed > 255))
       {
@@ -244,6 +261,8 @@ namespace AtmoLight
       Settings.startAtmoWin = ckStartAtmoWin.Checked;
       Settings.exitAtmoWin = ckExitAtmoWin.Checked;
       Settings.restartOnError = ckRestartOnError.Checked;
+      Settings.blackbarDetection = ckBlackbarDetection.Checked;
+      Settings.blackbarDetectionTime = cBlackbarDetectionTime;
       Settings.SaveSettings();
       this.DialogResult = DialogResult.OK;
     }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing;
 using MediaPortal.GUI.Library;
 using MediaPortal.Profile;
 using MediaPortal.Player;
@@ -15,6 +17,7 @@ using Microsoft.DirectX.Direct3D;
 using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
 using Language;
+using ProcessPlugins.ViewModeSwitcher;
 
 namespace AtmoLight
 {
@@ -42,6 +45,14 @@ namespace AtmoLight
     // Frame Fields
     private Surface rgbSurface = null; // RGB Surface
     private Int64 lastFrame = 0; // Tick count of the last frame
+
+    // Blackbar detection
+    private object blackbarAnalyzerClass; // Helper for reflection
+    private Assembly blackbarAnalyzerAssembly; // Helper for reflection
+    private Type blackbarAnalyzerType; // Helper for reflection
+    private MethodInfo blackbarAnalyzerMethodInfo; // Helper for reflection
+    private Rectangle blackbarDetectionRect = new Rectangle(); // Rectangle with the dimensions of the picture (without blackbars)
+    private Int64 blackbarDetectionLastTime = 0; // Last time blackbar detection was run
     
     // Static Color
     private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
@@ -93,8 +104,15 @@ namespace AtmoLight
       GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
 
       // Connection Lost Handler
-
       Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
+
+      // Frameanalyzer
+      // Reflection needed to access the FrameAnalyzer as it is an internal class
+      blackbarAnalyzerAssembly = Assembly.LoadFrom("plugins\\process\\ProcessPlugins.dll");
+      blackbarAnalyzerClass = blackbarAnalyzerAssembly.CreateInstance("ProcessPlugins.ViewModeSwitcher.FrameAnalyzer");
+      blackbarAnalyzerType = blackbarAnalyzerClass.GetType();
+      blackbarAnalyzerMethodInfo = blackbarAnalyzerType.GetMethod("FindBounds");
+
 
       staticColorTemp[0] = Settings.staticColorRed;
       staticColorTemp[1] = Settings.staticColorGreen;
@@ -102,6 +120,7 @@ namespace AtmoLight
 
       Log.Debug("Generating new AtmoLight.Core instance.");
       AtmoLightObject = new Core(Settings.atmowinExe, Settings.restartOnError, Settings.startAtmoWin, staticColorTemp, Settings.delay, Settings.delayReferenceTime);
+
 
       if (!AtmoLightObject.Initialise())
       {
@@ -414,6 +433,42 @@ namespace AtmoLight
 
           Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
 
+          if (Settings.blackbarDetection)
+          {
+            if (Win32API.GetTickCount() >= (blackbarDetectionLastTime + Settings.blackbarDetectionTime))
+            {
+              blackbarDetectionLastTime = Win32API.GetTickCount();
+
+              // Analyzing the frame for black bars.
+              // Has to be done in low res, as it would be to cpu heavy otherwise (0-2ms vs. 1000ms).
+              Bitmap streamBitmap = new Bitmap(stream);
+              object[] arguments = new Object[] { streamBitmap, null };
+
+              // Call FindBounds.
+              bool blackbarblackbarAnalyzerSuccess = (bool)blackbarAnalyzerMethodInfo.Invoke(blackbarAnalyzerClass, arguments);
+              streamBitmap.Dispose();
+
+              if (blackbarblackbarAnalyzerSuccess)
+              {
+                // Retrieving the bounds.
+                blackbarDetectionRect = (System.Drawing.Rectangle)arguments[1];
+              }
+            }
+
+            // New bitmap that has to have to dimensions AtmoWin expects.
+            Bitmap target = new Bitmap(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
+
+            using (Graphics g = Graphics.FromImage(target))
+            {
+              // Cropping and resizing the original bitmap
+              g.DrawImage(new Bitmap(stream), new Rectangle(0, 0, target.Width, target.Height), blackbarDetectionRect, GraphicsUnit.Pixel);
+            }
+
+            // Saving cropped and resized bitmap to stream
+            target.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+            target.Dispose();
+          }
+
           BinaryReader reader = new BinaryReader(stream);
           stream.Position = 0; // ensure that what start at the beginning of the stream. 
           reader.ReadBytes(14); // skip bitmap file info header
@@ -568,9 +623,9 @@ namespace AtmoLight
     /// </summary>
     private void DialogContextMenu()
     {
-      int delayTogglePos = 4;
-      int delayChangePos = 5;
-      int staticColorPos = 4;
+      int delayTogglePos = 5;
+      int delayChangePos = 6;
+      int staticColorPos = 5;
       Log.Info("Opening AtmoLight context menu.");
 
       // Showing context menu
@@ -602,6 +657,16 @@ namespace AtmoLight
       else
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Switch3DON));
+      }
+
+      // Toggle Blackbar Detection
+      if (Settings.blackbarDetection)
+      {
+        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchBlackbarDetectionOFF));
+      }
+      else
+      {
+        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchBlackbarDetectionON));
       }
 
       // Delay
@@ -726,6 +791,19 @@ namespace AtmoLight
         {
           Log.Info("Switching SBS 3D mode on.");
           Settings.sbs3dOn = true;
+        }
+      }
+      else if (dlg.SelectedLabel == 4)
+      {
+        if (Settings.blackbarDetection)
+        {
+          Log.Info("Switching blackbar detection off.");
+          Settings.blackbarDetection = false;
+        }
+        else
+        {
+          Log.Info("Switching blackbar detection on.");
+          Settings.blackbarDetection = true;
         }
       }
       else if ((dlg.SelectedLabel == delayTogglePos) && (delayTogglePos != -1))
