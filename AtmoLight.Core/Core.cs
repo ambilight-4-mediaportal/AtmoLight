@@ -193,7 +193,10 @@ namespace AtmoLight
     #region Constructor
     public Core(string pathAtmoWin, bool reinitialiseOnError, bool startAtmoWin, int[] staticColor, bool delayEnabled, int delayTime)
     {
-      Log.Debug("ctor");
+      var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+      DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
+      Log.Debug("Core Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
+
       this.pathAtmoWin = pathAtmoWin;
       this.reinitialiseOnError = reinitialiseOnError;
       this.startAtmoWin = startAtmoWin;
