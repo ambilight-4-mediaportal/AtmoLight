@@ -143,7 +143,6 @@
       // 
       // openFileDialog1
       // 
-      this.openFileDialog1.FileName = "openFileDialog1";
       this.openFileDialog1.Filter = "AtmoWinA.exe|*.exe";
       this.openFileDialog1.RestoreDirectory = true;
       // 
