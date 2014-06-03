@@ -8,6 +8,8 @@ using System.Runtime.InteropServices;
 using AtmoWinRemoteControl;
 using System.Drawing;
 using System.IO;
+using System.Windows.Media.Imaging;
+using System.Drawing.Imaging;
 
 namespace AtmoLight
 {
@@ -19,6 +21,7 @@ namespace AtmoLight
     ColorchangerLR,
     MediaPortalLiveMode,
     StaticColor,
+    GIFReader,
     Undefined = -1
   }
   public class Core
@@ -32,10 +35,12 @@ namespace AtmoLight
     private bool reinitialiseOnError = true;
     private bool startAtmoWin = true;
     private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
+    private string gifPath = "";
 
-    private Thread SetPixelDataThreadHelper;
-    private Thread GetAtmoLiveViewSourceThreadHelper;
-    private Thread ReinitialiseThreadHelper;
+    private Thread setPixelDataThreadHelper;
+    private Thread getAtmoLiveViewSourceThreadHelper;
+    private Thread reinitialiseThreadHelper;
+    private Thread gifReaderThreadHelper;
 
     // Com  Objects
     private IAtmoRemoteControl2 atmoRemoteControl = null; // Com Object to control AtmoWin
@@ -63,6 +68,7 @@ namespace AtmoLight
     private volatile bool getAtmoLiveViewSourceLock = true; // Lock for liveview source checks
     private volatile bool setPixelDataLock = true; // Lock for SetPixelData thread
     private volatile bool reinitialiseLock = false;
+    private volatile bool gifReaderLock = true;
 
     private int captureWidth = 0; // AtmoWins capture width
     private int captureHeight = 0; // AtmoWins capture height
@@ -347,9 +353,9 @@ namespace AtmoLight
     {
       if (!reinitialiseLock)
       {
-        ReinitialiseThreadHelper = new Thread(() => Reinitialise(force));
-        ReinitialiseThreadHelper.Name = "AtmoLight Reinitialise";
-        ReinitialiseThreadHelper.Start();
+        reinitialiseThreadHelper = new Thread(() => Reinitialise(force));
+        reinitialiseThreadHelper.Name = "AtmoLight Reinitialise";
+        reinitialiseThreadHelper.Start();
       }
       else
       {
@@ -544,6 +550,39 @@ namespace AtmoLight
         ReinitialiseThreaded();
         return false;
       }
+    }
+
+    public void CalculateBitmap(Stream stream)
+    {
+      BinaryReader reader = new BinaryReader(stream);
+      stream.Position = 0; // ensure that what start at the beginning of the stream. 
+      reader.ReadBytes(14); // skip bitmap file info header
+      byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
+
+      int rgbL = (int)(stream.Length - stream.Position);
+      int rgb = (int)(rgbL / (GetCaptureWidth() * GetCaptureHeight()));
+
+      byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
+
+      byte[] h1pixelData = new byte[GetCaptureWidth() * rgb];
+      byte[] h2pixelData = new byte[GetCaptureWidth() * rgb];
+      //now flip horizontally, we do it always to prevent microstudder
+      int i;
+      for (i = 0; i < ((GetCaptureHeight() / 2) - 1); i++)
+      {
+        Array.Copy(pixelData, i * GetCaptureWidth() * rgb, h1pixelData, 0, GetCaptureWidth() * rgb);
+        Array.Copy(pixelData, (GetCaptureHeight() - i - 1) * GetCaptureWidth() * rgb, h2pixelData, 0, GetCaptureWidth() * rgb);
+        Array.Copy(h1pixelData, 0, pixelData, (GetCaptureHeight() - i - 1) * GetCaptureWidth() * rgb, GetCaptureWidth() * rgb);
+        Array.Copy(h2pixelData, 0, pixelData, i * GetCaptureWidth() * rgb, GetCaptureWidth() * rgb);
+      }
+      //send scaled and fliped frame to atmowin
+
+      SetPixelData(bmiInfoHeader, pixelData);
+    }
+
+    public void UpdateGIFPath(string path)
+    {
+      gifPath = path;
     }
     #endregion
 
@@ -782,6 +821,7 @@ namespace AtmoLight
           currentState = true;
           StopSetPixelDataThread();
           StopGetAtmoLiveViewSourceThread();
+          StopGIFReaderThread();
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI)) return false;
           break;
@@ -789,12 +829,14 @@ namespace AtmoLight
           currentState = true;
           StopSetPixelDataThread();
           StopGetAtmoLiveViewSourceThread();
+          StopGIFReaderThread();
           if (!SetAtmoEffect(ComEffectMode.cemColorChange)) return false;
           break;
         case ContentEffect.ColorchangerLR:
           currentState = true;
           StopSetPixelDataThread();
           StopGetAtmoLiveViewSourceThread();
+          StopGIFReaderThread();
           if (!SetAtmoEffect(ComEffectMode.cemLrColorChange)) return false;
           break;
         case ContentEffect.LEDsDisabled:
@@ -802,6 +844,7 @@ namespace AtmoLight
           currentState = false;
           StopSetPixelDataThread();
           StopGetAtmoLiveViewSourceThread();
+          StopGIFReaderThread();
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           // Workaround for SEDU.
           // Without the sleep it would not change to color.
@@ -810,6 +853,7 @@ namespace AtmoLight
           break;
         case ContentEffect.MediaPortalLiveMode:
           currentState = true;
+          StopGIFReaderThread();
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
 
@@ -825,12 +869,21 @@ namespace AtmoLight
           currentState = true;
           StopSetPixelDataThread();
           StopGetAtmoLiveViewSourceThread();
+          StopGIFReaderThread();
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
           // Workaround for SEDU.
           // Without the sleep it would not change to color.
           System.Threading.Thread.Sleep(delaySetStaticColor);
           if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
+          break;
+        case ContentEffect.GIFReader:
+          currentState = true;
+          StopSetPixelDataThread();
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
+          StartGetAtmoLiveViewSourceThread();
+          StartGIFReaderThread();
           break;
       }
       currentEffect = changeEffect;
@@ -967,9 +1020,9 @@ namespace AtmoLight
     private void StartSetPixelDataThread()
     {
       setPixelDataLock = false;
-      SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread());
-      SetPixelDataThreadHelper.Name = "AtmoLight SetPixelData";
-      SetPixelDataThreadHelper.Start();
+      setPixelDataThreadHelper = new Thread(() => SetPixelDataThread());
+      setPixelDataThreadHelper.Name = "AtmoLight SetPixelData";
+      setPixelDataThreadHelper.Start();
     }
 
     /// <summary>
@@ -986,9 +1039,9 @@ namespace AtmoLight
     private void StartGetAtmoLiveViewSourceThread()
     {
       getAtmoLiveViewSourceLock = false;
-      GetAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
-      GetAtmoLiveViewSourceThreadHelper.Name = "AtmoLight GetAtmoLiveViewSource";
-      GetAtmoLiveViewSourceThreadHelper.Start();
+      getAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
+      getAtmoLiveViewSourceThreadHelper.Name = "AtmoLight GetAtmoLiveViewSource";
+      getAtmoLiveViewSourceThreadHelper.Start();
     }
 
     /// <summary>
@@ -997,6 +1050,19 @@ namespace AtmoLight
     private void StopGetAtmoLiveViewSourceThread()
     {
       getAtmoLiveViewSourceLock = true;
+    }
+
+    private void StartGIFReaderThread()
+    {
+      gifReaderLock = false;
+      gifReaderThreadHelper = new Thread(() => GIFReaderThread());
+      gifReaderThreadHelper.Name = "AtmoLight GIFReader";
+      gifReaderThreadHelper.Start();
+    }
+
+    private void StopGIFReaderThread()
+    {
+      gifReaderLock = true;
     }
 
     /// <summary>
@@ -1063,6 +1129,69 @@ namespace AtmoLight
       catch (Exception ex)
       {
         Log.Error("Error in GetAtmoLiveViewSourceThread.");
+        Log.Error("Exception: {0}", ex.Message);
+      }
+    }
+
+    private void GIFReaderThread()
+    {
+      try
+      {
+        // Get gif as stream
+        // "C:\\ProgramData\\Team MediaPortal\\MediaPortal\\mygif.gif"
+        Stream gifSource = new FileStream(gifPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        
+        // Decode gif
+        GifBitmapDecoder gifDecoder = new GifBitmapDecoder(gifSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+
+        // Maybe fps information
+        // Needs further investigation
+        //BitmapMetadata bmd = gifDecoder.Frames[0].Metadata as BitmapMetadata;
+        //Log.Error("fps {0}", bmd.GetQuery("/grctlext/Delay"));   
+
+        while (!gifReaderLock)
+        {
+          for (int index = 0; index < gifDecoder.Frames.Count; index++)
+          {
+            // Select frame
+            BitmapSource gifBitmapSource = gifDecoder.Frames[index];
+            System.Drawing.Bitmap gifBitmap;
+            // Convert frame to Bitmap
+            using (MemoryStream outStream = new MemoryStream())
+            {
+              BitmapEncoder enc = new BmpBitmapEncoder();
+              enc.Frames.Add(BitmapFrame.Create(gifBitmapSource));
+              enc.Save(outStream);
+              gifBitmap = new System.Drawing.Bitmap(outStream);
+            }
+
+            // Resize
+            /*if (gifBitmap.Width != AtmoLightObject.GetCaptureWidth() || gifBitmap.Height != AtmoLightObject.GetCaptureHeight())
+            {
+              gifBitmap = new Bitmap(gifBitmap, new Size(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight()));
+            }*/
+            // For some reason i have to always resize this image, otherwise an exception is thrown.
+            gifBitmap = new Bitmap(gifBitmap, new Size(GetCaptureWidth(), GetCaptureHeight()));
+
+            // Convert Bitmap to stream
+            System.IO.MemoryStream gifStream = new System.IO.MemoryStream();
+            gifBitmap.Save(gifStream, ImageFormat.Bmp);
+
+            // Calculations to prepare data for AtmoWin and then send data
+            CalculateBitmap(gifStream);
+
+            // Cleanup
+            gifBitmap.Dispose();
+
+            // Sleep until next frame
+            // Currently locked at 25fps
+            System.Threading.Thread.Sleep(40);
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        Log.Error("Error in GIFReaderThread.");
         Log.Error("Exception: {0}", ex.Message);
       }
     }
