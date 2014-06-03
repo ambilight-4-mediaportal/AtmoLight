@@ -717,6 +717,7 @@ namespace AtmoLight
         dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Colorchanger));
         dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ColorchangerLR));
         dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_StaticColor));
+        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_GIFReader));
         dlgEffect.SelectedLabel = 0;
         dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
 
@@ -743,6 +744,9 @@ namespace AtmoLight
             break;
           case 5:
             temp = ContentEffect.StaticColor;
+            break;
+          case 6:
+            temp = ContentEffect.GIFReader;
             break;
         }
         if (g_Player.Playing)
