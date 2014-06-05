@@ -74,7 +74,7 @@ namespace AtmoLight
     private volatile bool vuMeterLock = true;
 
     // VU Meter
-    SolidBrush brushWhite = new SolidBrush(Color.FromArgb(255, 255, 255));
+    SolidBrush brushBlack = new SolidBrush(Color.FromArgb(0, 0, 0));
     SolidBrush brushRed = new SolidBrush(Color.FromArgb(255, 0, 0));
     SolidBrush brushOrange = new SolidBrush(Color.FromArgb(255, 128, 0));
     SolidBrush brushGreen = new SolidBrush(Color.FromArgb(0, 255, 0));
@@ -1195,6 +1195,10 @@ namespace AtmoLight
         {
           for (int index = 0; index < gifDecoder.Frames.Count; index++)
           {
+            if (!gifReaderLock)
+            {
+              return;
+            }
             // Select frame
             BitmapSource gifBitmapSource = gifDecoder.Frames[index];
             System.Drawing.Bitmap gifBitmap;
@@ -1252,7 +1256,7 @@ namespace AtmoLight
 
         while (!vuMeterLock)
         {
-          vuMeterGFX.FillRectangle(brushWhite, rectFull);
+          vuMeterGFX.FillRectangle(brushBlack, rectFull);
           dbLevel = OnNewVUMeter();
 
           for (int channel = 0; channel <= 1; channel++)
