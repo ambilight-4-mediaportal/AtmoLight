@@ -207,7 +207,7 @@ namespace AtmoLight
       }
 
       int cBlackbarDetectionTime;
-      if (!int.TryParse(tbBlackbarDetectionTime.Text, out cBlackbarDetectionTime) || cBlackbarDetectionTime <= 0)
+      if (!int.TryParse(tbBlackbarDetectionTime.Text, out cBlackbarDetectionTime) || cBlackbarDetectionTime < 0)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
