@@ -309,7 +309,8 @@
             "Colorchanger LR",
             "MediaPortal Live Mode",
             "Static Color",
-            "GIF Reader"});
+            "GIF Reader",
+            "VU Meter"});
       this.cbRadio.Location = new System.Drawing.Point(145, 77);
       this.cbRadio.Name = "cbRadio";
       this.cbRadio.Size = new System.Drawing.Size(140, 21);
@@ -335,7 +336,8 @@
             "Colorchanger LR",
             "MediaPortal Live Mode",
             "Static Color",
-            "GIF Reader"});
+            "GIF Reader",
+            "VU Meter"});
       this.cbMusic.Location = new System.Drawing.Point(145, 50);
       this.cbMusic.Name = "cbMusic";
       this.cbMusic.Size = new System.Drawing.Size(140, 21);
