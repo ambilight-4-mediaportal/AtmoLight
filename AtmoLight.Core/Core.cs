@@ -22,6 +22,7 @@ namespace AtmoLight
     MediaPortalLiveMode,
     StaticColor,
     GIFReader,
+    VUMeter,
     Undefined = -1
   }
   public class Core
@@ -41,6 +42,7 @@ namespace AtmoLight
     private Thread getAtmoLiveViewSourceThreadHelper;
     private Thread reinitialiseThreadHelper;
     private Thread gifReaderThreadHelper;
+    private Thread vuMeterThreadHelper;
 
     // Com  Objects
     private IAtmoRemoteControl2 atmoRemoteControl = null; // Com Object to control AtmoWin
@@ -69,12 +71,16 @@ namespace AtmoLight
     private volatile bool setPixelDataLock = true; // Lock for SetPixelData thread
     private volatile bool reinitialiseLock = false;
     private volatile bool gifReaderLock = true;
+    private volatile bool vuMeterLock = true;
 
     private int captureWidth = 0; // AtmoWins capture width
     private int captureHeight = 0; // AtmoWins capture height
 
     public delegate void NewConnectionLostHandler();
     public static event NewConnectionLostHandler OnNewConnectionLost;
+
+    public delegate double[] NewVUMeterHander();
+    public static event NewVUMeterHander OnNewVUMeter;
 
     #endregion
 
@@ -822,6 +828,7 @@ namespace AtmoLight
           StopSetPixelDataThread();
           StopGetAtmoLiveViewSourceThread();
           StopGIFReaderThread();
+          StopVUMeterThread();
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI)) return false;
           break;
@@ -830,6 +837,7 @@ namespace AtmoLight
           StopSetPixelDataThread();
           StopGetAtmoLiveViewSourceThread();
           StopGIFReaderThread();
+          StopVUMeterThread();
           if (!SetAtmoEffect(ComEffectMode.cemColorChange)) return false;
           break;
         case ContentEffect.ColorchangerLR:
@@ -837,6 +845,7 @@ namespace AtmoLight
           StopSetPixelDataThread();
           StopGetAtmoLiveViewSourceThread();
           StopGIFReaderThread();
+          StopVUMeterThread();
           if (!SetAtmoEffect(ComEffectMode.cemLrColorChange)) return false;
           break;
         case ContentEffect.LEDsDisabled:
@@ -845,6 +854,7 @@ namespace AtmoLight
           StopSetPixelDataThread();
           StopGetAtmoLiveViewSourceThread();
           StopGIFReaderThread();
+          StopVUMeterThread();
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           // Workaround for SEDU.
           // Without the sleep it would not change to color.
@@ -854,6 +864,7 @@ namespace AtmoLight
         case ContentEffect.MediaPortalLiveMode:
           currentState = true;
           StopGIFReaderThread();
+          StopVUMeterThread();
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
 
@@ -870,6 +881,7 @@ namespace AtmoLight
           StopSetPixelDataThread();
           StopGetAtmoLiveViewSourceThread();
           StopGIFReaderThread();
+          StopVUMeterThread();
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
           // Workaround for SEDU.
@@ -880,10 +892,20 @@ namespace AtmoLight
         case ContentEffect.GIFReader:
           currentState = true;
           StopSetPixelDataThread();
+          StopVUMeterThread();
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
           StartGetAtmoLiveViewSourceThread();
           StartGIFReaderThread();
+          break;
+        case ContentEffect.VUMeter:
+          currentState = true;
+          StopSetPixelDataThread();
+          StopGIFReaderThread();
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
+          StartGetAtmoLiveViewSourceThread();
+          StartVUMeterThread();
           break;
       }
       currentEffect = changeEffect;
@@ -1065,6 +1087,19 @@ namespace AtmoLight
       gifReaderLock = true;
     }
 
+    private void StartVUMeterThread()
+    {
+      vuMeterLock = false;
+      vuMeterThreadHelper = new Thread(() => VUMeterThread());
+      vuMeterThreadHelper.Name = "AtmoLight VUMeter";
+      vuMeterThreadHelper.Start();
+    }
+
+    private void StopVUMeterThread()
+    {
+      vuMeterLock = true;
+    }
+
     /// <summary>
     /// Send pixel data to AtmoWin when MediaPortal liveview is used (external liveview source).
     /// Also add a delay specified in settings.
@@ -1195,7 +1230,25 @@ namespace AtmoLight
         Log.Error("Exception: {0}", ex.Message);
       }
     }
-    #endregion
 
+    private void VUMeterThread()
+    {
+      try
+      {
+        while (!vuMeterLock)
+        {
+          double[] dbLevel = new double[] { 0.0, 0.0 };
+          dbLevel = OnNewVUMeter();
+          Log.Error("L: {0}, R: {1}", dbLevel[0], dbLevel[1]);
+          System.Threading.Thread.Sleep(40);
+        }
+      }
+      catch (Exception ex)
+      {
+        Log.Error("Error in VUMeterThread.");
+        Log.Error("Exception: {0}", ex.Message);
+      }
+    }
+    #endregion
   }
 }

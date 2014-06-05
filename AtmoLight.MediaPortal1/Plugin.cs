@@ -108,6 +108,9 @@ namespace AtmoLight
       // Connection Lost Handler
       Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
 
+      // VU Meter Handler
+      Core.OnNewVUMeter += new Core.NewVUMeterHander(OnNewVUMeter);
+
       // Frameanalyzer
       // Reflection needed to access the FrameAnalyzer as it is an internal class
       blackbarAnalyzerAssembly = Assembly.LoadFrom("plugins\\process\\ProcessPlugins.dll");
@@ -268,6 +271,21 @@ namespace AtmoLight
     }
     #endregion
 
+    #region VU Meter Event Handler
+    private double[] OnNewVUMeter()
+    {
+      double[] dbLevel = new double[] { 0.0, 0.0 };
+      if (BassMusicPlayer.Initialized)
+      {
+        if (BassMusicPlayer.Player.Playing)
+        {
+          BassMusicPlayer.Player.RMS(out dbLevel[0], out dbLevel[1]);
+        }
+      }
+      return dbLevel;
+    }
+    #endregion
+
     #region Connection Lost Handler
     /// <summary>
     /// Connection lost event handler.
@@ -298,6 +316,7 @@ namespace AtmoLight
         else if (type == g_Player.MediaType.Music)
         {
           playbackEffect = Settings.effectMusic;
+          playbackEffect = ContentEffect.VUMeter;
           Log.Debug("Music detected.");
         }
         else if (type == g_Player.MediaType.Radio)
