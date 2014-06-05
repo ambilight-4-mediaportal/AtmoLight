@@ -31,6 +31,7 @@ namespace AtmoLight
       tbGreen.Text = Settings.staticColorGreen.ToString();
       tbBlue.Text = Settings.staticColorBlue.ToString();
       tbBlackbarDetectionTime.Text = Settings.blackbarDetectionTime.ToString();
+      tbGIF.Text = Settings.gifFile;
 
       if (Settings.manualMode)
       {
@@ -263,6 +264,7 @@ namespace AtmoLight
       Settings.restartOnError = ckRestartOnError.Checked;
       Settings.blackbarDetection = ckBlackbarDetection.Checked;
       Settings.blackbarDetectionTime = cBlackbarDetectionTime;
+      Settings.gifFile = tbGIF.Text;
       Settings.SaveSettings();
       this.DialogResult = DialogResult.OK;
     }
@@ -276,6 +278,14 @@ namespace AtmoLight
         LanguageLoader.strCurrentLanguageFile = openFileDialog2.FileName;
         UpdateLanguageOnControls();
         openFileDialog2.FileName = "";
+      }
+    }
+
+    private void btnSelectGIF_Click(object sender, EventArgs e)
+    {
+      if (openFileDialog3.ShowDialog() == DialogResult.OK)
+      {
+        tbGIF.Text = openFileDialog3.FileName;
       }
     }
   }

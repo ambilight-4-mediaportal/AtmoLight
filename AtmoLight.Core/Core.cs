@@ -1181,7 +1181,6 @@ namespace AtmoLight
       try
       {
         // Get gif as stream
-        // "C:\\ProgramData\\Team MediaPortal\\MediaPortal\\mygif.gif"
         Stream gifSource = new FileStream(gifPath, FileMode.Open, FileAccess.Read, FileShare.Read);
         
         // Decode gif

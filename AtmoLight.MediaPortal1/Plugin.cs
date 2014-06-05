@@ -125,7 +125,7 @@ namespace AtmoLight
 
       Log.Debug("Generating new AtmoLight.Core instance.");
       AtmoLightObject = new Core(Settings.atmowinExe, Settings.restartOnError, Settings.startAtmoWin, staticColorTemp, Settings.delay, Settings.delayReferenceTime);
-      AtmoLightObject.UpdateGIFPath("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\mygif.gif");
+      AtmoLightObject.UpdateGIFPath(Settings.gifFile);
 
 
       if (!AtmoLightObject.Initialise())
