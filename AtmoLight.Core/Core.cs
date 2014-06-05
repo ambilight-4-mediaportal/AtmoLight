@@ -73,6 +73,14 @@ namespace AtmoLight
     private volatile bool gifReaderLock = true;
     private volatile bool vuMeterLock = true;
 
+    // VU Meter
+    SolidBrush brushWhite = new SolidBrush(Color.FromArgb(255, 255, 255));
+    SolidBrush brushRed = new SolidBrush(Color.FromArgb(255, 0, 0));
+    SolidBrush brushOrange = new SolidBrush(Color.FromArgb(255, 128, 0));
+    SolidBrush brushGreen = new SolidBrush(Color.FromArgb(0, 255, 0));
+    int[] vuBorders = new int[] { -2, -7, -10, -15, -20, -25, -30, -35, -40, -45 };
+    int[] vuSegments = new int[] { 2, 3, 5 };
+
     private int captureWidth = 0; // AtmoWins capture width
     private int captureHeight = 0; // AtmoWins capture height
 
@@ -1235,11 +1243,48 @@ namespace AtmoLight
     {
       try
       {
+        Rectangle rectFull = new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight());
+        SolidBrush brushNow = null;
+
+        Bitmap vuMeterBitmap = new Bitmap(GetCaptureWidth(), GetCaptureHeight());
+        Graphics vuMeterGFX = Graphics.FromImage(vuMeterBitmap);
+
+        double[] dbLevel = new double[] { 0.0, 0.0 };
+
         while (!vuMeterLock)
         {
-          double[] dbLevel = new double[] { 0.0, 0.0 };
+          vuMeterGFX.FillRectangle(brushWhite, rectFull);
           dbLevel = OnNewVUMeter();
-          Log.Error("L: {0}, R: {1}", dbLevel[0], dbLevel[1]);
+
+          for (int channel = 0; channel <= 1; channel++)
+          {
+            for (int index = 0; index < vuBorders.Length; index++)
+            {
+              if (dbLevel[channel] >= vuBorders[index])
+              {
+                if (index < vuSegments[0])
+                {
+                  brushNow = brushRed;
+                }
+                else if (index < vuSegments[0] + vuSegments[1])
+                {
+                  brushNow = brushOrange;
+                }
+                else
+                {
+                  brushNow = brushGreen;
+                }
+                vuMeterGFX.FillRectangle(brushNow, (int)((double)channel * (double)vuMeterBitmap.Width / (double)2), (int)((double)index * (double)vuMeterBitmap.Height / (double)10), (int)((double)vuMeterBitmap.Width / (double)2), (int)((double)vuMeterBitmap.Height / (double)10));
+              }
+            }
+          }
+
+          MemoryStream vuMeterStream = new MemoryStream();
+          vuMeterBitmap.Save(vuMeterStream, ImageFormat.Bmp);
+          CalculateBitmap(vuMeterStream);
+          vuMeterStream.Close();
+          vuMeterStream.Dispose();
+
           System.Threading.Thread.Sleep(40);
         }
       }

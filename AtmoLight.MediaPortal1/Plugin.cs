@@ -316,7 +316,6 @@ namespace AtmoLight
         else if (type == g_Player.MediaType.Music)
         {
           playbackEffect = Settings.effectMusic;
-          playbackEffect = ContentEffect.VUMeter;
           Log.Debug("Music detected.");
         }
         else if (type == g_Player.MediaType.Radio)
@@ -490,7 +489,6 @@ namespace AtmoLight
             target.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
             target.Dispose();
           }
-
           AtmoLightObject.CalculateBitmap(stream);
 
           stream.Close();
@@ -737,6 +735,10 @@ namespace AtmoLight
         dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ColorchangerLR));
         dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_StaticColor));
         dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_GIFReader));
+        if (g_Player.Playing && (g_Player.currentMedia == g_Player.MediaType.Music || g_Player.currentMedia == g_Player.MediaType.Radio))
+        {
+          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_VUMeter));
+        }
         dlgEffect.SelectedLabel = 0;
         dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
 
@@ -766,6 +768,9 @@ namespace AtmoLight
             break;
           case 6:
             temp = ContentEffect.GIFReader;
+            break;
+          case 7:
+            temp = ContentEffect.VUMeter;
             break;
         }
         if (g_Player.Playing)
