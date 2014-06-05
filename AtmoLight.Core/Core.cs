@@ -78,7 +78,7 @@ namespace AtmoLight
     SolidBrush brushRed = new SolidBrush(Color.FromArgb(255, 0, 0));
     SolidBrush brushOrange = new SolidBrush(Color.FromArgb(255, 128, 0));
     SolidBrush brushGreen = new SolidBrush(Color.FromArgb(0, 255, 0));
-    int[] vuBorders = new int[] { -2, -7, -10, -15, -20, -25, -30, -35, -40, -45 };
+    int[] vuThresholds = new int[] { 0, -3, -6, -9, -12, -15, -18, -21, -24, -27 };
     int[] vuSegments = new int[] { 2, 3, 5 };
 
     private int captureWidth = 0; // AtmoWins capture width
@@ -1258,9 +1258,9 @@ namespace AtmoLight
 
           for (int channel = 0; channel <= 1; channel++)
           {
-            for (int index = 0; index < vuBorders.Length; index++)
+            for (int index = 0; index < vuThresholds.Length; index++)
             {
-              if (dbLevel[channel] >= vuBorders[index])
+              if (dbLevel[channel] >= vuThresholds[index])
               {
                 if (index < vuSegments[0])
                 {
@@ -1285,7 +1285,7 @@ namespace AtmoLight
           vuMeterStream.Close();
           vuMeterStream.Dispose();
 
-          System.Threading.Thread.Sleep(40);
+          System.Threading.Thread.Sleep(20);
         }
       }
       catch (Exception ex)
