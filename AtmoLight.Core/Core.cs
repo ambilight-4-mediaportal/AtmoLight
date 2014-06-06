@@ -1197,7 +1197,7 @@ namespace AtmoLight
           {
             if (!gifReaderLock)
             {
-              return;
+              break;
             }
             // Select frame
             BitmapSource gifBitmapSource = gifDecoder.Frames[index];
@@ -1220,13 +1220,15 @@ namespace AtmoLight
             gifBitmap = new Bitmap(gifBitmap, new Size(GetCaptureWidth(), GetCaptureHeight()));
 
             // Convert Bitmap to stream
-            System.IO.MemoryStream gifStream = new System.IO.MemoryStream();
+            MemoryStream gifStream = new MemoryStream();
             gifBitmap.Save(gifStream, ImageFormat.Bmp);
 
             // Calculations to prepare data for AtmoWin and then send data
             CalculateBitmap(gifStream);
 
             // Cleanup
+            gifStream.Close();
+            gifStream.Dispose();
             gifBitmap.Dispose();
 
             // Sleep until next frame
@@ -1234,6 +1236,8 @@ namespace AtmoLight
             System.Threading.Thread.Sleep(40);
           }
         }
+        gifSource.Close();
+        gifSource.Dispose();
       }
       catch (Exception ex)
       {
@@ -1292,6 +1296,8 @@ namespace AtmoLight
 
           System.Threading.Thread.Sleep(20);
         }
+        vuMeterBitmap.Dispose();
+        vuMeterGFX.Dispose();
       }
       catch (Exception ex)
       {
