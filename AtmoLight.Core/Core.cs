@@ -1283,6 +1283,8 @@ namespace AtmoLight
           }
 
           MemoryStream vuMeterStream = new MemoryStream();
+          // Debug file output
+          //vuMeterBitmap.Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
           vuMeterBitmap.Save(vuMeterStream, ImageFormat.Bmp);
           CalculateBitmap(vuMeterStream);
           vuMeterStream.Close();
