@@ -1276,7 +1276,7 @@ namespace AtmoLight
             {
               if (dbLevel[channel] >= vuThresholds[index])
               {
-                vuMeterGFX.FillRectangle(vuMeterBrushes[index + 1], (int)((double)channel * (double)vuMeterBitmap.Width / (double)2), (int)((double)index * (double)vuMeterBitmap.Height / (double)10), (int)((double)vuMeterBitmap.Width / (double)2), (int)((double)vuMeterBitmap.Height / (double)10));
+                vuMeterGFX.FillRectangle(vuMeterBrushes[index + 1], (int)((double)channel * (double)vuMeterBitmap.Width / (double)4 * (double)3), (int)((double)index * (double)vuMeterBitmap.Height / (double)10), (int)((double)vuMeterBitmap.Width / (double)4), (int)((double)vuMeterBitmap.Height / (double)10));
               }
             }
           }
