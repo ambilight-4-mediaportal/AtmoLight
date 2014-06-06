@@ -74,7 +74,7 @@ namespace AtmoLight
     private volatile bool vuMeterLock = true;
 
     // VU Meter
-    int[] vuThresholds = new int[] { 0, -3, -6, -9, -12, -15, -18, -21, -24, -27 };
+    int[] vuThresholds = new int[] { -2, -5, -8, -10, -11, -12, -14, -18, -20, -22 };
 
     private int captureWidth = 0; // AtmoWins capture width
     private int captureHeight = 0; // AtmoWins capture height
@@ -1248,14 +1248,14 @@ namespace AtmoLight
         List<SolidBrush> vuMeterBrushes = new List<SolidBrush>();
         vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 0)));
         vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
-        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 102, 0)));
-        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 230, 0)));
-        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(179, 255, 0)));
-        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(51, 255, 0)));
-        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 51)));
-        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 179)));
+        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 77, 0)));
+        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 128, 0)));
+        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 204, 0)));
+        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(230, 255, 0)));
+        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(102, 255, 0)));
+        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 153)));
         vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 230, 255)));
-        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 102, 255)));
+        vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 128, 255)));
         vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 255)));
 
         Rectangle rectFull = new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight());
@@ -1289,7 +1289,7 @@ namespace AtmoLight
           vuMeterStream.Close();
           vuMeterStream.Dispose();
 
-          System.Threading.Thread.Sleep(20);
+          System.Threading.Thread.Sleep(50);
         }
         vuMeterBitmap.Dispose();
         vuMeterGFX.Dispose();
