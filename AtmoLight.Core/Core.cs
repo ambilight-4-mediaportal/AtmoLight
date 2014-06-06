@@ -782,7 +782,7 @@ namespace AtmoLight
       }
       try
       {
-        if (IsDelayEnabled() && !force)
+        if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
         {
           AddDelayListItem(bmiInfoHeader, pixelData);
         }
