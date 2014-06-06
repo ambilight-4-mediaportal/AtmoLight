@@ -1190,7 +1190,7 @@ namespace AtmoLight
         {
           for (int index = 0; index < gifDecoder.Frames.Count; index++)
           {
-            if (!gifReaderLock)
+            if (gifReaderLock)
             {
               break;
             }
