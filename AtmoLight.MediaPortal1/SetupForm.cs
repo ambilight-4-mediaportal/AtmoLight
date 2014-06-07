@@ -143,6 +143,7 @@ namespace AtmoLight
       ckRestartOnError.Text = LanguageLoader.appStrings.SetupForm_ckRestartOnError;
       lblRefreshRate.Text = LanguageLoader.appStrings.SetupForm_lblRefreshRate;
       ckBlackbarDetection.Text = LanguageLoader.appStrings.SetupForm_ckBlackbarDetection;
+      grpGIF.Text = LanguageLoader.appStrings.SetupForm_grpGIF;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)

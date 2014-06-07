@@ -306,6 +306,7 @@ namespace Language
     public String ContextMenu_GIFReader = "GIF Reader";
     public String ContextMenu_VUMeter = "VU Meter";
     public String ContextMenu_VUMeterRainbow = "VU Meter Rainbow";
+    public String SetupForm_grpGIF = "GIF Reader";
   }
 }
 
