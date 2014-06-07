@@ -339,7 +339,7 @@
             "Static Color",
             "GIF Reader",
             "VU Meter",
-            "VU Meter Radio"});
+            "VU Meter Rainbow"});
       this.cbRadio.Location = new System.Drawing.Point(145, 77);
       this.cbRadio.Name = "cbRadio";
       this.cbRadio.Size = new System.Drawing.Size(140, 21);
