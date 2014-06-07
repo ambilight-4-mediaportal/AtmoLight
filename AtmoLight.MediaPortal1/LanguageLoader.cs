@@ -305,6 +305,7 @@ namespace Language
     public String ContextMenu_SwitchBlackbarDetectionON = "Switch Blackbar Detection on";
     public String ContextMenu_GIFReader = "GIF Reader";
     public String ContextMenu_VUMeter = "VU Meter";
+    public String ContextMenu_VUMeterRainbow = "VU Meter Rainbow";
   }
 }
 

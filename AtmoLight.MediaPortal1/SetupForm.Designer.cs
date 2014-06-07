@@ -39,6 +39,9 @@
       this.rbDisableLEDs = new System.Windows.Forms.RadioButton();
       this.rbSwitchToLiveView = new System.Windows.Forms.RadioButton();
       this.grpMode = new System.Windows.Forms.GroupBox();
+      this.grpGIF = new System.Windows.Forms.GroupBox();
+      this.btnSelectGIF = new System.Windows.Forms.Button();
+      this.tbGIF = new System.Windows.Forms.TextBox();
       this.grpStaticColor = new System.Windows.Forms.GroupBox();
       this.lblRed = new System.Windows.Forms.Label();
       this.tbGreen = new System.Windows.Forms.TextBox();
@@ -86,16 +89,13 @@
       this.btnLanguage = new System.Windows.Forms.Button();
       this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
       this.lblHint = new System.Windows.Forms.Label();
-      this.grpGIF = new System.Windows.Forms.GroupBox();
-      this.tbGIF = new System.Windows.Forms.TextBox();
-      this.btnSelectGIF = new System.Windows.Forms.Button();
       this.openFileDialog3 = new System.Windows.Forms.OpenFileDialog();
       this.grpMPClose.SuspendLayout();
       this.grpMode.SuspendLayout();
+      this.grpGIF.SuspendLayout();
       this.grpStaticColor.SuspendLayout();
       this.grpDeactivate.SuspendLayout();
       this.grpPluginOption.SuspendLayout();
-      this.grpGIF.SuspendLayout();
       this.SuspendLayout();
       // 
       // lblPathInfo
@@ -206,6 +206,34 @@
       this.grpMode.TabStop = false;
       this.grpMode.Text = "Atmolight Mode per content type";
       // 
+      // grpGIF
+      // 
+      this.grpGIF.Controls.Add(this.btnSelectGIF);
+      this.grpGIF.Controls.Add(this.tbGIF);
+      this.grpGIF.Location = new System.Drawing.Point(7, 186);
+      this.grpGIF.Name = "grpGIF";
+      this.grpGIF.Size = new System.Drawing.Size(276, 48);
+      this.grpGIF.TabIndex = 26;
+      this.grpGIF.TabStop = false;
+      this.grpGIF.Text = "GIF Reader";
+      // 
+      // btnSelectGIF
+      // 
+      this.btnSelectGIF.Location = new System.Drawing.Point(234, 17);
+      this.btnSelectGIF.Name = "btnSelectGIF";
+      this.btnSelectGIF.Size = new System.Drawing.Size(36, 23);
+      this.btnSelectGIF.TabIndex = 1;
+      this.btnSelectGIF.Text = "...";
+      this.btnSelectGIF.UseVisualStyleBackColor = true;
+      this.btnSelectGIF.Click += new System.EventHandler(this.btnSelectGIF_Click);
+      // 
+      // tbGIF
+      // 
+      this.tbGIF.Location = new System.Drawing.Point(6, 19);
+      this.tbGIF.Name = "tbGIF";
+      this.tbGIF.Size = new System.Drawing.Size(221, 20);
+      this.tbGIF.TabIndex = 0;
+      // 
       // grpStaticColor
       // 
       this.grpStaticColor.Controls.Add(this.lblRed);
@@ -310,7 +338,8 @@
             "MediaPortal Live Mode",
             "Static Color",
             "GIF Reader",
-            "VU Meter"});
+            "VU Meter",
+            "VU Meter Radio"});
       this.cbRadio.Location = new System.Drawing.Point(145, 77);
       this.cbRadio.Name = "cbRadio";
       this.cbRadio.Size = new System.Drawing.Size(140, 21);
@@ -337,7 +366,8 @@
             "MediaPortal Live Mode",
             "Static Color",
             "GIF Reader",
-            "VU Meter"});
+            "VU Meter",
+            "VU Meter Rainbow"});
       this.cbMusic.Location = new System.Drawing.Point(145, 50);
       this.cbMusic.Name = "cbMusic";
       this.cbMusic.Size = new System.Drawing.Size(140, 21);
@@ -714,34 +744,6 @@
       this.lblHint.Text = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3" +
     "D-SBS mode.";
       // 
-      // grpGIF
-      // 
-      this.grpGIF.Controls.Add(this.btnSelectGIF);
-      this.grpGIF.Controls.Add(this.tbGIF);
-      this.grpGIF.Location = new System.Drawing.Point(7, 186);
-      this.grpGIF.Name = "grpGIF";
-      this.grpGIF.Size = new System.Drawing.Size(276, 48);
-      this.grpGIF.TabIndex = 26;
-      this.grpGIF.TabStop = false;
-      this.grpGIF.Text = "GIF Reader";
-      // 
-      // tbGIF
-      // 
-      this.tbGIF.Location = new System.Drawing.Point(6, 19);
-      this.tbGIF.Name = "tbGIF";
-      this.tbGIF.Size = new System.Drawing.Size(221, 20);
-      this.tbGIF.TabIndex = 0;
-      // 
-      // btnSelectGIF
-      // 
-      this.btnSelectGIF.Location = new System.Drawing.Point(234, 17);
-      this.btnSelectGIF.Name = "btnSelectGIF";
-      this.btnSelectGIF.Size = new System.Drawing.Size(36, 23);
-      this.btnSelectGIF.TabIndex = 1;
-      this.btnSelectGIF.Text = "...";
-      this.btnSelectGIF.UseVisualStyleBackColor = true;
-      this.btnSelectGIF.Click += new System.EventHandler(this.btnSelectGIF_Click);
-      // 
       // openFileDialog3
       // 
       this.openFileDialog3.Filter = "files|*.gif";
@@ -773,14 +775,14 @@
       this.grpMPClose.PerformLayout();
       this.grpMode.ResumeLayout(false);
       this.grpMode.PerformLayout();
+      this.grpGIF.ResumeLayout(false);
+      this.grpGIF.PerformLayout();
       this.grpStaticColor.ResumeLayout(false);
       this.grpStaticColor.PerformLayout();
       this.grpDeactivate.ResumeLayout(false);
       this.grpDeactivate.PerformLayout();
       this.grpPluginOption.ResumeLayout(false);
       this.grpPluginOption.PerformLayout();
-      this.grpGIF.ResumeLayout(false);
-      this.grpGIF.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 

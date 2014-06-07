@@ -738,6 +738,7 @@ namespace AtmoLight
         if (g_Player.Playing && (g_Player.currentMedia == g_Player.MediaType.Music || g_Player.currentMedia == g_Player.MediaType.Radio))
         {
           dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_VUMeter));
+          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_VUMeterRainbow));
         }
         dlgEffect.SelectedLabel = 0;
         dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
@@ -771,6 +772,9 @@ namespace AtmoLight
             break;
           case 7:
             temp = ContentEffect.VUMeter;
+            break;
+          case 8:
+            temp = ContentEffect.VUMeterRainbow;
             break;
         }
         if (g_Player.Playing)
