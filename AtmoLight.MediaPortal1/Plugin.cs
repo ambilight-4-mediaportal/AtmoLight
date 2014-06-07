@@ -274,7 +274,7 @@ namespace AtmoLight
     #region VU Meter Event Handler
     private double[] OnNewVUMeter()
     {
-      double[] dbLevel = new double[] { 0.0, 0.0 };
+      double[] dbLevel = new double[] { -100.0, -100.0 };
       if (BassMusicPlayer.Initialized)
       {
         if (BassMusicPlayer.Player.Playing)
