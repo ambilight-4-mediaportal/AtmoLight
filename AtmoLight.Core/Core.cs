@@ -1270,8 +1270,8 @@ namespace AtmoLight
           vuMeterBrushes.Clear();
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 0)));
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 128, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 255, 0)));
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 255, 0)));
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
