@@ -831,36 +831,24 @@ namespace AtmoLight
       {
         case ContentEffect.AtmoWinLiveMode:
           currentState = true;
-          StopSetPixelDataThread();
-          StopGetAtmoLiveViewSourceThread();
-          StopGIFReaderThread();
-          StopVUMeterThread();
+          StopAllThreads();
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI)) return false;
           break;
         case ContentEffect.Colorchanger:
           currentState = true;
-          StopSetPixelDataThread();
-          StopGetAtmoLiveViewSourceThread();
-          StopGIFReaderThread();
-          StopVUMeterThread();
+          StopAllThreads();
           if (!SetAtmoEffect(ComEffectMode.cemColorChange)) return false;
           break;
         case ContentEffect.ColorchangerLR:
           currentState = true;
-          StopSetPixelDataThread();
-          StopGetAtmoLiveViewSourceThread();
-          StopGIFReaderThread();
-          StopVUMeterThread();
+          StopAllThreads();
           if (!SetAtmoEffect(ComEffectMode.cemLrColorChange)) return false;
           break;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
           currentState = false;
-          StopSetPixelDataThread();
-          StopGetAtmoLiveViewSourceThread();
-          StopGIFReaderThread();
-          StopVUMeterThread();
+          StopAllThreads();
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           // Workaround for SEDU.
           // Without the sleep it would not change to color.
@@ -869,8 +857,7 @@ namespace AtmoLight
           break;
         case ContentEffect.MediaPortalLiveMode:
           currentState = true;
-          StopGIFReaderThread();
-          StopVUMeterThread();
+          StopAllThreads();
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
 
@@ -884,10 +871,7 @@ namespace AtmoLight
           break;
         case ContentEffect.StaticColor:
           currentState = true;
-          StopSetPixelDataThread();
-          StopGetAtmoLiveViewSourceThread();
-          StopGIFReaderThread();
-          StopVUMeterThread();
+          StopAllThreads();
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
           // Workaround for SEDU.
@@ -897,8 +881,7 @@ namespace AtmoLight
           break;
         case ContentEffect.GIFReader:
           currentState = true;
-          StopSetPixelDataThread();
-          StopVUMeterThread();
+          StopAllThreads();
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
           StartGetAtmoLiveViewSourceThread();
@@ -907,9 +890,8 @@ namespace AtmoLight
         case ContentEffect.VUMeter:
         case ContentEffect.VUMeterRainbow:
           currentState = true;
+          StopAllThreads();
           vuMeterRainbowColorScheme = (effect == ContentEffect.VUMeterRainbow) ? true : false;
-          StopSetPixelDataThread();
-          StopGIFReaderThread();
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
           StartGetAtmoLiveViewSourceThread();
@@ -1106,6 +1088,14 @@ namespace AtmoLight
     private void StopVUMeterThread()
     {
       vuMeterLock = true;
+    }
+
+    private void StopAllThreads()
+    {
+      StopSetPixelDataThread();
+      StopGetAtmoLiveViewSourceThread();
+      StopGIFReaderThread();
+      StopVUMeterThread();
     }
 
     /// <summary>
