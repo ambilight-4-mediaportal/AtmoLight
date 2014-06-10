@@ -67,21 +67,9 @@ namespace AtmoLight
     #region Plugin Ctor/Start/Stop
     /// <summary>
     /// AtmoLight constructor.
-    /// Loads the plugin, loads the settings and initializes AtmoWin and the connection.
     /// </summary>
     public Plugin()
     {
-      if (MPSettings.Instance.GetValueAsBool("plugins", "AtmoLight", true))
-      {
-        // Log Handler
-        Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
-
-        var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-        DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
-        Log.Info("Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
-        Log.Debug("Loading settings.");
-        Settings.LoadSettings();
-      }
     }
 
     /// <summary>
@@ -90,6 +78,15 @@ namespace AtmoLight
     /// </summary>
     public void Start()
     {
+      // Log Handler
+      Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
+
+      var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+      DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
+      Log.Info("Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
+      Log.Debug("Loading settings.");
+      Settings.LoadSettings();
+
       Log.Debug("Initialising event handler.");
 
       // g_Player Handler
@@ -1059,6 +1056,15 @@ namespace AtmoLight
     /// </summary>
     public void ShowPlugin()
     {
+      // Log Handler
+      Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
+
+      var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+      DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
+      Log.Info("Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
+      Log.Debug("Loading settings.");
+      Settings.LoadSettings();
+
       new SetupForm().ShowDialog();
     }
 
