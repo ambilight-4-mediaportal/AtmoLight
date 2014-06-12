@@ -1170,15 +1170,9 @@ namespace AtmoLight
         
         // Decode gif
         GifBitmapDecoder gifDecoder = new GifBitmapDecoder(gifSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-
-        BitmapMetadata gifMetaData = gifDecoder.Frames[0].Metadata as BitmapMetadata;
-        var gifDelay = gifMetaData.GetQuery("/grctlext/Delay");
-        int gifRate = Convert.ToInt32(gifDelay) * 10;
-        Log.Error("{0}", gifRate);
-        if (gifRate == 0)
-        {
-          gifRate = 20;
-        }
+        BitmapMetadata gifDecoderMetadata = (BitmapMetadata)gifDecoder.Metadata;
+        int gifWidth = Convert.ToInt32(gifDecoderMetadata.GetQuery("/logscrdesc/Width"));
+        int gifHeight = Convert.ToInt32(gifDecoderMetadata.GetQuery("/logscrdesc/Height"));
 
         while (!gifReaderLock)
         {
@@ -1190,6 +1184,17 @@ namespace AtmoLight
             }
             // Select frame
             BitmapSource gifBitmapSource = gifDecoder.Frames[index];
+            gifBitmapSource.Freeze();
+            BitmapMetadata gifBitmapMetadata = (BitmapMetadata)gifBitmapSource.Metadata;
+            int gifDelay = Convert.ToInt32(gifBitmapMetadata.GetQuery("/grctlext/Delay")) * 10;
+            int gifOffsetLeft = Convert.ToInt32(gifBitmapMetadata.GetQuery("/imgdesc/Left"));
+            int gifOffsetTop = Convert.ToInt32(gifBitmapMetadata.GetQuery("/imgdesc/Top"));
+
+            if (gifDelay == 0)
+            {
+              gifDelay = 20;
+            }
+
             Bitmap gifBitmap;
             // Convert frame to Bitmap
             using (MemoryStream outStream = new MemoryStream())
@@ -1200,6 +1205,24 @@ namespace AtmoLight
               gifBitmap = new Bitmap(outStream);
             }
 
+            // Correct position of this frame, as gifs dont have to have fixed dimensions and positions
+            if (gifBitmap.Width != gifWidth || gifBitmap.Height != gifHeight || gifOffsetLeft > 0 || gifOffsetTop > 0)
+            {
+              using (Bitmap gifBitmapOffset = new Bitmap(gifWidth, gifHeight))
+              {
+                using (Graphics gifBitmapOffsetGFX = Graphics.FromImage(gifBitmapOffset))
+                {
+                  // Fill Bitmap with black
+                  gifBitmapOffsetGFX.FillRectangle(new SolidBrush(Color.FromArgb(0, 0, 0)), 0, 0, gifWidth, gifHeight);
+                  // Draw in original picture
+                  gifBitmapOffsetGFX.DrawImage(gifBitmap, gifOffsetLeft, gifOffsetTop);
+                  // Copy Bitmap
+                  gifBitmap = gifBitmapOffset.Clone(new Rectangle(0, 0, gifWidth, gifHeight), PixelFormat.Undefined);
+                }
+              }
+            }
+            
+            // Resize Bitmap
             gifBitmap = new Bitmap(gifBitmap, new Size(GetCaptureWidth(), GetCaptureHeight()));
 
             // Convert Bitmap to stream
@@ -1215,7 +1238,7 @@ namespace AtmoLight
             gifBitmap.Dispose();
 
             // Sleep until next frame
-            System.Threading.Thread.Sleep(gifRate);
+            System.Threading.Thread.Sleep(gifDelay);
           }
         }
         gifSource.Close();
