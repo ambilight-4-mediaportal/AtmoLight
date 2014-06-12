@@ -1171,10 +1171,14 @@ namespace AtmoLight
         // Decode gif
         GifBitmapDecoder gifDecoder = new GifBitmapDecoder(gifSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
 
-        // Maybe fps information
-        // Needs further investigation
-        //BitmapMetadata bmd = gifDecoder.Frames[0].Metadata as BitmapMetadata;
-        //Log.Error("fps {0}", bmd.GetQuery("/grctlext/Delay"));   
+        BitmapMetadata gifMetaData = gifDecoder.Frames[0].Metadata as BitmapMetadata;
+        var gifDelay = gifMetaData.GetQuery("/grctlext/Delay");
+        int gifRate = Convert.ToInt32(gifDelay) * 10;
+        Log.Error("{0}", gifRate);
+        if (gifRate == 0)
+        {
+          gifRate = 20;
+        }
 
         while (!gifReaderLock)
         {
@@ -1186,22 +1190,16 @@ namespace AtmoLight
             }
             // Select frame
             BitmapSource gifBitmapSource = gifDecoder.Frames[index];
-            System.Drawing.Bitmap gifBitmap;
+            Bitmap gifBitmap;
             // Convert frame to Bitmap
             using (MemoryStream outStream = new MemoryStream())
             {
-              BitmapEncoder enc = new BmpBitmapEncoder();
-              enc.Frames.Add(BitmapFrame.Create(gifBitmapSource));
-              enc.Save(outStream);
-              gifBitmap = new System.Drawing.Bitmap(outStream);
+              BitmapEncoder gifEncoder = new BmpBitmapEncoder();
+              gifEncoder.Frames.Add(BitmapFrame.Create(gifBitmapSource));
+              gifEncoder.Save(outStream);
+              gifBitmap = new Bitmap(outStream);
             }
 
-            // Resize
-            /*if (gifBitmap.Width != AtmoLightObject.GetCaptureWidth() || gifBitmap.Height != AtmoLightObject.GetCaptureHeight())
-            {
-              gifBitmap = new Bitmap(gifBitmap, new Size(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight()));
-            }*/
-            // For some reason i have to always resize this image, otherwise an exception is thrown.
             gifBitmap = new Bitmap(gifBitmap, new Size(GetCaptureWidth(), GetCaptureHeight()));
 
             // Convert Bitmap to stream
@@ -1217,8 +1215,7 @@ namespace AtmoLight
             gifBitmap.Dispose();
 
             // Sleep until next frame
-            // Currently locked at 25fps
-            System.Threading.Thread.Sleep(40);
+            System.Threading.Thread.Sleep(gifRate);
           }
         }
         gifSource.Close();
