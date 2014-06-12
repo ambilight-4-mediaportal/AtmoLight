@@ -251,8 +251,7 @@ namespace AtmoLight
     {
       Log.Debug("Disconnecting from AtmoWin.");
 
-      StopSetPixelDataThread();
-      StopGetAtmoLiveViewSourceThread();
+      StopAllThreads();
 
       if (atmoRemoteControl != null)
       {
