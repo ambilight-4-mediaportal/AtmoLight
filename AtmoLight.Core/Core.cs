@@ -566,6 +566,8 @@ namespace AtmoLight
 
     public void CalculateBitmap(Stream stream)
     {
+      // Debug file output
+      // new Bitmap(stream).Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
       BinaryReader reader = new BinaryReader(stream);
       stream.Position = 0; // ensure that what start at the beginning of the stream. 
       reader.ReadBytes(14); // skip bitmap file info header
@@ -1288,8 +1290,6 @@ namespace AtmoLight
           }
 
           MemoryStream vuMeterStream = new MemoryStream();
-          // Debug file output
-          //vuMeterBitmap.Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
           vuMeterBitmap.Save(vuMeterStream, ImageFormat.Bmp);
           CalculateBitmap(vuMeterStream);
           vuMeterStream.Close();
