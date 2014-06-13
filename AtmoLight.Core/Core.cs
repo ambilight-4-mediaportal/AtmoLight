@@ -1211,7 +1211,7 @@ namespace AtmoLight
                 using (Graphics gifBitmapOffsetGFX = Graphics.FromImage(gifBitmapOffset))
                 {
                   // Fill Bitmap with background color
-                  gifBitmapOffsetGFX.FillRectangle(new SolidBrush(gifBitmap.Palette.Entries[gifBackgroundColor]), 0, 0, gifWidth, gifHeight);
+                  gifBitmapOffsetGFX.FillRectangle(new SolidBrush(Color.FromArgb(gifDecoder.Palette.Colors[gifBackgroundColor].A, gifDecoder.Palette.Colors[gifBackgroundColor].R, gifDecoder.Palette.Colors[gifBackgroundColor].G, gifDecoder.Palette.Colors[gifBackgroundColor].B)), 0, 0, gifWidth, gifHeight);
                   // Draw in original picture
                   gifBitmapOffsetGFX.DrawImage(gifBitmap, gifOffsetLeft, gifOffsetTop);
                   // Copy Bitmap
