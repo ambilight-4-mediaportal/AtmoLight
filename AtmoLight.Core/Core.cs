@@ -1172,7 +1172,7 @@ namespace AtmoLight
         BitmapMetadata gifDecoderMetadata = (BitmapMetadata)gifDecoder.Metadata;
         int gifWidth = Convert.ToInt32(gifDecoderMetadata.GetQuery("/logscrdesc/Width"));
         int gifHeight = Convert.ToInt32(gifDecoderMetadata.GetQuery("/logscrdesc/Height"));
-
+        int gifBackgroundColor = Convert.ToInt32(gifDecoderMetadata.GetQuery("/logscrdesc/BackgroundColorIndex"));
         while (!gifReaderLock)
         {
           for (int index = 0; index < gifDecoder.Frames.Count; index++)
@@ -1203,7 +1203,6 @@ namespace AtmoLight
               gifEncoder.Save(outStream);
               gifBitmap = new Bitmap(outStream);
             }
-
             // Correct position of this frame, as gifs dont have to have fixed dimensions and positions
             if (gifBitmap.Width != gifWidth || gifBitmap.Height != gifHeight || gifOffsetLeft > 0 || gifOffsetTop > 0)
             {
@@ -1211,8 +1210,8 @@ namespace AtmoLight
               {
                 using (Graphics gifBitmapOffsetGFX = Graphics.FromImage(gifBitmapOffset))
                 {
-                  // Fill Bitmap with black
-                  gifBitmapOffsetGFX.FillRectangle(new SolidBrush(Color.FromArgb(0, 0, 0)), 0, 0, gifWidth, gifHeight);
+                  // Fill Bitmap with background color
+                  gifBitmapOffsetGFX.FillRectangle(new SolidBrush(gifBitmap.Palette.Entries[gifBackgroundColor]), 0, 0, gifWidth, gifHeight);
                   // Draw in original picture
                   gifBitmapOffsetGFX.DrawImage(gifBitmap, gifOffsetLeft, gifOffsetTop);
                   // Copy Bitmap
