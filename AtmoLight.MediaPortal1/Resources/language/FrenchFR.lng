@@ -43,6 +43,7 @@ ErrorGreen=Veuillez saisir une chiffre compris entre 0 et 255 pour le Vert.
 ErrorBlue=Veuillez saisir une chiffre compris entre 0 et 255 pour le Bleu.
 ErrorRemoteButtons=Vous ne pouvez pas utiliser le même bouton pour plusieurs actions.
 ckBlackbarDetection=Blackbar Detection toute les
+grpGIF=GIF Effet
 [ContextMenu]
 SwitchLEDsON=LEDs > ON
 SwitchLEDsOFF=LEDs > OFF
@@ -84,3 +85,6 @@ ConnectLine1=Voulez-vous essayer de démarrer
 ConnectLine2=AtmoWin et de se reconnecter à lui ?
 SwitchBlackbarDetectionON=Blackbar Detection > ON
 SwitchBlackbarDetectionOFF=Blackbar Detection > OFF
+GIFReader=GIF Effet
+VUMeter=VU Meter
+VUMeterRainbow=VU Meter ArcEnCiel
