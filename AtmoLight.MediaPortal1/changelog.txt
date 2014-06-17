@@ -1,3 +1,9 @@
+Version 1.13.0.0
+- Fixed bug where settings would not get loaded in MP Configuration
+- Added GIF Reader effect (adds support for custom effects made by users)
+- Added VU Meter effect (in traditional and rainbow colors)
+
+
 Version 1.12.1.0
 - Fixed bug where it was not possible to save configuration
 

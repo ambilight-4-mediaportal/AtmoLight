@@ -424,8 +424,8 @@ public static void Main(PackageClass packageClass, UnInstallItem item)
     <UpdateUrl>https://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/Atmolight_update.xml</UpdateUrl>
     <Version>
       <Major>1</Major>
-      <Minor>12</Minor>
-      <Build>1</Build>
+      <Minor>13</Minor>
+      <Build>0</Build>
       <Revision>0</Revision>
     </Version>
     <ExtensionDescription>AtmoLight is a process plugin that interfaces with AtmoWin and brings Ambilight to MediaPortal.
@@ -449,10 +449,12 @@ For this plugin to work you will also need AtmoWin. It will be installed automat
 
 
 MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed. </ExtensionDescription>
-    <VersionDescription>Version 1.12.1.0
-- Fixed bug where it was not possible to save configuration</VersionDescription>
+    <VersionDescription>Version 1.13.0.0
+- Fixed bug where settings would not get loaded in MP Configuration
+- Added GIF Reader effect (adds support for custom effects made by users)
+- Added VU Meter effect (in traditional and rainbow colors)</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
-    <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.12.1.0.mpe1</OnlineLocation>
+    <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.13.0.0.mpe1</OnlineLocation>
     <ReleaseDate>2014-06-05T10:45:58</ReleaseDate>
     <Tags>sedu-board, atmowin, ws2801, ambilight, teensy 2, atmoduino, ambilight, led</Tags>
     <Location>..\MPEI Release\[Name]_[Version].mpe1</Location>
