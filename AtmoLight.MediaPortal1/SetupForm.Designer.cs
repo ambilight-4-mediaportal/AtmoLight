@@ -39,6 +39,9 @@
       this.rbDisableLEDs = new System.Windows.Forms.RadioButton();
       this.rbSwitchToLiveView = new System.Windows.Forms.RadioButton();
       this.grpMode = new System.Windows.Forms.GroupBox();
+      this.grpGIF = new System.Windows.Forms.GroupBox();
+      this.btnSelectGIF = new System.Windows.Forms.Button();
+      this.tbGIF = new System.Windows.Forms.TextBox();
       this.grpStaticColor = new System.Windows.Forms.GroupBox();
       this.lblRed = new System.Windows.Forms.Label();
       this.tbGreen = new System.Windows.Forms.TextBox();
@@ -60,6 +63,9 @@
       this.edExcludeStart = new System.Windows.Forms.TextBox();
       this.lblStart = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
+      this.lblBlackarDetectionMS = new System.Windows.Forms.Label();
+      this.tbBlackbarDetectionTime = new System.Windows.Forms.TextBox();
+      this.ckBlackbarDetection = new System.Windows.Forms.CheckBox();
       this.lblRefreshRate = new System.Windows.Forms.Label();
       this.tbRefreshRate = new System.Windows.Forms.TextBox();
       this.ckRestartOnError = new System.Windows.Forms.CheckBox();
@@ -83,11 +89,10 @@
       this.btnLanguage = new System.Windows.Forms.Button();
       this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
       this.lblHint = new System.Windows.Forms.Label();
-      this.ckBlackbarDetection = new System.Windows.Forms.CheckBox();
-      this.tbBlackbarDetectionTime = new System.Windows.Forms.TextBox();
-      this.lblBlackarDetectionMS = new System.Windows.Forms.Label();
+      this.openFileDialog3 = new System.Windows.Forms.OpenFileDialog();
       this.grpMPClose.SuspendLayout();
       this.grpMode.SuspendLayout();
+      this.grpGIF.SuspendLayout();
       this.grpStaticColor.SuspendLayout();
       this.grpDeactivate.SuspendLayout();
       this.grpPluginOption.SuspendLayout();
@@ -125,7 +130,7 @@
       // btnSave
       // 
       this.btnSave.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-      this.btnSave.Location = new System.Drawing.Point(9, 585);
+      this.btnSave.Location = new System.Drawing.Point(9, 640);
       this.btnSave.Name = "btnSave";
       this.btnSave.Size = new System.Drawing.Size(89, 23);
       this.btnSave.TabIndex = 4;
@@ -136,7 +141,7 @@
       // btnCancel
       // 
       this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-      this.btnCancel.Location = new System.Drawing.Point(104, 585);
+      this.btnCancel.Location = new System.Drawing.Point(104, 640);
       this.btnCancel.Name = "btnCancel";
       this.btnCancel.Size = new System.Drawing.Size(86, 23);
       this.btnCancel.TabIndex = 5;
@@ -153,7 +158,7 @@
       // 
       this.grpMPClose.Controls.Add(this.rbDisableLEDs);
       this.grpMPClose.Controls.Add(this.rbSwitchToLiveView);
-      this.grpMPClose.Location = new System.Drawing.Point(10, 508);
+      this.grpMPClose.Location = new System.Drawing.Point(9, 563);
       this.grpMPClose.Name = "grpMPClose";
       this.grpMPClose.Size = new System.Drawing.Size(435, 70);
       this.grpMPClose.TabIndex = 6;
@@ -184,6 +189,7 @@
       // 
       // grpMode
       // 
+      this.grpMode.Controls.Add(this.grpGIF);
       this.grpMode.Controls.Add(this.grpStaticColor);
       this.grpMode.Controls.Add(this.lblMenu);
       this.grpMode.Controls.Add(this.cbMenu);
@@ -195,10 +201,38 @@
       this.grpMode.Controls.Add(this.lblVidTvRec);
       this.grpMode.Location = new System.Drawing.Point(9, 56);
       this.grpMode.Name = "grpMode";
-      this.grpMode.Size = new System.Drawing.Size(291, 187);
+      this.grpMode.Size = new System.Drawing.Size(291, 242);
       this.grpMode.TabIndex = 7;
       this.grpMode.TabStop = false;
       this.grpMode.Text = "Atmolight Mode per content type";
+      // 
+      // grpGIF
+      // 
+      this.grpGIF.Controls.Add(this.btnSelectGIF);
+      this.grpGIF.Controls.Add(this.tbGIF);
+      this.grpGIF.Location = new System.Drawing.Point(7, 186);
+      this.grpGIF.Name = "grpGIF";
+      this.grpGIF.Size = new System.Drawing.Size(276, 48);
+      this.grpGIF.TabIndex = 26;
+      this.grpGIF.TabStop = false;
+      this.grpGIF.Text = "GIF Reader";
+      // 
+      // btnSelectGIF
+      // 
+      this.btnSelectGIF.Location = new System.Drawing.Point(234, 17);
+      this.btnSelectGIF.Name = "btnSelectGIF";
+      this.btnSelectGIF.Size = new System.Drawing.Size(36, 23);
+      this.btnSelectGIF.TabIndex = 1;
+      this.btnSelectGIF.Text = "...";
+      this.btnSelectGIF.UseVisualStyleBackColor = true;
+      this.btnSelectGIF.Click += new System.EventHandler(this.btnSelectGIF_Click);
+      // 
+      // tbGIF
+      // 
+      this.tbGIF.Location = new System.Drawing.Point(6, 19);
+      this.tbGIF.Name = "tbGIF";
+      this.tbGIF.Size = new System.Drawing.Size(221, 20);
+      this.tbGIF.TabIndex = 0;
       // 
       // grpStaticColor
       // 
@@ -285,7 +319,8 @@
             "Colorchanger",
             "Colorchanger LR",
             "MediaPortal Live Mode",
-            "Static Color"});
+            "Static Color",
+            "GIF Reader"});
       this.cbMenu.Location = new System.Drawing.Point(145, 104);
       this.cbMenu.Name = "cbMenu";
       this.cbMenu.Size = new System.Drawing.Size(140, 21);
@@ -301,7 +336,10 @@
             "Colorchanger",
             "Colorchanger LR",
             "MediaPortal Live Mode",
-            "Static Color"});
+            "Static Color",
+            "GIF Reader",
+            "VU Meter",
+            "VU Meter Rainbow"});
       this.cbRadio.Location = new System.Drawing.Point(145, 77);
       this.cbRadio.Name = "cbRadio";
       this.cbRadio.Size = new System.Drawing.Size(140, 21);
@@ -326,7 +364,10 @@
             "Colorchanger",
             "Colorchanger LR",
             "MediaPortal Live Mode",
-            "Static Color"});
+            "Static Color",
+            "GIF Reader",
+            "VU Meter",
+            "VU Meter Rainbow"});
       this.cbMusic.Location = new System.Drawing.Point(145, 50);
       this.cbMusic.Name = "cbMusic";
       this.cbMusic.Size = new System.Drawing.Size(140, 21);
@@ -351,7 +392,8 @@
             "Colorchanger",
             "Colorchanger LR",
             "MediaPortal Live Mode",
-            "Static Color"});
+            "Static Color",
+            "GIF Reader"});
       this.cbVideo.Location = new System.Drawing.Point(145, 23);
       this.cbVideo.Name = "cbVideo";
       this.cbVideo.Size = new System.Drawing.Size(140, 21);
@@ -434,12 +476,39 @@
       this.grpPluginOption.Controls.Add(this.ckOnMediaStart);
       this.grpPluginOption.Controls.Add(this.comboBox1);
       this.grpPluginOption.Controls.Add(this.lblLedsOnOff);
-      this.grpPluginOption.Location = new System.Drawing.Point(10, 249);
+      this.grpPluginOption.Location = new System.Drawing.Point(9, 304);
       this.grpPluginOption.Name = "grpPluginOption";
       this.grpPluginOption.Size = new System.Drawing.Size(435, 253);
       this.grpPluginOption.TabIndex = 11;
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
+      // 
+      // lblBlackarDetectionMS
+      // 
+      this.lblBlackarDetectionMS.AutoSize = true;
+      this.lblBlackarDetectionMS.Location = new System.Drawing.Point(218, 162);
+      this.lblBlackarDetectionMS.Name = "lblBlackarDetectionMS";
+      this.lblBlackarDetectionMS.Size = new System.Drawing.Size(20, 13);
+      this.lblBlackarDetectionMS.TabIndex = 30;
+      this.lblBlackarDetectionMS.Text = "ms";
+      // 
+      // tbBlackbarDetectionTime
+      // 
+      this.tbBlackbarDetectionTime.Location = new System.Drawing.Point(171, 159);
+      this.tbBlackbarDetectionTime.Name = "tbBlackbarDetectionTime";
+      this.tbBlackbarDetectionTime.Size = new System.Drawing.Size(41, 20);
+      this.tbBlackbarDetectionTime.TabIndex = 29;
+      this.tbBlackbarDetectionTime.Text = "0";
+      // 
+      // ckBlackbarDetection
+      // 
+      this.ckBlackbarDetection.AutoSize = true;
+      this.ckBlackbarDetection.Location = new System.Drawing.Point(13, 161);
+      this.ckBlackbarDetection.Name = "ckBlackbarDetection";
+      this.ckBlackbarDetection.Size = new System.Drawing.Size(146, 17);
+      this.ckBlackbarDetection.TabIndex = 28;
+      this.ckBlackbarDetection.Text = "Blackbar Detection every";
+      this.ckBlackbarDetection.UseVisualStyleBackColor = true;
       // 
       // lblRefreshRate
       // 
@@ -634,7 +703,7 @@
       // lblVersion
       // 
       this.lblVersion.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-      this.lblVersion.Location = new System.Drawing.Point(350, 585);
+      this.lblVersion.Location = new System.Drawing.Point(350, 640);
       this.lblVersion.Name = "lblVersion";
       this.lblVersion.Size = new System.Drawing.Size(95, 26);
       this.lblVersion.TabIndex = 13;
@@ -644,7 +713,7 @@
       // 
       this.lblVersionVal.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
       this.lblVersionVal.AutoSize = true;
-      this.lblVersionVal.Location = new System.Drawing.Point(392, 598);
+      this.lblVersionVal.Location = new System.Drawing.Point(392, 653);
       this.lblVersionVal.Name = "lblVersionVal";
       this.lblVersionVal.Size = new System.Drawing.Size(40, 13);
       this.lblVersionVal.TabIndex = 14;
@@ -653,7 +722,7 @@
       // btnLanguage
       // 
       this.btnLanguage.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-      this.btnLanguage.Location = new System.Drawing.Point(196, 585);
+      this.btnLanguage.Location = new System.Drawing.Point(196, 640);
       this.btnLanguage.Name = "btnLanguage";
       this.btnLanguage.Size = new System.Drawing.Size(104, 23);
       this.btnLanguage.TabIndex = 16;
@@ -675,38 +744,15 @@
       this.lblHint.Text = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3" +
     "D-SBS mode.";
       // 
-      // ckBlackbarDetection
+      // openFileDialog3
       // 
-      this.ckBlackbarDetection.AutoSize = true;
-      this.ckBlackbarDetection.Location = new System.Drawing.Point(13, 161);
-      this.ckBlackbarDetection.Name = "ckBlackbarDetection";
-      this.ckBlackbarDetection.Size = new System.Drawing.Size(146, 17);
-      this.ckBlackbarDetection.TabIndex = 28;
-      this.ckBlackbarDetection.Text = "Blackbar Detection every";
-      this.ckBlackbarDetection.UseVisualStyleBackColor = true;
-      // 
-      // tbBlackbarDetectionTime
-      // 
-      this.tbBlackbarDetectionTime.Location = new System.Drawing.Point(171, 159);
-      this.tbBlackbarDetectionTime.Name = "tbBlackbarDetectionTime";
-      this.tbBlackbarDetectionTime.Size = new System.Drawing.Size(41, 20);
-      this.tbBlackbarDetectionTime.TabIndex = 29;
-      this.tbBlackbarDetectionTime.Text = "0";
-      // 
-      // lblBlackarDetectionMS
-      // 
-      this.lblBlackarDetectionMS.AutoSize = true;
-      this.lblBlackarDetectionMS.Location = new System.Drawing.Point(218, 162);
-      this.lblBlackarDetectionMS.Name = "lblBlackarDetectionMS";
-      this.lblBlackarDetectionMS.Size = new System.Drawing.Size(20, 13);
-      this.lblBlackarDetectionMS.TabIndex = 30;
-      this.lblBlackarDetectionMS.Text = "ms";
+      this.openFileDialog3.Filter = "files|*.gif";
       // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(452, 617);
+      this.ClientSize = new System.Drawing.Size(452, 672);
       this.Controls.Add(this.lblHint);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
@@ -721,14 +767,16 @@
       this.Controls.Add(this.edFile);
       this.Controls.Add(this.lblPathInfo);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-      this.MaximumSize = new System.Drawing.Size(468, 655);
-      this.MinimumSize = new System.Drawing.Size(468, 655);
+      this.MaximumSize = new System.Drawing.Size(468, 710);
+      this.MinimumSize = new System.Drawing.Size(468, 710);
       this.Name = "SetupForm";
       this.Text = "AtmoLight Setup";
       this.grpMPClose.ResumeLayout(false);
       this.grpMPClose.PerformLayout();
       this.grpMode.ResumeLayout(false);
       this.grpMode.PerformLayout();
+      this.grpGIF.ResumeLayout(false);
+      this.grpGIF.PerformLayout();
       this.grpStaticColor.ResumeLayout(false);
       this.grpStaticColor.PerformLayout();
       this.grpDeactivate.ResumeLayout(false);
@@ -799,5 +847,9 @@
     private System.Windows.Forms.Label lblBlackarDetectionMS;
     private System.Windows.Forms.TextBox tbBlackbarDetectionTime;
     private System.Windows.Forms.CheckBox ckBlackbarDetection;
+    private System.Windows.Forms.GroupBox grpGIF;
+    private System.Windows.Forms.Button btnSelectGIF;
+    private System.Windows.Forms.TextBox tbGIF;
+    private System.Windows.Forms.OpenFileDialog openFileDialog3;
   }
 }

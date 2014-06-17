@@ -43,6 +43,7 @@ ErrorGreen=Please enter a number between 0 and 255 for Green.
 ErrorBlue=Please enter a number between 0 and 255 for Blue.
 ErrorRemoteButtons=You cant use the same remote key for more than one task.
 ckBlackbarDetection=Blackbar Detection every
+grpGIF=GIF Reader
 [ContextMenu]
 SwitchLEDsON=Switch LEDs on
 SwitchLEDsOFF=Switch LEDs off
@@ -84,3 +85,6 @@ ConnectLine1=Do you want to try to start
 ConnectLine2=AtmoWin and reconnect to it?
 SwitchBlackbarDetectionON=Switch Blackbar Detection on
 SwitchBlackbarDetectionOFF=Switch Blackbar Detection off
+GIFReader=GIF Reader
+VUMeter=VU Meter
+VUMeterRainbow=VU Meter Rainbow

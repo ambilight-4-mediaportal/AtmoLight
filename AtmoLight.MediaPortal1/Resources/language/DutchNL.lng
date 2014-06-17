@@ -43,6 +43,7 @@ ErrorGreen=Voer een getal in tussen 0 en 255 voor Groen.
 ErrorBlue=Voer een getal in tussen 0 en 255 voor Blauw.
 ErrorRemoteButtons=Je kan elke toets van de afstandbediening maar voor één taak gebruiken.
 ckBlackbarDetection='Zwarte balken' Detectie elke
+grpGIF=GIF Lezer
 [ContextMenu]
 SwitchLEDsON=Schakel LEDs aan
 SwitchLEDsOFF=Schakel LEDs uit
@@ -84,3 +85,6 @@ ConnectLine1=Wil je proberen om AtmoWin te starten
 ConnectLine2=en opnieuw verbinding te maken?
 SwitchBlackbarDetectionOFF=Schakel 'Zwarte balken' Detectie uit
 SwitchBlackbarDetectionON=Schakel 'Zwarte balken' Detectie aan
+GIFReader=GIF Lezer
+VUMeter=VU Meter
+VUMeterRainbow=VU Meter (Regenboog)

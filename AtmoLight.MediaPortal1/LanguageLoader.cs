@@ -303,6 +303,10 @@ namespace Language
     public String SetupForm_ckBlackbarDetection = "Blackbar Detection every";
     public String ContextMenu_SwitchBlackbarDetectionOFF = "Switch Blackbar Detection off";
     public String ContextMenu_SwitchBlackbarDetectionON = "Switch Blackbar Detection on";
+    public String ContextMenu_GIFReader = "GIF Reader";
+    public String ContextMenu_VUMeter = "VU Meter";
+    public String ContextMenu_VUMeterRainbow = "VU Meter Rainbow";
+    public String SetupForm_grpGIF = "GIF Reader";
   }
 }
 

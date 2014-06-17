@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Drawing.Imaging;
 using MediaPortal.GUI.Library;
 using MediaPortal.Profile;
 using MediaPortal.Player;
@@ -18,6 +19,7 @@ using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
 using Language;
 using ProcessPlugins.ViewModeSwitcher;
+
 
 namespace AtmoLight
 {
@@ -53,11 +55,11 @@ namespace AtmoLight
     private MethodInfo blackbarAnalyzerMethodInfo; // Helper for reflection
     private Rectangle blackbarDetectionRect = new Rectangle(); // Rectangle with the dimensions of the picture (without blackbars)
     private Int64 blackbarDetectionLastTime = 0; // Last time blackbar detection was run
-    
+
     // Static Color
     private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
     private int staticColorHelper; // Helper var for static color change
-    
+
     // Delay Feature
     private int delayTimeHelper; // Helper var for delay time change
 
@@ -103,6 +105,9 @@ namespace AtmoLight
       // Connection Lost Handler
       Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
 
+      // VU Meter Handler
+      Core.OnNewVUMeter += new Core.NewVUMeterHander(OnNewVUMeter);
+
       // Frameanalyzer
       // Reflection needed to access the FrameAnalyzer as it is an internal class
       blackbarAnalyzerAssembly = Assembly.LoadFrom("plugins\\process\\ProcessPlugins.dll");
@@ -117,24 +122,25 @@ namespace AtmoLight
 
       Log.Debug("Generating new AtmoLight.Core instance.");
       AtmoLightObject = new Core(Settings.atmowinExe, Settings.restartOnError, Settings.startAtmoWin, staticColorTemp, Settings.delay, Settings.delayReferenceTime);
+      AtmoLightObject.UpdateGIFPath(Settings.gifFile);
 
 
       if (!AtmoLightObject.Initialise())
       {
         Log.Error("Initialising failed.");
-        return; 
+        return;
       }
 
       menuEffect = Settings.effectMenu;
       if (CheckForStartRequirements())
-       {
-         AtmoLightObject.ChangeEffect(menuEffect);
-         CalculateDelay();
-       }
-       else
-       {
-         AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
-       }
+      {
+        AtmoLightObject.ChangeEffect(menuEffect);
+        CalculateDelay();
+      }
+      else
+      {
+        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+      }
     }
 
     /// <summary>
@@ -192,7 +198,7 @@ namespace AtmoLight
       }
       // If starttime is bigger than endtime, then now has to be smaller than both or bigger than both to deactive the leds 
       else if ((DateTime.Now.TimeOfDay >= Settings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= Settings.excludeTimeEnd.TimeOfDay) ||
-              ((Settings.excludeTimeStart.TimeOfDay > Settings.excludeTimeEnd.TimeOfDay) && 
+              ((Settings.excludeTimeStart.TimeOfDay > Settings.excludeTimeEnd.TimeOfDay) &&
               ((DateTime.Now.TimeOfDay <= Settings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= Settings.excludeTimeEnd.TimeOfDay) ||
               (DateTime.Now.TimeOfDay >= Settings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay >= Settings.excludeTimeEnd.TimeOfDay))))
       {
@@ -259,6 +265,21 @@ namespace AtmoLight
           MediaPortal.GUI.Library.Log.Error(String.Format(format, args));
           break;
       }
+    }
+    #endregion
+
+    #region VU Meter Event Handler
+    private double[] OnNewVUMeter()
+    {
+      double[] dbLevel = new double[] { -100.0, -100.0 };
+      if (BassMusicPlayer.Initialized)
+      {
+        if (BassMusicPlayer.Player.Playing)
+        {
+          BassMusicPlayer.Player.RMS(out dbLevel[0], out dbLevel[1]);
+        }
+      }
+      return dbLevel;
     }
     #endregion
 
@@ -465,31 +486,7 @@ namespace AtmoLight
             target.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
             target.Dispose();
           }
-
-          BinaryReader reader = new BinaryReader(stream);
-          stream.Position = 0; // ensure that what start at the beginning of the stream. 
-          reader.ReadBytes(14); // skip bitmap file info header
-          byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
-
-          int rgbL = (int)(stream.Length - stream.Position);
-          int rgb = (int)(rgbL / (AtmoLightObject.GetCaptureWidth() * AtmoLightObject.GetCaptureHeight()));
-
-          byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
-
-          byte[] h1pixelData = new byte[AtmoLightObject.GetCaptureWidth() * rgb];
-          byte[] h2pixelData = new byte[AtmoLightObject.GetCaptureWidth() * rgb];
-          //now flip horizontally, we do it always to prevent microstudder
-          int i;
-          for (i = 0; i < ((AtmoLightObject.GetCaptureHeight() / 2) - 1); i++)
-          {
-            Array.Copy(pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, h1pixelData, 0, AtmoLightObject.GetCaptureWidth() * rgb);
-            Array.Copy(pixelData, (AtmoLightObject.GetCaptureHeight() - i - 1) * AtmoLightObject.GetCaptureWidth() * rgb, h2pixelData, 0, AtmoLightObject.GetCaptureWidth() * rgb);
-            Array.Copy(h1pixelData, 0, pixelData, (AtmoLightObject.GetCaptureHeight() - i - 1) * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
-            Array.Copy(h2pixelData, 0, pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
-          }
-          //send scaled and fliped frame to atmowin
-
-          AtmoLightObject.SetPixelData(bmiInfoHeader, pixelData);
+          AtmoLightObject.CalculateBitmap(stream);
 
           stream.Close();
           stream.Dispose();
@@ -734,6 +731,12 @@ namespace AtmoLight
         dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Colorchanger));
         dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ColorchangerLR));
         dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_StaticColor));
+        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_GIFReader));
+        if (g_Player.Playing && (g_Player.currentMedia == g_Player.MediaType.Music || g_Player.currentMedia == g_Player.MediaType.Radio))
+        {
+          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_VUMeter));
+          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_VUMeterRainbow));
+        }
         dlgEffect.SelectedLabel = 0;
         dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
 
@@ -760,6 +763,15 @@ namespace AtmoLight
             break;
           case 5:
             temp = ContentEffect.StaticColor;
+            break;
+          case 6:
+            temp = ContentEffect.GIFReader;
+            break;
+          case 7:
+            temp = ContentEffect.VUMeter;
+            break;
+          case 8:
+            temp = ContentEffect.VUMeterRainbow;
             break;
         }
         if (g_Player.Playing)

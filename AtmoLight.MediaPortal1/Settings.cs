@@ -34,6 +34,7 @@ namespace AtmoLight
     public static bool restartOnError = true;
     public static bool blackbarDetection = false;
     public static int blackbarDetectionTime = 0;
+    public static string gifFile = "";
     #endregion
 
     public static DateTime LoadTimeSetting(MediaPortal.Profile.Settings reader, string name, string defaultTime)
@@ -76,6 +77,7 @@ namespace AtmoLight
         delayReferenceRefreshRate = reader.GetValueAsInt("atmolight", "DelayRefreshRate", 50);
         blackbarDetection = reader.GetValueAsBool("atmolight", "BlackbarDetection", false);
         blackbarDetectionTime = reader.GetValueAsInt("atmolight", "BlackbarDetectionTime", 0);
+        gifFile = reader.GetValueAsString("atmolight", "GIFFile", "");
       }
     }
     public static void SaveSettings()
@@ -110,6 +112,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "DelayRefreshRate", delayReferenceRefreshRate);
         reader.SetValueAsBool("atmolight", "BlackbarDetection", blackbarDetection);
         reader.SetValue("atmolight", "BlackbarDetectionTime", blackbarDetectionTime);
+        reader.SetValue("atmolight", "GIFFile", gifFile);
       }
     }
 

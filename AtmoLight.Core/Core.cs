@@ -8,6 +8,8 @@ using System.Runtime.InteropServices;
 using AtmoWinRemoteControl;
 using System.Drawing;
 using System.IO;
+using System.Windows.Media.Imaging;
+using System.Drawing.Imaging;
 
 namespace AtmoLight
 {
@@ -19,6 +21,9 @@ namespace AtmoLight
     ColorchangerLR,
     MediaPortalLiveMode,
     StaticColor,
+    GIFReader,
+    VUMeter,
+    VUMeterRainbow,
     Undefined = -1
   }
   public class Core
@@ -32,10 +37,13 @@ namespace AtmoLight
     private bool reinitialiseOnError = true;
     private bool startAtmoWin = true;
     private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
+    private string gifPath = "";
 
-    private Thread SetPixelDataThreadHelper;
-    private Thread GetAtmoLiveViewSourceThreadHelper;
-    private Thread ReinitialiseThreadHelper;
+    private Thread setPixelDataThreadHelper;
+    private Thread getAtmoLiveViewSourceThreadHelper;
+    private Thread reinitialiseThreadHelper;
+    private Thread gifReaderThreadHelper;
+    private Thread vuMeterThreadHelper;
 
     // Com  Objects
     private IAtmoRemoteControl2 atmoRemoteControl = null; // Com Object to control AtmoWin
@@ -63,12 +71,22 @@ namespace AtmoLight
     private volatile bool getAtmoLiveViewSourceLock = true; // Lock for liveview source checks
     private volatile bool setPixelDataLock = true; // Lock for SetPixelData thread
     private volatile bool reinitialiseLock = false;
+    private volatile bool gifReaderLock = true;
+    private volatile bool vuMeterLock = true;
+
+    // VU Meter
+    private int[] vuMeterThresholds = new int[] { -2, -5, -8, -10, -11, -12, -14, -18, -20, -22 };
+    private bool vuMeterRainbowColorScheme = false;
+    private List<SolidBrush> vuMeterBrushes = new List<SolidBrush>();
 
     private int captureWidth = 0; // AtmoWins capture width
     private int captureHeight = 0; // AtmoWins capture height
 
     public delegate void NewConnectionLostHandler();
     public static event NewConnectionLostHandler OnNewConnectionLost;
+
+    public delegate double[] NewVUMeterHander();
+    public static event NewVUMeterHander OnNewVUMeter;
 
     #endregion
 
@@ -233,8 +251,7 @@ namespace AtmoLight
     {
       Log.Debug("Disconnecting from AtmoWin.");
 
-      StopSetPixelDataThread();
-      StopGetAtmoLiveViewSourceThread();
+      StopAllThreads();
 
       if (atmoRemoteControl != null)
       {
@@ -347,9 +364,9 @@ namespace AtmoLight
     {
       if (!reinitialiseLock)
       {
-        ReinitialiseThreadHelper = new Thread(() => Reinitialise(force));
-        ReinitialiseThreadHelper.Name = "AtmoLight Reinitialise";
-        ReinitialiseThreadHelper.Start();
+        reinitialiseThreadHelper = new Thread(() => Reinitialise(force));
+        reinitialiseThreadHelper.Name = "AtmoLight Reinitialise";
+        reinitialiseThreadHelper.Start();
       }
       else
       {
@@ -545,6 +562,41 @@ namespace AtmoLight
         return false;
       }
     }
+
+    public void CalculateBitmap(Stream stream)
+    {
+      // Debug file output
+      // new Bitmap(stream).Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
+      BinaryReader reader = new BinaryReader(stream);
+      stream.Position = 0; // ensure that what start at the beginning of the stream. 
+      reader.ReadBytes(14); // skip bitmap file info header
+      byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
+
+      int rgbL = (int)(stream.Length - stream.Position);
+      int rgb = (int)(rgbL / (GetCaptureWidth() * GetCaptureHeight()));
+
+      byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
+
+      byte[] h1pixelData = new byte[GetCaptureWidth() * rgb];
+      byte[] h2pixelData = new byte[GetCaptureWidth() * rgb];
+      //now flip horizontally, we do it always to prevent microstudder
+      int i;
+      for (i = 0; i < ((GetCaptureHeight() / 2) - 1); i++)
+      {
+        Array.Copy(pixelData, i * GetCaptureWidth() * rgb, h1pixelData, 0, GetCaptureWidth() * rgb);
+        Array.Copy(pixelData, (GetCaptureHeight() - i - 1) * GetCaptureWidth() * rgb, h2pixelData, 0, GetCaptureWidth() * rgb);
+        Array.Copy(h1pixelData, 0, pixelData, (GetCaptureHeight() - i - 1) * GetCaptureWidth() * rgb, GetCaptureWidth() * rgb);
+        Array.Copy(h2pixelData, 0, pixelData, i * GetCaptureWidth() * rgb, GetCaptureWidth() * rgb);
+      }
+      //send scaled and fliped frame to atmowin
+
+      SetPixelData(bmiInfoHeader, pixelData);
+    }
+
+    public void UpdateGIFPath(string path)
+    {
+      gifPath = path;
+    }
     #endregion
 
     #region COM Interface
@@ -734,7 +786,7 @@ namespace AtmoLight
       }
       try
       {
-        if (IsDelayEnabled() && !force)
+        if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
         {
           AddDelayListItem(bmiInfoHeader, pixelData);
         }
@@ -776,32 +828,25 @@ namespace AtmoLight
       currentEffect = ContentEffect.Undefined;
       changeEffect = effect;
       Log.Info("Changing AtmoLight effect to: {0}", effect.ToString());
+      StopAllThreads();
       switch (effect)
       {
         case ContentEffect.AtmoWinLiveMode:
           currentState = true;
-          StopSetPixelDataThread();
-          StopGetAtmoLiveViewSourceThread();
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI)) return false;
           break;
         case ContentEffect.Colorchanger:
           currentState = true;
-          StopSetPixelDataThread();
-          StopGetAtmoLiveViewSourceThread();
           if (!SetAtmoEffect(ComEffectMode.cemColorChange)) return false;
           break;
         case ContentEffect.ColorchangerLR:
           currentState = true;
-          StopSetPixelDataThread();
-          StopGetAtmoLiveViewSourceThread();
           if (!SetAtmoEffect(ComEffectMode.cemLrColorChange)) return false;
           break;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
           currentState = false;
-          StopSetPixelDataThread();
-          StopGetAtmoLiveViewSourceThread();
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           // Workaround for SEDU.
           // Without the sleep it would not change to color.
@@ -823,14 +868,28 @@ namespace AtmoLight
           break;
         case ContentEffect.StaticColor:
           currentState = true;
-          StopSetPixelDataThread();
-          StopGetAtmoLiveViewSourceThread();
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
           // Workaround for SEDU.
           // Without the sleep it would not change to color.
           System.Threading.Thread.Sleep(delaySetStaticColor);
           if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
+          break;
+        case ContentEffect.GIFReader:
+          currentState = true;
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
+          StartGetAtmoLiveViewSourceThread();
+          StartGIFReaderThread();
+          break;
+        case ContentEffect.VUMeter:
+        case ContentEffect.VUMeterRainbow:
+          currentState = true;
+          vuMeterRainbowColorScheme = (effect == ContentEffect.VUMeterRainbow) ? true : false;
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
+          StartGetAtmoLiveViewSourceThread();
+          StartVUMeterThread();
           break;
       }
       currentEffect = changeEffect;
@@ -967,9 +1026,9 @@ namespace AtmoLight
     private void StartSetPixelDataThread()
     {
       setPixelDataLock = false;
-      SetPixelDataThreadHelper = new Thread(() => SetPixelDataThread());
-      SetPixelDataThreadHelper.Name = "AtmoLight SetPixelData";
-      SetPixelDataThreadHelper.Start();
+      setPixelDataThreadHelper = new Thread(() => SetPixelDataThread());
+      setPixelDataThreadHelper.Name = "AtmoLight SetPixelData";
+      setPixelDataThreadHelper.Start();
     }
 
     /// <summary>
@@ -986,9 +1045,9 @@ namespace AtmoLight
     private void StartGetAtmoLiveViewSourceThread()
     {
       getAtmoLiveViewSourceLock = false;
-      GetAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
-      GetAtmoLiveViewSourceThreadHelper.Name = "AtmoLight GetAtmoLiveViewSource";
-      GetAtmoLiveViewSourceThreadHelper.Start();
+      getAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
+      getAtmoLiveViewSourceThreadHelper.Name = "AtmoLight GetAtmoLiveViewSource";
+      getAtmoLiveViewSourceThreadHelper.Start();
     }
 
     /// <summary>
@@ -997,6 +1056,40 @@ namespace AtmoLight
     private void StopGetAtmoLiveViewSourceThread()
     {
       getAtmoLiveViewSourceLock = true;
+    }
+
+    private void StartGIFReaderThread()
+    {
+      gifReaderLock = false;
+      gifReaderThreadHelper = new Thread(() => GIFReaderThread());
+      gifReaderThreadHelper.Name = "AtmoLight GIFReader";
+      gifReaderThreadHelper.Start();
+    }
+
+    private void StopGIFReaderThread()
+    {
+      gifReaderLock = true;
+    }
+
+    private void StartVUMeterThread()
+    {
+      vuMeterLock = false;
+      vuMeterThreadHelper = new Thread(() => VUMeterThread());
+      vuMeterThreadHelper.Name = "AtmoLight VUMeter";
+      vuMeterThreadHelper.Start();
+    }
+
+    private void StopVUMeterThread()
+    {
+      vuMeterLock = true;
+    }
+
+    private void StopAllThreads()
+    {
+      StopSetPixelDataThread();
+      StopGetAtmoLiveViewSourceThread();
+      StopGIFReaderThread();
+      StopVUMeterThread();
     }
 
     /// <summary>
@@ -1066,7 +1159,171 @@ namespace AtmoLight
         Log.Error("Exception: {0}", ex.Message);
       }
     }
-    #endregion
 
+    private void GIFReaderThread()
+    {
+      try
+      {
+        // Get gif as stream
+        Stream gifSource = new FileStream(gifPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        
+        // Decode gif
+        GifBitmapDecoder gifDecoder = new GifBitmapDecoder(gifSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+        BitmapMetadata gifDecoderMetadata = (BitmapMetadata)gifDecoder.Metadata;
+        int gifWidth = Convert.ToInt32(gifDecoderMetadata.GetQuery("/logscrdesc/Width"));
+        int gifHeight = Convert.ToInt32(gifDecoderMetadata.GetQuery("/logscrdesc/Height"));
+        int gifBackgroundColor = Convert.ToInt32(gifDecoderMetadata.GetQuery("/logscrdesc/BackgroundColorIndex"));
+        while (!gifReaderLock)
+        {
+          for (int index = 0; index < gifDecoder.Frames.Count; index++)
+          {
+            if (gifReaderLock)
+            {
+              break;
+            }
+            // Select frame
+            BitmapSource gifBitmapSource = gifDecoder.Frames[index];
+            gifBitmapSource.Freeze();
+            BitmapMetadata gifBitmapMetadata = (BitmapMetadata)gifBitmapSource.Metadata;
+            int gifDelay = Convert.ToInt32(gifBitmapMetadata.GetQuery("/grctlext/Delay")) * 10;
+            int gifOffsetLeft = Convert.ToInt32(gifBitmapMetadata.GetQuery("/imgdesc/Left"));
+            int gifOffsetTop = Convert.ToInt32(gifBitmapMetadata.GetQuery("/imgdesc/Top"));
+
+            if (gifDelay == 0)
+            {
+              gifDelay = 20;
+            }
+
+            Bitmap gifBitmap;
+            // Convert frame to Bitmap
+            using (MemoryStream outStream = new MemoryStream())
+            {
+              BitmapEncoder gifEncoder = new BmpBitmapEncoder();
+              gifEncoder.Frames.Add(BitmapFrame.Create(gifBitmapSource));
+              gifEncoder.Save(outStream);
+              gifBitmap = new Bitmap(outStream);
+            }
+            // Correct position of this frame, as gifs dont have to have fixed dimensions and positions
+            if (gifBitmap.Width != gifWidth || gifBitmap.Height != gifHeight || gifOffsetLeft > 0 || gifOffsetTop > 0)
+            {
+              using (Bitmap gifBitmapOffset = new Bitmap(gifWidth, gifHeight))
+              {
+                using (Graphics gifBitmapOffsetGFX = Graphics.FromImage(gifBitmapOffset))
+                {
+                  // Fill Bitmap with background color
+                  gifBitmapOffsetGFX.FillRectangle(new SolidBrush(Color.FromArgb(gifDecoder.Palette.Colors[gifBackgroundColor].A, gifDecoder.Palette.Colors[gifBackgroundColor].R, gifDecoder.Palette.Colors[gifBackgroundColor].G, gifDecoder.Palette.Colors[gifBackgroundColor].B)), 0, 0, gifWidth, gifHeight);
+                  // Draw in original picture
+                  gifBitmapOffsetGFX.DrawImage(gifBitmap, gifOffsetLeft, gifOffsetTop);
+                  // Copy Bitmap
+                  gifBitmap = gifBitmapOffset.Clone(new Rectangle(0, 0, gifWidth, gifHeight), PixelFormat.Undefined);
+                }
+              }
+            }
+            
+            // Resize Bitmap
+            gifBitmap = new Bitmap(gifBitmap, new Size(GetCaptureWidth(), GetCaptureHeight()));
+
+            // Convert Bitmap to stream
+            MemoryStream gifStream = new MemoryStream();
+            gifBitmap.Save(gifStream, ImageFormat.Bmp);
+
+            // Calculations to prepare data for AtmoWin and then send data
+            CalculateBitmap(gifStream);
+
+            // Cleanup
+            gifStream.Close();
+            gifStream.Dispose();
+            gifBitmap.Dispose();
+
+            // Sleep until next frame
+            System.Threading.Thread.Sleep(gifDelay);
+          }
+        }
+        gifSource.Close();
+        gifSource.Dispose();
+      }
+      catch (Exception ex)
+      {
+        Log.Error("Error in GIFReaderThread.");
+        Log.Error("Exception: {0}", ex.Message);
+      }
+    }
+
+    private void VUMeterThread()
+    {
+      try
+      {
+        if (vuMeterRainbowColorScheme)
+        {
+          vuMeterBrushes.Clear();
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 77, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 128, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 204, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(230, 255, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(102, 255, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 153)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 230, 255)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 128, 255)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 255)));
+        }
+        else
+        {
+          vuMeterBrushes.Clear();
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 128, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 255, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
+          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
+        }
+
+        Rectangle rectFull = new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight());
+
+        Bitmap vuMeterBitmap = new Bitmap(GetCaptureWidth(), GetCaptureHeight());
+        Graphics vuMeterGFX = Graphics.FromImage(vuMeterBitmap);
+
+        double[] dbLevel = new double[] { 0.0, 0.0 };
+
+        while (!vuMeterLock)
+        {
+          vuMeterGFX.FillRectangle(vuMeterBrushes[0], rectFull);
+          dbLevel = OnNewVUMeter();
+
+          for (int channel = 0; channel <= 1; channel++)
+          {
+            for (int index = 0; index < vuMeterThresholds.Length; index++)
+            {
+              if (dbLevel[channel] >= vuMeterThresholds[index])
+              {
+                vuMeterGFX.FillRectangle(vuMeterBrushes[index + 1], (int)((double)channel * (double)vuMeterBitmap.Width / (double)4 * (double)3), (int)((double)index * (double)vuMeterBitmap.Height / (double)10), (int)((double)vuMeterBitmap.Width / (double)4), (int)(((double)vuMeterBitmap.Height / (double)10) + (double)1));
+              }
+            }
+          }
+
+          MemoryStream vuMeterStream = new MemoryStream();
+          vuMeterBitmap.Save(vuMeterStream, ImageFormat.Bmp);
+          CalculateBitmap(vuMeterStream);
+          vuMeterStream.Close();
+          vuMeterStream.Dispose();
+
+          System.Threading.Thread.Sleep(50);
+        }
+        vuMeterBitmap.Dispose();
+        vuMeterGFX.Dispose();
+      }
+      catch (Exception ex)
+      {
+        Log.Error("Error in VUMeterThread.");
+        Log.Error("Exception: {0}", ex.Message);
+      }
+    }
+    #endregion
   }
 }
