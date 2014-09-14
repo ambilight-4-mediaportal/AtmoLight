@@ -1,6 +1,8 @@
 Version 2.0.0.0 Beta 2
 - Fixed bug where MediaPortal could crash to Desktop
 - Fixed issue where AtmoLight would always disable LEDs after reconnect
+- Fixed bug with deactivate between time
+- Added GIF Reader effect (adds support for custom effects made by users)
 
 Version 2.0.0.0 Beta 1
 - Added delay feature
