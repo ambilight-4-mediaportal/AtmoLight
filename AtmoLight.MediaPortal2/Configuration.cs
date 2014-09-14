@@ -27,12 +27,30 @@ namespace AtmoLight.Configuration
     }
   }
 
+  public class GIFFile : PathEntry
+  {
+    public override void Load()
+    {
+      _pathSelectionType = PathSelectionType.File;
+      _path = SettingsManager.Load<Settings>().GIFFile;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.GIFFile = _path;
+      SettingsManager.Save(settings);
+      AtmoLight.Plugin.AtmoLightObject.UpdateGIFPath(settings.GIFFile);
+    }
+  }
+
   public class VideoEffect : SingleSelectionList
   {
     public override void Load()
     {
       IList<string> effectList = new List<string>();
-      for (int x = 0; x < 6; x++)
+      for (int x = 0; x < 7; x++)
       {
         effectList.Add("[AtmoLight." + ((ContentEffect)x).ToString() + "]");
       }
@@ -60,7 +78,7 @@ namespace AtmoLight.Configuration
     public override void Load()
     {
       IList<string> effectList = new List<string>();
-      for (int x = 0; x < 6; x++)
+      for (int x = 0; x < 7; x++)
       {
         effectList.Add("[AtmoLight." + ((ContentEffect)x).ToString() + "]");
       }
@@ -89,7 +107,7 @@ namespace AtmoLight.Configuration
     public override void Load()
     {
       IList<string> effectList = new List<string>();
-      for (int x = 0; x < 6; x++)
+      for (int x = 0; x < 7; x++)
       {
         effectList.Add("[AtmoLight." + ((ContentEffect)x).ToString() + "]");
       }

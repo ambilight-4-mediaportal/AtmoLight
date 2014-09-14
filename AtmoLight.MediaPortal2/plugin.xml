@@ -150,6 +150,13 @@
         Text="[AtmoLight.StaticColorBlue]"
         ClassName="AtmoLight.Configuration.StaticColorBlue"/>
   </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
+        Id="GIFFile"
+        Text="[AtmoLight.GIFFile]"
+        ClassName="AtmoLight.Configuration.GIFFile"/>
+  </Register>
     
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
     <ConfigSetting

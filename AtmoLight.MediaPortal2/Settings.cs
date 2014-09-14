@@ -82,6 +82,9 @@ namespace AtmoLight
     [Setting(SettingScope.User, 0)]
     public int StaticColorBlue { get; set; }
 
+    [Setting(SettingScope.User, "")]
+    public string GIFFile { get; set; }
+
     ISettingsManager settingsManager = ServiceRegistration.Get<ISettingsManager>();
     Settings settings;
 
@@ -112,6 +115,7 @@ namespace AtmoLight
       StaticColorBlue = settings.StaticColorBlue;
       StaticColorGreen = settings.StaticColorGreen;
       StaticColorRed = settings.StaticColorRed;
+      GIFFile = settings.GIFFile;
       return true;
     }
 
@@ -141,6 +145,7 @@ namespace AtmoLight
       settings.StaticColorBlue = StaticColorBlue;
       settings.StaticColorGreen = StaticColorGreen;
       settings.StaticColorRed = StaticColorRed;
+      settings.GIFFile = GIFFile;
       settingsManager.Save(settings);
       return true;
     }

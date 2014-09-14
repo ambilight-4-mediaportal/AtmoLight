@@ -111,6 +111,7 @@ namespace AtmoLight
       // AtmoLight object creation
       Log.Debug("Generating new AtmoLight.Core instance.");
       AtmoLightObject = new Core(settings.AtmoWinExe, settings.RestartAtmoWinOnError, settings.StartAtmoWinOnStart, staticColorTemp, settings.Delay, settings.DelayTime);
+      AtmoLightObject.UpdateGIFPath(settings.GIFFile);
 
       // Handlers
       Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
