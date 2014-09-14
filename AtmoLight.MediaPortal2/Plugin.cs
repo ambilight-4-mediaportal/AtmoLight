@@ -328,30 +328,8 @@ namespace AtmoLight
 
         surfaceSource.Device.StretchRectangle(surfaceSource, null, surfaceDestination, rectangleDestination, SharpDX.Direct3D9.TextureFilter.None);
         DataStream stream = SharpDX.Direct3D9.Surface.ToStream(surfaceDestination, SharpDX.Direct3D9.ImageFileFormat.Bmp);
-        BinaryReader reader = new BinaryReader(stream);
 
-        stream.Position = 0; // ensure that what start at the beginning of the stream. 
-        reader.ReadBytes(14); // skip bitmap file info header
-        byte[] bmiInfoHeader = reader.ReadBytes(4 + 4 + 4 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4);
-
-        int rgbL = (int)(stream.Length - stream.Position);
-        int rgb = (int)(rgbL / (AtmoLightObject.GetCaptureWidth() * AtmoLightObject.GetCaptureHeight()));
-
-        byte[] pixelData = reader.ReadBytes((int)(stream.Length - stream.Position));
-
-        byte[] h1pixelData = new byte[AtmoLightObject.GetCaptureWidth() * rgb];
-        byte[] h2pixelData = new byte[AtmoLightObject.GetCaptureWidth() * rgb];
-        //now flip horizontally, we do it always to prevent microstudder
-        int i;
-        for (i = 0; i < ((AtmoLightObject.GetCaptureHeight() / 2) - 1); i++)
-        {
-          Array.Copy(pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, h1pixelData, 0, AtmoLightObject.GetCaptureWidth() * rgb);
-          Array.Copy(pixelData, (AtmoLightObject.GetCaptureHeight() - i - 1) * AtmoLightObject.GetCaptureWidth() * rgb, h2pixelData, 0, AtmoLightObject.GetCaptureWidth() * rgb);
-          Array.Copy(h1pixelData, 0, pixelData, (AtmoLightObject.GetCaptureHeight() - i - 1) * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
-          Array.Copy(h2pixelData, 0, pixelData, i * AtmoLightObject.GetCaptureWidth() * rgb, AtmoLightObject.GetCaptureWidth() * rgb);
-        }
-
-        AtmoLightObject.SetPixelData(bmiInfoHeader, pixelData);
+        AtmoLightObject.CalculateBitmap(stream);
 
         stream.Close();
         stream.Dispose();
