@@ -372,18 +372,21 @@ namespace AtmoLight
     {
         try
         {
-            //create raw TCP connection, telnet was the easiest as raw tcp sockets required admin access.
-            //might get replaced once Hyperion integrates web socket support
-            TelnetInterface.TelnetConnection tc = new TelnetInterface.TelnetConnection(Settings.hyperionIP, Settings.hyperionPort);
-
-            string s = tc.Login("", "", 100);
-            if (tc.IsConnected == true)
+            if (Settings.hyperionEnabled)
             {
-                //set dummy black color to disable leds.
-                string command = "{\"color\":[0,0,0],\"command\":\"color\",\"priority\":10}";
-                tc.WriteLine(command);
-                Log.Debug("[Atmolight] Hyperion command: " + command);
+                //create raw TCP connection, telnet was the easiest as raw tcp sockets required admin access.
+                //might get replaced once Hyperion integrates web socket support
+                TelnetInterface.TelnetConnection tc = new TelnetInterface.TelnetConnection(Settings.hyperionIP, Settings.hyperionPort);
 
+                string s = tc.Login("", "", 100);
+                if (tc.IsConnected == true)
+                {
+                    //set dummy black color to disable leds.
+                    string command = "{\"color\":[0,0,0],\"command\":\"color\",\"priority\":10}";
+                    tc.WriteLine(command);
+                    Log.Debug("[Atmolight] Hyperion command: " + command);
+
+                }
             }
         }
         catch (Exception et)
@@ -424,17 +427,20 @@ namespace AtmoLight
     {
         try
         {
-            //create raw TCP connection, telnet was the easiest as raw tcp sockets required admin access.
-            //might get replaced once Hyperion integrates web socket support
-            TelnetInterface.TelnetConnection tc = new TelnetInterface.TelnetConnection(Settings.hyperionIP, Settings.hyperionPort);
-
-            string s = tc.Login("", "", 100);
-            if (tc.IsConnected == true)
+            if (Settings.hyperionEnabled)
             {
-                //set dummy black color to disable leds.
-                string command = "{\"color\":[0,0,0],\"command\":\"color\",\"priority\":10}";
-                tc.WriteLine(command);
-                Log.Debug("[Atmolight] Hyperion command: " + command);
+                //create raw TCP connection, telnet was the easiest as raw tcp sockets required admin access.
+                //might get replaced once Hyperion integrates web socket support
+                TelnetInterface.TelnetConnection tc = new TelnetInterface.TelnetConnection(Settings.hyperionIP, Settings.hyperionPort);
+
+                string s = tc.Login("", "", 100);
+                if (tc.IsConnected == true)
+                {
+                    //set dummy black color to disable leds.
+                    string command = "{\"color\":[0,0,0],\"command\":\"color\",\"priority\":10}";
+                    tc.WriteLine(command);
+                    Log.Debug("[Atmolight] Hyperion command: " + command);
+                }
             }
         }
         catch (Exception et)

@@ -36,7 +36,6 @@ namespace AtmoLight
             public TelnetConnection(string Hostname, int Port)
             {
                 tcpSocket = new TcpClient(Hostname, Port);
-
             }
 
             public string Login(string Username, string Password, int LoginTimeOutMs)
