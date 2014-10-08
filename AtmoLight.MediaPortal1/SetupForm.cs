@@ -32,6 +32,8 @@ namespace AtmoLight
       tbBlue.Text = Settings.staticColorBlue.ToString();
       tbBlackbarDetectionTime.Text = Settings.blackbarDetectionTime.ToString();
       tbGIF.Text = Settings.gifFile;
+      tbHyperionIP.Text = Settings.hyperionIP;
+      tbHyperionPort.Text = Settings.hyperionPort.ToString();
 
       if (Settings.manualMode)
       {
@@ -104,6 +106,14 @@ namespace AtmoLight
       {
         ckBlackbarDetection.Checked = false;
       }
+      if (Settings.hyperionEnabled)
+      {
+          ckHyperionEnabled.Checked = true;
+      }
+      else
+      {
+          ckHyperionEnabled.Checked = false;
+      }
     }
 
     private void UpdateLanguageOnControls()
@@ -144,6 +154,8 @@ namespace AtmoLight
       lblRefreshRate.Text = LanguageLoader.appStrings.SetupForm_lblRefreshRate;
       ckBlackbarDetection.Text = LanguageLoader.appStrings.SetupForm_ckBlackbarDetection;
       grpGIF.Text = LanguageLoader.appStrings.SetupForm_grpGIF;
+      lblHyperionIP.Text = LanguageLoader.appStrings.SetupForm_lblHyperionIP;
+      lblHyperionPort.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPort;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -266,6 +278,9 @@ namespace AtmoLight
       Settings.blackbarDetection = ckBlackbarDetection.Checked;
       Settings.blackbarDetectionTime = cBlackbarDetectionTime;
       Settings.gifFile = tbGIF.Text;
+      Settings.hyperionEnabled = ckHyperionEnabled.Checked;
+      Settings.hyperionIP = tbHyperionIP.Text;
+      Settings.hyperionPort = int.Parse(tbHyperionPort.Text);
       Settings.SaveSettings();
       this.DialogResult = DialogResult.OK;
     }

@@ -35,6 +35,10 @@ namespace AtmoLight
     public static bool blackbarDetection = false;
     public static int blackbarDetectionTime = 0;
     public static string gifFile = "";
+    public static bool hyperionEnabled = false;
+    public static string hyperionIP = "";
+    public static int hyperionPort = 0;
+
     #endregion
 
     public static DateTime LoadTimeSetting(MediaPortal.Profile.Settings reader, string name, string defaultTime)
@@ -78,6 +82,9 @@ namespace AtmoLight
         blackbarDetection = reader.GetValueAsBool("atmolight", "BlackbarDetection", false);
         blackbarDetectionTime = reader.GetValueAsInt("atmolight", "BlackbarDetectionTime", 0);
         gifFile = reader.GetValueAsString("atmolight", "GIFFile", "");
+        hyperionEnabled = reader.GetValueAsBool("atmolight", "hyperionEnabled", false);
+        hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "");
+        hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 0);
       }
     }
     public static void SaveSettings()
@@ -113,6 +120,9 @@ namespace AtmoLight
         reader.SetValueAsBool("atmolight", "BlackbarDetection", blackbarDetection);
         reader.SetValue("atmolight", "BlackbarDetectionTime", blackbarDetectionTime);
         reader.SetValue("atmolight", "GIFFile", gifFile);
+        reader.SetValueAsBool("atmolight", "hyperionEnabled", hyperionEnabled);
+        reader.SetValue("atmolight", "hyperionIP", hyperionIP);
+        reader.SetValue("atmolight", "hyperionPort", (int)hyperionPort);
       }
     }
 

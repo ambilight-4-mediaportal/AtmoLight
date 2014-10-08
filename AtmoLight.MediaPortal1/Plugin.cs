@@ -309,6 +309,31 @@ namespace AtmoLight
         {
           Log.Debug("Video detected.");
           playbackEffect = Settings.effectVideo;
+
+          try
+          {
+              if (Settings.hyperionEnabled)
+              {
+                  //create raw TCP connection, telnet was the easiest as raw tcp sockets required admin access
+                  //might get replaced once Hyperion integrates web socket support
+                  TelnetInterface.TelnetConnection tc = new TelnetInterface.TelnetConnection(Settings.hyperionIP, Settings.hyperionPort);
+
+                  string s = tc.Login("", "", 100);
+                  if (tc.IsConnected == true)
+                  {
+                      //Clear dummy black channel so that leds light up from other sources with > 10 priority
+                      string command = "{\"command\":\"clear\",\"priority\":10}";
+                      tc.WriteLine(command);
+                      Log.Debug("[Atmolight] Hyperion command: " + command);
+                  }
+              }
+          }
+          catch (Exception et)
+          {
+              Log.Debug("Error during Hyperion control "+ Settings.hyperionIP + ":" + Settings.hyperionPort + ": " + et.ToString());
+          }
+
+
         }
         else if (type == g_Player.MediaType.Music)
         {
@@ -345,27 +370,48 @@ namespace AtmoLight
     /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
     {
-      if (!AtmoLightObject.IsConnected())
-      {
-        return;
-      }
-      try
-      {
-        if (CheckForStartRequirements())
+        try
         {
-          AtmoLightObject.ChangeEffect(menuEffect);
-          CalculateDelay();
+            //create raw TCP connection, telnet was the easiest as raw tcp sockets required admin access.
+            //might get replaced once Hyperion integrates web socket support
+            TelnetInterface.TelnetConnection tc = new TelnetInterface.TelnetConnection(Settings.hyperionIP, Settings.hyperionPort);
+
+            string s = tc.Login("", "", 100);
+            if (tc.IsConnected == true)
+            {
+                //set dummy black color to disable leds.
+                string command = "{\"color\":[0,0,0],\"command\":\"color\",\"priority\":10}";
+                tc.WriteLine(command);
+                Log.Debug("[Atmolight] Hyperion command: " + command);
+
+            }
         }
-        else
+        catch (Exception et)
         {
-          AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+            Log.Debug("Error during Hyperion control " + Settings.hyperionIP + ":" + Settings.hyperionPort + ": " + et.ToString());
         }
-      }
-      catch (Exception ex)
-      {
-        Log.Error("g_Player_PlayBackEnded failed.");
-        Log.Error("Exception= {0}", ex.Message);
-      }
+
+        if (!AtmoLightObject.IsConnected())
+        {
+            return;
+        }
+        try
+        {
+            if (CheckForStartRequirements())
+            {
+                AtmoLightObject.ChangeEffect(menuEffect);
+                CalculateDelay();
+            }
+            else
+            {
+                AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error("g_Player_PlayBackEnded failed.");
+            Log.Error("Exception= {0}", ex.Message);
+        }
     }
 
     /// <summary>
@@ -376,6 +422,27 @@ namespace AtmoLight
     /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackStopped(g_Player.MediaType type, int stoptime, string filename)
     {
+        try
+        {
+            //create raw TCP connection, telnet was the easiest as raw tcp sockets required admin access.
+            //might get replaced once Hyperion integrates web socket support
+            TelnetInterface.TelnetConnection tc = new TelnetInterface.TelnetConnection(Settings.hyperionIP, Settings.hyperionPort);
+
+            string s = tc.Login("", "", 100);
+            if (tc.IsConnected == true)
+            {
+                //set dummy black color to disable leds.
+                string command = "{\"color\":[0,0,0],\"command\":\"color\",\"priority\":10}";
+                tc.WriteLine(command);
+                Log.Debug("[Atmolight] Hyperion command: " + command);
+            }
+        }
+        catch (Exception et)
+        {
+            Log.Debug("Error during Hyperion control " + Settings.hyperionIP + ":" + Settings.hyperionPort + ": " + et.ToString());
+        }
+
+
       if (!AtmoLightObject.IsConnected())
       {
         return;
