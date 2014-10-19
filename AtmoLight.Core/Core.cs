@@ -10,6 +10,8 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
+using System.Net.Sockets;
+using Proto;
 
 namespace AtmoLight
 {
@@ -88,6 +90,40 @@ namespace AtmoLight
     public delegate double[] NewVUMeterHander();
     public static event NewVUMeterHander OnNewVUMeter;
 
+    private TcpClient hyperionSocket = new TcpClient();
+    private Stream hyperionStream;
+
+    #endregion
+
+    #region Hyperion Tests
+    // First Hyperion proto buf test implementation
+    // Hardcoded and not tested code!
+    private void HyperionTestMethod()
+    {
+      hyperionSocket.Connect("192.168.1.33", 19445);
+      hyperionStream = hyperionSocket.GetStream();
+
+      HyperionChangeColor(0, 0, 0);
+    }
+
+    private void HyperionChangeColor(int red, int green, int blue)
+    {
+      ColorRequest colorRequest = new ColorRequest();
+      colorRequest.RgbColor = 0x00FFFFFF;
+      colorRequest.Priority = 1;
+      colorRequest.Duration = 1;
+
+      HyperionRequest request = new HyperionRequest();
+      request.command = HyperionRequest.Command.COLOR;
+
+      HyperionSendRequest(request);
+    }
+
+    private void HyperionSendRequest(HyperionRequest request)
+    {
+      HyperionRequest.Serialize(hyperionStream, request);
+
+    }
     #endregion
 
     #region class Win32API
@@ -222,6 +258,9 @@ namespace AtmoLight
       this.staticColor = staticColor;
       this.delayEnabled = delayEnabled;
       this.delayTime = delayTime;
+
+      // Test Hyperion
+      HyperionTestMethod();
     }
     #endregion
 

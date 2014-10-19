@@ -65,7 +65,16 @@
   <ItemGroup>
     <Compile Include="Core.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="message.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="message.Serializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProtocolParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
