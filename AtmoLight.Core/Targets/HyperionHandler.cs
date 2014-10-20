@@ -36,6 +36,23 @@ namespace AtmoLight.Targets
     #endregion
     #region Hyperion
 
+    public Boolean Initialise()
+    {
+        Boolean IsInitialised = true;
+
+        try
+        {
+            Connect();
+            ClearPriority(hyperionPriority);
+        }
+        catch (Exception e)
+        {
+            Log.Debug("Error during initialise of Hyperion");
+            IsInitialised = false;
+        }
+
+        return IsInitialised;
+    }
     public Boolean IsConnected()
     {
         return Connected;
@@ -49,7 +66,7 @@ namespace AtmoLight.Targets
     {
         return captureHeight;
     }
-    public Boolean setupConnection()
+    public Boolean Connect()
     {
         if (Connected == false)
         {
