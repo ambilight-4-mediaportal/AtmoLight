@@ -33,6 +33,101 @@ namespace AtmoLight
 
     #endregion
 
+
+
+
+
+
+    #region Public methods
+    /// <summary>
+    /// Start AtmoWin and connects to it.
+    /// </summary>
+    /// <returns>true or false</returns>
+    public bool Initialise(bool force = false)
+    {
+      Log.Debug("Initialising.");
+      if (!Win32API.IsProcessRunning("atmowina.exe"))
+      {
+        if (startAtmoWin || force)
+        {
+          if (!StartAtmoWin()) return false;
+          System.Threading.Thread.Sleep(delayAtmoWinConnect);
+        }
+        else
+        {
+          Log.Error("AtmoWin is not running.");
+          return false;
+        }
+      }
+
+      if (!Connect()) return false;
+
+      Log.Debug("Initialising successfull.");
+      return true;
+    }
+
+    /// <summary>
+    /// Restart AtmoWin and reconnects to it.
+    /// </summary>
+    /// <param name="force">Force the reinitialising and discard user settings.</param>
+    public Reinitialise(bool force = false)
+    {
+      if (reinitialiseLock)
+      {
+        Log.Debug("Reinitialising locked.");
+        return;
+      }
+      if (!reinitialiseOnError && !force)
+      {
+        Disconnect();
+        OnNewConnectionLost();
+        return;
+      }
+
+      reinitialiseLock = true;
+      Log.Debug("Reinitialising.");
+
+      if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(changeEffect != ContentEffect.Undefined ? changeEffect : currentEffect, true))
+      {
+        Disconnect();
+        StopAtmoWin();
+        Log.Error("Reinitialising failed.");
+        reinitialiseLock = false;
+        OnNewConnectionLost();
+        return;
+      }
+
+      Log.Debug("Reinitialising successfull.");
+      reinitialiseLock = false;
+      return;
+    }
+
+    public bool ChangeEffect(ContentEffect effect)
+    {
+
+    }
+
+    public bool ChangeColor(int red, int green, int blue)
+    {
+
+    }
+
+    public bool ChangeImage(byte[] pixeldata)
+    {
+
+    }
+
+    public bool ChangeProfile()
+    {
+
+    }
+
+
+    #endregion
+
+
+
+
     #region Utilities
     /// <summary>
     /// Check if a method times out and starts to reinitialise AtmoWin if needed.
@@ -77,8 +172,6 @@ namespace AtmoLight
       }
     }
     #endregion
-
-
     #region Connect
     /// <summary>
     /// Connect to AtmoWin.
@@ -146,74 +239,13 @@ namespace AtmoLight
     }
     #endregion
     #region Initialise
-    /// <summary>
-    /// Start AtmoWin and connects to it.
-    /// </summary>
-    /// <returns>true or false</returns>
-    public bool Initialise(bool force = false)
-    {
-      Log.Debug("Initialising.");
-      if (!Win32API.IsProcessRunning("atmowina.exe"))
-      {
-        if (startAtmoWin || force)
-        {
-          if (!StartAtmoWin()) return false;
-          System.Threading.Thread.Sleep(delayAtmoWinConnect);
-        }
-        else
-        {
-          Log.Error("AtmoWin is not running.");
-          return false;
-        }
-      }
 
-      if (!Connect()) return false;
-
-      Log.Debug("Initialising successfull.");
-      return true;
-    }
-
-    /// <summary>
-    /// Restart AtmoWin and reconnects to it.
-    /// </summary>
-    /// <param name="force">Force the reinitialising and discard user settings.</param>
-    public void Reinitialise(bool force = false)
-    {
-      if (reinitialiseLock)
-      {
-        Log.Debug("Reinitialising locked.");
-        return;
-      }
-      if (!reinitialiseOnError && !force)
-      {
-        Disconnect();
-        OnNewConnectionLost();
-        return;
-      }
-
-      reinitialiseLock = true;
-      Log.Debug("Reinitialising.");
-
-      if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(changeEffect != ContentEffect.Undefined ? changeEffect : currentEffect, true))
-      {
-        Disconnect();
-        StopAtmoWin();
-        Log.Error("Reinitialising failed.");
-        reinitialiseLock = false;
-        OnNewConnectionLost();
-        return;
-      }
-
-      Log.Debug("Reinitialising successfull.");
-      reinitialiseLock = false;
-      return;
-    }
 
     /// <summary>
     /// Start reinitialising in a new thread.
     /// </summary>
     /// <param name="force">Force the reinitialising and discard user settings.</param>
-    public void ReinitialiseThreaded(bool force = false)
+    private void ReinitialiseThreaded(bool force = false)
     {
       if (!reinitialiseLock)
       {
@@ -512,6 +544,123 @@ namespace AtmoLight
     #endregion
 
 
+    #region class Win32API
+    public sealed class Win32API
+    {
+      [StructLayout(LayoutKind.Sequential)]
+      public struct RECT
+      {
+        public int left;
+        public int top;
+        public int right;
+        public int bottom;
+      }
 
+      [StructLayout(LayoutKind.Sequential)]
+      private struct PROCESSENTRY32
+      {
+        public uint dwSize;
+        public uint cntUsage;
+        public uint th32ProcessID;
+        public IntPtr th32DefaultHeapID;
+        public uint th32ModuleID;
+        public uint cntThreads;
+        public uint th32ParentProcessID;
+        public int pcPriClassBase;
+        public uint dwFlags;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+        public string szExeFile;
+      }
+
+      private const uint TH32CS_SNAPPROCESS = 0x00000002;
+
+      [DllImport("user32.dll")]
+      public static extern IntPtr FindWindow(string lpClassName, String lpWindowName);
+
+      [DllImport("user32.dll")]
+      public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+
+      [DllImport("user32.dll")]
+      public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+
+      private const int WM_CLOSE = 0x10;
+      private const int WM_DESTROY = 0x2;
+
+      [DllImport("user32.dll")]
+      public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
+
+      [DllImport("kernel32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+      public static extern Int64 GetTickCount();
+
+      [DllImport("kernel32.dll")]
+      private static extern int Process32First(IntPtr hSnapshot,
+                                       ref PROCESSENTRY32 lppe);
+
+      [DllImport("kernel32.dll")]
+      private static extern int Process32Next(IntPtr hSnapshot,
+                                      ref PROCESSENTRY32 lppe);
+
+      [DllImport("kernel32.dll", SetLastError = true)]
+      private static extern IntPtr CreateToolhelp32Snapshot(uint dwFlags,
+                                                     uint th32ProcessID);
+
+      [DllImport("kernel32.dll", SetLastError = true)]
+      private static extern bool CloseHandle(IntPtr hSnapshot);
+      private const int WM_MouseMove = 0x0200;
+
+      public static void RefreshTrayArea()
+      {
+
+        RECT rect;
+
+        IntPtr systemTrayContainerHandle = FindWindow("Shell_TrayWnd", null);
+        IntPtr systemTrayHandle = FindWindowEx(systemTrayContainerHandle, IntPtr.Zero, "TrayNotifyWnd", null);
+        IntPtr sysPagerHandle = FindWindowEx(systemTrayHandle, IntPtr.Zero, "SysPager", null);
+        IntPtr notificationAreaHandle = FindWindowEx(sysPagerHandle, IntPtr.Zero, "ToolbarWindow32", null);
+        GetClientRect(notificationAreaHandle, out rect);
+        for (var x = 0; x < rect.right; x += 5)
+          for (var y = 0; y < rect.bottom; y += 5)
+            SendMessage(notificationAreaHandle, WM_MouseMove, 0, (y << 16) + x);
+      }
+
+      public static bool IsProcessRunning(string applicationName)
+      {
+        IntPtr handle = IntPtr.Zero;
+        try
+        {
+          // Create snapshot of the processes
+          handle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+          PROCESSENTRY32 info = new PROCESSENTRY32();
+          info.dwSize = (uint)System.Runtime.InteropServices.
+                        Marshal.SizeOf(typeof(PROCESSENTRY32));
+
+          // Get the first process
+          int first = Process32First(handle, ref info);
+
+          // While there's another process, retrieve it
+          do
+          {
+            if (string.Compare(info.szExeFile,
+                  applicationName, true) == 0)
+            {
+              return true;
+            }
+          }
+          while (Process32Next(handle, ref info) != 0);
+        }
+        catch
+        {
+          throw;
+        }
+        finally
+        {
+          // Release handle of the snapshot
+          CloseHandle(handle);
+          handle = IntPtr.Zero;
+        }
+        return false;
+      }
+    }
+    #endregion
   }
 }
