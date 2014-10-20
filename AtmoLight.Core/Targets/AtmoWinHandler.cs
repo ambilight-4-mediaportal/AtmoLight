@@ -18,7 +18,10 @@ namespace AtmoLight
   class AtmoWinHandler
   {
     #region Fields
-    private string pathAtmoWin = "";
+    private string atmoWinPath = "";
+    private bool reInitOnError = true;
+    private bool startAtmoWin = true;
+    private int[] staticColor = { 0, 0, 0 };
 
     // Com  Objects
     private IAtmoRemoteControl2 atmoRemoteControl = null; // Com Object to control AtmoWin
@@ -31,12 +34,19 @@ namespace AtmoLight
     private const int delayAtmoWinConnect = 1000; // Delay between starting AtmoWin and connection to it
     private const int delayGetAtmoLiveViewSource = 1000; // Delay between liveview source checks
 
+    // Locks
+    private volatile bool reinitialiseLock = false;
+
     #endregion
 
-
-
-
-
+    #region Constructor
+    public AtmoWinHandler()
+    {
+      var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+      DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
+      Log.Debug("Core Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
+    }
+    #endregion
 
     #region Public methods
     /// <summary>
@@ -70,14 +80,14 @@ namespace AtmoLight
     /// Restart AtmoWin and reconnects to it.
     /// </summary>
     /// <param name="force">Force the reinitialising and discard user settings.</param>
-    public Reinitialise(bool force = false)
+    public void Reinitialise(bool force = false)
     {
       if (reinitialiseLock)
       {
         Log.Debug("Reinitialising locked.");
         return;
       }
-      if (!reinitialiseOnError && !force)
+      if (!reInitOnError && !force)
       {
         Disconnect();
         OnNewConnectionLost();
@@ -104,22 +114,51 @@ namespace AtmoLight
 
     public bool ChangeEffect(ContentEffect effect)
     {
-
+      return true;
     }
 
     public bool ChangeColor(int red, int green, int blue)
     {
-
+      return true;
     }
 
     public bool ChangeImage(byte[] pixeldata)
     {
-
+      return true;
     }
 
+    /// <summary>
+    /// Change to AtmoWin profile.
+    /// </summary>
+    /// <returns>true or false</returns>
     public bool ChangeProfile()
     {
+      if (!SetColorMode(ComEffectMode.cemColorMode)) return false;
 
+      // Change the effect to the desired effect.
+      // Needed for AtmoWin 1.0.0.5+
+      if (!ChangeEffect(currentEffect, true)) return false;
+      return true;
+    }
+
+    public void UpdateAtmoWinPath(string path)
+    {
+      atmoWinPath = path;
+    }
+
+    public void UpdateReInitOnError(bool reInit)
+    {
+      reInitOnError = reInit;
+    }
+
+    public void UpdateStartAtmoWin(bool startAtmoWin)
+    {
+      this.startAtmoWin = startAtmoWin;
+    }
+
+    public void UpdateStaticColor(int[] staticColor)
+    {
+      this.staticColor = staticColor;
     }
 
 

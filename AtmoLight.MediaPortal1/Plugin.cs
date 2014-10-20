@@ -120,7 +120,17 @@ namespace AtmoLight
       staticColorTemp[2] = Settings.staticColorBlue;
 
       Log.Debug("Generating new AtmoLight.Core instance.");
-      AtmoLightObject = new Core(Settings.atmowinExe, Settings.restartOnError, Settings.startAtmoWin, staticColorTemp, Settings.delay, Settings.delayReferenceTime);
+      AtmoLightObject = new Core();
+      if (Settings.atmoWinTarget)
+      {
+        AtmoLightObject.AddTarget(Target.AtmoWin);
+      }
+      if (Settings.hyperionTarget)
+      {
+        AtmoLightObject.AddTarget(Target.Hyperion);
+      }
+
+
       AtmoLightObject.UpdateGIFPath(Settings.gifFile);
 
 

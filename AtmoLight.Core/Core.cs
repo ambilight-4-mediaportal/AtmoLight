@@ -29,6 +29,13 @@ namespace AtmoLight
     VUMeterRainbow,
     Undefined = -1
   }
+
+  public enum Target
+  {
+    AtmoWin,
+    Hyperion
+  }
+
   public class Core
   {
 
@@ -53,11 +60,15 @@ namespace AtmoLight
     private bool currentState = false; // State of the LEDs
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current aktive effect
     private ContentEffect changeEffect = ContentEffect.Undefined; // Effect ChangeEffect() should change to (need for Reinitialise() if ChangeEffect() fails)
-    
 
 
+    AtmoWinHandler atmoWinHandler;
+    HyperionHander hyperionHandler;
 
     // Lists
+    private List<Target> targets = new List<Target>();
+    private List<Object> targetObjects = new List<Object>();
+
     private List<byte[]> pixelDataList = new List<byte[]>(); // List for pixelData (Delay)
     private List<byte[]> bmiInfoHeaderList = new List<byte[]>(); // List for bmiInfoHeader (Delay)
     private List<long> delayTimingList = new List<long>(); // List for timings (Delay)
@@ -208,33 +219,33 @@ namespace AtmoLight
     #endregion
 
     #region Constructor
-    public Core(string pathAtmoWin, bool reinitialiseOnError, bool startAtmoWin, int[] staticColor, bool delayEnabled, int delayTime)
+    public Core()
     {
-      var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-      DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
-      Log.Debug("Core Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
-
-      this.pathAtmoWin = pathAtmoWin;
-      this.reinitialiseOnError = reinitialiseOnError;
-      this.startAtmoWin = startAtmoWin;
-      this.staticColor = staticColor;
-      this.delayEnabled = delayEnabled;
-      this.delayTime = delayTime;
-       
-      // Test Hyperion
-      Log.Debug("Trying to connect to Hyperion");
-      hyperionSocket.Connect(Settings.hyperionIP, Settings.hyperionPort);
-      Log.Debug("Connected to Hyperion.");
-      hyperionStream = hyperionSocket.GetStream();
+      return;
     }
     #endregion
 
-    
+    public void AddTarget(Target target)
+    {
+      targets.Add(target);
+    }
 
-    
-    
+    public bool Initialise()
+    {
+      for (int i = 0; i <= targets.Count; i++)
+      {
+        if (targets[i] == Target.AtmoWin)
+        {
+          atmoWinHandler = new AtmoWinHandler();
 
-    
+        }
+        else if (targets[i] == Target.Hyperion)
+        {
+          targetObjects.Add(new HyperionHandler());
+        }
+      }
+      return true;
+    }
 
     #region Delay Lists
     /// <summary>
