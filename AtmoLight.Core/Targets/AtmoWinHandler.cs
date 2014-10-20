@@ -214,7 +214,7 @@ namespace AtmoLight
       return true;
     }
 
-    public bool ChangeImage(byte[] pixeldata)
+    public bool ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
       return true;
     }
@@ -246,11 +246,6 @@ namespace AtmoLight
     public void SetStartAtmoWin(bool startAtmoWin)
     {
       this.startAtmoWin = startAtmoWin;
-    }
-
-    public void SetStaticColor(int[] staticColor)
-    {
-      this.staticColor = staticColor;
     }
 
 

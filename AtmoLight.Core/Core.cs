@@ -99,6 +99,8 @@ namespace AtmoLight
     private string atmoWinPath;
     private bool reInitOnError;
     private int hyperionPriority;
+    private string hyperionIP;
+    private int hyperionPort;
 
     #endregion
 
@@ -243,11 +245,22 @@ namespace AtmoLight
           atmoWinHandler.SetAtmoWinPath(atmoWinPath);
           atmoWinHandler.SetReInitOnError(reInitOnError);
           atmoWinHandler.SetStartAtmoWin(startAtmoWin);
-          atmoWinHandler.SetStaticColor(staticColor);
+          if (atmoWinHandler.Initialise())
+          {
+            connectedTargets.Add(Target.AtmoWin);
+          }
         }
         else if (targets[i] == Target.Hyperion)
         {
           hyperionHandler = new HyperionHandler();
+          hyperionHandler.setHyperionIP(hyperionIP);
+          hyperionHandler.setHyperionPort(hyperionPort);
+          hyperionHandler.setHyperionPriority(hyperionPriority);
+          hyperionHandler.setReconnectOnError(reInitOnError);
+          if (hyperionHandler.Initialise())
+          {
+            connectedTargets.Add(Target.Hyperion);
+          }
         }
       }
       return true;
@@ -322,7 +335,7 @@ namespace AtmoLight
     #region Utilities
 
 
-    public void CalculateBitmap(Stream stream)
+    public void CalculateBitmap(Stream stream, bool force = false)
     {
       // Debug file output
       // new Bitmap(stream).Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
@@ -350,12 +363,27 @@ namespace AtmoLight
       }
       //send scaled and fliped frame to atmowin
 
-      if (hyperionSocket.Connected)
-      {
-        HyperionSendImage(pixelData, Settings.hyperionPriority);
-      }
 
-      SetPixelData(bmiInfoHeader, pixelData);
+
+      if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      {
+        AddDelayListItem(bmiInfoHeader, pixelData);
+      }
+      else
+      {
+        for (int x = 0; x <= connectedTargets.Count; x++)
+        {
+          switch (connectedTargets[x])
+          {
+            case Target.AtmoWin:
+              atmoWinHandler.ChangeImage(pixelData, bmiInfoHeader);
+              break;
+            case Target.Hyperion:
+              hyperionHandler.ChangeImage(pixelData, hyperionPriority);
+              break;
+          }
+        }
+      }
     }
 
     public void UpdateGIFPath(string path)
@@ -381,7 +409,7 @@ namespace AtmoLight
             }
             break;
           case Target.Hyperion:
-            if (!hyperionHandler.IsConnected())
+            if (!hyperionHandler.isConnected())
             {
               connectedTargets.RemoveAt(i);
               if (connectedTargets.Count == 0)
@@ -482,6 +510,11 @@ namespace AtmoLight
                 atmoWinHandler.ChangeEffect(ContentEffect.MediaPortalLiveMode);
                 break;
             }
+          }
+          if (delayEnabled)
+          {
+            Log.Debug("Adding {0}ms delay to the LEDs.", delayTime);
+            StartSetPixelDataThread();
           }
           break;
         case ContentEffect.StaticColor:
