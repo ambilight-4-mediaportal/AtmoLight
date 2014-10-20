@@ -214,7 +214,7 @@ namespace AtmoLight
       return true;
     }
 
-    public bool ChangeImage(byte[] pixeldata)
+    public bool ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
       return true;
     }
@@ -246,11 +246,6 @@ namespace AtmoLight
     public void SetStartAtmoWin(bool startAtmoWin)
     {
       this.startAtmoWin = startAtmoWin;
-    }
-
-    public void SetStaticColor(int[] staticColor)
-    {
-      this.staticColor = staticColor;
     }
 
 
@@ -672,6 +667,55 @@ namespace AtmoLight
     }
 
 
+    #endregion
+
+    #region Threads
+    /// <summary>
+    /// Start the GetAtmoLiveViewSource thread.
+    /// </summary>
+    private void StartGetAtmoLiveViewSourceThread()
+    {
+      getAtmoLiveViewSourceLock = false;
+      getAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
+      getAtmoLiveViewSourceThreadHelper.Name = "AtmoLight GetAtmoLiveViewSource";
+      getAtmoLiveViewSourceThreadHelper.Start();
+    }
+
+    /// <summary>
+    /// Stop the GetAtmoLiveViewSource thread.
+    /// </summary>
+    private void StopGetAtmoLiveViewSourceThread()
+    {
+      getAtmoLiveViewSourceLock = true;
+    }
+
+
+    /// <summary>
+    /// Check if the AtmoWin liveview source is set to external when MediaPortal liveview is used.
+    /// Set liveview source back to external if needed.
+    /// This method is designed to run as its own thread.
+    /// </summary>
+    private void GetAtmoLiveViewSourceThread()
+    {
+      try
+      {
+        while (!getAtmoLiveViewSourceLock && IsConnected())
+        {
+          GetAtmoLiveViewSource();
+          if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
+          {
+            Log.Debug("AtmoWin Liveview Source is not lvsExternal");
+            SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
+          }
+          System.Threading.Thread.Sleep(delayGetAtmoLiveViewSource);
+        }
+      }
+      catch (Exception ex)
+      {
+        Log.Error("Error in GetAtmoLiveViewSourceThread.");
+        Log.Error("Exception: {0}", ex.Message);
+      }
+    }
     #endregion
 
 
