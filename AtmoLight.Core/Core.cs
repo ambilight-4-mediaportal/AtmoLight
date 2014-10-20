@@ -13,6 +13,10 @@ using System.Drawing.Imaging;
 using System.Net.Sockets;
 using System.Linq;
 using proto;
+
+//Hyperion Handler
+using HyperionHandler = global::AtmoLight.Targets.HyperionHandler;
+
 namespace AtmoLight
 {
   public enum ContentEffect
@@ -54,8 +58,6 @@ namespace AtmoLight
     private Thread gifReaderThreadHelper;
     private Thread vuMeterThreadHelper;
 
-
-
     // States
     private bool currentState = false; // State of the LEDs
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current aktive effect
@@ -63,11 +65,11 @@ namespace AtmoLight
 
 
     AtmoWinHandler atmoWinHandler;
-    HyperionHander hyperionHandler;
+    HyperionHandler hyperionHandler;
 
     // Lists
     private List<Target> targets = new List<Target>();
-    private List<Object> targetObjects = new List<Object>();
+    private List<Target> connectedTargets = new List<Target>();
 
     private List<byte[]> pixelDataList = new List<byte[]>(); // List for pixelData (Delay)
     private List<byte[]> bmiInfoHeaderList = new List<byte[]>(); // List for bmiInfoHeader (Delay)
@@ -94,8 +96,9 @@ namespace AtmoLight
 
     public delegate double[] NewVUMeterHander();
     public static event NewVUMeterHander OnNewVUMeter;
-
-
+    private string atmoWinPath;
+    private bool reInitOnError;
+    private int hyperionPriority;
 
     #endregion
 
@@ -237,11 +240,14 @@ namespace AtmoLight
         if (targets[i] == Target.AtmoWin)
         {
           atmoWinHandler = new AtmoWinHandler();
-
+          atmoWinHandler.SetAtmoWinPath(atmoWinPath);
+          atmoWinHandler.SetReInitOnError(reInitOnError);
+          atmoWinHandler.SetStartAtmoWin(startAtmoWin);
+          atmoWinHandler.SetStaticColor(staticColor);
         }
         else if (targets[i] == Target.Hyperion)
         {
-          targetObjects.Add(new HyperionHandler());
+          hyperionHandler = new HyperionHandler();
         }
       }
       return true;
@@ -358,7 +364,36 @@ namespace AtmoLight
     }
     #endregion
 
-    
+    public bool IsConnected()
+    {
+      for (int i = 0; i <= connectedTargets.Count; i++)
+      {
+        switch (connectedTargets[i])
+        {
+          case Target.AtmoWin:
+            if (!atmoWinHandler.IsConnected())
+            {
+              connectedTargets.RemoveAt(i);
+              if (connectedTargets.Count == 0)
+              {
+                return false;
+              }
+            }
+            break;
+          case Target.Hyperion:
+            if (!hyperionHandler.IsConnected())
+            {
+              connectedTargets.RemoveAt(i);
+              if (connectedTargets.Count == 0)
+              {
+                return false;
+              }
+            }
+            break;
+        }
+      }
+      return true;
+    }
 
     #region Control LEDs
     /// <summary>
@@ -387,77 +422,114 @@ namespace AtmoLight
       {
         case ContentEffect.AtmoWinLiveMode:
           currentState = true;
-          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI)) return false;
+          for (int i = 0; i <= connectedTargets.Count; i++)
+          {
+            switch (connectedTargets[i])
+            {
+              case Target.AtmoWin:
+                atmoWinHandler.ChangeEffect(ContentEffect.AtmoWinLiveMode);
+                break;
+            }
+          }
           break;
         case ContentEffect.Colorchanger:
           currentState = true;
-          if (!SetAtmoEffect(ComEffectMode.cemColorChange)) return false;
+          for (int i = 0; i <= connectedTargets.Count; i++)
+          {
+            switch (connectedTargets[i])
+            {
+              case Target.AtmoWin:
+                atmoWinHandler.ChangeEffect(ContentEffect.Colorchanger);
+                break;
+            }
+          }
           break;
         case ContentEffect.ColorchangerLR:
           currentState = true;
-          if (!SetAtmoEffect(ComEffectMode.cemLrColorChange)) return false;
+          for (int i = 0; i <= connectedTargets.Count; i++)
+          {
+            switch (connectedTargets[i])
+            {
+              case Target.AtmoWin:
+                atmoWinHandler.ChangeEffect(ContentEffect.ColorchangerLR);
+                break;
+            }
+          }
           break;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
           currentState = false;
-
-          if (hyperionSocket.Connected)
+          for (int i = 0; i <= connectedTargets.Count; i++)
           {
-              HyperionClearPriority(Settings.hyperionPriority);
+            switch (connectedTargets[i])
+            {
+              case Target.AtmoWin:
+                atmoWinHandler.ChangeEffect(ContentEffect.LEDsDisabled);
+                break;
+              case Target.Hyperion:
+                hyperionHandler.ChangeColor(0, 0, 0, hyperionPriority);
+                break;
+            }
           }
-
-          if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
-          // Workaround for SEDU.
-          // Without the sleep it would not change to color.
-          System.Threading.Thread.Sleep(delaySetStaticColor);
-          if (!SetAtmoColor(0, 0, 0)) return false;
           break;
         case ContentEffect.MediaPortalLiveMode:
           currentState = true;
-          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
-
-          if (delayEnabled)
+          for (int i = 0; i <= connectedTargets.Count; i++)
           {
-            Log.Debug("Adding {0}ms delay to the LEDs.", delayTime);
-            StartSetPixelDataThread();
+            switch (connectedTargets[i])
+            {
+              case Target.AtmoWin:
+                atmoWinHandler.ChangeEffect(ContentEffect.MediaPortalLiveMode);
+                break;
+            }
           }
-
-          StartGetAtmoLiveViewSourceThread();
           break;
         case ContentEffect.StaticColor:
           currentState = true;
-
-          if (hyperionSocket.Connected)
+          for (int i = 0; i <= connectedTargets.Count; i++)
           {
-            HyperionChangeColor(staticColor[0], staticColor[1], staticColor[2], Settings.hyperionPriority);
+            switch (connectedTargets[i])
+            {
+              case Target.AtmoWin:
+                atmoWinHandler.ChangeEffect(ContentEffect.StaticColor);
+                atmoWinHandler.ChangeColor(staticColor[0], staticColor[1], staticColor[2]);
+                break;
+              case Target.Hyperion:
+                hyperionHandler.ChangeColor(staticColor[0], staticColor[1], staticColor[2], hyperionPriority);
+                break;
+            }
           }
-
-          if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
-          if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
-          // Workaround for SEDU.
-          // Without the sleep it would not change to color.
-          System.Threading.Thread.Sleep(delaySetStaticColor);
-          if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
           break;
         case ContentEffect.GIFReader:
           currentState = true;
-          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
+          for (int i = 0; i <= connectedTargets.Count; i++)
+          {
+            switch (connectedTargets[i])
+            {
+              case Target.AtmoWin:
+                atmoWinHandler.ChangeEffect(ContentEffect.MediaPortalLiveMode);
+                break;
+            }
+          }
           StartGetAtmoLiveViewSourceThread();
           StartGIFReaderThread();
           break;
         case ContentEffect.VUMeter:
         case ContentEffect.VUMeterRainbow:
-          currentState = true;
+          for (int i = 0; i <= connectedTargets.Count; i++)
+          {
+            switch (connectedTargets[i])
+            {
+              case Target.AtmoWin:
+                atmoWinHandler.ChangeEffect(ContentEffect.MediaPortalLiveMode);
+                break;
+            }
+          }
           vuMeterRainbowColorScheme = (effect == ContentEffect.VUMeterRainbow) ? true : false;
-          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
           StartGetAtmoLiveViewSourceThread();
           StartVUMeterThread();
           break;
-      }
+          }
       currentEffect = changeEffect;
       changeEffect = ContentEffect.Undefined;
       return true;

@@ -112,8 +112,100 @@ namespace AtmoLight
       return;
     }
 
-    public bool ChangeEffect(ContentEffect effect)
+    public bool ChangeEffect(ContentEffect effect, bool force = false)
     {
+      if (!IsConnected())
+      {
+        return false;
+      }
+      // Static color gets excluded so we can actually change it.
+      if ((effect == currentEffect) && (!force))
+      {
+        Log.Debug("Effect \"{0}\" is already active. Nothing to do.", effect);
+        return false;
+      }
+      currentEffect = ContentEffect.Undefined;
+      changeEffect = effect;
+      Log.Info("Changing AtmoLight effect to: {0}", effect.ToString());
+      StopAllThreads();
+      switch (effect)
+      {
+        case ContentEffect.AtmoWinLiveMode:
+          currentState = true;
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI)) return false;
+          break;
+        case ContentEffect.Colorchanger:
+          currentState = true;
+          if (!SetAtmoEffect(ComEffectMode.cemColorChange)) return false;
+          break;
+        case ContentEffect.ColorchangerLR:
+          currentState = true;
+          if (!SetAtmoEffect(ComEffectMode.cemLrColorChange)) return false;
+          break;
+        case ContentEffect.LEDsDisabled:
+        case ContentEffect.Undefined:
+          currentState = false;
+
+          if (HyperionHandler.hyperionSocket.Connected)
+          {
+            HyperionHandler.HyperionClearPriority(Settings.hyperionPriority);
+          }
+
+          if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
+          // Workaround for SEDU.
+          // Without the sleep it would not change to color.
+          System.Threading.Thread.Sleep(delaySetStaticColor);
+          if (!SetAtmoColor(0, 0, 0)) return false;
+          break;
+        case ContentEffect.MediaPortalLiveMode:
+          currentState = true;
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
+
+          if (delayEnabled)
+          {
+            Log.Debug("Adding {0}ms delay to the LEDs.", delayTime);
+            StartSetPixelDataThread();
+          }
+
+          StartGetAtmoLiveViewSourceThread();
+          break;
+        case ContentEffect.StaticColor:
+          currentState = true;
+
+          //Hyperion SET static color
+          if (HyperionHandler.hyperionSocket.Connected)
+          {
+            HyperionHandler.HyperionChangeColor(staticColor[0], staticColor[1], staticColor[2], Settings.hyperionPriority);
+          }
+
+          if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
+          if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
+          // Workaround for SEDU.
+          // Without the sleep it would not change to color.
+          System.Threading.Thread.Sleep(delaySetStaticColor);
+          if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
+          break;
+        case ContentEffect.GIFReader:
+          currentState = true;
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
+          StartGetAtmoLiveViewSourceThread();
+          StartGIFReaderThread();
+          break;
+        case ContentEffect.VUMeter:
+        case ContentEffect.VUMeterRainbow:
+          currentState = true;
+          vuMeterRainbowColorScheme = (effect == ContentEffect.VUMeterRainbow) ? true : false;
+          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
+          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
+          StartGetAtmoLiveViewSourceThread();
+          StartVUMeterThread();
+          break;
+      }
+      currentEffect = changeEffect;
+      changeEffect = ContentEffect.Undefined;
       return true;
     }
 
@@ -141,22 +233,22 @@ namespace AtmoLight
       return true;
     }
 
-    public void UpdateAtmoWinPath(string path)
+    public void SetAtmoWinPath(string path)
     {
       atmoWinPath = path;
     }
 
-    public void UpdateReInitOnError(bool reInit)
+    public void SetReInitOnError(bool reInit)
     {
       reInitOnError = reInit;
     }
 
-    public void UpdateStartAtmoWin(bool startAtmoWin)
+    public void SetStartAtmoWin(bool startAtmoWin)
     {
       this.startAtmoWin = startAtmoWin;
     }
 
-    public void UpdateStaticColor(int[] staticColor)
+    public void SetStaticColor(int[] staticColor)
     {
       this.staticColor = staticColor;
     }

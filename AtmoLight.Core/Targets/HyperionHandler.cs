@@ -19,15 +19,27 @@ namespace AtmoLight.Targets
   {
     #region Fields
 
-    private TcpClient hyperionSocket = new TcpClient();
-    private Stream hyperionStream;
+    public static TcpClient hyperionSocket = new TcpClient();
+    public Stream hyperionStream;
+    public Boolean hyperionIsConnected = false;
 
     private int captureWidth = 64;
     private int captureHeight = 48;
 
     #endregion
     #region Hyperion
-    private void HyperionChangeColor(int red, int green, int blue, int priority)
+
+    public Boolean SetupConnection()
+    {
+        if (hyperionIsConnected == false)
+        {
+            Log.Debug("Trying to connect to Hyperion");
+            hyperionSocket.Connect(Settings.hyperionIP, Settings.hyperionPort);
+            Log.Debug("Connected to Hyperion.");
+            hyperionStream = hyperionSocket.GetStream();
+        }
+    }
+    public void ChangeColor(int red, int green, int blue, int priority)
     {
       ColorRequest colorRequest = ColorRequest.CreateBuilder()
         .SetRgbColor((red * 256 * 256) + (green * 256) + blue)
@@ -40,9 +52,9 @@ namespace AtmoLight.Targets
         .SetExtension(ColorRequest.ColorRequest_, colorRequest)
         .Build();
 
-      HyperionSendRequest(request);
+      SendRequest(request);
     }
-    private void HyperionClearPriority(int priority)
+    public void ClearPriority(int priority)
     {
       ClearRequest clearRequest = ClearRequest.CreateBuilder()
       .SetPriority(priority)
@@ -53,18 +65,18 @@ namespace AtmoLight.Targets
       .SetExtension(ClearRequest.ClearRequest_, clearRequest)
       .Build();
 
-      HyperionSendRequest(request);
+      SendRequest(request);
     }
-    private void HyperionClearAll()
+    public void ClearAll()
     {
       HyperionRequest request = HyperionRequest.CreateBuilder()
       .SetCommand(HyperionRequest.Types.Command.CLEARALL)
       .Build();
 
-      HyperionSendRequest(request);
+      SendRequest(request);
     }
 
-    private void HyperionSendImage(byte[] pixeldata, int priority)
+    public void SendImage(byte[] pixeldata, int priority)
     {
       // Hyperion expects the bytestring to be the size of 3*width*height.
       // So 3 bytes per pixel, as in RGB.
@@ -95,10 +107,10 @@ namespace AtmoLight.Targets
         .SetExtension(ImageRequest.ImageRequest_, imageRequest)
         .Build();
 
-      HyperionSendRequest(request);
+      SendRequest(request);
     }
 
-    private void HyperionSendRequest(HyperionRequest request)
+    private void SendRequest(HyperionRequest request)
     {
       if (hyperionSocket.Connected)
       {
