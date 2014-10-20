@@ -53,6 +53,15 @@ namespace AtmoLight.Targets
 
         return IsInitialised;
     }
+
+    public void Dispose()
+    {
+        if (Socket.Connected)
+        {
+            ClearPriority(hyperionPriority);
+            Socket.Close();
+        }
+    }
     public Boolean IsConnected()
     {
         return Connected;
