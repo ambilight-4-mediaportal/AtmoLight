@@ -262,6 +262,22 @@ namespace AtmoLight
       return true;
     }
 
+    public void Dispose()
+    {
+      for (int i = 0; i <= connectedTargets.Count; i++)
+      {
+        switch (connectedTargets[i])
+        {
+          case Target.AtmoWin:
+            atmoWinHandler.Dispose();
+            break;
+          case Target.Hyperion:
+            hyperionHandler.Dispose();
+            break;
+        }
+      }
+    }
+
     #region Delay Lists
     /// <summary>
     /// Add new Items to the delay lists.

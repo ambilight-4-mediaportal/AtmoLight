@@ -176,12 +176,7 @@ namespace AtmoLight
         AtmoLightObject.ChangeEffect(ContentEffect.AtmoWinLiveMode);
       }
 
-      AtmoLightObject.Disconnect();
-
-      if (Settings.exitAtmoWin)
-      {
-        AtmoLightObject.StopAtmoWin();
-      }
+      AtmoLightObject.Dispose();
 
       Log.Debug("Plugin Stopped.");
 
