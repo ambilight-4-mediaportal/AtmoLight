@@ -19,25 +19,47 @@ namespace AtmoLight.Targets
   {
     #region Fields
 
-    public static TcpClient hyperionSocket = new TcpClient();
-    public Stream hyperionStream;
-    public Boolean hyperionIsConnected = false;
+    private static TcpClient Socket = new TcpClient();
+    private Stream Stream;
+    private Boolean Connected = false;
 
     private int captureWidth = 64;
     private int captureHeight = 48;
 
+
+    private string hyperionIP = "";
+    private int hyperionPort = 0;
+    private string hyperionstaticColor = "";
+    private int hyperionPriority = 0;
+    private Boolean hyperionReconnectOnError = false;
+
     #endregion
     #region Hyperion
 
-    public Boolean SetupConnection()
+    public Boolean isConnected()
     {
-        if (hyperionIsConnected == false)
+        return Connected;
+    }
+    public Boolean setupConnection()
+    {
+        if (Connected == false)
         {
-            Log.Debug("Trying to connect to Hyperion");
-            hyperionSocket.Connect(Settings.hyperionIP, Settings.hyperionPort);
-            Log.Debug("Connected to Hyperion.");
-            hyperionStream = hyperionSocket.GetStream();
+            try
+            {
+                Log.Debug("Trying to connect to Hyperion");
+                Socket.SendTimeout = 5000;
+                Socket.ReceiveTimeout = 5000;
+                Socket.Connect(hyperionIP, hyperionPort);
+                Log.Debug("Connected to Hyperion.");
+                Stream = Socket.GetStream();
+                Connected = Socket.Connected;
+            }
+            catch (Exception e)
+            {
+                Log.Debug("Error while connecting to Hyperion");
+            }
         }
+        return Connected;
     }
     public void ChangeColor(int red, int green, int blue, int priority)
     {
@@ -112,7 +134,7 @@ namespace AtmoLight.Targets
 
     private void SendRequest(HyperionRequest request)
     {
-      if (hyperionSocket.Connected)
+      if (Socket.Connected)
       {
         int size = request.SerializedSize;
 
@@ -124,11 +146,11 @@ namespace AtmoLight.Targets
 
         int headerSize = header.Count();
 
-        hyperionStream.Write(header, 0, headerSize);
-        request.WriteTo(hyperionStream);
+        Stream.Write(header, 0, headerSize);
+        request.WriteTo(Stream);
         Log.Debug("Hyperion data written.");
 
-        hyperionStream.Flush();
+        Stream.Flush();
         Log.Debug("Hyperion data flushed.");
 
         HyperionReply reply = receiveReply();
@@ -138,7 +160,7 @@ namespace AtmoLight.Targets
 
     private HyperionReply receiveReply()
     {
-      Stream input = hyperionSocket.GetStream();
+      Stream input = Socket.GetStream();
       byte[] header = new byte[4];
       input.Read(header, 0, 4);
       int size = (header[0] << 24) | (header[1] << 16) | (header[2] << 8) | (header[3]);
@@ -147,6 +169,30 @@ namespace AtmoLight.Targets
       HyperionReply reply = HyperionReply.ParseFrom(data);
       return reply;
     }
+    #endregion
+
+    #region settings
+    public void setHyperionIP(string ip)
+    {
+        hyperionIP = ip;
+    }
+    public void setHyperionPort(int port)
+    {
+        hyperionPort = port;
+    }
+    public void setHyperionStaticColor(string staticColor)
+    {
+        hyperionstaticColor = staticColor;
+    }
+    public void setHyperionPriority(int priority)
+    {
+        hyperionPriority = priority;
+    }
+    public void setReconnectOnError(Boolean reconnectOnError)
+    {
+        hyperionReconnectOnError = reconnectOnError;
+    }
+
     #endregion
   }
 }
