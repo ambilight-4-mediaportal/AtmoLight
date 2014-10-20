@@ -11,7 +11,8 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
 using System.Net.Sockets;
-using Proto;
+using System.Linq;
+using proto;
 
 namespace AtmoLight
 {
@@ -93,37 +94,6 @@ namespace AtmoLight
     private TcpClient hyperionSocket = new TcpClient();
     private Stream hyperionStream;
 
-    #endregion
-
-    #region Hyperion Tests
-    // First Hyperion proto buf test implementation
-    // Hardcoded and not tested code!
-    private void HyperionTestMethod()
-    {
-      hyperionSocket.Connect("192.168.1.33", 19445);
-      hyperionStream = hyperionSocket.GetStream();
-
-      HyperionChangeColor(0, 0, 0);
-    }
-
-    private void HyperionChangeColor(int red, int green, int blue)
-    {
-      ColorRequest colorRequest = new ColorRequest();
-      colorRequest.RgbColor = 0x00FFFFFF;
-      colorRequest.Priority = 1;
-      colorRequest.Duration = 1;
-
-      HyperionRequest request = new HyperionRequest();
-      request.command = HyperionRequest.Command.COLOR;
-
-      HyperionSendRequest(request);
-    }
-
-    private void HyperionSendRequest(HyperionRequest request)
-    {
-      HyperionRequest.Serialize(hyperionStream, request);
-
-    }
     #endregion
 
     #region class Win32API
@@ -260,7 +230,10 @@ namespace AtmoLight
       this.delayTime = delayTime;
 
       // Test Hyperion
-      HyperionTestMethod();
+      Log.Debug("Trying to connect to Hyperion");
+      hyperionSocket.Connect("192.168.1.33", 19445);
+      Log.Debug("Connected to Hyperion.");
+      hyperionStream = hyperionSocket.GetStream();
     }
     #endregion
 
@@ -492,6 +465,94 @@ namespace AtmoLight
     }
     #endregion
 
+    #region Hyperion
+    private void HyperionChangeColor(int red, int green, int blue)
+    {
+      ColorRequest colorRequest = ColorRequest.CreateBuilder()
+        .SetRgbColor((red * 256 * 256) + (green * 256) + blue)
+        .SetPriority(1)
+        .SetDuration(-1)
+        .Build();
+
+      HyperionRequest request = HyperionRequest.CreateBuilder()
+        .SetCommand(HyperionRequest.Types.Command.COLOR)
+        .SetExtension(ColorRequest.ColorRequest_, colorRequest)
+        .Build();
+
+      HyperionSendRequest(request);
+    }
+
+    private void HyperionSendImage(byte[] pixeldata)
+    {
+      // Hyperion expects the bytestring to be the size of 3*width*height.
+      // So 3 bytes per pixel, as in RGB.
+      // Given pixeldata however is 4 bytes per pixel, as in RGBA.
+      // So we need to remote the last byte per pixel.
+      byte[] newpixeldata = new byte[GetCaptureHeight() * GetCaptureWidth() * 3];
+      int x = 0;
+      int i = 0;
+      while (i <= (newpixeldata.GetLength(0) - 2))
+      {
+        newpixeldata[i] = pixeldata[i+x];
+        newpixeldata[i+1] = pixeldata[i+x+1];
+        newpixeldata[i+2] = pixeldata[i+x+2];
+        i += 3;
+        x++;
+      }
+
+      ImageRequest imageRequest = ImageRequest.CreateBuilder()
+        .SetImagedata(Google.ProtocolBuffers.ByteString.CopyFrom(newpixeldata))
+        .SetImageheight(GetCaptureHeight())
+        .SetImagewidth(GetCaptureWidth())
+        .SetPriority(1)
+        .SetDuration(-1)
+        .Build();
+
+      HyperionRequest request = HyperionRequest.CreateBuilder()
+        .SetCommand(HyperionRequest.Types.Command.IMAGE)
+        .SetExtension(ImageRequest.ImageRequest_, imageRequest)
+        .Build();
+
+      HyperionSendRequest(request);
+    }
+
+    private void HyperionSendRequest(HyperionRequest request)
+    {
+      if (hyperionSocket.Connected)
+      {
+        int size = request.SerializedSize;
+
+        Byte[] header = new byte[4];
+        header[0] = (byte)((size >> 24) & 0xFF);
+        header[1] = (byte)((size >> 16) & 0xFF);
+        header[2] = (byte)((size >> 8) & 0xFF);
+        header[3] = (byte)((size) & 0xFF);
+
+        hyperionStream.Write(header, 0, header.Count());
+        request.WriteTo(hyperionStream);
+        Log.Debug("Hyperion data written.");
+
+        hyperionStream.Flush();
+        Log.Debug("Hyperion data flushed.");
+
+        HyperionReply reply = receiveReply();
+        Log.Debug("Hyperion reply: {0}", reply);
+      }
+    }
+
+    private HyperionReply receiveReply()
+    {
+      Stream input = hyperionSocket.GetStream();
+      byte[] header = new byte[4];
+      input.Read(header, 0, 4);
+      int size = (header[0] << 24) | (header[1] << 16) | (header[2] << 8) | (header[3]);
+      byte[] data = new byte[size];
+      input.Read(data, 0, size);
+      HyperionReply reply = HyperionReply.ParseFrom(data);
+      return reply;
+    }
+    #endregion
+
     #region Delay Lists
     /// <summary>
     /// Add new Items to the delay lists.
@@ -628,6 +689,11 @@ namespace AtmoLight
         Array.Copy(h2pixelData, 0, pixelData, i * GetCaptureWidth() * rgb, GetCaptureWidth() * rgb);
       }
       //send scaled and fliped frame to atmowin
+
+      if (hyperionSocket.Connected)
+      {
+        HyperionSendImage(pixelData);
+      }
 
       SetPixelData(bmiInfoHeader, pixelData);
     }
@@ -886,6 +952,12 @@ namespace AtmoLight
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
           currentState = false;
+
+          if (hyperionSocket.Connected)
+          {
+            HyperionChangeColor(0, 0, 0);
+          }
+
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           // Workaround for SEDU.
           // Without the sleep it would not change to color.
@@ -907,6 +979,12 @@ namespace AtmoLight
           break;
         case ContentEffect.StaticColor:
           currentState = true;
+
+          if (hyperionSocket.Connected)
+          {
+            HyperionChangeColor(staticColor[0], staticColor[1], staticColor[2]);
+          }
+
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
           // Workaround for SEDU.
