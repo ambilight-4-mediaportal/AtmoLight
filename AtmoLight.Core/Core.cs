@@ -492,9 +492,9 @@ namespace AtmoLight
       int i = 0;
       while (i <= (newpixeldata.GetLength(0) - 2))
       {
-        newpixeldata[i] = pixeldata[i+x];
+        newpixeldata[i] = pixeldata[i+x+2];
         newpixeldata[i+1] = pixeldata[i+x+1];
-        newpixeldata[i+2] = pixeldata[i+x+2];
+        newpixeldata[i+2] = pixeldata[i+x];
         i += 3;
         x++;
       }
@@ -527,7 +527,9 @@ namespace AtmoLight
         header[2] = (byte)((size >> 8) & 0xFF);
         header[3] = (byte)((size) & 0xFF);
 
-        hyperionStream.Write(header, 0, header.Count());
+        int headerSize = header.Count();
+
+        hyperionStream.Write(header, 0, headerSize);
         request.WriteTo(hyperionStream);
         Log.Debug("Hyperion data written.");
 
@@ -678,6 +680,7 @@ namespace AtmoLight
 
       byte[] h1pixelData = new byte[GetCaptureWidth() * rgb];
       byte[] h2pixelData = new byte[GetCaptureWidth() * rgb];
+
       //now flip horizontally, we do it always to prevent microstudder
       int i;
       for (i = 0; i < ((GetCaptureHeight() / 2) - 1); i++)
