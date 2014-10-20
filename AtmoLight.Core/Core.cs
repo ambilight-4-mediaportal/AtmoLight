@@ -13,6 +13,10 @@ using System.Drawing.Imaging;
 using System.Net.Sockets;
 using System.Linq;
 using proto;
+
+//Hyperion Handler
+using HyperionHandler = global::AtmoLight.Targets.HyperionHandler;
+
 namespace AtmoLight
 {
   public enum ContentEffect
@@ -46,8 +50,6 @@ namespace AtmoLight
     private Thread reinitialiseThreadHelper;
     private Thread gifReaderThreadHelper;
     private Thread vuMeterThreadHelper;
-
-
 
     // States
     private bool currentState = false; // State of the LEDs
@@ -83,8 +85,6 @@ namespace AtmoLight
 
     public delegate double[] NewVUMeterHander();
     public static event NewVUMeterHander OnNewVUMeter;
-
-
 
     #endregion
 
@@ -206,7 +206,16 @@ namespace AtmoLight
       }
     }
     #endregion
-
+    #region Initialize
+    public bool Initialize()
+    {
+        for (int i = 0; i <= targets.Count; i++)
+        {
+            //
+        }
+        return true;
+    }
+    #endregion
     #region Constructor
     public Core(string pathAtmoWin, bool reinitialiseOnError, bool startAtmoWin, int[] staticColor, bool delayEnabled, int delayTime)
     {
@@ -220,21 +229,11 @@ namespace AtmoLight
       this.staticColor = staticColor;
       this.delayEnabled = delayEnabled;
       this.delayTime = delayTime;
-       
-      // Test Hyperion
-      Log.Debug("Trying to connect to Hyperion");
-      hyperionSocket.Connect(Settings.hyperionIP, Settings.hyperionPort);
-      Log.Debug("Connected to Hyperion.");
-      hyperionStream = hyperionSocket.GetStream();
     }
     #endregion
 
-    
-
-    
-    
-
-    
+   
+  
 
     #region Delay Lists
     /// <summary>
@@ -391,9 +390,9 @@ namespace AtmoLight
         case ContentEffect.Undefined:
           currentState = false;
 
-          if (hyperionSocket.Connected)
+          if (HyperionHandler.hyperionSocket.Connected)
           {
-              HyperionClearPriority(Settings.hyperionPriority);
+              HyperionHandler.HyperionClearPriority(Settings.hyperionPriority);
           }
 
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
@@ -418,9 +417,10 @@ namespace AtmoLight
         case ContentEffect.StaticColor:
           currentState = true;
 
-          if (hyperionSocket.Connected)
+          //Hyperion SET static color
+          if (HyperionHandler.hyperionSocket.Connected)
           {
-            HyperionChangeColor(staticColor[0], staticColor[1], staticColor[2], Settings.hyperionPriority);
+              HyperionHandler.HyperionChangeColor(staticColor[0], staticColor[1], staticColor[2], Settings.hyperionPriority);
           }
 
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
