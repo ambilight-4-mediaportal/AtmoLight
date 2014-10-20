@@ -76,7 +76,6 @@
     <Compile Include="IniAccess.cs" />
     <Compile Include="LanguageLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TelnetInterface.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SetupForm.resx">

@@ -20,7 +20,6 @@ using MediaPortal.Configuration;
 using Language;
 using ProcessPlugins.ViewModeSwitcher;
 
-
 namespace AtmoLight
 {
   [PluginIcons("AtmoLight.Resources.Enabled.png", "AtmoLight.Resources.Disabled.png")]
@@ -309,31 +308,6 @@ namespace AtmoLight
         {
           Log.Debug("Video detected.");
           playbackEffect = Settings.effectVideo;
-
-          try
-          {
-              if (Settings.hyperionEnabled)
-              {
-                  //create raw TCP connection, telnet was the easiest as raw tcp sockets required admin access
-                  //might get replaced once Hyperion integrates web socket support
-                  TelnetInterface.TelnetConnection tc = new TelnetInterface.TelnetConnection(Settings.hyperionIP, Settings.hyperionPort);
-
-                  string s = tc.Login("", "", 100);
-                  if (tc.IsConnected == true)
-                  {
-                      //Clear dummy black channel so that leds light up from other sources with > 10 priority
-                      string command = "{\"command\":\"clear\",\"priority\":10}";
-                      tc.WriteLine(command);
-                      Log.Debug("[Atmolight] Hyperion command: " + command);
-                  }
-              }
-          }
-          catch (Exception et)
-          {
-              Log.Debug("Error during Hyperion control "+ Settings.hyperionIP + ":" + Settings.hyperionPort + ": " + et.ToString());
-          }
-
-
         }
         else if (type == g_Player.MediaType.Music)
         {
@@ -370,30 +344,6 @@ namespace AtmoLight
     /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
     {
-        try
-        {
-            if (Settings.hyperionEnabled)
-            {
-                //create raw TCP connection, telnet was the easiest as raw tcp sockets required admin access.
-                //might get replaced once Hyperion integrates web socket support
-                TelnetInterface.TelnetConnection tc = new TelnetInterface.TelnetConnection(Settings.hyperionIP, Settings.hyperionPort);
-
-                string s = tc.Login("", "", 100);
-                if (tc.IsConnected == true)
-                {
-                    //set dummy black color to disable leds.
-                    string command = "{\"color\":[0,0,0],\"command\":\"color\",\"priority\":10}";
-                    tc.WriteLine(command);
-                    Log.Debug("[Atmolight] Hyperion command: " + command);
-
-                }
-            }
-        }
-        catch (Exception et)
-        {
-            Log.Debug("Error during Hyperion control " + Settings.hyperionIP + ":" + Settings.hyperionPort + ": " + et.ToString());
-        }
-
         if (!AtmoLightObject.IsConnected())
         {
             return;
@@ -425,30 +375,6 @@ namespace AtmoLight
     /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackStopped(g_Player.MediaType type, int stoptime, string filename)
     {
-        try
-        {
-            if (Settings.hyperionEnabled)
-            {
-                //create raw TCP connection, telnet was the easiest as raw tcp sockets required admin access.
-                //might get replaced once Hyperion integrates web socket support
-                TelnetInterface.TelnetConnection tc = new TelnetInterface.TelnetConnection(Settings.hyperionIP, Settings.hyperionPort);
-
-                string s = tc.Login("", "", 100);
-                if (tc.IsConnected == true)
-                {
-                    //set dummy black color to disable leds.
-                    string command = "{\"color\":[0,0,0],\"command\":\"color\",\"priority\":10}";
-                    tc.WriteLine(command);
-                    Log.Debug("[Atmolight] Hyperion command: " + command);
-                }
-            }
-        }
-        catch (Exception et)
-        {
-            Log.Debug("Error during Hyperion control " + Settings.hyperionIP + ":" + Settings.hyperionPort + ": " + et.ToString());
-        }
-
-
       if (!AtmoLightObject.IsConnected())
       {
         return;

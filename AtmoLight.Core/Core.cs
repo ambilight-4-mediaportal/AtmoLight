@@ -13,11 +13,11 @@ using System.Drawing.Imaging;
 using System.Net.Sockets;
 using System.Linq;
 using proto;
-
 namespace AtmoLight
 {
   public enum ContentEffect
   {
+     
     LEDsDisabled = 0,
     AtmoWinLiveMode,
     Colorchanger,
@@ -33,7 +33,6 @@ namespace AtmoLight
   {
 
     #region Fields
-
     private string pathAtmoWin = "";
     private bool delayEnabled = false;
     private int delayTime = 0;    
@@ -228,10 +227,10 @@ namespace AtmoLight
       this.staticColor = staticColor;
       this.delayEnabled = delayEnabled;
       this.delayTime = delayTime;
-
+       
       // Test Hyperion
       Log.Debug("Trying to connect to Hyperion");
-      hyperionSocket.Connect("192.168.1.33", 19445);
+      hyperionSocket.Connect(Settings.hyperionIP, Settings.hyperionPort);
       Log.Debug("Connected to Hyperion.");
       hyperionStream = hyperionSocket.GetStream();
     }
@@ -487,7 +486,7 @@ namespace AtmoLight
       // Hyperion expects the bytestring to be the size of 3*width*height.
       // So 3 bytes per pixel, as in RGB.
       // Given pixeldata however is 4 bytes per pixel, as in RGBA.
-      // So we need to remote the last byte per pixel.
+      // So we need to remove the last byte per pixel.
       byte[] newpixeldata = new byte[GetCaptureHeight() * GetCaptureWidth() * 3];
       int x = 0;
       int i = 0;
