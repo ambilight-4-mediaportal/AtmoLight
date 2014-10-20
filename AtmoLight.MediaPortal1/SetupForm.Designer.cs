@@ -91,11 +91,13 @@
             this.lblHint = new System.Windows.Forms.Label();
             this.openFileDialog3 = new System.Windows.Forms.OpenFileDialog();
             this.gbHyperion = new System.Windows.Forms.GroupBox();
-            this.ckHyperionEnabled = new System.Windows.Forms.CheckBox();
-            this.tbHyperionIP = new System.Windows.Forms.TextBox();
-            this.tbHyperionPort = new System.Windows.Forms.TextBox();
-            this.lblHyperionIP = new System.Windows.Forms.Label();
             this.lblHyperionPort = new System.Windows.Forms.Label();
+            this.lblHyperionIP = new System.Windows.Forms.Label();
+            this.tbHyperionPort = new System.Windows.Forms.TextBox();
+            this.tbHyperionIP = new System.Windows.Forms.TextBox();
+            this.ckHyperionEnabled = new System.Windows.Forms.CheckBox();
+            this.lblHyperionPriority = new System.Windows.Forms.Label();
+            this.tbHyperionPriority = new System.Windows.Forms.TextBox();
             this.grpMPClose.SuspendLayout();
             this.grpMode.SuspendLayout();
             this.grpGIF.SuspendLayout();
@@ -757,6 +759,8 @@
             // 
             // gbHyperion
             // 
+            this.gbHyperion.Controls.Add(this.tbHyperionPriority);
+            this.gbHyperion.Controls.Add(this.lblHyperionPriority);
             this.gbHyperion.Controls.Add(this.lblHyperionPort);
             this.gbHyperion.Controls.Add(this.lblHyperionIP);
             this.gbHyperion.Controls.Add(this.tbHyperionPort);
@@ -769,29 +773,14 @@
             this.gbHyperion.TabStop = false;
             this.gbHyperion.Text = "Hyperion";
             // 
-            // ckHyperionEnabled
+            // lblHyperionPort
             // 
-            this.ckHyperionEnabled.AutoSize = true;
-            this.ckHyperionEnabled.Location = new System.Drawing.Point(6, 19);
-            this.ckHyperionEnabled.Name = "ckHyperionEnabled";
-            this.ckHyperionEnabled.Size = new System.Drawing.Size(109, 17);
-            this.ckHyperionEnabled.TabIndex = 0;
-            this.ckHyperionEnabled.Text = "Hyperion enabled";
-            this.ckHyperionEnabled.UseVisualStyleBackColor = true;
-            // 
-            // tbHyperionIP
-            // 
-            this.tbHyperionIP.Location = new System.Drawing.Point(41, 52);
-            this.tbHyperionIP.Name = "tbHyperionIP";
-            this.tbHyperionIP.Size = new System.Drawing.Size(150, 20);
-            this.tbHyperionIP.TabIndex = 1;
-            // 
-            // tbHyperionPort
-            // 
-            this.tbHyperionPort.Location = new System.Drawing.Point(41, 79);
-            this.tbHyperionPort.Name = "tbHyperionPort";
-            this.tbHyperionPort.Size = new System.Drawing.Size(150, 20);
-            this.tbHyperionPort.TabIndex = 2;
+            this.lblHyperionPort.AutoSize = true;
+            this.lblHyperionPort.Location = new System.Drawing.Point(6, 82);
+            this.lblHyperionPort.Name = "lblHyperionPort";
+            this.lblHyperionPort.Size = new System.Drawing.Size(29, 13);
+            this.lblHyperionPort.TabIndex = 4;
+            this.lblHyperionPort.Text = "Port:";
             // 
             // lblHyperionIP
             // 
@@ -802,14 +791,45 @@
             this.lblHyperionIP.TabIndex = 3;
             this.lblHyperionIP.Text = "IP:";
             // 
-            // lblHyperionPort
+            // tbHyperionPort
             // 
-            this.lblHyperionPort.AutoSize = true;
-            this.lblHyperionPort.Location = new System.Drawing.Point(6, 82);
-            this.lblHyperionPort.Name = "lblHyperionPort";
-            this.lblHyperionPort.Size = new System.Drawing.Size(29, 13);
-            this.lblHyperionPort.TabIndex = 4;
-            this.lblHyperionPort.Text = "Port:";
+            this.tbHyperionPort.Location = new System.Drawing.Point(41, 79);
+            this.tbHyperionPort.Name = "tbHyperionPort";
+            this.tbHyperionPort.Size = new System.Drawing.Size(150, 20);
+            this.tbHyperionPort.TabIndex = 2;
+            // 
+            // tbHyperionIP
+            // 
+            this.tbHyperionIP.Location = new System.Drawing.Point(41, 52);
+            this.tbHyperionIP.Name = "tbHyperionIP";
+            this.tbHyperionIP.Size = new System.Drawing.Size(150, 20);
+            this.tbHyperionIP.TabIndex = 1;
+            // 
+            // ckHyperionEnabled
+            // 
+            this.ckHyperionEnabled.AutoSize = true;
+            this.ckHyperionEnabled.Location = new System.Drawing.Point(6, 19);
+            this.ckHyperionEnabled.Name = "ckHyperionEnabled";
+            this.ckHyperionEnabled.Size = new System.Drawing.Size(109, 17);
+            this.ckHyperionEnabled.TabIndex = 0;
+            this.ckHyperionEnabled.Text = "Hyperion enabled";
+            this.ckHyperionEnabled.UseVisualStyleBackColor = true;
+            // 
+            // lblHyperionPriority
+            // 
+            this.lblHyperionPriority.AutoSize = true;
+            this.lblHyperionPriority.Location = new System.Drawing.Point(3, 111);
+            this.lblHyperionPriority.Name = "lblHyperionPriority";
+            this.lblHyperionPriority.Size = new System.Drawing.Size(41, 13);
+            this.lblHyperionPriority.TabIndex = 5;
+            this.lblHyperionPriority.Text = "Priority:";
+            // 
+            // tbHyperionPriority
+            // 
+            this.tbHyperionPriority.Location = new System.Drawing.Point(41, 108);
+            this.tbHyperionPriority.Name = "tbHyperionPriority";
+            this.tbHyperionPriority.Size = new System.Drawing.Size(150, 20);
+            this.tbHyperionPriority.TabIndex = 6;
             // 
             // SetupForm
             // 
@@ -923,5 +943,7 @@
     private System.Windows.Forms.TextBox tbHyperionPort;
     private System.Windows.Forms.TextBox tbHyperionIP;
     private System.Windows.Forms.CheckBox ckHyperionEnabled;
+    private System.Windows.Forms.TextBox tbHyperionPriority;
+    private System.Windows.Forms.Label lblHyperionPriority;
   }
 }

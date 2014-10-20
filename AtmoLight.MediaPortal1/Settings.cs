@@ -38,6 +38,7 @@ namespace AtmoLight
     public static bool hyperionEnabled = false;
     public static string hyperionIP = "";
     public static int hyperionPort = 0;
+    public static int hyperionPriority = 0;
 
     #endregion
 
@@ -85,6 +86,7 @@ namespace AtmoLight
         hyperionEnabled = reader.GetValueAsBool("atmolight", "hyperionEnabled", false);
         hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "");
         hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 0);
+        hyperionPriority = reader.GetValueAsInt("atmolight", "hyperionPriority", 1);
       }
     }
     public static void SaveSettings()
@@ -123,6 +125,7 @@ namespace AtmoLight
         reader.SetValueAsBool("atmolight", "hyperionEnabled", hyperionEnabled);
         reader.SetValue("atmolight", "hyperionIP", hyperionIP);
         reader.SetValue("atmolight", "hyperionPort", (int)hyperionPort);
+        reader.SetValue("atmolight", "hyperionPriority", (int)hyperionPriority);
       }
     }
 

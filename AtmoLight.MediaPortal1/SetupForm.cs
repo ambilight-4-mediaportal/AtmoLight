@@ -34,6 +34,7 @@ namespace AtmoLight
       tbGIF.Text = Settings.gifFile;
       tbHyperionIP.Text = Settings.hyperionIP;
       tbHyperionPort.Text = Settings.hyperionPort.ToString();
+      tbHyperionPriority.Text = Settings.hyperionPriority.ToString();
 
       if (Settings.manualMode)
       {
@@ -156,6 +157,7 @@ namespace AtmoLight
       grpGIF.Text = LanguageLoader.appStrings.SetupForm_grpGIF;
       lblHyperionIP.Text = LanguageLoader.appStrings.SetupForm_lblHyperionIP;
       lblHyperionPort.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPort;
+      lblHyperionPriority.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPriorty;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -281,6 +283,8 @@ namespace AtmoLight
       Settings.hyperionEnabled = ckHyperionEnabled.Checked;
       Settings.hyperionIP = tbHyperionIP.Text;
       Settings.hyperionPort = int.Parse(tbHyperionPort.Text);
+      Settings.hyperionPriority = int.Parse(tbHyperionPriority.Text);
+
       Settings.SaveSettings();
       this.DialogResult = DialogResult.OK;
     }

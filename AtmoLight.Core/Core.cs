@@ -465,11 +465,11 @@ namespace AtmoLight
     #endregion
 
     #region Hyperion
-    private void HyperionChangeColor(int red, int green, int blue)
+    private void HyperionChangeColor(int red, int green, int blue, int priority)
     {
       ColorRequest colorRequest = ColorRequest.CreateBuilder()
         .SetRgbColor((red * 256 * 256) + (green * 256) + blue)
-        .SetPriority(1)
+        .SetPriority(priority)
         .SetDuration(-1)
         .Build();
 
@@ -480,8 +480,29 @@ namespace AtmoLight
 
       HyperionSendRequest(request);
     }
+    private void HyperionClearPriority(int priority)
+    {
+        ClearRequest clearRequest = ClearRequest.CreateBuilder()
+        .SetPriority(priority)
+        .Build();
 
-    private void HyperionSendImage(byte[] pixeldata)
+        HyperionRequest request = HyperionRequest.CreateBuilder()
+        .SetCommand(HyperionRequest.Types.Command.CLEAR)
+        .SetExtension(ClearRequest.ClearRequest_, clearRequest)
+        .Build();
+
+        HyperionSendRequest(request);
+    }
+    private void HyperionClearAll()
+    {
+        HyperionRequest request = HyperionRequest.CreateBuilder()
+        .SetCommand(HyperionRequest.Types.Command.CLEARALL)
+        .Build();
+
+        HyperionSendRequest(request);
+    }
+
+    private void HyperionSendImage(byte[] pixeldata, int priority)
     {
       // Hyperion expects the bytestring to be the size of 3*width*height.
       // So 3 bytes per pixel, as in RGB.
@@ -503,7 +524,7 @@ namespace AtmoLight
         .SetImagedata(Google.ProtocolBuffers.ByteString.CopyFrom(newpixeldata))
         .SetImageheight(GetCaptureHeight())
         .SetImagewidth(GetCaptureWidth())
-        .SetPriority(1)
+        .SetPriority(priority)
         .SetDuration(-1)
         .Build();
 
@@ -694,7 +715,7 @@ namespace AtmoLight
 
       if (hyperionSocket.Connected)
       {
-        HyperionSendImage(pixelData);
+        HyperionSendImage(pixelData, Settings.hyperionPriority);
       }
 
       SetPixelData(bmiInfoHeader, pixelData);
@@ -957,7 +978,7 @@ namespace AtmoLight
 
           if (hyperionSocket.Connected)
           {
-            HyperionChangeColor(0, 0, 0);
+              HyperionClearPriority(Settings.hyperionPriority);
           }
 
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
@@ -984,7 +1005,7 @@ namespace AtmoLight
 
           if (hyperionSocket.Connected)
           {
-            HyperionChangeColor(staticColor[0], staticColor[1], staticColor[2]);
+            HyperionChangeColor(staticColor[0], staticColor[1], staticColor[2], Settings.hyperionPriority);
           }
 
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;

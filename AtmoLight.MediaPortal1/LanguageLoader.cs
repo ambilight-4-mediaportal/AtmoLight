@@ -309,6 +309,7 @@ namespace Language
     public String SetupForm_grpGIF = "GIF Reader";
     public String SetupForm_lblHyperionIP = "IP";
     public String SetupForm_lblHyperionPort = "Port";
+    public String SetupForm_lblHyperionPriorty = "Priority";
   }
 }
 
