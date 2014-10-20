@@ -24,21 +24,30 @@ namespace AtmoLight.Targets
     private Boolean Connected = false;
 
     private int captureWidth = 64;
-    private int captureHeight = 48;
+    private int captureHeight = 64;
 
 
     private string hyperionIP = "";
     private int hyperionPort = 0;
-    private string hyperionstaticColor = "";
+    private int hyperionStaticColor = 0;
     private int hyperionPriority = 0;
     private Boolean hyperionReconnectOnError = false;
 
     #endregion
     #region Hyperion
 
-    public Boolean isConnected()
+    public Boolean IsConnected()
     {
         return Connected;
+    }
+
+    public int GetCaptureWidth()
+    {
+        return captureWidth;
+    }
+    public int GetCaptureHeight()
+    {
+        return captureHeight;
     }
     public Boolean setupConnection()
     {
@@ -180,9 +189,9 @@ namespace AtmoLight.Targets
     {
         hyperionPort = port;
     }
-    public void setHyperionStaticColor(string staticColor)
+    public void setHyperionStaticColor(int staticColor)
     {
-        hyperionstaticColor = staticColor;
+        hyperionStaticColor = staticColor;
     }
     public void setHyperionPriority(int priority)
     {
