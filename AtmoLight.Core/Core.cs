@@ -13,9 +13,7 @@ using System.Drawing.Imaging;
 using System.Net.Sockets;
 using System.Linq;
 using proto;
-
-//Hyperion Handler
-using HyperionHandler = global::AtmoLight.Targets.HyperionHandler;
+using AtmoLight.Targets;
 
 namespace AtmoLight
 {
@@ -53,7 +51,6 @@ namespace AtmoLight
     private string gifPath = "";
 
     private Thread setPixelDataThreadHelper;
-    private Thread getAtmoLiveViewSourceThreadHelper;
     private Thread reinitialiseThreadHelper;
     private Thread gifReaderThreadHelper;
     private Thread vuMeterThreadHelper;
@@ -77,7 +74,6 @@ namespace AtmoLight
 
     // Locks
     private readonly object listLock = new object(); // Lock object for the above lists
-    private volatile bool getAtmoLiveViewSourceLock = true; // Lock for liveview source checks
     private volatile bool setPixelDataLock = true; // Lock for SetPixelData thread
     private volatile bool reinitialiseLock = false;
     private volatile bool gifReaderLock = true;
@@ -88,8 +84,8 @@ namespace AtmoLight
     private bool vuMeterRainbowColorScheme = false;
     private List<SolidBrush> vuMeterBrushes = new List<SolidBrush>();
 
-    private int captureWidth = 0; // AtmoWins capture width
-    private int captureHeight = 0; // AtmoWins capture height
+    private int captureWidth = 64; // AtmoWins capture width
+    private int captureHeight = 48; // AtmoWins capture height
 
     public delegate void NewConnectionLostHandler();
     public static event NewConnectionLostHandler OnNewConnectionLost;
@@ -286,7 +282,6 @@ namespace AtmoLight
       else
       {
         Log.Error("Delay buffer overflow.");
-        ReinitialiseThreaded();
       }
     }
 
@@ -333,9 +328,39 @@ namespace AtmoLight
     #endregion
 
     #region Utilities
+    public int GetCaptureWidth()
+    {
+      if (connectedTargets.Contains(Target.AtmoWin))
+      {
+        return atmoWinHandler.GetCaptureWidth();
+      }
+      else if (connectedTargets.Contains(Target.Hyperion))
+      {
+        return hyperionHandler.GetCaptureWidth();
+      }
+      else
+      {
+        return captureWidth;
+      }
+    }
 
+    public int GetCaptureHeight()
+    {
+      if (connectedTargets.Contains(Target.AtmoWin))
+      {
+        return atmoWinHandler.GetCaptureHeight();
+      }
+      else if (connectedTargets.Contains(Target.Hyperion))
+      {
+        return hyperionHandler.GetCaptureHeight();
+      }
+      else
+      {
+        return captureHeight;
+      }
+    }
 
-    public void CalculateBitmap(Stream stream, bool force = false)
+    public void CalculateBitmap(Stream stream)
     {
       // Debug file output
       // new Bitmap(stream).Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
@@ -363,8 +388,11 @@ namespace AtmoLight
       }
       //send scaled and fliped frame to atmowin
 
+      SendPixelData(pixelData, bmiInfoHeader);
+    }
 
-
+    private void SendPixelData(byte[] pixelData, byte[] bmiInfoHeader, bool force = false)
+    {
       if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
         AddDelayListItem(bmiInfoHeader, pixelData);
@@ -379,7 +407,7 @@ namespace AtmoLight
               atmoWinHandler.ChangeImage(pixelData, bmiInfoHeader);
               break;
             case Target.Hyperion:
-              hyperionHandler.ChangeImage(pixelData, hyperionPriority);
+              hyperionHandler.SendImage(pixelData, hyperionPriority);
               break;
           }
         }
@@ -409,7 +437,7 @@ namespace AtmoLight
             }
             break;
           case Target.Hyperion:
-            if (!hyperionHandler.isConnected())
+            if (!hyperionHandler.IsConnected())
             {
               connectedTargets.RemoveAt(i);
               if (connectedTargets.Count == 0)
@@ -544,7 +572,6 @@ namespace AtmoLight
                 break;
             }
           }
-          StartGetAtmoLiveViewSourceThread();
           StartGIFReaderThread();
           break;
         case ContentEffect.VUMeter:
@@ -559,7 +586,6 @@ namespace AtmoLight
             }
           }
           vuMeterRainbowColorScheme = (effect == ContentEffect.VUMeterRainbow) ? true : false;
-          StartGetAtmoLiveViewSourceThread();
           StartVUMeterThread();
           break;
           }
@@ -592,12 +618,12 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     public bool ChangeAtmoWinProfile()
     {
-      if (!SetColorMode(ComEffectMode.cemColorMode)) return false;
-
-      // Change the effect to the desired effect.
-      // Needed for AtmoWin 1.0.0.5+
-      if (!ChangeEffect(currentEffect, true)) return false;
-      return true;
+      if (connectedTargets.Contains(Target.AtmoWin))
+      {
+        if (!atmoWinHandler.ChangeProfile()) return false;
+        return true;
+      }
+      return false;
     }
 
     /// <summary>
@@ -710,24 +736,7 @@ namespace AtmoLight
       setPixelDataLock = true;
     }
 
-    /// <summary>
-    /// Start the GetAtmoLiveViewSource thread.
-    /// </summary>
-    private void StartGetAtmoLiveViewSourceThread()
-    {
-      getAtmoLiveViewSourceLock = false;
-      getAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
-      getAtmoLiveViewSourceThreadHelper.Name = "AtmoLight GetAtmoLiveViewSource";
-      getAtmoLiveViewSourceThreadHelper.Start();
-    }
 
-    /// <summary>
-    /// Stop the GetAtmoLiveViewSource thread.
-    /// </summary>
-    private void StopGetAtmoLiveViewSourceThread()
-    {
-      getAtmoLiveViewSourceLock = true;
-    }
 
     private void StartGIFReaderThread()
     {
@@ -758,7 +767,6 @@ namespace AtmoLight
     private void StopAllThreads()
     {
       StopSetPixelDataThread();
-      StopGetAtmoLiveViewSourceThread();
       StopGIFReaderThread();
       StopVUMeterThread();
     }
@@ -770,7 +778,7 @@ namespace AtmoLight
     /// </summary>
     private void SetPixelDataThread()
     {
-      if (atmoRemoteControl == null)
+      if (!IsConnected())
       {
         return;
       }
@@ -783,7 +791,7 @@ namespace AtmoLight
           {
             if (Win32API.GetTickCount() >= (delayTimingList[0] + delayTime))
             {
-              SetPixelData(bmiInfoHeaderList[0], pixelDataList[0], true);
+              SendPixelData(bmiInfoHeaderList[0], pixelDataList[0], true);
               DeleteFirstDelayListsItems();
 
               // Trim the lists, to prevent a memory leak.
@@ -804,32 +812,7 @@ namespace AtmoLight
       }
     }
 
-    /// <summary>
-    /// Check if the AtmoWin liveview source is set to external when MediaPortal liveview is used.
-    /// Set liveview source back to external if needed.
-    /// This method is designed to run as its own thread.
-    /// </summary>
-    private void GetAtmoLiveViewSourceThread()
-    {
-      try
-      {
-        while (!getAtmoLiveViewSourceLock && IsConnected())
-        {
-          GetAtmoLiveViewSource();
-          if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
-          {
-            Log.Debug("AtmoWin Liveview Source is not lvsExternal");
-            SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
-          }
-          System.Threading.Thread.Sleep(delayGetAtmoLiveViewSource);
-        }
-      }
-      catch (Exception ex)
-      {
-        Log.Error("Error in GetAtmoLiveViewSourceThread.");
-        Log.Error("Exception: {0}", ex.Message);
-      }
-    }
+
 
     private void GIFReaderThread()
     {
