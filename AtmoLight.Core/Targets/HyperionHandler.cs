@@ -75,16 +75,11 @@ namespace AtmoLight.Targets
     {
         return captureHeight;
     }
-    public Boolean Connect()
+    public void Connect()
     {
         //Use connection thread to prevent Mediaportal lag due to connect errors
         Thread t = new Thread(ConnectThread);
         t.Start();
-
-        //Wait for thread to finish
-        t.Join();
-
-        return Connected;
     }
     private void ConnectThread()
     {
