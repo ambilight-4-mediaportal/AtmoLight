@@ -77,28 +77,38 @@ namespace AtmoLight.Targets
     }
     public Boolean Connect()
     {
-        if (Connected == false)
-        {
-            try
-            {
-                //Close old socket and create new TCP client which allows it to reconnect when calling the Connect()
-                Socket.Close();
-                Socket = new TcpClient();
+        //Use connection thread to prevent Mediaportal lag due to connect errors
+        Thread t = new Thread(ConnectThread);
+        t.Start();
 
-                Log.Debug("Trying to connect to Hyperion");
-                Socket.SendTimeout = 5000;
-                Socket.ReceiveTimeout = 5000;
-                Socket.Connect(hyperionIP, hyperionPort);
-                Log.Debug("Connected to Hyperion.");
-                Stream = Socket.GetStream();
-                Connected = Socket.Connected;
-            }
-            catch (Exception e)
-            {
-                Log.Debug("Error while connecting to Hyperion");
-            }
-        }
+        //Wait for thread to finish
+        t.Join();
+
         return Connected;
+    }
+    private void ConnectThread()
+    {
+        try
+        {
+            Log.Debug("Trying to connect to Hyperion");
+
+            //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
+            Socket.Close();
+            Socket = new TcpClient();
+
+            Socket.SendTimeout = 5000;
+            Socket.ReceiveTimeout = 5000;
+            Socket.Connect(hyperionIP, hyperionPort);
+            Log.Debug("Connected to Hyperion.");
+            Stream = Socket.GetStream();
+            Connected = Socket.Connected;
+        }
+        catch (Exception e)
+        {
+            Log.Debug("Error while connecting to Hyperion");
+            Connected = false;
+        }
+
     }
     public void ChangeColor(int red, int green, int blue, int priority)
     {
