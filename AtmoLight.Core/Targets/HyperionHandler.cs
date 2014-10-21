@@ -81,6 +81,10 @@ namespace AtmoLight.Targets
         {
             try
             {
+                //Close old socket and create new TCP client which allows it to reconnect when calling the Connect()
+                Socket.Close();
+                Socket = new TcpClient();
+
                 Log.Debug("Trying to connect to Hyperion");
                 Socket.SendTimeout = 5000;
                 Socket.ReceiveTimeout = 5000;
