@@ -56,13 +56,14 @@ namespace AtmoLight.Targets
       return IsInitialised;
     }
 
-    public void Dispose()
+    public bool Dispose()
     {
       if (Socket.Connected)
       {
         ClearPriority(hyperionPriority);
         Socket.Close();
       }
+      return true;
     }
     public bool IsConnected()
     {
@@ -111,11 +112,11 @@ namespace AtmoLight.Targets
       }
 
     }
-    public void ChangeColor(int red, int green, int blue, int priority)
+    public void ChangeColor(int red, int green, int blue)
     {
       ColorRequest colorRequest = ColorRequest.CreateBuilder()
         .SetRgbColor((red * 256 * 256) + (green * 256) + blue)
-        .SetPriority(priority)
+        .SetPriority(hyperionPriority)
         .SetDuration(-1)
         .Build();
 
@@ -151,7 +152,11 @@ namespace AtmoLight.Targets
     {
       return true;
     }
-    public void ChangeImage(byte[] pixeldata, int priority)
+    public bool ChangeProfile()
+    {
+      return true;
+    }
+    public bool ChangeImage(byte[] pixeldata, byte[] dummy)
     {
       // Hyperion expects the bytestring to be the size of 3*width*height.
       // So 3 bytes per pixel, as in RGB.
@@ -173,7 +178,7 @@ namespace AtmoLight.Targets
         .SetImagedata(Google.ProtocolBuffers.ByteString.CopyFrom(newpixeldata))
         .SetImageheight(captureHeight)
         .SetImagewidth(captureWidth)
-        .SetPriority(priority)
+        .SetPriority(hyperionPriority)
         .SetDuration(-1)
         .Build();
 
@@ -183,6 +188,7 @@ namespace AtmoLight.Targets
         .Build();
 
       SendRequest(request);
+      return true;
     }
 
     private void SendRequest(HyperionRequest request)
