@@ -45,20 +45,18 @@ namespace AtmoLight
     
     private bool delayEnabled = false;
     private int delayTime = 0;    
-    private bool reinitialiseOnError = true;
     private bool startAtmoWin = true;
     private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
     private string gifPath = "";
 
     private Thread setPixelDataThreadHelper;
-    private Thread reinitialiseThreadHelper;
     private Thread gifReaderThreadHelper;
     private Thread vuMeterThreadHelper;
 
     // States
     private bool currentState = false; // State of the LEDs
-    private ContentEffect currentEffect = ContentEffect.Undefined; // Current aktive effect
-    private ContentEffect changeEffect = ContentEffect.Undefined; // Effect ChangeEffect() should change to (need for Reinitialise() if ChangeEffect() fails)
+    private static ContentEffect currentEffect = ContentEffect.Undefined; // Current aktive effect
+    private static ContentEffect changeEffect = ContentEffect.Undefined; // Effect ChangeEffect() should change to (need for Reinitialise() if ChangeEffect() fails)
 
 
     AtmoWinHandler atmoWinHandler;
@@ -75,7 +73,6 @@ namespace AtmoLight
     // Locks
     private readonly object listLock = new object(); // Lock object for the above lists
     private volatile bool setPixelDataLock = true; // Lock for SetPixelData thread
-    private volatile bool reinitialiseLock = false;
     private volatile bool gifReaderLock = true;
     private volatile bool vuMeterLock = true;
 
@@ -231,6 +228,15 @@ namespace AtmoLight
       targets.Add(target);
     }
 
+    public void AllConnectedTargets(System.Action method)
+    {
+      // Interface code to get all the targets from the conectedTargets list.
+      // Interface implementation needed first!
+      Task.Factory.StartNew(() => method());
+    }
+
+
+
     public bool Initialise()
     {
       for (int i = 0; i <= targets.Count; i++)
@@ -259,6 +265,14 @@ namespace AtmoLight
           }
         }
       }
+      return true;
+    }
+
+    public bool ReInitialise()
+    {
+      // Code that reinitialises lost connections
+      // Only used when user wishes (context menu).
+      // so should check which item from targets is not in connectedTargets and then start the ReInitialise() method of this target.
       return true;
     }
 
@@ -614,9 +628,14 @@ namespace AtmoLight
     /// Returns the current effect.
     /// </summary>
     /// <returns>Current effect</returns>
-    public ContentEffect GetCurrentEffect()
+    public static ContentEffect GetCurrentEffect()
     {
       return currentEffect;
+    }
+
+    public static ContentEffect GetChangeEffect()
+    {
+      return changeEffect;
     }
 
     /// <summary>

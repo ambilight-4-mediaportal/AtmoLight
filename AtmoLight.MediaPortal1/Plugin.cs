@@ -237,7 +237,7 @@ namespace AtmoLight
     /// </summary>
     private void CalculateDelay()
     {
-      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
+      if (Core.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
       {
         AtmoLightObject.ChangeDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
       }
@@ -414,7 +414,7 @@ namespace AtmoLight
     /// <param name="pSurface">Surface.</param>
     private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
     {
-      if (AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || width == 0 || height == 0)
+      if (Core.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || width == 0 || height == 0)
       {
         return;
       }
@@ -524,7 +524,7 @@ namespace AtmoLight
         {
           if (DialogYesNo(LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2))
           {
-            AtmoLightObject.ReinitialiseThreaded(true);
+            AtmoLightObject.ReInitialise();
           }
         }
         else
@@ -668,7 +668,7 @@ namespace AtmoLight
       }
 
       // Delay
-      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      if (Core.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
         // Toggle Delay and Change Delay
         if (AtmoLightObject.IsDelayEnabled())
@@ -691,7 +691,7 @@ namespace AtmoLight
       }
 
       // Change Static Color
-      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
+      if (Core.GetCurrentEffect() == ContentEffect.StaticColor)
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeStatic));
       }

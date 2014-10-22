@@ -18,9 +18,17 @@ namespace AtmoLight
   class AtmoWinHandler
   {
     #region Fields
+
+    //public delegate void NewConnectionLostHandler();
+    //public static event NewConnectionLostHandler OnNewConnectionLost;
+
+
+    private Thread reinitialiseThreadHelper;
+
     private string atmoWinPath = "";
     private bool reInitOnError = true;
     private bool startAtmoWin = true;
+    private bool endAtmoWin = true;
     private int[] staticColor = { 0, 0, 0 };
 
     // Com  Objects
@@ -37,6 +45,12 @@ namespace AtmoLight
     // Locks
     private volatile bool reinitialiseLock = false;
 
+
+    private int captureWidth;
+    private int captureHeight;
+    private volatile bool getAtmoLiveViewSourceLock;
+    private Thread getAtmoLiveViewSourceThreadHelper;
+
     #endregion
 
     #region Constructor
@@ -47,6 +61,32 @@ namespace AtmoLight
       Log.Debug("Core Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
     }
     #endregion
+
+    #region Initialise
+
+
+    /// <summary>
+    /// Start reinitialising in a new thread.
+    /// </summary>
+    /// <param name="force">Force the reinitialising and discard user settings.</param>
+    private void ReinitialiseThreaded(bool force = false)
+    {
+      if (!reinitialiseLock)
+      {
+        reinitialiseThreadHelper = new Thread(() => Reinitialise(force));
+        reinitialiseThreadHelper.Name = "AtmoLight Reinitialise";
+        reinitialiseThreadHelper.Start();
+      }
+      else
+      {
+        Log.Debug("Reinitialising Thread already running.");
+      }
+    }
+
+    #endregion
+
+
+
 
     #region Public methods
     /// <summary>
@@ -76,6 +116,16 @@ namespace AtmoLight
       return true;
     }
 
+    public bool Dispose()
+    {
+      Disconnect();
+      if (endAtmoWin)
+      {
+        StopAtmoWin();
+      }
+      return true;
+    }
+
     /// <summary>
     /// Restart AtmoWin and reconnects to it.
     /// </summary>
@@ -90,20 +140,20 @@ namespace AtmoLight
       if (!reInitOnError && !force)
       {
         Disconnect();
-        OnNewConnectionLost();
+        //OnNewConnectionLost();
         return;
       }
 
       reinitialiseLock = true;
       Log.Debug("Reinitialising.");
 
-      if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(changeEffect != ContentEffect.Undefined ? changeEffect : currentEffect, true))
+      if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(Core.GetChangeEffect() != ContentEffect.Undefined ? Core.GetChangeEffect() : Core.GetCurrentEffect(), true))
       {
         Disconnect();
         StopAtmoWin();
         Log.Error("Reinitialising failed.");
         reinitialiseLock = false;
-        OnNewConnectionLost();
+        //OnNewConnectionLost();
         return;
       }
 
@@ -118,40 +168,21 @@ namespace AtmoLight
       {
         return false;
       }
-      // Static color gets excluded so we can actually change it.
-      if ((effect == currentEffect) && (!force))
-      {
-        Log.Debug("Effect \"{0}\" is already active. Nothing to do.", effect);
-        return false;
-      }
-      currentEffect = ContentEffect.Undefined;
-      changeEffect = effect;
-      Log.Info("Changing AtmoLight effect to: {0}", effect.ToString());
-      StopAllThreads();
+      StopGetAtmoLiveViewSourceThread();
       switch (effect)
       {
         case ContentEffect.AtmoWinLiveMode:
-          currentState = true;
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI)) return false;
           break;
         case ContentEffect.Colorchanger:
-          currentState = true;
           if (!SetAtmoEffect(ComEffectMode.cemColorChange)) return false;
           break;
         case ContentEffect.ColorchangerLR:
-          currentState = true;
           if (!SetAtmoEffect(ComEffectMode.cemLrColorChange)) return false;
           break;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
-          currentState = false;
-
-          if (HyperionHandler.hyperionSocket.Connected)
-          {
-            HyperionHandler.HyperionClearPriority(Settings.hyperionPriority);
-          }
-
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           // Workaround for SEDU.
           // Without the sleep it would not change to color.
@@ -159,27 +190,12 @@ namespace AtmoLight
           if (!SetAtmoColor(0, 0, 0)) return false;
           break;
         case ContentEffect.MediaPortalLiveMode:
-          currentState = true;
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
-
-          if (delayEnabled)
-          {
-            Log.Debug("Adding {0}ms delay to the LEDs.", delayTime);
-            StartSetPixelDataThread();
-          }
 
           StartGetAtmoLiveViewSourceThread();
           break;
         case ContentEffect.StaticColor:
-          currentState = true;
-
-          //Hyperion SET static color
-          if (HyperionHandler.hyperionSocket.Connected)
-          {
-            HyperionHandler.HyperionChangeColor(staticColor[0], staticColor[1], staticColor[2], Settings.hyperionPriority);
-          }
-
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
           if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
           // Workaround for SEDU.
@@ -188,24 +204,17 @@ namespace AtmoLight
           if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
           break;
         case ContentEffect.GIFReader:
-          currentState = true;
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
           StartGetAtmoLiveViewSourceThread();
-          StartGIFReaderThread();
           break;
         case ContentEffect.VUMeter:
         case ContentEffect.VUMeterRainbow:
-          currentState = true;
-          vuMeterRainbowColorScheme = (effect == ContentEffect.VUMeterRainbow) ? true : false;
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
           StartGetAtmoLiveViewSourceThread();
-          StartVUMeterThread();
           break;
       }
-      currentEffect = changeEffect;
-      changeEffect = ContentEffect.Undefined;
       return true;
     }
 
@@ -229,7 +238,7 @@ namespace AtmoLight
 
       // Change the effect to the desired effect.
       // Needed for AtmoWin 1.0.0.5+
-      if (!ChangeEffect(currentEffect, true)) return false;
+      if (!ChangeEffect(Core.GetCurrentEffect(), true)) return false;
       return true;
     }
 
@@ -324,7 +333,7 @@ namespace AtmoLight
     {
       Log.Debug("Disconnecting from AtmoWin.");
 
-      StopAllThreads();
+      StopGetAtmoLiveViewSourceThread();
 
       if (atmoRemoteControl != null)
       {
@@ -364,28 +373,7 @@ namespace AtmoLight
       return true;
     }
     #endregion
-    #region Initialise
-
-
-    /// <summary>
-    /// Start reinitialising in a new thread.
-    /// </summary>
-    /// <param name="force">Force the reinitialising and discard user settings.</param>
-    private void ReinitialiseThreaded(bool force = false)
-    {
-      if (!reinitialiseLock)
-      {
-        reinitialiseThreadHelper = new Thread(() => Reinitialise(force));
-        reinitialiseThreadHelper.Name = "AtmoLight Reinitialise";
-        reinitialiseThreadHelper.Start();
-      }
-      else
-      {
-        Log.Debug("Reinitialising Thread already running.");
-      }
-    }
-
-    #endregion
+    
     #region AtmoWin
     /// <summary>
     /// Start AtmoWin.
@@ -394,12 +382,12 @@ namespace AtmoLight
     public bool StartAtmoWin()
     {
       Log.Debug("Trying to start AtmoWin.");
-      if (!System.IO.File.Exists(pathAtmoWin))
+      if (!System.IO.File.Exists(atmoWinPath))
       {
         return false;
       }
       Process AtmoWinA = new Process();
-      AtmoWinA.StartInfo.FileName = pathAtmoWin;
+      AtmoWinA.StartInfo.FileName = atmoWinPath;
       AtmoWinA.StartInfo.UseShellExecute = true;
       AtmoWinA.StartInfo.Verb = "open";
       try
@@ -459,7 +447,7 @@ namespace AtmoLight
 
     public void ChangeAtmoWinRestartOnError(bool restartOnError)
     {
-      reinitialiseOnError = restartOnError;
+      reInitOnError = restartOnError;
     }
     #endregion
     #region COM Interface
@@ -641,7 +629,7 @@ namespace AtmoLight
       return false;
     }
 
-    public void SetPixelData(byte[] bmiInfoHeader, byte[] pixelData, bool force = false)
+    public void SetPixelData(byte[] bmiInfoHeader, byte[] pixelData)
     {
       if (!IsConnected())
       {
@@ -649,14 +637,7 @@ namespace AtmoLight
       }
       try
       {
-        if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-        {
-          AddDelayListItem(bmiInfoHeader, pixelData);
-        }
-        else
-        {
-          atmoLiveViewControl.setPixelData(bmiInfoHeader, pixelData);
-        }
+        atmoLiveViewControl.setPixelData(bmiInfoHeader, pixelData);
       }
       catch (Exception ex)
       {
