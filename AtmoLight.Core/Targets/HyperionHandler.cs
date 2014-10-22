@@ -19,7 +19,7 @@ namespace AtmoLight.Targets
   {
     #region Fields
 
-    public string Name { get { return "Hyperion"; } }
+    public Target Name { get { return Target.Hyperion; } }
 
     private static TcpClient Socket = new TcpClient();
     private Stream Stream;
@@ -38,65 +38,78 @@ namespace AtmoLight.Targets
     #endregion
     #region Hyperion
 
-    public Boolean Initialise()
+    public bool Initialise()
     {
-        Boolean IsInitialised = true;
+      Boolean IsInitialised = true;
 
-        try
-        {
-            Connect();
-            ClearPriority(hyperionPriority);
-        }
-        catch (Exception e)
-        {
-            Log.Debug("Error during initialise of Hyperion");
-            IsInitialised = false;
-        }
+      try
+      {
+        Connect();
+        ClearPriority(hyperionPriority);
+      }
+      catch (Exception e)
+      {
+        Log.Debug("Error during initialise of Hyperion");
+        IsInitialised = false;
+      }
 
-        return IsInitialised;
+      return IsInitialised;
     }
 
     public void Dispose()
     {
-        if (Socket.Connected)
-        {
-            ClearPriority(hyperionPriority);
-            Socket.Close();
-        }
+      if (Socket.Connected)
+      {
+        ClearPriority(hyperionPriority);
+        Socket.Close();
+      }
     }
-    public Boolean IsConnected()
+    public bool IsConnected()
     {
-        return Connected;
+      return Connected;
     }
 
     public int GetCaptureWidth()
     {
-        return captureWidth;
+      return captureWidth;
     }
     public int GetCaptureHeight()
     {
-        return captureHeight;
+      return captureHeight;
     }
-    public Boolean Connect()
+    public void Connect()
     {
-        if (Connected == false)
+      //Use connection thread to prevent Mediaportal lag due to connect errors
+      Thread t = new Thread(ConnectThread);
+      t.Start();
+    }
+    private void ConnectThread()
+    {
+      try
+      {
+        Log.Debug("Trying to connect to Hyperion");
+
+        //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
+        try
         {
-            try
-            {
-                Log.Debug("Trying to connect to Hyperion");
-                Socket.SendTimeout = 5000;
-                Socket.ReceiveTimeout = 5000;
-                Socket.Connect(hyperionIP, hyperionPort);
-                Log.Debug("Connected to Hyperion.");
-                Stream = Socket.GetStream();
-                Connected = Socket.Connected;
-            }
-            catch (Exception e)
-            {
-                Log.Debug("Error while connecting to Hyperion");
-            }
+          Socket.Close();
         }
-        return Connected;
+        catch { };
+        Socket = new TcpClient();
+
+        Socket.SendTimeout = 5000;
+        Socket.ReceiveTimeout = 5000;
+        Socket.Connect(hyperionIP, hyperionPort);
+        Log.Debug("Connected to Hyperion.");
+        Stream = Socket.GetStream();
+        Connected = Socket.Connected;
+      }
+      catch (Exception e)
+      {
+        Log.Debug("Error while connecting to Hyperion");
+        Connected = false;
+      }
+
     }
     public void ChangeColor(int red, int green, int blue, int priority)
     {
@@ -134,8 +147,11 @@ namespace AtmoLight.Targets
 
       SendRequest(request);
     }
-
-    public void SendImage(byte[] pixeldata, int priority)
+    public bool ChangeEffect(ContentEffect effect)
+    {
+      return true;
+    }
+    public void ChangeImage(byte[] pixeldata, int priority)
     {
       // Hyperion expects the bytestring to be the size of 3*width*height.
       // So 3 bytes per pixel, as in RGB.
@@ -193,6 +209,11 @@ namespace AtmoLight.Targets
         HyperionReply reply = receiveReply();
         Log.Debug("Hyperion reply: {0}", reply);
       }
+      else
+      {
+        Connected = false;
+        Connect();
+      }
     }
 
     private HyperionReply receiveReply()
@@ -211,23 +232,23 @@ namespace AtmoLight.Targets
     #region settings
     public void setHyperionIP(string ip)
     {
-        hyperionIP = ip;
+      hyperionIP = ip;
     }
     public void setHyperionPort(int port)
     {
-        hyperionPort = port;
+      hyperionPort = port;
     }
     public void setHyperionStaticColor(int staticColor)
     {
-        hyperionStaticColor = staticColor;
+      hyperionStaticColor = staticColor;
     }
     public void setHyperionPriority(int priority)
     {
-        hyperionPriority = priority;
+      hyperionPriority = priority;
     }
     public void setReconnectOnError(Boolean reconnectOnError)
     {
-        hyperionReconnectOnError = reconnectOnError;
+      hyperionReconnectOnError = reconnectOnError;
     }
 
     #endregion
