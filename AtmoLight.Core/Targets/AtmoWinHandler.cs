@@ -116,6 +116,11 @@ namespace AtmoLight
       return true;
     }
 
+    public bool Initialise()
+    {
+      return false;
+    }
+
     public bool Dispose()
     {
       Disconnect();

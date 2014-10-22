@@ -46,7 +46,6 @@ namespace AtmoLight
     bool IsConnected();
     bool ChangeEffect(ContentEffect effect);
     bool ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader);
-    bool ChangeColor(int red, int green, int blue);
     bool ChangeProfile();
   }
 

@@ -570,7 +570,7 @@ namespace AtmoLight
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.profileButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.profileButton == 3))
       {
-        AtmoLightObject.ChangeAtmoWinProfile();
+        AtmoLightObject.ChangeProfile();
       }
     }
     #endregion
@@ -791,7 +791,7 @@ namespace AtmoLight
       }
       else if (dlg.SelectedLabel == 2)
       {
-        AtmoLightObject.ChangeAtmoWinProfile();
+        AtmoLightObject.ChangeProfile();
       }
       else if (dlg.SelectedLabel == 3)
       {
