@@ -93,8 +93,8 @@ namespace AtmoLight
     private bool vuMeterRainbowColorScheme = false;
     private List<SolidBrush> vuMeterBrushes = new List<SolidBrush>();
 
-    private int captureWidth = 64; // AtmoWins capture width
-    private int captureHeight = 48; // AtmoWins capture height
+    private static int captureWidth = 64; // AtmoWins capture width
+    private static int captureHeight = 48; // AtmoWins capture height
 
     public delegate void NewConnectionLostHandler();
     public static event NewConnectionLostHandler OnNewConnectionLost;
@@ -231,6 +231,7 @@ namespace AtmoLight
     #region Constructor
     public Core()
     {
+      AtmoWinHandler.OnNewDimensions += new AtmoWinHandler.NewCaptureDimensionsHandler(SetCaptureDimensions);
       return;
     }
     #endregion
@@ -287,6 +288,7 @@ namespace AtmoLight
       {
         target.Dispose();
       }
+      AtmoWinHandler.OnNewDimensions -= new AtmoWinHandler.NewCaptureDimensionsHandler(SetCaptureDimensions);
     }
 
     #region Delay Lists
@@ -355,35 +357,19 @@ namespace AtmoLight
     #endregion
 
     #region Utilities
-    public int GetCaptureWidth()
+
+    private void SetCaptureDimensions(int width, int height)
     {
-      // Highest priority AtmoWin
-      // If AtmoWin is a target, return CaptureWidth from AtmoWin
-      foreach(var target in targets)
-      {
-        var atmoWinTarget = target as AtmoWinHandler;
-        if (atmoWinTarget != null)
-        {
-          return atmoWinTarget.GetCaptureWidth();
-        }
-      }
-      // Else, use default CaptureWidth
+      captureWidth = width;
+      captureHeight = height;
+    }
+    public static int GetCaptureWidth()
+    {
       return captureWidth;
     }
 
-    public int GetCaptureHeight()
+    public static int GetCaptureHeight()
     {
-      // Highest priority AtmoWin
-      // If AtmoWin is a target, return CaptureHeight from AtmoWin
-      foreach (var target in targets)
-      {
-        var atmoWinTarget = target as AtmoWinHandler;
-        if (atmoWinTarget != null)
-        {
-          return atmoWinTarget.GetCaptureHeight();
-        }
-      }
-      // Else, use default CaptureHeight
       return captureHeight;
     }
 

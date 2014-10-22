@@ -25,10 +25,6 @@ namespace AtmoLight.Targets
     private Stream Stream;
     private Boolean Connected = false;
 
-    private int captureWidth = 64;
-    private int captureHeight = 64;
-
-
     private string hyperionIP = "";
     private int hyperionPort = 0;
     private int hyperionStaticColor = 0;
@@ -70,14 +66,6 @@ namespace AtmoLight.Targets
       return Connected;
     }
 
-    public int GetCaptureWidth()
-    {
-      return captureWidth;
-    }
-    public int GetCaptureHeight()
-    {
-      return captureHeight;
-    }
     public void Connect()
     {
       //Use connection thread to prevent Mediaportal lag due to connect errors
@@ -162,7 +150,7 @@ namespace AtmoLight.Targets
       // So 3 bytes per pixel, as in RGB.
       // Given pixeldata however is 4 bytes per pixel, as in RGBA.
       // So we need to remove the last byte per pixel.
-      byte[] newpixeldata = new byte[captureHeight * captureWidth * 3];
+      byte[] newpixeldata = new byte[Core.GetCaptureHeight() * Core.GetCaptureWidth() * 3];
       int x = 0;
       int i = 0;
       while (i <= (newpixeldata.GetLength(0) - 2))
@@ -176,8 +164,8 @@ namespace AtmoLight.Targets
 
       ImageRequest imageRequest = ImageRequest.CreateBuilder()
         .SetImagedata(Google.ProtocolBuffers.ByteString.CopyFrom(newpixeldata))
-        .SetImageheight(captureHeight)
-        .SetImagewidth(captureWidth)
+        .SetImageheight(Core.GetCaptureHeight())
+        .SetImagewidth(Core.GetCaptureWidth())
         .SetPriority(hyperionPriority)
         .SetDuration(-1)
         .Build();
@@ -243,14 +231,6 @@ namespace AtmoLight.Targets
     public void setHyperionPort(int port)
     {
       hyperionPort = port;
-    }
-    public void setCaptureWidth(int width)
-    {
-      captureWidth = width;
-    }
-    public void setCaptureHeight(int height)
-    {
-      captureHeight = height;
     }
     public void setHyperionStaticColor(int staticColor)
     {

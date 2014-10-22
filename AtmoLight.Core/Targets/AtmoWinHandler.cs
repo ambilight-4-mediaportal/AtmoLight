@@ -19,6 +19,9 @@ namespace AtmoLight
   {
     #region Fields
 
+    public delegate void NewCaptureDimensionsHandler(int width, int height);
+    public static event NewCaptureDimensionsHandler OnNewDimensions;
+
     //public delegate void NewConnectionLostHandler();
     //public static event NewConnectionLostHandler OnNewConnectionLost;
     public Target Name { get { return Target.AtmoWin; } }
@@ -631,6 +634,7 @@ namespace AtmoLight
         Log.Debug("Liveview capture resolution is {0}x{1}. Screenshot will be resized to this dimensions.", captureWidth, captureHeight);
         return true;
       }
+      OnNewDimensions(captureWidth, captureHeight);
       return false;
     }
 
