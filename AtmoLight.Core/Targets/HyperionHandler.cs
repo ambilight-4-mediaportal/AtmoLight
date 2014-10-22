@@ -15,9 +15,11 @@ using proto;
 
 namespace AtmoLight.Targets
 {
-  class HyperionHandler
+  class HyperionHandler : ITargets
   {
     #region Fields
+
+    public string Name { get { return "Hyperion"; } }
 
     private static TcpClient Socket = new TcpClient();
     private Stream Stream;

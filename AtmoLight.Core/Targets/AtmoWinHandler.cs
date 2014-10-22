@@ -15,13 +15,13 @@ using System.Linq;
 
 namespace AtmoLight
 {
-  class AtmoWinHandler
+  class AtmoWinHandler : ITargets
   {
     #region Fields
 
     //public delegate void NewConnectionLostHandler();
     //public static event NewConnectionLostHandler OnNewConnectionLost;
-
+    public string Name { get { return "AtmoWin"; } }
 
     private Thread reinitialiseThreadHelper;
 
@@ -147,7 +147,7 @@ namespace AtmoLight
       reinitialiseLock = true;
       Log.Debug("Reinitialising.");
 
-      if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(Core.GetChangeEffect() != ContentEffect.Undefined ? Core.GetChangeEffect() : Core.GetCurrentEffect(), true))
+      if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(Core.GetChangeEffect() != ContentEffect.Undefined ? Core.GetChangeEffect() : Core.GetCurrentEffect()))
       {
         Disconnect();
         StopAtmoWin();
@@ -162,7 +162,7 @@ namespace AtmoLight
       return;
     }
 
-    public bool ChangeEffect(ContentEffect effect, bool force = false)
+    public bool ChangeEffect(ContentEffect effect)
     {
       if (!IsConnected())
       {
@@ -238,7 +238,7 @@ namespace AtmoLight
 
       // Change the effect to the desired effect.
       // Needed for AtmoWin 1.0.0.5+
-      if (!ChangeEffect(Core.GetCurrentEffect(), true)) return false;
+      if (!ChangeEffect(Core.GetCurrentEffect())) return false;
       return true;
     }
 
