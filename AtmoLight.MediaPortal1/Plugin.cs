@@ -124,14 +124,21 @@ namespace AtmoLight
       if (Settings.atmoWinTarget)
       {
         AtmoLightObject.AddTarget(Target.AtmoWin);
+        AtmoLightObject.SetAtmoWinPath(Settings.atmowinExe);
+        AtmoLightObject.SetStartAtmoWin(Settings.startAtmoWin);
+        AtmoLightObject.SetStopAtmoWin(Settings.disableOnShutdown);
       }
       if (Settings.hyperionTarget)
       {
         AtmoLightObject.AddTarget(Target.Hyperion);
+        AtmoLightObject.SetHyperionIP(Settings.hyperionIP);
+        AtmoLightObject.SetHyperionPort(Settings.hyperionPort);
+        AtmoLightObject.SetHyperionPriority(Settings.hyperionPriority);
       }
-
-
+      AtmoLightObject.SetDelay(Settings.delayReferenceTime);
       AtmoLightObject.SetGIFPath(Settings.gifFile);
+      AtmoLightObject.SetReInitOnError(Settings.restartOnError);
+      AtmoLightObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
 
 
       if (!AtmoLightObject.Initialise())

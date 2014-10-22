@@ -257,6 +257,7 @@ namespace AtmoLight
           atmoWinTarget.SetAtmoWinPath(atmoWinPath);
           atmoWinTarget.SetReInitOnError(reInitOnError);
           atmoWinTarget.SetStartAtmoWin(startAtmoWin);
+          atmoWinTarget.SetStopAtmoWin(stopAtmoWin);
         }
         // Hyperion Init
         var hyperionTarget = target as HyperionHandler;
@@ -282,6 +283,12 @@ namespace AtmoLight
     #endregion
 
     #region Configuration Methods (set)
+    private void SetCaptureDimensions(int width, int height)
+    {
+      captureWidth = width;
+      captureHeight = height;
+    }
+
     public void AddTarget(Target target)
     {
       if (target == Target.AtmoWin)
@@ -294,12 +301,40 @@ namespace AtmoLight
       }
     }
 
-    private void SetCaptureDimensions(int width, int height)
+    public void SetAtmoWinPath(string path)
     {
-      captureWidth = width;
-      captureHeight = height;
+      atmoWinPath = path;
     }
 
+    public void SetReInitOnError(bool reInit)
+    {
+      reInitOnError = reInit;
+    }
+
+    public void SetStartAtmoWin(bool startAtmoWin)
+    {
+      this.startAtmoWin = startAtmoWin;
+    }
+
+    public void SetStopAtmoWin(bool stopAtmoWin)
+    {
+      this.stopAtmoWin = stopAtmoWin;
+    }
+
+    public void SetHyperionIP(string ip)
+    {
+      hyperionIP = ip;
+    }
+
+    public void SetHyperionPort(int port)
+    {
+      hyperionPort = port;
+    }
+
+    public void SetHyperionPriority(int priority)
+    {
+      hyperionPriority = priority;
+    }
 
     public void SetGIFPath(string path)
     {

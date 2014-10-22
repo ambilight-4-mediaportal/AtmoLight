@@ -45,7 +45,8 @@ namespace AtmoLight.Targets
       }
       catch (Exception e)
       {
-        Log.Debug("Error during initialise of Hyperion");
+        Log.Error("Error during initialise of Hyperion");
+        Log.Error("Exception: {0}", e.Message);
         IsInitialised = false;
       }
 
@@ -95,7 +96,8 @@ namespace AtmoLight.Targets
       }
       catch (Exception e)
       {
-        Log.Debug("Error while connecting to Hyperion");
+        Log.Error("Error while connecting to Hyperion");
+        Log.Error("Exception: {0}", e.Message);
         Connected = false;
       }
 

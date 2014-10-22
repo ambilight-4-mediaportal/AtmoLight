@@ -53,6 +53,7 @@ namespace AtmoLight
     private int captureHeight;
     private volatile bool getAtmoLiveViewSourceLock;
     private Thread getAtmoLiveViewSourceThreadHelper;
+    private bool stopAtmoWin;
 
     #endregion
 
@@ -88,7 +89,10 @@ namespace AtmoLight
 
     #endregion
 
-
+    public void SetStopAtmoWin(bool stopAtmoWin)
+    {
+      this.stopAtmoWin = stopAtmoWin;
+    }
 
 
     #region Public methods
