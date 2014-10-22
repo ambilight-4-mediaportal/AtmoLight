@@ -40,7 +40,7 @@ namespace AtmoLight
 
   public interface ITargets
   {
-    string Name { get; }
+    Target Name { get; }
     bool Dispose();
     bool Initialise();
     bool IsConnected();
@@ -72,12 +72,12 @@ namespace AtmoLight
     private static ContentEffect changeEffect = ContentEffect.Undefined; // Effect ChangeEffect() should change to (need for Reinitialise() if ChangeEffect() fails)
 
 
-    AtmoWinHandler atmoWinHandler;
-    HyperionHandler hyperionHandler;
+    //AtmoWinHandler atmoWinHandler;
+    //HyperionHandler hyperionHandler;
 
     // Lists
-    private List<Target> targets = new List<Target>();
-    private List<Target> connectedTargets = new List<Target>();
+    private List<ITargets> targets = new List<ITargets>();
+    //private List<Target> connectedTargets = new List<Target>();
 
     private List<byte[]> pixelDataList = new List<byte[]>(); // List for pixelData (Delay)
     private List<byte[]> bmiInfoHeaderList = new List<byte[]>(); // List for bmiInfoHeader (Delay)
@@ -238,45 +238,38 @@ namespace AtmoLight
 
     public void AddTarget(Target target)
     {
-      targets.Add(target);
+      if (target == Target.AtmoWin)
+      {
+        targets.Add(new AtmoWinHandler());
+      }
+      else if (target == Target.Hyperion)
+      {
+        targets.Add(new HyperionHandler());
+      }
     }
-
-    public void AllConnectedTargets(System.Action method)
-    {
-      // Interface code to get all the targets from the conectedTargets list.
-      // Interface implementation needed first!
-      Task.Factory.StartNew(() => method());
-    }
-
-
 
     public bool Initialise()
     {
-      for (int i = 0; i <= targets.Count; i++)
+      foreach (var target in targets)
       {
-        if (targets[i] == Target.AtmoWin)
+        // AtmoWin Init
+        var atmoWinTarget = target as AtmoWinHandler;
+        if (atmoWinTarget != null)
         {
-          atmoWinHandler = new AtmoWinHandler();
-          atmoWinHandler.SetAtmoWinPath(atmoWinPath);
-          atmoWinHandler.SetReInitOnError(reInitOnError);
-          atmoWinHandler.SetStartAtmoWin(startAtmoWin);
-          if (atmoWinHandler.Initialise())
-          {
-            connectedTargets.Add(Target.AtmoWin);
-          }
+          atmoWinTarget.SetAtmoWinPath(atmoWinPath);
+          atmoWinTarget.SetReInitOnError(reInitOnError);
+          atmoWinTarget.SetStartAtmoWin(startAtmoWin);
         }
-        else if (targets[i] == Target.Hyperion)
+        // Hyperion Init
+        var hyperionTarget = target as HyperionHandler;
+        if (hyperionTarget != null)
         {
-          hyperionHandler = new HyperionHandler();
-          hyperionHandler.setHyperionIP(hyperionIP);
-          hyperionHandler.setHyperionPort(hyperionPort);
-          hyperionHandler.setHyperionPriority(hyperionPriority);
-          hyperionHandler.setReconnectOnError(reInitOnError);
-          if (hyperionHandler.Initialise())
-          {
-            connectedTargets.Add(Target.Hyperion);
-          }
+          hyperionTarget.setHyperionIP(hyperionIP);
+          hyperionTarget.setHyperionPort(hyperionPort);
+          hyperionTarget.setHyperionPriority(hyperionPriority);
+          hyperionTarget.setReconnectOnError(reInitOnError);
         }
+        target.Initialise();
       }
       return true;
     }
@@ -291,17 +284,9 @@ namespace AtmoLight
 
     public void Dispose()
     {
-      for (int i = 0; i <= connectedTargets.Count; i++)
+      foreach (var target in targets)
       {
-        switch (connectedTargets[i])
-        {
-          case Target.AtmoWin:
-            atmoWinHandler.Dispose();
-            break;
-          case Target.Hyperion:
-            hyperionHandler.Dispose();
-            break;
-        }
+        target.Dispose();
       }
     }
 
@@ -373,34 +358,34 @@ namespace AtmoLight
     #region Utilities
     public int GetCaptureWidth()
     {
-      if (connectedTargets.Contains(Target.AtmoWin))
+      // Highest priority AtmoWin
+      // If AtmoWin is a target, return CaptureWidth from AtmoWin
+      foreach(var target in targets)
       {
-        return atmoWinHandler.GetCaptureWidth();
+        var atmoWinTarget = target as AtmoWinHandler;
+        if (atmoWinTarget != null)
+        {
+          return atmoWinTarget.GetCaptureWidth();
+        }
       }
-      else if (connectedTargets.Contains(Target.Hyperion))
-      {
-        return hyperionHandler.GetCaptureWidth();
-      }
-      else
-      {
-        return captureWidth;
-      }
+      // Else, use default CaptureWidth
+      return captureWidth;
     }
 
     public int GetCaptureHeight()
     {
-      if (connectedTargets.Contains(Target.AtmoWin))
+      // Highest priority AtmoWin
+      // If AtmoWin is a target, return CaptureHeight from AtmoWin
+      foreach (var target in targets)
       {
-        return atmoWinHandler.GetCaptureHeight();
+        var atmoWinTarget = target as AtmoWinHandler;
+        if (atmoWinTarget != null)
+        {
+          return atmoWinTarget.GetCaptureHeight();
+        }
       }
-      else if (connectedTargets.Contains(Target.Hyperion))
-      {
-        return hyperionHandler.GetCaptureHeight();
-      }
-      else
-      {
-        return captureHeight;
-      }
+      // Else, use default CaptureHeight
+      return captureHeight;
     }
 
     public void CalculateBitmap(Stream stream)
@@ -442,17 +427,9 @@ namespace AtmoLight
       }
       else
       {
-        for (int x = 0; x <= connectedTargets.Count; x++)
+        foreach (var target in targets)
         {
-          switch (connectedTargets[x])
-          {
-            case Target.AtmoWin:
-              atmoWinHandler.ChangeImage(pixelData, bmiInfoHeader);
-              break;
-            case Target.Hyperion:
-              hyperionHandler.SendImage(pixelData, hyperionPriority);
-              break;
-          }
+          target.ChangeImage(pixelData, bmiInfoHeader);
         }
       }
     }
@@ -465,33 +442,14 @@ namespace AtmoLight
 
     public bool IsConnected()
     {
-      for (int i = 0; i <= connectedTargets.Count; i++)
+      foreach (var target in targets)
       {
-        switch (connectedTargets[i])
+        if (target.IsConnected())
         {
-          case Target.AtmoWin:
-            if (!atmoWinHandler.IsConnected())
-            {
-              connectedTargets.RemoveAt(i);
-              if (connectedTargets.Count == 0)
-              {
-                return false;
-              }
-            }
-            break;
-          case Target.Hyperion:
-            if (!hyperionHandler.IsConnected())
-            {
-              connectedTargets.RemoveAt(i);
-              if (connectedTargets.Count == 0)
-              {
-                return false;
-              }
-            }
-            break;
+          return true;
         }
       }
-      return true;
+      return false;
     }
 
     #region Control LEDs
@@ -521,66 +479,38 @@ namespace AtmoLight
       {
         case ContentEffect.AtmoWinLiveMode:
           currentState = true;
-          for (int i = 0; i <= connectedTargets.Count; i++)
+          foreach (var target in targets)
           {
-            switch (connectedTargets[i])
-            {
-              case Target.AtmoWin:
-                atmoWinHandler.ChangeEffect(ContentEffect.AtmoWinLiveMode);
-                break;
-            }
+            target.ChangeEffect(ContentEffect.AtmoWinLiveMode);
           }
           break;
         case ContentEffect.Colorchanger:
           currentState = true;
-          for (int i = 0; i <= connectedTargets.Count; i++)
+          foreach (var target in targets)
           {
-            switch (connectedTargets[i])
-            {
-              case Target.AtmoWin:
-                atmoWinHandler.ChangeEffect(ContentEffect.Colorchanger);
-                break;
-            }
+            target.ChangeEffect(ContentEffect.Colorchanger);
           }
           break;
         case ContentEffect.ColorchangerLR:
           currentState = true;
-          for (int i = 0; i <= connectedTargets.Count; i++)
+          foreach (var target in targets)
           {
-            switch (connectedTargets[i])
-            {
-              case Target.AtmoWin:
-                atmoWinHandler.ChangeEffect(ContentEffect.ColorchangerLR);
-                break;
-            }
+            target.ChangeEffect(ContentEffect.ColorchangerLR);
           }
           break;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
           currentState = false;
-          for (int i = 0; i <= connectedTargets.Count; i++)
+          foreach (var target in targets)
           {
-            switch (connectedTargets[i])
-            {
-              case Target.AtmoWin:
-                atmoWinHandler.ChangeEffect(ContentEffect.LEDsDisabled);
-                break;
-              case Target.Hyperion:
-                hyperionHandler.ChangeColor(0, 0, 0, hyperionPriority);
-                break;
-            }
+            target.ChangeEffect(ContentEffect.LEDsDisabled);
           }
           break;
         case ContentEffect.MediaPortalLiveMode:
           currentState = true;
-          for (int i = 0; i <= connectedTargets.Count; i++)
+          foreach (var target in targets)
           {
-            switch (connectedTargets[i])
-            {
-              case Target.AtmoWin:
-                atmoWinHandler.ChangeEffect(ContentEffect.MediaPortalLiveMode);
-                break;
-            }
+            target.ChangeEffect(ContentEffect.MediaPortalLiveMode);
           }
           if (delayEnabled)
           {
@@ -590,45 +520,35 @@ namespace AtmoLight
           break;
         case ContentEffect.StaticColor:
           currentState = true;
-          for (int i = 0; i <= connectedTargets.Count; i++)
+          foreach (var target in targets)
           {
-            switch (connectedTargets[i])
-            {
-              case Target.AtmoWin:
-                atmoWinHandler.ChangeEffect(ContentEffect.StaticColor);
-                atmoWinHandler.ChangeColor(staticColor[0], staticColor[1], staticColor[2]);
-                break;
-              case Target.Hyperion:
-                hyperionHandler.ChangeColor(staticColor[0], staticColor[1], staticColor[2], hyperionPriority);
-                break;
-            }
+            target.ChangeEffect(ContentEffect.StaticColor);
           }
           break;
         case ContentEffect.GIFReader:
           currentState = true;
-          for (int i = 0; i <= connectedTargets.Count; i++)
+          foreach (var target in targets)
           {
-            switch (connectedTargets[i])
-            {
-              case Target.AtmoWin:
-                atmoWinHandler.ChangeEffect(ContentEffect.MediaPortalLiveMode);
-                break;
-            }
+            target.ChangeEffect(ContentEffect.GIFReader);
           }
           StartGIFReaderThread();
           break;
         case ContentEffect.VUMeter:
-        case ContentEffect.VUMeterRainbow:
-          for (int i = 0; i <= connectedTargets.Count; i++)
+          currentState = true;
+          foreach (var target in targets)
           {
-            switch (connectedTargets[i])
-            {
-              case Target.AtmoWin:
-                atmoWinHandler.ChangeEffect(ContentEffect.MediaPortalLiveMode);
-                break;
-            }
+            target.ChangeEffect(ContentEffect.VUMeter);
           }
-          vuMeterRainbowColorScheme = (effect == ContentEffect.VUMeterRainbow) ? true : false;
+          vuMeterRainbowColorScheme = false;
+          StartVUMeterThread();
+          break;
+        case ContentEffect.VUMeterRainbow:
+          currentState = true;
+          foreach (var target in targets)
+          {
+            target.ChangeEffect(ContentEffect.VUMeterRainbow);
+          }
+          vuMeterRainbowColorScheme = true;
           StartVUMeterThread();
           break;
           }
@@ -664,14 +584,12 @@ namespace AtmoLight
     /// Change to AtmoWin profile.
     /// </summary>
     /// <returns>true or false</returns>
-    public bool ChangeAtmoWinProfile()
+    public void ChangeProfile()
     {
-      if (connectedTargets.Contains(Target.AtmoWin))
+      foreach (var target in targets)
       {
-        if (!atmoWinHandler.ChangeProfile()) return false;
-        return true;
+        target.ChangeProfile();
       }
-      return false;
     }
 
     /// <summary>

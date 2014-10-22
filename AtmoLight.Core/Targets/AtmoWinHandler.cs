@@ -21,7 +21,7 @@ namespace AtmoLight
 
     //public delegate void NewConnectionLostHandler();
     //public static event NewConnectionLostHandler OnNewConnectionLost;
-    public string Name { get { return "AtmoWin"; } }
+    public Target Name { get { return Target.AtmoWin; } }
 
     private Thread reinitialiseThreadHelper;
 
