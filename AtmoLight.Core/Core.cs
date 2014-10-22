@@ -54,13 +54,7 @@ namespace AtmoLight
   {
 
     #region Fields
-    
-    private bool delayEnabled = false;
-    private int delayTime = 0;    
-    private bool startAtmoWin = true;
-    private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
-    private string gifPath = "";
-
+    // Threads
     private Thread setPixelDataThreadHelper;
     private Thread gifReaderThreadHelper;
     private Thread vuMeterThreadHelper;
@@ -70,14 +64,8 @@ namespace AtmoLight
     private static ContentEffect currentEffect = ContentEffect.Undefined; // Current aktive effect
     private static ContentEffect changeEffect = ContentEffect.Undefined; // Effect ChangeEffect() should change to (need for Reinitialise() if ChangeEffect() fails)
 
-
-    //AtmoWinHandler atmoWinHandler;
-    //HyperionHandler hyperionHandler;
-
     // Lists
     private List<ITargets> targets = new List<ITargets>();
-    //private List<Target> connectedTargets = new List<Target>();
-
     private List<byte[]> pixelDataList = new List<byte[]>(); // List for pixelData (Delay)
     private List<byte[]> bmiInfoHeaderList = new List<byte[]>(); // List for bmiInfoHeader (Delay)
     private List<long> delayTimingList = new List<long>(); // List for timings (Delay)
@@ -93,16 +81,28 @@ namespace AtmoLight
     private bool vuMeterRainbowColorScheme = false;
     private List<SolidBrush> vuMeterBrushes = new List<SolidBrush>();
 
-    private static int captureWidth = 64; // AtmoWins capture width
-    private static int captureHeight = 48; // AtmoWins capture height
-
+    // Evevnt Handler
     public delegate void NewConnectionLostHandler();
     public static event NewConnectionLostHandler OnNewConnectionLost;
 
     public delegate double[] NewVUMeterHander();
     public static event NewVUMeterHander OnNewVUMeter;
-    private string atmoWinPath;
+
+    // Generic Fields
+    private static int captureWidth = 64; // Default fallback capture width
+    private static int captureHeight = 48; // Default fallback capture height
+    private bool delayEnabled = false;
+    private int delayTime = 0;
+    private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
+    private string gifPath = "";
     private bool reInitOnError;
+
+    // AtmoWin Settings Fields
+    private bool startAtmoWin = true;
+    private bool stopAtmoWin = true;
+    private string atmoWinPath;
+
+    // Hyperion Settings Fields
     private int hyperionPriority;
     private string hyperionIP;
     private int hyperionPort;
@@ -228,26 +228,24 @@ namespace AtmoLight
     }
     #endregion
 
-    #region Constructor
+    #region Constructor/Deconstructor
     public Core()
     {
       AtmoWinHandler.OnNewDimensions += new AtmoWinHandler.NewCaptureDimensionsHandler(SetCaptureDimensions);
       return;
     }
+
+    public void Dispose()
+    {
+      foreach (var target in targets)
+      {
+        target.Dispose();
+      }
+      AtmoWinHandler.OnNewDimensions -= new AtmoWinHandler.NewCaptureDimensionsHandler(SetCaptureDimensions);
+    }
     #endregion
 
-    public void AddTarget(Target target)
-    {
-      if (target == Target.AtmoWin)
-      {
-        targets.Add(new AtmoWinHandler());
-      }
-      else if (target == Target.Hyperion)
-      {
-        targets.Add(new HyperionHandler());
-      }
-    }
-
+    #region Initialisation
     public bool Initialise()
     {
       foreach (var target in targets)
@@ -281,15 +279,144 @@ namespace AtmoLight
       // so should check which item from targets is not in connectedTargets and then start the ReInitialise() method of this target.
       return true;
     }
+    #endregion
 
-    public void Dispose()
+    #region Configuration Methods (set)
+    public void AddTarget(Target target)
+    {
+      if (target == Target.AtmoWin)
+      {
+        targets.Add(new AtmoWinHandler());
+      }
+      else if (target == Target.Hyperion)
+      {
+        targets.Add(new HyperionHandler());
+      }
+    }
+
+    private void SetCaptureDimensions(int width, int height)
+    {
+      captureWidth = width;
+      captureHeight = height;
+    }
+
+
+    public void SetGIFPath(string path)
+    {
+      gifPath = path;
+    }
+
+    /// <summary>
+    /// Changes the delay time.
+    /// </summary>
+    /// <param name="delay">Delay in ms.</param>
+    /// <returns>true or false</returns>
+    public bool SetDelay(int delay)
+    {
+      if (delay > 0)
+      {
+        Log.Debug("Changing delay to {0}ms.", delay);
+        delayTime = delay;
+        return true;
+      }
+      return false;
+    }
+
+    /// <summary>
+    /// Changes the static color.
+    /// </summary>
+    /// <param name="red">Red in RGB format.</param>
+    /// <param name="green">Green  in RGB format.</param>
+    /// <param name="blue">Blue  in RGB format.</param>
+    /// <returns>true or false</returns>
+    public bool SetStaticColor(int red, int green, int blue)
+    {
+      if ((red >= 0 && red <= 255) && (green >= 0 && green <= 255) && (blue >= 0 && blue <= 255))
+      {
+        staticColor[0] = red;
+        staticColor[1] = green;
+        staticColor[2] = blue;
+        return true;
+      }
+      return false;
+    }
+    #endregion
+
+    #region Information Methods (get)
+    public bool IsConnected()
     {
       foreach (var target in targets)
       {
-        target.Dispose();
+        if (target.IsConnected())
+        {
+          return true;
+        }
       }
-      AtmoWinHandler.OnNewDimensions -= new AtmoWinHandler.NewCaptureDimensionsHandler(SetCaptureDimensions);
+      return false;
     }
+
+    /// <summary>
+    /// Returns if AtmoLight/LEDs are on.
+    /// </summary>
+    /// <returns>true or false</returns>
+    public bool IsAtmoLightOn()
+    {
+      return currentState;
+    }
+
+    /// <summary>
+    /// Returns if the delay in enabled.
+    /// </summary>
+    /// <returns>true or false</returns>
+    public bool IsDelayEnabled()
+    {
+      return delayEnabled;
+    }
+
+    /// <summary>
+    /// Returns the delay time.
+    /// </summary>
+    /// <returns>Delay in ms.</returns>
+    public int GetDelayTime()
+    {
+      return delayTime;
+    }
+
+    /// <summary>
+    /// Returns the static color.
+    /// </summary>
+    /// <returns>Static Color as int array</returns>
+    public int[] GetStaticColor()
+    {
+      return staticColor;
+    }
+    #endregion
+
+    #region Static Methods
+    public static int GetCaptureWidth()
+    {
+      return captureWidth;
+    }
+
+    public static int GetCaptureHeight()
+    {
+      return captureHeight;
+    }
+
+    /// <summary>
+    /// Returns the current effect.
+    /// </summary>
+    /// <returns>Current effect</returns>
+    public static ContentEffect GetCurrentEffect()
+    {
+      return currentEffect;
+    }
+
+    public static ContentEffect GetChangeEffect()
+    {
+      return changeEffect;
+    }
+    #endregion
 
     #region Delay Lists
     /// <summary>
@@ -357,22 +484,6 @@ namespace AtmoLight
     #endregion
 
     #region Utilities
-
-    private void SetCaptureDimensions(int width, int height)
-    {
-      captureWidth = width;
-      captureHeight = height;
-    }
-    public static int GetCaptureWidth()
-    {
-      return captureWidth;
-    }
-
-    public static int GetCaptureHeight()
-    {
-      return captureHeight;
-    }
-
     public void CalculateBitmap(Stream stream)
     {
       // Debug file output
@@ -418,26 +529,9 @@ namespace AtmoLight
         }
       }
     }
-
-    public void UpdateGIFPath(string path)
-    {
-      gifPath = path;
-    }
     #endregion
 
-    public bool IsConnected()
-    {
-      foreach (var target in targets)
-      {
-        if (target.IsConnected())
-        {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    #region Control LEDs
+    #region Control Methods
     /// <summary>
     /// Change effect.
     /// </summary>
@@ -543,30 +637,7 @@ namespace AtmoLight
     }
 
     /// <summary>
-    /// Returns the current effect.
-    /// </summary>
-    /// <returns>Current effect</returns>
-    public static ContentEffect GetCurrentEffect()
-    {
-      return currentEffect;
-    }
-
-    public static ContentEffect GetChangeEffect()
-    {
-      return changeEffect;
-    }
-
-    /// <summary>
-    /// Returns if AtmoLight/LEDs are on.
-    /// </summary>
-    /// <returns>true or false</returns>
-    public bool IsAtmoLightOn()
-    {
-      return currentState;
-    }
- 
-    /// <summary>
-    /// Change to AtmoWin profile.
+    /// Change profile.
     /// </summary>
     /// <returns>true or false</returns>
     public void ChangeProfile()
@@ -575,22 +646,6 @@ namespace AtmoLight
       {
         target.ChangeProfile();
       }
-    }
-
-    /// <summary>
-    /// Changes the delay time.
-    /// </summary>
-    /// <param name="delay">Delay in ms.</param>
-    /// <returns>true or false</returns>
-    public bool ChangeDelay(int delay)
-    {
-      if (delay > 0)
-      {
-        Log.Debug("Changing delay to {0}ms.", delay);
-        delayTime = delay;
-        return true;
-      }
-      return false;
     }
 
     /// <summary>
@@ -618,52 +673,6 @@ namespace AtmoLight
       Log.Info("Removing delay.");
       delayEnabled = false;
       StopSetPixelDataThread();
-    }
-
-    /// <summary>
-    /// Returns if the delay in enabled.
-    /// </summary>
-    /// <returns>true or false</returns>
-    public bool IsDelayEnabled()
-    {
-      return delayEnabled;
-    }
-
-    /// <summary>
-    /// Returns the delay time.
-    /// </summary>
-    /// <returns>Delay in ms.</returns>
-    public int GetDelayTime()
-    {
-      return delayTime;
-    }
-
-    /// <summary>
-    /// Changes the static color.
-    /// </summary>
-    /// <param name="red">Red in RGB format.</param>
-    /// <param name="green">Green  in RGB format.</param>
-    /// <param name="blue">Blue  in RGB format.</param>
-    /// <returns>true or false</returns>
-    public bool ChangeStaticColor(int red, int green, int blue)
-    {
-      if ((red >= 0 && red <= 255) && (green >= 0 && green <= 255) && (blue >= 0 && blue <= 255))
-      {
-        staticColor[0] = red;
-        staticColor[1] = green;
-        staticColor[2] = blue;
-        return true;
-      }
-      return false;
-    }
-
-    /// <summary>
-    /// Returns the static color.
-    /// </summary>
-    /// <returns>Static Color as int array</returns>
-    public int[] GetStaticColor()
-    {
-      return staticColor;
     }
     #endregion
 

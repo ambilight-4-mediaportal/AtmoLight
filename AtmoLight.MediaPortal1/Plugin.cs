@@ -131,7 +131,7 @@ namespace AtmoLight
       }
 
 
-      AtmoLightObject.UpdateGIFPath(Settings.gifFile);
+      AtmoLightObject.SetGIFPath(Settings.gifFile);
 
 
       if (!AtmoLightObject.Initialise())
@@ -239,7 +239,7 @@ namespace AtmoLight
     {
       if (Core.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
       {
-        AtmoLightObject.ChangeDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
+        AtmoLightObject.SetDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
       }
     }
     #endregion
@@ -835,7 +835,7 @@ namespace AtmoLight
       {
         if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) && (delayTimeHelper <= 1000))
         {
-          AtmoLightObject.ChangeDelay(delayTimeHelper);
+          AtmoLightObject.SetDelay(delayTimeHelper);
           Settings.delayReferenceTime = (int)(((float)delayTimeHelper * (float)GetRefreshRate()) / Settings.delayReferenceRefreshRate);
         }
         else
@@ -877,28 +877,28 @@ namespace AtmoLight
             Settings.staticColorBlue = AtmoLightObject.GetStaticColor()[2];
             break;
           case 2:
-            AtmoLightObject.ChangeStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
+            AtmoLightObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
             break;
           case 3:
-            AtmoLightObject.ChangeStaticColor(255, 255, 255);
+            AtmoLightObject.SetStaticColor(255, 255, 255);
             break;
           case 4:
-            AtmoLightObject.ChangeStaticColor(255, 0, 0);
+            AtmoLightObject.SetStaticColor(255, 0, 0);
             break;
           case 5:
-            AtmoLightObject.ChangeStaticColor(0, 255, 0);
+            AtmoLightObject.SetStaticColor(0, 255, 0);
             break;
           case 6:
-            AtmoLightObject.ChangeStaticColor(0, 0, 255);
+            AtmoLightObject.SetStaticColor(0, 0, 255);
             break;
           case 7:
-            AtmoLightObject.ChangeStaticColor(0, 255, 255);
+            AtmoLightObject.SetStaticColor(0, 255, 255);
             break;
           case 8:
-            AtmoLightObject.ChangeStaticColor(255, 0, 255);
+            AtmoLightObject.SetStaticColor(255, 0, 255);
             break;
           case 9:
-            AtmoLightObject.ChangeStaticColor(255, 255, 0);
+            AtmoLightObject.SetStaticColor(255, 255, 0);
             break;
         }
         AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
@@ -975,7 +975,7 @@ namespace AtmoLight
           }
           else
           {
-            AtmoLightObject.ChangeStaticColor(staticColorTemp[0], staticColorTemp[1], staticColorTemp[2]);
+            AtmoLightObject.SetStaticColor(staticColorTemp[0], staticColorTemp[1], staticColorTemp[2]);
             return;
           }
         case 4:
