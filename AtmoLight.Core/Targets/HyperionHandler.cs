@@ -15,9 +15,11 @@ using proto;
 
 namespace AtmoLight.Targets
 {
-  class HyperionHandler
+  class HyperionHandler : ITargets
   {
     #region Fields
+
+    public string Name { get { return "HyperionHandler"; } }
 
     private static TcpClient Socket = new TcpClient();
     private Stream Stream;
@@ -36,7 +38,7 @@ namespace AtmoLight.Targets
     #endregion
     #region Hyperion
 
-    public Boolean Initialise()
+    public bool Initialise()
     {
         Boolean IsInitialised = true;
 
@@ -62,7 +64,7 @@ namespace AtmoLight.Targets
             Socket.Close();
         }
     }
-    public Boolean IsConnected()
+    public bool IsConnected()
     {
         return Connected;
     }
@@ -142,7 +144,7 @@ namespace AtmoLight.Targets
       SendRequest(request);
     }
 
-    public void SendImage(byte[] pixeldata, int priority)
+    public void ChangeImage(byte[] pixeldata, int priority)
     {
       // Hyperion expects the bytestring to be the size of 3*width*height.
       // So 3 bytes per pixel, as in RGB.
