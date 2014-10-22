@@ -244,6 +244,14 @@ namespace AtmoLight.Targets
     {
       hyperionPort = port;
     }
+    public void setCaptureWidth(int width)
+    {
+      captureWidth = width;
+    }
+    public void setCaptureHeight(int height)
+    {
+      captureHeight = height;
+    }
     public void setHyperionStaticColor(int staticColor)
     {
       hyperionStaticColor = staticColor;
