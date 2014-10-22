@@ -435,7 +435,7 @@ namespace AtmoLight
 
       if (rgbSurface == null)
       {
-        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight(), Format.A8R8G8B8,
+        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(Core.GetCaptureWidth(), Core.GetCaptureHeight(), Format.A8R8G8B8,
           MultiSampleType.None, 0, true);
       }
       unsafe
@@ -445,12 +445,12 @@ namespace AtmoLight
           if (Settings.sbs3dOn)
           {
             VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
+              Core.GetCaptureWidth(), Core.GetCaptureHeight());
           }
           else
           {
             VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
+              Core.GetCaptureWidth(), Core.GetCaptureHeight());
           }
 
           Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
@@ -478,7 +478,7 @@ namespace AtmoLight
             }
 
             // New bitmap that has to have to dimensions AtmoWin expects.
-            Bitmap target = new Bitmap(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
+            Bitmap target = new Bitmap(Core.GetCaptureWidth(), Core.GetCaptureHeight());
 
             using (Graphics g = Graphics.FromImage(target))
             {

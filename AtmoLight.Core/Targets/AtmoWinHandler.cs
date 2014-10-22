@@ -510,24 +510,6 @@ namespace AtmoLight
     }
 
     /// <summary>
-    /// Returns the capture width of AtmoWin
-    /// </summary>
-    /// <returns>Capture width of AtmoWin</returns>
-    public int GetCaptureWidth()
-    {
-      return captureWidth;
-    }
-
-    /// <summary>
-    /// Returns the capture height of AtmoWin
-    /// </summary>
-    /// <returns>Capture height of AtmoWin</returns>
-    public int GetCaptureHeight()
-    {
-      return captureHeight;
-    }
-
-    /// <summary>
     /// Changes the AtmoWin profile.
     /// </summary>
     /// <returns>true if successfull and false if not.</returns>
