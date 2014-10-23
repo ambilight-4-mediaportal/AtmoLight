@@ -94,7 +94,7 @@ namespace AtmoLight
         blackbarDetectionTime = reader.GetValueAsInt("atmolight", "BlackbarDetectionTime", 0);
         gifFile = reader.GetValueAsString("atmolight", "GIFFile", "");
         hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "");
-        hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 0);
+        hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 19445);
         hyperionPriority = reader.GetValueAsInt("atmolight", "hyperionPriority", 1);
         HyperionPriorityStaticColor = reader.GetValueAsInt("atmolight", "hyperionStaticColorPriority", 1);
         hyperionCaptureWidth = reader.GetValueAsInt("atmolight", "hyperionCaptureWidth", 64);
