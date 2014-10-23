@@ -107,7 +107,15 @@ namespace AtmoLight
       {
         ckBlackbarDetection.Checked = false;
       }
-      if (Settings.hyperionEnabled)
+      if (Settings.atmoWinTarget)
+      {
+        ckAtmowinEnabled.Checked = true;
+      }
+      else
+      {
+        ckAtmowinEnabled.Checked = false;
+      }
+      if (Settings.hyperionTarget)
       {
           ckHyperionEnabled.Checked = true;
       }
@@ -140,6 +148,7 @@ namespace AtmoLight
       btnCancel.Text = LanguageLoader.appStrings.SetupForm_btnCancelText;
       btnLanguage.Text = LanguageLoader.appStrings.SetupForm_btnLanguageText;
       lblHint.Text = LanguageLoader.appStrings.SetupForm_lblHintText;
+      lblHintHardware.Text = LanguageLoader.appStrings.SetupForm_lblHardwareTip;
       lblFrames.Text = LanguageLoader.appStrings.SetupForm_lblFramesText;
       lblDelay.Text = LanguageLoader.appStrings.SetupForm_lblDelay;
       lblStart.Text = LanguageLoader.appStrings.SetupForm_lblStartText;
@@ -158,6 +167,10 @@ namespace AtmoLight
       lblHyperionIP.Text = LanguageLoader.appStrings.SetupForm_lblHyperionIP;
       lblHyperionPort.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPort;
       lblHyperionPriority.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPriorty;
+      tabPageGeneric.Text = LanguageLoader.appStrings.SetupForm_tabPageGeneric;
+      grpTargets.Text = LanguageLoader.appStrings.SetupForm_grpTargets;
+      grpAtmowinSettings.Text = LanguageLoader.appStrings.SetupForm_grpAtmowinSettings;
+      grpHyperionSettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionSettings;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -280,10 +293,11 @@ namespace AtmoLight
       Settings.blackbarDetection = ckBlackbarDetection.Checked;
       Settings.blackbarDetectionTime = cBlackbarDetectionTime;
       Settings.gifFile = tbGIF.Text;
-      Settings.hyperionEnabled = ckHyperionEnabled.Checked;
       Settings.hyperionIP = tbHyperionIP.Text;
       Settings.hyperionPort = int.Parse(tbHyperionPort.Text);
       Settings.hyperionPriority = int.Parse(tbHyperionPriority.Text);
+      Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
+      Settings.hyperionTarget = ckHyperionEnabled.Checked;
 
       Settings.SaveSettings();
       this.DialogResult = DialogResult.OK;

@@ -239,10 +239,11 @@ namespace Language
     public String SetupForm_btnCancelText = "Cancel";
     public String SetupForm_btnLanguageText = "Load Language";
     public String SetupForm_lblHintText = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3D-SBS mode.";
+    public String SetupForm_lblHardwareTip = "Hint: Select the devices you want to use with AtmoLight and configure it on its designated tab";
     public String SetupForm_lblFramesText = "ms between Frames";
     public String SetupForm_lblDelay = "ms Delay at";
     public String SetupForm_lblStartText = "Start:";
-    public String SetupForm_lblEndText = "End:";
+    public String SetupForm_lblEndText = "End:";   
     public String SetupForm_grpDeactivateText = "Deactive between...";
     public String SetupForm_lblMenu = "Menu/GUI:";
     public String SetupForm_grpStaticColor = "Static Color";
@@ -310,6 +311,11 @@ namespace Language
     public String SetupForm_lblHyperionIP = "IP";
     public String SetupForm_lblHyperionPort = "Port";
     public String SetupForm_lblHyperionPriorty = "Priority";
+    public String SetupForm_tabPageGeneric = "Generic settings";
+    public String SetupForm_grpTargets = "Select supported hardware";
+    public String SetupForm_grpAtmowinSettings = "Settings";
+    public String SetupForm_grpHyperionSettings = "Settings";    
+
   }
 }
 

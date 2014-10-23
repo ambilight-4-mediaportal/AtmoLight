@@ -246,7 +246,6 @@ namespace AtmoLight.Targets
     {
       hyperionReconnectOnError = reconnectOnError;
     }
-
     #endregion
   }
 }

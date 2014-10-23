@@ -7,7 +7,8 @@ namespace AtmoLight
   public class Settings
   {
     #region Config variables
-    public static string atmowinExe = "";
+
+    //Generic
     public static ContentEffect effectVideo;
     public static ContentEffect effectMusic;
     public static ContentEffect effectRadio;
@@ -24,8 +25,6 @@ namespace AtmoLight
     public static bool delay = false;
     public static int delayReferenceTime = 0;
     public static int delayReferenceRefreshRate = 0;
-    public static bool startAtmoWin = true;
-    public static bool exitAtmoWin = true;
     public static DateTime excludeTimeStart;
     public static DateTime excludeTimeEnd;
     public static int staticColorRed = 0;
@@ -35,12 +34,21 @@ namespace AtmoLight
     public static bool blackbarDetection = false;
     public static int blackbarDetectionTime = 0;
     public static string gifFile = "";
+
+    //Atmowin
+    public static bool atmowinEnabled = false;
+    public static string atmowinExe = "";
+    public static bool startAtmoWin = true;
+    public static bool exitAtmoWin = true;
+    public static bool atmoWinTarget;
+
+    //Hyperion
     public static bool hyperionEnabled = false;
     public static string hyperionIP = "";
     public static int hyperionPort = 0;
     public static int hyperionPriority = 0;
-    public static bool atmoWinTarget;
     public static bool hyperionTarget;
+
 
     #endregion
 
@@ -85,7 +93,6 @@ namespace AtmoLight
         blackbarDetection = reader.GetValueAsBool("atmolight", "BlackbarDetection", false);
         blackbarDetectionTime = reader.GetValueAsInt("atmolight", "BlackbarDetectionTime", 0);
         gifFile = reader.GetValueAsString("atmolight", "GIFFile", "");
-        hyperionEnabled = reader.GetValueAsBool("atmolight", "hyperionEnabled", false);
         hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "");
         hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 0);
         hyperionPriority = reader.GetValueAsInt("atmolight", "hyperionPriority", 1);
@@ -126,7 +133,6 @@ namespace AtmoLight
         reader.SetValueAsBool("atmolight", "BlackbarDetection", blackbarDetection);
         reader.SetValue("atmolight", "BlackbarDetectionTime", blackbarDetectionTime);
         reader.SetValue("atmolight", "GIFFile", gifFile);
-        reader.SetValueAsBool("atmolight", "hyperionEnabled", hyperionEnabled);
         reader.SetValue("atmolight", "hyperionIP", hyperionIP);
         reader.SetValue("atmolight", "hyperionPort", (int)hyperionPort);
         reader.SetValue("atmolight", "hyperionPriority", (int)hyperionPriority);
