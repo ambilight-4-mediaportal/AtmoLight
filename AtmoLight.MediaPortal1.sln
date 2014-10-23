@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmoLight.Core", "AtmoLight
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AtmoDXUtil", "AtmoDXUtil\AtmoDXUtil.vcxproj", "{AEEC4404-A93E-419E-9799-6BD201B649F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmoWinRemoteControl", "AtmoWinRemoteControl\AtmoWinRemoteControl.csproj", "{E0DA6AD7-F692-4645-88FA-356065806A57}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmoLight.MediaPortal1", "AtmoLight.MediaPortal1\AtmoLight.MediaPortal1.csproj", "{AFF495C2-7635-43F4-AF1C-C86EA86389BF}"
 	ProjectSection(ProjectDependencies) = postProject
 		{AEEC4404-A93E-419E-9799-6BD201B649F8} = {AEEC4404-A93E-419E-9799-6BD201B649F8}
@@ -51,20 +49,6 @@ Global
 		{AEEC4404-A93E-419E-9799-6BD201B649F8}.Release|Win32.ActiveCfg = Release|Win32
 		{AEEC4404-A93E-419E-9799-6BD201B649F8}.Release|Win32.Build.0 = Release|Win32
 		{AEEC4404-A93E-419E-9799-6BD201B649F8}.Release|x86.ActiveCfg = Release|Win32
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|Win32.ActiveCfg = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|Win32.Build.0 = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|x86.ActiveCfg = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|x86.Build.0 = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|Any CPU.ActiveCfg = Release|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|Mixed Platforms.Build.0 = Release|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|Win32.ActiveCfg = Release|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|Win32.Build.0 = Release|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|x86.ActiveCfg = Release|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|x86.Build.0 = Release|x86
 		{AFF495C2-7635-43F4-AF1C-C86EA86389BF}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{AFF495C2-7635-43F4-AF1C-C86EA86389BF}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{AFF495C2-7635-43F4-AF1C-C86EA86389BF}.Debug|Mixed Platforms.Build.0 = Debug|x86
