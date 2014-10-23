@@ -212,6 +212,9 @@ namespace AtmoLight
       if (!Connect()) return false;
 
       Log.Debug("Initialising successfull.");
+
+      ChangeEffect(Core.GetCurrentEffect());
+
       return true;
     }
 

@@ -43,6 +43,7 @@ namespace AtmoLight.Targets
       {
         Connect();
         ClearPriority(hyperionPriority);
+        ChangeEffect(Core.GetCurrentEffect());
       }
       catch (Exception e)
       {

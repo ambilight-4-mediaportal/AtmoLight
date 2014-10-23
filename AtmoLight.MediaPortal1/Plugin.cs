@@ -141,22 +141,20 @@ namespace AtmoLight
       AtmoLightObject.SetReInitOnError(Settings.restartOnError);
       AtmoLightObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
 
+      menuEffect = Settings.effectMenu;
+      if (CheckForStartRequirements())
+      {
+        AtmoLightObject.SetInitialEffect(menuEffect);
+      }
+      else
+      {
+        AtmoLightObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+      }
 
       if (!AtmoLightObject.Initialise())
       {
         Log.Error("Initialising failed.");
         return;
-      }
-
-      menuEffect = Settings.effectMenu;
-      if (CheckForStartRequirements())
-      {
-        AtmoLightObject.ChangeEffect(menuEffect);
-        CalculateDelay();
-      }
-      else
-      {
-        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
       }
     }
 
