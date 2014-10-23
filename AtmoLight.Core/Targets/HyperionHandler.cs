@@ -27,8 +27,8 @@ namespace AtmoLight.Targets
 
     private string hyperionIP = "";
     private int hyperionPort = 0;
-    private int hyperionStaticColor = 0;
     private int hyperionPriority = 0;
+    private int hyperionPriorityStaticColor = 0;
     private int[] staticColor = { 0, 0, 0 };
     private Boolean hyperionReconnectOnError = false;
 
@@ -65,6 +65,11 @@ namespace AtmoLight.Targets
     }
     public bool IsConnected()
     {
+      //=== TEMP === remove when we add reconnect handling
+      if (Connected == false)
+      {
+        Connect();
+      }
       return Connected;
     }
 
@@ -85,7 +90,11 @@ namespace AtmoLight.Targets
         {
           Socket.Close();
         }
-        catch { };
+        catch (Exception e)
+        {
+          Log.Error("Error while closing socket of Hyperion");
+          Log.Error("Exception: {0}", e.Message);
+        }
         Socket = new TcpClient();
 
         Socket.SendTimeout = 5000;
@@ -107,7 +116,7 @@ namespace AtmoLight.Targets
     {
       ColorRequest colorRequest = ColorRequest.CreateBuilder()
         .SetRgbColor((red * 256 * 256) + (green * 256) + blue)
-        .SetPriority(hyperionPriority)
+        .SetPriority(hyperionPriorityStaticColor)
         .SetDuration(-1)
         .Build();
 
@@ -254,6 +263,10 @@ namespace AtmoLight.Targets
     public void setHyperionPriority(int priority)
     {
       hyperionPriority = priority;
+    }
+    public void setHyperionPriorityStaticColor(int priority)
+    {
+      hyperionPriorityStaticColor = priority;
     }
     public void setReconnectOnError(Boolean reconnectOnError)
     {

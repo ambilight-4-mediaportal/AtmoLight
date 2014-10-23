@@ -310,12 +310,18 @@ namespace Language
     public String SetupForm_grpGIF = "GIF Reader";
     public String SetupForm_lblHyperionIP = "IP";
     public String SetupForm_lblHyperionPort = "Port";
-    public String SetupForm_lblHyperionPriorty = "Priority";
+    public String SetupForm_lblHyperionPriorty = "Priority live:";
+    public String SetupForm_lblHyperionPriorityStaticColor = "Priority static color:";
+    public String SetupForm_lblHyperionCaptureWidth = "Width:";
+    public String SetupForm_lblHyperionCaptureHeight = "Height:";
+    public String SetupForm_grpHyperionNetworkSettings = "Network settings";
+    public String SetupForm_grpHyperionCaptureSettings = "Capture settings";
+    public String SetupForm_grpHyperionPrioritySettings = "Priority settings"; 
     public String SetupForm_tabPageGeneric = "Generic settings";
     public String SetupForm_grpTargets = "Select supported hardware";
     public String SetupForm_grpAtmowinSettings = "Settings";
-    public String SetupForm_grpHyperionSettings = "Settings";    
-
+   
+      
   }
 }
 

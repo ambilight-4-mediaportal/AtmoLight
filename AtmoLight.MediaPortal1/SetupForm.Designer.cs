@@ -105,7 +105,15 @@
       this.tabPageAtmowin = new System.Windows.Forms.TabPage();
       this.grpAtmowinSettings = new System.Windows.Forms.GroupBox();
       this.tabPageHyperion = new System.Windows.Forms.TabPage();
-      this.grpHyperionSettings = new System.Windows.Forms.GroupBox();
+      this.grpHyperionPrioritySettings = new System.Windows.Forms.GroupBox();
+      this.lblHyperionPriorityStaticColor = new System.Windows.Forms.Label();
+      this.tbHyperionPriorityStaticColor = new System.Windows.Forms.TextBox();
+      this.grpHyperionCaptureSettings = new System.Windows.Forms.GroupBox();
+      this.lblHyperionCaptureHeight = new System.Windows.Forms.Label();
+      this.lblHyperionCaptureWidth = new System.Windows.Forms.Label();
+      this.tbHyperionCaptureWidth = new System.Windows.Forms.TextBox();
+      this.tbHyperionCaptureHeight = new System.Windows.Forms.TextBox();
+      this.grpHyperionNetworkSettings = new System.Windows.Forms.GroupBox();
       this.grpMPClose.SuspendLayout();
       this.grpMode.SuspendLayout();
       this.grpGIF.SuspendLayout();
@@ -118,7 +126,9 @@
       this.tabPageAtmowin.SuspendLayout();
       this.grpAtmowinSettings.SuspendLayout();
       this.tabPageHyperion.SuspendLayout();
-      this.grpHyperionSettings.SuspendLayout();
+      this.grpHyperionPrioritySettings.SuspendLayout();
+      this.grpHyperionCaptureSettings.SuspendLayout();
+      this.grpHyperionNetworkSettings.SuspendLayout();
       this.SuspendLayout();
       // 
       // lblPathInfo
@@ -156,7 +166,7 @@
       this.btnSave.Location = new System.Drawing.Point(19, 566);
       this.btnSave.Name = "btnSave";
       this.btnSave.Size = new System.Drawing.Size(102, 23);
-      this.btnSave.TabIndex = 4;
+      this.btnSave.TabIndex = 100;
       this.btnSave.Text = "Save";
       this.btnSave.UseVisualStyleBackColor = true;
       this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -167,7 +177,7 @@
       this.btnCancel.Location = new System.Drawing.Point(150, 566);
       this.btnCancel.Name = "btnCancel";
       this.btnCancel.Size = new System.Drawing.Size(109, 23);
-      this.btnCancel.TabIndex = 5;
+      this.btnCancel.TabIndex = 101;
       this.btnCancel.Text = "Cancel";
       this.btnCancel.UseVisualStyleBackColor = true;
       this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -194,7 +204,7 @@
       this.rbDisableLEDs.Location = new System.Drawing.Point(7, 43);
       this.rbDisableLEDs.Name = "rbDisableLEDs";
       this.rbDisableLEDs.Size = new System.Drawing.Size(114, 17);
-      this.rbDisableLEDs.TabIndex = 1;
+      this.rbDisableLEDs.TabIndex = 26;
       this.rbDisableLEDs.TabStop = true;
       this.rbDisableLEDs.Text = "Switch all LEDs off";
       this.rbDisableLEDs.UseVisualStyleBackColor = true;
@@ -205,7 +215,7 @@
       this.rbSwitchToLiveView.Location = new System.Drawing.Point(7, 20);
       this.rbSwitchToLiveView.Name = "rbSwitchToLiveView";
       this.rbSwitchToLiveView.Size = new System.Drawing.Size(232, 17);
-      this.rbSwitchToLiveView.TabIndex = 0;
+      this.rbSwitchToLiveView.TabIndex = 25;
       this.rbSwitchToLiveView.TabStop = true;
       this.rbSwitchToLiveView.Text = "Switch to AtmoWin\'s internal live view mode";
       this.rbSwitchToLiveView.UseVisualStyleBackColor = true;
@@ -245,7 +255,7 @@
       this.btnSelectGIF.Location = new System.Drawing.Point(278, 17);
       this.btnSelectGIF.Name = "btnSelectGIF";
       this.btnSelectGIF.Size = new System.Drawing.Size(50, 23);
-      this.btnSelectGIF.TabIndex = 1;
+      this.btnSelectGIF.TabIndex = 24;
       this.btnSelectGIF.Text = "...";
       this.btnSelectGIF.UseVisualStyleBackColor = true;
       this.btnSelectGIF.Click += new System.EventHandler(this.btnSelectGIF_Click);
@@ -255,7 +265,7 @@
       this.tbGIF.Location = new System.Drawing.Point(6, 19);
       this.tbGIF.Name = "tbGIF";
       this.tbGIF.Size = new System.Drawing.Size(266, 20);
-      this.tbGIF.TabIndex = 0;
+      this.tbGIF.TabIndex = 23;
       // 
       // grpStaticColor
       // 
@@ -286,7 +296,7 @@
       this.tbGreen.Location = new System.Drawing.Point(135, 19);
       this.tbGreen.Name = "tbGreen";
       this.tbGreen.Size = new System.Drawing.Size(40, 20);
-      this.tbGreen.TabIndex = 23;
+      this.tbGreen.TabIndex = 21;
       this.tbGreen.Text = "0";
       // 
       // tbBlue
@@ -294,7 +304,7 @@
       this.tbBlue.Location = new System.Drawing.Point(221, 19);
       this.tbBlue.Name = "tbBlue";
       this.tbBlue.Size = new System.Drawing.Size(40, 20);
-      this.tbBlue.TabIndex = 24;
+      this.tbBlue.TabIndex = 22;
       this.tbBlue.Text = "0";
       // 
       // tbRed
@@ -302,7 +312,7 @@
       this.tbRed.Location = new System.Drawing.Point(50, 19);
       this.tbRed.Name = "tbRed";
       this.tbRed.Size = new System.Drawing.Size(40, 20);
-      this.tbRed.TabIndex = 22;
+      this.tbRed.TabIndex = 20;
       this.tbRed.Text = "0";
       // 
       // lblGreen
@@ -347,7 +357,7 @@
       this.cbMenu.Location = new System.Drawing.Point(145, 104);
       this.cbMenu.Name = "cbMenu";
       this.cbMenu.Size = new System.Drawing.Size(140, 21);
-      this.cbMenu.TabIndex = 17;
+      this.cbMenu.TabIndex = 19;
       // 
       // cbRadio
       // 
@@ -366,7 +376,7 @@
       this.cbRadio.Location = new System.Drawing.Point(145, 77);
       this.cbRadio.Name = "cbRadio";
       this.cbRadio.Size = new System.Drawing.Size(140, 21);
-      this.cbRadio.TabIndex = 5;
+      this.cbRadio.TabIndex = 18;
       // 
       // lblRadio
       // 
@@ -394,7 +404,7 @@
       this.cbMusic.Location = new System.Drawing.Point(145, 50);
       this.cbMusic.Name = "cbMusic";
       this.cbMusic.Size = new System.Drawing.Size(140, 21);
-      this.cbMusic.TabIndex = 3;
+      this.cbMusic.TabIndex = 17;
       // 
       // lblMusic
       // 
@@ -420,7 +430,7 @@
       this.cbVideo.Location = new System.Drawing.Point(145, 23);
       this.cbVideo.Name = "cbVideo";
       this.cbVideo.Size = new System.Drawing.Size(140, 21);
-      this.cbVideo.TabIndex = 1;
+      this.cbVideo.TabIndex = 16;
       // 
       // lblVidTvRec
       // 
@@ -449,7 +459,7 @@
       this.edExcludeEnd.Location = new System.Drawing.Point(75, 47);
       this.edExcludeEnd.Name = "edExcludeEnd";
       this.edExcludeEnd.Size = new System.Drawing.Size(50, 20);
-      this.edExcludeEnd.TabIndex = 3;
+      this.edExcludeEnd.TabIndex = 15;
       // 
       // lblEnd
       // 
@@ -465,7 +475,7 @@
       this.edExcludeStart.Location = new System.Drawing.Point(75, 21);
       this.edExcludeStart.Name = "edExcludeStart";
       this.edExcludeStart.Size = new System.Drawing.Size(50, 20);
-      this.edExcludeStart.TabIndex = 1;
+      this.edExcludeStart.TabIndex = 14;
       // 
       // lblStart
       // 
@@ -519,7 +529,7 @@
       this.tbBlackbarDetectionTime.Location = new System.Drawing.Point(171, 159);
       this.tbBlackbarDetectionTime.Name = "tbBlackbarDetectionTime";
       this.tbBlackbarDetectionTime.Size = new System.Drawing.Size(41, 20);
-      this.tbBlackbarDetectionTime.TabIndex = 29;
+      this.tbBlackbarDetectionTime.TabIndex = 13;
       this.tbBlackbarDetectionTime.Text = "0";
       // 
       // lblHint
@@ -538,7 +548,7 @@
       this.ckBlackbarDetection.Location = new System.Drawing.Point(13, 161);
       this.ckBlackbarDetection.Name = "ckBlackbarDetection";
       this.ckBlackbarDetection.Size = new System.Drawing.Size(146, 17);
-      this.ckBlackbarDetection.TabIndex = 28;
+      this.ckBlackbarDetection.TabIndex = 12;
       this.ckBlackbarDetection.Text = "Blackbar Detection every";
       this.ckBlackbarDetection.UseVisualStyleBackColor = true;
       // 
@@ -556,7 +566,7 @@
       this.tbRefreshRate.Location = new System.Drawing.Point(286, 136);
       this.tbRefreshRate.Name = "tbRefreshRate";
       this.tbRefreshRate.Size = new System.Drawing.Size(41, 20);
-      this.tbRefreshRate.TabIndex = 26;
+      this.tbRefreshRate.TabIndex = 11;
       this.tbRefreshRate.Text = "50";
       // 
       // lblDelay
@@ -573,7 +583,7 @@
       this.tbDelay.Location = new System.Drawing.Point(171, 136);
       this.tbDelay.Name = "tbDelay";
       this.tbDelay.Size = new System.Drawing.Size(41, 20);
-      this.tbDelay.TabIndex = 23;
+      this.tbDelay.TabIndex = 10;
       this.tbDelay.Text = "0";
       // 
       // ckDelay
@@ -582,7 +592,7 @@
       this.ckDelay.Location = new System.Drawing.Point(13, 138);
       this.ckDelay.Name = "ckDelay";
       this.ckDelay.Size = new System.Drawing.Size(77, 17);
-      this.ckDelay.TabIndex = 22;
+      this.ckDelay.TabIndex = 9;
       this.ckDelay.Text = "LED Delay";
       this.ckDelay.UseVisualStyleBackColor = true;
       // 
@@ -608,7 +618,7 @@
       this.cbMenuButton.Location = new System.Drawing.Point(171, 15);
       this.cbMenuButton.Name = "cbMenuButton";
       this.cbMenuButton.Size = new System.Drawing.Size(96, 21);
-      this.cbMenuButton.TabIndex = 20;
+      this.cbMenuButton.TabIndex = 3;
       // 
       // lblProfile
       // 
@@ -632,7 +642,7 @@
       this.comboBox2.Location = new System.Drawing.Point(171, 65);
       this.comboBox2.Name = "comboBox2";
       this.comboBox2.Size = new System.Drawing.Size(96, 21);
-      this.comboBox2.TabIndex = 16;
+      this.comboBox2.TabIndex = 5;
       // 
       // lblFrames
       // 
@@ -649,7 +659,8 @@
       this.lowCpuTime.MaxLength = 4;
       this.lowCpuTime.Name = "lowCpuTime";
       this.lowCpuTime.Size = new System.Drawing.Size(41, 20);
-      this.lowCpuTime.TabIndex = 14;
+      this.lowCpuTime.TabIndex = 8;
+      this.lowCpuTime.TabStop = false;
       this.lowCpuTime.Text = "0";
       // 
       // ckLowCpu
@@ -658,7 +669,7 @@
       this.ckLowCpu.Location = new System.Drawing.Point(13, 115);
       this.ckLowCpu.Name = "ckLowCpu";
       this.ckLowCpu.Size = new System.Drawing.Size(71, 17);
-      this.ckLowCpu.TabIndex = 13;
+      this.ckLowCpu.TabIndex = 7;
       this.ckLowCpu.Text = "Low CPU";
       this.ckLowCpu.UseVisualStyleBackColor = true;
       // 
@@ -668,7 +679,7 @@
       this.ckOnMediaStart.Location = new System.Drawing.Point(13, 92);
       this.ckOnMediaStart.Name = "ckOnMediaStart";
       this.ckOnMediaStart.Size = new System.Drawing.Size(208, 17);
-      this.ckOnMediaStart.TabIndex = 12;
+      this.ckOnMediaStart.TabIndex = 6;
       this.ckOnMediaStart.Text = "LEDs off on media start (manual mode)";
       this.ckOnMediaStart.UseVisualStyleBackColor = true;
       // 
@@ -685,7 +696,7 @@
       this.comboBox1.Location = new System.Drawing.Point(171, 40);
       this.comboBox1.Name = "comboBox1";
       this.comboBox1.Size = new System.Drawing.Size(96, 21);
-      this.comboBox1.TabIndex = 9;
+      this.comboBox1.TabIndex = 4;
       // 
       // lblLedsOnOff
       // 
@@ -704,7 +715,7 @@
       this.ckRestartOnError.Location = new System.Drawing.Point(9, 135);
       this.ckRestartOnError.Name = "ckRestartOnError";
       this.ckRestartOnError.Size = new System.Drawing.Size(224, 17);
-      this.ckRestartOnError.TabIndex = 25;
+      this.ckRestartOnError.TabIndex = 5;
       this.ckRestartOnError.Text = "Restart AtmoWin and Connection on Error";
       this.ckRestartOnError.UseVisualStyleBackColor = true;
       // 
@@ -716,7 +727,7 @@
       this.ckExitAtmoWin.Location = new System.Drawing.Point(9, 112);
       this.ckExitAtmoWin.Name = "ckExitAtmoWin";
       this.ckExitAtmoWin.Size = new System.Drawing.Size(173, 17);
-      this.ckExitAtmoWin.TabIndex = 19;
+      this.ckExitAtmoWin.TabIndex = 4;
       this.ckExitAtmoWin.Text = "Exit AtmoWin with MediaPortal ";
       this.ckExitAtmoWin.UseVisualStyleBackColor = true;
       // 
@@ -728,7 +739,7 @@
       this.ckStartAtmoWin.Location = new System.Drawing.Point(9, 89);
       this.ckStartAtmoWin.Name = "ckStartAtmoWin";
       this.ckStartAtmoWin.Size = new System.Drawing.Size(175, 17);
-      this.ckStartAtmoWin.TabIndex = 18;
+      this.ckStartAtmoWin.TabIndex = 3;
       this.ckStartAtmoWin.Text = "Start AtmoWin with MediaPortal";
       this.ckStartAtmoWin.UseVisualStyleBackColor = true;
       // 
@@ -757,7 +768,7 @@
       this.btnLanguage.Location = new System.Drawing.Point(306, 566);
       this.btnLanguage.Name = "btnLanguage";
       this.btnLanguage.Size = new System.Drawing.Size(104, 23);
-      this.btnLanguage.TabIndex = 16;
+      this.btnLanguage.TabIndex = 102;
       this.btnLanguage.Text = "Load Language";
       this.btnLanguage.UseVisualStyleBackColor = true;
       this.btnLanguage.Click += new System.EventHandler(this.btnLanguage_Click);
@@ -772,19 +783,19 @@
       // 
       // tbHyperionPriority
       // 
-      this.tbHyperionPriority.Location = new System.Drawing.Point(44, 85);
+      this.tbHyperionPriority.Location = new System.Drawing.Point(107, 27);
       this.tbHyperionPriority.Name = "tbHyperionPriority";
-      this.tbHyperionPriority.Size = new System.Drawing.Size(150, 20);
-      this.tbHyperionPriority.TabIndex = 6;
+      this.tbHyperionPriority.Size = new System.Drawing.Size(74, 20);
+      this.tbHyperionPriority.TabIndex = 5;
       // 
       // lblHyperionPriority
       // 
       this.lblHyperionPriority.AutoSize = true;
-      this.lblHyperionPriority.Location = new System.Drawing.Point(6, 88);
+      this.lblHyperionPriority.Location = new System.Drawing.Point(6, 30);
       this.lblHyperionPriority.Name = "lblHyperionPriority";
-      this.lblHyperionPriority.Size = new System.Drawing.Size(41, 13);
+      this.lblHyperionPriority.Size = new System.Drawing.Size(60, 13);
       this.lblHyperionPriority.TabIndex = 5;
-      this.lblHyperionPriority.Text = "Priority:";
+      this.lblHyperionPriority.Text = "Priority live:";
       // 
       // lblHyperionPort
       // 
@@ -824,7 +835,7 @@
       this.ckHyperionEnabled.Location = new System.Drawing.Point(13, 54);
       this.ckHyperionEnabled.Name = "ckHyperionEnabled";
       this.ckHyperionEnabled.Size = new System.Drawing.Size(68, 17);
-      this.ckHyperionEnabled.TabIndex = 0;
+      this.ckHyperionEnabled.TabIndex = 2;
       this.ckHyperionEnabled.Text = "Hyperion";
       this.ckHyperionEnabled.UseVisualStyleBackColor = true;
       // 
@@ -914,27 +925,101 @@
       // tabPageHyperion
       // 
       this.tabPageHyperion.BackColor = System.Drawing.SystemColors.Control;
-      this.tabPageHyperion.Controls.Add(this.grpHyperionSettings);
+      this.tabPageHyperion.Controls.Add(this.grpHyperionPrioritySettings);
+      this.tabPageHyperion.Controls.Add(this.grpHyperionCaptureSettings);
+      this.tabPageHyperion.Controls.Add(this.grpHyperionNetworkSettings);
       this.tabPageHyperion.Location = new System.Drawing.Point(4, 22);
       this.tabPageHyperion.Name = "tabPageHyperion";
       this.tabPageHyperion.Size = new System.Drawing.Size(841, 519);
       this.tabPageHyperion.TabIndex = 2;
       this.tabPageHyperion.Text = "Hyperion";
       // 
-      // grpHyperionSettings
+      // grpHyperionPrioritySettings
       // 
-      this.grpHyperionSettings.Controls.Add(this.tbHyperionIP);
-      this.grpHyperionSettings.Controls.Add(this.tbHyperionPriority);
-      this.grpHyperionSettings.Controls.Add(this.lblHyperionIP);
-      this.grpHyperionSettings.Controls.Add(this.lblHyperionPriority);
-      this.grpHyperionSettings.Controls.Add(this.tbHyperionPort);
-      this.grpHyperionSettings.Controls.Add(this.lblHyperionPort);
-      this.grpHyperionSettings.Location = new System.Drawing.Point(15, 16);
-      this.grpHyperionSettings.Name = "grpHyperionSettings";
-      this.grpHyperionSettings.Size = new System.Drawing.Size(289, 177);
-      this.grpHyperionSettings.TabIndex = 7;
-      this.grpHyperionSettings.TabStop = false;
-      this.grpHyperionSettings.Text = "Settings";
+      this.grpHyperionPrioritySettings.Controls.Add(this.lblHyperionPriorityStaticColor);
+      this.grpHyperionPrioritySettings.Controls.Add(this.tbHyperionPriorityStaticColor);
+      this.grpHyperionPrioritySettings.Controls.Add(this.lblHyperionPriority);
+      this.grpHyperionPrioritySettings.Controls.Add(this.tbHyperionPriority);
+      this.grpHyperionPrioritySettings.Location = new System.Drawing.Point(15, 184);
+      this.grpHyperionPrioritySettings.Name = "grpHyperionPrioritySettings";
+      this.grpHyperionPrioritySettings.Size = new System.Drawing.Size(228, 100);
+      this.grpHyperionPrioritySettings.TabIndex = 10;
+      this.grpHyperionPrioritySettings.TabStop = false;
+      this.grpHyperionPrioritySettings.Text = "Priority settings";
+      // 
+      // lblHyperionPriorityStaticColor
+      // 
+      this.lblHyperionPriorityStaticColor.AutoSize = true;
+      this.lblHyperionPriorityStaticColor.Location = new System.Drawing.Point(6, 68);
+      this.lblHyperionPriorityStaticColor.Name = "lblHyperionPriorityStaticColor";
+      this.lblHyperionPriorityStaticColor.Size = new System.Drawing.Size(95, 13);
+      this.lblHyperionPriorityStaticColor.TabIndex = 8;
+      this.lblHyperionPriorityStaticColor.Text = "Priority static color:";
+      // 
+      // tbHyperionPriorityStaticColor
+      // 
+      this.tbHyperionPriorityStaticColor.Location = new System.Drawing.Point(107, 65);
+      this.tbHyperionPriorityStaticColor.Name = "tbHyperionPriorityStaticColor";
+      this.tbHyperionPriorityStaticColor.Size = new System.Drawing.Size(74, 20);
+      this.tbHyperionPriorityStaticColor.TabIndex = 6;
+      // 
+      // grpHyperionCaptureSettings
+      // 
+      this.grpHyperionCaptureSettings.Controls.Add(this.lblHyperionCaptureHeight);
+      this.grpHyperionCaptureSettings.Controls.Add(this.lblHyperionCaptureWidth);
+      this.grpHyperionCaptureSettings.Controls.Add(this.tbHyperionCaptureWidth);
+      this.grpHyperionCaptureSettings.Controls.Add(this.tbHyperionCaptureHeight);
+      this.grpHyperionCaptureSettings.Location = new System.Drawing.Point(249, 16);
+      this.grpHyperionCaptureSettings.Name = "grpHyperionCaptureSettings";
+      this.grpHyperionCaptureSettings.Size = new System.Drawing.Size(220, 162);
+      this.grpHyperionCaptureSettings.TabIndex = 9;
+      this.grpHyperionCaptureSettings.TabStop = false;
+      this.grpHyperionCaptureSettings.Text = "Capture settings";
+      // 
+      // lblHyperionCaptureHeight
+      // 
+      this.lblHyperionCaptureHeight.AutoSize = true;
+      this.lblHyperionCaptureHeight.Location = new System.Drawing.Point(7, 71);
+      this.lblHyperionCaptureHeight.Name = "lblHyperionCaptureHeight";
+      this.lblHyperionCaptureHeight.Size = new System.Drawing.Size(41, 13);
+      this.lblHyperionCaptureHeight.TabIndex = 10;
+      this.lblHyperionCaptureHeight.Text = "Height:";
+      // 
+      // lblHyperionCaptureWidth
+      // 
+      this.lblHyperionCaptureWidth.AutoSize = true;
+      this.lblHyperionCaptureWidth.Location = new System.Drawing.Point(7, 36);
+      this.lblHyperionCaptureWidth.Name = "lblHyperionCaptureWidth";
+      this.lblHyperionCaptureWidth.Size = new System.Drawing.Size(38, 13);
+      this.lblHyperionCaptureWidth.TabIndex = 9;
+      this.lblHyperionCaptureWidth.Text = "Width:";
+      // 
+      // tbHyperionCaptureWidth
+      // 
+      this.tbHyperionCaptureWidth.Location = new System.Drawing.Point(54, 33);
+      this.tbHyperionCaptureWidth.Name = "tbHyperionCaptureWidth";
+      this.tbHyperionCaptureWidth.Size = new System.Drawing.Size(100, 20);
+      this.tbHyperionCaptureWidth.TabIndex = 3;
+      // 
+      // tbHyperionCaptureHeight
+      // 
+      this.tbHyperionCaptureHeight.Location = new System.Drawing.Point(54, 68);
+      this.tbHyperionCaptureHeight.Name = "tbHyperionCaptureHeight";
+      this.tbHyperionCaptureHeight.Size = new System.Drawing.Size(100, 20);
+      this.tbHyperionCaptureHeight.TabIndex = 4;
+      // 
+      // grpHyperionNetworkSettings
+      // 
+      this.grpHyperionNetworkSettings.Controls.Add(this.tbHyperionIP);
+      this.grpHyperionNetworkSettings.Controls.Add(this.lblHyperionIP);
+      this.grpHyperionNetworkSettings.Controls.Add(this.tbHyperionPort);
+      this.grpHyperionNetworkSettings.Controls.Add(this.lblHyperionPort);
+      this.grpHyperionNetworkSettings.Location = new System.Drawing.Point(15, 16);
+      this.grpHyperionNetworkSettings.Name = "grpHyperionNetworkSettings";
+      this.grpHyperionNetworkSettings.Size = new System.Drawing.Size(228, 162);
+      this.grpHyperionNetworkSettings.TabIndex = 7;
+      this.grpHyperionNetworkSettings.TabStop = false;
+      this.grpHyperionNetworkSettings.Text = "Network settings";
       // 
       // SetupForm
       // 
@@ -974,8 +1059,12 @@
       this.grpAtmowinSettings.ResumeLayout(false);
       this.grpAtmowinSettings.PerformLayout();
       this.tabPageHyperion.ResumeLayout(false);
-      this.grpHyperionSettings.ResumeLayout(false);
-      this.grpHyperionSettings.PerformLayout();
+      this.grpHyperionPrioritySettings.ResumeLayout(false);
+      this.grpHyperionPrioritySettings.PerformLayout();
+      this.grpHyperionCaptureSettings.ResumeLayout(false);
+      this.grpHyperionCaptureSettings.PerformLayout();
+      this.grpHyperionNetworkSettings.ResumeLayout(false);
+      this.grpHyperionNetworkSettings.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1058,7 +1147,15 @@
     private System.Windows.Forms.CheckBox ckAtmowinEnabled;
     private System.Windows.Forms.TabPage tabPageAtmowin;
     private System.Windows.Forms.TabPage tabPageHyperion;
-    private System.Windows.Forms.GroupBox grpHyperionSettings;
+    private System.Windows.Forms.GroupBox grpHyperionNetworkSettings;
     private System.Windows.Forms.GroupBox grpAtmowinSettings;
+    private System.Windows.Forms.TextBox tbHyperionCaptureHeight;
+    private System.Windows.Forms.GroupBox grpHyperionCaptureSettings;
+    private System.Windows.Forms.TextBox tbHyperionCaptureWidth;
+    private System.Windows.Forms.Label lblHyperionCaptureHeight;
+    private System.Windows.Forms.Label lblHyperionCaptureWidth;
+    private System.Windows.Forms.GroupBox grpHyperionPrioritySettings;
+    private System.Windows.Forms.Label lblHyperionPriorityStaticColor;
+    private System.Windows.Forms.TextBox tbHyperionPriorityStaticColor;
   }
 }

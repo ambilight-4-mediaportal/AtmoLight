@@ -103,9 +103,10 @@ namespace AtmoLight
     private string atmoWinPath;
 
     // Hyperion Settings Fields
-    private int hyperionPriority;
     private string hyperionIP;
     private int hyperionPort;
+    private int hyperionPriority;
+    private int hyperionPriorityStaticColor;
 
     #endregion
 
@@ -284,7 +285,7 @@ namespace AtmoLight
     #endregion
 
     #region Configuration Methods (set)
-    private void SetCaptureDimensions(int width, int height)
+    public void SetCaptureDimensions(int width, int height)
     {
       captureWidth = width;
       captureHeight = height;
@@ -335,6 +336,10 @@ namespace AtmoLight
     public void SetHyperionPriority(int priority)
     {
       hyperionPriority = priority;
+    }
+    public void SetHyperionPriorityStaticColor(int priority)
+    {
+      hyperionPriorityStaticColor = priority;
     }
     public void SetGIFPath(string path)
     {

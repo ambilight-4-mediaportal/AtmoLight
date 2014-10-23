@@ -134,6 +134,8 @@ namespace AtmoLight
         AtmoLightObject.SetHyperionIP(Settings.hyperionIP);
         AtmoLightObject.SetHyperionPort(Settings.hyperionPort);
         AtmoLightObject.SetHyperionPriority(Settings.hyperionPriority);
+        AtmoLightObject.SetHyperionPriorityStaticColor(Settings.HyperionPriorityStaticColor);
+        AtmoLightObject.SetCaptureDimensions(Settings.hyperionCaptureWidth, Settings.hyperionCaptureHeight);
       }
       AtmoLightObject.SetDelay(Settings.delayReferenceTime);
       AtmoLightObject.SetGIFPath(Settings.gifFile);

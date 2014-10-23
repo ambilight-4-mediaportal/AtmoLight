@@ -35,6 +35,9 @@ namespace AtmoLight
       tbHyperionIP.Text = Settings.hyperionIP;
       tbHyperionPort.Text = Settings.hyperionPort.ToString();
       tbHyperionPriority.Text = Settings.hyperionPriority.ToString();
+      tbHyperionPriorityStaticColor.Text = Settings.HyperionPriorityStaticColor.ToString();
+      tbHyperionCaptureWidth.Text = Settings.hyperionCaptureWidth.ToString();
+      tbHyperionCaptureHeight.Text = Settings.hyperionCaptureHeight.ToString();
 
       if (Settings.manualMode)
       {
@@ -167,10 +170,15 @@ namespace AtmoLight
       lblHyperionIP.Text = LanguageLoader.appStrings.SetupForm_lblHyperionIP;
       lblHyperionPort.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPort;
       lblHyperionPriority.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPriorty;
+      lblHyperionPriorityStaticColor.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPriorityStaticColor;
+      lblHyperionCaptureWidth.Text = LanguageLoader.appStrings.SetupForm_lblHyperionCaptureWidth;
+      lblHyperionCaptureHeight.Text = LanguageLoader.appStrings.SetupForm_lblHyperionCaptureHeight;
       tabPageGeneric.Text = LanguageLoader.appStrings.SetupForm_tabPageGeneric;
       grpTargets.Text = LanguageLoader.appStrings.SetupForm_grpTargets;
       grpAtmowinSettings.Text = LanguageLoader.appStrings.SetupForm_grpAtmowinSettings;
-      grpHyperionSettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionSettings;
+      grpHyperionNetworkSettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionNetworkSettings;
+      grpHyperionPrioritySettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionPrioritySettings;
+      grpHyperionCaptureSettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionCaptureSettings;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -296,6 +304,9 @@ namespace AtmoLight
       Settings.hyperionIP = tbHyperionIP.Text;
       Settings.hyperionPort = int.Parse(tbHyperionPort.Text);
       Settings.hyperionPriority = int.Parse(tbHyperionPriority.Text);
+      Settings.HyperionPriorityStaticColor = int.Parse(tbHyperionPriorityStaticColor.Text);
+      Settings.hyperionCaptureWidth = int.Parse(tbHyperionCaptureWidth.Text);
+      Settings.hyperionCaptureHeight = int.Parse(tbHyperionCaptureHeight.Text);
       Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
       Settings.hyperionTarget = ckHyperionEnabled.Checked;
 
