@@ -114,6 +114,8 @@
       this.tbHyperionCaptureWidth = new System.Windows.Forms.TextBox();
       this.tbHyperionCaptureHeight = new System.Windows.Forms.TextBox();
       this.grpHyperionNetworkSettings = new System.Windows.Forms.GroupBox();
+      this.tbHyperionReconnectDelay = new System.Windows.Forms.TextBox();
+      this.lblHyperionReconnectDelay = new System.Windows.Forms.Label();
       this.grpMPClose.SuspendLayout();
       this.grpMode.SuspendLayout();
       this.grpGIF.SuspendLayout();
@@ -817,16 +819,16 @@
       // 
       // tbHyperionPort
       // 
-      this.tbHyperionPort.Location = new System.Drawing.Point(44, 56);
+      this.tbHyperionPort.Location = new System.Drawing.Point(128, 56);
       this.tbHyperionPort.Name = "tbHyperionPort";
-      this.tbHyperionPort.Size = new System.Drawing.Size(150, 20);
+      this.tbHyperionPort.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPort.TabIndex = 2;
       // 
       // tbHyperionIP
       // 
-      this.tbHyperionIP.Location = new System.Drawing.Point(44, 29);
+      this.tbHyperionIP.Location = new System.Drawing.Point(128, 29);
       this.tbHyperionIP.Name = "tbHyperionIP";
-      this.tbHyperionIP.Size = new System.Drawing.Size(150, 20);
+      this.tbHyperionIP.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionIP.TabIndex = 1;
       // 
       // ckHyperionEnabled
@@ -1010,6 +1012,8 @@
       // 
       // grpHyperionNetworkSettings
       // 
+      this.grpHyperionNetworkSettings.Controls.Add(this.tbHyperionReconnectDelay);
+      this.grpHyperionNetworkSettings.Controls.Add(this.lblHyperionReconnectDelay);
       this.grpHyperionNetworkSettings.Controls.Add(this.tbHyperionIP);
       this.grpHyperionNetworkSettings.Controls.Add(this.lblHyperionIP);
       this.grpHyperionNetworkSettings.Controls.Add(this.tbHyperionPort);
@@ -1020,6 +1024,22 @@
       this.grpHyperionNetworkSettings.TabIndex = 7;
       this.grpHyperionNetworkSettings.TabStop = false;
       this.grpHyperionNetworkSettings.Text = "Network settings";
+      // 
+      // tbHyperionReconnectDelay
+      // 
+      this.tbHyperionReconnectDelay.Location = new System.Drawing.Point(128, 82);
+      this.tbHyperionReconnectDelay.Name = "tbHyperionReconnectDelay";
+      this.tbHyperionReconnectDelay.Size = new System.Drawing.Size(93, 20);
+      this.tbHyperionReconnectDelay.TabIndex = 5;
+      // 
+      // lblHyperionReconnectDelay
+      // 
+      this.lblHyperionReconnectDelay.AutoSize = true;
+      this.lblHyperionReconnectDelay.Location = new System.Drawing.Point(9, 85);
+      this.lblHyperionReconnectDelay.Name = "lblHyperionReconnectDelay";
+      this.lblHyperionReconnectDelay.Size = new System.Drawing.Size(113, 13);
+      this.lblHyperionReconnectDelay.TabIndex = 6;
+      this.lblHyperionReconnectDelay.Text = "Reconnect delay (ms):";
       // 
       // SetupForm
       // 
@@ -1157,5 +1177,7 @@
     private System.Windows.Forms.GroupBox grpHyperionPrioritySettings;
     private System.Windows.Forms.Label lblHyperionPriorityStaticColor;
     private System.Windows.Forms.TextBox tbHyperionPriorityStaticColor;
+    private System.Windows.Forms.TextBox tbHyperionReconnectDelay;
+    private System.Windows.Forms.Label lblHyperionReconnectDelay;
   }
 }

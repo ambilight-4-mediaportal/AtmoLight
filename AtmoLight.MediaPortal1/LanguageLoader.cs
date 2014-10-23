@@ -311,6 +311,7 @@ namespace Language
     public String SetupForm_lblHyperionIP = "IP";
     public String SetupForm_lblHyperionPort = "Port";
     public String SetupForm_lblHyperionPriorty = "Priority live:";
+    public String SetupForm_lblHyperionReconnectDelay = "Reconnect delay:";
     public String SetupForm_lblHyperionPriorityStaticColor = "Priority static color:";
     public String SetupForm_lblHyperionCaptureWidth = "Width:";
     public String SetupForm_lblHyperionCaptureHeight = "Height:";

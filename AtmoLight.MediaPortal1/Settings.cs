@@ -46,6 +46,7 @@ namespace AtmoLight
     public static string hyperionIP = "";
     public static int hyperionPort = 0;
     public static int hyperionPriority = 0;
+    public static int hyperionReconnectDelay = 0;
     public static int HyperionPriorityStaticColor = 0;
     public static int hyperionCaptureWidth = 0;
     public static int hyperionCaptureHeight = 0;
@@ -95,6 +96,7 @@ namespace AtmoLight
         gifFile = reader.GetValueAsString("atmolight", "GIFFile", "");
         hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "");
         hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 19445);
+        hyperionReconnectDelay = reader.GetValueAsInt("atmolight", "hyperionReconnectDelay", 5);
         hyperionPriority = reader.GetValueAsInt("atmolight", "hyperionPriority", 1);
         HyperionPriorityStaticColor = reader.GetValueAsInt("atmolight", "hyperionStaticColorPriority", 1);
         hyperionCaptureWidth = reader.GetValueAsInt("atmolight", "hyperionCaptureWidth", 64);
@@ -139,6 +141,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "hyperionIP", hyperionIP);
         reader.SetValue("atmolight", "hyperionPort", (int)hyperionPort);
         reader.SetValue("atmolight", "hyperionPriority", (int)hyperionPriority);
+        reader.SetValue("atmolight", "hyperionReconnectDelay", (int)hyperionReconnectDelay);
         reader.SetValue("atmolight", "hyperionStaticColorPriority", (int)HyperionPriorityStaticColor);
         reader.SetValue("atmolight", "hyperionCaptureWidth", (int)hyperionCaptureWidth);
         reader.SetValue("atmolight", "hyperionCaptureHeight", (int)hyperionCaptureHeight);

@@ -109,6 +109,7 @@ namespace AtmoLight
     private string hyperionIP;
     private int hyperionPort;
     private int hyperionPriority;
+    private int hyperionReconnectDelay;
     private int hyperionPriorityStaticColor;
     #endregion
 
@@ -270,6 +271,7 @@ namespace AtmoLight
           hyperionTarget.setHyperionIP(hyperionIP);
           hyperionTarget.setHyperionPort(hyperionPort);
           hyperionTarget.setHyperionPriority(hyperionPriority);
+          hyperionTarget.SetHyperionReconnectDelay(hyperionReconnectDelay);
           hyperionTarget.setReconnectOnError(reInitOnError);
           hyperionTarget.SetDisableOnExit(disableOnExit);
         }
@@ -348,11 +350,15 @@ namespace AtmoLight
     {
       hyperionPort = port;
     }
-
     public void SetHyperionPriority(int priority)
     {
       hyperionPriority = priority;
     }
+    public void SetHyperionReconnectDelay(int reconnectDelay)
+    {
+      hyperionReconnectDelay = reconnectDelay;
+    }
+
     public void SetHyperionPriorityStaticColor(int priority)
     {
       hyperionPriorityStaticColor = priority;

@@ -24,6 +24,7 @@ namespace AtmoLight.Targets
     private static TcpClient Socket = new TcpClient();
     private Stream Stream;
     private Boolean Connected = false;
+    private Stopwatch sw = new Stopwatch();
 
     private string hyperionIP = "";
     private int hyperionPort = 0;
@@ -31,6 +32,7 @@ namespace AtmoLight.Targets
     private int hyperionPriorityStaticColor = 0;
     private int[] staticColor = { 0, 0, 0 };
     private Boolean hyperionReconnectOnError = false;
+    private int hyperionReconnectDelay = 0;
     private bool disableOnExit;
 
     #endregion
@@ -43,6 +45,7 @@ namespace AtmoLight.Targets
         Connect();
         ClearPriority(hyperionPriority);
         ChangeEffect(Core.GetCurrentEffect());
+        sw.Start();
       }
       catch (Exception e)
       {
@@ -54,6 +57,9 @@ namespace AtmoLight.Targets
     public void ReInitialise(bool force = false)
     {
       Connect();
+
+      //In case we didn't start Stopwatch again
+      sw.Restart();
     }
 
     public void Dispose()
@@ -74,9 +80,6 @@ namespace AtmoLight.Targets
     }
     public bool IsConnected()
     {
-      //=== TEMP === remove when we add reconnect handling
-      // 303: This causes problems when using both targets and Pi is off and you start watching a video.
-      // It tries to reconnect 24 times a second (24fps).
       if (Connected == false)
       {
         Connect();
@@ -86,9 +89,17 @@ namespace AtmoLight.Targets
 
     public void Connect()
     {
-      //Use connection thread to prevent Mediaportal lag due to connect errors
-      Thread t = new Thread(ConnectThread);
-      t.Start();
+      if (sw.ElapsedMilliseconds >= hyperionReconnectDelay && sw.IsRunning)
+      {
+        Thread t = new Thread(ConnectThread);
+        t.Start();
+        sw.Restart();
+      }
+      else if(sw.IsRunning == false)
+      {
+        Thread t = new Thread(ConnectThread);
+        t.Start();
+      }
     }
     private void ConnectThread()
     {
@@ -268,6 +279,10 @@ namespace AtmoLight.Targets
     public void setHyperionPriority(int priority)
     {
       hyperionPriority = priority;
+    }
+    public void SetHyperionReconnectDelay(int reconnectDelay)
+    {
+      hyperionReconnectDelay = reconnectDelay;
     }
     public void setHyperionPriorityStaticColor(int priority)
     {
