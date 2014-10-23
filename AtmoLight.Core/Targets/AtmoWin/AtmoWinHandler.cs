@@ -21,9 +21,6 @@ namespace AtmoLight
 
     public delegate void NewCaptureDimensionsHandler(int width, int height);
     public static event NewCaptureDimensionsHandler OnNewDimensions;
-
-    //public delegate void NewConnectionLostHandler();
-    //public static event NewConnectionLostHandler OnNewConnectionLost;
     public Target Name { get { return Target.AtmoWin; } }
 
     private Thread reinitialiseThreadHelper;
@@ -35,6 +32,7 @@ namespace AtmoLight
     private bool startAtmoWin = true;
     private bool stopAtmoWin = true;
     private int[] staticColor = { 0, 0, 0 };
+    private bool disableOnExit;
 
     // Com  Objects
     private IAtmoRemoteControl2 atmoRemoteControl = null; // Com Object to control AtmoWin
@@ -54,9 +52,6 @@ namespace AtmoLight
 
     private int captureWidth;
     private int captureHeight;
-    
-    
-    
 
     #endregion
 
@@ -100,6 +95,14 @@ namespace AtmoLight
 
     public void Dispose()
     {
+      if (disableOnExit)
+      {
+        ChangeEffect(ContentEffect.LEDsDisabled);
+      }
+      else
+      {
+        ChangeEffect(ContentEffect.AtmoWinLiveMode);
+      }
       Disconnect();
       if (stopAtmoWin)
       {
@@ -418,11 +421,6 @@ namespace AtmoLight
       StopAtmoWin();
       StartAtmoWin();
     }
-
-    public void ChangeAtmoWinRestartOnError(bool restartOnError)
-    {
-      reInitOnError = restartOnError;
-    }
     #endregion
 
     #region Configuration Methods (set)
@@ -444,6 +442,10 @@ namespace AtmoLight
     public void SetStopAtmoWin(bool stopAtmoWin)
     {
       this.stopAtmoWin = stopAtmoWin;
+    }
+    public void SetDisableOnExit(bool disable)
+    {
+      disableOnExit = disable;
     }
     #endregion
 

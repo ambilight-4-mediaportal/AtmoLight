@@ -83,7 +83,7 @@ namespace AtmoLight
     private bool vuMeterRainbowColorScheme = false;
     private List<SolidBrush> vuMeterBrushes = new List<SolidBrush>();
 
-    // Evevnt Handler
+    // Event Handler
     public delegate void NewConnectionLostHandler();
     public static event NewConnectionLostHandler OnNewConnectionLost;
 
@@ -98,6 +98,7 @@ namespace AtmoLight
     private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
     private string gifPath = "";
     private bool reInitOnError;
+    private bool disableOnExit;
 
     // AtmoWin Settings Fields
     private bool startAtmoWin = true;
@@ -109,7 +110,6 @@ namespace AtmoLight
     private int hyperionPort;
     private int hyperionPriority;
     private int hyperionPriorityStaticColor;
-
     #endregion
 
     #region class Win32API
@@ -261,6 +261,7 @@ namespace AtmoLight
           atmoWinTarget.SetReInitOnError(reInitOnError);
           atmoWinTarget.SetStartAtmoWin(startAtmoWin);
           atmoWinTarget.SetStopAtmoWin(stopAtmoWin);
+          atmoWinTarget.SetDisableOnExit(disableOnExit);
         }
         // Hyperion Init
         var hyperionTarget = target as HyperionHandler;
@@ -270,6 +271,7 @@ namespace AtmoLight
           hyperionTarget.setHyperionPort(hyperionPort);
           hyperionTarget.setHyperionPriority(hyperionPriority);
           hyperionTarget.setReconnectOnError(reInitOnError);
+          hyperionTarget.SetDisableOnExit(disableOnExit);
         }
         target.Initialise(false);
       }
@@ -310,6 +312,11 @@ namespace AtmoLight
     public void SetInitialEffect(ContentEffect effect)
     {
       currentEffect = effect;
+    }
+
+    public void SetDisableOnExit(bool disable)
+    {
+      disableOnExit = disable;
     }
 
     public void SetAtmoWinPath(string path)

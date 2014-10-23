@@ -139,6 +139,7 @@ namespace AtmoLight
       AtmoLightObject.SetDelay(Settings.delayReferenceTime);
       AtmoLightObject.SetGIFPath(Settings.gifFile);
       AtmoLightObject.SetReInitOnError(Settings.restartOnError);
+      AtmoLightObject.SetDisableOnExit(Settings.disableOnShutdown);
       AtmoLightObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
 
       menuEffect = Settings.effectMenu;
