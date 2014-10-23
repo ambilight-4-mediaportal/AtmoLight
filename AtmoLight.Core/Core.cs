@@ -47,6 +47,7 @@ namespace AtmoLight
     bool ChangeEffect(ContentEffect effect);
     bool ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader);
     bool ChangeProfile();
+    bool SetStaticColor(int red, int green, int blue);
   }
 
 
@@ -268,7 +269,6 @@ namespace AtmoLight
           hyperionTarget.setHyperionPort(hyperionPort);
           hyperionTarget.setHyperionPriority(hyperionPriority);
           hyperionTarget.setReconnectOnError(reInitOnError);
-          hyperionTarget.setHyperionStaticColor(staticColor[0], staticColor[1], staticColor[2]);
         }
         target.Initialise();
       }
@@ -285,7 +285,7 @@ namespace AtmoLight
     #endregion
 
     #region Configuration Methods (set)
-    public void SetCaptureDimensions(int width, int height)
+    private void SetCaptureDimensions(int width, int height)
     {
       captureWidth = width;
       captureHeight = height;
@@ -376,6 +376,10 @@ namespace AtmoLight
         staticColor[0] = red;
         staticColor[1] = green;
         staticColor[2] = blue;
+        foreach (var target in targets)
+        {
+          target.SetStaticColor(staticColor[0], staticColor[1], staticColor[2]);
+        }
         return true;
       }
       return false;

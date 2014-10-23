@@ -256,11 +256,12 @@ namespace AtmoLight.Targets
     {
       hyperionPort = port;
     }
-    public void setHyperionStaticColor(int red, int green, int blue)
+    public bool SetStaticColor(int red, int green, int blue)
     {
       staticColor[0] = red;
       staticColor[1] = green;
       staticColor[2] = blue;
+      return true;
     }
     public void setHyperionPriority(int priority)
     {

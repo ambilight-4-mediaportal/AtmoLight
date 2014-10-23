@@ -27,6 +27,7 @@ namespace AtmoLight
     public Target Name { get { return Target.AtmoWin; } }
 
     private Thread reinitialiseThreadHelper;
+    private Thread initialiseThreadHelper;
 
     private string atmoWinPath = "";
     private bool reInitOnError = true;
@@ -66,66 +67,13 @@ namespace AtmoLight
     }
     #endregion
 
-    #region Initialise
-
-
-    /// <summary>
-    /// Start reinitialising in a new thread.
-    /// </summary>
-    /// <param name="force">Force the reinitialising and discard user settings.</param>
-    private void ReinitialiseThreaded(bool force = false)
-    {
-      if (!reinitialiseLock)
-      {
-        reinitialiseThreadHelper = new Thread(() => Reinitialise(force));
-        reinitialiseThreadHelper.Name = "AtmoLight Reinitialise";
-        reinitialiseThreadHelper.Start();
-      }
-      else
-      {
-        Log.Debug("Reinitialising Thread already running.");
-      }
-    }
-
-    #endregion
-
-    public void SetStopAtmoWin(bool stopAtmoWin)
-    {
-      this.stopAtmoWin = stopAtmoWin;
-    }
-
-
-    #region Public methods
-    /// <summary>
-    /// Start AtmoWin and connects to it.
-    /// </summary>
-    /// <returns>true or false</returns>
-    public bool Initialise(bool force = false)
-    {
-      Log.Debug("Initialising.");
-      if (!Win32API.IsProcessRunning("atmowina.exe"))
-      {
-        if (startAtmoWin || force)
-        {
-          if (!StartAtmoWin()) return false;
-          System.Threading.Thread.Sleep(delayAtmoWinConnect);
-        }
-        else
-        {
-          Log.Error("AtmoWin is not running.");
-          return false;
-        }
-      }
-
-      if (!Connect()) return false;
-
-      Log.Debug("Initialising successfull.");
-      return true;
-    }
-
+    #region ITargets Methods
     public bool Initialise()
     {
-      return false;
+      initialiseThreadHelper = new Thread(() => Initialise(false));
+      initialiseThreadHelper.Name = "AtmoLight Initialise";
+      initialiseThreadHelper.Start();
+      return true;
     }
 
     public bool Dispose()
@@ -133,45 +81,25 @@ namespace AtmoLight
       Disconnect();
       if (endAtmoWin)
       {
-        StopAtmoWin();
+        if (!StopAtmoWin())
+        {
+          return false;
+        }
       }
       return true;
     }
 
     /// <summary>
-    /// Restart AtmoWin and reconnects to it.
+    /// Return if a connection to AtmoWin is established.
     /// </summary>
-    /// <param name="force">Force the reinitialising and discard user settings.</param>
-    public void Reinitialise(bool force = false)
+    /// <returns>true or false</returns>
+    public bool IsConnected()
     {
-      if (reinitialiseLock)
+      if (atmoRemoteControl == null || atmoLiveViewControl == null)
       {
-        Log.Debug("Reinitialising locked.");
-        return;
+        return false;
       }
-      if (!reInitOnError && !force)
-      {
-        Disconnect();
-        //OnNewConnectionLost();
-        return;
-      }
-
-      reinitialiseLock = true;
-      Log.Debug("Reinitialising.");
-
-      if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(Core.GetChangeEffect() != ContentEffect.Undefined ? Core.GetChangeEffect() : Core.GetCurrentEffect()))
-      {
-        Disconnect();
-        StopAtmoWin();
-        Log.Error("Reinitialising failed.");
-        reinitialiseLock = false;
-        //OnNewConnectionLost();
-        return;
-      }
-
-      Log.Debug("Reinitialising successfull.");
-      reinitialiseLock = false;
-      return;
+      return true;
     }
 
     public bool ChangeEffect(ContentEffect effect)
@@ -230,13 +158,9 @@ namespace AtmoLight
       return true;
     }
 
-    public bool ChangeColor(int red, int green, int blue)
-    {
-      return true;
-    }
-
     public bool ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
+      SetPixelData(bmiInfoHeader, pixeldata);
       return true;
     }
 
@@ -254,71 +178,98 @@ namespace AtmoLight
       return true;
     }
 
-    public void SetAtmoWinPath(string path)
+    public bool SetStaticColor(int red, int green, int blue)
     {
-      atmoWinPath = path;
+      staticColor[0] = red;
+      staticColor[1] = green;
+      staticColor[2] = blue;
+      return true;
     }
-
-    public void SetReInitOnError(bool reInit)
-    {
-      reInitOnError = reInit;
-    }
-
-    public void SetStartAtmoWin(bool startAtmoWin)
-    {
-      this.startAtmoWin = startAtmoWin;
-    }
-
-
     #endregion
 
-
-
-
-    #region Utilities
+    #region Initialise
     /// <summary>
-    /// Check if a method times out and starts to reinitialise AtmoWin if needed.
+    /// Start AtmoWin and connects to it.
     /// </summary>
-    /// <param name="method">Method that needs checking for a timeout.</param>
-    /// <param name="timeout">Timeout in ms.</param>
-    /// <returns>true if not timed out and false if timed out.</returns>
-    private bool TimeoutHandler(System.Action method, int timeout = timeoutComInterface)
+    /// <returns>true or false</returns>
+    private bool Initialise(bool force = false)
     {
-      try
+      Log.Debug("Initialising.");
+      if (!Win32API.IsProcessRunning("atmowina.exe"))
       {
-#if DEBUG
-        method();
-        return true;
-#else
-        long timeoutStart = Win32API.GetTickCount();
-        var tokenSource = new CancellationTokenSource();
-        CancellationToken token = tokenSource.Token;
-        var task = Task.Factory.StartNew(() => method(), token);
-
-        if (!task.Wait(timeout, token))
+        if (startAtmoWin || force)
         {
-          // Stacktrace is needed so we can output the name of the method that timed out.
-          StackTrace trace = new StackTrace();
-          Log.Error("{0} timed out after {1}ms!", trace.GetFrame(1).GetMethod().Name, Win32API.GetTickCount() - timeoutStart);
-          ReinitialiseThreaded();
+          if (!StartAtmoWin()) return false;
+          System.Threading.Thread.Sleep(delayAtmoWinConnect);
+        }
+        else
+        {
+          Log.Error("AtmoWin is not running.");
           return false;
         }
-        return true;
-#endif
       }
-      catch (AggregateException ex)
+
+      if (!Connect()) return false;
+
+      Log.Debug("Initialising successfull.");
+      return true;
+    }
+
+    /// <summary>
+    /// Restart AtmoWin and reconnects to it.
+    /// </summary>
+    /// <param name="force">Force the reinitialising and discard user settings.</param>
+    public void Reinitialise(bool force = false)
+    {
+      if (reinitialiseLock)
       {
-        StackTrace trace = new StackTrace();
-        Log.Error("Error with {0}!", trace.GetFrame(1).GetMethod().Name);
-        foreach (var innerEx in ex.InnerExceptions)
-        {
-          Log.Error("Exception: {0}", innerEx.Message);
-        }
-        ReinitialiseThreaded();
-        return false;
+        Log.Debug("Reinitialising locked.");
+        return;
+      }
+      if (!reInitOnError && !force)
+      {
+        Disconnect();
+        //OnNewConnectionLost();
+        return;
+      }
+
+      reinitialiseLock = true;
+      Log.Debug("Reinitialising.");
+
+      if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(Core.GetChangeEffect() != ContentEffect.Undefined ? Core.GetChangeEffect() : Core.GetCurrentEffect()))
+      {
+        Disconnect();
+        StopAtmoWin();
+        Log.Error("Reinitialising failed.");
+        reinitialiseLock = false;
+        //OnNewConnectionLost();
+        return;
+      }
+
+      Log.Debug("Reinitialising successfull.");
+      reinitialiseLock = false;
+      return;
+    }
+
+    /// <summary>
+    /// Start reinitialising in a new thread.
+    /// </summary>
+    /// <param name="force">Force the reinitialising and discard user settings.</param>
+    private void ReinitialiseThreaded(bool force = false)
+    {
+      if (!reinitialiseLock)
+      {
+        reinitialiseThreadHelper = new Thread(() => Reinitialise(force));
+        reinitialiseThreadHelper.Name = "AtmoLight Reinitialise";
+        reinitialiseThreadHelper.Start();
+      }
+      else
+      {
+        Log.Debug("Reinitialising Thread already running.");
       }
     }
     #endregion
+
     #region Connect
     /// <summary>
     /// Connect to AtmoWin.
@@ -371,21 +322,8 @@ namespace AtmoLight
       Connect();
       return true;
     }
-
-    /// <summary>
-    /// Return if a connection to AtmoWin is established.
-    /// </summary>
-    /// <returns>true or false</returns>
-    public bool IsConnected()
-    {
-      if (atmoRemoteControl == null || atmoLiveViewControl == null)
-      {
-        return false;
-      }
-      return true;
-    }
     #endregion
-    
+
     #region AtmoWin
     /// <summary>
     /// Start AtmoWin.
@@ -462,6 +400,74 @@ namespace AtmoLight
       reInitOnError = restartOnError;
     }
     #endregion
+
+    #region Configuration Methods (set)
+    public void SetAtmoWinPath(string path)
+    {
+      atmoWinPath = path;
+    }
+
+    public void SetReInitOnError(bool reInit)
+    {
+      reInitOnError = reInit;
+    }
+
+    public void SetStartAtmoWin(bool startAtmoWin)
+    {
+      this.startAtmoWin = startAtmoWin;
+    }
+
+    public void SetStopAtmoWin(bool stopAtmoWin)
+    {
+      this.stopAtmoWin = stopAtmoWin;
+    }
+    #endregion
+
+    #region Utilities
+    /// <summary>
+    /// Check if a method times out and starts to reinitialise AtmoWin if needed.
+    /// </summary>
+    /// <param name="method">Method that needs checking for a timeout.</param>
+    /// <param name="timeout">Timeout in ms.</param>
+    /// <returns>true if not timed out and false if timed out.</returns>
+    private bool TimeoutHandler(System.Action method, int timeout = timeoutComInterface)
+    {
+      try
+      {
+#if DEBUG
+        method();
+        return true;
+#else
+        long timeoutStart = Win32API.GetTickCount();
+        var tokenSource = new CancellationTokenSource();
+        CancellationToken token = tokenSource.Token;
+        var task = Task.Factory.StartNew(() => method(), token);
+
+        if (!task.Wait(timeout, token))
+        {
+          // Stacktrace is needed so we can output the name of the method that timed out.
+          StackTrace trace = new StackTrace();
+          Log.Error("{0} timed out after {1}ms!", trace.GetFrame(1).GetMethod().Name, Win32API.GetTickCount() - timeoutStart);
+          ReinitialiseThreaded();
+          return false;
+        }
+        return true;
+#endif
+      }
+      catch (AggregateException ex)
+      {
+        StackTrace trace = new StackTrace();
+        Log.Error("Error with {0}!", trace.GetFrame(1).GetMethod().Name);
+        foreach (var innerEx in ex.InnerExceptions)
+        {
+          Log.Error("Exception: {0}", innerEx.Message);
+        }
+        ReinitialiseThreaded();
+        return false;
+      }
+    }
+    #endregion
+
     #region COM Interface
 
     private bool GetAtmoRemoteControl()
@@ -641,8 +647,6 @@ namespace AtmoLight
         ReinitialiseThreaded();
       }
     }
-
-
     #endregion
 
     #region Threads
@@ -693,7 +697,6 @@ namespace AtmoLight
       }
     }
     #endregion
-
 
     #region class Win32API
     public sealed class Win32API
