@@ -29,6 +29,7 @@ namespace AtmoLight.Targets
     private int hyperionPort = 0;
     private int hyperionStaticColor = 0;
     private int hyperionPriority = 0;
+    private int[] staticColor = { 0, 0, 0 };
     private Boolean hyperionReconnectOnError = false;
 
     #endregion
@@ -140,6 +141,16 @@ namespace AtmoLight.Targets
     }
     public bool ChangeEffect(ContentEffect effect)
     {
+      switch (effect)
+      {
+        case ContentEffect.LEDsDisabled:
+        case ContentEffect.Undefined:
+          ClearPriority(hyperionPriority);
+          break;
+        case ContentEffect.StaticColor:
+          ChangeColor(staticColor[0], staticColor[1], staticColor[2]);
+          break;
+      }
       return true;
     }
     public bool ChangeProfile()
@@ -234,9 +245,11 @@ namespace AtmoLight.Targets
     {
       hyperionPort = port;
     }
-    public void setHyperionStaticColor(int staticColor)
+    public void setHyperionStaticColor(int red, int green, int blue)
     {
-      hyperionStaticColor = staticColor;
+      staticColor[0] = red;
+      staticColor[1] = green;
+      staticColor[2] = blue;
     }
     public void setHyperionPriority(int priority)
     {

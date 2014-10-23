@@ -61,7 +61,7 @@ namespace AtmoLight
 
     // States
     private bool currentState = false; // State of the LEDs
-    private static ContentEffect currentEffect = ContentEffect.Undefined; // Current aktive effect
+    private static ContentEffect currentEffect = ContentEffect.Undefined; // Current active effect
     private static ContentEffect changeEffect = ContentEffect.Undefined; // Effect ChangeEffect() should change to (need for Reinitialise() if ChangeEffect() fails)
 
     // Lists
@@ -267,6 +267,7 @@ namespace AtmoLight
           hyperionTarget.setHyperionPort(hyperionPort);
           hyperionTarget.setHyperionPriority(hyperionPriority);
           hyperionTarget.setReconnectOnError(reInitOnError);
+          hyperionTarget.setHyperionStaticColor(staticColor[0], staticColor[1], staticColor[2]);
         }
         target.Initialise();
       }
@@ -335,7 +336,6 @@ namespace AtmoLight
     {
       hyperionPriority = priority;
     }
-
     public void SetGIFPath(string path)
     {
       gifPath = path;

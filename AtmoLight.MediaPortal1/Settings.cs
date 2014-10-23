@@ -36,19 +36,16 @@ namespace AtmoLight
     public static string gifFile = "";
 
     //Atmowin
-    public static bool atmowinEnabled = false;
+    public static bool atmoWinTarget;
     public static string atmowinExe = "";
     public static bool startAtmoWin = true;
     public static bool exitAtmoWin = true;
-    public static bool atmoWinTarget;
 
     //Hyperion
-    public static bool hyperionEnabled = false;
+    public static bool hyperionTarget;
     public static string hyperionIP = "";
     public static int hyperionPort = 0;
     public static int hyperionPriority = 0;
-    public static bool hyperionTarget;
-
 
     #endregion
 
