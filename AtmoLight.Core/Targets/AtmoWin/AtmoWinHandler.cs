@@ -28,11 +28,12 @@ namespace AtmoLight
 
     private Thread reinitialiseThreadHelper;
     private Thread initialiseThreadHelper;
+    private Thread getAtmoLiveViewSourceThreadHelper;
 
     private string atmoWinPath = "";
     private bool reInitOnError = true;
     private bool startAtmoWin = true;
-    private bool endAtmoWin = true;
+    private bool stopAtmoWin = true;
     private int[] staticColor = { 0, 0, 0 };
 
     // Com  Objects
@@ -47,14 +48,15 @@ namespace AtmoLight
     private const int delayGetAtmoLiveViewSource = 1000; // Delay between liveview source checks
 
     // Locks
-    private volatile bool reinitialiseLock = false;
-
+    private volatile bool reInitialiseLock = false;
+    private volatile bool initialiseLock = false;
+    private volatile bool getAtmoLiveViewSourceLock = false;
 
     private int captureWidth;
     private int captureHeight;
-    private volatile bool getAtmoLiveViewSourceLock;
-    private Thread getAtmoLiveViewSourceThreadHelper;
-    private bool stopAtmoWin;
+    
+    
+    
 
     #endregion
 
@@ -68,25 +70,41 @@ namespace AtmoLight
     #endregion
 
     #region ITargets Methods
-    public bool Initialise()
+    public void Initialise(bool force = false)
     {
-      initialiseThreadHelper = new Thread(() => Initialise(false));
-      initialiseThreadHelper.Name = "AtmoLight Initialise";
-      initialiseThreadHelper.Start();
-      return true;
+      if (!initialiseLock)
+      {
+        initialiseThreadHelper = new Thread(() => InitialiseThreaded(force));
+        initialiseThreadHelper.Name = "AtmoLight Initialise";
+        initialiseThreadHelper.Start();
+      }
+      else
+      {
+        Log.Debug("Initialising Thread already running.");
+      }
     }
 
-    public bool Dispose()
+    public void ReInitialise(bool force = false)
+    {
+      if (!reInitialiseLock)
+      {
+        reinitialiseThreadHelper = new Thread(() => ReInitialiseThreaded(force));
+        reinitialiseThreadHelper.Name = "AtmoLight Reinitialise";
+        reinitialiseThreadHelper.Start();
+      }
+      else
+      {
+        Log.Debug("Reinitialising Thread already running.");
+      }
+    }
+
+    public void Dispose()
     {
       Disconnect();
-      if (endAtmoWin)
+      if (stopAtmoWin)
       {
-        if (!StopAtmoWin())
-        {
-          return false;
-        }
+        StopAtmoWin();
       }
-      return true;
     }
 
     /// <summary>
@@ -158,32 +176,37 @@ namespace AtmoLight
       return true;
     }
 
-    public bool ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
+    public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
+      if (!IsConnected())
+      {
+        return;
+      }
       SetPixelData(bmiInfoHeader, pixeldata);
-      return true;
     }
 
     /// <summary>
     /// Change to AtmoWin profile.
     /// </summary>
     /// <returns>true or false</returns>
-    public bool ChangeProfile()
+    public void ChangeProfile()
     {
-      if (!SetColorMode(ComEffectMode.cemColorMode)) return false;
+      if (!IsConnected())
+      {
+        return;
+      }
+      if (!SetColorMode(ComEffectMode.cemColorMode)) return;
 
       // Change the effect to the desired effect.
       // Needed for AtmoWin 1.0.0.5+
-      if (!ChangeEffect(Core.GetCurrentEffect())) return false;
-      return true;
+      if (!ChangeEffect(Core.GetCurrentEffect())) return;
     }
 
-    public bool SetStaticColor(int red, int green, int blue)
+    public void SetStaticColor(int red, int green, int blue)
     {
       staticColor[0] = red;
       staticColor[1] = green;
       staticColor[2] = blue;
-      return true;
     }
     #endregion
 
@@ -192,29 +215,45 @@ namespace AtmoLight
     /// Start AtmoWin and connects to it.
     /// </summary>
     /// <returns>true or false</returns>
-    private bool Initialise(bool force = false)
+    private bool InitialiseThreaded(bool force = false)
     {
+      if (initialiseLock)
+      {
+        Log.Debug("Initialising locked.");
+        return false;
+      }
+      initialiseLock = true;
       Log.Debug("Initialising.");
       if (!Win32API.IsProcessRunning("atmowina.exe"))
       {
         if (startAtmoWin || force)
         {
-          if (!StartAtmoWin()) return false;
+          if (!StartAtmoWin())
+          {
+            initialiseLock = false;
+            return false;
+          }
           System.Threading.Thread.Sleep(delayAtmoWinConnect);
         }
         else
         {
           Log.Error("AtmoWin is not running.");
+          initialiseLock = false;
           return false;
         }
       }
 
-      if (!Connect()) return false;
+      if (!Connect())
+      {
+        initialiseLock = false;
+        return false;
+      }
 
       Log.Debug("Initialising successfull.");
 
       ChangeEffect(Core.GetCurrentEffect());
 
+      initialiseLock = false;
       return true;
     }
 
@@ -222,9 +261,9 @@ namespace AtmoLight
     /// Restart AtmoWin and reconnects to it.
     /// </summary>
     /// <param name="force">Force the reinitialising and discard user settings.</param>
-    public void Reinitialise(bool force = false)
+    public void ReInitialiseThreaded(bool force = false)
     {
-      if (reinitialiseLock)
+      if (reInitialiseLock)
       {
         Log.Debug("Reinitialising locked.");
         return;
@@ -236,40 +275,22 @@ namespace AtmoLight
         return;
       }
 
-      reinitialiseLock = true;
+      reInitialiseLock = true;
       Log.Debug("Reinitialising.");
 
-      if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(Core.GetChangeEffect() != ContentEffect.Undefined ? Core.GetChangeEffect() : Core.GetCurrentEffect()))
+      if (!Disconnect() || !StopAtmoWin() || !InitialiseThreaded(force) || !ChangeEffect(Core.GetChangeEffect() != ContentEffect.Undefined ? Core.GetChangeEffect() : Core.GetCurrentEffect()))
       {
         Disconnect();
         StopAtmoWin();
         Log.Error("Reinitialising failed.");
-        reinitialiseLock = false;
+        reInitialiseLock = false;
         //OnNewConnectionLost();
         return;
       }
 
       Log.Debug("Reinitialising successfull.");
-      reinitialiseLock = false;
+      reInitialiseLock = false;
       return;
-    }
-
-    /// <summary>
-    /// Start reinitialising in a new thread.
-    /// </summary>
-    /// <param name="force">Force the reinitialising and discard user settings.</param>
-    private void ReinitialiseThreaded(bool force = false)
-    {
-      if (!reinitialiseLock)
-      {
-        reinitialiseThreadHelper = new Thread(() => Reinitialise(force));
-        reinitialiseThreadHelper.Name = "AtmoLight Reinitialise";
-        reinitialiseThreadHelper.Start();
-      }
-      else
-      {
-        Log.Debug("Reinitialising Thread already running.");
-      }
     }
     #endregion
 
@@ -451,7 +472,7 @@ namespace AtmoLight
           // Stacktrace is needed so we can output the name of the method that timed out.
           StackTrace trace = new StackTrace();
           Log.Error("{0} timed out after {1}ms!", trace.GetFrame(1).GetMethod().Name, Win32API.GetTickCount() - timeoutStart);
-          ReinitialiseThreaded();
+          ReInitialise();
           return false;
         }
         return true;
@@ -465,7 +486,7 @@ namespace AtmoLight
         {
           Log.Error("Exception: {0}", innerEx.Message);
         }
-        ReinitialiseThreaded();
+        ReInitialise();
         return false;
       }
     }
@@ -647,7 +668,7 @@ namespace AtmoLight
       {
         Log.Error("Error with SetPixelData.");
         Log.Error("Exception: {0}", ex.Message);
-        ReinitialiseThreaded();
+        ReInitialise();
       }
     }
     #endregion

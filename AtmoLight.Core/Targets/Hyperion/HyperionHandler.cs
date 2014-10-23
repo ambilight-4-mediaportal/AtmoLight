@@ -35,10 +35,8 @@ namespace AtmoLight.Targets
     #endregion
     #region Hyperion
 
-    public bool Initialise()
+    public void Initialise(bool force = false)
     {
-      Boolean IsInitialised = true;
-
       try
       {
         Connect();
@@ -49,13 +47,15 @@ namespace AtmoLight.Targets
       {
         Log.Error("Hyperion: Error during initialise");
         Log.Error("Exception: {0}", e.Message);
-        IsInitialised = false;
       }
-
-      return IsInitialised;
     }
 
-    public bool Dispose()
+    public void ReInitialise(bool force = false)
+    {
+
+    }
+
+    public void Dispose()
     {
       if (Socket.Connected)
       {
@@ -63,7 +63,6 @@ namespace AtmoLight.Targets
         ClearPriority(hyperionPriorityStaticColor);
         Socket.Close();
       }
-      return true;
     }
     public bool IsConnected()
     {
@@ -165,11 +164,11 @@ namespace AtmoLight.Targets
       }
       return true;
     }
-    public bool ChangeProfile()
+    public void ChangeProfile()
     {
-      return true;
+      return;
     }
-    public bool ChangeImage(byte[] pixeldata, byte[] dummy)
+    public void ChangeImage(byte[] pixeldata, byte[] dummy)
     {
       // Hyperion expects the bytestring to be the size of 3*width*height.
       // So 3 bytes per pixel, as in RGB.
@@ -201,7 +200,6 @@ namespace AtmoLight.Targets
         .Build();
 
       SendRequest(request);
-      return true;
     }
 
     private void SendRequest(HyperionRequest request)
@@ -251,12 +249,11 @@ namespace AtmoLight.Targets
     {
       hyperionPort = port;
     }
-    public bool SetStaticColor(int red, int green, int blue)
+    public void SetStaticColor(int red, int green, int blue)
     {
       staticColor[0] = red;
       staticColor[1] = green;
       staticColor[2] = blue;
-      return true;
     }
     public void setHyperionPriority(int priority)
     {

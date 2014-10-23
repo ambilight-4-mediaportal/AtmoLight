@@ -41,13 +41,14 @@ namespace AtmoLight
   public interface ITargets
   {
     Target Name { get; }
-    bool Dispose();
-    bool Initialise();
+    void Initialise(bool force);
+    void ReInitialise(bool force);
+    void Dispose();
     bool IsConnected();
     bool ChangeEffect(ContentEffect effect);
-    bool ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader);
-    bool ChangeProfile();
-    bool SetStaticColor(int red, int green, int blue);
+    void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader);
+    void ChangeProfile();
+    void SetStaticColor(int red, int green, int blue);
   }
 
 
@@ -270,17 +271,20 @@ namespace AtmoLight
           hyperionTarget.setHyperionPriority(hyperionPriority);
           hyperionTarget.setReconnectOnError(reInitOnError);
         }
-        target.Initialise();
+        target.Initialise(false);
       }
       return true;
     }
 
-    public bool ReInitialise()
+    public void ReInitialise()
     {
-      // Code that reinitialises lost connections
-      // Only used when user wishes (context menu).
-      // so should check which item from targets is not in connectedTargets and then start the ReInitialise() method of this target.
-      return true;
+      foreach (var target in targets)
+      {
+        if (!target.IsConnected())
+        {
+          target.ReInitialise(true);
+        }
+      }
     }
     #endregion
 
