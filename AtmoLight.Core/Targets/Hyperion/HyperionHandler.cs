@@ -47,7 +47,7 @@ namespace AtmoLight.Targets
       }
       catch (Exception e)
       {
-        Log.Error("Error during initialise of Hyperion");
+        Log.Error("Hyperion: Error during initialise");
         Log.Error("Exception: {0}", e.Message);
         IsInitialised = false;
       }
@@ -85,7 +85,7 @@ namespace AtmoLight.Targets
     {
       try
       {
-        Log.Debug("Trying to connect to Hyperion");
+        Log.Debug("Hyperion: Trying to connect");
 
         //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
         try
@@ -94,7 +94,7 @@ namespace AtmoLight.Targets
         }
         catch (Exception e)
         {
-          Log.Error("Error while closing socket of Hyperion");
+          Log.Error("Hyperion: Error while closing socket");
           Log.Error("Exception: {0}", e.Message);
         }
         Socket = new TcpClient();
@@ -102,13 +102,13 @@ namespace AtmoLight.Targets
         Socket.SendTimeout = 5000;
         Socket.ReceiveTimeout = 5000;
         Socket.Connect(hyperionIP, hyperionPort);
-        Log.Debug("Connected to Hyperion.");
+        Log.Debug("Hyperion: Connected");
         Stream = Socket.GetStream();
         Connected = Socket.Connected;
       }
       catch (Exception e)
       {
-        Log.Error("Error while connecting to Hyperion");
+        Log.Error("Hyperion: Error while connecting");
         Log.Error("Exception: {0}", e.Message);
         Connected = false;
       }
@@ -217,16 +217,10 @@ namespace AtmoLight.Targets
         header[3] = (byte)((size) & 0xFF);
 
         int headerSize = header.Count();
-
         Stream.Write(header, 0, headerSize);
         request.WriteTo(Stream);
-        Log.Debug("Hyperion data written.");
-
         Stream.Flush();
-        Log.Debug("Hyperion data flushed.");
-
         HyperionReply reply = receiveReply();
-        Log.Debug("Hyperion reply: {0}", reply);
       }
       else
       {
