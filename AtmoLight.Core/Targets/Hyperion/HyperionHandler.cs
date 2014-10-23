@@ -53,7 +53,7 @@ namespace AtmoLight.Targets
 
     public void ReInitialise(bool force = false)
     {
-
+      Connect();
     }
 
     public void Dispose()
@@ -75,6 +75,8 @@ namespace AtmoLight.Targets
     public bool IsConnected()
     {
       //=== TEMP === remove when we add reconnect handling
+      // 303: This causes problems when using both targets and Pi is off and you start watching a video.
+      // It tries to reconnect 24 times a second (24fps).
       if (Connected == false)
       {
         Connect();
