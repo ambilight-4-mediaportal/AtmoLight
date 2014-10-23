@@ -305,7 +305,7 @@ namespace AtmoLight
 
     public void SetInitialEffect(ContentEffect effect)
     {
-      changeEffect = effect;
+      currentEffect = effect;
     }
 
     public void SetAtmoWinPath(string path)
