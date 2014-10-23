@@ -59,6 +59,7 @@ namespace AtmoLight.Targets
       if (Socket.Connected)
       {
         ClearPriority(hyperionPriority);
+        ClearPriority(hyperionPriorityStaticColor);
         Socket.Close();
       }
       return true;
@@ -155,6 +156,7 @@ namespace AtmoLight.Targets
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
           ClearPriority(hyperionPriority);
+          ClearPriority(hyperionPriorityStaticColor);
           break;
         case ContentEffect.StaticColor:
           ChangeColor(staticColor[0], staticColor[1], staticColor[2]);
