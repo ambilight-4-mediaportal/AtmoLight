@@ -800,7 +800,7 @@ namespace AtmoLight
           {
             if (Win32API.GetTickCount() >= (delayTimingList[0] + delayTime))
             {
-              SendPixelData(bmiInfoHeaderList[0], pixelDataList[0], true);
+              SendPixelData(pixelDataList[0], bmiInfoHeaderList[0], true);
               DeleteFirstDelayListsItems();
 
               // Trim the lists, to prevent a memory leak.
