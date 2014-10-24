@@ -56,6 +56,7 @@ namespace AtmoLight.Targets
 
     public void ReInitialise(bool force = false)
     {
+      //Reset reconnect counter if needed
       hyperionReconnectCounter = 0;
       Connect();
     }
@@ -81,53 +82,65 @@ namespace AtmoLight.Targets
       return Connected;
     }
 
-    public void Connect()
+    private void Connect()
     {
       Thread t = new Thread(ConnectThread);
       t.Start();
     }
     private void ConnectThread()
     {
-      while (hyperionReconnectCounter <= hyperionReconnectAttempts && IsConnected() == false)
+      while (hyperionReconnectCounter <= hyperionReconnectAttempts)
       {
-        try
+        if (Connected == false)
         {
-          Log.Debug("Hyperion: Trying to connect");
-
-          //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
           try
           {
-            Socket.Close();
+            Log.Debug("Hyperion: Trying to connect");
+
+            //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
+            try
+            {
+              Socket.Close();
+            }
+            catch (Exception e)
+            {
+              Log.Error("Hyperion: Error while closing socket");
+              Log.Error("Exception: {0}", e.Message);
+            }
+            Socket = new TcpClient();
+
+            Socket.SendTimeout = 5000;
+            Socket.ReceiveTimeout = 5000;
+            Socket.Connect(hyperionIP, hyperionPort);
+            Log.Debug("Hyperion: Connected");
+            Stream = Socket.GetStream();
+            Connected = Socket.Connected;
           }
           catch (Exception e)
           {
-            Log.Error("Hyperion: Error while closing socket");
+            Log.Error("Hyperion: Error while connecting");
             Log.Error("Exception: {0}", e.Message);
+            Connected = false;
+
           }
-          Socket = new TcpClient();
 
-          Socket.SendTimeout = 5000;
-          Socket.ReceiveTimeout = 5000;
-          Socket.Connect(hyperionIP, hyperionPort);
-          Log.Debug("Hyperion: Connected");
-          Stream = Socket.GetStream();
-          Connected = Socket.Connected;
+          //Increment times tried
+          hyperionReconnectCounter++;
+
+          //Sleep for specified time
+          Thread.Sleep(hyperionReconnectDelay);
+
+          //Log.Error("Hyperion: retry attempt {0} of {1}",hyperionReconnectCounter,hyperionReconnectAttempts);
         }
-        catch (Exception e)
+        else
         {
-          Log.Error("Hyperion: Error while connecting");
-          Log.Error("Exception: {0}", e.Message);
-          Connected = false;
-
+          //Log.Debug("Hyperion: Connected after {0} attempts.", hyperionReconnectCounter);
+          hyperionReconnectCounter = 0;
+          break;
         }
-
-        //Increment times tried
-        hyperionReconnectCounter++;
-
-        //Sleep for specified time
-        Thread.Sleep(hyperionReconnectDelay);
       }
     }
+
     public void ChangeColor(int red, int green, int blue)
     {
       ColorRequest colorRequest = ColorRequest.CreateBuilder()
