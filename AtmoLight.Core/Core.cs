@@ -99,6 +99,7 @@ namespace AtmoLight
     private string gifPath = "";
     private bool reInitOnError;
     private bool disableOnExit;
+    private bool initialEffect = false;
 
     // AtmoWin Settings Fields
     public bool atmoWinAutoStart;
@@ -301,8 +302,11 @@ namespace AtmoLight
     #region Configuration Methods (set)
     public void SetCaptureDimensions(int width, int height)
     {
-      captureWidth = width;
-      captureHeight = height;
+      if (width >= 0 && height >= 0)
+      {
+        captureWidth = width;
+        captureHeight = height;
+      }
     }
 
     public void AddTarget(Target target)
@@ -317,9 +321,15 @@ namespace AtmoLight
       }
     }
 
-    public void SetInitialEffect(ContentEffect effect)
+    public bool SetInitialEffect(ContentEffect effect)
     {
-      currentEffect = effect;
+      if (!initialEffect)
+      {
+        currentEffect = effect;
+        initialEffect = true;
+        return true;
+      }
+      return false;
     }
 
     public void SetDisableOnExit(bool disable)
@@ -332,9 +342,14 @@ namespace AtmoLight
       reInitOnError = reInit;
     }
 
-    public void SetGIFPath(string path)
+    public bool SetGIFPath(string path)
     {
-      gifPath = path;
+      if (path.Substring(path.Length - 3, 3) == "gif")
+      {
+        gifPath = path;
+        return true;
+      }
+      return false;
     }
 
     /// <summary>
