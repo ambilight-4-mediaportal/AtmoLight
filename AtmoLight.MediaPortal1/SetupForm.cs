@@ -35,6 +35,7 @@ namespace AtmoLight
       tbHyperionIP.Text = Settings.hyperionIP;
       tbHyperionPort.Text = Settings.hyperionPort.ToString();
       tbHyperionReconnectDelay.Text = Settings.hyperionReconnectDelay.ToString();
+      tbHyperionReconnectAttempts.Text = Settings.hyperionReconnectAttempts.ToString();
       tbHyperionPriority.Text = Settings.hyperionPriority.ToString();
       tbHyperionPriorityStaticColor.Text = Settings.HyperionPriorityStaticColor.ToString();
       tbCaptureWidth.Text = Settings.captureWidth.ToString();
@@ -173,6 +174,7 @@ namespace AtmoLight
       lblHyperionPort.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPort;
       lblHyperionPriority.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPriorty;
       lblHyperionReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblHyperionReconnectDelay;
+      lblHyperionReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblHyperionReconnectAttempts;
       lblHyperionPriorityStaticColor.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPriorityStaticColor;
       lblCaptureWidth.Text = LanguageLoader.appStrings.SetupForm_lblCaptureWidth;
       lblCaptureHeight.Text = LanguageLoader.appStrings.SetupForm_lblCaptureHeight;
@@ -308,6 +310,7 @@ namespace AtmoLight
       Settings.hyperionPort = int.Parse(tbHyperionPort.Text);
       Settings.hyperionPriority = int.Parse(tbHyperionPriority.Text);
       Settings.hyperionReconnectDelay = int.Parse(tbHyperionReconnectDelay.Text);
+      Settings.hyperionReconnectAttempts = int.Parse(tbHyperionReconnectAttempts.Text);
       Settings.HyperionPriorityStaticColor = int.Parse(tbHyperionPriorityStaticColor.Text);
       Settings.captureWidth = int.Parse(tbCaptureWidth.Text);
       Settings.captureHeight = int.Parse(tbCaptureHeight.Text);

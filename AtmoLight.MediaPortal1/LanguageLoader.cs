@@ -314,6 +314,7 @@ namespace Language
     public String SetupForm_lblHyperionPort = "Port";
     public String SetupForm_lblHyperionPriorty = "Priority live:";
     public String SetupForm_lblHyperionReconnectDelay = "Reconnect delay (ms):";
+    public String SetupForm_lblHyperionReconnectAttempts = "Reconnect attempts:";
     public String SetupForm_lblHyperionPriorityStaticColor = "Priority static color:";
     public String SetupForm_lblCaptureWidth = "Width:";
     public String SetupForm_lblCaptureHeight = "Height:";

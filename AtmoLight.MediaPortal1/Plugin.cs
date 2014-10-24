@@ -135,6 +135,7 @@ namespace AtmoLight
         AtmoLightObject.SetHyperionPort(Settings.hyperionPort);
         AtmoLightObject.SetHyperionPriority(Settings.hyperionPriority);
         AtmoLightObject.SetHyperionReconnectDelay(Settings.hyperionReconnectDelay);
+        AtmoLightObject.SetHyperionReconnectAttempts(Settings.hyperionReconnectAttempts);
         AtmoLightObject.SetHyperionPriorityStaticColor(Settings.HyperionPriorityStaticColor);
       }
       AtmoLightObject.SetDelay(Settings.delayReferenceTime);

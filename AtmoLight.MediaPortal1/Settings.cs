@@ -50,6 +50,7 @@ namespace AtmoLight
     public static int hyperionPort = 0;
     public static int hyperionPriority = 0;
     public static int hyperionReconnectDelay = 0;
+    public static int hyperionReconnectAttempts = 0;
     public static int HyperionPriorityStaticColor = 0;
 
     #endregion
@@ -99,7 +100,8 @@ namespace AtmoLight
         captureHeight = reader.GetValueAsInt("atmolight", "captureHeight", 64);
         hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "");
         hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 19445);
-        hyperionReconnectDelay = reader.GetValueAsInt("atmolight", "hyperionReconnectDelay", 5);
+        hyperionReconnectDelay = reader.GetValueAsInt("atmolight", "hyperionReconnectDelay", 10000);
+        hyperionReconnectAttempts = reader.GetValueAsInt("atmolight", "hyperionReconnectAttempts", 5);
         hyperionPriority = reader.GetValueAsInt("atmolight", "hyperionPriority", 1);
         HyperionPriorityStaticColor = reader.GetValueAsInt("atmolight", "hyperionStaticColorPriority", 1);
         atmoWinTarget = reader.GetValueAsBool("atmolight", "atmoWinTarget", true);
@@ -145,6 +147,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "hyperionPort", (int)hyperionPort);
         reader.SetValue("atmolight", "hyperionPriority", (int)hyperionPriority);
         reader.SetValue("atmolight", "hyperionReconnectDelay", (int)hyperionReconnectDelay);
+        reader.SetValue("atmolight", "hyperionReconnectAttempts", (int)hyperionReconnectAttempts);
         reader.SetValue("atmolight", "hyperionStaticColorPriority", (int)HyperionPriorityStaticColor);
         reader.SetValueAsBool("atmolight", "atmoWinTarget", atmoWinTarget);
         reader.SetValueAsBool("atmolight", "hyperionTarget", hyperionTarget);

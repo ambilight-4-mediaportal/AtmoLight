@@ -63,6 +63,12 @@
       this.edExcludeStart = new System.Windows.Forms.TextBox();
       this.lblStart = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
+      this.grpCaptureDimensions = new System.Windows.Forms.GroupBox();
+      this.lblHintCaptureDimensions = new System.Windows.Forms.Label();
+      this.lblCaptureHeight = new System.Windows.Forms.Label();
+      this.lblCaptureWidth = new System.Windows.Forms.Label();
+      this.tbCaptureWidth = new System.Windows.Forms.TextBox();
+      this.tbCaptureHeight = new System.Windows.Forms.TextBox();
       this.lblBlackarDetectionMS = new System.Windows.Forms.Label();
       this.tbBlackbarDetectionTime = new System.Windows.Forms.TextBox();
       this.lblHintMenuButtons = new System.Windows.Forms.Label();
@@ -111,18 +117,15 @@
       this.grpHyperionNetworkSettings = new System.Windows.Forms.GroupBox();
       this.tbHyperionReconnectDelay = new System.Windows.Forms.TextBox();
       this.lblHyperionReconnectDelay = new System.Windows.Forms.Label();
-      this.grpCaptureDimensions = new System.Windows.Forms.GroupBox();
-      this.lblCaptureHeight = new System.Windows.Forms.Label();
-      this.lblCaptureWidth = new System.Windows.Forms.Label();
-      this.tbCaptureWidth = new System.Windows.Forms.TextBox();
-      this.tbCaptureHeight = new System.Windows.Forms.TextBox();
-      this.lblHintCaptureDimensions = new System.Windows.Forms.Label();
+      this.tbHyperionReconnectAttempts = new System.Windows.Forms.TextBox();
+      this.lblHyperionReconnectAttempts = new System.Windows.Forms.Label();
       this.grpMPClose.SuspendLayout();
       this.grpMode.SuspendLayout();
       this.grpGIF.SuspendLayout();
       this.grpStaticColor.SuspendLayout();
       this.grpDeactivate.SuspendLayout();
       this.grpPluginOption.SuspendLayout();
+      this.grpCaptureDimensions.SuspendLayout();
       this.tabMenu.SuspendLayout();
       this.tabPageGeneric.SuspendLayout();
       this.grpTargets.SuspendLayout();
@@ -131,7 +134,6 @@
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
-      this.grpCaptureDimensions.SuspendLayout();
       this.SuspendLayout();
       // 
       // lblPathInfo
@@ -519,6 +521,61 @@
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
       // 
+      // grpCaptureDimensions
+      // 
+      this.grpCaptureDimensions.Controls.Add(this.lblHintCaptureDimensions);
+      this.grpCaptureDimensions.Controls.Add(this.lblCaptureHeight);
+      this.grpCaptureDimensions.Controls.Add(this.lblCaptureWidth);
+      this.grpCaptureDimensions.Controls.Add(this.tbCaptureWidth);
+      this.grpCaptureDimensions.Controls.Add(this.tbCaptureHeight);
+      this.grpCaptureDimensions.Location = new System.Drawing.Point(13, 202);
+      this.grpCaptureDimensions.Name = "grpCaptureDimensions";
+      this.grpCaptureDimensions.Size = new System.Drawing.Size(426, 123);
+      this.grpCaptureDimensions.TabIndex = 31;
+      this.grpCaptureDimensions.TabStop = false;
+      this.grpCaptureDimensions.Text = "Capture dimensions";
+      // 
+      // lblHintCaptureDimensions
+      // 
+      this.lblHintCaptureDimensions.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblHintCaptureDimensions.Location = new System.Drawing.Point(190, 30);
+      this.lblHintCaptureDimensions.Name = "lblHintCaptureDimensions";
+      this.lblHintCaptureDimensions.Size = new System.Drawing.Size(230, 79);
+      this.lblHintCaptureDimensions.TabIndex = 32;
+      this.lblHintCaptureDimensions.Text = "Hint: Only used when Atmowin is not\r\n enabled\r\n";
+      // 
+      // lblCaptureHeight
+      // 
+      this.lblCaptureHeight.AutoSize = true;
+      this.lblCaptureHeight.Location = new System.Drawing.Point(7, 71);
+      this.lblCaptureHeight.Name = "lblCaptureHeight";
+      this.lblCaptureHeight.Size = new System.Drawing.Size(41, 13);
+      this.lblCaptureHeight.TabIndex = 10;
+      this.lblCaptureHeight.Text = "Height:";
+      // 
+      // lblCaptureWidth
+      // 
+      this.lblCaptureWidth.AutoSize = true;
+      this.lblCaptureWidth.Location = new System.Drawing.Point(7, 36);
+      this.lblCaptureWidth.Name = "lblCaptureWidth";
+      this.lblCaptureWidth.Size = new System.Drawing.Size(38, 13);
+      this.lblCaptureWidth.TabIndex = 9;
+      this.lblCaptureWidth.Text = "Width:";
+      // 
+      // tbCaptureWidth
+      // 
+      this.tbCaptureWidth.Location = new System.Drawing.Point(54, 33);
+      this.tbCaptureWidth.Name = "tbCaptureWidth";
+      this.tbCaptureWidth.Size = new System.Drawing.Size(92, 20);
+      this.tbCaptureWidth.TabIndex = 3;
+      // 
+      // tbCaptureHeight
+      // 
+      this.tbCaptureHeight.Location = new System.Drawing.Point(54, 68);
+      this.tbCaptureHeight.Name = "tbCaptureHeight";
+      this.tbCaptureHeight.Size = new System.Drawing.Size(92, 20);
+      this.tbCaptureHeight.TabIndex = 4;
+      // 
       // lblBlackarDetectionMS
       // 
       this.lblBlackarDetectionMS.AutoSize = true;
@@ -787,9 +844,9 @@
       // 
       // tbHyperionPriority
       // 
-      this.tbHyperionPriority.Location = new System.Drawing.Point(107, 27);
+      this.tbHyperionPriority.Location = new System.Drawing.Point(128, 27);
       this.tbHyperionPriority.Name = "tbHyperionPriority";
-      this.tbHyperionPriority.Size = new System.Drawing.Size(74, 20);
+      this.tbHyperionPriority.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPriority.TabIndex = 5;
       // 
       // lblHyperionPriority
@@ -961,13 +1018,15 @@
       // 
       // tbHyperionPriorityStaticColor
       // 
-      this.tbHyperionPriorityStaticColor.Location = new System.Drawing.Point(107, 65);
+      this.tbHyperionPriorityStaticColor.Location = new System.Drawing.Point(128, 65);
       this.tbHyperionPriorityStaticColor.Name = "tbHyperionPriorityStaticColor";
-      this.tbHyperionPriorityStaticColor.Size = new System.Drawing.Size(74, 20);
+      this.tbHyperionPriorityStaticColor.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPriorityStaticColor.TabIndex = 6;
       // 
       // grpHyperionNetworkSettings
       // 
+      this.grpHyperionNetworkSettings.Controls.Add(this.tbHyperionReconnectAttempts);
+      this.grpHyperionNetworkSettings.Controls.Add(this.lblHyperionReconnectAttempts);
       this.grpHyperionNetworkSettings.Controls.Add(this.tbHyperionReconnectDelay);
       this.grpHyperionNetworkSettings.Controls.Add(this.lblHyperionReconnectDelay);
       this.grpHyperionNetworkSettings.Controls.Add(this.tbHyperionIP);
@@ -997,60 +1056,21 @@
       this.lblHyperionReconnectDelay.TabIndex = 6;
       this.lblHyperionReconnectDelay.Text = "Reconnect delay (ms):";
       // 
-      // grpCaptureDimensions
+      // tbHyperionReconnectAttempts
       // 
-      this.grpCaptureDimensions.Controls.Add(this.lblHintCaptureDimensions);
-      this.grpCaptureDimensions.Controls.Add(this.lblCaptureHeight);
-      this.grpCaptureDimensions.Controls.Add(this.lblCaptureWidth);
-      this.grpCaptureDimensions.Controls.Add(this.tbCaptureWidth);
-      this.grpCaptureDimensions.Controls.Add(this.tbCaptureHeight);
-      this.grpCaptureDimensions.Location = new System.Drawing.Point(13, 202);
-      this.grpCaptureDimensions.Name = "grpCaptureDimensions";
-      this.grpCaptureDimensions.Size = new System.Drawing.Size(426, 123);
-      this.grpCaptureDimensions.TabIndex = 31;
-      this.grpCaptureDimensions.TabStop = false;
-      this.grpCaptureDimensions.Text = "Capture dimensions";
+      this.tbHyperionReconnectAttempts.Location = new System.Drawing.Point(128, 108);
+      this.tbHyperionReconnectAttempts.Name = "tbHyperionReconnectAttempts";
+      this.tbHyperionReconnectAttempts.Size = new System.Drawing.Size(93, 20);
+      this.tbHyperionReconnectAttempts.TabIndex = 7;
       // 
-      // lblCaptureHeight
+      // lblHyperionReconnectAttempts
       // 
-      this.lblCaptureHeight.AutoSize = true;
-      this.lblCaptureHeight.Location = new System.Drawing.Point(7, 71);
-      this.lblCaptureHeight.Name = "lblCaptureHeight";
-      this.lblCaptureHeight.Size = new System.Drawing.Size(41, 13);
-      this.lblCaptureHeight.TabIndex = 10;
-      this.lblCaptureHeight.Text = "Height:";
-      // 
-      // lblCaptureWidth
-      // 
-      this.lblCaptureWidth.AutoSize = true;
-      this.lblCaptureWidth.Location = new System.Drawing.Point(7, 36);
-      this.lblCaptureWidth.Name = "lblCaptureWidth";
-      this.lblCaptureWidth.Size = new System.Drawing.Size(38, 13);
-      this.lblCaptureWidth.TabIndex = 9;
-      this.lblCaptureWidth.Text = "Width:";
-      // 
-      // tbCaptureWidth
-      // 
-      this.tbCaptureWidth.Location = new System.Drawing.Point(54, 33);
-      this.tbCaptureWidth.Name = "tbCaptureWidth";
-      this.tbCaptureWidth.Size = new System.Drawing.Size(92, 20);
-      this.tbCaptureWidth.TabIndex = 3;
-      // 
-      // tbCaptureHeight
-      // 
-      this.tbCaptureHeight.Location = new System.Drawing.Point(54, 68);
-      this.tbCaptureHeight.Name = "tbCaptureHeight";
-      this.tbCaptureHeight.Size = new System.Drawing.Size(92, 20);
-      this.tbCaptureHeight.TabIndex = 4;
-      // 
-      // lblHintCaptureDimensions
-      // 
-      this.lblHintCaptureDimensions.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintCaptureDimensions.Location = new System.Drawing.Point(190, 30);
-      this.lblHintCaptureDimensions.Name = "lblHintCaptureDimensions";
-      this.lblHintCaptureDimensions.Size = new System.Drawing.Size(230, 79);
-      this.lblHintCaptureDimensions.TabIndex = 32;
-      this.lblHintCaptureDimensions.Text = "Hint: Only used when Atmowin is not\r\n enabled\r\n";
+      this.lblHyperionReconnectAttempts.AutoSize = true;
+      this.lblHyperionReconnectAttempts.Location = new System.Drawing.Point(9, 111);
+      this.lblHyperionReconnectAttempts.Name = "lblHyperionReconnectAttempts";
+      this.lblHyperionReconnectAttempts.Size = new System.Drawing.Size(106, 13);
+      this.lblHyperionReconnectAttempts.TabIndex = 8;
+      this.lblHyperionReconnectAttempts.Text = "Reconnect attempts:";
       // 
       // SetupForm
       // 
@@ -1082,6 +1102,8 @@
       this.grpDeactivate.PerformLayout();
       this.grpPluginOption.ResumeLayout(false);
       this.grpPluginOption.PerformLayout();
+      this.grpCaptureDimensions.ResumeLayout(false);
+      this.grpCaptureDimensions.PerformLayout();
       this.tabMenu.ResumeLayout(false);
       this.tabPageGeneric.ResumeLayout(false);
       this.grpTargets.ResumeLayout(false);
@@ -1094,8 +1116,6 @@
       this.grpHyperionPrioritySettings.PerformLayout();
       this.grpHyperionNetworkSettings.ResumeLayout(false);
       this.grpHyperionNetworkSettings.PerformLayout();
-      this.grpCaptureDimensions.ResumeLayout(false);
-      this.grpCaptureDimensions.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1191,5 +1211,7 @@
     private System.Windows.Forms.Label lblCaptureWidth;
     private System.Windows.Forms.TextBox tbCaptureWidth;
     private System.Windows.Forms.TextBox tbCaptureHeight;
+    private System.Windows.Forms.TextBox tbHyperionReconnectAttempts;
+    private System.Windows.Forms.Label lblHyperionReconnectAttempts;
   }
 }

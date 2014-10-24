@@ -110,6 +110,8 @@ namespace AtmoLight
     private int hyperionPort;
     private int hyperionPriority;
     private int hyperionReconnectDelay;
+    private int hyperionReconnectAttempts;
+
     private int hyperionPriorityStaticColor;
     #endregion
 
@@ -272,6 +274,7 @@ namespace AtmoLight
           hyperionTarget.setHyperionPort(hyperionPort);
           hyperionTarget.setHyperionPriority(hyperionPriority);
           hyperionTarget.SetHyperionReconnectDelay(hyperionReconnectDelay);
+          hyperionTarget.SetHyperionReconnectAttempts(hyperionReconnectAttempts);
           hyperionTarget.setReconnectOnError(reInitOnError);
           hyperionTarget.SetDisableOnExit(disableOnExit);
         }
@@ -357,6 +360,10 @@ namespace AtmoLight
     public void SetHyperionReconnectDelay(int reconnectDelay)
     {
       hyperionReconnectDelay = reconnectDelay;
+    }
+    public void SetHyperionReconnectAttempts(int reconnectAttempts)
+    {
+      hyperionReconnectAttempts = reconnectAttempts;
     }
 
     public void SetHyperionPriorityStaticColor(int priority)
