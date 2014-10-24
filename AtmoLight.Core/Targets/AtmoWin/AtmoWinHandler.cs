@@ -650,9 +650,9 @@ namespace AtmoLight
       if (TimeoutHandler(() => atmoRemoteControl.getLiveViewRes(out captureWidth, out captureHeight)))
       {
         Log.Debug("Liveview capture resolution is {0}x{1}. Screenshot will be resized to this dimensions.", captureWidth, captureHeight);
+        OnNewDimensions(captureWidth, captureHeight);
         return true;
       }
-      OnNewDimensions(captureWidth, captureHeight);
       return false;
     }
 
