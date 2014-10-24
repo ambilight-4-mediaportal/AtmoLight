@@ -34,10 +34,11 @@ namespace AtmoLight
       tbGIF.Text = Settings.gifFile;
       tbHyperionIP.Text = Settings.hyperionIP;
       tbHyperionPort.Text = Settings.hyperionPort.ToString();
+      tbHyperionReconnectDelay.Text = Settings.hyperionReconnectDelay.ToString();
       tbHyperionPriority.Text = Settings.hyperionPriority.ToString();
       tbHyperionPriorityStaticColor.Text = Settings.HyperionPriorityStaticColor.ToString();
-      tbHyperionCaptureWidth.Text = Settings.hyperionCaptureWidth.ToString();
-      tbHyperionCaptureHeight.Text = Settings.hyperionCaptureHeight.ToString();
+      tbCaptureWidth.Text = Settings.captureWidth.ToString();
+      tbCaptureHeight.Text = Settings.captureHeight.ToString();
 
       if (Settings.manualMode)
       {
@@ -150,8 +151,9 @@ namespace AtmoLight
       btnSave.Text = LanguageLoader.appStrings.SetupForm_btnSaveText;
       btnCancel.Text = LanguageLoader.appStrings.SetupForm_btnCancelText;
       btnLanguage.Text = LanguageLoader.appStrings.SetupForm_btnLanguageText;
-      lblHint.Text = LanguageLoader.appStrings.SetupForm_lblHintText;
-      lblHintHardware.Text = LanguageLoader.appStrings.SetupForm_lblHardwareTip;
+      lblHintMenuButtons.Text = LanguageLoader.appStrings.SetupForm_lblHintText;
+      lblHintHardware.Text = LanguageLoader.appStrings.SetupForm_lblHintHardware;
+      lblHintCaptureDimensions.Text = LanguageLoader.appStrings.SetupForm_lblHintCaptureDimensions;
       lblFrames.Text = LanguageLoader.appStrings.SetupForm_lblFramesText;
       lblDelay.Text = LanguageLoader.appStrings.SetupForm_lblDelay;
       lblStart.Text = LanguageLoader.appStrings.SetupForm_lblStartText;
@@ -170,15 +172,16 @@ namespace AtmoLight
       lblHyperionIP.Text = LanguageLoader.appStrings.SetupForm_lblHyperionIP;
       lblHyperionPort.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPort;
       lblHyperionPriority.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPriorty;
+      lblHyperionReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblHyperionReconnectDelay;
       lblHyperionPriorityStaticColor.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPriorityStaticColor;
-      lblHyperionCaptureWidth.Text = LanguageLoader.appStrings.SetupForm_lblHyperionCaptureWidth;
-      lblHyperionCaptureHeight.Text = LanguageLoader.appStrings.SetupForm_lblHyperionCaptureHeight;
+      lblCaptureWidth.Text = LanguageLoader.appStrings.SetupForm_lblCaptureWidth;
+      lblCaptureHeight.Text = LanguageLoader.appStrings.SetupForm_lblCaptureHeight;
       tabPageGeneric.Text = LanguageLoader.appStrings.SetupForm_tabPageGeneric;
       grpTargets.Text = LanguageLoader.appStrings.SetupForm_grpTargets;
       grpAtmowinSettings.Text = LanguageLoader.appStrings.SetupForm_grpAtmowinSettings;
       grpHyperionNetworkSettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionNetworkSettings;
       grpHyperionPrioritySettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionPrioritySettings;
-      grpHyperionCaptureSettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionCaptureSettings;
+      grpCaptureDimensions.Text = LanguageLoader.appStrings.SetupForm_grpCaptureDimensions;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -304,9 +307,10 @@ namespace AtmoLight
       Settings.hyperionIP = tbHyperionIP.Text;
       Settings.hyperionPort = int.Parse(tbHyperionPort.Text);
       Settings.hyperionPriority = int.Parse(tbHyperionPriority.Text);
+      Settings.hyperionReconnectDelay = int.Parse(tbHyperionReconnectDelay.Text);
       Settings.HyperionPriorityStaticColor = int.Parse(tbHyperionPriorityStaticColor.Text);
-      Settings.hyperionCaptureWidth = int.Parse(tbHyperionCaptureWidth.Text);
-      Settings.hyperionCaptureHeight = int.Parse(tbHyperionCaptureHeight.Text);
+      Settings.captureWidth = int.Parse(tbCaptureWidth.Text);
+      Settings.captureHeight = int.Parse(tbCaptureHeight.Text);
       Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
       Settings.hyperionTarget = ckHyperionEnabled.Checked;
 
