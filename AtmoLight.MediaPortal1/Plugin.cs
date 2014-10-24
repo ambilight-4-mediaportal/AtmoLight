@@ -124,20 +124,20 @@ namespace AtmoLight
       if (Settings.atmoWinTarget)
       {
         AtmoLightObject.AddTarget(Target.AtmoWin);
-        AtmoLightObject.SetAtmoWinPath(Settings.atmowinExe);
-        AtmoLightObject.SetStartAtmoWin(Settings.startAtmoWin);
-        AtmoLightObject.SetStopAtmoWin(Settings.disableOnShutdown);
+        AtmoLightObject.atmoWinPath = Settings.atmowinExe;
+        AtmoLightObject.atmoWinAutoStart = Settings.startAtmoWin;
+        AtmoLightObject.atmoWinAutoStop = Settings.exitAtmoWin;
       }
       if (Settings.hyperionTarget)
       {
         AtmoLightObject.AddTarget(Target.Hyperion);
-        AtmoLightObject.SetHyperionIP(Settings.hyperionIP);
-        AtmoLightObject.SetHyperionPort(Settings.hyperionPort);
-        AtmoLightObject.SetHyperionPriority(Settings.hyperionPriority);
-        AtmoLightObject.SetHyperionReconnectDelay(Settings.hyperionReconnectDelay);
-        AtmoLightObject.SetHyperionReconnectAttempts(Settings.hyperionReconnectAttempts);
-        AtmoLightObject.SetHyperionPriorityStaticColor(Settings.HyperionPriorityStaticColor);
-        AtmoLightObject.setHyperionLiveConnect(Settings.HyperionLiveReconnect);
+        AtmoLightObject.hyperionIP = Settings.hyperionIP;
+        AtmoLightObject.hyperionPort = Settings.hyperionPort;
+        AtmoLightObject.hyperionPriority = Settings.hyperionPriority;
+        AtmoLightObject.hyperionReconnectDelay = Settings.hyperionReconnectDelay;
+        AtmoLightObject.hyperionReconnectAttempts = Settings.hyperionReconnectAttempts;
+        AtmoLightObject.hyperionPriorityStaticColor = Settings.HyperionPriorityStaticColor;
+        AtmoLightObject.hyperionLiveReconnect = Settings.HyperionLiveReconnect;
       }
       AtmoLightObject.SetDelay(Settings.delayReferenceTime);
       AtmoLightObject.SetGIFPath(Settings.gifFile);

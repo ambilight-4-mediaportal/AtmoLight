@@ -25,16 +25,16 @@ namespace AtmoLight.Targets
     private Stream Stream;
     private Boolean Connected = false;
     int hyperionReconnectCounter = 0;
-    int hyperionReconnectAttempts = 0;
+    public int hyperionReconnectAttempts = 0;
 
-    private string hyperionIP = "";
-    private int hyperionPort = 0;
-    private int hyperionPriority = 0;
-    private int hyperionPriorityStaticColor = 0;
-    private bool hyperionLiveReconnect = false;
+    public string hyperionIP = "";
+    public int hyperionPort = 0;
+    public int hyperionPriority = 0;
+    public int hyperionPriorityStaticColor = 0;
+    public bool hyperionLiveReconnect = false;
     private int[] staticColor = { 0, 0, 0 };
-    private Boolean hyperionReconnectOnError = false;
-    private int hyperionReconnectDelay = 0;
+    public Boolean hyperionReconnectOnError = false;
+    public int hyperionReconnectDelay = 0;
     private bool disableOnExit;
 
     #endregion
@@ -295,41 +295,11 @@ namespace AtmoLight.Targets
     #endregion
 
     #region settings
-    public void setHyperionIP(string ip)
-    {
-      hyperionIP = ip;
-    }
-    public void setHyperionPort(int port)
-    {
-      hyperionPort = port;
-    }
     public void SetStaticColor(int red, int green, int blue)
     {
       staticColor[0] = red;
       staticColor[1] = green;
       staticColor[2] = blue;
-    }
-    public void setHyperionPriority(int priority)
-    {
-      hyperionPriority = priority;
-    }
-    public void SetHyperionReconnectDelay(int reconnectDelay)
-    {
-      hyperionReconnectDelay = reconnectDelay;
-    }
-    public void SetHyperionReconnectAttempts(int reconnectAttempts)
-    {
-      hyperionReconnectAttempts = reconnectAttempts;
-    }
-
-    public void setHyperionPriorityStaticColor(int priority)
-    {
-      hyperionPriorityStaticColor = priority;
-    }
-
-    public void setHyperionLiveConnect(bool liveReconnect)
-    {
-      hyperionLiveReconnect = liveReconnect;
     }
 
     public void setReconnectOnError(Boolean reconnectOnError)

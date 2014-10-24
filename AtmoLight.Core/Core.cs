@@ -101,18 +101,18 @@ namespace AtmoLight
     private bool disableOnExit;
 
     // AtmoWin Settings Fields
-    private bool startAtmoWin = true;
-    private bool stopAtmoWin = true;
-    private string atmoWinPath;
+    public bool atmoWinAutoStart;
+    public bool atmoWinAutoStop;
+    public string atmoWinPath;
 
     // Hyperion Settings Fields
-    private string hyperionIP;
-    private int hyperionPort;
-    private int hyperionPriority;
-    private int hyperionReconnectDelay;
-    private int hyperionReconnectAttempts;
-    private int hyperionPriorityStaticColor;
-    private bool hyperionLiveReconnect;
+    public string hyperionIP;
+    public int hyperionPort;
+    public int hyperionPriority;
+    public int hyperionReconnectDelay;
+    public int hyperionReconnectAttempts;
+    public int hyperionPriorityStaticColor;
+    public bool hyperionLiveReconnect;
     #endregion
 
     #region class Win32API
@@ -260,22 +260,24 @@ namespace AtmoLight
         var atmoWinTarget = target as AtmoWinHandler;
         if (atmoWinTarget != null)
         {
-          atmoWinTarget.SetAtmoWinPath(atmoWinPath);
+          atmoWinTarget.atmoWinPath = atmoWinPath;
+          atmoWinTarget.atmoWinAutoStart = atmoWinAutoStart;
+          atmoWinTarget.atmoWinAutoStop = atmoWinAutoStop;
+
           atmoWinTarget.SetReInitOnError(reInitOnError);
-          atmoWinTarget.SetStartAtmoWin(startAtmoWin);
-          atmoWinTarget.SetStopAtmoWin(stopAtmoWin);
           atmoWinTarget.SetDisableOnExit(disableOnExit);
         }
         // Hyperion Init
         var hyperionTarget = target as HyperionHandler;
         if (hyperionTarget != null)
         {
-          hyperionTarget.setHyperionIP(hyperionIP);
-          hyperionTarget.setHyperionPort(hyperionPort);
-          hyperionTarget.setHyperionPriority(hyperionPriority);
-          hyperionTarget.SetHyperionReconnectDelay(hyperionReconnectDelay);
-          hyperionTarget.SetHyperionReconnectAttempts(hyperionReconnectAttempts);
-          hyperionTarget.setHyperionLiveConnect(hyperionLiveReconnect);
+          hyperionTarget.hyperionIP = hyperionIP;
+          hyperionTarget.hyperionPort = hyperionPort;
+          hyperionTarget.hyperionPriority = hyperionPriority;
+          hyperionTarget.hyperionReconnectDelay = hyperionReconnectDelay;
+          hyperionTarget.hyperionReconnectAttempts = hyperionReconnectAttempts;
+          hyperionTarget.hyperionLiveReconnect = hyperionLiveReconnect;
+
           hyperionTarget.setReconnectOnError(reInitOnError);
           hyperionTarget.SetDisableOnExit(disableOnExit);
         }
@@ -325,54 +327,9 @@ namespace AtmoLight
       disableOnExit = disable;
     }
 
-    public void SetAtmoWinPath(string path)
-    {
-      atmoWinPath = path;
-    }
-
     public void SetReInitOnError(bool reInit)
     {
       reInitOnError = reInit;
-    }
-
-    public void SetStartAtmoWin(bool startAtmoWin)
-    {
-      this.startAtmoWin = startAtmoWin;
-    }
-
-    public void SetStopAtmoWin(bool stopAtmoWin)
-    {
-      this.stopAtmoWin = stopAtmoWin;
-    }
-
-    public void SetHyperionIP(string ip)
-    {
-      hyperionIP = ip;
-    }
-
-    public void SetHyperionPort(int port)
-    {
-      hyperionPort = port;
-    }
-    public void SetHyperionPriority(int priority)
-    {
-      hyperionPriority = priority;
-    }
-    public void SetHyperionReconnectDelay(int reconnectDelay)
-    {
-      hyperionReconnectDelay = reconnectDelay;
-    }
-    public void SetHyperionReconnectAttempts(int reconnectAttempts)
-    {
-      hyperionReconnectAttempts = reconnectAttempts;
-    }
-    public void SetHyperionPriorityStaticColor(int priority)
-    {
-      hyperionPriorityStaticColor = priority;
-    }
-    public void setHyperionLiveConnect(bool liveReconnect)
-    {
-      hyperionLiveReconnect = liveReconnect;
     }
 
     public void SetGIFPath(string path)

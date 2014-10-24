@@ -27,12 +27,13 @@ namespace AtmoLight
     private Thread initialiseThreadHelper;
     private Thread getAtmoLiveViewSourceThreadHelper;
 
-    private string atmoWinPath = "";
+    public string atmoWinPath = "";
+    public bool atmoWinAutoStart = true;
+    public bool atmoWinAutoStop = true;
     private bool reInitOnError = true;
-    private bool startAtmoWin = true;
-    private bool stopAtmoWin = true;
+    private bool disableOnExit = true;
     private int[] staticColor = { 0, 0, 0 };
-    private bool disableOnExit;
+
 
     // Com  Objects
     private IAtmoRemoteControl2 atmoRemoteControl = null; // Com Object to control AtmoWin
@@ -104,7 +105,7 @@ namespace AtmoLight
         ChangeEffect(ContentEffect.AtmoWinLiveMode);
       }
       Disconnect();
-      if (stopAtmoWin)
+      if (atmoWinAutoStop)
       {
         StopAtmoWin();
       }
@@ -229,7 +230,7 @@ namespace AtmoLight
       Log.Debug("Initialising.");
       if (!Win32API.IsProcessRunning("atmowina.exe"))
       {
-        if (startAtmoWin || force)
+        if (atmoWinAutoStart || force)
         {
           if (!StartAtmoWin())
           {
@@ -424,25 +425,12 @@ namespace AtmoLight
     #endregion
 
     #region Configuration Methods (set)
-    public void SetAtmoWinPath(string path)
-    {
-      atmoWinPath = path;
-    }
 
     public void SetReInitOnError(bool reInit)
     {
       reInitOnError = reInit;
     }
 
-    public void SetStartAtmoWin(bool startAtmoWin)
-    {
-      this.startAtmoWin = startAtmoWin;
-    }
-
-    public void SetStopAtmoWin(bool stopAtmoWin)
-    {
-      this.stopAtmoWin = stopAtmoWin;
-    }
     public void SetDisableOnExit(bool disable)
     {
       disableOnExit = disable;
