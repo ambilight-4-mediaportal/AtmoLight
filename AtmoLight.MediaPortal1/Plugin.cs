@@ -142,6 +142,7 @@ namespace AtmoLight
       AtmoLightObject.SetReInitOnError(Settings.restartOnError);
       AtmoLightObject.SetDisableOnExit(Settings.disableOnShutdown);
       AtmoLightObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
+      AtmoLightObject.SetCaptureDimensions(Settings.captureWidth, Settings.captureHeight);
 
       menuEffect = Settings.effectMenu;
       if (CheckForStartRequirements())

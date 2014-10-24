@@ -34,6 +34,9 @@ namespace AtmoLight
     public static bool blackbarDetection = false;
     public static int blackbarDetectionTime = 0;
     public static string gifFile = "";
+    public static int captureWidth = 0;
+    public static int captureHeight = 0;
+
 
     //Atmowin
     public static bool atmoWinTarget;
@@ -48,8 +51,6 @@ namespace AtmoLight
     public static int hyperionPriority = 0;
     public static int hyperionReconnectDelay = 0;
     public static int HyperionPriorityStaticColor = 0;
-    public static int hyperionCaptureWidth = 0;
-    public static int hyperionCaptureHeight = 0;
 
     #endregion
 
@@ -94,13 +95,13 @@ namespace AtmoLight
         blackbarDetection = reader.GetValueAsBool("atmolight", "BlackbarDetection", false);
         blackbarDetectionTime = reader.GetValueAsInt("atmolight", "BlackbarDetectionTime", 0);
         gifFile = reader.GetValueAsString("atmolight", "GIFFile", "");
+        captureWidth = reader.GetValueAsInt("atmolight", "captureWidth", 64);
+        captureHeight = reader.GetValueAsInt("atmolight", "captureHeight", 64);
         hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "");
         hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 19445);
         hyperionReconnectDelay = reader.GetValueAsInt("atmolight", "hyperionReconnectDelay", 5);
         hyperionPriority = reader.GetValueAsInt("atmolight", "hyperionPriority", 1);
         HyperionPriorityStaticColor = reader.GetValueAsInt("atmolight", "hyperionStaticColorPriority", 1);
-        hyperionCaptureWidth = reader.GetValueAsInt("atmolight", "hyperionCaptureWidth", 64);
-        hyperionCaptureHeight = reader.GetValueAsInt("atmolight", "hyperionCaptureHeight", 64);
         atmoWinTarget = reader.GetValueAsBool("atmolight", "atmoWinTarget", true);
         hyperionTarget = reader.GetValueAsBool("atmolight", "hyperionTarget", false);
       }
@@ -138,13 +139,13 @@ namespace AtmoLight
         reader.SetValueAsBool("atmolight", "BlackbarDetection", blackbarDetection);
         reader.SetValue("atmolight", "BlackbarDetectionTime", blackbarDetectionTime);
         reader.SetValue("atmolight", "GIFFile", gifFile);
+        reader.SetValue("atmolight", "captureWidth", (int)captureWidth);
+        reader.SetValue("atmolight", "captureHeight", (int)captureHeight);
         reader.SetValue("atmolight", "hyperionIP", hyperionIP);
         reader.SetValue("atmolight", "hyperionPort", (int)hyperionPort);
         reader.SetValue("atmolight", "hyperionPriority", (int)hyperionPriority);
         reader.SetValue("atmolight", "hyperionReconnectDelay", (int)hyperionReconnectDelay);
         reader.SetValue("atmolight", "hyperionStaticColorPriority", (int)HyperionPriorityStaticColor);
-        reader.SetValue("atmolight", "hyperionCaptureWidth", (int)hyperionCaptureWidth);
-        reader.SetValue("atmolight", "hyperionCaptureHeight", (int)hyperionCaptureHeight);
         reader.SetValueAsBool("atmolight", "atmoWinTarget", atmoWinTarget);
         reader.SetValueAsBool("atmolight", "hyperionTarget", hyperionTarget);
       }

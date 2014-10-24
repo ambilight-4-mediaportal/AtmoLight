@@ -239,7 +239,8 @@ namespace Language
     public String SetupForm_btnCancelText = "Cancel";
     public String SetupForm_btnLanguageText = "Load Language";
     public String SetupForm_lblHintText = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3D-SBS mode.";
-    public String SetupForm_lblHardwareTip = "Hint: Select the devices you want to use with AtmoLight and configure it on its designated tab";
+    public String SetupForm_lblHintHardware = "Hint: Select the devices you want to use with AtmoLight and configure it on its designated tab";
+    public String SetupForm_lblHintCaptureDimensions = "Hint: Only used when Atmowin is not enabled";
     public String SetupForm_lblFramesText = "ms between Frames";
     public String SetupForm_lblDelay = "ms Delay at";
     public String SetupForm_lblStartText = "Start:";
@@ -308,21 +309,19 @@ namespace Language
     public String ContextMenu_VUMeter = "VU Meter";
     public String ContextMenu_VUMeterRainbow = "VU Meter Rainbow";
     public String SetupForm_grpGIF = "GIF Reader";
+    public String SetupForm_grpCaptureDimensions = "Capture dimensions";
     public String SetupForm_lblHyperionIP = "IP";
     public String SetupForm_lblHyperionPort = "Port";
     public String SetupForm_lblHyperionPriorty = "Priority live:";
     public String SetupForm_lblHyperionReconnectDelay = "Reconnect delay (ms):";
     public String SetupForm_lblHyperionPriorityStaticColor = "Priority static color:";
-    public String SetupForm_lblHyperionCaptureWidth = "Width:";
-    public String SetupForm_lblHyperionCaptureHeight = "Height:";
-    public String SetupForm_grpHyperionNetworkSettings = "Network settings";
-    public String SetupForm_grpHyperionCaptureSettings = "Capture settings";
-    public String SetupForm_grpHyperionPrioritySettings = "Priority settings"; 
+    public String SetupForm_lblCaptureWidth = "Width:";
+    public String SetupForm_lblCaptureHeight = "Height:";
+    public String SetupForm_grpHyperionNetworkSettings = "Network";
+    public String SetupForm_grpHyperionPrioritySettings = "Priority"; 
     public String SetupForm_tabPageGeneric = "Generic settings";
     public String SetupForm_grpTargets = "Select supported hardware";
     public String SetupForm_grpAtmowinSettings = "Settings";
-   
-      
   }
 }
 

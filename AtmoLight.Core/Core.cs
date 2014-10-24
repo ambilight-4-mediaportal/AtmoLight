@@ -293,7 +293,7 @@ namespace AtmoLight
     #endregion
 
     #region Configuration Methods (set)
-    private void SetCaptureDimensions(int width, int height)
+    public void SetCaptureDimensions(int width, int height)
     {
       captureWidth = width;
       captureHeight = height;
