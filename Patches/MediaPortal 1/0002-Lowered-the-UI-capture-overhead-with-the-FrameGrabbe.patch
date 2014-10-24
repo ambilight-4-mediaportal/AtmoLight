@@ -1,0 +1,93 @@
+From 176fab433888706fc5c86c18f4bb94f88ee40330 Mon Sep 17 00:00:00 2001
+From: Lightning303 <Lightning303@gmail.com>
+Date: Fri, 24 Oct 2014 21:18:08 +0200
+Subject: [PATCH] Lowered the UI capture overhead with the FrameGrabber if
+ there is nothing subscribed to the FrameGrabber event
+
+---
+ mediaportal/Core/Player/FrameGrabber.cs            | 13 +++++++++
+ mediaportal/MediaPortal.Application/MediaPortal.cs | 34 +++++++++++++---------
+ 2 files changed, 33 insertions(+), 14 deletions(-)
+
+diff --git a/mediaportal/Core/Player/FrameGrabber.cs b/mediaportal/Core/Player/FrameGrabber.cs
+index c45de1a..19e8408 100644
+--- a/mediaportal/Core/Player/FrameGrabber.cs
++++ b/mediaportal/Core/Player/FrameGrabber.cs
+@@ -192,5 +192,18 @@ namespace MediaPortal
+         Log.Error(e.ToString());
+       }
+     }
++
++    /// <summary>
++    /// Method to tell if anything is subscribed to the FrameGrabber event.
++    /// </summary>
++    /// <returns></returns>
++    public bool HasSubscribers()
++    {
++      if (OnNewFrame == null)
++      {
++        return false;
++      }
++      return true;
++    }
+   }
+ }
+\ No newline at end of file
+diff --git a/mediaportal/MediaPortal.Application/MediaPortal.cs b/mediaportal/MediaPortal.Application/MediaPortal.cs
+index 6ee52f0..3372c42 100644
+--- a/mediaportal/MediaPortal.Application/MediaPortal.cs
++++ b/mediaportal/MediaPortal.Application/MediaPortal.cs
+@@ -3164,16 +3164,19 @@ public class MediaPortalApp : D3D, IRender
+               GUIGraphicsContext.Render3DMode == GUIGraphicsContext.eRender3DMode.SideBySideTo2D ||
+               GUIGraphicsContext.Render3DMode == GUIGraphicsContext.eRender3DMode.TopAndBottomTo2D)
+           {
+-            // Call Framegrabber with UI Surface
+-            // Needed for AtmoLight UI capture
+-            Surface atmoLightSurface = GUIGraphicsContext.DX9Device.GetBackBuffer(0, 0, BackBufferType.Mono);
+-            Int16 atmoLightWidth = (Int16)atmoLightSurface.Description.Width;
+-            Int16 atmoLightHeight = (Int16)atmoLightSurface.Description.Height;
+-            unsafe
++            if (grabber.HasSubscribers())
+             {
+-              grabber.OnFrame(atmoLightWidth, atmoLightHeight, 0, 0, (uint)atmoLightSurface.UnmanagedComPointer);
++              // Call Framegrabber with UI Surface
++              // Needed for AtmoLight UI capture
++              Surface atmoLightSurface = GUIGraphicsContext.DX9Device.GetBackBuffer(0, 0, BackBufferType.Mono);
++              Int16 atmoLightWidth = (Int16)atmoLightSurface.Description.Width;
++              Int16 atmoLightHeight = (Int16)atmoLightSurface.Description.Height;
++              unsafe
++              {
++                grabber.OnFrame(atmoLightWidth, atmoLightHeight, 0, 0, (uint)atmoLightSurface.UnmanagedComPointer);
++              }
++              atmoLightSurface.Dispose();
+             }
+-            atmoLightSurface.Dispose();
+ 
+             // clear the surface
+             GUIGraphicsContext.DX9Device.Clear(ClearFlags.Target, Color.Black, 1.0f, 0);
+@@ -3208,13 +3211,16 @@ public class MediaPortalApp : D3D, IRender
+ 
+             Surface backbuffer = GUIGraphicsContext.DX9Device.GetBackBuffer(0, 0, BackBufferType.Mono);
+ 
+-            // Call Framegrabber with UI Surface
+-            // Needed for AtmoLight UI capture
+-            Int16 atmoLightWidth = (Int16)backbuffer.Description.Width;
+-            Int16 atmoLightHeight = (Int16)backbuffer.Description.Height;
+-            unsafe
++            if (grabber.HasSubscribers())
+             {
+-              grabber.OnFrame(atmoLightWidth, atmoLightHeight, 0, 0, (uint)backbuffer.UnmanagedComPointer);
++              // Call Framegrabber with UI Surface
++              // Needed for AtmoLight UI capture
++              Int16 atmoLightWidth = (Int16)backbuffer.Description.Width;
++              Int16 atmoLightHeight = (Int16)backbuffer.Description.Height;
++              unsafe
++              {
++                grabber.OnFrame(atmoLightWidth, atmoLightHeight, 0, 0, (uint)backbuffer.UnmanagedComPointer);
++              }
+             }
+ 
+             // create texture/surface for preparation for 3D output if they don't exist
+-- 
+1.9.0.msysgit.0
+
