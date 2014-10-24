@@ -115,10 +115,11 @@
       this.lblHyperionPriorityStaticColor = new System.Windows.Forms.Label();
       this.tbHyperionPriorityStaticColor = new System.Windows.Forms.TextBox();
       this.grpHyperionNetworkSettings = new System.Windows.Forms.GroupBox();
-      this.tbHyperionReconnectDelay = new System.Windows.Forms.TextBox();
-      this.lblHyperionReconnectDelay = new System.Windows.Forms.Label();
       this.tbHyperionReconnectAttempts = new System.Windows.Forms.TextBox();
       this.lblHyperionReconnectAttempts = new System.Windows.Forms.Label();
+      this.tbHyperionReconnectDelay = new System.Windows.Forms.TextBox();
+      this.lblHyperionReconnectDelay = new System.Windows.Forms.Label();
+      this.ckHyperionLiveReconnect = new System.Windows.Forms.CheckBox();
       this.grpMPClose.SuspendLayout();
       this.grpMode.SuspendLayout();
       this.grpGIF.SuspendLayout();
@@ -1000,9 +1001,9 @@
       this.grpHyperionPrioritySettings.Controls.Add(this.tbHyperionPriorityStaticColor);
       this.grpHyperionPrioritySettings.Controls.Add(this.lblHyperionPriority);
       this.grpHyperionPrioritySettings.Controls.Add(this.tbHyperionPriority);
-      this.grpHyperionPrioritySettings.Location = new System.Drawing.Point(15, 184);
+      this.grpHyperionPrioritySettings.Location = new System.Drawing.Point(15, 218);
       this.grpHyperionPrioritySettings.Name = "grpHyperionPrioritySettings";
-      this.grpHyperionPrioritySettings.Size = new System.Drawing.Size(228, 100);
+      this.grpHyperionPrioritySettings.Size = new System.Drawing.Size(379, 100);
       this.grpHyperionPrioritySettings.TabIndex = 10;
       this.grpHyperionPrioritySettings.TabStop = false;
       this.grpHyperionPrioritySettings.Text = "Priority";
@@ -1025,6 +1026,7 @@
       // 
       // grpHyperionNetworkSettings
       // 
+      this.grpHyperionNetworkSettings.Controls.Add(this.ckHyperionLiveReconnect);
       this.grpHyperionNetworkSettings.Controls.Add(this.tbHyperionReconnectAttempts);
       this.grpHyperionNetworkSettings.Controls.Add(this.lblHyperionReconnectAttempts);
       this.grpHyperionNetworkSettings.Controls.Add(this.tbHyperionReconnectDelay);
@@ -1035,10 +1037,26 @@
       this.grpHyperionNetworkSettings.Controls.Add(this.lblHyperionPort);
       this.grpHyperionNetworkSettings.Location = new System.Drawing.Point(15, 16);
       this.grpHyperionNetworkSettings.Name = "grpHyperionNetworkSettings";
-      this.grpHyperionNetworkSettings.Size = new System.Drawing.Size(228, 162);
+      this.grpHyperionNetworkSettings.Size = new System.Drawing.Size(803, 196);
       this.grpHyperionNetworkSettings.TabIndex = 7;
       this.grpHyperionNetworkSettings.TabStop = false;
       this.grpHyperionNetworkSettings.Text = "Network";
+      // 
+      // tbHyperionReconnectAttempts
+      // 
+      this.tbHyperionReconnectAttempts.Location = new System.Drawing.Point(128, 108);
+      this.tbHyperionReconnectAttempts.Name = "tbHyperionReconnectAttempts";
+      this.tbHyperionReconnectAttempts.Size = new System.Drawing.Size(93, 20);
+      this.tbHyperionReconnectAttempts.TabIndex = 7;
+      // 
+      // lblHyperionReconnectAttempts
+      // 
+      this.lblHyperionReconnectAttempts.AutoSize = true;
+      this.lblHyperionReconnectAttempts.Location = new System.Drawing.Point(9, 111);
+      this.lblHyperionReconnectAttempts.Name = "lblHyperionReconnectAttempts";
+      this.lblHyperionReconnectAttempts.Size = new System.Drawing.Size(106, 13);
+      this.lblHyperionReconnectAttempts.TabIndex = 8;
+      this.lblHyperionReconnectAttempts.Text = "Reconnect attempts:";
       // 
       // tbHyperionReconnectDelay
       // 
@@ -1056,21 +1074,16 @@
       this.lblHyperionReconnectDelay.TabIndex = 6;
       this.lblHyperionReconnectDelay.Text = "Reconnect delay (ms):";
       // 
-      // tbHyperionReconnectAttempts
+      // ckHyperionLiveReconnect
       // 
-      this.tbHyperionReconnectAttempts.Location = new System.Drawing.Point(128, 108);
-      this.tbHyperionReconnectAttempts.Name = "tbHyperionReconnectAttempts";
-      this.tbHyperionReconnectAttempts.Size = new System.Drawing.Size(93, 20);
-      this.tbHyperionReconnectAttempts.TabIndex = 7;
-      // 
-      // lblHyperionReconnectAttempts
-      // 
-      this.lblHyperionReconnectAttempts.AutoSize = true;
-      this.lblHyperionReconnectAttempts.Location = new System.Drawing.Point(9, 111);
-      this.lblHyperionReconnectAttempts.Name = "lblHyperionReconnectAttempts";
-      this.lblHyperionReconnectAttempts.Size = new System.Drawing.Size(106, 13);
-      this.lblHyperionReconnectAttempts.TabIndex = 8;
-      this.lblHyperionReconnectAttempts.Text = "Reconnect attempts:";
+      this.ckHyperionLiveReconnect.AutoSize = true;
+      this.ckHyperionLiveReconnect.Location = new System.Drawing.Point(12, 151);
+      this.ckHyperionLiveReconnect.Name = "ckHyperionLiveReconnect";
+      this.ckHyperionLiveReconnect.Size = new System.Drawing.Size(518, 30);
+      this.ckHyperionLiveReconnect.TabIndex = 9;
+      this.ckHyperionLiveReconnect.Text = "Live reconnect (NOT recommended)\r\nWill keep reconnecting until device is reachabl" +
+    "e and only useful for live testing Hyperion config changes.";
+      this.ckHyperionLiveReconnect.UseVisualStyleBackColor = true;
       // 
       // SetupForm
       // 
@@ -1213,5 +1226,6 @@
     private System.Windows.Forms.TextBox tbCaptureHeight;
     private System.Windows.Forms.TextBox tbHyperionReconnectAttempts;
     private System.Windows.Forms.Label lblHyperionReconnectAttempts;
+    private System.Windows.Forms.CheckBox ckHyperionLiveReconnect;
   }
 }

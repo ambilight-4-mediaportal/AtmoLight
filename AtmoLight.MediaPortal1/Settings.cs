@@ -37,7 +37,6 @@ namespace AtmoLight
     public static int captureWidth = 0;
     public static int captureHeight = 0;
 
-
     //Atmowin
     public static bool atmoWinTarget;
     public static string atmowinExe = "";
@@ -52,6 +51,7 @@ namespace AtmoLight
     public static int hyperionReconnectDelay = 0;
     public static int hyperionReconnectAttempts = 0;
     public static int HyperionPriorityStaticColor = 0;
+    public static bool HyperionLiveReconnect;
 
     #endregion
 
@@ -104,6 +104,8 @@ namespace AtmoLight
         hyperionReconnectAttempts = reader.GetValueAsInt("atmolight", "hyperionReconnectAttempts", 5);
         hyperionPriority = reader.GetValueAsInt("atmolight", "hyperionPriority", 1);
         HyperionPriorityStaticColor = reader.GetValueAsInt("atmolight", "hyperionStaticColorPriority", 1);
+        HyperionPriorityStaticColor = reader.GetValueAsInt("atmolight", "hyperionStaticColorPriority", 1);
+        HyperionLiveReconnect = reader.GetValueAsBool("atmolight", "HyperionLiveReconnect", false);
         atmoWinTarget = reader.GetValueAsBool("atmolight", "atmoWinTarget", true);
         hyperionTarget = reader.GetValueAsBool("atmolight", "hyperionTarget", false);
       }
@@ -149,6 +151,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "hyperionReconnectDelay", (int)hyperionReconnectDelay);
         reader.SetValue("atmolight", "hyperionReconnectAttempts", (int)hyperionReconnectAttempts);
         reader.SetValue("atmolight", "hyperionStaticColorPriority", (int)HyperionPriorityStaticColor);
+        reader.SetValueAsBool("atmolight", "HyperionLiveReconnect", HyperionLiveReconnect);        
         reader.SetValueAsBool("atmolight", "atmoWinTarget", atmoWinTarget);
         reader.SetValueAsBool("atmolight", "hyperionTarget", hyperionTarget);
       }

@@ -316,6 +316,7 @@ namespace Language
     public String SetupForm_lblHyperionReconnectDelay = "Reconnect delay (ms):";
     public String SetupForm_lblHyperionReconnectAttempts = "Reconnect attempts:";
     public String SetupForm_lblHyperionPriorityStaticColor = "Priority static color:";
+    public String SetupForm_ckHyperionLiveReconnect = "Live reconnect (NOT recommended) - will keep reconnecting until device is reachable and only useful for live testing Hyperion config changes.";    
     public String SetupForm_lblCaptureWidth = "Width:";
     public String SetupForm_lblCaptureHeight = "Height:";
     public String SetupForm_grpHyperionNetworkSettings = "Network";

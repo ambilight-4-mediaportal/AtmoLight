@@ -137,6 +137,7 @@ namespace AtmoLight
         AtmoLightObject.SetHyperionReconnectDelay(Settings.hyperionReconnectDelay);
         AtmoLightObject.SetHyperionReconnectAttempts(Settings.hyperionReconnectAttempts);
         AtmoLightObject.SetHyperionPriorityStaticColor(Settings.HyperionPriorityStaticColor);
+        AtmoLightObject.setHyperionLiveConnect(Settings.HyperionLiveReconnect);
       }
       AtmoLightObject.SetDelay(Settings.delayReferenceTime);
       AtmoLightObject.SetGIFPath(Settings.gifFile);

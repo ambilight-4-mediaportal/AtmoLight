@@ -31,6 +31,7 @@ namespace AtmoLight.Targets
     private int hyperionPort = 0;
     private int hyperionPriority = 0;
     private int hyperionPriorityStaticColor = 0;
+    private bool hyperionLiveReconnect = false;
     private int[] staticColor = { 0, 0, 0 };
     private Boolean hyperionReconnectOnError = false;
     private int hyperionReconnectDelay = 0;
@@ -79,6 +80,10 @@ namespace AtmoLight.Targets
     }
     public bool IsConnected()
     {
+      if (hyperionLiveReconnect)
+      {
+        Connect();
+      }
       return Connected;
     }
 
@@ -95,7 +100,10 @@ namespace AtmoLight.Targets
         {
           try
           {
-            Log.Debug("Hyperion: Trying to connect");
+            if (hyperionLiveReconnect == false)
+            {
+              Log.Debug("Hyperion: Trying to connect");
+            }
 
             //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
             try
@@ -104,28 +112,46 @@ namespace AtmoLight.Targets
             }
             catch (Exception e)
             {
-              Log.Error("Hyperion: Error while closing socket");
-              Log.Error("Exception: {0}", e.Message);
+              if (hyperionLiveReconnect == false)
+              {
+                Log.Error("Hyperion: Error while closing socket");
+                Log.Error("Exception: {0}", e.Message);
+              }
             }
             Socket = new TcpClient();
 
             Socket.SendTimeout = 5000;
             Socket.ReceiveTimeout = 5000;
             Socket.Connect(hyperionIP, hyperionPort);
-            Log.Debug("Hyperion: Connected");
             Stream = Socket.GetStream();
             Connected = Socket.Connected;
+
+            if (hyperionLiveReconnect == false)
+            {
+              Log.Debug("Hyperion: Connected");
+            }
           }
           catch (Exception e)
           {
-            Log.Error("Hyperion: Error while connecting");
-            Log.Error("Exception: {0}", e.Message);
+            if (hyperionLiveReconnect == false)
+            {
+              Log.Error("Hyperion: Error while connecting");
+              Log.Error("Exception: {0}", e.Message);
+            }
             Connected = false;
 
           }
 
-          //Increment times tried
-          hyperionReconnectCounter++;
+          //if live connect enabled don't use this loop and let IsConnected fire up new connections
+          if (hyperionLiveReconnect)
+          {
+            break;
+          }
+          else
+          {
+            //Increment times tried
+            hyperionReconnectCounter++;
+          }
 
           //Sleep for specified time
           Thread.Sleep(hyperionReconnectDelay);
@@ -300,6 +326,12 @@ namespace AtmoLight.Targets
     {
       hyperionPriorityStaticColor = priority;
     }
+
+    public void setHyperionLiveConnect(bool liveReconnect)
+    {
+      hyperionLiveReconnect = liveReconnect;
+    }
+
     public void setReconnectOnError(Boolean reconnectOnError)
     {
       hyperionReconnectOnError = reconnectOnError;

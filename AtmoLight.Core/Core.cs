@@ -111,8 +111,8 @@ namespace AtmoLight
     private int hyperionPriority;
     private int hyperionReconnectDelay;
     private int hyperionReconnectAttempts;
-
     private int hyperionPriorityStaticColor;
+    private bool hyperionLiveReconnect;
     #endregion
 
     #region class Win32API
@@ -275,6 +275,7 @@ namespace AtmoLight
           hyperionTarget.setHyperionPriority(hyperionPriority);
           hyperionTarget.SetHyperionReconnectDelay(hyperionReconnectDelay);
           hyperionTarget.SetHyperionReconnectAttempts(hyperionReconnectAttempts);
+          hyperionTarget.setHyperionLiveConnect(hyperionLiveReconnect);
           hyperionTarget.setReconnectOnError(reInitOnError);
           hyperionTarget.SetDisableOnExit(disableOnExit);
         }
@@ -365,11 +366,15 @@ namespace AtmoLight
     {
       hyperionReconnectAttempts = reconnectAttempts;
     }
-
     public void SetHyperionPriorityStaticColor(int priority)
     {
       hyperionPriorityStaticColor = priority;
     }
+    public void setHyperionLiveConnect(bool liveReconnect)
+    {
+      hyperionLiveReconnect = liveReconnect;
+    }
+
     public void SetGIFPath(string path)
     {
       gifPath = path;

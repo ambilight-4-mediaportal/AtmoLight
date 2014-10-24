@@ -128,6 +128,14 @@ namespace AtmoLight
       {
           ckHyperionEnabled.Checked = false;
       }
+      if (Settings.HyperionLiveReconnect)
+      {
+        ckHyperionLiveReconnect.Checked = true;
+      }
+      else
+      {
+        ckHyperionLiveReconnect.Checked = false;
+      }
     }
 
     private void UpdateLanguageOnControls()
@@ -176,6 +184,7 @@ namespace AtmoLight
       lblHyperionReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblHyperionReconnectDelay;
       lblHyperionReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblHyperionReconnectAttempts;
       lblHyperionPriorityStaticColor.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPriorityStaticColor;
+      ckHyperionLiveReconnect.Text = LanguageLoader.appStrings.SetupForm_ckHyperionLiveReconnect;
       lblCaptureWidth.Text = LanguageLoader.appStrings.SetupForm_lblCaptureWidth;
       lblCaptureHeight.Text = LanguageLoader.appStrings.SetupForm_lblCaptureHeight;
       tabPageGeneric.Text = LanguageLoader.appStrings.SetupForm_tabPageGeneric;
@@ -312,6 +321,7 @@ namespace AtmoLight
       Settings.hyperionReconnectDelay = int.Parse(tbHyperionReconnectDelay.Text);
       Settings.hyperionReconnectAttempts = int.Parse(tbHyperionReconnectAttempts.Text);
       Settings.HyperionPriorityStaticColor = int.Parse(tbHyperionPriorityStaticColor.Text);
+      Settings.HyperionLiveReconnect = ckHyperionLiveReconnect.Checked;
       Settings.captureWidth = int.Parse(tbCaptureWidth.Text);
       Settings.captureHeight = int.Parse(tbCaptureHeight.Text);
       Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
