@@ -65,9 +65,12 @@ namespace AtmoLight.Targets
     {
       if (Socket.Connected)
       {
-        ClearPriority(hyperionPriority);
-        ClearPriority(hyperionPriorityStaticColor);
-        Socket.Close();
+        if (Core.GetCurrentEffect() == ContentEffect.LEDsDisabled || Core.GetCurrentEffect() == ContentEffect.Undefined)
+        {
+          ClearPriority(hyperionPriority);
+          ClearPriority(hyperionPriorityStaticColor);
+          Socket.Close();
+        }
       }
     }
     public bool IsConnected()
