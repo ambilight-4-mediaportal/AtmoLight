@@ -264,13 +264,13 @@ namespace Language
     public String ContextMenu_SwitchLEDsON = "Switch LEDs on";
     public String ContextMenu_SwitchLEDsOFF = "Switch LEDs off";
     public String ContextMenu_ChangeEffect = "Change Effect";
-    public String ContextMenu_ChangeAWProfile = "Change AtmoWin Profile";
+    public String ContextMenu_ChangeAWProfile = "Change Profile";
     public String ContextMenu_Switch3DON = "Switch 3D SBS Mode on";
     public String ContextMenu_Switch3DOFF = "Switch 3D SBS Mode off";
     public String ContextMenu_ChangeStatic = "Change Static Color";
     public String ContextMenu_LEDsDisabled = "LEDs disabled";
     public String ContextMenu_MPLive = "MediaPortal Live Mode";
-    public String ContextMenu_AWLive = "AtmoWin Live Mode";
+    public String ContextMenu_AWLive = "External Live Mode";
     public String ContextMenu_Colorchanger = "Colorchanger";
     public String ContextMenu_ColorchangerLR = "Colorchanger LR";
     public String ContextMenu_StaticColor = "Static Color";
