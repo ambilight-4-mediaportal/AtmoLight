@@ -344,10 +344,13 @@ namespace AtmoLight
 
     public bool SetGIFPath(string path)
     {
-      if (path.Substring(path.Length - 3, 3) == "gif")
+      if (path.Length > 4)
       {
-        gifPath = path;
-        return true;
+        if (path.Substring(path.Length - 3, 3) == "gif")
+        {
+          gifPath = path;
+          return true;
+        }
       }
       return false;
     }
