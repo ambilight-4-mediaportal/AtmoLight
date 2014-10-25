@@ -220,7 +220,7 @@ namespace Language
   public class ApplicationStrings
   {
     public String SetupForm_lblPathInfoText = "Path+Filename of AtmoWinA.exe";
-    public String SetupForm_grpModeText = "Atmolight Mode per content type";
+    public String SetupForm_grpModeText = "Effect Settings";
     public String SetupForm_grpPluginOptionText = "Plugin options";
     public String SetupForm_lblVidTvRecText = "Video/TV/Recordings:";
     public String SetupForm_lblMusicText = "Music:";
@@ -232,9 +232,6 @@ namespace Language
     public String SetupForm_ckDelayText = "LED Delay";
     public String SetupForm_ckStartAtmoWinText = "Start AtmoWin with MediaPortal";
     public String SetupForm_ckExitAtmoWinText = "Exit AtmoWin with MediaPortal";
-    public String SetupForm_grpMPCloseText = "MP close...";
-    public String SetupForm_rbSwitchToLiveViewText = "Switch to AtmoWin's internal live view mode";
-    public String SetupForm_rbDisableLEDsText = "Switch all LEDs off";
     public String SetupForm_btnSaveText = "Save";
     public String SetupForm_btnCancelText = "Cancel";
     public String SetupForm_btnLanguageText = "Load Language";
@@ -245,14 +242,14 @@ namespace Language
     public String SetupForm_lblDelay = "ms Delay at";
     public String SetupForm_lblStartText = "Start:";
     public String SetupForm_lblEndText = "End:";   
-    public String SetupForm_grpDeactivateText = "Deactive between...";
+    public String SetupForm_grpDeactivateText = "Disable LEDs between";
     public String SetupForm_lblMenu = "Menu/GUI:";
     public String SetupForm_grpStaticColor = "Static Color";
     public String SetupForm_lblRed = "Red:";
     public String SetupForm_lblGreen = "Green:";
     public String SetupForm_lblBlue = "Blue:";
     public String SetupForm_lblMenuButton = "Menu Remote Button:";
-    public String SetupForm_ckRestartOnError = "Restart AtmoWin and Connection on Error";
+    public String SetupForm_ckRestartOnError = "Auto-Reconnect on Error";
     public String SetupForm_Error = "Error";
     public String SetupForm_ErrorAtmoWinA = "Invalid Filename. Please choose path to AtmoWinA.exe.";
     public String SetupForm_ErrorStartTime = "You have to enter a valid start time.";
@@ -263,6 +260,7 @@ namespace Language
     public String SetupForm_ErrorGreen = "Please enter a number between 0 and 255 for Green.";
     public String SetupForm_ErrorBlue = "Please enter a number between 0 and 255 for Blue.";
     public String SetupForm_ErrorRemoteButtons = "You cant use the same remote key for more than one task.";
+    public String SetupForm_lblMPExit = "MediaPortal Exit:";
     public String ContextMenu_SwitchLEDsON = "Switch LEDs on";
     public String ContextMenu_SwitchLEDsOFF = "Switch LEDs off";
     public String ContextMenu_ChangeEffect = "Change Effect";

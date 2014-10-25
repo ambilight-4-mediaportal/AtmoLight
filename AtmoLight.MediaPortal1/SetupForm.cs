@@ -182,6 +182,7 @@ namespace AtmoLight
       grpHyperionNetworkSettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionNetworkSettings;
       grpHyperionPrioritySettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionPrioritySettings;
       grpCaptureDimensions.Text = LanguageLoader.appStrings.SetupForm_grpCaptureDimensions;
+      lblMPExit.Text = LanguageLoader.appStrings.SetupForm_lblMPExit;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)

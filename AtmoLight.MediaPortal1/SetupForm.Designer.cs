@@ -37,7 +37,7 @@
       this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
       this.grpMode = new System.Windows.Forms.GroupBox();
       this.cbMPExit = new System.Windows.Forms.ComboBox();
-      this.label1 = new System.Windows.Forms.Label();
+      this.lblMPExit = new System.Windows.Forms.Label();
       this.grpGIF = new System.Windows.Forms.GroupBox();
       this.btnSelectGIF = new System.Windows.Forms.Button();
       this.tbGIF = new System.Windows.Forms.TextBox();
@@ -194,7 +194,7 @@
       // grpMode
       // 
       this.grpMode.Controls.Add(this.cbMPExit);
-      this.grpMode.Controls.Add(this.label1);
+      this.grpMode.Controls.Add(this.lblMPExit);
       this.grpMode.Controls.Add(this.grpGIF);
       this.grpMode.Controls.Add(this.grpStaticColor);
       this.grpMode.Controls.Add(this.lblMenu);
@@ -227,14 +227,14 @@
       this.cbMPExit.Size = new System.Drawing.Size(160, 21);
       this.cbMPExit.TabIndex = 28;
       // 
-      // label1
+      // lblMPExit
       // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(10, 134);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(103, 13);
-      this.label1.TabIndex = 27;
-      this.label1.Text = "On MediaPortal Exit:";
+      this.lblMPExit.AutoSize = true;
+      this.lblMPExit.Location = new System.Drawing.Point(10, 134);
+      this.lblMPExit.Name = "lblMPExit";
+      this.lblMPExit.Size = new System.Drawing.Size(86, 13);
+      this.lblMPExit.TabIndex = 27;
+      this.lblMPExit.Text = "MediaPortal Exit:";
       // 
       // grpGIF
       // 
@@ -1218,7 +1218,7 @@
     private System.Windows.Forms.Label lblHyperionReconnectAttempts;
     private System.Windows.Forms.CheckBox ckHyperionLiveReconnect;
     private System.Windows.Forms.ComboBox cbMPExit;
-    private System.Windows.Forms.Label label1;
+    private System.Windows.Forms.Label lblMPExit;
     private System.Windows.Forms.CheckBox ckRestartOnError;
   }
 }
