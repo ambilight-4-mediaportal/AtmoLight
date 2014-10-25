@@ -98,7 +98,6 @@ namespace AtmoLight
     private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
     private string gifPath = "";
     private bool reInitOnError;
-    private bool disableOnExit;
     private bool initialEffect = false;
 
     // AtmoWin Settings Fields
