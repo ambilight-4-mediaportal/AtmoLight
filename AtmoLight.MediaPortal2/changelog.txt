@@ -1,3 +1,9 @@
+Version 2.0.0.0 Beta 3
+- Added Hyperion as target software
+- Added possibility to use more then one target software (e.g. AtmoWin and Hyperion at the same time)
+- Added "MediaPortal exit" effect (effect that gets set when MediaPortal gets closed)
+- Added interface to allow more targets in the future
+
 Version 2.0.0.0 Beta 2
 - Fixed bug where MediaPortal could crash to Desktop
 - Fixed issue where AtmoLight would always disable LEDs after reconnect

@@ -1,3 +1,10 @@
+Version 1.14.0.0
+- Added Hyperion as target software
+- Added possibility to use more then one target software (e.g. AtmoWin and Hyperion at the same time)
+- Added "MediaPortal exit" effect (effect that gets set when MediaPortal gets closed)
+- Added interface to allow more targets in the future
+
+
 Version 1.13.0.0
 - Fixed bug where settings would not get loaded in MP Configuration
 - Added GIF Reader effect (adds support for custom effects made by users)
