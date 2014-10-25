@@ -142,7 +142,6 @@ namespace AtmoLight
       AtmoLightObject.SetDelay(Settings.delayReferenceTime);
       AtmoLightObject.SetGIFPath(Settings.gifFile);
       AtmoLightObject.SetReInitOnError(Settings.restartOnError);
-      AtmoLightObject.SetDisableOnExit(Settings.disableOnShutdown);
       AtmoLightObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
       AtmoLightObject.SetCaptureDimensions(Settings.captureWidth, Settings.captureHeight);
 
@@ -177,15 +176,7 @@ namespace AtmoLight
 
       GUIWindowManager.OnNewAction -= new OnActionHandler(OnNewAction);
 
-      if (Settings.disableOnShutdown)
-      {
-        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
-      }
-
-      if (Settings.enableInternalLiveView)
-      {
-        AtmoLightObject.ChangeEffect(ContentEffect.AtmoWinLiveMode);
-      }
+      AtmoLightObject.ChangeEffect(Settings.effectMPExit);
 
       AtmoLightObject.Dispose();
 

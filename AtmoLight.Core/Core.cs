@@ -266,7 +266,6 @@ namespace AtmoLight
           atmoWinTarget.atmoWinAutoStop = atmoWinAutoStop;
 
           atmoWinTarget.SetReInitOnError(reInitOnError);
-          atmoWinTarget.SetDisableOnExit(disableOnExit);
         }
         // Hyperion Init
         var hyperionTarget = target as HyperionHandler;
@@ -280,7 +279,6 @@ namespace AtmoLight
           hyperionTarget.hyperionLiveReconnect = hyperionLiveReconnect;
 
           hyperionTarget.setReconnectOnError(reInitOnError);
-          hyperionTarget.SetDisableOnExit(disableOnExit);
         }
         target.Initialise(false);
       }
@@ -330,11 +328,6 @@ namespace AtmoLight
         return true;
       }
       return false;
-    }
-
-    public void SetDisableOnExit(bool disable)
-    {
-      disableOnExit = disable;
     }
 
     public void SetReInitOnError(bool reInit)

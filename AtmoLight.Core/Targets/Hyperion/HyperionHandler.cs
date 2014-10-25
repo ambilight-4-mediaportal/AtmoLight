@@ -35,7 +35,6 @@ namespace AtmoLight.Targets
     private int[] staticColor = { 0, 0, 0 };
     public Boolean hyperionReconnectOnError = false;
     public int hyperionReconnectDelay = 0;
-    private bool disableOnExit;
 
     #endregion
     #region Hyperion
@@ -66,15 +65,8 @@ namespace AtmoLight.Targets
     {
       if (Socket.Connected)
       {
-        if (disableOnExit)
-        {
-          ChangeEffect(ContentEffect.LEDsDisabled);
-        }
-        else
-        {
-          ClearPriority(hyperionPriority);
-          ClearPriority(hyperionPriorityStaticColor);
-        }
+        ClearPriority(hyperionPriority);
+        ClearPriority(hyperionPriorityStaticColor);
         Socket.Close();
       }
     }
@@ -305,11 +297,6 @@ namespace AtmoLight.Targets
     public void setReconnectOnError(Boolean reconnectOnError)
     {
       hyperionReconnectOnError = reconnectOnError;
-    }
-
-    public void SetDisableOnExit(bool disable)
-    {
-      disableOnExit = disable;
     }
     #endregion
   }

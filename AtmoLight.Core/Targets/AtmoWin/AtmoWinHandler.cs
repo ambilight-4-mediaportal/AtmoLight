@@ -31,7 +31,6 @@ namespace AtmoLight
     public bool atmoWinAutoStart = true;
     public bool atmoWinAutoStop = true;
     private bool reInitOnError = true;
-    private bool disableOnExit = true;
     private int[] staticColor = { 0, 0, 0 };
 
 
@@ -96,14 +95,6 @@ namespace AtmoLight
 
     public void Dispose()
     {
-      if (disableOnExit)
-      {
-        ChangeEffect(ContentEffect.LEDsDisabled);
-      }
-      else
-      {
-        ChangeEffect(ContentEffect.AtmoWinLiveMode);
-      }
       Disconnect();
       if (atmoWinAutoStop)
       {
@@ -429,11 +420,6 @@ namespace AtmoLight
     public void SetReInitOnError(bool reInit)
     {
       reInitOnError = reInit;
-    }
-
-    public void SetDisableOnExit(bool disable)
-    {
-      disableOnExit = disable;
     }
     #endregion
 

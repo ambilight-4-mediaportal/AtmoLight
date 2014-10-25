@@ -19,6 +19,7 @@ namespace AtmoLight
       cbMusic.SelectedIndex = (int)Settings.effectMusic;
       cbRadio.SelectedIndex = (int)Settings.effectRadio;
       cbMenu.SelectedIndex = (int)Settings.effectMenu;
+      cbMPExit.SelectedIndex = (Settings.effectMPExit == ContentEffect.StaticColor ? 4 : (int)Settings.effectMPExit);
       comboBox1.SelectedIndex = (int)Settings.killButton;
       comboBox2.SelectedIndex = (int)Settings.profileButton;
       cbMenuButton.SelectedIndex = (int)Settings.menuButton;
@@ -86,15 +87,6 @@ namespace AtmoLight
         ckExitAtmoWin.Checked = false;
       }
 
-      if (Settings.disableOnShutdown)
-      {
-        rbDisableLEDs.Checked = true;
-      }
-      else
-      {
-        rbSwitchToLiveView.Checked = true;
-      }
-
       if (Settings.restartOnError)
       {
         ckRestartOnError.Checked = true;
@@ -154,9 +146,6 @@ namespace AtmoLight
       ckDelay.Text = LanguageLoader.appStrings.SetupForm_ckDelayText;
       ckStartAtmoWin.Text = LanguageLoader.appStrings.SetupForm_ckStartAtmoWinText;
       ckExitAtmoWin.Text = LanguageLoader.appStrings.SetupForm_ckExitAtmoWinText;
-      grpMPClose.Text = LanguageLoader.appStrings.SetupForm_grpMPCloseText;
-      rbSwitchToLiveView.Text = LanguageLoader.appStrings.SetupForm_rbSwitchToLiveViewText;
-      rbDisableLEDs.Text = LanguageLoader.appStrings.SetupForm_rbDisableLEDsText;
       btnSave.Text = LanguageLoader.appStrings.SetupForm_btnSaveText;
       btnCancel.Text = LanguageLoader.appStrings.SetupForm_btnCancelText;
       btnLanguage.Text = LanguageLoader.appStrings.SetupForm_btnLanguageText;
@@ -301,11 +290,10 @@ namespace AtmoLight
       Settings.effectMusic = (ContentEffect)cbMusic.SelectedIndex;
       Settings.effectRadio = (ContentEffect)cbRadio.SelectedIndex;
       Settings.effectMenu = (ContentEffect)cbMenu.SelectedIndex;
+      Settings.effectMPExit = (ContentEffect)(cbMPExit.SelectedIndex == 4 ? 5 : cbMPExit.SelectedIndex);
       Settings.killButton = comboBox1.SelectedIndex;
       Settings.profileButton = comboBox2.SelectedIndex;
       Settings.menuButton = cbMenuButton.SelectedIndex;
-      Settings.disableOnShutdown = rbDisableLEDs.Checked;
-      Settings.enableInternalLiveView = rbSwitchToLiveView.Checked;
       Settings.manualMode = ckOnMediaStart.Checked;
       Settings.lowCPU = ckLowCpu.Checked;
       Settings.delay = ckDelay.Checked;
