@@ -3,7 +3,7 @@
   <string name="AtmoLight.Name">AtmoLight</string>
   <string name="AtmoLight.AtmoWinExe">Path to AtmoWinA.exe</string>
   <string name="AtmoLight.LEDsDisabled">LEDs disabled</string>
-  <string name="AtmoLight.AtmoWinLiveMode">AtmoWin liveview mode</string>
+  <string name="AtmoLight.AtmoWinLiveMode">External liveview mode</string>
   <string name="AtmoLight.Colorchanger">Colorchanger</string>
   <string name="AtmoLight.ColorchangerLR">Colorchanger LR</string>
   <string name="AtmoLight.MediaPortalLiveMode">MediaPortal liveview mode</string>
@@ -20,8 +20,7 @@
   <string name="AtmoLight.Advanced">Advanced settings</string>
   <string name="AtmoLight.StartAtmoWinOnStart">Start AtmoWin with MediaPortal</string>
   <string name="AtmoLight.StopAtmoWinOnExit">Stop AtmoWin with MediaPortal</string>
-  <string name="AtmoLight.RestartAtmoWinOnError">Restart AtmoWin on error</string>
-  <string name="AtmoLight.OnMediaPortalExit">AtmoWin behaviour on MediaPortal exit</string>
+  <string name="AtmoLight.RestartAtmoWinOnError">Auto-Reconnect on Error</string>
   <string name="AtmoLight.ExcludeTimeStartHour">Excluded timeframe (start hour)</string>
   <string name="AtmoLight.ExcludeTimeStartMinutes">Excluded timeframe (start minutes)</string>
   <string name="AtmoLight.ExcludeTimeEndHour">Excluded timeframe (stop hour)</string>
@@ -35,15 +34,25 @@
   <string name="AtmoLight.ManualMode">Manual mode</string>
   <string name="AtmoLight.MenuButton">Context menu button</string>
   <string name="AtmoLight.OnOffButton">Toggle LEDs button</string>
-  <string name="AtmoLight.ProfileButton">Change AtmoWin profile button</string>
+  <string name="AtmoLight.ProfileButton">Change profile button</string>
   <string name="AtmoLight.LowCPU">Low CPU</string>
   <string name="AtmoLight.LowCPUTime">Low CPU delay</string>
   <string name="AtmoLight.Delay">Delay</string>
   <string name="AtmoLight.DelayTime">Delay time</string>
   <string name="AtmoLight.DelayRefreshRate">Delay reference refreshrate</string>
-  <string name="AtmoLight.DisableLEDsOnExit">Disabled LEDs</string>
-  <string name="AtmoLight.EnableLiveviewOnExit">Enable AtmoWin Liveview</string>
   <string name="AtmoLight.AtmoWinConnectionLost">Connection to AtmoWin lost!</string>
   <string name="AtmoLight.LEDsEnabled">Current LED state (enabled or disabled)</string>
   <string name="AtmoLight.GIFFile">Path to a gif file</string>
+  <string name="AtmoLight.MPExitEffect">MediaPortal exit effect</string>
+  <string name="AtmoLight.AtmoWin">AtmoWin</string>
+  <string name="AtmoLight.Hyperion">Hyperion</string>
+  <string name="AtmoLight.AtmoWinTarget">Use AtmoWin</string>
+  <string name="AtmoLight.HyperionTarget">Use Hyperion</string>
+  <string name="AtmoLight.HyperionIP">IP address</string>
+  <string name="AtmoLight.HyperionPort">Port number</string>
+  <string name="AtmoLight.HyperionPriority">Effect priority</string>
+  <string name="AtmoLight.HyperionPriorityStaticColor">Static color priority</string>
+  <string name="AtmoLight.HyperionReconnectDelay">Reconnect delay</string>
+  <string name="AtmoLight.HyperionReconnectAttempts">Reconnect attempts</string>
+  <string name="AtmoLight.HyperionLiveReconnect">Live reconnect (mainly debugging)</string>
 </resources>

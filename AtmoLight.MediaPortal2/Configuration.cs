@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
 using MediaPortal.Common.Configuration.ConfigurationClasses;
 using MediaPortal.Common.Localization;
 
@@ -41,7 +42,7 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.GIFFile = _path;
       SettingsManager.Save(settings);
-      AtmoLight.Plugin.AtmoLightObject.UpdateGIFPath(settings.GIFFile);
+      AtmoLight.Plugin.AtmoLightObject.SetGIFPath(settings.GIFFile);
     }
   }
 
@@ -131,6 +132,30 @@ namespace AtmoLight.Configuration
     }
   }
 
+  public class MPExitEffect : SingleSelectionList
+  {
+    public override void Load()
+    {
+      IList<string> effectList = new List<string>();
+      for (int x = 0; x < 7; x++)
+      {
+        effectList.Add("[AtmoLight." + ((ContentEffect)x).ToString() + "]");
+      }
+
+      Selected = effectList.IndexOf("[AtmoLight." + SettingsManager.Load<Settings>().MPExitEffect.ToString() + "]");
+
+      _items = effectList.Select(LocalizationHelper.CreateResourceString).ToList();
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.MPExitEffect = (ContentEffect)Selected;
+      SettingsManager.Save(settings);
+    }
+  }
+
   public class MenuButton : SingleSelectionList
   {
     private IList<string> buttonList = new List<string>();
@@ -215,47 +240,6 @@ namespace AtmoLight.Configuration
     }
   }
 
-  public class OnMediaPortalExit : SingleSelectionList
-  {
-    private IList<string> list = new List<string>();
-    public override void Load()
-    {
-      if (list.Count == 0)
-      {
-        list.Add("[AtmoLight.DisableLEDsOnExit]");
-        list.Add("[AtmoLight.EnableLiveviewOnExit]");
-      }
-
-      if (SettingsManager.Load<Settings>().DisableLEDsOnExit == true)
-      {
-        Selected = 0;
-      }
-      else
-      {
-        Selected = 1;
-      }
-
-      _items = list.Select(LocalizationHelper.CreateResourceString).ToList();
-    }
-
-    public override void Save()
-    {
-      base.Save();
-      Settings settings = SettingsManager.Load<Settings>();
-      if (Selected == 0)
-      {
-        settings.DisableLEDsOnExit = true;
-        settings.EnableLiveviewOnExit = false;
-      }
-      else
-      {
-        settings.DisableLEDsOnExit = false;
-        settings.EnableLiveviewOnExit = true;
-      }
-      SettingsManager.Save(settings);
-    }
-  }
-
   public class ManualMode : YesNo
   {
     public override void Load()
@@ -334,7 +318,7 @@ namespace AtmoLight.Configuration
       settings.RestartAtmoWinOnError = _yes;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.ChangeAtmoWinRestartOnError(_yes);
+      AtmoLight.Plugin.AtmoLightObject.SetReInitOnError(_yes);
     }
   }
 
@@ -386,7 +370,7 @@ namespace AtmoLight.Configuration
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
 
-      if (settings.Delay != _yes && AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      if (settings.Delay != _yes && Core.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
         if (_yes)
         {
@@ -421,9 +405,9 @@ namespace AtmoLight.Configuration
       settings.DelayTime = (int)_value;
       SettingsManager.Save(settings);
 
-      if (AtmoLight.Plugin.AtmoLightObject.IsDelayEnabled() && AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      if (AtmoLight.Plugin.AtmoLightObject.IsDelayEnabled() && Core.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeDelay((int)_value);
+        AtmoLight.Plugin.AtmoLightObject.SetDelay((int)_value);
       }
     }
   }
@@ -466,9 +450,9 @@ namespace AtmoLight.Configuration
       settings.StaticColorRed = (int)_value;
       SettingsManager.Save(settings);
 
-      if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
+      if (Core.GetCurrentEffect() == ContentEffect.StaticColor)
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeStaticColor((int)_value, settings.StaticColorGreen, settings.StaticColorBlue);
+        AtmoLight.Plugin.AtmoLightObject.SetStaticColor((int)_value, settings.StaticColorGreen, settings.StaticColorBlue);
         AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
       }
     }
@@ -492,9 +476,9 @@ namespace AtmoLight.Configuration
       settings.StaticColorGreen = (int)_value;
       SettingsManager.Save(settings);
 
-      if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
+      if (Core.GetCurrentEffect() == ContentEffect.StaticColor)
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeStaticColor(settings.StaticColorRed, (int)_value, settings.StaticColorBlue);
+        AtmoLight.Plugin.AtmoLightObject.SetStaticColor(settings.StaticColorRed, (int)_value, settings.StaticColorBlue);
         AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
       }
     }
@@ -518,9 +502,9 @@ namespace AtmoLight.Configuration
       settings.StaticColorBlue = (int)_value;
       SettingsManager.Save(settings);
 
-      if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
+      if (Core.GetCurrentEffect() == ContentEffect.StaticColor)
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeStaticColor(settings.StaticColorRed, settings.StaticColorGreen, (int)_value);
+        AtmoLight.Plugin.AtmoLightObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, (int)_value);
         AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
       }
     }
@@ -654,6 +638,179 @@ namespace AtmoLight.Configuration
       {
         AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
       }
+    }
+  }
+
+  public class AtmoWinTarget : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().AtmoWinTarget;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AtmoWinTarget = _yes;
+      SettingsManager.Save(settings);
+    }
+  }
+
+  public class HyperionTarget : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().HyperionTarget;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HyperionTarget = _yes;
+      SettingsManager.Save(settings);
+    }
+  }
+
+  public class HyperionIP : Entry
+  {
+    public override void Load()
+    {
+      _value = SettingsManager.Load<Settings>().HyperionIP;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      IPAddress ip;
+      if (IPAddress.TryParse(_value, out ip))
+      {
+        settings.HyperionIP = _value;
+        SettingsManager.Save(settings);
+      }
+    }
+
+    public override int DisplayLength
+    {
+      get { return 15; }
+    }
+  }
+
+  public class HyperionPort : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 65535;
+      _value = SettingsManager.Load<Settings>().HyperionPort;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HyperionPort = (int)_value;
+      SettingsManager.Save(settings);
+    }
+  }
+
+  public class HyperionPriority : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 9999;
+      _value = SettingsManager.Load<Settings>().HyperionPriority;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HyperionPriority = (int)_value;
+      SettingsManager.Save(settings);
+    }
+  }
+
+  public class HyperionPriorityStaticColor : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 9999;
+      _value = SettingsManager.Load<Settings>().HyperionPriorityStaticColor;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HyperionPriorityStaticColor = (int)_value;
+      SettingsManager.Save(settings);
+    }
+  }
+
+  public class HyperionReconnectAttempts : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 9999;
+      _value = SettingsManager.Load<Settings>().HyperionReconnectAttempts;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HyperionReconnectAttempts = (int)_value;
+      SettingsManager.Save(settings);
+    }
+  }
+
+  public class HyperionReconnectDelay : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 9999;
+      _value = SettingsManager.Load<Settings>().HyperionReconnectDelay;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HyperionReconnectDelay = (int)_value;
+      SettingsManager.Save(settings);
+    }
+  }
+
+  public class HyperionLiveReconnect : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().HyperionLiveReconnect;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HyperionLiveReconnect = _yes;
+      SettingsManager.Save(settings);
     }
   }
 }

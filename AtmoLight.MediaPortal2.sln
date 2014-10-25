@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmoLight.Core", "AtmoLight.Core\AtmoLight.Core.csproj", "{1A2ADEB0-CEB7-40F2-A146-91724EA884E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmoWinRemoteControl", "AtmoWinRemoteControl\AtmoWinRemoteControl.csproj", "{E0DA6AD7-F692-4645-88FA-356065806A57}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmoLight.MediaPortal2", "AtmoLight.MediaPortal2\AtmoLight.MediaPortal2.csproj", "{6F1CE8C0-F6F3-47FF-B331-17570C05F8E8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1A2ADEB0-CEB7-40F2-A146-91724EA884E0} = {1A2ADEB0-CEB7-40F2-A146-91724EA884E0}
@@ -36,20 +34,6 @@ Global
 		{1A2ADEB0-CEB7-40F2-A146-91724EA884E0}.Release|Win32.ActiveCfg = Release|x86
 		{1A2ADEB0-CEB7-40F2-A146-91724EA884E0}.Release|x86.ActiveCfg = Release|x86
 		{1A2ADEB0-CEB7-40F2-A146-91724EA884E0}.Release|x86.Build.0 = Release|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|Win32.ActiveCfg = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|Win32.Build.0 = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|x86.ActiveCfg = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Debug|x86.Build.0 = Debug|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|Any CPU.ActiveCfg = Release|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|Mixed Platforms.Build.0 = Release|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|Win32.ActiveCfg = Release|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|Win32.Build.0 = Release|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|x86.ActiveCfg = Release|x86
-		{E0DA6AD7-F692-4645-88FA-356065806A57}.Release|x86.Build.0 = Release|x86
 		{6F1CE8C0-F6F3-47FF-B331-17570C05F8E8}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{6F1CE8C0-F6F3-47FF-B331-17570C05F8E8}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{6F1CE8C0-F6F3-47FF-B331-17570C05F8E8}.Debug|Mixed Platforms.Build.0 = Debug|x86

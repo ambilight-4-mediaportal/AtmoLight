@@ -22,6 +22,9 @@ namespace AtmoLight
     [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
     public ContentEffect MenuEffect { get; set; }
 
+    [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
+    public ContentEffect MPExitEffect { get; set; }
+
     [Setting(SettingScope.User, "Red")]
     public string MenuButton { get; set; }
 
@@ -30,12 +33,6 @@ namespace AtmoLight
 
     [Setting(SettingScope.User, "Yellow")]
     public string ProfileButton { get; set; }
-
-    [Setting(SettingScope.User, true)]
-    public bool DisableLEDsOnExit { get; set; }
-
-    [Setting(SettingScope.User, false)]
-    public bool EnableLiveviewOnExit { get; set; }
 
     [Setting(SettingScope.User, "08:00")]
     public string ExcludeTimeStart { get; set; }
@@ -85,6 +82,39 @@ namespace AtmoLight
     [Setting(SettingScope.User, "")]
     public string GIFFile { get; set; }
 
+    [Setting(SettingScope.User, true)]
+    public bool AtmoWinTarget { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool HyperionTarget { get; set; }
+
+    [Setting(SettingScope.User, 64)]
+    public int CaptureWidth { get; set; }
+
+    [Setting(SettingScope.User, 64)]
+    public int CaptureHeight { get; set; }
+
+    [Setting(SettingScope.User, "127.0.0.1")]
+    public string HyperionIP { get; set; }
+
+    [Setting(SettingScope.User, 19445)]
+    public int HyperionPort { get; set; }
+
+    [Setting(SettingScope.User, 1)]
+    public int HyperionPriority { get; set; }
+
+    [Setting(SettingScope.User, 1)]
+    public int HyperionPriorityStaticColor { get; set; }
+
+    [Setting(SettingScope.User, 10000)]
+    public int HyperionReconnectDelay { get; set; }
+
+    [Setting(SettingScope.User, 5)]
+    public int HyperionReconnectAttempts { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool HyperionLiveReconnect { get; set; }
+
     ISettingsManager settingsManager = ServiceRegistration.Get<ISettingsManager>();
     Settings settings;
 
@@ -98,8 +128,6 @@ namespace AtmoLight
       MenuButton = settings.MenuButton;
       OnOffButton = settings.OnOffButton;
       ProfileButton = settings.ProfileButton;
-      DisableLEDsOnExit = settings.DisableLEDsOnExit;
-      EnableLiveviewOnExit = settings.EnableLiveviewOnExit;
       ExcludeTimeStart = settings.ExcludeTimeStart;
       ExcludeTimeEnd = settings.ExcludeTimeEnd;
       ManualMode = settings.ManualMode;
@@ -116,6 +144,16 @@ namespace AtmoLight
       StaticColorGreen = settings.StaticColorGreen;
       StaticColorRed = settings.StaticColorRed;
       GIFFile = settings.GIFFile;
+      MPExitEffect = settings.MPExitEffect;
+      AtmoWinTarget = settings.AtmoWinTarget;
+      HyperionTarget = settings.HyperionTarget;
+      HyperionIP = settings.HyperionIP;
+      HyperionLiveReconnect = settings.HyperionLiveReconnect;
+      HyperionPort = settings.HyperionPort;
+      HyperionPriority = settings.HyperionPriority;
+      HyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
+      HyperionReconnectAttempts = settings.HyperionReconnectAttempts;
+      HyperionReconnectDelay = settings.HyperionReconnectDelay;
       return true;
     }
 
@@ -128,8 +166,6 @@ namespace AtmoLight
       settings.MenuButton = MenuButton;
       settings.OnOffButton = OnOffButton;
       settings.ProfileButton = ProfileButton;
-      settings.DisableLEDsOnExit = DisableLEDsOnExit;
-      settings.EnableLiveviewOnExit = EnableLiveviewOnExit;
       settings.ExcludeTimeStart = ExcludeTimeStart;
       settings.ExcludeTimeEnd = ExcludeTimeEnd;
       settings.ManualMode = ManualMode;
@@ -146,6 +182,16 @@ namespace AtmoLight
       settings.StaticColorGreen = StaticColorGreen;
       settings.StaticColorRed = StaticColorRed;
       settings.GIFFile = GIFFile;
+      settings.MPExitEffect = MPExitEffect;
+      settings.AtmoWinTarget = AtmoWinTarget;
+      settings.HyperionTarget = HyperionTarget;
+      settings.HyperionIP = HyperionIP;
+      settings.HyperionLiveReconnect = HyperionLiveReconnect;
+      settings.HyperionPort = HyperionPort;
+      settings.HyperionPriority = HyperionPriority;
+      settings.HyperionPriorityStaticColor = HyperionPriorityStaticColor;
+      settings.HyperionReconnectAttempts = HyperionReconnectAttempts;
+      settings.HyperionReconnectDelay = HyperionReconnectDelay;
       settingsManager.Save(settings);
       return true;
     }

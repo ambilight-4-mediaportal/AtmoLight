@@ -18,7 +18,7 @@
   <Runtime>
     <Assembly FileName="AtmoLight.MediaPortal2.dll"/>
     <Assembly FileName="AtmoLight.Core.dll"/>
-    <Assembly FileName="AtmoWinRemoteControl.dll"/>
+    <Assembly FileName="Google.ProtocolBuffers.dll"/>
     <Assembly FileName="../SkinEngine/SkinEngine.dll"/>
     <PluginStateTracker ClassName="AtmoLight.Plugin"/>
   </Runtime>
@@ -64,43 +64,115 @@
         Text="[AtmoLight.Advanced]"/>
   </Register> 
   
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight">
+    <ConfigSection
+        Id="AtmoWin"
+        Redundant="true"
+        Text="[AtmoLight.AtmoWin]"/>
+  </Register> 
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight">
+    <ConfigSection
+        Id="Hyperion"
+        Redundant="true"
+        Text="[AtmoLight.Hyperion]"/>
+  </Register> 
+  
   <!-- Entries-->  
   <!-- General -->
+    <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
+    <ConfigSetting
+        Id="AtmoWinTarget"
+        Text="[AtmoLight.AtmoWinTarget]"
+        ClassName="AtmoLight.Configuration.AtmoWinTarget"/>
+  </Register>
+  
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
     <ConfigSetting
-        Id="AtmoWinExe"
-        Text="[AtmoLight.AtmoWinExe]"
-        ClassName="AtmoLight.Configuration.AtmoWinExe"/>
+        Id="HyperionTarget"
+        Text="[AtmoLight.HyperionTarget]"
+        ClassName="AtmoLight.Configuration.HyperionTarget"/>
   </Register>
     
-  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
-    <ConfigSetting
-        Id="StartAtmoWinOnStart"
-        Text="[AtmoLight.StartAtmoWinOnStart]"
-        ClassName="AtmoLight.Configuration.StartAtmoWinOnStart"/>
-  </Register>
-  
-  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
-    <ConfigSetting
-        Id="StopAtmoWinOnExit"
-        Text="[AtmoLight.StopAtmoWinOnExit]"
-        ClassName="AtmoLight.Configuration.StopAtmoWinOnExit"/>
-  </Register>
-  
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
     <ConfigSetting
         Id="RestartAtmoWinOnError"
         Text="[AtmoLight.RestartAtmoWinOnError]"
         ClassName="AtmoLight.Configuration.RestartAtmoWinOnError"/>
   </Register>
-    
-  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
+             
+  <!--- AtmoWin -->
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/AtmoWin">
     <ConfigSetting
-        Id="OnMediaPortalExit"
-        Text="[AtmoLight.OnMediaPortalExit]"
-        ClassName="AtmoLight.Configuration.OnMediaPortalExit"/>
+        Id="AtmoWinExe"
+        Text="[AtmoLight.AtmoWinExe]"
+        ClassName="AtmoLight.Configuration.AtmoWinExe"/>
+  </Register>  
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/AtmoWin">
+    <ConfigSetting
+        Id="StartAtmoWinOnStart"
+        Text="[AtmoLight.StartAtmoWinOnStart]"
+        ClassName="AtmoLight.Configuration.StartAtmoWinOnStart"/>
+  </Register>    
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/AtmoWin">
+    <ConfigSetting
+        Id="StopAtmoWinOnExit"
+        Text="[AtmoLight.StopAtmoWinOnExit]"
+        ClassName="AtmoLight.Configuration.StopAtmoWinOnExit"/>
   </Register>
-         
+  
+  <!-- Hyperion -->
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Hyperion">
+    <ConfigSetting
+        Id="HyperionIP"
+        Text="[AtmoLight.HyperionIP]"
+        ClassName="AtmoLight.Configuration.HyperionIP"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Hyperion">
+    <ConfigSetting
+        Id="HyperionPort"
+        Text="[AtmoLight.HyperionPort]"
+        ClassName="AtmoLight.Configuration.HyperionPort"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Hyperion">
+    <ConfigSetting
+        Id="HyperionPriority"
+        Text="[AtmoLight.HyperionPriority]"
+        ClassName="AtmoLight.Configuration.HyperionPriority"/>
+  </Register>
+        
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Hyperion">
+    <ConfigSetting
+        Id="HyperionPriorityStaticColor"
+        Text="[AtmoLight.HyperionPriorityStaticColor]"
+        ClassName="AtmoLight.Configuration.HyperionPriorityStaticColor"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Hyperion">
+    <ConfigSetting
+        Id="HyperionReconnectDelay"
+        Text="[AtmoLight.HyperionReconnectDelay]"
+        ClassName="AtmoLight.Configuration.HyperionReconnectDelay"/>
+  </Register>
+        
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Hyperion">
+    <ConfigSetting
+        Id="HyperionReconnectAttempts"
+        Text="[AtmoLight.HyperionReconnectAttempts]"
+        ClassName="AtmoLight.Configuration.HyperionReconnectAttempts"/>
+  </Register>
+    
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Hyperion">
+    <ConfigSetting
+        Id="HyperionLiveReconnect"
+        Text="[AtmoLight.HyperionLiveReconnect]"
+        ClassName="AtmoLight.Configuration.HyperionLiveReconnect"/>
+  </Register>
+          
   <!-- Effects -->
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
     <ConfigSetting
@@ -128,6 +200,13 @@
         Id="MenuEffect"
         Text="[AtmoLight.MenuEffect]"
         ClassName="AtmoLight.Configuration.MenuEffect"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
+    <ConfigSetting
+        Id="MPExitEffect"
+        Text="[AtmoLight.MPExitEffect]"
+        ClassName="AtmoLight.Configuration.MPExitEffect"/>
   </Register>
   
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">

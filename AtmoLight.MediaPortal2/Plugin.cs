@@ -110,30 +110,51 @@ namespace AtmoLight
 
       // AtmoLight object creation
       Log.Debug("Generating new AtmoLight.Core instance.");
-      AtmoLightObject = new Core(settings.AtmoWinExe, settings.RestartAtmoWinOnError, settings.StartAtmoWinOnStart, staticColorTemp, settings.Delay, settings.DelayTime);
-      AtmoLightObject.UpdateGIFPath(settings.GIFFile);
+      AtmoLightObject = new Core();
+      if (settings.AtmoWinTarget)
+      {
+        AtmoLightObject.AddTarget(Target.AtmoWin);
+        AtmoLightObject.atmoWinPath = settings.AtmoWinExe;
+        AtmoLightObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
+        AtmoLightObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
+      }
+      if (settings.HyperionTarget)
+      {
+        AtmoLightObject.AddTarget(Target.Hyperion);
+        AtmoLightObject.hyperionIP = settings.HyperionIP;
+        AtmoLightObject.hyperionPort = settings.HyperionPort;
+        AtmoLightObject.hyperionPriority = settings.HyperionPriority;
+        AtmoLightObject.hyperionReconnectDelay = settings.HyperionReconnectDelay;
+        AtmoLightObject.hyperionReconnectAttempts = settings.HyperionReconnectAttempts;
+        AtmoLightObject.hyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
+        AtmoLightObject.hyperionLiveReconnect = settings.HyperionLiveReconnect;
+      }
+      AtmoLightObject.SetDelay(settings.DelayTime);
+      AtmoLightObject.SetGIFPath(settings.GIFFile);
+      AtmoLightObject.SetReInitOnError(settings.RestartAtmoWinOnError);
+      AtmoLightObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, settings.StaticColorBlue);
+      AtmoLightObject.SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
 
-      // Handlers
-      Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
-      SkinContext.DeviceSceneEnd += UICapture;
-      RegisterKeyBindings();
+      menuEffect = settings.MenuEffect;
+      if (CheckForStartRequirements())
+      {
+        AtmoLightObject.SetInitialEffect(menuEffect);
+      }
+      else
+      {
+        AtmoLightObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+      }
 
-      // AtmoLight initialisation
       if (!AtmoLightObject.Initialise())
       {
         Log.Error("Initialising failed.");
         return;
       }
 
-      if (CheckForStartRequirements())
-      {
-        AtmoLightObject.ChangeEffect(menuEffect);
-        CalculateDelay();
-      }
-      else
-      {
-        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
-      }
+      // Handlers
+      Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
+      SkinContext.DeviceSceneEnd += UICapture;
+      RegisterKeyBindings();
     }
 
     private void Dispose()
@@ -150,21 +171,10 @@ namespace AtmoLight
 
       messageQueue.MessageReceived -= OnMessageReceived;
 
-      // Disconnect from AtmoWin
-      if (settings.DisableLEDsOnExit)
-      {
-        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
-      }
-      else if (settings.EnableLiveviewOnExit)
-      {
-        AtmoLightObject.ChangeEffect(ContentEffect.AtmoWinLiveMode);
-      }
-      AtmoLightObject.Disconnect();
+      // Dispose of the AtmoLight Core
+      AtmoLightObject.ChangeEffect(settings.MPExitEffect);
 
-      if (settings.StopAtmoWinOnExit)
-      {
-        AtmoLightObject.StopAtmoWin();
-      }
+      AtmoLightObject.Dispose();
 
       // Unregister Log Handler
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
@@ -207,10 +217,10 @@ namespace AtmoLight
     /// </summary>
     private void CalculateDelay()
     {
-      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
+      if (Core.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
       {
         int refreshRate = SkinContext.Direct3D.GetAdapterDisplayModeEx(0).RefreshRate;
-        AtmoLightObject.ChangeDelay((int)(((float)settings.DelayRefreshRate / (float)refreshRate) * (float)settings.DelayTime));
+        AtmoLightObject.SetDelay((int)(((float)settings.DelayRefreshRate / (float)refreshRate) * (float)settings.DelayTime));
       }
     }
     #endregion
@@ -278,7 +288,7 @@ namespace AtmoLight
     #region UI Capture Event Handler
     public void UICapture(object sender, EventArgs args)
     {
-      if (!AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
+      if (!AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || Core.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
       {
         return;
       }
@@ -298,12 +308,12 @@ namespace AtmoLight
       }
 
 
-      Rectangle rectangleDestination = new Rectangle(0, 0, AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
+      Rectangle rectangleDestination = new Rectangle(0, 0, Core.GetCaptureWidth(), Core.GetCaptureHeight());
       try
       {
         if (surfaceDestination == null)
         {
-          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device, AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight(), SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
+          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device, Core.GetCaptureWidth(), Core.GetCaptureHeight(), SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
         }
 
         // Use the Player Surface if video is playing.
@@ -471,7 +481,7 @@ namespace AtmoLight
       }
       else
       {
-        AtmoLightObject.ReinitialiseThreaded();
+        AtmoLightObject.ReInitialise();
       }
     }
 
@@ -479,11 +489,11 @@ namespace AtmoLight
     {
       if (AtmoLightObject.IsConnected())
       {
-        AtmoLightObject.ChangeAtmoWinProfile();
+        AtmoLightObject.ChangeProfile();
       }
       else
       {
-        AtmoLightObject.ReinitialiseThreaded();
+        AtmoLightObject.ReInitialise();
       }
     }
 

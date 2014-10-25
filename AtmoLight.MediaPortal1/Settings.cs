@@ -102,7 +102,6 @@ namespace AtmoLight
         hyperionReconnectAttempts = reader.GetValueAsInt("atmolight", "hyperionReconnectAttempts", 5);
         hyperionPriority = reader.GetValueAsInt("atmolight", "hyperionPriority", 1);
         HyperionPriorityStaticColor = reader.GetValueAsInt("atmolight", "hyperionStaticColorPriority", 1);
-        HyperionPriorityStaticColor = reader.GetValueAsInt("atmolight", "hyperionStaticColorPriority", 1);
         HyperionLiveReconnect = reader.GetValueAsBool("atmolight", "HyperionLiveReconnect", false);
         atmoWinTarget = reader.GetValueAsBool("atmolight", "atmoWinTarget", true);
         hyperionTarget = reader.GetValueAsBool("atmolight", "hyperionTarget", false);
