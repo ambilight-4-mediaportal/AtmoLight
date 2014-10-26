@@ -37,6 +37,11 @@ namespace AtmoLight
     AtmoWin,
     Hyperion
   }
+  public enum TargetType
+  {
+    Local,
+    Network
+  }
 
   public interface ITargets
   {
@@ -259,6 +264,7 @@ namespace AtmoLight
     {
       foreach (var target in targets)
       {
+
         // AtmoWin Init
         var atmoWinTarget = target as AtmoWinHandler;
         if (atmoWinTarget != null)
@@ -482,6 +488,11 @@ namespace AtmoLight
     public ContentEffect GetChangeEffect()
     {
       return changeEffect;
+    }
+
+    public int GetTargetCount()
+    {
+      return targets.Count();
     }
     #endregion
 

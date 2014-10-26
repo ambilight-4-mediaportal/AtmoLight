@@ -20,6 +20,7 @@ namespace AtmoLight.Targets
     #region Fields
 
     public Target Name { get { return Target.Hyperion; } }
+    public TargetType Type { get { return TargetType.Network; } }
 
     private static TcpClient Socket = new TcpClient();
     private Stream Stream;
