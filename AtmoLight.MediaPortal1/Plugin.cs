@@ -606,14 +606,20 @@ namespace AtmoLight
     /// <param name="setLine2">Second line.</param>
     private void DialogError(string setLine1 = null, string setLine2 = null)
     {
-      GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
-      if (dlgError != null)
+      // Send Thread Callback to let this Dialog be shown by the main thread
+      // Will result in problems and error messages otherwise
+      GUIWindowManager.SendThreadCallback((p1, p2, o) =>
       {
-        dlgError.SetHeading(LanguageLoader.appStrings.ContextMenu_Error + "!");
-        dlgError.SetLine(1, setLine1);
-        dlgError.SetLine(2, setLine2);
-        dlgError.DoModal(GUIWindowManager.ActiveWindow);
-      }
+        GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
+        if (dlgError != null)
+        {
+          dlgError.SetHeading(LanguageLoader.appStrings.ContextMenu_Error + "!");
+          dlgError.SetLine(1, setLine1);
+          dlgError.SetLine(2, setLine2);
+          dlgError.DoModal(GUIWindowManager.ActiveWindow);
+        }
+        return 0;
+      }, 0, 0, null);
     }
 
     /// <summary>
