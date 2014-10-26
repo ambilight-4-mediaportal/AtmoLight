@@ -523,8 +523,7 @@ namespace AtmoLight
       {
         if (!AtmoLightObject.IsConnected())
         {
-          string reconnectMessage = string.Format("{0}\r\n{1}", LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2);
-          if (DialogYesNo(reconnectMessage))
+          if (DialogYesNo(LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2))
           {
             AtmoLightObject.ReInitialise();
           }
