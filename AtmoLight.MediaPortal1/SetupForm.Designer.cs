@@ -156,7 +156,7 @@
       // btnSelectFile
       // 
       this.btnSelectFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnSelectFile.Location = new System.Drawing.Point(713, 42);
+      this.btnSelectFile.Location = new System.Drawing.Point(713, 40);
       this.btnSelectFile.Name = "btnSelectFile";
       this.btnSelectFile.Size = new System.Drawing.Size(92, 23);
       this.btnSelectFile.TabIndex = 2;
@@ -571,17 +571,17 @@
       // 
       // tbCaptureWidth
       // 
-      this.tbCaptureWidth.Location = new System.Drawing.Point(54, 23);
+      this.tbCaptureWidth.Location = new System.Drawing.Point(75, 23);
       this.tbCaptureWidth.Name = "tbCaptureWidth";
-      this.tbCaptureWidth.Size = new System.Drawing.Size(92, 20);
+      this.tbCaptureWidth.Size = new System.Drawing.Size(50, 20);
       this.tbCaptureWidth.TabIndex = 3;
       this.tbCaptureWidth.Text = "64";
       // 
       // tbCaptureHeight
       // 
-      this.tbCaptureHeight.Location = new System.Drawing.Point(54, 49);
+      this.tbCaptureHeight.Location = new System.Drawing.Point(75, 49);
       this.tbCaptureHeight.Name = "tbCaptureHeight";
-      this.tbCaptureHeight.Size = new System.Drawing.Size(92, 20);
+      this.tbCaptureHeight.Size = new System.Drawing.Size(50, 20);
       this.tbCaptureHeight.TabIndex = 4;
       this.tbCaptureHeight.Text = "64";
       // 
@@ -607,7 +607,7 @@
       this.lblHintMenuButtons.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.lblHintMenuButtons.Location = new System.Drawing.Point(294, 15);
       this.lblHintMenuButtons.Name = "lblHintMenuButtons";
-      this.lblHintMenuButtons.Size = new System.Drawing.Size(153, 78);
+      this.lblHintMenuButtons.Size = new System.Drawing.Size(153, 103);
       this.lblHintMenuButtons.TabIndex = 18;
       this.lblHintMenuButtons.Text = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3" +
     "D-SBS mode.";
@@ -625,7 +625,7 @@
       // lblRefreshRate
       // 
       this.lblRefreshRate.AutoSize = true;
-      this.lblRefreshRate.Location = new System.Drawing.Point(395, 147);
+      this.lblRefreshRate.Location = new System.Drawing.Point(415, 147);
       this.lblRefreshRate.Name = "lblRefreshRate";
       this.lblRefreshRate.Size = new System.Drawing.Size(20, 13);
       this.lblRefreshRate.TabIndex = 27;
@@ -633,7 +633,7 @@
       // 
       // tbRefreshRate
       // 
-      this.tbRefreshRate.Location = new System.Drawing.Point(352, 144);
+      this.tbRefreshRate.Location = new System.Drawing.Point(372, 144);
       this.tbRefreshRate.Name = "tbRefreshRate";
       this.tbRefreshRate.Size = new System.Drawing.Size(41, 20);
       this.tbRefreshRate.TabIndex = 11;
@@ -685,7 +685,7 @@
             "Yellow",
             "Blue",
             "None"});
-      this.cbMenuButton.Location = new System.Drawing.Point(171, 23);
+      this.cbMenuButton.Location = new System.Drawing.Point(190, 23);
       this.cbMenuButton.Name = "cbMenuButton";
       this.cbMenuButton.Size = new System.Drawing.Size(96, 21);
       this.cbMenuButton.TabIndex = 3;
@@ -709,7 +709,7 @@
             "Yellow",
             "Blue",
             "None"});
-      this.comboBox2.Location = new System.Drawing.Point(171, 73);
+      this.comboBox2.Location = new System.Drawing.Point(190, 73);
       this.comboBox2.Name = "comboBox2";
       this.comboBox2.Size = new System.Drawing.Size(96, 21);
       this.comboBox2.TabIndex = 5;
@@ -763,7 +763,7 @@
             "Yellow",
             "Blue",
             "None"});
-      this.comboBox1.Location = new System.Drawing.Point(171, 48);
+      this.comboBox1.Location = new System.Drawing.Point(190, 48);
       this.comboBox1.Name = "comboBox1";
       this.comboBox1.Size = new System.Drawing.Size(96, 21);
       this.comboBox1.TabIndex = 4;
@@ -841,7 +841,7 @@
       // 
       // tbHyperionPriority
       // 
-      this.tbHyperionPriority.Location = new System.Drawing.Point(199, 27);
+      this.tbHyperionPriority.Location = new System.Drawing.Point(220, 27);
       this.tbHyperionPriority.Name = "tbHyperionPriority";
       this.tbHyperionPriority.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPriority.TabIndex = 5;
@@ -875,14 +875,14 @@
       // 
       // tbHyperionPort
       // 
-      this.tbHyperionPort.Location = new System.Drawing.Point(199, 55);
+      this.tbHyperionPort.Location = new System.Drawing.Point(220, 55);
       this.tbHyperionPort.Name = "tbHyperionPort";
       this.tbHyperionPort.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPort.TabIndex = 2;
       // 
       // tbHyperionIP
       // 
-      this.tbHyperionIP.Location = new System.Drawing.Point(199, 29);
+      this.tbHyperionIP.Location = new System.Drawing.Point(220, 29);
       this.tbHyperionIP.Name = "tbHyperionIP";
       this.tbHyperionIP.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionIP.TabIndex = 1;
@@ -938,7 +938,7 @@
       this.lblHintHardware.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.lblHintHardware.Location = new System.Drawing.Point(169, 15);
       this.lblHintHardware.Name = "lblHintHardware";
-      this.lblHintHardware.Size = new System.Drawing.Size(170, 103);
+      this.lblHintHardware.Size = new System.Drawing.Size(170, 121);
       this.lblHintHardware.TabIndex = 20;
       this.lblHintHardware.Text = "Hint: Select the devices you want to use with AtmoLight and configure it on its d" +
     "esignated tab";
@@ -1015,7 +1015,7 @@
       // 
       // tbHyperionPriorityStaticColor
       // 
-      this.tbHyperionPriorityStaticColor.Location = new System.Drawing.Point(199, 65);
+      this.tbHyperionPriorityStaticColor.Location = new System.Drawing.Point(220, 65);
       this.tbHyperionPriorityStaticColor.Name = "tbHyperionPriorityStaticColor";
       this.tbHyperionPriorityStaticColor.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPriorityStaticColor.TabIndex = 6;
@@ -1050,7 +1050,7 @@
       // 
       // tbHyperionReconnectAttempts
       // 
-      this.tbHyperionReconnectAttempts.Location = new System.Drawing.Point(199, 108);
+      this.tbHyperionReconnectAttempts.Location = new System.Drawing.Point(220, 108);
       this.tbHyperionReconnectAttempts.Name = "tbHyperionReconnectAttempts";
       this.tbHyperionReconnectAttempts.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionReconnectAttempts.TabIndex = 7;
@@ -1066,7 +1066,7 @@
       // 
       // tbHyperionReconnectDelay
       // 
-      this.tbHyperionReconnectDelay.Location = new System.Drawing.Point(199, 82);
+      this.tbHyperionReconnectDelay.Location = new System.Drawing.Point(220, 82);
       this.tbHyperionReconnectDelay.Name = "tbHyperionReconnectDelay";
       this.tbHyperionReconnectDelay.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionReconnectDelay.TabIndex = 5;
@@ -1084,7 +1084,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(884, 531);
+      this.ClientSize = new System.Drawing.Size(884, 532);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
