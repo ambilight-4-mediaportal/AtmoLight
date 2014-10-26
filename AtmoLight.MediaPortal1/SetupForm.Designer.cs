@@ -588,7 +588,7 @@
       // lblBlackarDetectionMS
       // 
       this.lblBlackarDetectionMS.AutoSize = true;
-      this.lblBlackarDetectionMS.Location = new System.Drawing.Point(218, 170);
+      this.lblBlackarDetectionMS.Location = new System.Drawing.Point(256, 170);
       this.lblBlackarDetectionMS.Name = "lblBlackarDetectionMS";
       this.lblBlackarDetectionMS.Size = new System.Drawing.Size(20, 13);
       this.lblBlackarDetectionMS.TabIndex = 30;
@@ -596,7 +596,7 @@
       // 
       // tbBlackbarDetectionTime
       // 
-      this.tbBlackbarDetectionTime.Location = new System.Drawing.Point(171, 167);
+      this.tbBlackbarDetectionTime.Location = new System.Drawing.Point(209, 167);
       this.tbBlackbarDetectionTime.Name = "tbBlackbarDetectionTime";
       this.tbBlackbarDetectionTime.Size = new System.Drawing.Size(41, 20);
       this.tbBlackbarDetectionTime.TabIndex = 13;
@@ -625,7 +625,7 @@
       // lblRefreshRate
       // 
       this.lblRefreshRate.AutoSize = true;
-      this.lblRefreshRate.Location = new System.Drawing.Point(333, 147);
+      this.lblRefreshRate.Location = new System.Drawing.Point(395, 147);
       this.lblRefreshRate.Name = "lblRefreshRate";
       this.lblRefreshRate.Size = new System.Drawing.Size(20, 13);
       this.lblRefreshRate.TabIndex = 27;
@@ -633,7 +633,7 @@
       // 
       // tbRefreshRate
       // 
-      this.tbRefreshRate.Location = new System.Drawing.Point(286, 144);
+      this.tbRefreshRate.Location = new System.Drawing.Point(352, 144);
       this.tbRefreshRate.Name = "tbRefreshRate";
       this.tbRefreshRate.Size = new System.Drawing.Size(41, 20);
       this.tbRefreshRate.TabIndex = 11;
@@ -642,7 +642,7 @@
       // lblDelay
       // 
       this.lblDelay.AutoSize = true;
-      this.lblDelay.Location = new System.Drawing.Point(218, 147);
+      this.lblDelay.Location = new System.Drawing.Point(256, 147);
       this.lblDelay.Name = "lblDelay";
       this.lblDelay.Size = new System.Drawing.Size(62, 13);
       this.lblDelay.TabIndex = 24;
@@ -650,7 +650,7 @@
       // 
       // tbDelay
       // 
-      this.tbDelay.Location = new System.Drawing.Point(171, 144);
+      this.tbDelay.Location = new System.Drawing.Point(209, 144);
       this.tbDelay.Name = "tbDelay";
       this.tbDelay.Size = new System.Drawing.Size(41, 20);
       this.tbDelay.TabIndex = 10;
@@ -717,7 +717,7 @@
       // lblFrames
       // 
       this.lblFrames.AutoSize = true;
-      this.lblFrames.Location = new System.Drawing.Point(218, 124);
+      this.lblFrames.Location = new System.Drawing.Point(256, 124);
       this.lblFrames.Name = "lblFrames";
       this.lblFrames.Size = new System.Drawing.Size(101, 13);
       this.lblFrames.TabIndex = 15;
@@ -725,7 +725,7 @@
       // 
       // lowCpuTime
       // 
-      this.lowCpuTime.Location = new System.Drawing.Point(171, 121);
+      this.lowCpuTime.Location = new System.Drawing.Point(209, 121);
       this.lowCpuTime.MaxLength = 4;
       this.lowCpuTime.Name = "lowCpuTime";
       this.lowCpuTime.Size = new System.Drawing.Size(41, 20);
@@ -841,7 +841,7 @@
       // 
       // tbHyperionPriority
       // 
-      this.tbHyperionPriority.Location = new System.Drawing.Point(128, 27);
+      this.tbHyperionPriority.Location = new System.Drawing.Point(199, 27);
       this.tbHyperionPriority.Name = "tbHyperionPriority";
       this.tbHyperionPriority.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPriority.TabIndex = 5;
@@ -875,14 +875,14 @@
       // 
       // tbHyperionPort
       // 
-      this.tbHyperionPort.Location = new System.Drawing.Point(128, 56);
+      this.tbHyperionPort.Location = new System.Drawing.Point(199, 55);
       this.tbHyperionPort.Name = "tbHyperionPort";
       this.tbHyperionPort.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPort.TabIndex = 2;
       // 
       // tbHyperionIP
       // 
-      this.tbHyperionIP.Location = new System.Drawing.Point(128, 29);
+      this.tbHyperionIP.Location = new System.Drawing.Point(199, 29);
       this.tbHyperionIP.Name = "tbHyperionIP";
       this.tbHyperionIP.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionIP.TabIndex = 1;
@@ -999,7 +999,7 @@
       this.grpHyperionPrioritySettings.Controls.Add(this.tbHyperionPriority);
       this.grpHyperionPrioritySettings.Location = new System.Drawing.Point(15, 218);
       this.grpHyperionPrioritySettings.Name = "grpHyperionPrioritySettings";
-      this.grpHyperionPrioritySettings.Size = new System.Drawing.Size(379, 100);
+      this.grpHyperionPrioritySettings.Size = new System.Drawing.Size(340, 100);
       this.grpHyperionPrioritySettings.TabIndex = 10;
       this.grpHyperionPrioritySettings.TabStop = false;
       this.grpHyperionPrioritySettings.Text = "Priority";
@@ -1015,7 +1015,7 @@
       // 
       // tbHyperionPriorityStaticColor
       // 
-      this.tbHyperionPriorityStaticColor.Location = new System.Drawing.Point(128, 65);
+      this.tbHyperionPriorityStaticColor.Location = new System.Drawing.Point(199, 65);
       this.tbHyperionPriorityStaticColor.Name = "tbHyperionPriorityStaticColor";
       this.tbHyperionPriorityStaticColor.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPriorityStaticColor.TabIndex = 6;
@@ -1040,7 +1040,6 @@
       // 
       // ckHyperionLiveReconnect
       // 
-      this.ckHyperionLiveReconnect.AutoSize = true;
       this.ckHyperionLiveReconnect.Location = new System.Drawing.Point(12, 151);
       this.ckHyperionLiveReconnect.Name = "ckHyperionLiveReconnect";
       this.ckHyperionLiveReconnect.Size = new System.Drawing.Size(518, 30);
@@ -1051,7 +1050,7 @@
       // 
       // tbHyperionReconnectAttempts
       // 
-      this.tbHyperionReconnectAttempts.Location = new System.Drawing.Point(128, 108);
+      this.tbHyperionReconnectAttempts.Location = new System.Drawing.Point(199, 108);
       this.tbHyperionReconnectAttempts.Name = "tbHyperionReconnectAttempts";
       this.tbHyperionReconnectAttempts.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionReconnectAttempts.TabIndex = 7;
@@ -1067,7 +1066,7 @@
       // 
       // tbHyperionReconnectDelay
       // 
-      this.tbHyperionReconnectDelay.Location = new System.Drawing.Point(128, 82);
+      this.tbHyperionReconnectDelay.Location = new System.Drawing.Point(199, 82);
       this.tbHyperionReconnectDelay.Name = "tbHyperionReconnectDelay";
       this.tbHyperionReconnectDelay.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionReconnectDelay.TabIndex = 5;
@@ -1085,7 +1084,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(884, 532);
+      this.ClientSize = new System.Drawing.Size(884, 531);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
