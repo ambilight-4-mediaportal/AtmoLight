@@ -294,7 +294,10 @@ namespace AtmoLight
     /// </summary>
     private void OnNewConnectionLost(Target target)
     {
-      DialogError(LanguageLoader.appStrings.ContextMenu_ConnectionLost.Replace("[Target]", target.ToString()));
+      if (GUIWindowManager.Initalized)
+      {
+        DialogError(LanguageLoader.appStrings.ContextMenu_ConnectionLost.Replace("[Target]", target.ToString()));
+      }
     }
     #endregion
 
