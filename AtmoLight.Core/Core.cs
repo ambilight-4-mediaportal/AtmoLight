@@ -277,11 +277,6 @@ namespace AtmoLight
           atmoWinTarget.atmoWinAutoStop = atmoWinAutoStop;
 
           atmoWinTarget.SetReInitOnError(reInitOnError);
-
-          //Increment total active targets and specifiy type for UI messages
-          activeTargetCount++;
-          activeTargetName = Target.AtmoWin;
-          activeTargetType = TargetType.Local;
         }
         // Hyperion Init
         var hyperionTarget = target as HyperionHandler;
@@ -295,11 +290,6 @@ namespace AtmoLight
           hyperionTarget.hyperionLiveReconnect = hyperionLiveReconnect;
 
           hyperionTarget.setReconnectOnError(reInitOnError);
-
-          //Increment total active targets and specifiy type for UI messages
-          activeTargetCount++;
-          activeTargetName = Target.Hyperion;
-          activeTargetType = TargetType.Network;
         }
         target.Initialise(false);
       }
@@ -503,6 +493,11 @@ namespace AtmoLight
       return changeEffect;
     }
     #endregion
+
+    public int GetTargetCount()
+    {
+      return targets.Count();
+    }
 
     #region Events
     public void NewConnectionLost(Target target)

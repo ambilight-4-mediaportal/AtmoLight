@@ -22,6 +22,7 @@ namespace AtmoLight
     public delegate void NewCaptureDimensionsHandler(int width, int height);
     public static event NewCaptureDimensionsHandler OnNewDimensions;
     public Target Name { get { return Target.AtmoWin; } }
+    public TargetType Type { get { return TargetType.Local; } }
 
     private Thread reinitialiseThreadHelper;
     private Thread initialiseThreadHelper;

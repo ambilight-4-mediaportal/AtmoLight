@@ -294,7 +294,7 @@ namespace AtmoLight
     /// </summary>
     private void OnNewConnectionLost(Target target)
     {
-      string connectionLostMessage = string.Format("{0} {1} {2}", LanguageLoader.appStrings.ContextMenu_ConnectionLost, target.ToString(), LanguageLoader.appStrings.ContextMenu_ConnectionLostSuffix);
+      string connectionLostMessage = LanguageLoader.appStrings.ContextMenu_ConnectionLost.Replace("[target]", target.ToString());
       DialogError(connectionLostMessage);
     }
     #endregion
@@ -523,33 +523,10 @@ namespace AtmoLight
       {
         if (!AtmoLightObject.IsConnected())
         {
-          string reconnectMessage = "";
-
-          if (AtmoLightObject.activeTargetCount == 1)
+          string reconnectMessage = string.Format("{0}\r\n{1}", LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2);
+          if (DialogYesNo(reconnectMessage))
           {
-            //Check if reconnect message needs to be for local or network device
-            if (AtmoLightObject.activeTargetType.ToString() == "Local")
-            {
-              reconnectMessage = string.Format("{0} {1} {2}", LanguageLoader.appStrings.ContextMenu_ConnectLineLocal1, AtmoLightObject.activeTargetName.ToString(), LanguageLoader.appStrings.ContextMenu_ConnectLineLocal2);
-            }
-            else if (AtmoLightObject.activeTargetType.ToString() == "Network")
-            {
-              reconnectMessage = string.Format("{0} {1} {2}", LanguageLoader.appStrings.ContextMenu_ConnectLineNetwork1, AtmoLightObject.activeTargetName.ToString(), LanguageLoader.appStrings.ContextMenu_ConnectLineNetwork2);
-            }
-
-            if (DialogYesNo(reconnectMessage))
-            {
-              AtmoLightObject.ReInitialise();
-            }
-          }
-          else
-          {
-            //Since we don't know what the multiple devices types are we display the generic local message.
-            reconnectMessage = string.Format("{0} {1} {2}", LanguageLoader.appStrings.ContextMenu_ConnectLineLocal1, LanguageLoader.appStrings.ContextMenu_ConnectLineMultipleTargets, LanguageLoader.appStrings.ContextMenu_ConnectLineLocal2);
-            if (DialogYesNo(reconnectMessage))
-            {
-              AtmoLightObject.ReInitialise();
-            }
+            AtmoLightObject.ReInitialise();
           }
         }
         else
