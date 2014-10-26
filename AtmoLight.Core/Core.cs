@@ -37,6 +37,7 @@ namespace AtmoLight
     AtmoWin,
     Hyperion
   }
+
   public enum TargetType
   {
     Local,
@@ -56,12 +57,10 @@ namespace AtmoLight
     void SetStaticColor(int red, int green, int blue);
   }
 
-
   public class Core
   {
-
     #region Fields
-    // Instance
+    // Core Instance
     private static Core instance = null;
 
     // Threads
@@ -243,28 +242,38 @@ namespace AtmoLight
     #endregion
 
     #region Constructor/Deconstructor
+    /// <summary>
+    /// Core Constructor
+    /// </summary>
     private Core()
     {
-      AtmoWinHandler.OnNewDimensions += new AtmoWinHandler.NewCaptureDimensionsHandler(SetCaptureDimensions);
+      var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+      DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
+      Log.Debug("Core Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
       return;
     }
 
+    /// <summary>
+    /// Disposes of all targets
+    /// </summary>
     public void Dispose()
     {
       foreach (var target in targets)
       {
         target.Dispose();
       }
-      AtmoWinHandler.OnNewDimensions -= new AtmoWinHandler.NewCaptureDimensionsHandler(SetCaptureDimensions);
     }
     #endregion
 
     #region Initialisation
+    /// <summary>
+    /// Generate all targets and initialise them.
+    /// </summary>
+    /// <returns></returns>
     public bool Initialise()
     {
       foreach (var target in targets)
       {
-
         // AtmoWin Init
         var atmoWinTarget = target as AtmoWinHandler;
         if (atmoWinTarget != null)
@@ -293,6 +302,9 @@ namespace AtmoLight
       return true;
     }
 
+    /// <summary>
+    /// Reinitialise all targets that are not connected.
+    /// </summary>
     public void ReInitialise()
     {
       foreach (var target in targets)
@@ -306,6 +318,11 @@ namespace AtmoLight
     #endregion
 
     #region Configuration Methods (set)
+    /// <summary>
+    /// Set capture dimensions that should be used by everbody.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
     public void SetCaptureDimensions(int width, int height)
     {
       if (width >= 0 && height >= 0)
@@ -315,6 +332,10 @@ namespace AtmoLight
       }
     }
 
+    /// <summary>
+    /// Add a target to be used.
+    /// </summary>
+    /// <param name="target"></param>
     public void AddTarget(Target target)
     {
       if (target == Target.AtmoWin)
@@ -327,6 +348,11 @@ namespace AtmoLight
       }
     }
 
+    /// <summary>
+    /// Set the effect that should be switched to after connection has be established.
+    /// </summary>
+    /// <param name="effect"></param>
+    /// <returns></returns>
     public bool SetInitialEffect(ContentEffect effect)
     {
       if (!initialEffect)
@@ -338,11 +364,21 @@ namespace AtmoLight
       return false;
     }
 
+    /// <summary>
+    /// Define if the handlers should try to reinitialise when the connection is lost
+    /// or and error occurs.
+    /// </summary>
+    /// <param name="reInit"></param>
     public void SetReInitOnError(bool reInit)
     {
       reInitOnError = reInit;
     }
 
+    /// <summary>
+    /// Set the path to the gif file that should be used by the GIFReader
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
     public bool SetGIFPath(string path)
     {
       if (path.Length > 4)
@@ -397,6 +433,10 @@ namespace AtmoLight
     #endregion
 
     #region Information Methods (get)
+    /// <summary>
+    /// Returns the instance of the core.
+    /// </summary>
+    /// <returns></returns>
     public static Core GetInstance()
     {
       if (instance == null)
@@ -406,6 +446,10 @@ namespace AtmoLight
       return instance;
     }
 
+    /// <summary>
+    /// Returns if there are targets that are connected.
+    /// </summary>
+    /// <returns></returns>
     public bool IsConnected()
     {
       foreach (var target in targets)
@@ -418,6 +462,10 @@ namespace AtmoLight
       return false;
     }
 
+    /// <summary>
+    /// Returns if all targets are connected.
+    /// </summary>
+    /// <returns></returns>
     public bool AreAllConnected()
     {
       foreach (var target in targets)
@@ -466,11 +514,19 @@ namespace AtmoLight
       return staticColor;
     }
 
+    /// <summary>
+    /// Returns the capture width
+    /// </summary>
+    /// <returns></returns>
     public int GetCaptureWidth()
     {
       return captureWidth;
     }
 
+    /// <summary>
+    /// Returns the capture height
+    /// </summary>
+    /// <returns></returns>
     public int GetCaptureHeight()
     {
       return captureHeight;
@@ -485,11 +541,19 @@ namespace AtmoLight
       return currentEffect;
     }
 
+    /// <summary>
+    /// Returns the effect that should be changed to.
+    /// </summary>
+    /// <returns></returns>
     public ContentEffect GetChangeEffect()
     {
       return changeEffect;
     }
 
+    /// <summary>
+    /// Returns the number of active targets.
+    /// </summary>
+    /// <returns></returns>
     public int GetTargetCount()
     {
       return targets.Count();
@@ -497,6 +561,10 @@ namespace AtmoLight
     #endregion
 
     #region Events
+    /// <summary>
+    /// Method to allow the handlers to raise the NewConnectionLost event.
+    /// </summary>
+    /// <param name="target"></param>
     public void NewConnectionLost(Target target)
     {
       OnNewConnectionLost(target);
@@ -569,6 +637,10 @@ namespace AtmoLight
     #endregion
 
     #region Utilities
+    /// <summary>
+    /// Calculates the needed information from a bitmap stream and sends them to SendPixelData().
+    /// </summary>
+    /// <param name="stream"></param>
     public void CalculateBitmap(Stream stream)
     {
       // Debug file output
@@ -600,6 +672,12 @@ namespace AtmoLight
       SendPixelData(pixelData, bmiInfoHeader);
     }
 
+    /// <summary>
+    /// Sends picture information either to the delay thread or directly to the targets.
+    /// </summary>
+    /// <param name="pixelData"></param>
+    /// <param name="bmiInfoHeader"></param>
+    /// <param name="force"></param>
     private void SendPixelData(byte[] pixelData, byte[] bmiInfoHeader, bool force = false)
     {
       if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
@@ -781,8 +859,9 @@ namespace AtmoLight
       setPixelDataLock = true;
     }
 
-
-
+    /// <summary>
+    /// Start the GIFReader thread.
+    /// </summary>
     private void StartGIFReaderThread()
     {
       gifReaderLock = false;
@@ -791,11 +870,17 @@ namespace AtmoLight
       gifReaderThreadHelper.Start();
     }
 
+    /// <summary>
+    /// Stop the GIFReader thread.
+    /// </summary>
     private void StopGIFReaderThread()
     {
       gifReaderLock = true;
     }
 
+    /// <summary>
+    /// Start the VUMeter thread.
+    /// </summary>
     private void StartVUMeterThread()
     {
       vuMeterLock = false;
@@ -804,11 +889,17 @@ namespace AtmoLight
       vuMeterThreadHelper.Start();
     }
 
+    /// <summary>
+    /// Stop the VUMeter thread.
+    /// </summary>
     private void StopVUMeterThread()
     {
       vuMeterLock = true;
     }
 
+    /// <summary>
+    /// Stop all core threads.
+    /// </summary>
     private void StopAllThreads()
     {
       StopSetPixelDataThread();
@@ -857,8 +948,9 @@ namespace AtmoLight
       }
     }
 
-
-
+    /// <summary>
+    /// Decode the gif file, transform it and send it to CalculateBitmap().
+    /// </summary>
     private void GIFReaderThread()
     {
       try
@@ -948,6 +1040,10 @@ namespace AtmoLight
       }
     }
 
+    /// <summary>
+    /// Receives dblevel data from MediaPortal and generates bitmaps out of that.
+    /// Then sends these bitmaps to CalculateBitmap().
+    /// </summary>
     private void VUMeterThread()
     {
       try
