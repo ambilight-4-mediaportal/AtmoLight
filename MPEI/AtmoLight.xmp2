@@ -20,13 +20,6 @@
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\AtmoWinRemoteControl\bin\x86\Release\AtmoWinRemoteControl.dll</LocalFileName>
-              <ZipFileName>Installer{CopyFile}\{7acda226-b77b-42b7-af7e-89c521f99c1c}-AtmoWinRemoteControl.dll</ZipFileName>
-              <DestinationFilename>%Plugins%\process\AtmoWinRemoteControl.dll</DestinationFilename>
-            </FileItem>
-            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
-              <Param1 />
-              <UpdateOption>OverwriteIfOlder</UpdateOption>
               <LocalFileName>..\AtmoLight.Core\bin\Release\AtmoLight.Core.dll</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{ac5ce745-0ef6-4baf-b108-24ac2875e6d8}-AtmoLight.Core.dll</ZipFileName>
               <DestinationFilename>%Plugins%\process\AtmoLight.Core.dll</DestinationFilename>
@@ -37,6 +30,13 @@
               <LocalFileName>..\AtmoLight.MediaPortal1\bin\x86\Release\AtmoLight.MediaPortal1.dll</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{50c503aa-16a9-4e24-904b-3482fb265b64}-AtmoLight.MediaPortal1.dll</ZipFileName>
               <DestinationFilename>%Plugins%\process\AtmoLight.MediaPortal1.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\AtmoLight.Core\bin\Release\Google.ProtocolBuffers.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d79ac7b0-ad9d-4428-ad98-860bad85324d}-Google.ProtocolBuffers.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\process\Google.ProtocolBuffers.dll</DestinationFilename>
             </FileItem>
           </Items>
         </Files>
@@ -321,6 +321,11 @@ public static void Main(PackageClass packageClass, UnInstallItem item)
                 {
                     File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\AtmoWinRemoteControl.dll"));
                 }
+				
+				if (File.Exists(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Google.ProtocolBuffers.dll")))
+                {
+                    File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Google.ProtocolBuffers.dll"));
+                }
            }
            catch { }
         }
@@ -502,13 +507,6 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\AtmoWinRemoteControl\bin\x86\Release\AtmoWinRemoteControl.dll</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{7acda226-b77b-42b7-af7e-89c521f99c1c}-AtmoWinRemoteControl.dll</ZipFileName>
-        <DestinationFilename>%Plugins%\process\AtmoWinRemoteControl.dll</DestinationFilename>
-      </FileItem>
-      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
-        <Param1 />
-        <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\AtmoLight.Core\bin\Release\AtmoLight.Core.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{ac5ce745-0ef6-4baf-b108-24ac2875e6d8}-AtmoLight.Core.dll</ZipFileName>
         <DestinationFilename>%Plugins%\process\AtmoLight.Core.dll</DestinationFilename>
@@ -519,6 +517,13 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <LocalFileName>..\AtmoLight.MediaPortal1\bin\x86\Release\AtmoLight.MediaPortal1.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{50c503aa-16a9-4e24-904b-3482fb265b64}-AtmoLight.MediaPortal1.dll</ZipFileName>
         <DestinationFilename>%Plugins%\process\AtmoLight.MediaPortal1.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\AtmoLight.Core\bin\Release\Google.ProtocolBuffers.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d79ac7b0-ad9d-4428-ad98-860bad85324d}-Google.ProtocolBuffers.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\process\Google.ProtocolBuffers.dll</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
