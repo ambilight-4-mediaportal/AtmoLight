@@ -238,7 +238,7 @@ namespace AtmoLight
     #endregion
 
     #region Constructor/Deconstructor
-    public Core()
+    private Core()
     {
       AtmoWinHandler.OnNewDimensions += new AtmoWinHandler.NewCaptureDimensionsHandler(SetCaptureDimensions);
       return;
