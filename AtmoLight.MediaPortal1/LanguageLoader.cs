@@ -322,6 +322,7 @@ namespace Language
     public String SetupForm_tabPageGeneric = "Generic settings";
     public String SetupForm_grpTargets = "Select supported hardware";
     public String SetupForm_grpAtmowinSettings = "Settings";
+    public String ContextMenu_ReInitialise = "Reconnect to lost targets";
   }
 }
 

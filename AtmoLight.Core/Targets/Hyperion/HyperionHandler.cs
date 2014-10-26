@@ -35,8 +35,14 @@ namespace AtmoLight.Targets
     private int[] staticColor = { 0, 0, 0 };
     public Boolean hyperionReconnectOnError = false;
     public int hyperionReconnectDelay = 0;
+    private Core coreObject;
 
     #endregion
+
+    public HyperionHandler()
+    {
+      coreObject = Core.GetInstance();
+    }
     #region Hyperion
 
     public void Initialise(bool force = false)
@@ -45,7 +51,7 @@ namespace AtmoLight.Targets
       {
         Connect();
         ClearPriority(hyperionPriority);
-        ChangeEffect(Core.GetCurrentEffect());
+        ChangeEffect(coreObject.GetCurrentEffect());
       }
       catch (Exception e)
       {
@@ -65,7 +71,7 @@ namespace AtmoLight.Targets
     {
       if (Socket.Connected)
       {
-        if (Core.GetCurrentEffect() == ContentEffect.LEDsDisabled || Core.GetCurrentEffect() == ContentEffect.Undefined)
+        if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
           ClearPriority(hyperionPriority);
           ClearPriority(hyperionPriorityStaticColor);
@@ -146,6 +152,10 @@ namespace AtmoLight.Targets
           {
             //Increment times tried
             hyperionReconnectCounter++;
+            if (hyperionReconnectCounter > hyperionReconnectAttempts)
+            {
+              coreObject.NewConnectionLost(Name);
+            }
           }
 
           //Sleep for specified time
@@ -223,7 +233,7 @@ namespace AtmoLight.Targets
       // So 3 bytes per pixel, as in RGB.
       // Given pixeldata however is 4 bytes per pixel, as in RGBA.
       // So we need to remove the last byte per pixel.
-      byte[] newpixeldata = new byte[Core.GetCaptureHeight() * Core.GetCaptureWidth() * 3];
+      byte[] newpixeldata = new byte[coreObject.GetCaptureHeight() * coreObject.GetCaptureWidth() * 3];
       int x = 0;
       int i = 0;
       while (i <= (newpixeldata.GetLength(0) - 2))
@@ -237,8 +247,8 @@ namespace AtmoLight.Targets
 
       ImageRequest imageRequest = ImageRequest.CreateBuilder()
         .SetImagedata(Google.ProtocolBuffers.ByteString.CopyFrom(newpixeldata))
-        .SetImageheight(Core.GetCaptureHeight())
-        .SetImagewidth(Core.GetCaptureWidth())
+        .SetImageheight(coreObject.GetCaptureHeight())
+        .SetImagewidth(coreObject.GetCaptureWidth())
         .SetPriority(hyperionPriority)
         .SetDuration(-1)
         .Build();

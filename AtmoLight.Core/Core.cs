@@ -56,6 +56,9 @@ namespace AtmoLight
   {
 
     #region Fields
+    // Instance
+    private static Core instance = null;
+
     // Threads
     private Thread setPixelDataThreadHelper;
     private Thread gifReaderThreadHelper;
@@ -63,8 +66,8 @@ namespace AtmoLight
 
     // States
     private bool currentState = false; // State of the LEDs
-    private static ContentEffect currentEffect = ContentEffect.Undefined; // Current active effect
-    private static ContentEffect changeEffect = ContentEffect.Undefined; // Effect ChangeEffect() should change to (need for Reinitialise() if ChangeEffect() fails)
+    private ContentEffect currentEffect = ContentEffect.Undefined; // Current active effect
+    private ContentEffect changeEffect = ContentEffect.Undefined; // Effect ChangeEffect() should change to (need for Reinitialise() if ChangeEffect() fails)
 
     // Lists
     private List<ITargets> targets = new List<ITargets>();
@@ -84,15 +87,15 @@ namespace AtmoLight
     private List<SolidBrush> vuMeterBrushes = new List<SolidBrush>();
 
     // Event Handler
-    public delegate void NewConnectionLostHandler();
+    public delegate void NewConnectionLostHandler(Target target);
     public static event NewConnectionLostHandler OnNewConnectionLost;
 
     public delegate double[] NewVUMeterHander();
     public static event NewVUMeterHander OnNewVUMeter;
 
     // Generic Fields
-    private static int captureWidth = 64; // Default fallback capture width
-    private static int captureHeight = 48; // Default fallback capture height
+    private int captureWidth = 64; // Default fallback capture width
+    private int captureHeight = 48; // Default fallback capture height
     private bool delayEnabled = false;
     private int delayTime = 0;
     private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
@@ -388,6 +391,15 @@ namespace AtmoLight
     #endregion
 
     #region Information Methods (get)
+    public static Core GetInstance()
+    {
+      if (instance == null)
+      {
+        instance = new Core();
+      }
+      return instance;
+    }
+
     public bool IsConnected()
     {
       foreach (var target in targets)
@@ -398,6 +410,18 @@ namespace AtmoLight
         }
       }
       return false;
+    }
+
+    public bool AreAllConnected()
+    {
+      foreach (var target in targets)
+      {
+        if (!target.IsConnected())
+        {
+          return false;
+        }
+      }
+      return true;
     }
 
     /// <summary>
@@ -435,15 +459,13 @@ namespace AtmoLight
     {
       return staticColor;
     }
-    #endregion
 
-    #region Static Methods
-    public static int GetCaptureWidth()
+    public int GetCaptureWidth()
     {
       return captureWidth;
     }
 
-    public static int GetCaptureHeight()
+    public int GetCaptureHeight()
     {
       return captureHeight;
     }
@@ -452,14 +474,21 @@ namespace AtmoLight
     /// Returns the current effect.
     /// </summary>
     /// <returns>Current effect</returns>
-    public static ContentEffect GetCurrentEffect()
+    public ContentEffect GetCurrentEffect()
     {
       return currentEffect;
     }
 
-    public static ContentEffect GetChangeEffect()
+    public ContentEffect GetChangeEffect()
     {
       return changeEffect;
+    }
+    #endregion
+
+    #region Events
+    public void NewConnectionLost(Target target)
+    {
+      OnNewConnectionLost(target);
     }
     #endregion
 

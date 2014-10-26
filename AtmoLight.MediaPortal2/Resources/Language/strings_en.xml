@@ -40,7 +40,7 @@
   <string name="AtmoLight.Delay">Delay</string>
   <string name="AtmoLight.DelayTime">Delay time</string>
   <string name="AtmoLight.DelayRefreshRate">Delay reference refreshrate</string>
-  <string name="AtmoLight.AtmoWinConnectionLost">Connection to AtmoWin lost!</string>
+  <string name="AtmoLight.AtmoWinConnectionLost">Connection to [Target] lost!</string>
   <string name="AtmoLight.LEDsEnabled">Current LED state (enabled or disabled)</string>
   <string name="AtmoLight.GIFFile">Path to a gif file</string>
   <string name="AtmoLight.MPExitEffect">MediaPortal exit effect</string>

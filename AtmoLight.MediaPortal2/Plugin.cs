@@ -110,7 +110,7 @@ namespace AtmoLight
 
       // AtmoLight object creation
       Log.Debug("Generating new AtmoLight.Core instance.");
-      AtmoLightObject = new Core();
+      AtmoLightObject = Core.GetInstance();
       if (settings.AtmoWinTarget)
       {
         AtmoLightObject.AddTarget(Target.AtmoWin);
@@ -217,7 +217,7 @@ namespace AtmoLight
     /// </summary>
     private void CalculateDelay()
     {
-      if (Core.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
+      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
       {
         int refreshRate = SkinContext.Direct3D.GetAdapterDisplayModeEx(0).RefreshRate;
         AtmoLightObject.SetDelay((int)(((float)settings.DelayRefreshRate / (float)refreshRate) * (float)settings.DelayTime));
@@ -288,7 +288,7 @@ namespace AtmoLight
     #region UI Capture Event Handler
     public void UICapture(object sender, EventArgs args)
     {
-      if (!AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || Core.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
+      if (!AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
       {
         return;
       }
@@ -308,12 +308,12 @@ namespace AtmoLight
       }
 
 
-      Rectangle rectangleDestination = new Rectangle(0, 0, Core.GetCaptureWidth(), Core.GetCaptureHeight());
+      Rectangle rectangleDestination = new Rectangle(0, 0, AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
       try
       {
         if (surfaceDestination == null)
         {
-          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device, Core.GetCaptureWidth(), Core.GetCaptureHeight(), SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
+          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device, AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight(), SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
         }
 
         // Use the Player Surface if video is playing.
@@ -508,9 +508,9 @@ namespace AtmoLight
     /// Connection lost event handler.
     /// This event gets called if connection to AtmoWin is lost and not recoverable.
     /// </summary>
-    private void OnNewConnectionLost()
+    private void OnNewConnectionLost(Target target)
     {
-      ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", "[AtmoLight.AtmoWinConnectionLost]", true);
+      ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", "[AtmoLight.AtmoWinConnectionLost]".Replace("[Target]", target.ToString()), true);
     }
     #endregion
   }

@@ -11,8 +11,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
-//using AtmoWinRemoteControl;
-//using System.Drawing;
 using System.IO;
 using Microsoft.DirectX.Direct3D;
 using MediaPortal.Dialogs;
@@ -120,7 +118,7 @@ namespace AtmoLight
       staticColorTemp[2] = Settings.staticColorBlue;
 
       Log.Debug("Generating new AtmoLight.Core instance.");
-      AtmoLightObject = new Core();
+      AtmoLightObject = Core.GetInstance();
       if (Settings.atmoWinTarget)
       {
         AtmoLightObject.AddTarget(Target.AtmoWin);
@@ -239,7 +237,7 @@ namespace AtmoLight
     /// </summary>
     private void CalculateDelay()
     {
-      if (Core.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
+      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
       {
         AtmoLightObject.SetDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
       }
@@ -294,9 +292,9 @@ namespace AtmoLight
     /// Connection lost event handler.
     /// This event gets called if connection to AtmoWin is lost and not recoverable.
     /// </summary>
-    private void OnNewConnectionLost()
+    private void OnNewConnectionLost(Target target)
     {
-      DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost);
+      DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost.Replace("[Target]", target.ToString()));
     }
     #endregion
 
@@ -416,7 +414,7 @@ namespace AtmoLight
     /// <param name="pSurface">Surface.</param>
     private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
     {
-      if (Core.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || width == 0 || height == 0)
+      if (AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || width == 0 || height == 0)
       {
         return;
       }
@@ -437,7 +435,7 @@ namespace AtmoLight
 
       if (rgbSurface == null)
       {
-        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(Core.GetCaptureWidth(), Core.GetCaptureHeight(), Format.A8R8G8B8,
+        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight(), Format.A8R8G8B8,
           MultiSampleType.None, 0, true);
       }
       unsafe
@@ -447,12 +445,12 @@ namespace AtmoLight
           if (Settings.sbs3dOn)
           {
             VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              Core.GetCaptureWidth(), Core.GetCaptureHeight());
+              AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
           }
           else
           {
             VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              Core.GetCaptureWidth(), Core.GetCaptureHeight());
+              AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
           }
 
           Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
@@ -480,7 +478,7 @@ namespace AtmoLight
             }
 
             // New bitmap that has to have to dimensions AtmoWin expects.
-            Bitmap target = new Bitmap(Core.GetCaptureWidth(), Core.GetCaptureHeight());
+            Bitmap target = new Bitmap(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
 
             using (Graphics g = Graphics.FromImage(target))
             {
@@ -623,9 +621,6 @@ namespace AtmoLight
     /// </summary>
     private void DialogContextMenu()
     {
-      int delayTogglePos = 5;
-      int delayChangePos = 6;
-      int staticColorPos = 5;
       Log.Info("Opening AtmoLight context menu.");
 
       // Showing context menu
@@ -646,7 +641,7 @@ namespace AtmoLight
       // Change Effect
       dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeEffect));
 
-      // Change AtmoWin Profile
+      // Change Profile
       dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeAWProfile));
 
       // Toggle 3D Mode
@@ -670,43 +665,38 @@ namespace AtmoLight
       }
 
       // Delay
-      if (Core.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
         // Toggle Delay and Change Delay
         if (AtmoLightObject.IsDelayEnabled())
         {
           dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_DelayOFF));
           dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + AtmoLightObject.GetDelayTime() + "ms)"));
-          staticColorPos++;
         }
         else
         {
           dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_DelayON));
-          delayChangePos = -1;
         }
-        staticColorPos++;
-      }
-      else
-      {
-        delayTogglePos = -1;
-        delayChangePos = -1;
       }
 
       // Change Static Color
-      if (Core.GetCurrentEffect() == ContentEffect.StaticColor)
+      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeStatic));
       }
-      else
+
+      // ReInit
+      if (!AtmoLightObject.AreAllConnected())
       {
-        staticColorPos = -1;
+        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ReInitialise));
       }
 
       dlg.SelectedLabel = 0;
       dlg.DoModal(GUIWindowManager.ActiveWindow);
 
       // Do stuff
-      if (dlg.SelectedLabel == 0)
+      // Toggle LEDs
+      if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchLEDsON || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchLEDsOFF)
       {
         if (!AtmoLightObject.IsAtmoLightOn())
         {
@@ -726,7 +716,8 @@ namespace AtmoLight
           AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
         }
       }
-      else if (dlg.SelectedLabel == 1)
+      // Change Effect
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeEffect)
       {
         GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgEffect.Reset();
@@ -791,11 +782,13 @@ namespace AtmoLight
         AtmoLightObject.ChangeEffect(temp);
         CalculateDelay();
       }
-      else if (dlg.SelectedLabel == 2)
+      // Change Profile
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeAWProfile)
       {
         AtmoLightObject.ChangeProfile();
       }
-      else if (dlg.SelectedLabel == 3)
+      // Toggle 3D
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_Switch3DOFF || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_Switch3DON)
       {
         if (Settings.sbs3dOn)
         {
@@ -808,7 +801,8 @@ namespace AtmoLight
           Settings.sbs3dOn = true;
         }
       }
-      else if (dlg.SelectedLabel == 4)
+      // Blackbar detection
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchBlackbarDetectionOFF || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchBlackbarDetectionON)
       {
         if (Settings.blackbarDetection)
         {
@@ -821,7 +815,8 @@ namespace AtmoLight
           Settings.blackbarDetection = true;
         }
       }
-      else if ((dlg.SelectedLabel == delayTogglePos) && (delayTogglePos != -1))
+      // Toggle Delay
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_DelayOFF || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_DelayON)
       {
         if (AtmoLightObject.IsDelayEnabled())
         {
@@ -833,7 +828,8 @@ namespace AtmoLight
           AtmoLightObject.EnableDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
         }
       }
-      else if ((dlg.SelectedLabel == delayChangePos) && (delayChangePos != -1))
+      // Change Delay
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + AtmoLightObject.GetDelayTime() + "ms)")
       {
         if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) && (delayTimeHelper <= 1000))
         {
@@ -845,7 +841,8 @@ namespace AtmoLight
           DialogError(LanguageLoader.appStrings.ContextMenu_DelayTimeErrorLine1, LanguageLoader.appStrings.ContextMenu_DelayTimeErrorLine2);
         }
       }
-      else if ((dlg.SelectedLabel == staticColorPos) && (staticColorPos != -1))
+      // Change Static Color
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeStatic)
       {
         GUIDialogMenu dlgStaticColor = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgStaticColor.Reset();
@@ -904,6 +901,10 @@ namespace AtmoLight
             break;
         }
         AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
+      }
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ReInitialise)
+      {
+        AtmoLightObject.ReInitialise();
       }
     }
 

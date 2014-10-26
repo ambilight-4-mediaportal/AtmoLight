@@ -32,6 +32,7 @@ namespace AtmoLight
     public bool atmoWinAutoStop = true;
     private bool reInitOnError = true;
     private int[] staticColor = { 0, 0, 0 };
+    private Core coreObject;
 
 
     // Com  Objects
@@ -61,6 +62,7 @@ namespace AtmoLight
       var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
       DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
       Log.Debug("Core Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
+      coreObject = Core.GetInstance();
     }
     #endregion
 
@@ -194,7 +196,7 @@ namespace AtmoLight
 
       // Change the effect to the desired effect.
       // Needed for AtmoWin 1.0.0.5+
-      if (!ChangeEffect(Core.GetCurrentEffect())) return;
+      if (!ChangeEffect(coreObject.GetCurrentEffect())) return;
     }
 
     public void SetStaticColor(int red, int green, int blue)
@@ -246,7 +248,7 @@ namespace AtmoLight
 
       Log.Debug("Initialising successfull.");
 
-      ChangeEffect(Core.GetCurrentEffect());
+      ChangeEffect(coreObject.GetCurrentEffect());
 
       initialiseLock = false;
       return true;
@@ -266,20 +268,20 @@ namespace AtmoLight
       if (!reInitOnError && !force)
       {
         Disconnect();
-        //OnNewConnectionLost();
+        coreObject.NewConnectionLost(Name);
         return;
       }
 
       reInitialiseLock = true;
       Log.Debug("Reinitialising.");
 
-      if (!Disconnect() || !StopAtmoWin() || !InitialiseThreaded(force) || !ChangeEffect(Core.GetChangeEffect() != ContentEffect.Undefined ? Core.GetChangeEffect() : Core.GetCurrentEffect()))
+      if (!Disconnect() || !StopAtmoWin() || !InitialiseThreaded(force) || !ChangeEffect(coreObject.GetChangeEffect() != ContentEffect.Undefined ? coreObject.GetChangeEffect() : coreObject.GetCurrentEffect()))
       {
         Disconnect();
         StopAtmoWin();
         Log.Error("Reinitialising failed.");
         reInitialiseLock = false;
-        //OnNewConnectionLost();
+        coreObject.NewConnectionLost(Name);
         return;
       }
 

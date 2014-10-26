@@ -370,7 +370,7 @@ namespace AtmoLight.Configuration
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
 
-      if (settings.Delay != _yes && Core.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      if (settings.Delay != _yes && AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
         if (_yes)
         {
@@ -405,7 +405,7 @@ namespace AtmoLight.Configuration
       settings.DelayTime = (int)_value;
       SettingsManager.Save(settings);
 
-      if (AtmoLight.Plugin.AtmoLightObject.IsDelayEnabled() && Core.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      if (AtmoLight.Plugin.AtmoLightObject.IsDelayEnabled() && AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
         AtmoLight.Plugin.AtmoLightObject.SetDelay((int)_value);
       }
@@ -450,7 +450,7 @@ namespace AtmoLight.Configuration
       settings.StaticColorRed = (int)_value;
       SettingsManager.Save(settings);
 
-      if (Core.GetCurrentEffect() == ContentEffect.StaticColor)
+      if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
       {
         AtmoLight.Plugin.AtmoLightObject.SetStaticColor((int)_value, settings.StaticColorGreen, settings.StaticColorBlue);
         AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
@@ -476,7 +476,7 @@ namespace AtmoLight.Configuration
       settings.StaticColorGreen = (int)_value;
       SettingsManager.Save(settings);
 
-      if (Core.GetCurrentEffect() == ContentEffect.StaticColor)
+      if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
       {
         AtmoLight.Plugin.AtmoLightObject.SetStaticColor(settings.StaticColorRed, (int)_value, settings.StaticColorBlue);
         AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
@@ -502,7 +502,7 @@ namespace AtmoLight.Configuration
       settings.StaticColorBlue = (int)_value;
       SettingsManager.Save(settings);
 
-      if (Core.GetCurrentEffect() == ContentEffect.StaticColor)
+      if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
       {
         AtmoLight.Plugin.AtmoLightObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, (int)_value);
         AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
