@@ -523,9 +523,33 @@ namespace AtmoLight
       {
         if (!AtmoLightObject.IsConnected())
         {
-          if (DialogYesNo(LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2))
+          string reconnectMessage = "";
+
+          if (AtmoLightObject.activeTargetCount == 1)
           {
-            AtmoLightObject.ReInitialise();
+            //Check if reconnect message needs to be for local or network device
+            if (AtmoLightObject.activeTargetType.ToString() == "Local")
+            {
+              reconnectMessage = string.Format("{0} {1} {2}", LanguageLoader.appStrings.ContextMenu_ConnectLineLocal1, AtmoLightObject.activeTargetName.ToString(), LanguageLoader.appStrings.ContextMenu_ConnectLineLocal2);
+            }
+            else if (AtmoLightObject.activeTargetType.ToString() == "Network")
+            {
+              reconnectMessage = string.Format("{0} {1} {2}", LanguageLoader.appStrings.ContextMenu_ConnectLineNetwork1, AtmoLightObject.activeTargetName.ToString(), LanguageLoader.appStrings.ContextMenu_ConnectLineNetwork2);
+            }
+
+            if (DialogYesNo(reconnectMessage))
+            {
+              AtmoLightObject.ReInitialise();
+            }
+          }
+          else
+          {
+            //Since we don't know what the multiple devices types are we display the generic local message.
+            reconnectMessage = string.Format("{0} {1} {2}", LanguageLoader.appStrings.ContextMenu_ConnectLineLocal1, LanguageLoader.appStrings.ContextMenu_ConnectLineMultipleTargets, LanguageLoader.appStrings.ContextMenu_ConnectLineLocal2);
+            if (DialogYesNo(reconnectMessage))
+            {
+              AtmoLightObject.ReInitialise();
+            }
           }
         }
         else

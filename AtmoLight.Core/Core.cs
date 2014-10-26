@@ -37,6 +37,11 @@ namespace AtmoLight
     AtmoWin,
     Hyperion
   }
+  public enum TargetType
+  {
+    Local,
+    Network
+  }
 
   public interface ITargets
   {
@@ -102,6 +107,9 @@ namespace AtmoLight
     private string gifPath = "";
     private bool reInitOnError;
     private bool initialEffect = false;
+    public int activeTargetCount = 0;
+    public TargetType activeTargetType;
+    public Target activeTargetName;
 
     // AtmoWin Settings Fields
     public bool atmoWinAutoStart;
@@ -259,6 +267,7 @@ namespace AtmoLight
     {
       foreach (var target in targets)
       {
+
         // AtmoWin Init
         var atmoWinTarget = target as AtmoWinHandler;
         if (atmoWinTarget != null)
@@ -268,6 +277,11 @@ namespace AtmoLight
           atmoWinTarget.atmoWinAutoStop = atmoWinAutoStop;
 
           atmoWinTarget.SetReInitOnError(reInitOnError);
+
+          //Increment total active targets and specifiy type for UI messages
+          activeTargetCount++;
+          activeTargetName = Target.AtmoWin;
+          activeTargetType = TargetType.Local;
         }
         // Hyperion Init
         var hyperionTarget = target as HyperionHandler;
@@ -281,6 +295,11 @@ namespace AtmoLight
           hyperionTarget.hyperionLiveReconnect = hyperionLiveReconnect;
 
           hyperionTarget.setReconnectOnError(reInitOnError);
+
+          //Increment total active targets and specifiy type for UI messages
+          activeTargetCount++;
+          activeTargetName = Target.Hyperion;
+          activeTargetType = TargetType.Network;
         }
         target.Initialise(false);
       }

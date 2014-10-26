@@ -298,8 +298,11 @@ namespace Language
     public String ContextMenu_ChangeDelay = "Change LED delay";
     public String ContextMenu_DelayTimeErrorLine1 = "The value has to be a number";
     public String ContextMenu_DelayTimeErrorLine2 = "and must be between 0 and 1000.";
-    public String ContextMenu_ConnectLine1 = "Do you want to try to start";
-    public String ContextMenu_ConnectLine2 = "AtmoWin and reconnect to it?";
+    public String ContextMenu_ConnectLineLocal1 = "Do you want to try to start";
+    public String ContextMenu_ConnectLineLocal2 = "and reconnect to it?";
+    public String ContextMenu_ConnectLineNetwork1 = "Do you want to try to reconnect to";
+    public String ContextMenu_ConnectLineNetwork2 = "?";
+    public String ContextMenu_ConnectLineMultipleTargets = "mulitple targets";
     public String SetupForm_lblRefreshRate = "Hz";
     public String SetupForm_ckBlackbarDetection = "Blackbar Detection every";
     public String ContextMenu_SwitchBlackbarDetectionOFF = "Switch Blackbar Detection off";
