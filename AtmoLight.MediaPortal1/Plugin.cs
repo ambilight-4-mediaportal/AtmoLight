@@ -294,7 +294,8 @@ namespace AtmoLight
     /// </summary>
     private void OnNewConnectionLost(Target target)
     {
-      DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost.Replace("[Target]", target.ToString()));
+      string connectionLostMessage = string.Format("{0} {1} {2}", LanguageLoader.appStrings.ContextMenu_ConnectionLost, target.ToString(), LanguageLoader.appStrings.ContextMenu_ConnectionLostSuffix);
+      DialogError(connectionLostMessage);
     }
     #endregion
 
