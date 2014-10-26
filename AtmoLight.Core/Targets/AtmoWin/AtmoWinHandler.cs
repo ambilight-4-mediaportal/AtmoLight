@@ -18,23 +18,18 @@ namespace AtmoLight
   class AtmoWinHandler : ITargets
   {
     #region Fields
-
-    public delegate void NewCaptureDimensionsHandler(int width, int height);
-    public static event NewCaptureDimensionsHandler OnNewDimensions;
     public Target Name { get { return Target.AtmoWin; } }
     public TargetType Type { get { return TargetType.Local; } }
 
+    // Threads
     private Thread reinitialiseThreadHelper;
     private Thread initialiseThreadHelper;
     private Thread getAtmoLiveViewSourceThreadHelper;
 
-    public string atmoWinPath = "";
-    public bool atmoWinAutoStart = true;
-    public bool atmoWinAutoStop = true;
-    private bool reInitOnError = true;
-    private int[] staticColor = { 0, 0, 0 };
-    private Core coreObject;
-
+    // Locks
+    private volatile bool reInitialiseLock = false;
+    private volatile bool initialiseLock = false;
+    private volatile bool getAtmoLiveViewSourceLock = false;
 
     // Com  Objects
     private IAtmoRemoteControl2 atmoRemoteControl = null; // Com Object to control AtmoWin
@@ -47,27 +42,37 @@ namespace AtmoLight
     private const int delayAtmoWinConnect = 1000; // Delay between starting AtmoWin and connection to it
     private const int delayGetAtmoLiveViewSource = 1000; // Delay between liveview source checks
 
-    // Locks
-    private volatile bool reInitialiseLock = false;
-    private volatile bool initialiseLock = false;
-    private volatile bool getAtmoLiveViewSourceLock = false;
+    // Core Object
+    private Core coreObject;
+
+    // Other Fields
+    public string atmoWinPath = "";
+    public bool atmoWinAutoStart = true;
+    public bool atmoWinAutoStop = true;
+    private bool reInitOnError = true;
+    private int[] staticColor = { 0, 0, 0 };
 
     private int captureWidth;
     private int captureHeight;
-
     #endregion
 
     #region Constructor
+    /// <summary>
+    /// AtmoWinHandler constructor
+    /// </summary>
     public AtmoWinHandler()
     {
-      var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-      DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
-      Log.Debug("Core Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
+      // Get Core instance to use core inside AtmoWinHandler
       coreObject = Core.GetInstance();
     }
     #endregion
 
     #region ITargets Methods
+    /// <summary>
+    /// Initialise AtmoWin by starting (if needed and wanted) it and connecting.
+    /// This happens threaded.
+    /// </summary>
+    /// <param name="force"></param>
     public void Initialise(bool force = false)
     {
       if (!initialiseLock)
@@ -82,6 +87,11 @@ namespace AtmoLight
       }
     }
 
+    /// <summary>
+    /// Reinitialisation of AtmoWin if connection got lost.
+    /// This happens threaded.
+    /// </summary>
+    /// <param name="force">force the reinit or not</param>
     public void ReInitialise(bool force = false)
     {
       if (!reInitialiseLock)
@@ -96,6 +106,9 @@ namespace AtmoLight
       }
     }
 
+    /// <summary>
+    /// Disconnects from AtmoWin and stops it if wanted.
+    /// </summary>
     public void Dispose()
     {
       Disconnect();
@@ -118,6 +131,11 @@ namespace AtmoLight
       return true;
     }
 
+    /// <summary>
+    /// Changes to desired effect.
+    /// </summary>
+    /// <param name="effect"></param>
+    /// <returns></returns>
     public bool ChangeEffect(ContentEffect effect)
     {
       if (!IsConnected())
@@ -174,6 +192,11 @@ namespace AtmoLight
       return true;
     }
 
+    /// <summary>
+    /// Sends current image/frame to AtmoWin to be displayed.
+    /// </summary>
+    /// <param name="pixeldata">bytearray of the picture</param>
+    /// <param name="bmiInfoHeader">bytearray of the picture header</param>
     public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
       if (!IsConnected())
@@ -184,7 +207,7 @@ namespace AtmoLight
     }
 
     /// <summary>
-    /// Change to AtmoWin profile.
+    /// Change the AtmoWin profile.
     /// </summary>
     /// <returns>true or false</returns>
     public void ChangeProfile()
@@ -200,6 +223,12 @@ namespace AtmoLight
       if (!ChangeEffect(coreObject.GetCurrentEffect())) return;
     }
 
+    /// <summary>
+    /// Sets the static color that should be used.
+    /// </summary>
+    /// <param name="red"></param>
+    /// <param name="green"></param>
+    /// <param name="blue"></param>
     public void SetStaticColor(int red, int green, int blue)
     {
       staticColor[0] = red;
@@ -419,7 +448,11 @@ namespace AtmoLight
     #endregion
 
     #region Configuration Methods (set)
-
+    /// <summary>
+    /// Set if AtmoWinHandler should try to restart and reconnect to AtmoWin when
+    /// the connection is lost or an error occurs.
+    /// </summary>
+    /// <param name="reInit"></param>
     public void SetReInitOnError(bool reInit)
     {
       reInitOnError = reInit;
@@ -472,7 +505,10 @@ namespace AtmoLight
     #endregion
 
     #region COM Interface
-
+    /// <summary>
+    /// Opens the COM interface to AtmoWin.
+    /// </summary>
+    /// <returns></returns>
     private bool GetAtmoRemoteControl()
     {
       Log.Debug("Getting AtmoWin Remote Control.");
@@ -485,7 +521,7 @@ namespace AtmoLight
     }
 
     /// <summary>
-    /// Opens the COM interface to AtmoWin.
+    /// Opens the COM interface for live view control.
     /// </summary>
     /// <returns>true if successfull and false if not.</returns>
     private bool GetAtmoLiveViewControl()
@@ -610,8 +646,6 @@ namespace AtmoLight
       return false;
     }
 
-
-
     /// <summary>
     /// Gets the current liveview resolution.
     /// </summary>
@@ -627,13 +661,18 @@ namespace AtmoLight
       if (TimeoutHandler(() => atmoRemoteControl.getLiveViewRes(out captureWidth, out captureHeight)))
       {
         Log.Debug("Liveview capture resolution is {0}x{1}. Screenshot will be resized to this dimensions.", captureWidth, captureHeight);
-        OnNewDimensions(captureWidth, captureHeight);
+        coreObject.SetCaptureDimensions(captureWidth, captureHeight);
         return true;
       }
       return false;
     }
 
-    public void SetPixelData(byte[] bmiInfoHeader, byte[] pixelData)
+    /// <summary>
+    /// Sends picture information directly to AtmoWin
+    /// </summary>
+    /// <param name="bmiInfoHeader"></param>
+    /// <param name="pixelData"></param>
+    private void SetPixelData(byte[] bmiInfoHeader, byte[] pixelData)
     {
       if (!IsConnected())
       {
