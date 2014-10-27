@@ -98,7 +98,15 @@ namespace AtmoLight.Targets
     }
     public bool IsConnected()
     {
-      return Socket.Connected;
+      if (Socket.Connected)
+      {
+        Connected = true;
+      }
+      else
+      {
+        Connected = false;
+      }
+      return Connected;
     }
 
     private void Connect()
@@ -190,8 +198,8 @@ namespace AtmoLight.Targets
             hyperionReconnectCounter++;
             if (hyperionReconnectCounter > hyperionReconnectAttempts)
             {
-              //During first init it would show the dialog too soon resulting in Mediaportal stalling at startup screen ("Starting plugins..") even with the GUIWindowManager.Initalized check.
-              //It will still display the connection message after the startup screen this way so no downside but might need looking at later on.
+              //During first init it would try to show the connection lost dialog too soon resulting in Mediaportal stalling at startup screen ("Starting plugins..") even with the GUIWindowManager.Initalized check.
+              //It will still display the connection lost message after the startup screen this way so no downside but might need looking at later on.
               if (isInit)
               {
                 isInit = false;
