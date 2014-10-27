@@ -27,6 +27,8 @@ namespace AtmoLight.Targets
     private Boolean Connected = false;
     int hyperionReconnectCounter = 0;
     public int hyperionReconnectAttempts = 0;
+    public Stopwatch liveReconnectSW = new Stopwatch();
+
 
     public string hyperionIP = "";
     public int hyperionPort = 0;
@@ -53,6 +55,11 @@ namespace AtmoLight.Targets
         Connect();
         ClearPriority(hyperionPriority);
         ChangeEffect(coreObject.GetCurrentEffect());
+
+        if(hyperionLiveReconnect)
+        {
+          liveReconnect();
+        }
       }
       catch (Exception e)
       {
@@ -70,6 +77,7 @@ namespace AtmoLight.Targets
 
     public void Dispose()
     {
+      //If connected close any remaining sockets and enabled set effect.
       if (Socket.Connected)
       {
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.Undefined)
@@ -79,13 +87,15 @@ namespace AtmoLight.Targets
           Socket.Close();
         }
       }
+
+      //Stop live reconnect so it doesn't start new connect threads.
+      if (hyperionLiveReconnect)
+      {
+        hyperionLiveReconnect = false;
+      }
     }
     public bool IsConnected()
     {
-      if (hyperionLiveReconnect)
-      {
-        Connect();
-      }
       return Connected;
     }
 
@@ -94,6 +104,29 @@ namespace AtmoLight.Targets
       Thread t = new Thread(ConnectThread);
       t.Start();
     }
+    private void liveReconnect()
+    {
+      Thread t = new Thread(liveReconnectThread);
+      t.Start();
+    }
+
+    private void liveReconnectThread()
+    {
+      liveReconnectSW.Start();
+
+      //Start live reconnect with set delay in config
+      while (hyperionLiveReconnect == true)
+      {
+        if (liveReconnectSW.ElapsedMilliseconds >= hyperionReconnectDelay && Connected == false)
+        {
+          Connect();
+          liveReconnectSW.Restart();
+        }
+      }
+
+      liveReconnectSW.Stop();
+    }
+
     private void ConnectThread()
     {
       while (hyperionReconnectCounter <= hyperionReconnectAttempts)
