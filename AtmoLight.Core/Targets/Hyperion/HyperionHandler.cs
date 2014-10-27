@@ -25,19 +25,20 @@ namespace AtmoLight.Targets
     private static TcpClient Socket = new TcpClient();
     private Stream Stream;
     private Boolean Connected = false;
+    private Boolean isInit = false;
     int hyperionReconnectCounter = 0;
     public int hyperionReconnectAttempts = 0;
-    public Stopwatch liveReconnectSW = new Stopwatch();
+    private Stopwatch liveReconnectSW = new Stopwatch();
 
 
     public string hyperionIP = "";
     public int hyperionPort = 0;
     public int hyperionPriority = 0;
     public int hyperionPriorityStaticColor = 0;
-    public bool hyperionLiveReconnect = false;
     private int[] staticColor = { 0, 0, 0 };
     public Boolean hyperionReconnectOnError = false;
     public int hyperionReconnectDelay = 0;
+    public bool hyperionLiveReconnect = false;
     private Core coreObject;
 
     #endregion
@@ -52,6 +53,7 @@ namespace AtmoLight.Targets
     {
       try
       {
+        isInit = true;
         Connect();
         ClearPriority(hyperionPriority);
         ChangeEffect(coreObject.GetCurrentEffect());
@@ -96,7 +98,7 @@ namespace AtmoLight.Targets
     }
     public bool IsConnected()
     {
-      return Connected;
+      return Socket.Connected;
     }
 
     private void Connect()
@@ -188,7 +190,16 @@ namespace AtmoLight.Targets
             hyperionReconnectCounter++;
             if (hyperionReconnectCounter > hyperionReconnectAttempts)
             {
-              coreObject.NewConnectionLost(Name);
+              //During first init it would show the dialog too soon resulting in Mediaportal stalling at startup screen ("Starting plugins..") even with the GUIWindowManager.Initalized check.
+              //It will still display the connection message after the startup screen this way so no downside but might need looking at later on.
+              if (isInit)
+              {
+                isInit = false;
+              }
+              else
+              {
+                coreObject.NewConnectionLost(Name);
+              }
             }
           }
 
