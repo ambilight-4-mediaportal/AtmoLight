@@ -62,6 +62,7 @@ namespace AtmoLight
     /// </summary>
     public AtmoWinHandler()
     {
+      Log.Debug("AtmoWinHandler - AtmoWin as target added.");
       // Get Core instance to use core inside AtmoWinHandler
       coreObject = Core.GetInstance();
     }
@@ -83,7 +84,7 @@ namespace AtmoLight
       }
       else
       {
-        Log.Debug("Initialising Thread already running.");
+        Log.Debug("AtmoWinHandler - Initialising Thread already running.");
       }
     }
 
@@ -102,7 +103,7 @@ namespace AtmoLight
       }
       else
       {
-        Log.Debug("Reinitialising Thread already running.");
+        Log.Debug("AtmoWinHandler - Reinitialising Thread already running.");
       }
     }
 
@@ -111,6 +112,7 @@ namespace AtmoLight
     /// </summary>
     public void Dispose()
     {
+      Log.Debug("AtmoWinHandler - Disposing AtmoWin handler.");
       Disconnect();
       if (atmoWinAutoStop)
       {
@@ -216,6 +218,7 @@ namespace AtmoLight
       {
         return;
       }
+      Log.Info("AtmoWinHandler - Changing AtmoWin profile.");
       if (!SetColorMode(ComEffectMode.cemColorMode)) return;
 
       // Change the effect to the desired effect.
@@ -246,11 +249,11 @@ namespace AtmoLight
     {
       if (initialiseLock)
       {
-        Log.Debug("Initialising locked.");
+        Log.Debug("AtmoWinHandler - Initialising locked.");
         return false;
       }
       initialiseLock = true;
-      Log.Debug("Initialising.");
+      Log.Debug("AtmoWinHandler - Initialising.");
       if (!Win32API.IsProcessRunning("atmowina.exe"))
       {
         if (atmoWinAutoStart || force)
@@ -264,7 +267,7 @@ namespace AtmoLight
         }
         else
         {
-          Log.Error("AtmoWin is not running.");
+          Log.Error("AtmoWinHandler - AtmoWin is not running.");
           initialiseLock = false;
           return false;
         }
@@ -276,7 +279,7 @@ namespace AtmoLight
         return false;
       }
 
-      Log.Debug("Initialising successfull.");
+      Log.Debug("AtmoWinHandler - Initialising successfull.");
 
       ChangeEffect(coreObject.GetCurrentEffect());
 
@@ -292,30 +295,31 @@ namespace AtmoLight
     {
       if (reInitialiseLock)
       {
-        Log.Debug("Reinitialising locked.");
+        Log.Debug("AtmoWinHandler - Reinitialising locked.");
         return;
       }
       if (!reInitOnError && !force)
       {
         Disconnect();
+        Log.Error("AtmoWinHandler - Connection to AtmoWin lost.");
         coreObject.NewConnectionLost(Name);
         return;
       }
 
       reInitialiseLock = true;
-      Log.Debug("Reinitialising.");
+      Log.Debug("AtmoWinHandler - Reinitialising.");
 
       if (!Disconnect() || !StopAtmoWin() || !InitialiseThreaded(force) || !ChangeEffect(coreObject.GetChangeEffect() != ContentEffect.Undefined ? coreObject.GetChangeEffect() : coreObject.GetCurrentEffect()))
       {
         Disconnect();
         StopAtmoWin();
-        Log.Error("Reinitialising failed.");
+        Log.Error("AtmoWinHandler - Reinitialising failed.");
         reInitialiseLock = false;
         coreObject.NewConnectionLost(Name);
         return;
       }
 
-      Log.Debug("Reinitialising successfull.");
+      Log.Debug("AtmoWinHandler - Reinitialising successfull.");
       reInitialiseLock = false;
       return;
     }
@@ -328,14 +332,14 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     public bool Connect()
     {
-      Log.Debug("Trying to connect to AtmoWin.");
+      Log.Debug("AtmoWinHandler - Trying to connect to AtmoWin.");
       if (!GetAtmoRemoteControl()) return false;
       if (!SetAtmoEffect(ComEffectMode.cemLivePicture, true)) return false;
       if (!GetAtmoLiveViewControl()) return false;
       if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
       if (!GetAtmoLiveViewRes()) return false;
 
-      Log.Debug("Successfully connected to AtmoWin.");
+      Log.Debug("AtmoWinHandler - Successfully connected to AtmoWin.");
       return true;
     }
 
@@ -345,7 +349,7 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     public bool Disconnect()
     {
-      Log.Debug("Disconnecting from AtmoWin.");
+      Log.Debug("AtmoWinHandler - Disconnecting from AtmoWin.");
 
       StopGetAtmoLiveViewSourceThread();
 
@@ -368,7 +372,7 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     public bool Reconnect()
     {
-      Log.Debug("Trying to reconnect to AtmoWin.");
+      Log.Debug("AtmoWinHandler - Trying to reconnect to AtmoWin.");
       Disconnect();
       Connect();
       return true;
@@ -382,7 +386,7 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     public bool StartAtmoWin()
     {
-      Log.Debug("Trying to start AtmoWin.");
+      Log.Debug("AtmoWinHandler - Trying to start AtmoWin.");
       if (!System.IO.File.Exists(atmoWinPath))
       {
         return false;
@@ -397,10 +401,10 @@ namespace AtmoLight
       }
       catch (Exception)
       {
-        Log.Error("Starting AtmoWin failed.");
+        Log.Error("AtmoWinHandler - Starting AtmoWin failed.");
         return false;
       }
-      Log.Info("AtmoWin successfully started.");
+      Log.Info("AtmoWinHandler - AtmoWin successfully started.");
       return true;
     }
 
@@ -410,7 +414,7 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     public bool StopAtmoWin()
     {
-      Log.Info("Trying to stop AtmoWin.");
+      Log.Info("AtmoWinHandler - Trying to stop AtmoWin.");
       foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension("atmowina")))
       {
         try
@@ -420,19 +424,19 @@ namespace AtmoLight
           // If it does not, we stop the whole initialization.
           if (!TimeoutHandler(() => process.WaitForExit()))
           {
-            Log.Error("Stopping AtmoWin failed.");
+            Log.Error("AtmoWinHandler - Stopping AtmoWin failed.");
             return false;
           }
           Win32API.RefreshTrayArea();
         }
         catch (Exception ex)
         {
-          Log.Error("Stopping AtmoWin failed.");
-          Log.Error("Exception: {0}", ex.Message);
+          Log.Error("AtmoWinHandler - Stopping AtmoWin failed.");
+          Log.Error("AtmoWinHandler - Exception: {0}", ex.Message);
           return false;
         }
       }
-      Log.Info("AtmoWin successfully stopped.");
+      Log.Info("AtmoWinHandler - AtmoWin successfully stopped.");
       return true;
     }
 
@@ -441,7 +445,7 @@ namespace AtmoLight
     /// </summary>
     public void RestartAtmoWin()
     {
-      Log.Debug("Trying to restart AtmoWin.");
+      Log.Debug("AtmoWinHandler - Trying to restart AtmoWin.");
       StopAtmoWin();
       StartAtmoWin();
     }
@@ -483,7 +487,7 @@ namespace AtmoLight
         {
           // Stacktrace is needed so we can output the name of the method that timed out.
           StackTrace trace = new StackTrace();
-          Log.Error("{0} timed out after {1}ms!", trace.GetFrame(1).GetMethod().Name, Win32API.GetTickCount() - timeoutStart);
+          Log.Error("AtmoWinHandler - {0} timed out after {1}ms!", trace.GetFrame(1).GetMethod().Name, Win32API.GetTickCount() - timeoutStart);
           ReInitialise();
           return false;
         }
@@ -493,10 +497,10 @@ namespace AtmoLight
       catch (AggregateException ex)
       {
         StackTrace trace = new StackTrace();
-        Log.Error("Error with {0}!", trace.GetFrame(1).GetMethod().Name);
+        Log.Error("AtmoWinHandler - Error with {0}!", trace.GetFrame(1).GetMethod().Name);
         foreach (var innerEx in ex.InnerExceptions)
         {
-          Log.Error("Exception: {0}", innerEx.Message);
+          Log.Error("AtmoWinHandler - Exception: {0}", innerEx.Message);
         }
         ReInitialise();
         return false;
@@ -511,10 +515,10 @@ namespace AtmoLight
     /// <returns></returns>
     private bool GetAtmoRemoteControl()
     {
-      Log.Debug("Getting AtmoWin Remote Control.");
+      Log.Debug("AtmoWinHandler - Getting AtmoWin Remote Control.");
       if (TimeoutHandler(() => atmoRemoteControl = (IAtmoRemoteControl2)Marshal.GetActiveObject("AtmoRemoteControl.1")))
       {
-        Log.Debug("Successfully got AtmoWin Remote Control.");
+        Log.Debug("AtmoWinHandler - Successfully got AtmoWin Remote Control.");
         return true;
       }
       return false;
@@ -531,10 +535,10 @@ namespace AtmoLight
         return false;
       }
 
-      Log.Debug("Getting AtmoWin Live View Control.");
+      Log.Debug("AtmoWinHandler - Getting AtmoWin Live View Control.");
       if (TimeoutHandler(() => atmoLiveViewControl = (IAtmoLiveViewControl)Marshal.GetActiveObject("AtmoRemoteControl.1")))
       {
-        Log.Debug("Successfully got AtmoWin Live View Control.");
+        Log.Debug("AtmoWinHandler - Successfully got AtmoWin Live View Control.");
         return true;
       }
       return false;
@@ -569,11 +573,11 @@ namespace AtmoLight
         return false;
       }
 
-      Log.Debug("Changing AtmoWin profile (SetColorMode).");
+      Log.Debug("AtmoWinHandler - Changing AtmoWin profile (SetColorMode).");
       ComEffectMode oldEffect;
       if (TimeoutHandler(() => atmoRemoteControl.setEffect(effect, out oldEffect)))
       {
-        Log.Info("Successfully changed AtmoWin profile.");
+        Log.Info("AtmoWinHandler - Successfully changed AtmoWin profile.");
         return true;
       }
       return false;
@@ -592,11 +596,11 @@ namespace AtmoLight
         return false;
       }
 
-      Log.Debug("Changing AtmoWin effect to: {0}", effect.ToString());
+      Log.Debug("AtmoWinHandler - Changing AtmoWin effect to: {0}", effect.ToString());
       ComEffectMode oldEffect;
       if (TimeoutHandler(() => atmoRemoteControl.setEffect(effect, out oldEffect)))
       {
-        Log.Info("Successfully changed AtmoWin effect to: {0}", effect.ToString());
+        Log.Info("AtmoWinHandler - Successfully changed AtmoWin effect to: {0}", effect.ToString());
         return true;
       }
       return false;
@@ -616,10 +620,10 @@ namespace AtmoLight
         return false;
       }
 
-      Log.Debug("Setting static color to R:{0} G:{1} B:{2}.", red, green, blue);
+      Log.Debug("AtmoWinHandler - Setting static color to R:{0} G:{1} B:{2}.", red, green, blue);
       if (TimeoutHandler(() => atmoRemoteControl.setStaticColor(red, green, blue)))
       {
-        Log.Info("Successfully set static color to R:{0} G:{1} B:{2}.", red, green, blue);
+        Log.Info("AtmoWinHandler - Successfully set static color to R:{0} G:{1} B:{2}.", red, green, blue);
         return true;
       }
       return false;
@@ -637,10 +641,10 @@ namespace AtmoLight
         return false;
       }
 
-      Log.Debug("Changing AtmoWin Liveview Source to: {0}", viewSource.ToString());
+      Log.Debug("AtmoWinHandler - Changing AtmoWin Liveview Source to: {0}", viewSource.ToString());
       if (TimeoutHandler(() => atmoLiveViewControl.setLiveViewSource(viewSource)))
       {
-        Log.Info("Successfully changed AtmoWin Liveview Source to: {0}", viewSource.ToString());
+        Log.Info("AtmoWinHandler - Successfully changed AtmoWin Liveview Source to: {0}", viewSource.ToString());
         return true;
       }
       return false;
@@ -657,10 +661,10 @@ namespace AtmoLight
         return false;
       }
 
-      Log.Debug("Getting Liveview Resolution.");
+      Log.Debug("AtmoWinHandler - Getting Liveview Resolution.");
       if (TimeoutHandler(() => atmoRemoteControl.getLiveViewRes(out captureWidth, out captureHeight)))
       {
-        Log.Debug("Liveview capture resolution is {0}x{1}. Screenshot will be resized to this dimensions.", captureWidth, captureHeight);
+        Log.Debug("AtmoWinHandler - Liveview capture resolution is {0}x{1}. Screenshot will be resized to this dimensions.", captureWidth, captureHeight);
         coreObject.SetCaptureDimensions(captureWidth, captureHeight);
         return true;
       }
@@ -684,8 +688,8 @@ namespace AtmoLight
       }
       catch (Exception ex)
       {
-        Log.Error("Error with SetPixelData.");
-        Log.Error("Exception: {0}", ex.Message);
+        Log.Error("AtmoWinHandler - Error with SetPixelData.");
+        Log.Error("AtmoWinHandler - Exception: {0}", ex.Message);
         ReInitialise();
       }
     }
@@ -726,7 +730,7 @@ namespace AtmoLight
           GetAtmoLiveViewSource();
           if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
           {
-            Log.Debug("AtmoWin Liveview Source is not lvsExternal");
+            Log.Debug("AtmoWinHandler - AtmoWin Liveview Source is not lvsExternal");
             SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
           }
           System.Threading.Thread.Sleep(delayGetAtmoLiveViewSource);
@@ -734,8 +738,8 @@ namespace AtmoLight
       }
       catch (Exception ex)
       {
-        Log.Error("Error in GetAtmoLiveViewSourceThread.");
-        Log.Error("Exception: {0}", ex.Message);
+        Log.Error("AtmoWinHandler - Error in GetAtmoLiveViewSourceThread.");
+        Log.Error("AtmoWinHandler - Exception: {0}", ex.Message);
       }
     }
     #endregion
