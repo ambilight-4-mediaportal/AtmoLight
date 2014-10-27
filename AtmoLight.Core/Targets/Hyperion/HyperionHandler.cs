@@ -115,7 +115,7 @@ namespace AtmoLight.Targets
       liveReconnectSW.Start();
 
       //Start live reconnect with set delay in config
-      while (hyperionLiveReconnect == true)
+      while (hyperionLiveReconnect)
       {
         if (liveReconnectSW.ElapsedMilliseconds >= hyperionReconnectDelay && Connected == false)
         {
@@ -177,7 +177,7 @@ namespace AtmoLight.Targets
 
           }
 
-          //if live connect enabled don't use this loop and let IsConnected fire up new connections
+          //if live connect enabled don't use this loop and let liveReconnectThread() fire up new connections
           if (hyperionLiveReconnect)
           {
             break;
