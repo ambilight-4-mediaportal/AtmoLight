@@ -119,7 +119,7 @@ namespace Language
       using (Settings reader = new Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
         LanguageLoader.strCurrentLanguageFile = reader.GetValueAsString("atmolight", "CurrentLanguageFile", "");
 
-      if ((strCurrentLanguageFile == null) || (strCurrentLanguageFile == ""))
+      if (string.IsNullOrEmpty(strCurrentLanguageFile))
       {
         string CommonAppDataDir = Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\Atmolight";
 

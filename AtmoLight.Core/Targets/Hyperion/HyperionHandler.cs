@@ -56,7 +56,7 @@ namespace AtmoLight.Targets
       }
       catch (Exception e)
       {
-        Log.Error("Hyperion: Error during initialise");
+        Log.Error("HyperionHandler - Error during initialise");
         Log.Error("Exception: {0}", e.Message);
       }
     }
@@ -104,7 +104,7 @@ namespace AtmoLight.Targets
           {
             if (hyperionLiveReconnect == false)
             {
-              Log.Debug("Hyperion: Trying to connect");
+              Log.Debug("HyperionHandler - Trying to connect");
             }
 
             //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
@@ -116,7 +116,7 @@ namespace AtmoLight.Targets
             {
               if (hyperionLiveReconnect == false)
               {
-                Log.Error("Hyperion: Error while closing socket");
+                Log.Error("HyperionHandler - Error while closing socket");
                 Log.Error("Exception: {0}", e.Message);
               }
             }
@@ -130,14 +130,14 @@ namespace AtmoLight.Targets
 
             if (hyperionLiveReconnect == false)
             {
-              Log.Debug("Hyperion: Connected");
+              Log.Debug("HyperionHandler - Connected");
             }
           }
           catch (Exception e)
           {
             if (hyperionLiveReconnect == false)
             {
-              Log.Error("Hyperion: Error while connecting");
+              Log.Error("HyperionHandler - Error while connecting");
               Log.Error("Exception: {0}", e.Message);
             }
             Connected = false;
@@ -162,11 +162,11 @@ namespace AtmoLight.Targets
           //Sleep for specified time
           Thread.Sleep(hyperionReconnectDelay);
 
-          //Log.Error("Hyperion: retry attempt {0} of {1}",hyperionReconnectCounter,hyperionReconnectAttempts);
+          //Log.Error("HyperionHandler - retry attempt {0} of {1}",hyperionReconnectCounter,hyperionReconnectAttempts);
         }
         else
         {
-          //Log.Debug("Hyperion: Connected after {0} attempts.", hyperionReconnectCounter);
+          //Log.Debug("HyperionHandler - Connected after {0} attempts.", hyperionReconnectCounter);
           hyperionReconnectCounter = 0;
           break;
         }
@@ -228,7 +228,7 @@ namespace AtmoLight.Targets
     {
       return;
     }
-    public void ChangeImage(byte[] pixeldata, byte[] dummy)
+    public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
       // Hyperion expects the bytestring to be the size of 3*width*height.
       // So 3 bytes per pixel, as in RGB.
