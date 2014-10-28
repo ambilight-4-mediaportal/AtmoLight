@@ -224,28 +224,56 @@ namespace AtmoLight
         return;
       }
 
-      if(validatorInt(lowCpuTime.Text,0,0,false) == false)
+      if(validatorInt(lowCpuTime.Text,1,0,false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckLowCpu.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-        return;
+        if (ckLowCpu.Checked == true)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckLowCpu.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+        else
+        {
+          lowCpuTime.Text = "0";
+        }
       }
 
-      if (validatorInt(tbDelay.Text, 0, 0, false) == false)
+      if (validatorInt(tbDelay.Text, 1, 0, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-        return;
+        if (ckDelay.Checked == true)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+        else
+        {
+          tbDelay.Text = "0";
+        }
       }
 
-      if (validatorInt(tbRefreshRate.Text, 0, 0, false) == false)
+      if (validatorInt(tbRefreshRate.Text, 1, 0, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + lblRefreshRate.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-        return;
+        if (ckDelay.Checked == true)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + lblRefreshRate.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+        else
+        {
+          tbRefreshRate.Text = "50";
+        }
       }
 
-      if (validatorInt(tbBlackbarDetectionTime.Text, 0, 0, false) == false)
+      if (validatorInt(tbBlackbarDetectionTime.Text, 1, 0, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckBlackbarDetection.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-        return;
+        if (ckBlackbarDetection.Checked == true)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckBlackbarDetection.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+        else
+        {
+          tbBlackbarDetectionTime.Text = "0";
+        }
       }
 
       if (validatorInt(tbRed.Text, 0, 255, true) == false)
@@ -295,6 +323,21 @@ namespace AtmoLight
       //Settings with specific Integer restrictions
       int minValue = 0;
       int maxValue = 0;
+
+      minValue = 1;
+      maxValue = 0;
+      if (validatorInt(tbCaptureWidth.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - [" + lblCaptureWidth.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+
+      minValue = 1;
+      maxValue = 0;
+      if (validatorInt(tbCaptureHeight.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - [" + lblCaptureHeight.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+
 
       minValue = 1;
       maxValue = 65535;
@@ -418,12 +461,24 @@ namespace AtmoLight
     private Boolean validatorIPAdress(string input)
     {
       Boolean IsValid = false;
-      System.Net.IPAddress IPAddress;
 
-      if (System.Net.IPAddress.TryParse(input, out IPAddress))
+      System.Net.IPAddress address;
+      if (System.Net.IPAddress.TryParse(input, out address))
       {
-        IsValid = true;
-      }
+        switch (address.AddressFamily)
+        {
+          case System.Net.Sockets.AddressFamily.InterNetwork:
+            // we have IPv4
+            IsValid = true;
+            break;
+          case System.Net.Sockets.AddressFamily.InterNetworkV6:
+            // we have IPv6
+            break;
+          default:
+            // do something else
+            break;
+        }
+      } 
       return IsValid;
     }
     private Boolean validatorDateTime(string input)
@@ -464,7 +519,7 @@ namespace AtmoLight
 
     private void lowCpuTime_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      int minValue = 0;
+      int minValue = 1;
       int maxValue = 0;
       if (validatorInt(lowCpuTime.Text, minValue, maxValue, false) == false)
       {
@@ -473,7 +528,7 @@ namespace AtmoLight
     }
     private void tbDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      int minValue = 0;
+      int minValue = 1;
       int maxValue = 0;
       if (validatorInt(tbDelay.Text, minValue, maxValue, false) == false)
       {
@@ -483,7 +538,7 @@ namespace AtmoLight
 
     private void tbRefreshRate_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      int minValue = 0;
+      int minValue = 1;
       int maxValue = 0;
       if (validatorInt(tbRefreshRate.Text, minValue, maxValue, false) == false)
       {
@@ -493,7 +548,7 @@ namespace AtmoLight
 
     private void tbBlackbarDetectionTime_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      int minValue = 0;
+      int minValue = 1;
       int maxValue = 0;
       if (validatorInt(tbBlackbarDetectionTime.Text, minValue, maxValue, false) == false)
       {
@@ -503,21 +558,21 @@ namespace AtmoLight
 
     private void tbCaptureWidth_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      int minValue = 0;
+      int minValue = 1;
       int maxValue = 0;
-      if (validatorInt(tbBlackbarDetectionTime.Text, minValue, maxValue, false) == false)
+      if (validatorInt(tbCaptureWidth.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidInteger.Replace("[Integer]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
     private void tbCaptureHeight_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      int minValue = 0;
+      int minValue = 1;
       int maxValue = 0;
       if (validatorInt(tbCaptureHeight.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidInteger.Replace("[Integer]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -576,6 +631,38 @@ namespace AtmoLight
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
+    }
+    private void cbMenuButton_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if ((cbMenuButton.SelectedIndex == comboBox1.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
+    (cbMenuButton.SelectedIndex == comboBox2.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
+    (comboBox1.SelectedIndex == comboBox2.SelectedIndex) && (comboBox1.SelectedIndex != 4))
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRemoteButtons, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+
+    }
+
+    private void comboBox1_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if ((cbMenuButton.SelectedIndex == comboBox1.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
+    (cbMenuButton.SelectedIndex == comboBox2.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
+    (comboBox1.SelectedIndex == comboBox2.SelectedIndex) && (comboBox1.SelectedIndex != 4))
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRemoteButtons, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+
+    }
+
+    private void comboBox2_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if ((cbMenuButton.SelectedIndex == comboBox1.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
+    (cbMenuButton.SelectedIndex == comboBox2.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
+    (comboBox1.SelectedIndex == comboBox2.SelectedIndex) && (comboBox1.SelectedIndex != 4))
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRemoteButtons, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+
     }
 
     private void edFile_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -644,6 +731,5 @@ namespace AtmoLight
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
-
   }
 }

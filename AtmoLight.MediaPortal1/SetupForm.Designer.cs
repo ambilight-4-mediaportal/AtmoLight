@@ -701,6 +701,7 @@
       this.cbMenuButton.Name = "cbMenuButton";
       this.cbMenuButton.Size = new System.Drawing.Size(96, 21);
       this.cbMenuButton.TabIndex = 3;
+      this.cbMenuButton.Validating += new System.ComponentModel.CancelEventHandler(this.cbMenuButton_Validating);
       // 
       // lblProfile
       // 
@@ -725,6 +726,7 @@
       this.comboBox2.Name = "comboBox2";
       this.comboBox2.Size = new System.Drawing.Size(96, 21);
       this.comboBox2.TabIndex = 5;
+      this.comboBox2.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox2_Validating);
       // 
       // lblFrames
       // 
@@ -780,6 +782,7 @@
       this.comboBox1.Name = "comboBox1";
       this.comboBox1.Size = new System.Drawing.Size(96, 21);
       this.comboBox1.TabIndex = 4;
+      this.comboBox1.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox1_Validating);
       // 
       // lblLedsOnOff
       // 
