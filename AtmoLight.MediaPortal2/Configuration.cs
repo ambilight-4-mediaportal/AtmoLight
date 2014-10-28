@@ -785,7 +785,7 @@ namespace AtmoLight.Configuration
       _type = NumberType.Integer;
       _step = 1;
       _lowerLimit = 1;
-      _upperLimit = 9999;
+      _upperLimit = 99999;
       _value = SettingsManager.Load<Settings>().HyperionReconnectDelay;
     }
 
