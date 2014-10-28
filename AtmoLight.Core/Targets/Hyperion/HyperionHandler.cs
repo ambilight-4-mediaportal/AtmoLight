@@ -202,6 +202,7 @@ namespace AtmoLight.Targets
               //It will still display the connection lost message after the startup screen this way so no downside but might need looking at later on.
               if (isInit)
               {
+                coreObject.ChangeEffect(coreObject.GetCurrentEffect(), true);
                 isInit = false;
               }
               else
@@ -228,6 +229,7 @@ namespace AtmoLight.Targets
       if (isInit)
       {
         coreObject.ChangeEffect(coreObject.GetCurrentEffect(), true);
+        isInit = false;
       }
     }
 
