@@ -324,39 +324,56 @@ namespace AtmoLight.Targets
 
     private void SendRequest(HyperionRequest request)
     {
-      if (Socket.Connected)
+      try
       {
-        int size = request.SerializedSize;
+        if (Socket.Connected)
+        {
+          int size = request.SerializedSize;
 
-        Byte[] header = new byte[4];
-        header[0] = (byte)((size >> 24) & 0xFF);
-        header[1] = (byte)((size >> 16) & 0xFF);
-        header[2] = (byte)((size >> 8) & 0xFF);
-        header[3] = (byte)((size) & 0xFF);
+          Byte[] header = new byte[4];
+          header[0] = (byte)((size >> 24) & 0xFF);
+          header[1] = (byte)((size >> 16) & 0xFF);
+          header[2] = (byte)((size >> 8) & 0xFF);
+          header[3] = (byte)((size) & 0xFF);
 
-        int headerSize = header.Count();
-        Stream.Write(header, 0, headerSize);
-        request.WriteTo(Stream);
-        Stream.Flush();
-        HyperionReply reply = receiveReply();
+          int headerSize = header.Count();
+          Stream.Write(header, 0, headerSize);
+          request.WriteTo(Stream);
+          Stream.Flush();
+          HyperionReply reply = receiveReply();
+        }
+        else
+        {
+          Connected = false;
+          Connect();
+        }
       }
-      else
+      catch (Exception e)
       {
-        Connected = false;
-        Connect();
+        Log.Error("HyperionHandler - Error while sending proto request");
+        Log.Error("Exception: {0}", e.Message);
       }
     }
 
     private HyperionReply receiveReply()
     {
-      Stream input = Socket.GetStream();
-      byte[] header = new byte[4];
-      input.Read(header, 0, 4);
-      int size = (header[0] << 24) | (header[1] << 16) | (header[2] << 8) | (header[3]);
-      byte[] data = new byte[size];
-      input.Read(data, 0, size);
-      HyperionReply reply = HyperionReply.ParseFrom(data);
-      return reply;
+      try
+      {
+        Stream input = Socket.GetStream();
+        byte[] header = new byte[4];
+        input.Read(header, 0, 4);
+        int size = (header[0] << 24) | (header[1] << 16) | (header[2] << 8) | (header[3]);
+        byte[] data = new byte[size];
+        input.Read(data, 0, size);
+        HyperionReply reply = HyperionReply.ParseFrom(data);
+        return reply;
+      }
+      catch(Exception e)
+      {
+        Log.Error("HyperionHandler - Error while receiving reply from proto request");
+        Log.Error("Exception: {0}", e.Message);
+        return null;
+      }
     }
     #endregion
 
