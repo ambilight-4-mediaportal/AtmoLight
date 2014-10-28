@@ -231,13 +231,15 @@ namespace AtmoLight
       //Low CPU
       if(validatorInt(lowCpuTime.Text,1,0,false) == false)
       {
-        if (ckLowCpu.Checked == true)
+        if (ckLowCpu.Checked)
         {
           MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckLowCpu.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
         else
+
         {
+          //Didn't pass validation so save cleanly with default value even if option isn't used
           lowCpuTime.Text = "0";
         }
       }
@@ -245,13 +247,14 @@ namespace AtmoLight
       //LED delay
       if (validatorInt(tbDelay.Text, 1, 0, false) == false)
       {
-        if (ckDelay.Checked == true)
+        if (ckDelay.Checked)
         {
           MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
         else
         {
+          //Didn't pass validation so save cleanly with default value even if option isn't used
           tbDelay.Text = "0";
         }
       }
@@ -259,13 +262,14 @@ namespace AtmoLight
       //Refresh rate
       if (validatorInt(tbRefreshRate.Text, 1, 0, false) == false)
       {
-        if (ckDelay.Checked == true)
+        if (ckDelay.Checked)
         {
           MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + lblRefreshRate.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
         else
         {
+          //Didn't pass validation so save cleanly with default value even if option isn't used
           tbRefreshRate.Text = "50";
         }
       }
@@ -273,13 +277,14 @@ namespace AtmoLight
       //Black bar detection
       if (validatorInt(tbBlackbarDetectionTime.Text, 1, 0, false) == false)
       {
-        if (ckBlackbarDetection.Checked == true)
+        if (ckBlackbarDetection.Checked)
         {
           MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckBlackbarDetection.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
         else
         {
+          //Didn't pass validation so save cleanly with default value even if option isn't used
           tbBlackbarDetectionTime.Text = "0";
         }
       }
