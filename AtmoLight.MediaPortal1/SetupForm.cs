@@ -212,18 +212,23 @@ namespace AtmoLight
     private void btnSave_Click(object sender, EventArgs e)
     {
       //Validate user input
+
+
+      //Time excluded Start
       if (validatorDateTime(edExcludeStart.Text) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorStartTime + " - ["+lblStart.Text+"]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
+      //Time excluded Stop
       if (validatorDateTime(edExcludeEnd.Text) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorEndTime + " - [" + lblEnd.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
+      //Low CPU
       if(validatorInt(lowCpuTime.Text,1,0,false) == false)
       {
         if (ckLowCpu.Checked == true)
@@ -237,6 +242,7 @@ namespace AtmoLight
         }
       }
 
+      //LED delay
       if (validatorInt(tbDelay.Text, 1, 0, false) == false)
       {
         if (ckDelay.Checked == true)
@@ -250,6 +256,7 @@ namespace AtmoLight
         }
       }
 
+      //Refresh rate
       if (validatorInt(tbRefreshRate.Text, 1, 0, false) == false)
       {
         if (ckDelay.Checked == true)
@@ -263,6 +270,7 @@ namespace AtmoLight
         }
       }
 
+      //Black bar detection
       if (validatorInt(tbBlackbarDetectionTime.Text, 1, 0, false) == false)
       {
         if (ckBlackbarDetection.Checked == true)
@@ -275,25 +283,29 @@ namespace AtmoLight
           tbBlackbarDetectionTime.Text = "0";
         }
       }
-
+      
+      //Static color RED
       if (validatorInt(tbRed.Text, 0, 255, true) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRed + " - [" + lblRed.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
+      //Static color GREEN
       if (validatorInt(tbGreen.Text, 0, 255, true) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorGreen + " - [" + lblGreen.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
+      //Static color BLUE
       if (validatorInt(tbBlue.Text, 0, 255, true) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorBlue + " - [" + lblBlue.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
+      //Menu buttons
       if ((cbMenuButton.SelectedIndex == comboBox1.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
           (cbMenuButton.SelectedIndex == comboBox2.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
           (comboBox1.SelectedIndex == comboBox2.SelectedIndex) && (comboBox1.SelectedIndex != 4))
@@ -302,17 +314,21 @@ namespace AtmoLight
         return;
       }
 
+      //GIF path
       if (validatorPath(tbGIF.Text) == false && string.IsNullOrEmpty(tbGIF.Text) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + grpGIF.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
+
+      //Atmowin path
       if (validatorPath(edFile.Text) == false && string.IsNullOrEmpty(edFile.Text) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + lblPathInfo.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
+      //Hyperion IP
       if (validatorIPAdress(tbHyperionIP.Text) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + lblHyperionIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -320,10 +336,14 @@ namespace AtmoLight
       }
 
 
-      //Settings with specific Integer restrictions
+      /*
+       * Settings with specific Integer restrictions
+       */
+
       int minValue = 0;
       int maxValue = 0;
 
+      //Capture width
       minValue = 1;
       maxValue = 0;
       if (validatorInt(tbCaptureWidth.Text, minValue, maxValue, false) == false)
@@ -331,6 +351,7 @@ namespace AtmoLight
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - [" + lblCaptureWidth.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
 
+      //Capture height
       minValue = 1;
       maxValue = 0;
       if (validatorInt(tbCaptureHeight.Text, minValue, maxValue, false) == false)
@@ -338,7 +359,7 @@ namespace AtmoLight
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - [" + lblCaptureHeight.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
 
-
+      //Hyperion port
       minValue = 1;
       maxValue = 65535;
       if (validatorInt(tbHyperionPort.Text, minValue, maxValue, true) == false)
@@ -347,6 +368,7 @@ namespace AtmoLight
         return;
       }
 
+      //Hyperion reconnect attempts
       minValue = 1;
       maxValue = 0;
       if (validatorInt(tbHyperionReconnectAttempts.Text, minValue, maxValue, false) == false)
@@ -355,6 +377,7 @@ namespace AtmoLight
         return;
       }
 
+      //Hyperion priority
       minValue = 1;
       maxValue = 0;
       if (validatorInt(tbHyperionPriority.Text, minValue, maxValue, false) == false)
@@ -363,6 +386,7 @@ namespace AtmoLight
         return;
       }
 
+      //Hyperion priority static color
       minValue = 1;
       maxValue = 0;
       if (validatorInt(tbHyperionPriorityStaticColor.Text, minValue, maxValue, false) == false)
