@@ -370,6 +370,7 @@ namespace AtmoLight
       Log.Debug("AtmoWinHandler - Trying to start AtmoWin.");
       if (!System.IO.File.Exists(coreObject.atmoWinPath))
       {
+        Log.Error("AtmoWinHandler - AtmoWinA.exe not found!");
         return false;
       }
       Process AtmoWinA = new Process();

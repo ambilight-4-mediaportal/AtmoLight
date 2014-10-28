@@ -27,6 +27,12 @@ namespace AtmoLight.Configuration
       SettingsManager.Save(settings);
 
       AtmoLight.Plugin.AtmoLightObject.atmoWinPath = settings.AtmoWinExe;
+      if (settings.AtmoWinTarget)
+      {
+        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.AtmoWin);
+        AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.AtmoWin);
+        AtmoLight.Plugin.AtmoLightObject.Initialise();
+      }
     }
   }
 
