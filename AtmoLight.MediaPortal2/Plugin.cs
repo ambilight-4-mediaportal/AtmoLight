@@ -110,24 +110,30 @@ namespace AtmoLight
       // AtmoLight object creation
       Log.Debug("Generating new AtmoLight.Core instance.");
       AtmoLightObject = Core.GetInstance();
+
+      // AtmoWin
       if (settings.AtmoWinTarget)
       {
         AtmoLightObject.AddTarget(Target.AtmoWin);
-        AtmoLightObject.atmoWinPath = settings.AtmoWinExe;
-        AtmoLightObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
-        AtmoLightObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
       }
+      AtmoLightObject.atmoWinPath = settings.AtmoWinExe;
+      AtmoLightObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
+      AtmoLightObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
+
+      // Hyperion
       if (settings.HyperionTarget)
       {
         AtmoLightObject.AddTarget(Target.Hyperion);
-        AtmoLightObject.hyperionIP = settings.HyperionIP;
-        AtmoLightObject.hyperionPort = settings.HyperionPort;
-        AtmoLightObject.hyperionPriority = settings.HyperionPriority;
-        AtmoLightObject.hyperionReconnectDelay = settings.HyperionReconnectDelay;
-        AtmoLightObject.hyperionReconnectAttempts = settings.HyperionReconnectAttempts;
-        AtmoLightObject.hyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
-        AtmoLightObject.hyperionLiveReconnect = settings.HyperionLiveReconnect;
       }
+      AtmoLightObject.hyperionIP = settings.HyperionIP;
+      AtmoLightObject.hyperionPort = settings.HyperionPort;
+      AtmoLightObject.hyperionPriority = settings.HyperionPriority;
+      AtmoLightObject.hyperionReconnectDelay = settings.HyperionReconnectDelay;
+      AtmoLightObject.hyperionReconnectAttempts = settings.HyperionReconnectAttempts;
+      AtmoLightObject.hyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
+      AtmoLightObject.hyperionLiveReconnect = settings.HyperionLiveReconnect;
+
+      // General settings
       AtmoLightObject.SetDelay(settings.DelayTime);
       AtmoLightObject.SetGIFPath(settings.GIFFile);
       AtmoLightObject.SetReInitOnError(settings.RestartAtmoWinOnError);

@@ -54,7 +54,6 @@ namespace AtmoLight
     bool ChangeEffect(ContentEffect effect);
     void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader);
     void ChangeProfile();
-    void SetStaticColor(int red, int green, int blue);
   }
 
   public class Core
@@ -102,10 +101,12 @@ namespace AtmoLight
     private int captureHeight = 48; // Default fallback capture height
     private bool delayEnabled = false;
     private int delayTime = 0;
-    private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
     private string gifPath = "";
-    private bool reInitOnError;
     private bool initialEffect = false;
+
+    // General settings for targets
+    public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
+    public bool reInitOnError;
 
     // AtmoWin Settings Fields
     public bool atmoWinAutoStart;
@@ -274,29 +275,6 @@ namespace AtmoLight
     {
       foreach (var target in targets)
       {
-        // AtmoWin Init
-        var atmoWinTarget = target as AtmoWinHandler;
-        if (atmoWinTarget != null)
-        {
-          atmoWinTarget.atmoWinPath = atmoWinPath;
-          atmoWinTarget.atmoWinAutoStart = atmoWinAutoStart;
-          atmoWinTarget.atmoWinAutoStop = atmoWinAutoStop;
-
-          atmoWinTarget.SetReInitOnError(reInitOnError);
-        }
-        // Hyperion Init
-        var hyperionTarget = target as HyperionHandler;
-        if (hyperionTarget != null)
-        {
-          hyperionTarget.hyperionIP = hyperionIP;
-          hyperionTarget.hyperionPort = hyperionPort;
-          hyperionTarget.hyperionPriority = hyperionPriority;
-          hyperionTarget.hyperionReconnectDelay = hyperionReconnectDelay;
-          hyperionTarget.hyperionReconnectAttempts = hyperionReconnectAttempts;
-          hyperionTarget.hyperionLiveReconnect = hyperionLiveReconnect;
-
-          hyperionTarget.setReconnectOnError(reInitOnError);
-        }
         target.Initialise(false);
       }
       return true;
@@ -338,6 +316,15 @@ namespace AtmoLight
     /// <param name="target"></param>
     public void AddTarget(Target target)
     {
+      // Dont allow the same target to be added more than once.
+      foreach (var t in targets)
+      {
+        if (t.Name == target)
+        {
+          return;
+        }
+      }
+
       if (target == Target.AtmoWin)
       {
         targets.Add(new AtmoWinHandler());
@@ -345,6 +332,19 @@ namespace AtmoLight
       else if (target == Target.Hyperion)
       {
         targets.Add(new HyperionHandler());
+      }
+    }
+
+    public void RemoveTarget(Target target)
+    {
+      foreach (var t in targets)
+      {
+        if (t.Name == target)
+        {
+          Log.Debug("Removing {0} as target.", target.ToString());
+          t.Dispose();
+          targets.Remove(t);
+        }
       }
     }
 
@@ -422,10 +422,6 @@ namespace AtmoLight
         staticColor[0] = red;
         staticColor[1] = green;
         staticColor[2] = blue;
-        foreach (var target in targets)
-        {
-          target.SetStaticColor(staticColor[0], staticColor[1], staticColor[2]);
-        }
         return true;
       }
       return false;

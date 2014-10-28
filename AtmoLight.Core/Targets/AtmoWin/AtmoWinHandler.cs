@@ -46,12 +46,6 @@ namespace AtmoLight
     private Core coreObject;
 
     // Other Fields
-    public string atmoWinPath = "";
-    public bool atmoWinAutoStart = true;
-    public bool atmoWinAutoStop = true;
-    private bool reInitOnError = true;
-    private int[] staticColor = { 0, 0, 0 };
-
     private int captureWidth;
     private int captureHeight;
     #endregion
@@ -114,7 +108,7 @@ namespace AtmoLight
     {
       Log.Debug("AtmoWinHandler - Disposing AtmoWin handler.");
       Disconnect();
-      if (atmoWinAutoStop)
+      if (coreObject.atmoWinAutoStop)
       {
         StopAtmoWin();
       }
@@ -173,11 +167,11 @@ namespace AtmoLight
           break;
         case ContentEffect.StaticColor:
           if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
-          if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
+          if (!SetAtmoColor((byte)coreObject.staticColor[0], (byte)coreObject.staticColor[1], (byte)coreObject.staticColor[2])) return false;
           // Workaround for SEDU.
           // Without the sleep it would not change to color.
           System.Threading.Thread.Sleep(delaySetStaticColor);
-          if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
+          if (!SetAtmoColor((byte)coreObject.staticColor[0], (byte)coreObject.staticColor[1], (byte)coreObject.staticColor[2])) return false;
           break;
         case ContentEffect.GIFReader:
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
@@ -225,19 +219,6 @@ namespace AtmoLight
       // Needed for AtmoWin 1.0.0.5+
       if (!ChangeEffect(coreObject.GetCurrentEffect())) return;
     }
-
-    /// <summary>
-    /// Sets the static color that should be used.
-    /// </summary>
-    /// <param name="red"></param>
-    /// <param name="green"></param>
-    /// <param name="blue"></param>
-    public void SetStaticColor(int red, int green, int blue)
-    {
-      staticColor[0] = red;
-      staticColor[1] = green;
-      staticColor[2] = blue;
-    }
     #endregion
 
     #region Initialise
@@ -256,7 +237,7 @@ namespace AtmoLight
       Log.Debug("AtmoWinHandler - Initialising.");
       if (!Win32API.IsProcessRunning("atmowina.exe"))
       {
-        if (atmoWinAutoStart || force)
+        if (coreObject.atmoWinAutoStart || force)
         {
           if (!StartAtmoWin())
           {
@@ -298,7 +279,7 @@ namespace AtmoLight
         Log.Debug("AtmoWinHandler - Reinitialising locked.");
         return;
       }
-      if (!reInitOnError && !force)
+      if (!coreObject.reInitOnError && !force)
       {
         Disconnect();
         Log.Error("AtmoWinHandler - Connection to AtmoWin lost.");
@@ -387,12 +368,12 @@ namespace AtmoLight
     public bool StartAtmoWin()
     {
       Log.Debug("AtmoWinHandler - Trying to start AtmoWin.");
-      if (!System.IO.File.Exists(atmoWinPath))
+      if (!System.IO.File.Exists(coreObject.atmoWinPath))
       {
         return false;
       }
       Process AtmoWinA = new Process();
-      AtmoWinA.StartInfo.FileName = atmoWinPath;
+      AtmoWinA.StartInfo.FileName = coreObject.atmoWinPath;
       AtmoWinA.StartInfo.UseShellExecute = true;
       AtmoWinA.StartInfo.Verb = "open";
       try
@@ -448,18 +429,6 @@ namespace AtmoLight
       Log.Debug("AtmoWinHandler - Trying to restart AtmoWin.");
       StopAtmoWin();
       StartAtmoWin();
-    }
-    #endregion
-
-    #region Configuration Methods (set)
-    /// <summary>
-    /// Set if AtmoWinHandler should try to restart and reconnect to AtmoWin when
-    /// the connection is lost or an error occurs.
-    /// </summary>
-    /// <param name="reInit"></param>
-    public void SetReInitOnError(bool reInit)
-    {
-      reInitOnError = reInit;
     }
     #endregion
 
