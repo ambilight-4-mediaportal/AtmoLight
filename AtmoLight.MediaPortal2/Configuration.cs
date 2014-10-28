@@ -167,6 +167,9 @@ namespace AtmoLight.Configuration
 
   public class MenuButton : SingleSelectionList
   {
+    public delegate void MenuButtonHander();
+    public static event MenuButtonHander NewMenuButton;
+
     private IList<string> buttonList = new List<string>();
     public override void Load()
     {
@@ -179,7 +182,7 @@ namespace AtmoLight.Configuration
         buttonList.Add("[AtmoLight.Blue]");
       }
 
-      Selected = buttonList.IndexOf(SettingsManager.Load<Settings>().MenuButton.ToString());
+      Selected = SettingsManager.Load<Settings>().MenuButton;
 
       _items = buttonList.Select(LocalizationHelper.CreateResourceString).ToList();
     }
@@ -188,13 +191,17 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.MenuButton = buttonList[Selected];
+      settings.MenuButton = buttonList.IndexOf(buttonList[Selected]);
       SettingsManager.Save(settings);
+      NewMenuButton();
     }
   }
 
   public class OnOffButton : SingleSelectionList
   {
+    public delegate void OnOffButtonHander();
+    public static event OnOffButtonHander NewOnOffButton;
+
     private IList<string> buttonList = new List<string>();
     public override void Load()
     {
@@ -207,7 +214,7 @@ namespace AtmoLight.Configuration
         buttonList.Add("[AtmoLight.Blue]");
       }
 
-      Selected = buttonList.IndexOf(SettingsManager.Load<Settings>().OnOffButton.ToString());
+      Selected = SettingsManager.Load<Settings>().OnOffButton;
 
       _items = buttonList.Select(LocalizationHelper.CreateResourceString).ToList();
     }
@@ -216,13 +223,17 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.OnOffButton = buttonList[Selected];
+      settings.OnOffButton = buttonList.IndexOf(buttonList[Selected]);
       SettingsManager.Save(settings);
+      NewOnOffButton();
     }
   }
 
   public class ProfileButton : SingleSelectionList
   {
+    public delegate void ProfileButtonHander();
+    public static event ProfileButtonHander NewProfileButton;
+
     private IList<string> buttonList = new List<string>();
     public override void Load()
     {
@@ -235,7 +246,7 @@ namespace AtmoLight.Configuration
         buttonList.Add("[AtmoLight.Blue]");
       }
 
-      Selected = buttonList.IndexOf(SettingsManager.Load<Settings>().ProfileButton.ToString());
+      Selected = SettingsManager.Load<Settings>().ProfileButton;
 
       _items = buttonList.Select(LocalizationHelper.CreateResourceString).ToList();
     }
@@ -244,8 +255,9 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.ProfileButton = buttonList[Selected];
+      settings.ProfileButton = buttonList.IndexOf(buttonList[Selected]);
       SettingsManager.Save(settings);
+      NewProfileButton();
     }
   }
 
