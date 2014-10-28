@@ -80,6 +80,7 @@ namespace AtmoLight
 
     // Locks
     private readonly object listLock = new object(); // Lock object for the above lists
+    private readonly object targetsLock = new object(); // Lock object for the target list
     private volatile bool setPixelDataLock = true; // Lock for SetPixelData thread
     private volatile bool gifReaderLock = true;
     private volatile bool vuMeterLock = true;
@@ -275,7 +276,10 @@ namespace AtmoLight
     {
       foreach (var target in targets)
       {
-        target.Initialise(false);
+        if (!target.IsConnected())
+        {
+          target.Initialise(false);
+        }
       }
       return true;
     }
@@ -317,33 +321,40 @@ namespace AtmoLight
     public void AddTarget(Target target)
     {
       // Dont allow the same target to be added more than once.
-      foreach (var t in targets)
+      lock (targetsLock)
       {
-        if (t.Name == target)
+        foreach (var t in targets)
         {
-          return;
+          if (t.Name == target)
+          {
+            return;
+          }
         }
-      }
 
-      if (target == Target.AtmoWin)
-      {
-        targets.Add(new AtmoWinHandler());
-      }
-      else if (target == Target.Hyperion)
-      {
-        targets.Add(new HyperionHandler());
+        if (target == Target.AtmoWin)
+        {
+          targets.Add(new AtmoWinHandler());
+        }
+        else if (target == Target.Hyperion)
+        {
+          targets.Add(new HyperionHandler());
+        }
       }
     }
 
     public void RemoveTarget(Target target)
     {
-      foreach (var t in targets)
+      lock (targetsLock)
       {
-        if (t.Name == target)
+        foreach (var t in targets)
         {
-          Log.Debug("Removing {0} as target.", target.ToString());
-          t.Dispose();
-          targets.Remove(t);
+          if (t.Name == target)
+          {
+            Log.Debug("Removing {0} as target.", target.ToString());
+            t.Dispose();
+            targets.Remove(t);
+            return;
+          }
         }
       }
     }
@@ -448,11 +459,14 @@ namespace AtmoLight
     /// <returns></returns>
     public bool IsConnected()
     {
-      foreach (var target in targets)
+      lock (targetsLock)
       {
-        if (target.IsConnected())
+        foreach (var target in targets)
         {
-          return true;
+          if (target.IsConnected())
+          {
+            return true;
+          }
         }
       }
       return false;
@@ -464,11 +478,14 @@ namespace AtmoLight
     /// <returns></returns>
     public bool AreAllConnected()
     {
-      foreach (var target in targets)
+      lock (targetsLock)
       {
-        if (!target.IsConnected())
+        foreach (var target in targets)
         {
-          return false;
+          if (!target.IsConnected())
+          {
+            return false;
+          }
         }
       }
       return true;
@@ -682,9 +699,12 @@ namespace AtmoLight
       }
       else
       {
-        foreach (var target in targets)
+        lock (targetsLock)
         {
-          target.ChangeImage(pixelData, bmiInfoHeader);
+          foreach (var target in targets)
+          {
+            target.ChangeImage(pixelData, bmiInfoHeader);
+          }
         }
       }
     }
@@ -717,38 +737,53 @@ namespace AtmoLight
       {
         case ContentEffect.AtmoWinLiveMode:
           currentState = true;
-          foreach (var target in targets)
+          lock (targetsLock)
           {
-            target.ChangeEffect(ContentEffect.AtmoWinLiveMode);
+            foreach (var target in targets)
+            {
+              target.ChangeEffect(ContentEffect.AtmoWinLiveMode);
+            }
           }
           break;
         case ContentEffect.Colorchanger:
           currentState = true;
-          foreach (var target in targets)
+          lock (targetsLock)
           {
-            target.ChangeEffect(ContentEffect.Colorchanger);
+            foreach (var target in targets)
+            {
+              target.ChangeEffect(ContentEffect.Colorchanger);
+            }
           }
           break;
         case ContentEffect.ColorchangerLR:
           currentState = true;
-          foreach (var target in targets)
+          lock (targetsLock)
           {
-            target.ChangeEffect(ContentEffect.ColorchangerLR);
+            foreach (var target in targets)
+            {
+              target.ChangeEffect(ContentEffect.ColorchangerLR);
+            }
           }
           break;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
           currentState = false;
-          foreach (var target in targets)
+          lock (targetsLock)
           {
-            target.ChangeEffect(ContentEffect.LEDsDisabled);
+            foreach (var target in targets)
+            {
+              target.ChangeEffect(ContentEffect.LEDsDisabled);
+            }
           }
           break;
         case ContentEffect.MediaPortalLiveMode:
           currentState = true;
-          foreach (var target in targets)
+          lock (targetsLock)
           {
-            target.ChangeEffect(ContentEffect.MediaPortalLiveMode);
+            foreach (var target in targets)
+            {
+              target.ChangeEffect(ContentEffect.MediaPortalLiveMode);
+            }
           }
           if (delayEnabled)
           {
@@ -758,33 +793,45 @@ namespace AtmoLight
           break;
         case ContentEffect.StaticColor:
           currentState = true;
-          foreach (var target in targets)
+          lock (targetsLock)
           {
-            target.ChangeEffect(ContentEffect.StaticColor);
+            foreach (var target in targets)
+            {
+              target.ChangeEffect(ContentEffect.StaticColor);
+            }
           }
           break;
         case ContentEffect.GIFReader:
           currentState = true;
-          foreach (var target in targets)
+          lock (targetsLock)
           {
-            target.ChangeEffect(ContentEffect.GIFReader);
+            foreach (var target in targets)
+            {
+              target.ChangeEffect(ContentEffect.GIFReader);
+            }
           }
           StartGIFReaderThread();
           break;
         case ContentEffect.VUMeter:
           currentState = true;
-          foreach (var target in targets)
+          lock (targetsLock)
           {
-            target.ChangeEffect(ContentEffect.VUMeter);
+            foreach (var target in targets)
+            {
+              target.ChangeEffect(ContentEffect.VUMeter);
+            }
           }
           vuMeterRainbowColorScheme = false;
           StartVUMeterThread();
           break;
         case ContentEffect.VUMeterRainbow:
           currentState = true;
-          foreach (var target in targets)
+          lock (targetsLock)
           {
-            target.ChangeEffect(ContentEffect.VUMeterRainbow);
+            foreach (var target in targets)
+            {
+              target.ChangeEffect(ContentEffect.VUMeterRainbow);
+            }
           }
           vuMeterRainbowColorScheme = true;
           StartVUMeterThread();
@@ -801,9 +848,12 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     public void ChangeProfile()
     {
-      foreach (var target in targets)
+      lock (targetsLock)
       {
-        target.ChangeProfile();
+        foreach (var target in targets)
+        {
+          target.ChangeProfile();
+        }
       }
     }
 

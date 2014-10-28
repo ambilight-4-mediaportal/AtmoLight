@@ -77,8 +77,8 @@ namespace AtmoLight.Targets
         {
           ClearPriority(coreObject.hyperionPriority);
           ClearPriority(coreObject.hyperionPriorityStaticColor);
-          Socket.Close();
         }
+        Socket.Close();
       }
 
       //Stop live reconnect so it doesn't start new connect threads.
@@ -218,6 +218,10 @@ namespace AtmoLight.Targets
 
     public void ChangeColor(int red, int green, int blue)
     {
+      if (!IsConnected())
+      {
+        return;
+      }
       ColorRequest colorRequest = ColorRequest.CreateBuilder()
         .SetRgbColor((red * 256 * 256) + (green * 256) + blue)
         .SetPriority(coreObject.hyperionPriorityStaticColor)
@@ -233,6 +237,10 @@ namespace AtmoLight.Targets
     }
     public void ClearPriority(int priority)
     {
+      if (!IsConnected())
+      {
+        return;
+      }
       ClearRequest clearRequest = ClearRequest.CreateBuilder()
       .SetPriority(priority)
       .Build();
@@ -246,6 +254,10 @@ namespace AtmoLight.Targets
     }
     public void ClearAll()
     {
+      if (!IsConnected())
+      {
+        return;
+      }
       HyperionRequest request = HyperionRequest.CreateBuilder()
       .SetCommand(HyperionRequest.Types.Command.CLEARALL)
       .Build();
@@ -254,6 +266,10 @@ namespace AtmoLight.Targets
     }
     public bool ChangeEffect(ContentEffect effect)
     {
+      if (!IsConnected())
+      {
+        return false;
+      }
       switch (effect)
       {
         case ContentEffect.LEDsDisabled:
@@ -273,6 +289,10 @@ namespace AtmoLight.Targets
     }
     public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
+      if (!IsConnected())
+      {
+        return;
+      }
       // Hyperion expects the bytestring to be the size of 3*width*height.
       // So 3 bytes per pixel, as in RGB.
       // Given pixeldata however is 4 bytes per pixel, as in RGBA.
@@ -307,6 +327,10 @@ namespace AtmoLight.Targets
 
     private void SendRequest(HyperionRequest request)
     {
+      if (!IsConnected())
+      {
+        return;
+      }
       if (Socket.Connected)
       {
         int size = request.SerializedSize;

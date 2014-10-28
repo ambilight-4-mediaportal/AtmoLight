@@ -665,6 +665,7 @@ namespace AtmoLight.Configuration
       if (_yes)
       {
         AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.AtmoWin);
+        AtmoLight.Plugin.AtmoLightObject.Initialise();
       }
       else
       {
@@ -690,10 +691,11 @@ namespace AtmoLight.Configuration
       if (_yes)
       {
         AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.Hyperion);
+        AtmoLight.Plugin.AtmoLightObject.Initialise();
       }
       else
       {
-        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.AtmoWin);
+        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.Hyperion);
       }
     }
   }
