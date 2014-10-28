@@ -96,7 +96,7 @@ namespace AtmoLight
         gifFile = reader.GetValueAsString("atmolight", "GIFFile", "");
         captureWidth = reader.GetValueAsInt("atmolight", "captureWidth", 64);
         captureHeight = reader.GetValueAsInt("atmolight", "captureHeight", 64);
-        hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "");
+        hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "0.0.0.0");
         hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 19445);
         hyperionReconnectDelay = reader.GetValueAsInt("atmolight", "hyperionReconnectDelay", 10000);
         hyperionReconnectAttempts = reader.GetValueAsInt("atmolight", "hyperionReconnectAttempts", 5);
