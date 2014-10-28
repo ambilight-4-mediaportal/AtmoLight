@@ -260,6 +260,11 @@ namespace Language
     public String SetupForm_ErrorGreen;
     public String SetupForm_ErrorBlue;
     public String SetupForm_ErrorRemoteButtons;
+    public String SetupForm_ErrorInvalidInteger;
+    public String SetupForm_ErrorInvalidIP;
+    public String SetupForm_ErrorInvalidPath;
+    public String SetupForm_ErrorInvalidIntegerStarting;
+    public String SetupForm_ErrorInvalidIntegerBetween;
     public String SetupForm_lblMPExit;
     public String SetupForm_lblRefreshRate;
     public String SetupForm_ckBlackbarDetection;

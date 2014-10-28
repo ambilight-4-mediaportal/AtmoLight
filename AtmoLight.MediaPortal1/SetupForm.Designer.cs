@@ -152,6 +152,7 @@
       this.edFile.Name = "edFile";
       this.edFile.Size = new System.Drawing.Size(698, 20);
       this.edFile.TabIndex = 1;
+      this.edFile.Validating += new System.ComponentModel.CancelEventHandler(this.edFile_Validating);
       // 
       // btnSelectFile
       // 
@@ -263,6 +264,7 @@
       this.tbGIF.Name = "tbGIF";
       this.tbGIF.Size = new System.Drawing.Size(266, 20);
       this.tbGIF.TabIndex = 23;
+      this.tbGIF.Validating += new System.ComponentModel.CancelEventHandler(this.tbGIF_Validating);
       // 
       // grpStaticColor
       // 
@@ -295,6 +297,7 @@
       this.tbGreen.Size = new System.Drawing.Size(40, 20);
       this.tbGreen.TabIndex = 21;
       this.tbGreen.Text = "0";
+      this.tbGreen.Validating += new System.ComponentModel.CancelEventHandler(this.tbGreen_Validating);
       // 
       // tbBlue
       // 
@@ -303,6 +306,7 @@
       this.tbBlue.Size = new System.Drawing.Size(40, 20);
       this.tbBlue.TabIndex = 22;
       this.tbBlue.Text = "0";
+      this.tbBlue.Validating += new System.ComponentModel.CancelEventHandler(this.tbBlue_Validating);
       // 
       // tbRed
       // 
@@ -311,6 +315,7 @@
       this.tbRed.Size = new System.Drawing.Size(40, 20);
       this.tbRed.TabIndex = 20;
       this.tbRed.Text = "0";
+      this.tbRed.Validating += new System.ComponentModel.CancelEventHandler(this.tbRed_Validating);
       // 
       // lblGreen
       // 
@@ -458,6 +463,7 @@
       this.edExcludeEnd.Size = new System.Drawing.Size(50, 20);
       this.edExcludeEnd.TabIndex = 15;
       this.edExcludeEnd.Text = "21:00";
+      this.edExcludeEnd.Validating += new System.ComponentModel.CancelEventHandler(this.edExcludeEnd_Validating);
       // 
       // lblEnd
       // 
@@ -475,6 +481,7 @@
       this.edExcludeStart.Size = new System.Drawing.Size(50, 20);
       this.edExcludeStart.TabIndex = 14;
       this.edExcludeStart.Text = "8:00";
+      this.edExcludeStart.Validating += new System.ComponentModel.CancelEventHandler(this.edExcludeStart_Validating);
       // 
       // lblStart
       // 
@@ -576,6 +583,7 @@
       this.tbCaptureWidth.Size = new System.Drawing.Size(50, 20);
       this.tbCaptureWidth.TabIndex = 3;
       this.tbCaptureWidth.Text = "64";
+      this.tbCaptureWidth.Validating += new System.ComponentModel.CancelEventHandler(this.tbCaptureWidth_Validating);
       // 
       // tbCaptureHeight
       // 
@@ -584,6 +592,7 @@
       this.tbCaptureHeight.Size = new System.Drawing.Size(50, 20);
       this.tbCaptureHeight.TabIndex = 4;
       this.tbCaptureHeight.Text = "64";
+      this.tbCaptureHeight.Validating += new System.ComponentModel.CancelEventHandler(this.tbCaptureHeight_Validating);
       // 
       // lblBlackarDetectionMS
       // 
@@ -601,6 +610,7 @@
       this.tbBlackbarDetectionTime.Size = new System.Drawing.Size(41, 20);
       this.tbBlackbarDetectionTime.TabIndex = 13;
       this.tbBlackbarDetectionTime.Text = "0";
+      this.tbBlackbarDetectionTime.Validating += new System.ComponentModel.CancelEventHandler(this.tbBlackbarDetectionTime_Validating);
       // 
       // lblHintMenuButtons
       // 
@@ -633,11 +643,12 @@
       // 
       // tbRefreshRate
       // 
-      this.tbRefreshRate.Location = new System.Drawing.Point(372, 144);
+      this.tbRefreshRate.Location = new System.Drawing.Point(373, 144);
       this.tbRefreshRate.Name = "tbRefreshRate";
       this.tbRefreshRate.Size = new System.Drawing.Size(41, 20);
       this.tbRefreshRate.TabIndex = 11;
       this.tbRefreshRate.Text = "50";
+      this.tbRefreshRate.Validating += new System.ComponentModel.CancelEventHandler(this.tbRefreshRate_Validating);
       // 
       // lblDelay
       // 
@@ -655,6 +666,7 @@
       this.tbDelay.Size = new System.Drawing.Size(41, 20);
       this.tbDelay.TabIndex = 10;
       this.tbDelay.Text = "0";
+      this.tbDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbDelay_Validating);
       // 
       // ckDelay
       // 
@@ -732,6 +744,7 @@
       this.lowCpuTime.TabIndex = 8;
       this.lowCpuTime.TabStop = false;
       this.lowCpuTime.Text = "0";
+      this.lowCpuTime.Validating += new System.ComponentModel.CancelEventHandler(this.lowCpuTime_Validating);
       // 
       // ckLowCpu
       // 
@@ -845,6 +858,7 @@
       this.tbHyperionPriority.Name = "tbHyperionPriority";
       this.tbHyperionPriority.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPriority.TabIndex = 5;
+      this.tbHyperionPriority.Validating += new System.ComponentModel.CancelEventHandler(this.tbHyperionPriority_Validating);
       // 
       // lblHyperionPriority
       // 
@@ -879,6 +893,7 @@
       this.tbHyperionPort.Name = "tbHyperionPort";
       this.tbHyperionPort.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPort.TabIndex = 2;
+      this.tbHyperionPort.Validating += new System.ComponentModel.CancelEventHandler(this.tbHyperionPort_Validating);
       // 
       // tbHyperionIP
       // 
@@ -886,6 +901,7 @@
       this.tbHyperionIP.Name = "tbHyperionIP";
       this.tbHyperionIP.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionIP.TabIndex = 1;
+      this.tbHyperionIP.Validating += new System.ComponentModel.CancelEventHandler(this.tbHyperionIP_Validating);
       // 
       // ckHyperionEnabled
       // 
@@ -1019,6 +1035,7 @@
       this.tbHyperionPriorityStaticColor.Name = "tbHyperionPriorityStaticColor";
       this.tbHyperionPriorityStaticColor.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPriorityStaticColor.TabIndex = 6;
+      this.tbHyperionPriorityStaticColor.Validating += new System.ComponentModel.CancelEventHandler(this.tbHyperionPriorityStaticColor_Validating);
       // 
       // grpHyperionNetworkSettings
       // 
@@ -1054,6 +1071,7 @@
       this.tbHyperionReconnectAttempts.Name = "tbHyperionReconnectAttempts";
       this.tbHyperionReconnectAttempts.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionReconnectAttempts.TabIndex = 7;
+      this.tbHyperionReconnectAttempts.Validating += new System.ComponentModel.CancelEventHandler(this.tbHyperionReconnectAttempts_Validating);
       // 
       // lblHyperionReconnectAttempts
       // 
@@ -1070,6 +1088,7 @@
       this.tbHyperionReconnectDelay.Name = "tbHyperionReconnectDelay";
       this.tbHyperionReconnectDelay.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionReconnectDelay.TabIndex = 5;
+      this.tbHyperionReconnectDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbHyperionReconnectDelay_Validating);
       // 
       // lblHyperionReconnectDelay
       // 
@@ -1084,7 +1103,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(884, 532);
+      this.ClientSize = new System.Drawing.Size(884, 531);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);

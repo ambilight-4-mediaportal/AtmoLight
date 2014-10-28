@@ -211,63 +211,58 @@ namespace AtmoLight
 
     private void btnSave_Click(object sender, EventArgs e)
     {
-      DateTime dt;
-      if (!DateTime.TryParse(edExcludeStart.Text, out dt))
+      //Validate user input
+      if (validatorDateTime(edExcludeStart.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorStartTime, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorStartTime + " - ["+lblStart.Text+"]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
-      Settings.excludeTimeStart = dt;
-      DateTime dt2;
-      if (!DateTime.TryParse(edExcludeEnd.Text, out dt2))
+      if (validatorDateTime(edExcludeEnd.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorEndTime, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorEndTime + " - [" + lblEnd.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
-      int cTime;
-      if (!int.TryParse(lowCpuTime.Text, out cTime) || cTime < 0)
+      if(validatorInt(lowCpuTime.Text,0,0,false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckLowCpu.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
-      int cDelay;
-      if (!int.TryParse(tbDelay.Text, out cDelay) || cDelay < 0)
+      if (validatorInt(tbDelay.Text, 0, 0, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
-      int cRefreshRate;
-      if (!int.TryParse(tbRefreshRate.Text, out cRefreshRate) || cRefreshRate <= 0)
+      if (validatorInt(tbRefreshRate.Text, 0, 0, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRefreshRate, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + lblRefreshRate.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
-      int cBlackbarDetectionTime;
-      if (!int.TryParse(tbBlackbarDetectionTime.Text, out cBlackbarDetectionTime) || cBlackbarDetectionTime < 0)
+      if (validatorInt(tbBlackbarDetectionTime.Text, 0, 0, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckBlackbarDetection.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
-      int StaticColorRed, StaticColorGreen, StaticColorBlue;
-      if ((!int.TryParse(tbRed.Text, out StaticColorRed)) || (StaticColorRed < 0 || StaticColorRed > 255))
+      if (validatorInt(tbRed.Text, 0, 255, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRed, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRed + " - [" + lblRed.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
-      else if ((!int.TryParse(tbGreen.Text, out StaticColorGreen)) || (StaticColorGreen < 0 || StaticColorGreen > 255))
+
+      if (validatorInt(tbGreen.Text, 0, 255, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorGreen, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorGreen + " - [" + lblGreen.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
-      else if ((!int.TryParse(tbBlue.Text, out StaticColorBlue)) || (StaticColorBlue < 0 || StaticColorBlue > 255))
+
+      if (validatorInt(tbBlue.Text, 0, 255, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorBlue, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorBlue + " - [" + lblBlue.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -279,30 +274,85 @@ namespace AtmoLight
         return;
       }
 
-      Settings.staticColorRed = StaticColorRed;
-      Settings.staticColorGreen = StaticColorGreen;
-      Settings.staticColorBlue = StaticColorBlue;
-      Settings.lowCPUTime = cTime;
-      Settings.delayReferenceTime = cDelay;
-      Settings.delayReferenceRefreshRate = cRefreshRate;
-      Settings.excludeTimeEnd = dt2;
+      if (validatorPath(tbGIF.Text) == false && string.IsNullOrEmpty(tbGIF.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + grpGIF.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+      if (validatorPath(edFile.Text) == false && string.IsNullOrEmpty(edFile.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + lblPathInfo.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      if (validatorIPAdress(tbHyperionIP.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + lblHyperionIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+
+      //Settings with specific Integer restrictions
+      int minValue = 0;
+      int maxValue = 0;
+
+      minValue = 1;
+      maxValue = 65535;
+      if (validatorInt(tbHyperionPort.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHyperionPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      minValue = 1;
+      maxValue = 0;
+      if (validatorInt(tbHyperionReconnectAttempts.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - ["+ lblHyperionReconnectAttempts.Text +"]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      minValue = 1;
+      maxValue = 0;
+      if (validatorInt(tbHyperionPriority.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - ["+ lblHyperionPriority.Text +"]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      minValue = 1;
+      maxValue = 0;
+      if (validatorInt(tbHyperionPriorityStaticColor.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - ["+ lblHyperionPriorityStaticColor.Text +"]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      Settings.staticColorRed = int.Parse(tbRed.Text);
+      Settings.staticColorGreen = int.Parse(tbGreen.Text);
+      Settings.staticColorBlue = int.Parse(tbBlue.Text);
       Settings.atmowinExe = edFile.Text;
       Settings.effectVideo = (ContentEffect)cbVideo.SelectedIndex;
       Settings.effectMusic = (ContentEffect)cbMusic.SelectedIndex;
       Settings.effectRadio = (ContentEffect)cbRadio.SelectedIndex;
       Settings.effectMenu = (ContentEffect)cbMenu.SelectedIndex;
       Settings.effectMPExit = (ContentEffect)(cbMPExit.SelectedIndex == 4 ? 5 : cbMPExit.SelectedIndex);
+      Settings.excludeTimeStart = DateTime.Parse(edExcludeStart.Text);
+      Settings.excludeTimeEnd = DateTime.Parse(edExcludeEnd.Text);
       Settings.killButton = comboBox1.SelectedIndex;
       Settings.profileButton = comboBox2.SelectedIndex;
       Settings.menuButton = cbMenuButton.SelectedIndex;
       Settings.manualMode = ckOnMediaStart.Checked;
       Settings.lowCPU = ckLowCpu.Checked;
+      Settings.lowCPUTime = int.Parse(lowCpuTime.Text);
       Settings.delay = ckDelay.Checked;
       Settings.startAtmoWin = ckStartAtmoWin.Checked;
       Settings.exitAtmoWin = ckExitAtmoWin.Checked;
       Settings.restartOnError = ckRestartOnError.Checked;
       Settings.blackbarDetection = ckBlackbarDetection.Checked;
-      Settings.blackbarDetectionTime = cBlackbarDetectionTime;
+      Settings.blackbarDetectionTime = int.Parse(tbBlackbarDetectionTime.Text);
+      Settings.delayReferenceRefreshRate = int.Parse(tbRefreshRate.Text);
+      Settings.delayReferenceTime = int.Parse(tbDelay.Text);
       Settings.gifFile = tbGIF.Text;
       Settings.hyperionIP = tbHyperionIP.Text;
       Settings.hyperionPort = int.Parse(tbHyperionPort.Text);
@@ -339,5 +389,261 @@ namespace AtmoLight
         tbGIF.Text = openFileDialog3.FileName;
       }
     }
+
+    #region input validators
+    private Boolean validatorInt(string input, int minValue, int maxValue, Boolean validateMaxValue)
+    {
+      Boolean IsValid = false;
+      Int32 value;
+      bool IsInteger = Int32.TryParse(input, out value);
+
+      if (IsInteger)
+      {
+        //Only check minValue
+        if (validateMaxValue == false && value >= minValue)
+        {
+          IsValid = true;
+        }
+        //Check both min/max values
+        else
+        {
+          if (value >= minValue && value <= maxValue)
+          {
+            IsValid = true;
+          }
+        }
+      }
+      return IsValid;
+    }
+    private Boolean validatorIPAdress(string input)
+    {
+      Boolean IsValid = false;
+      System.Net.IPAddress IPAddress;
+
+      if (System.Net.IPAddress.TryParse(input, out IPAddress))
+      {
+        IsValid = true;
+      }
+      return IsValid;
+    }
+    private Boolean validatorDateTime(string input)
+    {
+      DateTime dt;
+      Boolean IsValid = false;
+      bool isDateTime = DateTime.TryParse(input, out dt);
+      if (isDateTime)
+      {
+        IsValid = true;
+      }
+
+      return IsValid;
+    }
+
+    private Boolean validatorPath(string input)
+    {
+      Boolean IsValid = false;
+
+      try
+      {
+        if (File.Exists(input))
+        {
+          IsValid = true;
+        }
+      }
+      catch { };
+
+      return IsValid;
+    }
+    private Boolean validatorRGB(string color, string range)
+    {
+
+      Boolean IsValid = false;
+      return IsValid;
+    }
+    #endregion
+
+    private void lowCpuTime_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 0;
+      if (validatorInt(lowCpuTime.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+    private void tbDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 0;
+      if (validatorInt(tbDelay.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbRefreshRate_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 0;
+      if (validatorInt(tbRefreshRate.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRefreshRate, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbBlackbarDetectionTime_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 0;
+      if (validatorInt(tbBlackbarDetectionTime.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbCaptureWidth_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 0;
+      if (validatorInt(tbBlackbarDetectionTime.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidInteger.Replace("[Integer]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbCaptureHeight_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 0;
+      if (validatorInt(tbCaptureHeight.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidInteger.Replace("[Integer]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void edExcludeStart_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (validatorDateTime(edExcludeStart.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorStartTime, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+
+    }
+
+    private void edExcludeEnd_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (validatorDateTime(edExcludeEnd.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorEndTime, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+
+    private void tbRed_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 255;
+      if (validatorInt(tbRed.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRed, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+
+    }
+
+    private void tbGreen_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 255;
+      if (validatorInt(tbGreen.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorGreen, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbBlue_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 255;
+      if (validatorInt(tbBlue.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorBlue, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbGIF_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (validatorPath(tbGIF.Text) == false && string.IsNullOrEmpty(tbGIF.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void edFile_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (validatorPath(edFile.Text) == false && string.IsNullOrEmpty(edFile.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbHyperionIP_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (validatorIPAdress(tbHyperionIP.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbHyperionPort_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 65535;
+      if (validatorInt(tbHyperionPort.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]",minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbHyperionReconnectDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 10;
+      int maxValue = 0;
+      if (validatorInt(tbHyperionReconnectDelay.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]",minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+
+    }
+
+    private void tbHyperionReconnectAttempts_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 0;
+      if (validatorInt(tbHyperionReconnectAttempts.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbHyperionPriority_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 0;
+      if (validatorInt(tbHyperionPriority.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbHyperionPriorityStaticColor_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 0;
+      if (validatorInt(tbHyperionPriorityStaticColor.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
   }
 }
