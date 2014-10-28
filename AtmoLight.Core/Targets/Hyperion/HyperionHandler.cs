@@ -56,7 +56,6 @@ namespace AtmoLight.Targets
         isInit = true;
         Connect();
         ClearPriority(hyperionPriority);
-        ChangeEffect(coreObject.GetCurrentEffect());
 
         if(hyperionLiveReconnect)
         {
@@ -106,6 +105,7 @@ namespace AtmoLight.Targets
       {
         Connected = false;
       }
+
       return Connected;
     }
 
@@ -222,6 +222,12 @@ namespace AtmoLight.Targets
           hyperionReconnectCounter = 0;
           break;
         }
+      }
+
+      //On first initialize set the effect after we are done trying to connect
+      if (isInit)
+      {
+        coreObject.ChangeEffect(coreObject.GetCurrentEffect(), true);
       }
     }
 
