@@ -511,7 +511,7 @@ namespace AtmoLight
     /// </summary>
     private void OnNewConnectionLost(Target target)
     {
-      ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", "[AtmoLight.AtmoWinConnectionLost]".Replace("[Target]", target.ToString()), true);
+      ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", MediaPortal.Common.Localization.LocalizationHelper.Translate("[AtmoLight.AtmoWinConnectionLost]").Replace("[Target]", target.ToString()), true);
     }
     #endregion
   }
