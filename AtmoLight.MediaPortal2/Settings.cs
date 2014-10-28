@@ -25,14 +25,14 @@ namespace AtmoLight
     [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
     public ContentEffect MPExitEffect { get; set; }
 
-    [Setting(SettingScope.User, "Red")]
-    public string MenuButton { get; set; }
+    [Setting(SettingScope.User, 0)]
+    public int MenuButton { get; set; }
 
-    [Setting(SettingScope.User, "Green")]
-    public string OnOffButton { get; set; }
+    [Setting(SettingScope.User, 1)]
+    public int OnOffButton { get; set; }
 
-    [Setting(SettingScope.User, "Yellow")]
-    public string ProfileButton { get; set; }
+    [Setting(SettingScope.User, 2)]
+    public int ProfileButton { get; set; }
 
     [Setting(SettingScope.User, "08:00")]
     public string ExcludeTimeStart { get; set; }

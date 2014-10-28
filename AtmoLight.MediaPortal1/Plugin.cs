@@ -119,24 +119,30 @@ namespace AtmoLight
 
       Log.Debug("Generating new AtmoLight.Core instance.");
       AtmoLightObject = Core.GetInstance();
+
+      // AtmoWin
       if (Settings.atmoWinTarget)
       {
         AtmoLightObject.AddTarget(Target.AtmoWin);
-        AtmoLightObject.atmoWinPath = Settings.atmowinExe;
-        AtmoLightObject.atmoWinAutoStart = Settings.startAtmoWin;
-        AtmoLightObject.atmoWinAutoStop = Settings.exitAtmoWin;
       }
+      AtmoLightObject.atmoWinPath = Settings.atmowinExe;
+      AtmoLightObject.atmoWinAutoStart = Settings.startAtmoWin;
+      AtmoLightObject.atmoWinAutoStop = Settings.exitAtmoWin;
+
+      // Hyperion
       if (Settings.hyperionTarget)
       {
         AtmoLightObject.AddTarget(Target.Hyperion);
-        AtmoLightObject.hyperionIP = Settings.hyperionIP;
-        AtmoLightObject.hyperionPort = Settings.hyperionPort;
-        AtmoLightObject.hyperionPriority = Settings.hyperionPriority;
-        AtmoLightObject.hyperionReconnectDelay = Settings.hyperionReconnectDelay;
-        AtmoLightObject.hyperionReconnectAttempts = Settings.hyperionReconnectAttempts;
-        AtmoLightObject.hyperionPriorityStaticColor = Settings.HyperionPriorityStaticColor;
-        AtmoLightObject.hyperionLiveReconnect = Settings.HyperionLiveReconnect;
       }
+      AtmoLightObject.hyperionIP = Settings.hyperionIP;
+      AtmoLightObject.hyperionPort = Settings.hyperionPort;
+      AtmoLightObject.hyperionPriority = Settings.hyperionPriority;
+      AtmoLightObject.hyperionReconnectDelay = Settings.hyperionReconnectDelay;
+      AtmoLightObject.hyperionReconnectAttempts = Settings.hyperionReconnectAttempts;
+      AtmoLightObject.hyperionPriorityStaticColor = Settings.HyperionPriorityStaticColor;
+      AtmoLightObject.hyperionLiveReconnect = Settings.HyperionLiveReconnect;
+
+      // General settings
       AtmoLightObject.SetDelay(Settings.delayReferenceTime);
       AtmoLightObject.SetGIFPath(Settings.gifFile);
       AtmoLightObject.SetReInitOnError(Settings.restartOnError);

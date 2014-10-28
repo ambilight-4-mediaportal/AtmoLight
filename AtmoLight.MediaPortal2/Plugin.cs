@@ -110,24 +110,30 @@ namespace AtmoLight
       // AtmoLight object creation
       Log.Debug("Generating new AtmoLight.Core instance.");
       AtmoLightObject = Core.GetInstance();
+
+      // AtmoWin
       if (settings.AtmoWinTarget)
       {
         AtmoLightObject.AddTarget(Target.AtmoWin);
-        AtmoLightObject.atmoWinPath = settings.AtmoWinExe;
-        AtmoLightObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
-        AtmoLightObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
       }
+      AtmoLightObject.atmoWinPath = settings.AtmoWinExe;
+      AtmoLightObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
+      AtmoLightObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
+
+      // Hyperion
       if (settings.HyperionTarget)
       {
         AtmoLightObject.AddTarget(Target.Hyperion);
-        AtmoLightObject.hyperionIP = settings.HyperionIP;
-        AtmoLightObject.hyperionPort = settings.HyperionPort;
-        AtmoLightObject.hyperionPriority = settings.HyperionPriority;
-        AtmoLightObject.hyperionReconnectDelay = settings.HyperionReconnectDelay;
-        AtmoLightObject.hyperionReconnectAttempts = settings.HyperionReconnectAttempts;
-        AtmoLightObject.hyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
-        AtmoLightObject.hyperionLiveReconnect = settings.HyperionLiveReconnect;
       }
+      AtmoLightObject.hyperionIP = settings.HyperionIP;
+      AtmoLightObject.hyperionPort = settings.HyperionPort;
+      AtmoLightObject.hyperionPriority = settings.HyperionPriority;
+      AtmoLightObject.hyperionReconnectDelay = settings.HyperionReconnectDelay;
+      AtmoLightObject.hyperionReconnectAttempts = settings.HyperionReconnectAttempts;
+      AtmoLightObject.hyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
+      AtmoLightObject.hyperionLiveReconnect = settings.HyperionLiveReconnect;
+
+      // General settings
       AtmoLightObject.SetDelay(settings.DelayTime);
       AtmoLightObject.SetGIFPath(settings.GIFFile);
       AtmoLightObject.SetReInitOnError(settings.RestartAtmoWinOnError);
@@ -152,6 +158,9 @@ namespace AtmoLight
 
       // Handlers
       Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
+      AtmoLight.Configuration.MenuButton.NewMenuButton += new Configuration.MenuButton.MenuButtonHander(ReregisterKeyBindings);
+      AtmoLight.Configuration.OnOffButton.NewOnOffButton += new Configuration.OnOffButton.OnOffButtonHander(ReregisterKeyBindings);
+      AtmoLight.Configuration.ProfileButton.NewProfileButton += new Configuration.ProfileButton.ProfileButtonHander(ReregisterKeyBindings);
       SkinContext.DeviceSceneEnd += UICapture;
       RegisterKeyBindings();
     }
@@ -177,6 +186,10 @@ namespace AtmoLight
 
       // Unregister Log Handler
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
+      Core.OnNewConnectionLost -= new Core.NewConnectionLostHandler(OnNewConnectionLost);
+      AtmoLight.Configuration.MenuButton.NewMenuButton -= new Configuration.MenuButton.MenuButtonHander(ReregisterKeyBindings);
+      AtmoLight.Configuration.OnOffButton.NewOnOffButton -= new Configuration.OnOffButton.OnOffButtonHander(ReregisterKeyBindings);
+      AtmoLight.Configuration.ProfileButton.NewProfileButton -= new Configuration.ProfileButton.ProfileButtonHander(ReregisterKeyBindings);
     }
     #endregion
 
@@ -377,58 +390,64 @@ namespace AtmoLight
     #endregion
 
     #region Key Bindings
+    private void ReregisterKeyBindings()
+    {
+      UnregisterKeyBindings();
+      RegisterKeyBindings();
+    }
+
     private void RegisterKeyBindings()
     {
       IInputManager manager = ServiceRegistration.Get<IInputManager>(false);
       if (manager != null)
       {
-        if (settings.MenuButton == "Red")
+        if (settings.MenuButton == 1)
         {
           manager.AddKeyBinding(Key.Red, new VoidKeyActionDlgt(ContextMenu));
         }
-        else if (settings.MenuButton == "Green")
+        else if (settings.MenuButton == 2)
         {
           manager.AddKeyBinding(Key.Green, new VoidKeyActionDlgt(ContextMenu));
         }
-        else if (settings.MenuButton == "Yellow")
+        else if (settings.MenuButton == 3)
         {
           manager.AddKeyBinding(Key.Yellow, new VoidKeyActionDlgt(ContextMenu));
         }
-        else if (settings.MenuButton == "Blue")
+        else if (settings.MenuButton == 4)
         {
           manager.AddKeyBinding(Key.Blue, new VoidKeyActionDlgt(ContextMenu));
         }
 
-        if (settings.OnOffButton == "Red")
+        if (settings.OnOffButton == 1)
         {
           manager.AddKeyBinding(Key.Red, new VoidKeyActionDlgt(ToggleEffectOnOff));
         }
-        else if (settings.OnOffButton == "Green")
+        else if (settings.OnOffButton == 2)
         {
           manager.AddKeyBinding(Key.Green, new VoidKeyActionDlgt(ToggleEffectOnOff));
         }
-        else if (settings.OnOffButton == "Yellow")
+        else if (settings.OnOffButton == 3)
         {
           manager.AddKeyBinding(Key.Yellow, new VoidKeyActionDlgt(ToggleEffectOnOff));
         }
-        else if (settings.OnOffButton == "Blue")
+        else if (settings.OnOffButton == 4)
         {
           manager.AddKeyBinding(Key.Blue, new VoidKeyActionDlgt(ToggleEffectOnOff));
         }
 
-        if (settings.ProfileButton == "Red")
+        if (settings.ProfileButton == 1)
         {
           manager.AddKeyBinding(Key.Red, new VoidKeyActionDlgt(ChangeAtmoWinProfile));
         }
-        else if (settings.ProfileButton == "Green")
+        else if (settings.ProfileButton == 2)
         {
           manager.AddKeyBinding(Key.Green, new VoidKeyActionDlgt(ChangeAtmoWinProfile));
         }
-        else if (settings.ProfileButton == "Yellow")
+        else if (settings.ProfileButton == 3)
         {
           manager.AddKeyBinding(Key.Yellow, new VoidKeyActionDlgt(ChangeAtmoWinProfile));
         }
-        else if (settings.ProfileButton == "Blue")
+        else if (settings.ProfileButton == 4)
         {
           manager.AddKeyBinding(Key.Blue, new VoidKeyActionDlgt(ChangeAtmoWinProfile));
         }
@@ -505,7 +524,7 @@ namespace AtmoLight
     /// </summary>
     private void OnNewConnectionLost(Target target)
     {
-      ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", "[AtmoLight.AtmoWinConnectionLost]".Replace("[Target]", target.ToString()), true);
+      ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", MediaPortal.Common.Localization.LocalizationHelper.Translate("[AtmoLight.AtmoWinConnectionLost]").Replace("[Target]", target.ToString()), true);
     }
     #endregion
   }

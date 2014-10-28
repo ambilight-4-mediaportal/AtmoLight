@@ -25,6 +25,14 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.AtmoWinExe = _path + "AtmoWinA.exe";
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.atmoWinPath = settings.AtmoWinExe;
+      if (settings.AtmoWinTarget)
+      {
+        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.AtmoWin);
+        AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.AtmoWin);
+        AtmoLight.Plugin.AtmoLightObject.Initialise();
+      }
     }
   }
 
@@ -42,6 +50,7 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.GIFFile = _path;
       SettingsManager.Save(settings);
+
       AtmoLight.Plugin.AtmoLightObject.SetGIFPath(settings.GIFFile);
     }
   }
@@ -158,6 +167,9 @@ namespace AtmoLight.Configuration
 
   public class MenuButton : SingleSelectionList
   {
+    public delegate void MenuButtonHander();
+    public static event MenuButtonHander NewMenuButton;
+
     private IList<string> buttonList = new List<string>();
     public override void Load()
     {
@@ -170,7 +182,7 @@ namespace AtmoLight.Configuration
         buttonList.Add("[AtmoLight.Blue]");
       }
 
-      Selected = buttonList.IndexOf(SettingsManager.Load<Settings>().MenuButton.ToString());
+      Selected = SettingsManager.Load<Settings>().MenuButton;
 
       _items = buttonList.Select(LocalizationHelper.CreateResourceString).ToList();
     }
@@ -179,13 +191,17 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.MenuButton = buttonList[Selected];
+      settings.MenuButton = buttonList.IndexOf(buttonList[Selected]);
       SettingsManager.Save(settings);
+      NewMenuButton();
     }
   }
 
   public class OnOffButton : SingleSelectionList
   {
+    public delegate void OnOffButtonHander();
+    public static event OnOffButtonHander NewOnOffButton;
+
     private IList<string> buttonList = new List<string>();
     public override void Load()
     {
@@ -198,7 +214,7 @@ namespace AtmoLight.Configuration
         buttonList.Add("[AtmoLight.Blue]");
       }
 
-      Selected = buttonList.IndexOf(SettingsManager.Load<Settings>().OnOffButton.ToString());
+      Selected = SettingsManager.Load<Settings>().OnOffButton;
 
       _items = buttonList.Select(LocalizationHelper.CreateResourceString).ToList();
     }
@@ -207,13 +223,17 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.OnOffButton = buttonList[Selected];
+      settings.OnOffButton = buttonList.IndexOf(buttonList[Selected]);
       SettingsManager.Save(settings);
+      NewOnOffButton();
     }
   }
 
   public class ProfileButton : SingleSelectionList
   {
+    public delegate void ProfileButtonHander();
+    public static event ProfileButtonHander NewProfileButton;
+
     private IList<string> buttonList = new List<string>();
     public override void Load()
     {
@@ -226,7 +246,7 @@ namespace AtmoLight.Configuration
         buttonList.Add("[AtmoLight.Blue]");
       }
 
-      Selected = buttonList.IndexOf(SettingsManager.Load<Settings>().ProfileButton.ToString());
+      Selected = SettingsManager.Load<Settings>().ProfileButton;
 
       _items = buttonList.Select(LocalizationHelper.CreateResourceString).ToList();
     }
@@ -235,8 +255,9 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.ProfileButton = buttonList[Selected];
+      settings.ProfileButton = buttonList.IndexOf(buttonList[Selected]);
       SettingsManager.Save(settings);
+      NewProfileButton();
     }
   }
 
@@ -285,6 +306,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.StopAtmoWinOnExit = _yes;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.atmoWinAutoStop = _yes;
     }
   }
 
@@ -301,6 +324,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.StartAtmoWinOnStart = _yes;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.atmoWinAutoStart = _yes;
     }
   }
 
@@ -654,6 +679,16 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.AtmoWinTarget = _yes;
       SettingsManager.Save(settings);
+
+      if (_yes)
+      {
+        AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.AtmoWin);
+        AtmoLight.Plugin.AtmoLightObject.Initialise();
+      }
+      else
+      {
+        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.AtmoWin);
+      }
     }
   }
 
@@ -670,6 +705,16 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionTarget = _yes;
       SettingsManager.Save(settings);
+
+      if (_yes)
+      {
+        AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.Hyperion);
+        AtmoLight.Plugin.AtmoLightObject.Initialise();
+      }
+      else
+      {
+        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.Hyperion);
+      }
     }
   }
 
@@ -689,6 +734,8 @@ namespace AtmoLight.Configuration
       {
         settings.HyperionIP = _value;
         SettingsManager.Save(settings);
+
+        AtmoLight.Plugin.AtmoLightObject.hyperionIP = _value;
       }
     }
 
@@ -715,6 +762,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionPort = (int)_value;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.hyperionPort = (int)_value;
     }
   }
 
@@ -735,6 +784,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionPriority = (int)_value;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.hyperionPriority = (int)_value;
     }
   }
 
@@ -755,6 +806,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionPriorityStaticColor = (int)_value;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.hyperionPriorityStaticColor = (int)_value;
     }
   }
 
@@ -775,6 +828,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionReconnectAttempts = (int)_value;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.hyperionReconnectAttempts = (int)_value;
     }
   }
 
@@ -785,7 +840,7 @@ namespace AtmoLight.Configuration
       _type = NumberType.Integer;
       _step = 1;
       _lowerLimit = 1;
-      _upperLimit = 9999;
+      _upperLimit = 99999;
       _value = SettingsManager.Load<Settings>().HyperionReconnectDelay;
     }
 
@@ -795,6 +850,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionReconnectDelay = (int)_value;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.hyperionReconnectDelay = (int)_value;
     }
   }
 
@@ -811,6 +868,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionLiveReconnect = _yes;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.hyperionLiveReconnect = _yes;
     }
   }
 }
