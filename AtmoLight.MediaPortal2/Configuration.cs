@@ -25,6 +25,14 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.AtmoWinExe = _path + "AtmoWinA.exe";
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.atmoWinPath = settings.AtmoWinExe;
+      if (settings.AtmoWinTarget)
+      {
+        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.AtmoWin);
+        AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.AtmoWin);
+        AtmoLight.Plugin.AtmoLightObject.Initialise();
+      }
     }
   }
 
@@ -42,6 +50,7 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.GIFFile = _path;
       SettingsManager.Save(settings);
+
       AtmoLight.Plugin.AtmoLightObject.SetGIFPath(settings.GIFFile);
     }
   }
@@ -285,6 +294,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.StopAtmoWinOnExit = _yes;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.atmoWinAutoStop = _yes;
     }
   }
 
@@ -301,6 +312,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.StartAtmoWinOnStart = _yes;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.atmoWinAutoStart = _yes;
     }
   }
 
@@ -654,6 +667,16 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.AtmoWinTarget = _yes;
       SettingsManager.Save(settings);
+
+      if (_yes)
+      {
+        AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.AtmoWin);
+        AtmoLight.Plugin.AtmoLightObject.Initialise();
+      }
+      else
+      {
+        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.AtmoWin);
+      }
     }
   }
 
@@ -670,6 +693,16 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionTarget = _yes;
       SettingsManager.Save(settings);
+
+      if (_yes)
+      {
+        AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.Hyperion);
+        AtmoLight.Plugin.AtmoLightObject.Initialise();
+      }
+      else
+      {
+        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.Hyperion);
+      }
     }
   }
 
@@ -689,6 +722,8 @@ namespace AtmoLight.Configuration
       {
         settings.HyperionIP = _value;
         SettingsManager.Save(settings);
+
+        AtmoLight.Plugin.AtmoLightObject.hyperionIP = _value;
       }
     }
 
@@ -715,6 +750,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionPort = (int)_value;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.hyperionPort = (int)_value;
     }
   }
 
@@ -735,6 +772,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionPriority = (int)_value;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.hyperionPriority = (int)_value;
     }
   }
 
@@ -755,6 +794,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionPriorityStaticColor = (int)_value;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.hyperionPriorityStaticColor = (int)_value;
     }
   }
 
@@ -775,6 +816,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionReconnectAttempts = (int)_value;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.hyperionReconnectAttempts = (int)_value;
     }
   }
 
@@ -795,6 +838,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionReconnectDelay = (int)_value;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.hyperionReconnectDelay = (int)_value;
     }
   }
 
@@ -811,6 +856,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.HyperionLiveReconnect = _yes;
       SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.hyperionLiveReconnect = _yes;
     }
   }
 }

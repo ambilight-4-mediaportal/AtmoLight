@@ -30,15 +30,6 @@ namespace AtmoLight.Targets
     public int hyperionReconnectAttempts = 0;
     private Stopwatch liveReconnectSW = new Stopwatch();
 
-
-    public string hyperionIP = "";
-    public int hyperionPort = 0;
-    public int hyperionPriority = 0;
-    public int hyperionPriorityStaticColor = 0;
-    private int[] staticColor = { 0, 0, 0 };
-    public Boolean hyperionReconnectOnError = false;
-    public int hyperionReconnectDelay = 0;
-    public bool hyperionLiveReconnect = false;
     private Core coreObject;
 
     #endregion
@@ -55,9 +46,9 @@ namespace AtmoLight.Targets
       {
         isInit = true;
         Connect();
-        ClearPriority(hyperionPriority);
+        ClearPriority(coreObject.hyperionPriority);
 
-        if(hyperionLiveReconnect)
+        if (coreObject.hyperionLiveReconnect)
         {
           liveReconnect();
         }
@@ -83,16 +74,16 @@ namespace AtmoLight.Targets
       {
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
-          ClearPriority(hyperionPriority);
-          ClearPriority(hyperionPriorityStaticColor);
-          Socket.Close();
+          ClearPriority(coreObject.hyperionPriority);
+          ClearPriority(coreObject.hyperionPriorityStaticColor);
         }
+        Socket.Close();
       }
 
       //Stop live reconnect so it doesn't start new connect threads.
-      if (hyperionLiveReconnect)
+      if (coreObject.hyperionLiveReconnect)
       {
-        hyperionLiveReconnect = false;
+        coreObject.hyperionLiveReconnect = false;
       }
     }
     public bool IsConnected()
@@ -125,9 +116,9 @@ namespace AtmoLight.Targets
       liveReconnectSW.Start();
 
       //Start live reconnect with set delay in config
-      while (hyperionLiveReconnect)
+      while (coreObject.hyperionLiveReconnect)
       {
-        if (liveReconnectSW.ElapsedMilliseconds >= hyperionReconnectDelay && Connected == false)
+        if (liveReconnectSW.ElapsedMilliseconds >= coreObject.hyperionReconnectDelay && Connected == false)
         {
           Connect();
           liveReconnectSW.Restart();
@@ -145,7 +136,7 @@ namespace AtmoLight.Targets
         {
           try
           {
-            if (hyperionLiveReconnect == false)
+            if (coreObject.hyperionLiveReconnect == false)
             {
               Log.Debug("HyperionHandler - Trying to connect");
             }
@@ -157,7 +148,7 @@ namespace AtmoLight.Targets
             }
             catch (Exception e)
             {
-              if (hyperionLiveReconnect == false)
+              if (coreObject.hyperionLiveReconnect == false)
               {
                 Log.Error("HyperionHandler - Error while closing socket");
                 Log.Error("Exception: {0}", e.Message);
@@ -167,18 +158,18 @@ namespace AtmoLight.Targets
 
             Socket.SendTimeout = 5000;
             Socket.ReceiveTimeout = 5000;
-            Socket.Connect(hyperionIP, hyperionPort);
+            Socket.Connect(coreObject.hyperionIP, coreObject.hyperionPort);
             Stream = Socket.GetStream();
             Connected = Socket.Connected;
 
-            if (hyperionLiveReconnect == false)
+            if (coreObject.hyperionLiveReconnect == false)
             {
               Log.Debug("HyperionHandler - Connected");
             }
           }
           catch (Exception e)
           {
-            if (hyperionLiveReconnect == false)
+            if (coreObject.hyperionLiveReconnect == false)
             {
               Log.Error("HyperionHandler - Error while connecting");
               Log.Error("Exception: {0}", e.Message);
@@ -188,7 +179,7 @@ namespace AtmoLight.Targets
           }
 
           //if live connect enabled don't use this loop and let liveReconnectThread() fire up new connections
-          if (hyperionLiveReconnect)
+          if (coreObject.hyperionLiveReconnect)
           {
             break;
           }
@@ -213,7 +204,7 @@ namespace AtmoLight.Targets
           }
 
           //Sleep for specified time
-          Thread.Sleep(hyperionReconnectDelay);
+          Thread.Sleep(coreObject.hyperionReconnectDelay);
 
           //Log.Error("HyperionHandler - retry attempt {0} of {1}",hyperionReconnectCounter,hyperionReconnectAttempts);
         }
@@ -235,9 +226,13 @@ namespace AtmoLight.Targets
 
     public void ChangeColor(int red, int green, int blue)
     {
+      if (!IsConnected())
+      {
+        return;
+      }
       ColorRequest colorRequest = ColorRequest.CreateBuilder()
         .SetRgbColor((red * 256 * 256) + (green * 256) + blue)
-        .SetPriority(hyperionPriorityStaticColor)
+        .SetPriority(coreObject.hyperionPriorityStaticColor)
         .SetDuration(-1)
         .Build();
 
@@ -250,6 +245,10 @@ namespace AtmoLight.Targets
     }
     public void ClearPriority(int priority)
     {
+      if (!IsConnected())
+      {
+        return;
+      }
       ClearRequest clearRequest = ClearRequest.CreateBuilder()
       .SetPriority(priority)
       .Build();
@@ -263,6 +262,10 @@ namespace AtmoLight.Targets
     }
     public void ClearAll()
     {
+      if (!IsConnected())
+      {
+        return;
+      }
       HyperionRequest request = HyperionRequest.CreateBuilder()
       .SetCommand(HyperionRequest.Types.Command.CLEARALL)
       .Build();
@@ -271,15 +274,19 @@ namespace AtmoLight.Targets
     }
     public bool ChangeEffect(ContentEffect effect)
     {
+      if (!IsConnected())
+      {
+        return false;
+      }
       switch (effect)
       {
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
-          ClearPriority(hyperionPriority);
-          ClearPriority(hyperionPriorityStaticColor);
+          ClearPriority(coreObject.hyperionPriority);
+          ClearPriority(coreObject.hyperionPriorityStaticColor);
           break;
         case ContentEffect.StaticColor:
-          ChangeColor(staticColor[0], staticColor[1], staticColor[2]);
+          ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
           break;
       }
       return true;
@@ -290,6 +297,10 @@ namespace AtmoLight.Targets
     }
     public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
+      if (!IsConnected())
+      {
+        return;
+      }
       // Hyperion expects the bytestring to be the size of 3*width*height.
       // So 3 bytes per pixel, as in RGB.
       // Given pixeldata however is 4 bytes per pixel, as in RGBA.
@@ -310,7 +321,7 @@ namespace AtmoLight.Targets
         .SetImagedata(Google.ProtocolBuffers.ByteString.CopyFrom(newpixeldata))
         .SetImageheight(coreObject.GetCaptureHeight())
         .SetImagewidth(coreObject.GetCaptureWidth())
-        .SetPriority(hyperionPriority)
+        .SetPriority(coreObject.hyperionPriority)
         .SetDuration(-1)
         .Build();
 
@@ -374,20 +385,6 @@ namespace AtmoLight.Targets
         Log.Error("Exception: {0}", e.Message);
         return null;
       }
-    }
-    #endregion
-
-    #region settings
-    public void SetStaticColor(int red, int green, int blue)
-    {
-      staticColor[0] = red;
-      staticColor[1] = green;
-      staticColor[2] = blue;
-    }
-
-    public void setReconnectOnError(Boolean reconnectOnError)
-    {
-      hyperionReconnectOnError = reconnectOnError;
     }
     #endregion
   }
