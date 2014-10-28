@@ -106,7 +106,6 @@ namespace AtmoLight
       staticColorTemp[0] = settings.StaticColorRed;
       staticColorTemp[1] = settings.StaticColorGreen;
       staticColorTemp[2] = settings.StaticColorBlue;
-      menuEffect = settings.MenuEffect;
 
       // AtmoLight object creation
       Log.Debug("Generating new AtmoLight.Core instance.");
@@ -188,10 +187,6 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     private bool CheckForStartRequirements()
     {
-      if (!AtmoLightObject.IsConnected())
-      {
-        return false;
-      }
       if (settings.ManualMode)
       {
         Log.Debug("LEDs should be deactivated. (Manual Mode)");

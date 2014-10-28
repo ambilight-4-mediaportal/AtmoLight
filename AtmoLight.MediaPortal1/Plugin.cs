@@ -191,10 +191,6 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     private bool CheckForStartRequirements()
     {
-      if (!AtmoLightObject.IsConnected())
-      {
-        return false;
-      }
       if (Settings.manualMode)
       {
         Log.Debug("LEDs should be deactivated. (Manual Mode)");

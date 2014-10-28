@@ -154,6 +154,8 @@ namespace AtmoLight
       HyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
       HyperionReconnectAttempts = settings.HyperionReconnectAttempts;
       HyperionReconnectDelay = settings.HyperionReconnectDelay;
+      CaptureHeight = settings.CaptureHeight;
+      CaptureWidth = settings.CaptureWidth;
       return true;
     }
 
@@ -192,6 +194,8 @@ namespace AtmoLight
       settings.HyperionPriorityStaticColor = HyperionPriorityStaticColor;
       settings.HyperionReconnectAttempts = HyperionReconnectAttempts;
       settings.HyperionReconnectDelay = HyperionReconnectDelay;
+      settings.CaptureWidth = CaptureWidth;
+      settings.CaptureHeight = CaptureHeight;
       settingsManager.Save(settings);
       return true;
     }

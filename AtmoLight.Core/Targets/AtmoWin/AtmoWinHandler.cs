@@ -281,7 +281,7 @@ namespace AtmoLight
 
       Log.Debug("AtmoWinHandler - Initialising successfull.");
 
-      ChangeEffect(coreObject.GetCurrentEffect());
+      coreObject.ChangeEffect(coreObject.GetCurrentEffect(), true);
 
       initialiseLock = false;
       return true;
