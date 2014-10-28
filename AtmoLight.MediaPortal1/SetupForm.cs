@@ -547,7 +547,10 @@ namespace AtmoLight
       int maxValue = 0;
       if (validatorInt(lowCpuTime.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        if (ckLowCpu.Checked)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
       }
     }
     private void tbDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -556,7 +559,10 @@ namespace AtmoLight
       int maxValue = 0;
       if (validatorInt(tbDelay.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        if (ckDelay.Checked)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
       }
     }
 
@@ -566,7 +572,10 @@ namespace AtmoLight
       int maxValue = 0;
       if (validatorInt(tbRefreshRate.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRefreshRate, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        if (ckDelay.Checked)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRefreshRate, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
       }
     }
 
@@ -576,7 +585,10 @@ namespace AtmoLight
       int maxValue = 0;
       if (validatorInt(tbBlackbarDetectionTime.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        if (ckBlackbarDetection.Checked)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
       }
     }
 
