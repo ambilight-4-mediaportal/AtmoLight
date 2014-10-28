@@ -354,6 +354,7 @@ namespace AtmoLight
       if (validatorInt(tbCaptureWidth.Text, minValue, maxValue, false) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - [" + lblCaptureWidth.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
       }
 
       //Capture height
@@ -362,6 +363,7 @@ namespace AtmoLight
       if (validatorInt(tbCaptureHeight.Text, minValue, maxValue, false) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - [" + lblCaptureHeight.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
       }
 
       //Hyperion port
