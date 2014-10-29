@@ -66,6 +66,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITargets.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\AtmoLiveViewControl.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\AtmoLiveViewControlClass.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\AtmoRemoteControl.cs" />

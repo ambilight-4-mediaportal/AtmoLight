@@ -44,18 +44,6 @@ namespace AtmoLight
     Network
   }
 
-  public interface ITargets
-  {
-    Target Name { get; }
-    void Initialise(bool force);
-    void ReInitialise(bool force);
-    void Dispose();
-    bool IsConnected();
-    bool ChangeEffect(ContentEffect effect);
-    void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader);
-    void ChangeProfile();
-  }
-
   public class Core
   {
     #region Fields
@@ -590,7 +578,7 @@ namespace AtmoLight
     /// </summary>
     /// <param name="bmiInfoHeader">Info Header</param>
     /// <param name="pixelData">Pixel Data</param>
-    private void AddDelayListItem(byte[] bmiInfoHeader, byte[] pixelData)
+    private void AddDelayListItem(byte[] pixelData, byte[] bmiInfoHeader)
     {
       if (delayTimingList.Count <= 60)
       {
@@ -695,7 +683,7 @@ namespace AtmoLight
     {
       if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
-        AddDelayListItem(bmiInfoHeader, pixelData);
+        AddDelayListItem(pixelData, bmiInfoHeader);
       }
       else
       {
