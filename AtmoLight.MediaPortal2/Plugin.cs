@@ -158,7 +158,6 @@ namespace AtmoLight
 
       // Handlers
       Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
-      AtmoLight.Configuration.MenuButton.NewMenuButton += new Configuration.MenuButton.MenuButtonHander(ReregisterKeyBindings);
       AtmoLight.Configuration.OnOffButton.NewOnOffButton += new Configuration.OnOffButton.OnOffButtonHander(ReregisterKeyBindings);
       AtmoLight.Configuration.ProfileButton.NewProfileButton += new Configuration.ProfileButton.ProfileButtonHander(ReregisterKeyBindings);
       SkinContext.DeviceSceneEnd += UICapture;
@@ -187,7 +186,6 @@ namespace AtmoLight
       // Unregister Log Handler
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
       Core.OnNewConnectionLost -= new Core.NewConnectionLostHandler(OnNewConnectionLost);
-      AtmoLight.Configuration.MenuButton.NewMenuButton -= new Configuration.MenuButton.MenuButtonHander(ReregisterKeyBindings);
       AtmoLight.Configuration.OnOffButton.NewOnOffButton -= new Configuration.OnOffButton.OnOffButtonHander(ReregisterKeyBindings);
       AtmoLight.Configuration.ProfileButton.NewProfileButton -= new Configuration.ProfileButton.ProfileButtonHander(ReregisterKeyBindings);
     }
@@ -401,23 +399,6 @@ namespace AtmoLight
       IInputManager manager = ServiceRegistration.Get<IInputManager>(false);
       if (manager != null)
       {
-        if (settings.MenuButton == 1)
-        {
-          manager.AddKeyBinding(Key.Red, new VoidKeyActionDlgt(ContextMenu));
-        }
-        else if (settings.MenuButton == 2)
-        {
-          manager.AddKeyBinding(Key.Green, new VoidKeyActionDlgt(ContextMenu));
-        }
-        else if (settings.MenuButton == 3)
-        {
-          manager.AddKeyBinding(Key.Yellow, new VoidKeyActionDlgt(ContextMenu));
-        }
-        else if (settings.MenuButton == 4)
-        {
-          manager.AddKeyBinding(Key.Blue, new VoidKeyActionDlgt(ContextMenu));
-        }
-
         if (settings.OnOffButton == 1)
         {
           manager.AddKeyBinding(Key.Red, new VoidKeyActionDlgt(ToggleEffectOnOff));
@@ -509,11 +490,6 @@ namespace AtmoLight
       {
         AtmoLightObject.ReInitialise();
       }
-    }
-
-    private void ContextMenu()
-    {
-
     }
     #endregion
 

@@ -25,9 +25,6 @@ namespace AtmoLight
     [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
     public ContentEffect MPExitEffect { get; set; }
 
-    [Setting(SettingScope.User, 0)]
-    public int MenuButton { get; set; }
-
     [Setting(SettingScope.User, 1)]
     public int OnOffButton { get; set; }
 
@@ -125,7 +122,6 @@ namespace AtmoLight
       VideoEffect = settings.VideoEffect;
       AudioEffect = settings.AudioEffect;
       MenuEffect = settings.MenuEffect;
-      MenuButton = settings.MenuButton;
       OnOffButton = settings.OnOffButton;
       ProfileButton = settings.ProfileButton;
       ExcludeTimeStart = settings.ExcludeTimeStart;
@@ -165,7 +161,6 @@ namespace AtmoLight
       settings.VideoEffect = VideoEffect;
       settings.AudioEffect = AudioEffect;
       settings.MenuEffect = MenuEffect;
-      settings.MenuButton = MenuButton;
       settings.OnOffButton = OnOffButton;
       settings.ProfileButton = ProfileButton;
       settings.ExcludeTimeStart = ExcludeTimeStart;

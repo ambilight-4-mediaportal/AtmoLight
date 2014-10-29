@@ -273,15 +273,6 @@
   </Register>
   
   <!-- Buttons -->
-  <!-- Menu Button currently not supported
-  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Buttons">
-    <ConfigSetting
-        Id="MenuButton"
-        Text="[AtmoLight.MenuButton]"
-        ClassName="AtmoLight.Configuration.MenuButton"/>
-  </Register>
-  -->
-  
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/Buttons">
     <ConfigSetting
         Id="OnOffButton"

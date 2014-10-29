@@ -165,38 +165,6 @@ namespace AtmoLight.Configuration
     }
   }
 
-  public class MenuButton : SingleSelectionList
-  {
-    public delegate void MenuButtonHander();
-    public static event MenuButtonHander NewMenuButton;
-
-    private IList<string> buttonList = new List<string>();
-    public override void Load()
-    {
-      if (buttonList.Count == 0)
-      {
-        buttonList.Add("[AtmoLight.None]");
-        buttonList.Add("[AtmoLight.Red]");
-        buttonList.Add("[AtmoLight.Green]");
-        buttonList.Add("[AtmoLight.Yellow]");
-        buttonList.Add("[AtmoLight.Blue]");
-      }
-
-      Selected = SettingsManager.Load<Settings>().MenuButton;
-
-      _items = buttonList.Select(LocalizationHelper.CreateResourceString).ToList();
-    }
-
-    public override void Save()
-    {
-      base.Save();
-      Settings settings = SettingsManager.Load<Settings>();
-      settings.MenuButton = buttonList.IndexOf(buttonList[Selected]);
-      SettingsManager.Save(settings);
-      NewMenuButton();
-    }
-  }
-
   public class OnOffButton : SingleSelectionList
   {
     public delegate void OnOffButtonHander();
