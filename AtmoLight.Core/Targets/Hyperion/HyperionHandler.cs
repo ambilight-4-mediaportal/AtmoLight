@@ -56,7 +56,7 @@ namespace AtmoLight.Targets
       catch (Exception e)
       {
         Log.Error("HyperionHandler - Error during initialise");
-        Log.Error("Exception: {0}", e.Message);
+        Log.Error("HyperionHandler - Exception: {0}", e.Message);
       }
     }
 
@@ -151,7 +151,7 @@ namespace AtmoLight.Targets
               if (coreObject.hyperionLiveReconnect == false)
               {
                 Log.Error("HyperionHandler - Error while closing socket");
-                Log.Error("Exception: {0}", e.Message);
+                Log.Error("HyperionHandler - Exception: {0}", e.Message);
               }
             }
             Socket = new TcpClient();
@@ -172,7 +172,7 @@ namespace AtmoLight.Targets
             if (coreObject.hyperionLiveReconnect == false)
             {
               Log.Error("HyperionHandler - Error while connecting");
-              Log.Error("Exception: {0}", e.Message);
+              Log.Error("HyperionHandler - Exception: {0}", e.Message);
             }
             Connected = false;
 
@@ -217,7 +217,7 @@ namespace AtmoLight.Targets
       }
 
       //On first initialize set the effect after we are done trying to connect
-      if (isInit)
+      if (isInit && Connected)
       {
         coreObject.ChangeEffect(coreObject.GetCurrentEffect(), true);
         isInit = false;
@@ -362,7 +362,7 @@ namespace AtmoLight.Targets
       catch (Exception e)
       {
         Log.Error("HyperionHandler - Error while sending proto request");
-        Log.Error("Exception: {0}", e.Message);
+        Log.Error("HyperionHandler - Exception: {0}", e.Message);
       }
     }
 
@@ -382,7 +382,7 @@ namespace AtmoLight.Targets
       catch(Exception e)
       {
         Log.Error("HyperionHandler - Error while receiving reply from proto request");
-        Log.Error("Exception: {0}", e.Message);
+        Log.Error("HyperionHandler - Exception: {0}", e.Message);
         return null;
       }
     }
