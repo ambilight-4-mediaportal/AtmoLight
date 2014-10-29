@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using MediaPortal.Common.Configuration.ConfigurationClasses;
 using MediaPortal.Common.Localization;
-
+using MediaPortal.UI.Presentation.UiNotifications;
 using MediaPortal.UI.Presentation.Players;
 using MediaPortal.Common;
 
@@ -191,9 +191,16 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.OnOffButton = buttonList.IndexOf(buttonList[Selected]);
-      SettingsManager.Save(settings);
-      NewOnOffButton();
+      if ((buttonList.IndexOf(buttonList[Selected]) != settings.ProfileButton) || buttonList.IndexOf(buttonList[Selected]) == 0)
+      {
+        settings.OnOffButton = buttonList.IndexOf(buttonList[Selected]);
+        SettingsManager.Save(settings);
+        NewOnOffButton();
+      }
+      else
+      {
+        ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", "[AtmoLight.ButtonError]", true);
+      }
     }
   }
 
@@ -223,9 +230,16 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.ProfileButton = buttonList.IndexOf(buttonList[Selected]);
-      SettingsManager.Save(settings);
-      NewProfileButton();
+      if ((buttonList.IndexOf(buttonList[Selected]) != settings.OnOffButton) || buttonList.IndexOf(buttonList[Selected]) == 0)
+      {
+        settings.ProfileButton = buttonList.IndexOf(buttonList[Selected]);
+        SettingsManager.Save(settings);
+        NewProfileButton();
+      }
+      else
+      {
+        ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", "[AtmoLight.ButtonError]", true);
+      }
     }
   }
 
