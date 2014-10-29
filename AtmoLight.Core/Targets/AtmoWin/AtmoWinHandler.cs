@@ -262,7 +262,8 @@ namespace AtmoLight
 
       Log.Debug("AtmoWinHandler - Initialising successfull.");
 
-      coreObject.ChangeEffect(coreObject.GetCurrentEffect(), true);
+      ChangeEffect(coreObject.GetCurrentEffect());
+      coreObject.SetAtmoLightOn(coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true);
 
       initialiseLock = false;
       return true;

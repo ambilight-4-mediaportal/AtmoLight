@@ -330,6 +330,10 @@ namespace AtmoLight
       }
     }
 
+    /// <summary>
+    /// Removes a target.
+    /// </summary>
+    /// <param name="target"></param>
     public void RemoveTarget(Target target)
     {
       lock (targetsLock)
@@ -424,6 +428,15 @@ namespace AtmoLight
         return true;
       }
       return false;
+    }
+
+    /// <summary>
+    /// Sets the current state field.
+    /// </summary>
+    /// <param name="on"></param>
+    public void SetAtmoLightOn(bool on)
+    {
+      currentState = on;
     }
     #endregion
 
