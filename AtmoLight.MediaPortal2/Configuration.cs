@@ -457,9 +457,9 @@ namespace AtmoLight.Configuration
       settings.StaticColorRed = (int)_value;
       SettingsManager.Save(settings);
 
+      AtmoLight.Plugin.AtmoLightObject.SetStaticColor((int)_value, settings.StaticColorGreen, settings.StaticColorBlue);
       if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
       {
-        AtmoLight.Plugin.AtmoLightObject.SetStaticColor((int)_value, settings.StaticColorGreen, settings.StaticColorBlue);
         AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
       }
     }
@@ -483,9 +483,9 @@ namespace AtmoLight.Configuration
       settings.StaticColorGreen = (int)_value;
       SettingsManager.Save(settings);
 
+      AtmoLight.Plugin.AtmoLightObject.SetStaticColor(settings.StaticColorRed, (int)_value, settings.StaticColorBlue);
       if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
       {
-        AtmoLight.Plugin.AtmoLightObject.SetStaticColor(settings.StaticColorRed, (int)_value, settings.StaticColorBlue);
         AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
       }
     }
@@ -509,9 +509,9 @@ namespace AtmoLight.Configuration
       settings.StaticColorBlue = (int)_value;
       SettingsManager.Save(settings);
 
+      AtmoLight.Plugin.AtmoLightObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, (int)_value);
       if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
       {
-        AtmoLight.Plugin.AtmoLightObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, (int)_value);
         AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
       }
     }
