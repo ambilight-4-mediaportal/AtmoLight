@@ -49,6 +49,7 @@
   <string name="AtmoLight.Hyperion">Hyperion</string>
   <string name="AtmoLight.AtmoWinTarget">Use AtmoWin</string>
   <string name="AtmoLight.HyperionTarget">Use Hyperion</string>
+  <string name="AtmoLight.HueTarget">Use Hue</string>
   <string name="AtmoLight.HyperionIP">IP address</string>
   <string name="AtmoLight.HyperionPort">Port number</string>
   <string name="AtmoLight.HyperionPriority">Effect priority</string>
@@ -56,4 +57,7 @@
   <string name="AtmoLight.HyperionReconnectDelay">Reconnect delay</string>
   <string name="AtmoLight.HyperionReconnectAttempts">Reconnect attempts</string>
   <string name="AtmoLight.HyperionLiveReconnect">Live reconnect (mainly debugging)</string>
+  <string name="AtmoLight.HueIP">IP address</string>
+  <string name="AtmoLight.HuePort">Port number</string>
+  <string name="AtmoLight.HueMinimalColorDifference">Minimal color difference (0-255)</string>
 </resources>

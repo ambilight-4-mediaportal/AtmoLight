@@ -93,6 +93,13 @@
         Text="[AtmoLight.HyperionTarget]"
         ClassName="AtmoLight.Configuration.HyperionTarget"/>
   </Register>
+
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
+    <ConfigSetting
+        Id="HueTarget"
+        Text="[AtmoLight.HueTarget]"
+        ClassName="AtmoLight.Configuration.HueTarget"/>
+  </Register>
     
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
     <ConfigSetting
@@ -172,7 +179,30 @@
         Text="[AtmoLight.HyperionLiveReconnect]"
         ClassName="AtmoLight.Configuration.HyperionLiveReconnect"/>
   </Register>
-          
+
+  <!-- Hue -->
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Hue">
+    <ConfigSetting
+        Id="HueIP"
+        Text="[AtmoLight.HueIP]"
+        ClassName="AtmoLight.Configuration.HueIP"/>
+  </Register>
+
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Hue">
+    <ConfigSetting
+        Id="HuePort"
+        Text="[AtmoLight.HuePort]"
+        ClassName="AtmoLight.Configuration.HuePort"/>
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Hue">
+    <ConfigSetting
+        Id="HueMinimalColorDifference"
+        Text="[AtmoLight.HueMinimalColorDifference]"
+        ClassName="AtmoLight.Configuration.HueMinimalColorDifference"/>
+  </Register>
+
+
   <!-- Effects -->
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/Effects">
     <ConfigSetting

@@ -854,4 +854,98 @@ namespace AtmoLight.Configuration
       AtmoLight.Plugin.AtmoLightObject.hyperionLiveReconnect = _yes;
     }
   }
+  public class HueTarget : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().HueTarget;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueTarget = _yes;
+      SettingsManager.Save(settings);
+
+      if (_yes)
+      {
+        AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.Hue);
+        AtmoLight.Plugin.AtmoLightObject.Initialise();
+      }
+      else
+      {
+        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.Hue);
+      }
+    }
+  }
+  public class HueIP : Entry
+  {
+    public override void Load()
+    {
+      _value = SettingsManager.Load<Settings>().HueIP;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      IPAddress ip;
+      if (IPAddress.TryParse(_value, out ip))
+      {
+        settings.HueIP = _value;
+        SettingsManager.Save(settings);
+
+        AtmoLight.Plugin.AtmoLightObject.hueIP = _value;
+      }
+    }
+
+    public override int DisplayLength
+    {
+      get { return 15; }
+    }
+  }
+
+  public class HuePort : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 65535;
+      _value = SettingsManager.Load<Settings>().HuePort;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HuePort = (int)_value;
+      SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.huePort = (int)_value;
+    }
+  }
+  public class HueMinimalColorDifference : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 255;
+      _value = SettingsManager.Load<Settings>().HueMinimalColorDifference;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueMinimalColorDifference = (int)_value;
+      SettingsManager.Save(settings);
+
+      AtmoLight.Plugin.AtmoLightObject.hueMinimalColorDifference = (int)_value;
+    }
+  }
 }

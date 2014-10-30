@@ -85,6 +85,9 @@ namespace AtmoLight
     [Setting(SettingScope.User, false)]
     public bool HyperionTarget { get; set; }
 
+    [Setting(SettingScope.User, false)]
+    public bool HueTarget { get; set; }
+
     [Setting(SettingScope.User, 64)]
     public int CaptureWidth { get; set; }
 
@@ -111,6 +114,16 @@ namespace AtmoLight
 
     [Setting(SettingScope.User, false)]
     public bool HyperionLiveReconnect { get; set; }
+
+    [Setting(SettingScope.User, "127.0.0.1")]
+    public string HueIP { get; set; }
+
+    [Setting(SettingScope.User, 20123)]
+    public int HuePort { get; set; }
+
+    [Setting(SettingScope.User, 25)]
+    public int HueMinimalColorDifference { get; set; }
+
 
     ISettingsManager settingsManager = ServiceRegistration.Get<ISettingsManager>();
     Settings settings;
@@ -143,6 +156,7 @@ namespace AtmoLight
       MPExitEffect = settings.MPExitEffect;
       AtmoWinTarget = settings.AtmoWinTarget;
       HyperionTarget = settings.HyperionTarget;
+      HueTarget = settings.HueTarget;
       HyperionIP = settings.HyperionIP;
       HyperionLiveReconnect = settings.HyperionLiveReconnect;
       HyperionPort = settings.HyperionPort;
@@ -150,6 +164,9 @@ namespace AtmoLight
       HyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
       HyperionReconnectAttempts = settings.HyperionReconnectAttempts;
       HyperionReconnectDelay = settings.HyperionReconnectDelay;
+      HueIP = settings.HueIP;
+      HuePort = settings.HuePort;
+      HueMinimalColorDifference = settings.HueMinimalColorDifference;
       CaptureHeight = settings.CaptureHeight;
       CaptureWidth = settings.CaptureWidth;
       return true;
@@ -182,6 +199,7 @@ namespace AtmoLight
       settings.MPExitEffect = MPExitEffect;
       settings.AtmoWinTarget = AtmoWinTarget;
       settings.HyperionTarget = HyperionTarget;
+      settings.HueTarget = HueTarget;
       settings.HyperionIP = HyperionIP;
       settings.HyperionLiveReconnect = HyperionLiveReconnect;
       settings.HyperionPort = HyperionPort;
@@ -189,6 +207,9 @@ namespace AtmoLight
       settings.HyperionPriorityStaticColor = HyperionPriorityStaticColor;
       settings.HyperionReconnectAttempts = HyperionReconnectAttempts;
       settings.HyperionReconnectDelay = HyperionReconnectDelay;
+      settings.HueIP = HueIP;
+      settings.HuePort = HuePort;
+      settings.HueMinimalColorDifference = HueMinimalColorDifference;
       settings.CaptureWidth = CaptureWidth;
       settings.CaptureHeight = CaptureHeight;
       settingsManager.Save(settings);
