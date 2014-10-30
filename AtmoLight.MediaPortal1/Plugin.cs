@@ -142,6 +142,12 @@ namespace AtmoLight
       AtmoLightObject.hyperionPriorityStaticColor = Settings.HyperionPriorityStaticColor;
       AtmoLightObject.hyperionLiveReconnect = Settings.HyperionLiveReconnect;
 
+      // Hue
+      if (Settings.hueTarget)
+      {
+        AtmoLightObject.AddTarget(Target.Hue);
+      }
+
       // General settings
       AtmoLightObject.SetDelay(Settings.delayReferenceTime);
       AtmoLightObject.SetGIFPath(Settings.gifFile);

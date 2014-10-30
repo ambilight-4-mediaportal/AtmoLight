@@ -120,6 +120,15 @@ namespace AtmoLight
       {
           ckHyperionEnabled.Checked = false;
       }
+      if (Settings.hueTarget)
+      {
+        ckHueEnabled.Checked = true;
+      }
+      else
+      {
+        ckHueEnabled.Checked = false;
+      }
+
       if (Settings.HyperionLiveReconnect)
       {
         ckHyperionLiveReconnect.Checked = true;
@@ -438,6 +447,7 @@ namespace AtmoLight
       Settings.captureWidth = int.Parse(tbCaptureWidth.Text);
       Settings.captureHeight = int.Parse(tbCaptureHeight.Text);
       Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
+      Settings.hueTarget = ckHueEnabled.Checked;
       Settings.hyperionTarget = ckHyperionEnabled.Checked;
 
       Settings.SaveSettings();

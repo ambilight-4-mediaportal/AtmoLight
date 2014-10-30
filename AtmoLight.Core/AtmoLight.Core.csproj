@@ -81,6 +81,7 @@
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\IAtmoRemoteControl2.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\IUnknown.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\__MIDL___MIDL_itf_AtmoWin_0003_0001_0001.cs" />
+    <Compile Include="Targets\Hue\HueHandler.cs" />
     <Compile Include="Targets\Hyperion\HyperionMessages.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

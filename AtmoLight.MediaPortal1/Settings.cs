@@ -52,6 +52,9 @@ namespace AtmoLight
     public static int HyperionPriorityStaticColor = 0;
     public static bool HyperionLiveReconnect;
 
+    //Hue
+    public static bool hueTarget;
+
     #endregion
 
     public static DateTime LoadTimeSetting(MediaPortal.Profile.Settings reader, string name, string defaultTime)
@@ -104,7 +107,9 @@ namespace AtmoLight
         HyperionPriorityStaticColor = reader.GetValueAsInt("atmolight", "hyperionStaticColorPriority", 1);
         HyperionLiveReconnect = reader.GetValueAsBool("atmolight", "HyperionLiveReconnect", false);
         atmoWinTarget = reader.GetValueAsBool("atmolight", "atmoWinTarget", true);
+        hueTarget = reader.GetValueAsBool("atmolight", "hueTarget", false);
         hyperionTarget = reader.GetValueAsBool("atmolight", "hyperionTarget", false);
+
       }
     }
     public static void SaveSettings()
@@ -149,6 +154,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "hyperionStaticColorPriority", (int)HyperionPriorityStaticColor);
         reader.SetValueAsBool("atmolight", "HyperionLiveReconnect", HyperionLiveReconnect);        
         reader.SetValueAsBool("atmolight", "atmoWinTarget", atmoWinTarget);
+        reader.SetValueAsBool("atmolight", "hueTarget", hueTarget);
         reader.SetValueAsBool("atmolight", "hyperionTarget", hyperionTarget);
       }
     }
