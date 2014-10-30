@@ -281,6 +281,7 @@ namespace Language
     public String SetupForm_lblCaptureHeight;
     public String SetupForm_lblHueIP;
     public String SetupForm_lblHuePort;
+    public String SetupForm_lblHueMinimalColorDifference;    
     public String SetupForm_grpHyperionNetworkSettings;
     public String SetupForm_grpHyperionPrioritySettings;
     public String SetupForm_tabPageGeneric;

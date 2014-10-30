@@ -61,6 +61,7 @@ lblCaptureWidth=Width:
 lblCaptureHeight=Height:
 lblHueIP=IP:
 lblHuePort=Port:
+lblHueMinimalColorDifference=Minimal color difference (0-255)
 grpHyperionNetworkSettings=Network
 grpHyperionPrioritySettings=Priority
 tabPageGeneric=Generic settings

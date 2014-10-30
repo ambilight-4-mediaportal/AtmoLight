@@ -127,6 +127,8 @@
       this.tbHuePort = new System.Windows.Forms.TextBox();
       this.lblHuePort = new System.Windows.Forms.Label();
       this.lblHintHue = new System.Windows.Forms.Label();
+      this.tbHueMinimalColorDifference = new System.Windows.Forms.TextBox();
+      this.lblHueMinimalColorDifference = new System.Windows.Forms.Label();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -1136,6 +1138,8 @@
       // 
       // HueNetworkSettings
       // 
+      this.HueNetworkSettings.Controls.Add(this.tbHueMinimalColorDifference);
+      this.HueNetworkSettings.Controls.Add(this.lblHueMinimalColorDifference);
       this.HueNetworkSettings.Controls.Add(this.lblHintHue);
       this.HueNetworkSettings.Controls.Add(this.tbHuePort);
       this.HueNetworkSettings.Controls.Add(this.lblHuePort);
@@ -1143,14 +1147,14 @@
       this.HueNetworkSettings.Controls.Add(this.lblHueIP);
       this.HueNetworkSettings.Location = new System.Drawing.Point(23, 26);
       this.HueNetworkSettings.Name = "HueNetworkSettings";
-      this.HueNetworkSettings.Size = new System.Drawing.Size(419, 187);
+      this.HueNetworkSettings.Size = new System.Drawing.Size(419, 255);
       this.HueNetworkSettings.TabIndex = 0;
       this.HueNetworkSettings.TabStop = false;
       this.HueNetworkSettings.Text = "Network";
       // 
       // tbHueIP
       // 
-      this.tbHueIP.Location = new System.Drawing.Point(124, 27);
+      this.tbHueIP.Location = new System.Drawing.Point(200, 27);
       this.tbHueIP.Name = "tbHueIP";
       this.tbHueIP.Size = new System.Drawing.Size(93, 20);
       this.tbHueIP.TabIndex = 4;
@@ -1167,7 +1171,7 @@
       // 
       // tbHuePort
       // 
-      this.tbHuePort.Location = new System.Drawing.Point(124, 63);
+      this.tbHuePort.Location = new System.Drawing.Point(200, 63);
       this.tbHuePort.Name = "tbHuePort";
       this.tbHuePort.Size = new System.Drawing.Size(93, 20);
       this.tbHuePort.TabIndex = 6;
@@ -1185,12 +1189,28 @@
       // lblHintHue
       // 
       this.lblHintHue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintHue.Location = new System.Drawing.Point(16, 108);
+      this.lblHintHue.Location = new System.Drawing.Point(6, 169);
       this.lblHintHue.Name = "lblHintHue";
       this.lblHintHue.Size = new System.Drawing.Size(397, 62);
       this.lblHintHue.TabIndex = 21;
       this.lblHintHue.Text = "Hint: requires AtmoHue to be running on the above IP and Port to function, do not" +
     " enter your Hue bridge information here\r\n";
+      // 
+      // tbHueMinimalColorDifference
+      // 
+      this.tbHueMinimalColorDifference.Location = new System.Drawing.Point(200, 102);
+      this.tbHueMinimalColorDifference.Name = "tbHueMinimalColorDifference";
+      this.tbHueMinimalColorDifference.Size = new System.Drawing.Size(93, 20);
+      this.tbHueMinimalColorDifference.TabIndex = 22;
+      // 
+      // lblHueMinimalColorDifference
+      // 
+      this.lblHueMinimalColorDifference.AutoSize = true;
+      this.lblHueMinimalColorDifference.Location = new System.Drawing.Point(16, 105);
+      this.lblHueMinimalColorDifference.Name = "lblHueMinimalColorDifference";
+      this.lblHueMinimalColorDifference.Size = new System.Drawing.Size(154, 13);
+      this.lblHueMinimalColorDifference.TabIndex = 23;
+      this.lblHueMinimalColorDifference.Text = "Minimal color difference (0-255)";
       // 
       // SetupForm
       // 
@@ -1342,5 +1362,7 @@
     private System.Windows.Forms.TextBox tbHuePort;
     private System.Windows.Forms.Label lblHuePort;
     private System.Windows.Forms.Label lblHintHue;
+    private System.Windows.Forms.TextBox tbHueMinimalColorDifference;
+    private System.Windows.Forms.Label lblHueMinimalColorDifference;
   }
 }

@@ -43,6 +43,7 @@ namespace AtmoLight
       tbCaptureHeight.Text = Settings.captureHeight.ToString();
       tbHueIP.Text = Settings.hueIP;
       tbHuePort.Text = Settings.huePort.ToString();
+      tbHueMinimalColorDifference.Text = Settings.hueMinimalColorDifference.ToString();
 
       if (Settings.manualMode)
       {
@@ -196,6 +197,7 @@ namespace AtmoLight
       grpCaptureDimensions.Text = LanguageLoader.appStrings.SetupForm_grpCaptureDimensions;
       lblHueIP.Text = LanguageLoader.appStrings.SetupForm_lblHueIP;
       lblHuePort.Text = LanguageLoader.appStrings.SetupForm_lblHuePort;
+      lblHueMinimalColorDifference.Text = LanguageLoader.appStrings.SetupForm_lblHueMinimalColorDifference;
       lblMPExit.Text = LanguageLoader.appStrings.SetupForm_lblMPExit;
     }
 
@@ -469,6 +471,7 @@ namespace AtmoLight
       Settings.captureHeight = int.Parse(tbCaptureHeight.Text);
       Settings.hueIP = tbHueIP.Text;
       Settings.huePort = int.Parse(tbHuePort.Text);
+      Settings.hueMinimalColorDifference = int.Parse(tbHueMinimalColorDifference.Text);
       Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
       Settings.hueTarget = ckHueEnabled.Checked;
       Settings.hyperionTarget = ckHyperionEnabled.Checked;

@@ -258,13 +258,13 @@ namespace AtmoLight.Targets
       int count = width * height - dropped;
 
       //Minimal differcence new versus previous colors
-      int minDiversionPreviousColors = 25;
+      int minDifferencePreviousColors = coreObject.hueMinimalColorDifference;
 
       int avgR = (int)(totals[2] / count);
       int avgG = (int)(totals[1] / count);
       int avgB = (int)(totals[0] / count);
 
-      if (Math.Abs(avgR_previous - avgR) > minDiversionPreviousColors || Math.Abs(avgG_previous - avgG) > minDiversionPreviousColors || Math.Abs(avgG_previous - avgG_previous) > minDiversionPreviousColors)
+      if (Math.Abs(avgR_previous - avgR) > minDifferencePreviousColors || Math.Abs(avgG_previous - avgG) > minDifferencePreviousColors || Math.Abs(avgG_previous - avgG_previous) > minDifferencePreviousColors)
       {
         avgR_previous = avgR;
         avgG_previous = avgG;

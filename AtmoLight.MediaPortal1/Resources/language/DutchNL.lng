@@ -60,6 +60,7 @@ lblCaptureWidth=Breedte:
 lblCaptureHeight=Hoogte:
 lblHueIP=IP adres:
 lblHuePort=Poort:
+lblHueMinimalColorDifference=Minimaal kleur verschil (0-255)
 grpHyperionNetworkSettings=Netwerk
 grpHyperionPrioritySettings=Prioriteit
 tabPageGeneric=Algemene instellingen

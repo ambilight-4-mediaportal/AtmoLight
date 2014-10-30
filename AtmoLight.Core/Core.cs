@@ -115,6 +115,7 @@ namespace AtmoLight
     // Hue Settings Fields
     public string hueIP;
     public int huePort;
+    public int hueMinimalColorDifference;
 
     #endregion
 

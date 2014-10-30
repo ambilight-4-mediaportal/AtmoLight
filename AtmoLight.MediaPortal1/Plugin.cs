@@ -149,6 +149,7 @@ namespace AtmoLight
       }
       AtmoLightObject.hueIP = Settings.hueIP;
       AtmoLightObject.huePort = Settings.huePort;
+      AtmoLightObject.hueMinimalColorDifference = Settings.hueMinimalColorDifference;
 
 
       // General settings
