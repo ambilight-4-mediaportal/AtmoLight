@@ -147,6 +147,9 @@ namespace AtmoLight
       {
         AtmoLightObject.AddTarget(Target.Hue);
       }
+      AtmoLightObject.hueIP = Settings.hueIP;
+      AtmoLightObject.huePort = Settings.huePort;
+
 
       // General settings
       AtmoLightObject.SetDelay(Settings.delayReferenceTime);

@@ -238,6 +238,7 @@ namespace Language
     public String SetupForm_lblHintText;
     public String SetupForm_lblHintHardware;
     public String SetupForm_lblHintCaptureDimensions;
+    public String SetupForm_lblHintHue;
     public String SetupForm_lblFramesText;
     public String SetupForm_lblDelay;
     public String SetupForm_lblStartText;
@@ -278,6 +279,8 @@ namespace Language
     public String SetupForm_ckHyperionLiveReconnect;
     public String SetupForm_lblCaptureWidth;
     public String SetupForm_lblCaptureHeight;
+    public String SetupForm_lblHueIP;
+    public String SetupForm_lblHuePort;
     public String SetupForm_grpHyperionNetworkSettings;
     public String SetupForm_grpHyperionPrioritySettings;
     public String SetupForm_tabPageGeneric;

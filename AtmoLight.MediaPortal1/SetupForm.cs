@@ -41,6 +41,8 @@ namespace AtmoLight
       tbHyperionPriorityStaticColor.Text = Settings.HyperionPriorityStaticColor.ToString();
       tbCaptureWidth.Text = Settings.captureWidth.ToString();
       tbCaptureHeight.Text = Settings.captureHeight.ToString();
+      tbHueIP.Text = Settings.hueIP;
+      tbHuePort.Text = Settings.huePort.ToString();
 
       if (Settings.manualMode)
       {
@@ -161,6 +163,7 @@ namespace AtmoLight
       lblHintMenuButtons.Text = LanguageLoader.appStrings.SetupForm_lblHintText;
       lblHintHardware.Text = LanguageLoader.appStrings.SetupForm_lblHintHardware;
       lblHintCaptureDimensions.Text = LanguageLoader.appStrings.SetupForm_lblHintCaptureDimensions;
+      lblHintHue.Text = LanguageLoader.appStrings.SetupForm_lblHintHue;
       lblFrames.Text = LanguageLoader.appStrings.SetupForm_lblFramesText;
       lblDelay.Text = LanguageLoader.appStrings.SetupForm_lblDelay;
       lblStart.Text = LanguageLoader.appStrings.SetupForm_lblStartText;
@@ -191,6 +194,8 @@ namespace AtmoLight
       grpHyperionNetworkSettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionNetworkSettings;
       grpHyperionPrioritySettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionPrioritySettings;
       grpCaptureDimensions.Text = LanguageLoader.appStrings.SetupForm_grpCaptureDimensions;
+      lblHueIP.Text = LanguageLoader.appStrings.SetupForm_lblHueIP;
+      lblHuePort.Text = LanguageLoader.appStrings.SetupForm_lblHuePort;
       lblMPExit.Text = LanguageLoader.appStrings.SetupForm_lblMPExit;
     }
 

@@ -22,8 +22,8 @@ namespace AtmoLight.Targets
     public Target Name { get { return Target.Hue; } }
     public TargetType Type { get { return TargetType.Network; } }
 
-    public static TcpClient client = new TcpClient();
-    public static IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3000);
+    private TcpClient client;
+    private IPEndPoint serverEndPoint;
     private Boolean Connected = false;
     private Core coreObject;
 
@@ -37,6 +37,8 @@ namespace AtmoLight.Targets
 
     public void Initialise(bool force = false)
     {
+      serverEndPoint = new IPEndPoint(IPAddress.Parse(coreObject.hueIP),coreObject.huePort);
+      client = new TcpClient();
       Connect();
     }
 

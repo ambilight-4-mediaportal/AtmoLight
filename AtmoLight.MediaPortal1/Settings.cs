@@ -54,6 +54,8 @@ namespace AtmoLight
 
     //Hue
     public static bool hueTarget;
+    public static string hueIP = "";
+    public static int huePort = 0;;
 
     #endregion
 
@@ -106,6 +108,8 @@ namespace AtmoLight
         hyperionPriority = reader.GetValueAsInt("atmolight", "hyperionPriority", 1);
         HyperionPriorityStaticColor = reader.GetValueAsInt("atmolight", "hyperionStaticColorPriority", 1);
         HyperionLiveReconnect = reader.GetValueAsBool("atmolight", "HyperionLiveReconnect", false);
+        hueIP = reader.GetValueAsString("atmolight", "hueIP", "127.0.0.1");
+        huePort = reader.GetValueAsInt("atmolight", "huePort", 20123);
         atmoWinTarget = reader.GetValueAsBool("atmolight", "atmoWinTarget", true);
         hueTarget = reader.GetValueAsBool("atmolight", "hueTarget", false);
         hyperionTarget = reader.GetValueAsBool("atmolight", "hyperionTarget", false);
@@ -152,7 +156,9 @@ namespace AtmoLight
         reader.SetValue("atmolight", "hyperionReconnectDelay", (int)hyperionReconnectDelay);
         reader.SetValue("atmolight", "hyperionReconnectAttempts", (int)hyperionReconnectAttempts);
         reader.SetValue("atmolight", "hyperionStaticColorPriority", (int)HyperionPriorityStaticColor);
-        reader.SetValueAsBool("atmolight", "HyperionLiveReconnect", HyperionLiveReconnect);        
+        reader.SetValueAsBool("atmolight", "HyperionLiveReconnect", HyperionLiveReconnect);     
+        reader.SetValue("atmolight", "hueIP", hueIP);
+        reader.SetValue("atmolight", "huePort", (int)huePort);
         reader.SetValueAsBool("atmolight", "atmoWinTarget", atmoWinTarget);
         reader.SetValueAsBool("atmolight", "hueTarget", hueTarget);
         reader.SetValueAsBool("atmolight", "hyperionTarget", hyperionTarget);

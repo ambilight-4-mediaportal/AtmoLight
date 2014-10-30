@@ -111,6 +111,11 @@ namespace AtmoLight
     public int hyperionReconnectAttempts;
     public int hyperionPriorityStaticColor;
     public bool hyperionLiveReconnect;
+
+    // Hue Settings Fields
+    public string hueIP;
+    public int huePort;
+
     #endregion
 
     #region class Win32API
