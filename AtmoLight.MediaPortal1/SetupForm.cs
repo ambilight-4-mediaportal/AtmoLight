@@ -467,6 +467,8 @@ namespace AtmoLight
       Settings.HyperionLiveReconnect = ckHyperionLiveReconnect.Checked;
       Settings.captureWidth = int.Parse(tbCaptureWidth.Text);
       Settings.captureHeight = int.Parse(tbCaptureHeight.Text);
+      Settings.hueIP = tbHueIP.Text;
+      Settings.huePort = int.Parse(tbHuePort.Text);
       Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
       Settings.hueTarget = ckHueEnabled.Checked;
       Settings.hyperionTarget = ckHyperionEnabled.Checked;

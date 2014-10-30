@@ -26,6 +26,7 @@ namespace AtmoLight.Targets
     private IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"),20123);
     private Boolean Connected = false;
     private Core coreObject;
+    private Boolean isInit = false;
 
     #endregion
 
@@ -37,6 +38,7 @@ namespace AtmoLight.Targets
 
     public void Initialise(bool force = false)
     {
+      isInit = true;
       serverEndPoint = new IPEndPoint(IPAddress.Parse(coreObject.hueIP),coreObject.huePort);
       Connect();
     }
@@ -88,6 +90,7 @@ namespace AtmoLight.Targets
       try
       {
         client.Connect(serverEndPoint);
+        Connected = true;
       }
       catch (Exception e)
       {
@@ -95,6 +98,15 @@ namespace AtmoLight.Targets
         Log.Error(string.Format("Hue - {0}", e.Message));
         Connected = false;
       }
+
+      //On first initialize set the effect after we are done trying to connect
+      if (isInit && Connected)
+      {
+        ChangeEffect(coreObject.GetCurrentEffect());
+        coreObject.SetAtmoLightOn(coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true);
+        isInit = false;
+      }
+
     }
 
     public void ChangeColor(int red, int green, int blue)
