@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MediaPortal2 AtmoLight Plugin")]
 [assembly: AssemblyDescription("Utilizes the AtmoWinA.exe to toggle live picture mode")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Lightning303")]
+[assembly: AssemblyCompany("Lightning303, Rick164")]
 [assembly: AssemblyProduct("MediaPortal2 AtmoLight Plugin")]
-[assembly: AssemblyCopyright("Copyright © Lightning303 2014")]
+[assembly: AssemblyCopyright("Copyright © Lightning303, Rick164 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
