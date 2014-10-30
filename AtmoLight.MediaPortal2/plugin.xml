@@ -76,7 +76,14 @@
         Id="Hyperion"
         Redundant="true"
         Text="[AtmoLight.Hyperion]"/>
-  </Register> 
+  </Register>
+  
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight">
+    <ConfigSection
+        Id="Hue"
+        Redundant="true"
+        Text="[AtmoLight.Hue]"/>
+  </Register>
   
   <!-- Entries-->  
   <!-- General -->
