@@ -47,6 +47,7 @@
   <string name="AtmoLight.ButtonError">You can not use the same button for multiple actions.</string>
   <string name="AtmoLight.AtmoWin">AtmoWin</string>
   <string name="AtmoLight.Hyperion">Hyperion</string>
+  <string name="AtmoLight.Hue">Hue</string>
   <string name="AtmoLight.AtmoWinTarget">Use AtmoWin</string>
   <string name="AtmoLight.HyperionTarget">Use Hyperion</string>
   <string name="AtmoLight.HueTarget">Use Hue</string>
