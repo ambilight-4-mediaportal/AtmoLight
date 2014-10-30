@@ -27,6 +27,10 @@ namespace AtmoLight.Targets
     private Boolean Connected = false;
     private Core coreObject;
     private Boolean isInit = false;
+    private int avgR_previous = 0;
+    private int avgG_previous = 0;
+    private int avgB_previous = 0;
+
 
     #endregion
 
@@ -45,7 +49,11 @@ namespace AtmoLight.Targets
 
     public void ReInitialise(bool force = false)
     {
-      Connect();
+      if (client.Connected == false)
+      {
+        Connected = false;
+        Connect();
+      }
     }
 
     public void Dispose()
@@ -194,7 +202,7 @@ namespace AtmoLight.Targets
             using (Bitmap image = new Bitmap(coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight(), coreObject.GetCaptureWidth() * 4,
                         PixelFormat.Format32bppRgb, new IntPtr(ptr)))
             {
-              CalculateAverageColor(image);
+              CalculateAverageColorAndSendToHue(image);
             }
           }
         }
@@ -205,7 +213,7 @@ namespace AtmoLight.Targets
         Log.Error(string.Format("Hue - {0}", e.Message));
       }
     }
-    public void CalculateAverageColor(Bitmap bm)
+    public void CalculateAverageColorAndSendToHue(Bitmap bm)
     {
       int width = bm.Width;
       int height = bm.Height;
@@ -248,14 +256,24 @@ namespace AtmoLight.Targets
       }
 
       int count = width * height - dropped;
+
+      //Minimal differcence new versus previous colors
+      int minDiversionPreviousColors = 25;
+
       int avgR = (int)(totals[2] / count);
       int avgG = (int)(totals[1] / count);
       int avgB = (int)(totals[0] / count);
 
+      if (Math.Abs(avgR_previous - avgR) > minDiversionPreviousColors || Math.Abs(avgG_previous - avgG) > minDiversionPreviousColors || Math.Abs(avgG_previous - avgG_previous) > minDiversionPreviousColors)
+      {
+        avgR_previous = avgR;
+        avgG_previous = avgG;
+        avgB_previous = avgB;
 
-      //Send average colors to Bridge
-      ChangeColor(avgR, avgG, avgB);
-    }
+        //Send average colors to Bridge
+        ChangeColor(avgR, avgG, avgB);
+      }
+          }
     #endregion
   }
 }
