@@ -683,7 +683,8 @@ namespace AtmoLight
       byte[] h1pixelData = new byte[GetCaptureWidth() * rgb];
       byte[] h2pixelData = new byte[GetCaptureWidth() * rgb];
 
-      //now flip horizontally, we do it always to prevent microstudder
+      // We need to flip the image horizontally.
+      // Because after reading the bytes into the bytearray with BinaryReader the image is upside down (bmp characteristic).
       int i;
       for (i = 0; i < ((GetCaptureHeight() / 2) - 1); i++)
       {
@@ -692,7 +693,6 @@ namespace AtmoLight
         Array.Copy(h1pixelData, 0, pixelData, (GetCaptureHeight() - i - 1) * GetCaptureWidth() * rgb, GetCaptureWidth() * rgb);
         Array.Copy(h2pixelData, 0, pixelData, i * GetCaptureWidth() * rgb, GetCaptureWidth() * rgb);
       }
-      //send scaled and fliped frame to atmowin
 
       SendPixelData(pixelData, bmiInfoHeader);
     }
