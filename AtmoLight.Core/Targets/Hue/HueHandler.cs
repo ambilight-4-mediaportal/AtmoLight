@@ -12,7 +12,6 @@ using System.Drawing.Imaging;
 using System.Net;
 using System.Net.Sockets;
 using System.Linq;
-using proto;
 
 namespace AtmoLight.Targets
 {
@@ -30,11 +29,11 @@ namespace AtmoLight.Targets
 
     #endregion
 
+    #region Hue
     public HueHandler()
     {
       coreObject = Core.GetInstance();
     }
-    #region Hue
 
     public void Initialise(bool force = false)
     {
@@ -56,6 +55,7 @@ namespace AtmoLight.Targets
         }
         catch (Exception e)
         {
+          Log.Error(string.Format("Hue - {0}", "Error during dispose"));
           Log.Error(string.Format("Hue - {0}", e.Message));
         }
       }
@@ -118,12 +118,6 @@ namespace AtmoLight.Targets
         Log.Error(string.Format("Hue - {0}", e.Message));
       }
     }
-    public void ClearPriority(int priority)
-    {
-    }
-    public void ClearAll()
-    {
-    }
     public bool ChangeEffect(ContentEffect effect)
     {
       if (!IsConnected())
@@ -175,7 +169,7 @@ namespace AtmoLight.Targets
        
       }
 
-      //Convert pixeldat to bitmap and calculate average color afterwards
+      //Convert pixeldata to bitmap and calculate average color afterwards
       try
       {
         unsafe
@@ -194,7 +188,6 @@ namespace AtmoLight.Targets
       catch(Exception e)
       {
         Log.Error(string.Format("Hue - {0}", "Error during average color calculations"));
-
         Log.Error(string.Format("Hue - {0}", e.Message));
       }
     }
@@ -208,7 +201,7 @@ namespace AtmoLight.Targets
       int minDiversion = 15; // drop pixels that do not differ by at least minDiversion between color values (white, gray or black)
       int dropped = 0; // keep track of dropped pixels
       long[] totals = new long[] { 0, 0, 0 };
-      int bppModifier = bm.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb ? 3 : 4; // cutting corners, will fail on anything else but 32 and 24 bit images
+      int bppModifier = bm.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppRgb ? 3 : 4; // cutting corners, will fail on anything else but 32 and 24 bit images
 
       BitmapData srcData = bm.LockBits(new System.Drawing.Rectangle(0, 0, bm.Width, bm.Height), ImageLockMode.ReadOnly, bm.PixelFormat);
       int stride = srcData.Stride;
