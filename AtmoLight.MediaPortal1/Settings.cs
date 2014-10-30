@@ -55,7 +55,7 @@ namespace AtmoLight
     //Hue
     public static bool hueTarget;
     public static string hueIP = "";
-    public static int huePort = 0;;
+    public static int huePort = 0;
 
     #endregion
 

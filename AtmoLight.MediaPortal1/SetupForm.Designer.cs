@@ -1154,6 +1154,7 @@
       this.tbHueIP.Name = "tbHueIP";
       this.tbHueIP.Size = new System.Drawing.Size(93, 20);
       this.tbHueIP.TabIndex = 4;
+      this.tbHueIP.Validating += new System.ComponentModel.CancelEventHandler(this.tbHueIP_Validating);
       // 
       // lblHueIP
       // 
@@ -1170,6 +1171,7 @@
       this.tbHuePort.Name = "tbHuePort";
       this.tbHuePort.Size = new System.Drawing.Size(93, 20);
       this.tbHuePort.TabIndex = 6;
+      this.tbHuePort.Validating += new System.ComponentModel.CancelEventHandler(this.tbHuePort_Validating);
       // 
       // lblHuePort
       // 
