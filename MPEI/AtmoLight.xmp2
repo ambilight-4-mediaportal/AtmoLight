@@ -423,7 +423,7 @@ public static void Main(PackageClass packageClass, UnInstallItem item)
   <GeneralInfo>
     <Name>AtmoLight</Name>
     <Id>8d2c6d9d-03c8-4144-b0b8-85e3a2b0e001</Id>
-    <Author>gemx, Angie05, RickDB, legnod, azzuro, BassFan, Lightning303, HomeY, Sebastiii</Author>
+    <Author>gemx, Angie05, Rick164, legnod, azzuro, BassFan, Lightning303, HomeY, Sebastiii</Author>
     <HomePage>https://code.google.com/p/ambilight-4-mediaportal/</HomePage>
     <ForumPage>http:/http://forum.team-mediaportal.com/threads/atmolight-1-10-0-0-2014-04-19.125633/</ForumPage>
     <UpdateUrl>https://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/Atmolight_update.xml</UpdateUrl>

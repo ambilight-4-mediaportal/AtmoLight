@@ -3,7 +3,7 @@
     Name="AtmoLight"
     PluginId="{c4c349f8-2c98-47b3-be24-6aa1da552f5d}"
     AutoActivate="True"
-    Author="Lightning303"
+    Author="Lightning303, Rick164"
     Copyright="GPL"
     Description="AtmoLight Plugin"
     PluginVersion="2.0">

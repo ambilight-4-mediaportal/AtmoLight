@@ -1017,7 +1017,7 @@ namespace AtmoLight
     /// <returns>Authors name.</returns>
     public string Author()
     {
-      return "gemx, Angie05, RickDB, legnod, azzuro, BassFan, Lightning303, HomeY, Sebastiii";
+      return "gemx, Angie05, Rick164, legnod, azzuro, BassFan, Lightning303, HomeY, Sebastiii";
     }
 
     /// <summary>
