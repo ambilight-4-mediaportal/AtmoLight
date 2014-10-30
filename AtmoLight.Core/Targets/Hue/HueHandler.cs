@@ -22,8 +22,8 @@ namespace AtmoLight.Targets
     public Target Name { get { return Target.Hue; } }
     public TargetType Type { get { return TargetType.Network; } }
 
-    private TcpClient client;
-    private IPEndPoint serverEndPoint;
+    private TcpClient client = new TcpClient();
+    private IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"),20123);
     private Boolean Connected = false;
     private Core coreObject;
 
@@ -38,7 +38,6 @@ namespace AtmoLight.Targets
     public void Initialise(bool force = false)
     {
       serverEndPoint = new IPEndPoint(IPAddress.Parse(coreObject.hueIP),coreObject.huePort);
-      client = new TcpClient();
       Connect();
     }
 
@@ -94,6 +93,7 @@ namespace AtmoLight.Targets
       {
         Log.Error("Hue - error during connect");
         Log.Error(string.Format("Hue - {0}", e.Message));
+        Connected = false;
       }
     }
 
@@ -203,7 +203,7 @@ namespace AtmoLight.Targets
       int minDiversion = 15; // drop pixels that do not differ by at least minDiversion between color values (white, gray or black)
       int dropped = 0; // keep track of dropped pixels
       long[] totals = new long[] { 0, 0, 0 };
-      int bppModifier = bm.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppRgb ? 3 : 4; // cutting corners, will fail on anything else but 32 and 24 bit images
+      int bppModifier = bm.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb ? 3 : 4; // cutting corners, will fail on anything else but 32 and 24 bit images
 
       BitmapData srcData = bm.LockBits(new System.Drawing.Rectangle(0, 0, bm.Width, bm.Height), ImageLockMode.ReadOnly, bm.PixelFormat);
       int stride = srcData.Stride;
