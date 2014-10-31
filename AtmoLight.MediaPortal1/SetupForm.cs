@@ -45,101 +45,17 @@ namespace AtmoLight
       tbHuePort.Text = Settings.huePort.ToString();
       tbHueMinimalColorDifference.Text = Settings.hueMinimalColorDifference.ToString();
 
-      if (Settings.manualMode)
-      {
-        ckOnMediaStart.Checked = true;
-      }
-      else
-      {
-        this.ckOnMediaStart.Checked = false;
-      }
-
-      if (Settings.lowCPU)
-      {
-        ckLowCpu.Checked = true;
-      }
-      else
-      {
-        this.ckLowCpu.Checked = false;
-      }
-
-      if (Settings.delay)
-      {
-        ckDelay.Checked = true;
-      }
-      else
-      {
-        ckDelay.Checked = false;
-      }
-
-      if (Settings.startAtmoWin)
-      {
-        ckStartAtmoWin.Checked = true;
-      }
-      else
-      {
-        ckStartAtmoWin.Checked = false;
-      }
-
-      if (Settings.exitAtmoWin)
-      {
-        ckExitAtmoWin.Checked = true;
-      }
-      else
-      {
-        ckExitAtmoWin.Checked = false;
-      }
-
-      if (Settings.restartOnError)
-      {
-        ckRestartOnError.Checked = true;
-      }
-      else
-      {
-        ckRestartOnError.Checked = false;
-      }
-
-      if (Settings.blackbarDetection)
-      {
-        ckBlackbarDetection.Checked = true;
-      }
-      else
-      {
-        ckBlackbarDetection.Checked = false;
-      }
-      if (Settings.atmoWinTarget)
-      {
-        ckAtmowinEnabled.Checked = true;
-      }
-      else
-      {
-        ckAtmowinEnabled.Checked = false;
-      }
-      if (Settings.hyperionTarget)
-      {
-          ckHyperionEnabled.Checked = true;
-      }
-      else
-      {
-          ckHyperionEnabled.Checked = false;
-      }
-      if (Settings.hueTarget)
-      {
-        ckHueEnabled.Checked = true;
-      }
-      else
-      {
-        ckHueEnabled.Checked = false;
-      }
-
-      if (Settings.HyperionLiveReconnect)
-      {
-        ckHyperionLiveReconnect.Checked = true;
-      }
-      else
-      {
-        ckHyperionLiveReconnect.Checked = false;
-      }
+      ckOnMediaStart.Checked = Settings.manualMode;
+      ckLowCpu.Checked = Settings.lowCPU;
+      ckDelay.Checked = Settings.delay;
+      ckStartAtmoWin.Checked = Settings.startAtmoWin;
+      ckExitAtmoWin.Checked = Settings.exitAtmoWin;
+      ckRestartOnError.Checked = Settings.restartOnError;
+      ckBlackbarDetection.Checked = Settings.blackbarDetection;
+      ckAtmowinEnabled.Checked = Settings.atmoWinTarget;
+      ckHyperionEnabled.Checked = Settings.hyperionTarget;
+      ckHueEnabled.Checked = Settings.hueTarget;
+      ckHyperionLiveReconnect.Checked = Settings.HyperionLiveReconnect;
     }
 
     private void UpdateLanguageOnControls()
