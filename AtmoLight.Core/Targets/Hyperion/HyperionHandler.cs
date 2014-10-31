@@ -130,7 +130,7 @@ namespace AtmoLight.Targets
 
     private void ConnectThread()
     {
-      while (hyperionReconnectCounter <= hyperionReconnectAttempts)
+      while (hyperionReconnectCounter <= coreObject.hyperionReconnectAttempts)
       {
         if (Connected == false)
         {
@@ -171,11 +171,11 @@ namespace AtmoLight.Targets
           {
             if (coreObject.hyperionLiveReconnect == false)
             {
+
               Log.Error("HyperionHandler - Error while connecting");
               Log.Error("HyperionHandler - Exception: {0}", e.Message);
             }
             Connected = false;
-
           }
 
           //if live connect enabled don't use this loop and let liveReconnectThread() fire up new connections
@@ -188,20 +188,14 @@ namespace AtmoLight.Targets
             //Increment times tried
             hyperionReconnectCounter++;
 
-            if (hyperionReconnectCounter > hyperionReconnectAttempts)
+            if (hyperionReconnectCounter > coreObject.hyperionReconnectAttempts)
             {
-              //During first init it would try to show the connection lost dialog too soon resulting in Mediaportal stalling at startup screen ("Starting plugins..") even with the GUIWindowManager.Initalized check.
-              //It will still display the connection lost message after the startup screen this way so no downside but might need looking at later on.
-              if (isInit == false && Connected == false)
-              {
                 coreObject.NewConnectionLost(Name);
-              }
             }
+
+            //Sleep for specified time
+            Thread.Sleep(coreObject.hyperionReconnectDelay);
           }
-
-          //Sleep for specified time
-          Thread.Sleep(coreObject.hyperionReconnectDelay);
-
           //Log.Error("HyperionHandler - retry attempt {0} of {1}",hyperionReconnectCounter,hyperionReconnectAttempts);
         }
         else
