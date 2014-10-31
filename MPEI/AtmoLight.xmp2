@@ -462,7 +462,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
     <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.13.0.0.mpe1</OnlineLocation>
     <ReleaseDate>2014-06-05T10:45:58</ReleaseDate>
     <Tags>sedu-board, atmowin, ws2801, ambilight, teensy 2, atmoduino, ambilight, led</Tags>
-    <Location>..\MPEI Release\[Name]_[Version].mpe1</Location>
+    <Location>..\Release\MP1\[Name]_[Version].mpe1</Location>
     <Params>
       <Items>
         <SectionParam Name="Icon">

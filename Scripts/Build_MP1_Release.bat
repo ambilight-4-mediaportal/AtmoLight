@@ -22,7 +22,7 @@ if not "%ProgramFiles(x86)%".=="". set progpath=%ProgramFiles(x86)%
 
 
 REM set logfile where the infos are written to, and clear that file
-set LOG=build_%BUILD_TYPE%.log
+set LOG=MP1_Build_%BUILD_TYPE%.log
 echo. > %LOG%
 
 
@@ -33,7 +33,11 @@ echo.
 
 "%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBUILD.exe" /target:Rebuild /property:VisualStudioVersion=12.0;Configuration=%BUILD_TYPE% "..\AtmoLight.MediaPortal1.sln" >> %LOG%
 
+if %1!==Debug! goto END
+
 echo Building MPEI
 copy "..\MPEI\AtmoLight.xmp2" "..\MPEI\AtmoLight_COPY.xmp2"
 "%progpath%\Team MediaPortal\MediaPortal\MpeMaker.exe" "..\MPEI\AtmoLight_COPY.xmp2" /B >> %LOG%
 del "..\MPEI\AtmoLight_COPY.xmp2"
+
+:END
