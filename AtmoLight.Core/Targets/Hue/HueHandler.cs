@@ -257,23 +257,32 @@ namespace AtmoLight.Targets
 
       int count = width * height - dropped;
 
-      //Minimal differcence new versus previous colors
       int minDifferencePreviousColors = coreObject.hueMinimalColorDifference;
 
       int avgR = (int)(totals[2] / count);
       int avgG = (int)(totals[1] / count);
       int avgB = (int)(totals[0] / count);
 
-      if (Math.Abs(avgR_previous - avgR) > minDifferencePreviousColors || Math.Abs(avgG_previous - avgG) > minDifferencePreviousColors || Math.Abs(avgG_previous - avgG_previous) > minDifferencePreviousColors)
+      //If users sets minimal difference to 0 disable the average color check
+      if (minDifferencePreviousColors == 0)
       {
-        avgR_previous = avgR;
-        avgG_previous = avgG;
-        avgB_previous = avgB;
-
         //Send average colors to Bridge
         ChangeColor(avgR, avgG, avgB);
       }
-          }
+      else
+      {
+        //Minimal differcence new compared to previous colors
+        if (Math.Abs(avgR_previous - avgR) > minDifferencePreviousColors || Math.Abs(avgG_previous - avgG) > minDifferencePreviousColors || Math.Abs(avgG_previous - avgG_previous) > minDifferencePreviousColors)
+        {
+          avgR_previous = avgR;
+          avgG_previous = avgG;
+          avgB_previous = avgB;
+
+          //Send average colors to Bridge
+          ChangeColor(avgR, avgG, avgB);
+        }
+      }
+    }
     #endregion
   }
 }
