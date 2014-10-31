@@ -168,28 +168,6 @@ namespace AtmoLight.Targets
       {
         return;
       }
-      // Hyperion expects the bytestring to be the size of 3*width*height.
-      // So 3 bytes per pixel, as in RGB.
-      // Given pixeldata however is 4 bytes per pixel, as in RGBA.
-      // So we need to remove the last byte per pixel.
-      byte[] newpixeldata = new byte[coreObject.GetCaptureHeight() * coreObject.GetCaptureWidth() * 3];
-      int x = 0;
-      int i = 0;
-      int red = 0;
-      int green = 0;
-      int blue = 0;
-      while (i <= (newpixeldata.GetLength(0) - 2))
-      {
-        newpixeldata[i] = pixeldata[i + x + 2];
-        newpixeldata[i + 1] = pixeldata[i + x + 1];
-        newpixeldata[i + 2] = pixeldata[i + x];
-        red = newpixeldata[i];
-        green = newpixeldata[i + 1];
-        blue = newpixeldata[i + 2];
-        i += 3;
-        x++;
-       
-      }
 
       //Convert pixeldata to bitmap and calculate average color afterwards
       try
