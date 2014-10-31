@@ -187,18 +187,12 @@ namespace AtmoLight.Targets
           {
             //Increment times tried
             hyperionReconnectCounter++;
+
             if (hyperionReconnectCounter > hyperionReconnectAttempts)
             {
               //During first init it would try to show the connection lost dialog too soon resulting in Mediaportal stalling at startup screen ("Starting plugins..") even with the GUIWindowManager.Initalized check.
               //It will still display the connection lost message after the startup screen this way so no downside but might need looking at later on.
-              if (isInit)
-              {
-                ChangeEffect(coreObject.GetCurrentEffect());
-                coreObject.SetAtmoLightOn(coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true);
-
-                isInit = false;
-              }
-              else
+              if (isInit == false && Connected == false)
               {
                 coreObject.NewConnectionLost(Name);
               }
@@ -224,6 +218,10 @@ namespace AtmoLight.Targets
         ChangeEffect(coreObject.GetCurrentEffect());
         coreObject.SetAtmoLightOn(coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true);
 
+        isInit = false;
+      }
+      else if (isInit)
+      {
         isInit = false;
       }
     }
