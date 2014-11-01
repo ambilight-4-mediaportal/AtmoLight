@@ -132,22 +132,25 @@ namespace AtmoLight.Targets
 
     }
 
-    public void ChangeColor(int red, int green, int blue)
+    public void ChangeColor(int red, int green, int blue, int priority)
     {
-      Thread t = new Thread(() => ChangeColorThread(red,green,blue));
+      Thread t = new Thread(() => ChangeColorThread(red,green,blue, priority));
+      t.IsBackground = true;
       t.Start();
+
     }
-    public void ChangeColorThread(int red, int green, int blue)
+    public void ChangeColorThread(int red, int green, int blue, int priority)
     {
       try
       {
-          string message = string.Format("{0},{1},{2}", red.ToString(), green.ToString(), blue.ToString());
+          string message = string.Format("{0},{1},{2},{3}", red.ToString(), green.ToString(), blue.ToString(), priority.ToString());
           NetworkStream clientStream = client.GetStream();
           ASCIIEncoding encoder = new ASCIIEncoding();
           byte[] buffer = encoder.GetBytes(message);
 
           clientStream.Write(buffer, 0, buffer.Length);
           clientStream.Flush();
+
       }
       catch (Exception e)
       {
@@ -164,12 +167,12 @@ namespace AtmoLight.Targets
       switch (effect)
       {
         case ContentEffect.StaticColor:
-          ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
+          ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2], 10);
           break;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
         default:
-          ChangeColor(0, 0, 0);
+          ChangeColor(0, 0, 0, 1);
           break;
       }
       return true;
@@ -196,7 +199,14 @@ namespace AtmoLight.Targets
             using (Bitmap image = new Bitmap(coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight(), coreObject.GetCaptureWidth() * 4,
                         PixelFormat.Format32bppRgb, new IntPtr(ptr)))
             {
-              CalculateAverageColorAndSendToHue(image);
+              if (coreObject.GetCurrentEffect() == ContentEffect.VUMeter || coreObject.GetCurrentEffect() == ContentEffect.VUMeterRainbow)
+              {
+                CalculateVUMeterColorAndSendToHue(image);
+              }
+              else
+              {
+                CalculateAverageColorAndSendToHue(image);
+              }
             }
           }
         }
@@ -261,7 +271,7 @@ namespace AtmoLight.Targets
       if (minDifferencePreviousColors == 0)
       {
         //Send average colors to Bridge
-        ChangeColor(avgR, avgG, avgB);
+        ChangeColor(avgR, avgG, avgB, 200);
       }
       else
       {
@@ -273,9 +283,27 @@ namespace AtmoLight.Targets
           avgB_previous = avgB;
 
           //Send average colors to Bridge
-          ChangeColor(avgR, avgG, avgB);
+          ChangeColor(avgR, avgG, avgB,200);
         }
       }
+    }
+
+    private void CalculateVUMeterColorAndSendToHue(Bitmap vuMeterBitmap)
+    {
+      for (int i = 0; i < vuMeterBitmap.Height; i++)
+      {
+        if (vuMeterBitmap.GetPixel(0, i).R != 0 || vuMeterBitmap.GetPixel(0, i).G != 0 || vuMeterBitmap.GetPixel(0, i).B != 0)
+        {
+          ChangeColor(vuMeterBitmap.GetPixel(0, i).R, vuMeterBitmap.GetPixel(0, i).G, vuMeterBitmap.GetPixel(0, i).B, 200);
+          return;
+        }
+        else if (vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).R != 0 || vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).G != 0 || vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).B != 0)
+        {
+          ChangeColor(vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).R, vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).G, vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).B, 200);
+          return;
+        }
+      }
+      ChangeColor(0, 0, 0,200);
     }
     #endregion
   }
