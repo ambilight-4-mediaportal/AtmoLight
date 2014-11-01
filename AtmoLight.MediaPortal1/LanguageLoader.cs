@@ -182,6 +182,38 @@ namespace Language
 
     }
 
+    public static string GetTranslationFromFieldName(string fieldName)
+    {
+      Object obj = appStrings;
+      Type t = appStrings.GetType();
+
+      FieldInfo[] fi = t.GetFields();
+      foreach (FieldInfo field in fi)
+      {
+        if (field.Name == fieldName)
+        {
+          return (string)(field.GetValue(obj));
+        }
+      }
+      return "-1";
+    }
+
+    public static string GetFieldNameFromTranslation(string translation)
+    {
+      Object obj = appStrings;
+      Type t = appStrings.GetType();
+
+      FieldInfo[] fi = t.GetFields();
+      foreach (FieldInfo field in fi)
+      {
+        if ((string)(field.GetValue(obj)) == translation)
+        {
+          return field.Name;
+        }
+      }
+      return "-1";
+    }
+
     public static Boolean WriteLanguageFile(String strLanguageFile)
     {
       INIWriterForCE iniAccess = new INIWriterForCE(strLanguageFile);
@@ -297,8 +329,8 @@ namespace Language
     public String ContextMenu_Switch3DOFF;
     public String ContextMenu_ChangeStatic;
     public String ContextMenu_LEDsDisabled;
-    public String ContextMenu_MPLive;
-    public String ContextMenu_AWLive;
+    public String ContextMenu_MediaPortalLiveMode;
+    public String ContextMenu_ExternalLiveMode;
     public String ContextMenu_Colorchanger;
     public String ContextMenu_ColorchangerLR;
     public String ContextMenu_StaticColor;
@@ -335,4 +367,3 @@ namespace Language
     public String ContextMenu_ReInitialise;
   }
 }
-

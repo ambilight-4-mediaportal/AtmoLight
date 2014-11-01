@@ -74,11 +74,11 @@ namespace AtmoLight
       using (MediaPortal.Profile.Settings reader = new MediaPortal.Profile.Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
       {
         atmowinExe = reader.GetValueAsString("atmolight", "atmowinexe", "");
-        effectVideo = (ContentEffect)reader.GetValueAsInt("atmolight", "effectVideo", 4);
-        effectMusic = (ContentEffect)reader.GetValueAsInt("atmolight", "effectMusic", 1);
-        effectRadio = (ContentEffect)reader.GetValueAsInt("atmolight", "effectRadio", 0);
-        effectMenu = (ContentEffect)reader.GetValueAsInt("atmolight", "effectMenu", 0);
-        effectMPExit = (ContentEffect)reader.GetValueAsInt("atmolight", "effectMPExit", 0);
+        effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectVideo", "MediaPortalLiveMode"));
+        effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMusic", "LEDsDisabled"));
+        effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectRadio", "LEDsDisabled"));
+        effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMenu", "LEDsDisabled"));
+        effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMPExit", "LEDsDisabled"));
         killButton = reader.GetValueAsInt("atmolight", "killbutton", 4);
         profileButton = reader.GetValueAsInt("atmolight", "cmbutton", 4);
         menuButton = reader.GetValueAsInt("atmolight", "menubutton", 4);
@@ -124,11 +124,11 @@ namespace AtmoLight
       using (MediaPortal.Profile.Settings reader = new MediaPortal.Profile.Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
       {
         reader.SetValue("atmolight", "atmowinexe", atmowinExe);
-        reader.SetValue("atmolight", "effectVideo", (int)effectVideo);
-        reader.SetValue("atmolight", "effectMusic", (int)effectMusic);
-        reader.SetValue("atmolight", "effectRadio", (int)effectRadio);
-        reader.SetValue("atmolight", "effectMenu", (int)effectMenu);
-        reader.SetValue("atmolight", "effectMPExit", (int)effectMPExit);
+        reader.SetValue("atmolight", "effectVideo", effectVideo.ToString());
+        reader.SetValue("atmolight", "effectMusic", effectMusic.ToString());
+        reader.SetValue("atmolight", "effectRadio", effectRadio.ToString());
+        reader.SetValue("atmolight", "effectMenu", effectMenu.ToString());
+        reader.SetValue("atmolight", "effectMPExit", effectMPExit.ToString());
         reader.SetValue("atmolight", "killbutton", (int)killButton);
         reader.SetValue("atmolight", "cmbutton", (int)profileButton);
         reader.SetValue("atmolight", "menubutton", (int)menuButton);

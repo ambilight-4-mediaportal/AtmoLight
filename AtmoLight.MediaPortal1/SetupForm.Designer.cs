@@ -480,6 +480,7 @@
       this.ckHueEnabled.TabIndex = 21;
       this.ckHueEnabled.Text = "Hue";
       this.ckHueEnabled.UseVisualStyleBackColor = true;
+      this.ckHueEnabled.CheckedChanged += new System.EventHandler(this.ckHueEnabled_CheckedChanged);
       // 
       // lblHintHardware
       // 
@@ -502,6 +503,7 @@
       this.ckAtmowinEnabled.TabIndex = 1;
       this.ckAtmowinEnabled.Text = "AtmoWin";
       this.ckAtmowinEnabled.UseVisualStyleBackColor = true;
+      this.ckAtmowinEnabled.CheckedChanged += new System.EventHandler(this.ckAtmowinEnabled_CheckedChanged);
       // 
       // ckHyperionEnabled
       // 
@@ -512,6 +514,7 @@
       this.ckHyperionEnabled.TabIndex = 2;
       this.ckHyperionEnabled.Text = "Hyperion";
       this.ckHyperionEnabled.UseVisualStyleBackColor = true;
+      this.ckHyperionEnabled.CheckedChanged += new System.EventHandler(this.ckHyperionEnabled_CheckedChanged);
       // 
       // grpMode
       // 

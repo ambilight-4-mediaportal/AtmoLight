@@ -21,6 +21,24 @@ namespace AtmoLight
     public Target Name { get { return Target.AtmoWin; } }
     public TargetType Type { get { return TargetType.Local; } }
 
+    public List<ContentEffect> SupportedEffects
+    {
+      get
+      {
+        return new List<ContentEffect> {  ContentEffect.ExternalLiveMode,
+                                          ContentEffect.Colorchanger,
+                                          ContentEffect.ColorchangerLR,
+                                          ContentEffect.GIFReader,
+                                          ContentEffect.LEDsDisabled,
+                                          ContentEffect.MediaPortalLiveMode,
+                                          ContentEffect.StaticColor,
+                                          ContentEffect.Undefined,
+                                          ContentEffect.VUMeter,
+                                          ContentEffect.VUMeterRainbow
+        };
+      }
+    }
+
     // Threads
     private Thread reinitialiseThreadHelper;
     private Thread initialiseThreadHelper;
@@ -141,7 +159,7 @@ namespace AtmoLight
       StopGetAtmoLiveViewSourceThread();
       switch (effect)
       {
-        case ContentEffect.AtmoWinLiveMode:
+        case ContentEffect.ExternalLiveMode:
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI)) return false;
           break;

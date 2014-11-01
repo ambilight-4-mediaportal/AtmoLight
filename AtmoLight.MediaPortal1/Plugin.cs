@@ -41,6 +41,8 @@ namespace AtmoLight
     private ContentEffect playbackEffect = ContentEffect.Undefined; // Effect for current placback
     private ContentEffect menuEffect = ContentEffect.Undefined; // Effect in GUI (no playback)
 
+    private List<ContentEffect> supportedEffects;
+
     // Frame Fields
     private Surface rgbSurface = null; // RGB Surface
     private Int64 lastFrame = 0; // Tick count of the last frame
@@ -158,6 +160,9 @@ namespace AtmoLight
       AtmoLightObject.SetReInitOnError(Settings.restartOnError);
       AtmoLightObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
       AtmoLightObject.SetCaptureDimensions(Settings.captureWidth, Settings.captureHeight);
+
+      // Get the effects that are supported by at least one target
+      supportedEffects = AtmoLightObject.GetSupportedEffects();
 
       menuEffect = Settings.effectMenu;
       if (CheckForStartRequirements())
@@ -743,55 +748,67 @@ namespace AtmoLight
         GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgEffect.Reset();
         dlgEffect.SetHeading(LanguageLoader.appStrings.ContextMenu_ChangeEffect);
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_LEDsDisabled));
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_MPLive));
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_AWLive));
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Colorchanger));
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ColorchangerLR));
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_StaticColor));
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_GIFReader));
-        if (g_Player.Playing && (g_Player.currentMedia == g_Player.MediaType.Music || g_Player.currentMedia == g_Player.MediaType.Radio))
+
+        // Only show effects that are support by at least one target
+        foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
         {
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_VUMeter));
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_VUMeterRainbow));
+          if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
+          {
+            if (effect == ContentEffect.VUMeter || effect == ContentEffect.VUMeterRainbow)
+            {
+              if (g_Player.Playing && (g_Player.currentMedia == g_Player.MediaType.Music || g_Player.currentMedia == g_Player.MediaType.Radio))
+              {
+                dlgEffect.Add(new GUIListItem(LanguageLoader.GetTranslationFromFieldName("ContextMenu_"+effect.ToString())));
+              }
+            }
+            else
+            {
+              dlgEffect.Add(new GUIListItem(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString())));
+            }
+          }
         }
         dlgEffect.SelectedLabel = 0;
         dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
 
         ContentEffect temp = ContentEffect.Undefined;
 
-        switch (dlgEffect.SelectedLabel)
+        if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_LEDsDisabled)
         {
-          case -1:
-            return;
-          case 0:
-            temp = ContentEffect.LEDsDisabled;
-            break;
-          case 1:
-            temp = ContentEffect.MediaPortalLiveMode;
-            break;
-          case 2:
-            temp = ContentEffect.AtmoWinLiveMode;
-            break;
-          case 3:
-            temp = ContentEffect.Colorchanger;
-            break;
-          case 4:
-            temp = ContentEffect.ColorchangerLR;
-            break;
-          case 5:
-            temp = ContentEffect.StaticColor;
-            break;
-          case 6:
-            temp = ContentEffect.GIFReader;
-            break;
-          case 7:
-            temp = ContentEffect.VUMeter;
-            break;
-          case 8:
-            temp = ContentEffect.VUMeterRainbow;
-            break;
+          temp = ContentEffect.LEDsDisabled;
         }
+        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_MediaPortalLiveMode)
+        {
+          temp = ContentEffect.MediaPortalLiveMode;
+        }
+        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ExternalLiveMode)
+        {
+          temp = ContentEffect.ExternalLiveMode;
+        }
+        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_Colorchanger)
+        {
+          temp = ContentEffect.Colorchanger;
+        }
+        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ColorchangerLR)
+        {
+          temp = ContentEffect.ColorchangerLR;
+        }
+        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_StaticColor)
+        {
+          temp = ContentEffect.StaticColor;
+        }
+        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_GIFReader)
+        {
+          temp = ContentEffect.GIFReader;
+        }
+        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_VUMeter)
+        {
+          temp = ContentEffect.VUMeter;
+        }
+        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_VUMeterRainbow)
+        {
+          temp = ContentEffect.VUMeterRainbow;
+        }
+
         if (g_Player.Playing)
         {
           playbackEffect = temp;

@@ -2,24 +2,108 @@
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using Language;
 
 namespace AtmoLight
 {
   public partial class SetupForm : Form
   {
+    private Core coreObject = Core.GetInstance();
+    public void UpdateComboBoxes()
+    {
+      List<ContentEffect> supportedEffects = coreObject.GetSupportedEffects();
+
+      cbVideo.Items.Clear();
+      cbMusic.Items.Clear();
+      cbRadio.Items.Clear();
+      cbMenu.Items.Clear();
+      cbMPExit.Items.Clear();
+
+      foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
+      {
+        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
+        {
+          cbVideo.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+          cbMusic.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+          cbRadio.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+          cbMenu.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+          cbMPExit.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+        }
+      }
+
+      cbVideo.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectVideo.ToString());
+      cbMusic.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectMusic.ToString());
+      cbRadio.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectRadio.ToString());
+      cbMenu.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectMenu.ToString());
+      cbMPExit.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectMPExit.ToString());
+    }
+
+    private void ckAtmowinEnabled_CheckedChanged(Object sender, EventArgs e)
+    {
+      if (ckAtmowinEnabled.Checked)
+      {
+        coreObject.AddTarget(Target.AtmoWin);
+      }
+      else
+      {
+        coreObject.RemoveTarget(Target.AtmoWin);
+      }
+      UpdateComboBoxes();
+    }
+
+    private void ckHyperionEnabled_CheckedChanged(Object sender, EventArgs e)
+    {
+      if (ckHyperionEnabled.Checked)
+      {
+        coreObject.AddTarget(Target.Hyperion);
+      }
+      else
+      {
+        coreObject.RemoveTarget(Target.Hyperion);
+      }
+      UpdateComboBoxes();
+    }
+
+    private void ckHueEnabled_CheckedChanged(Object sender, EventArgs e)
+    {
+      if (ckHueEnabled.Checked)
+      {
+        coreObject.AddTarget(Target.Hue);
+      }
+      else
+      {
+        coreObject.RemoveTarget(Target.Hue);
+      }
+      UpdateComboBoxes();
+    }
+
     public SetupForm()
     {
       InitializeComponent();
       UpdateLanguageOnControls();
 
+      // AtmoWin
+      if (Settings.atmoWinTarget)
+      {
+        coreObject.AddTarget(Target.AtmoWin);
+      }
+      // Hyperion
+      if (Settings.hyperionTarget)
+      {
+        coreObject.AddTarget(Target.Hyperion);
+      }
+
+      // Hue
+      if (Settings.hueTarget)
+      {
+        coreObject.AddTarget(Target.Hue);
+      }
+
+      UpdateComboBoxes();
+
       lblVersionVal.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
       edFile.Text = Settings.atmowinExe;
-      cbVideo.SelectedIndex = (int)Settings.effectVideo;
-      cbMusic.SelectedIndex = (int)Settings.effectMusic;
-      cbRadio.SelectedIndex = (int)Settings.effectRadio;
-      cbMenu.SelectedIndex = (int)Settings.effectMenu;
-      cbMPExit.SelectedIndex = (Settings.effectMPExit == ContentEffect.StaticColor ? 4 : (int)Settings.effectMPExit);
       comboBox1.SelectedIndex = (int)Settings.killButton;
       comboBox2.SelectedIndex = (int)Settings.profileButton;
       cbMenuButton.SelectedIndex = (int)Settings.menuButton;
@@ -354,11 +438,6 @@ namespace AtmoLight
       Settings.staticColorGreen = int.Parse(tbGreen.Text);
       Settings.staticColorBlue = int.Parse(tbBlue.Text);
       Settings.atmowinExe = edFile.Text;
-      Settings.effectVideo = (ContentEffect)cbVideo.SelectedIndex;
-      Settings.effectMusic = (ContentEffect)cbMusic.SelectedIndex;
-      Settings.effectRadio = (ContentEffect)cbRadio.SelectedIndex;
-      Settings.effectMenu = (ContentEffect)cbMenu.SelectedIndex;
-      Settings.effectMPExit = (ContentEffect)(cbMPExit.SelectedIndex == 4 ? 5 : cbMPExit.SelectedIndex);
       Settings.excludeTimeStart = DateTime.Parse(edExcludeStart.Text);
       Settings.excludeTimeEnd = DateTime.Parse(edExcludeEnd.Text);
       Settings.killButton = comboBox1.SelectedIndex;
@@ -391,6 +470,12 @@ namespace AtmoLight
       Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
       Settings.hueTarget = ckHueEnabled.Checked;
       Settings.hyperionTarget = ckHyperionEnabled.Checked;
+
+      Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text).Remove(0, 12));
+      Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text).Remove(0, 12));
+      Settings.effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbRadio.Text).Remove(0, 12));
+      Settings.effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMenu.Text).Remove(0, 12));
+      Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMPExit.Text).Remove(0, 12));
 
       Settings.SaveSettings();
       this.DialogResult = DialogResult.OK;

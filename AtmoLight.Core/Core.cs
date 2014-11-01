@@ -21,14 +21,14 @@ namespace AtmoLight
   {
      
     LEDsDisabled = 0,
-    AtmoWinLiveMode,
-    Colorchanger,
-    ColorchangerLR,
     MediaPortalLiveMode,
     StaticColor,
     GIFReader,
     VUMeter,
     VUMeterRainbow,
+    ExternalLiveMode,
+    Colorchanger,
+    ColorchangerLR,
     Undefined = -1
   }
 
@@ -583,6 +583,25 @@ namespace AtmoLight
     {
       return targets.Count();
     }
+
+    public List<ContentEffect> GetSupportedEffects()
+    {
+      List<ContentEffect> tempList = new List<ContentEffect>();
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          for (int i = 0; i < target.SupportedEffects.Count; i++)
+          {
+            if (!tempList.Contains(target.SupportedEffects[i]))
+            {
+              tempList.Add(target.SupportedEffects[i]);
+            }
+          }
+        }
+      }
+      return tempList;
+    }
     #endregion
 
     #region Events
@@ -747,13 +766,13 @@ namespace AtmoLight
       StopAllThreads();
       switch (effect)
       {
-        case ContentEffect.AtmoWinLiveMode:
+        case ContentEffect.ExternalLiveMode:
           currentState = true;
           lock (targetsLock)
           {
             foreach (var target in targets)
             {
-              target.ChangeEffect(ContentEffect.AtmoWinLiveMode);
+              target.ChangeEffect(ContentEffect.ExternalLiveMode);
             }
           }
           break;

@@ -22,6 +22,21 @@ namespace AtmoLight.Targets
     public Target Name { get { return Target.Hyperion; } }
     public TargetType Type { get { return TargetType.Network; } }
 
+    public List<ContentEffect> SupportedEffects
+    {
+      get
+      {
+        return new List<ContentEffect> {  ContentEffect.GIFReader,
+                                          ContentEffect.LEDsDisabled,
+                                          ContentEffect.MediaPortalLiveMode,
+                                          ContentEffect.StaticColor,
+                                          ContentEffect.Undefined,
+                                          ContentEffect.VUMeter,
+                                          ContentEffect.VUMeterRainbow
+        };
+      }
+    }
+
     private static TcpClient Socket = new TcpClient();
     private Stream Stream;
     private Boolean Connected = false;
