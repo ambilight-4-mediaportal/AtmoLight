@@ -26,8 +26,8 @@ namespace AtmoLight
       get
       {
         return new List<ContentEffect> {  ContentEffect.ExternalLiveMode,
-                                          ContentEffect.Colorchanger,
-                                          ContentEffect.ColorchangerLR,
+                                          ContentEffect.AtmoWinColorchanger,
+                                          ContentEffect.AtmoWinColorchangerLR,
                                           ContentEffect.GIFReader,
                                           ContentEffect.LEDsDisabled,
                                           ContentEffect.MediaPortalLiveMode,
@@ -163,10 +163,10 @@ namespace AtmoLight
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI)) return false;
           break;
-        case ContentEffect.Colorchanger:
+        case ContentEffect.AtmoWinColorchanger:
           if (!SetAtmoEffect(ComEffectMode.cemColorChange)) return false;
           break;
-        case ContentEffect.ColorchangerLR:
+        case ContentEffect.AtmoWinColorchangerLR:
           if (!SetAtmoEffect(ComEffectMode.cemLrColorChange)) return false;
           break;
         case ContentEffect.MediaPortalLiveMode:

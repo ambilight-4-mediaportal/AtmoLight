@@ -27,8 +27,8 @@ namespace AtmoLight
     VUMeter,
     VUMeterRainbow,
     ExternalLiveMode,
-    Colorchanger,
-    ColorchangerLR,
+    AtmoWinColorchanger,
+    AtmoWinColorchangerLR,
     Undefined = -1
   }
 
@@ -776,23 +776,23 @@ namespace AtmoLight
             }
           }
           break;
-        case ContentEffect.Colorchanger:
+        case ContentEffect.AtmoWinColorchanger:
           currentState = true;
           lock (targetsLock)
           {
             foreach (var target in targets)
             {
-              target.ChangeEffect(ContentEffect.Colorchanger);
+              target.ChangeEffect(ContentEffect.AtmoWinColorchanger);
             }
           }
           break;
-        case ContentEffect.ColorchangerLR:
+        case ContentEffect.AtmoWinColorchangerLR:
           currentState = true;
           lock (targetsLock)
           {
             foreach (var target in targets)
             {
-              target.ChangeEffect(ContentEffect.ColorchangerLR);
+              target.ChangeEffect(ContentEffect.AtmoWinColorchangerLR);
             }
           }
           break;

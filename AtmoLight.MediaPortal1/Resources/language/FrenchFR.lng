@@ -80,9 +80,9 @@ Switch3DON=3D SBS Mode > ON
 Switch3DOFF=3D SBS Mode > OFF
 ChangeStatic=Changé la Couleur unique
 LEDsDisabled=LEDs éteinte
-MPLive=MediaPortal Live Mode
-Colorchanger=Changement de couleur
-ColorchangerLR=Changement de couleur LR
+MediaPortalLiveMode=MediaPortal Live Mode
+AtmoWinColorchanger=Changement de couleur
+AtmoWinColorchangerLR=Changement de couleur LR
 StaticColor=Couleur unique
 Manual=Manuel
 SaveColor=Enreg. couleur actuelle
@@ -115,6 +115,6 @@ ConnectionLost=Connexion à [Target] perdu!
 
 ;We need the strings below translated into french!
 ReInitialise=Reconnect to lost targets
-AWLive=External Live Mode
+ExternalLiveMode=External Live Mode
 ConnectLine1=Connection to target lost.
 ConnectLine2=Do you want to re establish it?

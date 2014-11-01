@@ -331,8 +331,8 @@ namespace Language
     public String ContextMenu_LEDsDisabled;
     public String ContextMenu_MediaPortalLiveMode;
     public String ContextMenu_ExternalLiveMode;
-    public String ContextMenu_Colorchanger;
-    public String ContextMenu_ColorchangerLR;
+    public String ContextMenu_AtmoWinColorchanger;
+    public String ContextMenu_AtmoWinColorchangerLR;
     public String ContextMenu_StaticColor;
     public String ContextMenu_Manual;
     public String ContextMenu_SaveColor;

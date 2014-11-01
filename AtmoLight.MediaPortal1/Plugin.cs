@@ -784,13 +784,13 @@ namespace AtmoLight
         {
           temp = ContentEffect.ExternalLiveMode;
         }
-        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_Colorchanger)
+        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_AtmoWinColorchanger)
         {
-          temp = ContentEffect.Colorchanger;
+          temp = ContentEffect.AtmoWinColorchanger;
         }
-        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ColorchangerLR)
+        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_AtmoWinColorchangerLR)
         {
-          temp = ContentEffect.ColorchangerLR;
+          temp = ContentEffect.AtmoWinColorchangerLR;
         }
         else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_StaticColor)
         {
