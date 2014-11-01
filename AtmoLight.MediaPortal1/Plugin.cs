@@ -770,18 +770,21 @@ namespace AtmoLight
         dlgEffect.SelectedLabel = 0;
         dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
 
-        ContentEffect temp = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(dlgEffect.SelectedLabelText, "ContextMenu_").Remove(0, 12));
+        if (!String.IsNullOrEmpty(dlgEffect.SelectedLabelText))
+        {
+          ContentEffect temp = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(dlgEffect.SelectedLabelText, "ContextMenu_").Remove(0, 12));
 
-        if (g_Player.Playing)
-        {
-          playbackEffect = temp;
+          if (g_Player.Playing)
+          {
+            playbackEffect = temp;
+          }
+          else
+          {
+            menuEffect = temp;
+          }
+          AtmoLightObject.ChangeEffect(temp);
+          CalculateDelay();
         }
-        else
-        {
-          menuEffect = temp;
-        }
-        AtmoLightObject.ChangeEffect(temp);
-        CalculateDelay();
       }
       // Change Profile
       else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeAWProfile)
