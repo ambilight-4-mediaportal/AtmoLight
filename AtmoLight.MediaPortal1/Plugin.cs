@@ -770,55 +770,21 @@ namespace AtmoLight
         dlgEffect.SelectedLabel = 0;
         dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
 
-        ContentEffect temp = ContentEffect.Undefined;
+        if (!String.IsNullOrEmpty(dlgEffect.SelectedLabelText))
+        {
+          ContentEffect temp = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(dlgEffect.SelectedLabelText, "ContextMenu_").Remove(0, 12));
 
-        if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_LEDsDisabled)
-        {
-          temp = ContentEffect.LEDsDisabled;
+          if (g_Player.Playing)
+          {
+            playbackEffect = temp;
+          }
+          else
+          {
+            menuEffect = temp;
+          }
+          AtmoLightObject.ChangeEffect(temp);
+          CalculateDelay();
         }
-        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_MediaPortalLiveMode)
-        {
-          temp = ContentEffect.MediaPortalLiveMode;
-        }
-        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ExternalLiveMode)
-        {
-          temp = ContentEffect.ExternalLiveMode;
-        }
-        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_AtmoWinColorchanger)
-        {
-          temp = ContentEffect.AtmoWinColorchanger;
-        }
-        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_AtmoWinColorchangerLR)
-        {
-          temp = ContentEffect.AtmoWinColorchangerLR;
-        }
-        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_StaticColor)
-        {
-          temp = ContentEffect.StaticColor;
-        }
-        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_GIFReader)
-        {
-          temp = ContentEffect.GIFReader;
-        }
-        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_VUMeter)
-        {
-          temp = ContentEffect.VUMeter;
-        }
-        else if (dlgEffect.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_VUMeterRainbow)
-        {
-          temp = ContentEffect.VUMeterRainbow;
-        }
-
-        if (g_Player.Playing)
-        {
-          playbackEffect = temp;
-        }
-        else
-        {
-          menuEffect = temp;
-        }
-        AtmoLightObject.ChangeEffect(temp);
-        CalculateDelay();
       }
       // Change Profile
       else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeAWProfile)

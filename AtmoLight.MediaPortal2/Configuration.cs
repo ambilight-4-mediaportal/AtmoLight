@@ -57,13 +57,24 @@ namespace AtmoLight.Configuration
 
   public class VideoEffect : SingleSelectionList
   {
+    private IList<string> effectList = new List<string>();
     public override void Load()
     {
-      IList<string> effectList = new List<string>();
-      for (int x = 0; x < 7; x++)
+      List<ContentEffect> supportedEffects = AtmoLight.Plugin.AtmoLightObject.GetSupportedEffects();
+
+      effectList.Clear();
+      foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
       {
-        effectList.Add("[AtmoLight." + ((ContentEffect)x).ToString() + "]");
+        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
+        {
+          // VU Meter is not supported by MP2 yet.
+          if (effect != ContentEffect.VUMeter && effect != ContentEffect.VUMeterRainbow)
+          {
+            effectList.Add("[AtmoLight." + effect.ToString() + "]");
+          }
+        }
       }
+
       Selected = effectList.IndexOf("[AtmoLight." + SettingsManager.Load<Settings>().VideoEffect.ToString() + "]");
 
       _items = effectList.Select(LocalizationHelper.CreateResourceString).ToList();
@@ -73,24 +84,34 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.VideoEffect = (ContentEffect)Selected;
+      settings.VideoEffect = (ContentEffect)Enum.Parse(typeof(ContentEffect), effectList[Selected].Remove(effectList[Selected].Length - 1).Remove(0, 11));
       SettingsManager.Save(settings);
 
       if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeEffect((ContentEffect)Selected);
+        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(settings.VideoEffect);
       }
     }
   }
 
   public class AudioEffect : SingleSelectionList
   {
+    private IList<string> effectList = new List<string>();
     public override void Load()
     {
-      IList<string> effectList = new List<string>();
-      for (int x = 0; x < 7; x++)
+      List<ContentEffect> supportedEffects = AtmoLight.Plugin.AtmoLightObject.GetSupportedEffects();
+
+      effectList.Clear();
+      foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
       {
-        effectList.Add("[AtmoLight." + ((ContentEffect)x).ToString() + "]");
+        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
+        {
+          // VU Meter is not supported by MP2 yet.
+          if (effect != ContentEffect.VUMeter && effect != ContentEffect.VUMeterRainbow)
+          {
+            effectList.Add("[AtmoLight." + effect.ToString() + "]");
+          }
+        }
       }
 
       Selected = effectList.IndexOf("[AtmoLight." + SettingsManager.Load<Settings>().AudioEffect.ToString() + "]");
@@ -102,24 +123,34 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.AudioEffect = (ContentEffect)Selected;
+      settings.AudioEffect = (ContentEffect)Enum.Parse(typeof(ContentEffect), effectList[Selected].Remove(effectList[Selected].Length - 1).Remove(0, 11));
       SettingsManager.Save(settings);
 
       if (ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeEffect((ContentEffect)Selected);
+        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(settings.AudioEffect);
       }
     }
   }
 
   public class MenuEffect : SingleSelectionList
   {
+    private IList<string> effectList = new List<string>();
     public override void Load()
     {
-      IList<string> effectList = new List<string>();
-      for (int x = 0; x < 7; x++)
+      List<ContentEffect> supportedEffects = AtmoLight.Plugin.AtmoLightObject.GetSupportedEffects();
+
+      effectList.Clear();
+      foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
       {
-        effectList.Add("[AtmoLight." + ((ContentEffect)x).ToString() + "]");
+        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
+        {
+          // VU Meter is not supported by MP2 yet.
+          if (effect != ContentEffect.VUMeter && effect != ContentEffect.VUMeterRainbow)
+          {
+            effectList.Add("[AtmoLight." + effect.ToString() + "]");
+          }
+        }
       }
 
       Selected = effectList.IndexOf("[AtmoLight." + SettingsManager.Load<Settings>().MenuEffect.ToString() + "]");
@@ -131,24 +162,37 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.MenuEffect = (ContentEffect)Selected;
+      settings.MenuEffect = (ContentEffect)Enum.Parse(typeof(ContentEffect), effectList[Selected].Remove(effectList[Selected].Length - 1).Remove(0, 11));
       SettingsManager.Save(settings);
 
       if (!ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive && !ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeEffect((ContentEffect)Selected);
+        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(settings.MenuEffect);
       }
     }
   }
 
   public class MPExitEffect : SingleSelectionList
   {
+    private IList<string> effectList = new List<string>();
     public override void Load()
     {
-      IList<string> effectList = new List<string>();
-      for (int x = 0; x < 7; x++)
+      List<ContentEffect> supportedEffects = AtmoLight.Plugin.AtmoLightObject.GetSupportedEffects();
+
+      effectList.Clear();
+      foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
       {
-        effectList.Add("[AtmoLight." + ((ContentEffect)x).ToString() + "]");
+        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
+        {
+          // VU Meter is not supported by MP2 yet.
+          if (effect != ContentEffect.VUMeter && effect != ContentEffect.VUMeterRainbow)
+          {
+            if (effect != ContentEffect.MediaPortalLiveMode && effect != ContentEffect.GIFReader)
+            {
+              effectList.Add("[AtmoLight." + effect.ToString() + "]");
+            }
+          }
+        }
       }
 
       Selected = effectList.IndexOf("[AtmoLight." + SettingsManager.Load<Settings>().MPExitEffect.ToString() + "]");
@@ -160,7 +204,7 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.MPExitEffect = (ContentEffect)Selected;
+      settings.MPExitEffect = (ContentEffect)Enum.Parse(typeof(ContentEffect), effectList[Selected].Remove(effectList[Selected].Length - 1).Remove(0, 11));
       SettingsManager.Save(settings);
     }
   }

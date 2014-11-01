@@ -3,9 +3,9 @@
   <string name="AtmoLight.Name">AtmoLight</string>
   <string name="AtmoLight.AtmoWinExe">Path to AtmoWinA.exe</string>
   <string name="AtmoLight.LEDsDisabled">LEDs disabled</string>
-  <string name="AtmoLight.AtmoWinLiveMode">External liveview mode</string>
-  <string name="AtmoLight.Colorchanger">Colorchanger</string>
-  <string name="AtmoLight.ColorchangerLR">Colorchanger LR</string>
+  <string name="AtmoLight.ExternalLiveMode">External liveview mode</string>
+  <string name="AtmoLight.AtmoWinColorchanger">Colorchanger</string>
+  <string name="AtmoLight.AtmoWInColorchangerLR">Colorchanger LR</string>
   <string name="AtmoLight.MediaPortalLiveMode">MediaPortal liveview mode</string>
   <string name="AtmoLight.StaticColor">Static Color</string>
   <string name="AtmoLight.gifreader">GIFReader</string>
