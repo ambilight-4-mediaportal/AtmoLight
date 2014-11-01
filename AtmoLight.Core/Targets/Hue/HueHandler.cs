@@ -103,6 +103,7 @@ namespace AtmoLight.Targets
       if (Connected == false)
       {
         Thread t = new Thread(ConnectThread);
+        t.IsBackground = true;
         t.Start();
       }
     }

@@ -122,6 +122,7 @@ namespace AtmoLight.Targets
     private void liveReconnect()
     {
       Thread t = new Thread(liveReconnectThread);
+      t.IsBackground = true;
       t.Start();
     }
 
