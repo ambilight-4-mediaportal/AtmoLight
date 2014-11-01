@@ -169,14 +169,6 @@ namespace AtmoLight
         case ContentEffect.ColorchangerLR:
           if (!SetAtmoEffect(ComEffectMode.cemLrColorChange)) return false;
           break;
-        case ContentEffect.LEDsDisabled:
-        case ContentEffect.Undefined:
-          if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
-          // Workaround for SEDU.
-          // Without the sleep it would not change to color.
-          System.Threading.Thread.Sleep(delaySetStaticColor);
-          if (!SetAtmoColor(0, 0, 0)) return false;
-          break;
         case ContentEffect.MediaPortalLiveMode:
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
@@ -201,6 +193,15 @@ namespace AtmoLight
           if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
           if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
           StartGetAtmoLiveViewSourceThread();
+          break;
+        case ContentEffect.LEDsDisabled:
+        case ContentEffect.Undefined:
+        default:
+          if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
+          // Workaround for SEDU.
+          // Without the sleep it would not change to color.
+          System.Threading.Thread.Sleep(delaySetStaticColor);
+          if (!SetAtmoColor(0, 0, 0)) return false;
           break;
       }
       return true;

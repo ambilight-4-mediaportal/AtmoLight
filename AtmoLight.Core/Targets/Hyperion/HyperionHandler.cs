@@ -291,13 +291,14 @@ namespace AtmoLight.Targets
       }
       switch (effect)
       {
-        case ContentEffect.LEDsDisabled:
-        case ContentEffect.Undefined:
-          ClearPriority(coreObject.hyperionPriority);
-          ClearPriority(coreObject.hyperionPriorityStaticColor);
-          break;
         case ContentEffect.StaticColor:
           ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
+          break;
+        case ContentEffect.LEDsDisabled:
+        case ContentEffect.Undefined:
+        default:
+          ClearPriority(coreObject.hyperionPriority);
+          ClearPriority(coreObject.hyperionPriorityStaticColor);
           break;
       }
       return true;
