@@ -196,7 +196,14 @@ namespace AtmoLight.Targets
             using (Bitmap image = new Bitmap(coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight(), coreObject.GetCaptureWidth() * 4,
                         PixelFormat.Format32bppRgb, new IntPtr(ptr)))
             {
-              CalculateAverageColorAndSendToHue(image);
+              if (coreObject.GetCurrentEffect() == ContentEffect.VUMeter || coreObject.GetCurrentEffect() == ContentEffect.VUMeterRainbow)
+              {
+                CalculateVUMeterColorAndSendToHue(image);
+              }
+              else
+              {
+                CalculateAverageColorAndSendToHue(image);
+              }
             }
           }
         }
@@ -276,6 +283,24 @@ namespace AtmoLight.Targets
           ChangeColor(avgR, avgG, avgB);
         }
       }
+    }
+
+    private void CalculateVUMeterColorAndSendToHue(Bitmap vuMeterBitmap)
+    {
+      for (int i = 0; i < vuMeterBitmap.Height; i++)
+      {
+        if (vuMeterBitmap.GetPixel(0, i).R != 0 || vuMeterBitmap.GetPixel(0, i).G != 0 || vuMeterBitmap.GetPixel(0, i).B != 0)
+        {
+          ChangeColor(vuMeterBitmap.GetPixel(0, i).R, vuMeterBitmap.GetPixel(0, i).G, vuMeterBitmap.GetPixel(0, i).B);
+          return;
+        }
+        else if (vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).R != 0 || vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).G != 0 || vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).B != 0)
+        {
+          ChangeColor(vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).R, vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).G, vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).B);
+          return;
+        }
+      }
+      ChangeColor(0, 0, 0);
     }
     #endregion
   }
