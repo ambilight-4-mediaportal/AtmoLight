@@ -143,8 +143,6 @@ namespace AtmoLight.Targets
     {
       try
       {
-        Log.Error("change color (THREAD)");
-
           string message = string.Format("{0},{1},{2},{3}", red.ToString(), green.ToString(), blue.ToString(), priority.ToString());
           NetworkStream clientStream = client.GetStream();
           ASCIIEncoding encoder = new ASCIIEncoding();
@@ -152,7 +150,6 @@ namespace AtmoLight.Targets
 
           clientStream.Write(buffer, 0, buffer.Length);
           clientStream.Flush();
-          Log.Error("DONE with change color (THREAD)");
 
       }
       catch (Exception e)
@@ -175,7 +172,6 @@ namespace AtmoLight.Targets
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
         default:
-          Log.Error("changeeffect");
           ChangeColor(0, 0, 0, 1);
           break;
       }
@@ -298,18 +294,15 @@ namespace AtmoLight.Targets
       {
         if (vuMeterBitmap.GetPixel(0, i).R != 0 || vuMeterBitmap.GetPixel(0, i).G != 0 || vuMeterBitmap.GetPixel(0, i).B != 0)
         {
-          Log.Error("vu");
           ChangeColor(vuMeterBitmap.GetPixel(0, i).R, vuMeterBitmap.GetPixel(0, i).G, vuMeterBitmap.GetPixel(0, i).B, 200);
           return;
         }
         else if (vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).R != 0 || vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).G != 0 || vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).B != 0)
         {
-          Log.Error("vu");
           ChangeColor(vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).R, vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).G, vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).B, 200);
           return;
         }
       }
-      Log.Error("vu");
       ChangeColor(0, 0, 0,200);
     }
     #endregion
