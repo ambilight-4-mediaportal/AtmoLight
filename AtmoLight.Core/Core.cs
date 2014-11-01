@@ -76,7 +76,6 @@ namespace AtmoLight
 
     // VU Meter
     private int[] vuMeterThresholds = new int[] { -2, -5, -8, -10, -11, -12, -14, -18, -20, -22 };
-    private List<SolidBrush> vuMeterBrushes = new List<SolidBrush>();
 
     // Event Handler
     public delegate void NewConnectionLostHandler(Target target);
@@ -1062,11 +1061,11 @@ namespace AtmoLight
     /// </summary>
     private void VUMeterThread()
     {
+      List<SolidBrush> vuMeterBrushes = new List<SolidBrush>();
       try
       {
         if (currentEffect == ContentEffect.VUMeterRainbow)
         {
-          vuMeterBrushes.Clear();
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 0)));
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 77, 0)));
@@ -1081,7 +1080,6 @@ namespace AtmoLight
         }
         else
         {
-          vuMeterBrushes.Clear();
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 0)));
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
@@ -1128,6 +1126,7 @@ namespace AtmoLight
         }
         vuMeterBitmap.Dispose();
         vuMeterGFX.Dispose();
+        vuMeterBrushes.Clear();
       }
       catch (Exception ex)
       {
