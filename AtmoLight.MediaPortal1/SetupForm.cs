@@ -482,11 +482,11 @@ namespace AtmoLight
       Settings.hueTarget = ckHueEnabled.Checked;
       Settings.hyperionTarget = ckHyperionEnabled.Checked;
 
-      Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text).Remove(0, 12));
-      Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text).Remove(0, 12));
-      Settings.effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbRadio.Text).Remove(0, 12));
-      Settings.effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMenu.Text).Remove(0, 12));
-      Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMPExit.Text).Remove(0, 12));
+      Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
+      Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
+      Settings.effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbRadio.Text, "ContextMenu_").Remove(0, 12));
+      Settings.effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMenu.Text, "ContextMenu_").Remove(0, 12));
+      Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMPExit.Text, "ContextMenu_").Remove(0, 12));
 
       Settings.SaveSettings();
       this.DialogResult = DialogResult.OK;

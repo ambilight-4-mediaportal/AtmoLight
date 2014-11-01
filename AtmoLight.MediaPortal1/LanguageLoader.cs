@@ -198,7 +198,7 @@ namespace Language
       return "-1";
     }
 
-    public static string GetFieldNameFromTranslation(string translation)
+    public static string GetFieldNameFromTranslation(string translation, string contains)
     {
       Object obj = appStrings;
       Type t = appStrings.GetType();
@@ -208,7 +208,10 @@ namespace Language
       {
         if ((string)(field.GetValue(obj)) == translation)
         {
-          return field.Name;
+          if (field.Name.Contains(contains))
+          {
+            return field.Name;
+          }
         }
       }
       return "-1";
