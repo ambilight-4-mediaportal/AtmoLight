@@ -30,7 +30,6 @@ namespace AtmoLight.Targets
                                           ContentEffect.LEDsDisabled,
                                           ContentEffect.MediaPortalLiveMode,
                                           ContentEffect.StaticColor,
-                                          ContentEffect.Undefined,
                                           ContentEffect.VUMeter,
                                           ContentEffect.VUMeterRainbow
         };
