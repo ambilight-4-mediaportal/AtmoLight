@@ -89,6 +89,31 @@ namespace AtmoLight
       UpdateComboBoxes();
     }
 
+    private void cbVideo_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
+    }
+
+    private void cbMusic_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
+    }
+
+    private void cbRadio_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      Settings.effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbRadio.Text, "ContextMenu_").Remove(0, 12));
+    }
+
+    private void cbMenu_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      Settings.effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMenu.Text, "ContextMenu_").Remove(0, 12));
+    }
+
+    private void cbMPExit_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMPExit.Text, "ContextMenu_").Remove(0, 12));
+    }
+
     public SetupForm()
     {
       InitializeComponent();

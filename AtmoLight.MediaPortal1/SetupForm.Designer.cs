@@ -551,6 +551,7 @@
       this.cbMPExit.Name = "cbMPExit";
       this.cbMPExit.Size = new System.Drawing.Size(160, 21);
       this.cbMPExit.TabIndex = 28;
+      this.cbMPExit.SelectedIndexChanged += new System.EventHandler(cbMPExit_SelectedIndexChanged);
       // 
       // lblMPExit
       // 
@@ -684,6 +685,7 @@
       this.cbMenu.Name = "cbMenu";
       this.cbMenu.Size = new System.Drawing.Size(160, 21);
       this.cbMenu.TabIndex = 19;
+      this.cbMenu.SelectedIndexChanged += new System.EventHandler(cbMenu_SelectedIndexChanged);
       // 
       // cbRadio
       // 
@@ -703,6 +705,7 @@
       this.cbRadio.Name = "cbRadio";
       this.cbRadio.Size = new System.Drawing.Size(160, 21);
       this.cbRadio.TabIndex = 18;
+      this.cbRadio.SelectedIndexChanged += new System.EventHandler(cbRadio_SelectedIndexChanged);
       // 
       // lblRadio
       // 
@@ -731,6 +734,7 @@
       this.cbMusic.Name = "cbMusic";
       this.cbMusic.Size = new System.Drawing.Size(160, 21);
       this.cbMusic.TabIndex = 17;
+      this.cbMusic.SelectedIndexChanged += new System.EventHandler(cbMusic_SelectedIndexChanged);
       // 
       // lblMusic
       // 
@@ -757,6 +761,7 @@
       this.cbVideo.Name = "cbVideo";
       this.cbVideo.Size = new System.Drawing.Size(160, 21);
       this.cbVideo.TabIndex = 16;
+      this.cbVideo.SelectedIndexChanged += new System.EventHandler(cbVideo_SelectedIndexChanged);
       // 
       // lblVidTvRec
       // 
