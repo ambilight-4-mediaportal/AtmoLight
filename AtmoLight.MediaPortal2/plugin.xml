@@ -38,31 +38,31 @@
   <Register Location="/Configuration/Settings/Plugins/AtmoLight">
     <ConfigSection
         Id="General"
-		Sort="1"
+        Sort="1"
         Text="[AtmoLight.General]"/>
     <ConfigSection
         Id="AtmoWin"
-		Sort="2"
+        Sort="2"
         Text="[AtmoLight.AtmoWin]"/>
     <ConfigSection
         Id="Hue"
-		Sort="3"
+        Sort="3"
         Text="[AtmoLight.Hue]"/>
     <ConfigSection
         Id="Hyperion"
-		Sort="4"
+        Sort="4"
         Text="[AtmoLight.Hyperion]"/>
     <ConfigSection
         Id="Effects"
-		Sort="5"
+        Sort="5"
         Text="[AtmoLight.Effects]"/>
     <ConfigSection
         Id="Buttons"
-		Sort="6"
+        Sort="6"
         Text="[AtmoLight.Buttons]"/>
     <ConfigSection
         Id="Advanced"
-		Sort="7"
+        Sort="7"
         Text="[AtmoLight.Advanced]"/>
   </Register>
   
