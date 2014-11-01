@@ -76,7 +76,6 @@ namespace AtmoLight
 
     // VU Meter
     private int[] vuMeterThresholds = new int[] { -2, -5, -8, -10, -11, -12, -14, -18, -20, -22 };
-    private bool vuMeterRainbowColorScheme = false;
     private List<SolidBrush> vuMeterBrushes = new List<SolidBrush>();
 
     // Event Handler
@@ -764,110 +763,44 @@ namespace AtmoLight
       changeEffect = effect;
       Log.Info("Changing AtmoLight effect to: {0}", effect.ToString());
       StopAllThreads();
-      switch (effect)
+
+      if (effect == ContentEffect.LEDsDisabled || effect == ContentEffect.Undefined)
       {
-        case ContentEffect.ExternalLiveMode:
-          currentState = true;
-          lock (targetsLock)
+        currentState = false;
+      }
+      else
+      {
+        currentState = true;
+      }
+
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          if (target.IsConnected())
           {
-            foreach (var target in targets)
-            {
-              target.ChangeEffect(ContentEffect.ExternalLiveMode);
-            }
+            target.ChangeEffect(effect);
           }
-          break;
-        case ContentEffect.AtmoWinColorchanger:
-          currentState = true;
-          lock (targetsLock)
-          {
-            foreach (var target in targets)
-            {
-              target.ChangeEffect(ContentEffect.AtmoWinColorchanger);
-            }
-          }
-          break;
-        case ContentEffect.AtmoWinColorchangerLR:
-          currentState = true;
-          lock (targetsLock)
-          {
-            foreach (var target in targets)
-            {
-              target.ChangeEffect(ContentEffect.AtmoWinColorchangerLR);
-            }
-          }
-          break;
-        case ContentEffect.LEDsDisabled:
-        case ContentEffect.Undefined:
-          currentState = false;
-          lock (targetsLock)
-          {
-            foreach (var target in targets)
-            {
-              target.ChangeEffect(ContentEffect.LEDsDisabled);
-            }
-          }
-          break;
-        case ContentEffect.MediaPortalLiveMode:
-          currentState = true;
-          lock (targetsLock)
-          {
-            foreach (var target in targets)
-            {
-              target.ChangeEffect(ContentEffect.MediaPortalLiveMode);
-            }
-          }
-          if (delayEnabled)
-          {
-            Log.Debug("Adding {0}ms delay to the LEDs.", delayTime);
-            StartSetPixelDataThread();
-          }
-          break;
-        case ContentEffect.StaticColor:
-          currentState = true;
-          lock (targetsLock)
-          {
-            foreach (var target in targets)
-            {
-              target.ChangeEffect(ContentEffect.StaticColor);
-            }
-          }
-          break;
-        case ContentEffect.GIFReader:
-          currentState = true;
-          lock (targetsLock)
-          {
-            foreach (var target in targets)
-            {
-              target.ChangeEffect(ContentEffect.GIFReader);
-            }
-          }
-          StartGIFReaderThread();
-          break;
-        case ContentEffect.VUMeter:
-          currentState = true;
-          lock (targetsLock)
-          {
-            foreach (var target in targets)
-            {
-              target.ChangeEffect(ContentEffect.VUMeter);
-            }
-          }
-          vuMeterRainbowColorScheme = false;
-          StartVUMeterThread();
-          break;
-        case ContentEffect.VUMeterRainbow:
-          currentState = true;
-          lock (targetsLock)
-          {
-            foreach (var target in targets)
-            {
-              target.ChangeEffect(ContentEffect.VUMeterRainbow);
-            }
-          }
-          vuMeterRainbowColorScheme = true;
-          StartVUMeterThread();
-          break;
-          }
+        }
+      }
+
+      if (effect == ContentEffect.MediaPortalLiveMode)
+      {
+        if (delayEnabled)
+        {
+          Log.Debug("Adding {0}ms delay to the LEDs.", delayTime);
+          StartSetPixelDataThread();
+        }
+      }
+      else if (effect == ContentEffect.GIFReader)
+      {
+        StartGIFReaderThread();
+      }
+      else if (effect == ContentEffect.VUMeter || effect == ContentEffect.VUMeterRainbow)
+      {
+        StartVUMeterThread();
+      }
+
       currentEffect = changeEffect;
       changeEffect = ContentEffect.Undefined;
       return true;
@@ -883,7 +816,10 @@ namespace AtmoLight
       {
         foreach (var target in targets)
         {
-          target.ChangeProfile();
+          if (target.IsConnected())
+          {
+            target.ChangeProfile();
+          }
         }
       }
     }
@@ -1128,7 +1064,7 @@ namespace AtmoLight
     {
       try
       {
-        if (vuMeterRainbowColorScheme)
+        if (currentEffect == ContentEffect.VUMeterRainbow)
         {
           vuMeterBrushes.Clear();
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 0)));
