@@ -117,6 +117,7 @@ namespace AtmoLight.Targets
     private void Connect()
     {
       Thread t = new Thread(ConnectThread);
+      t.IsBackground = true;
       t.Start();
     }
     private void liveReconnect()

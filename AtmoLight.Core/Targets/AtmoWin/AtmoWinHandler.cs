@@ -693,6 +693,7 @@ namespace AtmoLight
       getAtmoLiveViewSourceLock = false;
       getAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
       getAtmoLiveViewSourceThreadHelper.Name = "AtmoLight GetAtmoLiveViewSource";
+      getAtmoLiveViewSourceThreadHelper.IsBackground = true;
       getAtmoLiveViewSourceThreadHelper.Start();
     }
 

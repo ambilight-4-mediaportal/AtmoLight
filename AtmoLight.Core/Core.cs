@@ -925,6 +925,7 @@ namespace AtmoLight
       setPixelDataLock = false;
       setPixelDataThreadHelper = new Thread(() => SetPixelDataThread());
       setPixelDataThreadHelper.Name = "AtmoLight SetPixelData";
+      setPixelDataThreadHelper.IsBackground = true;
       setPixelDataThreadHelper.Start();
     }
 
@@ -944,6 +945,7 @@ namespace AtmoLight
       gifReaderLock = false;
       gifReaderThreadHelper = new Thread(() => GIFReaderThread());
       gifReaderThreadHelper.Name = "AtmoLight GIFReader";
+      gifReaderThreadHelper.IsBackground = true;
       gifReaderThreadHelper.Start();
     }
 
@@ -963,6 +965,7 @@ namespace AtmoLight
       vuMeterLock = false;
       vuMeterThreadHelper = new Thread(() => VUMeterThread());
       vuMeterThreadHelper.Name = "AtmoLight VUMeter";
+      vuMeterThreadHelper.IsBackground = true;
       vuMeterThreadHelper.Start();
     }
 
