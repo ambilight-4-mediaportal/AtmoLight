@@ -24,11 +24,22 @@ namespace AtmoLight
       {
         if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
         {
-          cbVideo.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+          // Cases in which all effects are possible
           cbMusic.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
           cbRadio.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
-          cbMenu.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
-          cbMPExit.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+
+          // Cases in which VU Meter is not possible
+          if (effect != ContentEffect.VUMeter && effect != ContentEffect.VUMeterRainbow)
+          {
+            cbVideo.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+            cbMenu.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+
+            // Cases in which Vu Meter, MPLiveView and GifReader are not possible
+            if (effect != ContentEffect.MediaPortalLiveMode && effect != ContentEffect.GIFReader)
+            {
+              cbMPExit.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+            }
+          }
         }
       }
 
