@@ -45,6 +45,9 @@ namespace AtmoLight
     // Player helper
     private IPlayerManager playerManager;
     private ISharpDXVideoPlayer player;
+
+    // Unsupported effects
+    public static List<ContentEffect> unsupportedEffects = new List<ContentEffect> { ContentEffect.VUMeter, ContentEffect.VUMeterRainbow };
     #endregion
 
     #region Win32API

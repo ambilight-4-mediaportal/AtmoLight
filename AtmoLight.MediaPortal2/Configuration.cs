@@ -65,13 +65,9 @@ namespace AtmoLight.Configuration
       effectList.Clear();
       foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
       {
-        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
+        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined && !AtmoLight.Plugin.unsupportedEffects.Contains(effect))
         {
-          // VU Meter is not supported by MP2 yet.
-          if (effect != ContentEffect.VUMeter && effect != ContentEffect.VUMeterRainbow)
-          {
-            effectList.Add("[AtmoLight." + effect.ToString() + "]");
-          }
+          effectList.Add("[AtmoLight." + effect.ToString() + "]");
         }
       }
 
@@ -104,13 +100,9 @@ namespace AtmoLight.Configuration
       effectList.Clear();
       foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
       {
-        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
+        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined && !AtmoLight.Plugin.unsupportedEffects.Contains(effect))
         {
-          // VU Meter is not supported by MP2 yet.
-          if (effect != ContentEffect.VUMeter && effect != ContentEffect.VUMeterRainbow)
-          {
-            effectList.Add("[AtmoLight." + effect.ToString() + "]");
-          }
+          effectList.Add("[AtmoLight." + effect.ToString() + "]");
         }
       }
 
@@ -143,13 +135,9 @@ namespace AtmoLight.Configuration
       effectList.Clear();
       foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
       {
-        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
+        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined && !AtmoLight.Plugin.unsupportedEffects.Contains(effect))
         {
-          // VU Meter is not supported by MP2 yet.
-          if (effect != ContentEffect.VUMeter && effect != ContentEffect.VUMeterRainbow)
-          {
-            effectList.Add("[AtmoLight." + effect.ToString() + "]");
-          }
+          effectList.Add("[AtmoLight." + effect.ToString() + "]");
         }
       }
 
@@ -182,15 +170,11 @@ namespace AtmoLight.Configuration
       effectList.Clear();
       foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
       {
-        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
+        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined && !AtmoLight.Plugin.unsupportedEffects.Contains(effect))
         {
-          // VU Meter is not supported by MP2 yet.
-          if (effect != ContentEffect.VUMeter && effect != ContentEffect.VUMeterRainbow)
+          if (effect != ContentEffect.MediaPortalLiveMode && effect != ContentEffect.GIFReader)
           {
-            if (effect != ContentEffect.MediaPortalLiveMode && effect != ContentEffect.GIFReader)
-            {
-              effectList.Add("[AtmoLight." + effect.ToString() + "]");
-            }
+            effectList.Add("[AtmoLight." + effect.ToString() + "]");
           }
         }
       }
