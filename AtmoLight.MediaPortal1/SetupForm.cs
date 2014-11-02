@@ -381,8 +381,11 @@ namespace AtmoLight
       //Atmowin path
       if (validatorPath(edFile.Text) == false && string.IsNullOrEmpty(edFile.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + lblPathInfo.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-        return;
+        if (ckAtmowinEnabled.Checked)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + lblPathInfo.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
       }
 
       //Hyperion IP
