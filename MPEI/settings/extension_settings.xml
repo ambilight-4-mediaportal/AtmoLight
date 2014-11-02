@@ -2,33 +2,147 @@
     <disable_entry>
         <setting entryname="plugins" name="atmolight" displayname="Plugin Enabled" defaultvalue="yes" type="string" listvalues="yes|no" displaylistvalues="Yes|No"/>
     </disable_entry>
-        <settings section="Configuration">
-		
+    <settings section="General settings">
+		<setting entryname="atmolight" name="atmoWinTarget" type="string" defaultvalue="yes" listvalues="Yes|No"
+		displayname="Use AtmoWin:"    
+		description="Select if you want to use AtmoWin."
+		displaylistvalues="Yes|No"/>
+
+		<setting entryname="atmolight" name="hueTarget" type="string" defaultvalue="no" listvalues="Yes|No"
+		displayname="Use Hue:"    
+		description="Select if you want to use Hue."
+		displaylistvalues="Yes|No"/>
+
+		<setting entryname="atmolight" name="hyperionTarget" type="string" defaultvalue="no" listvalues="Yes|No"
+		displayname="Use Hyperion:"    
+		description="Select if you want to use Hyperion."
+		displaylistvalues="Yes|No"/>		
+
+		<setting entryname="atmolight" name="RestartOnError" type="string" defaultvalue="yes" listvalues="Yes|No"
+		displayname="Reconnection to target software on Error:"    
+		description="Choose if you want MediaPortal/AtmoLight to reconnect if something goes wrong."
+		displaylistvalues="Yes|No"/>		
+	</settings>
+	
+	<settings section="AtmoWin">
 		<setting entryname="atmolight" name="atmowinexe" type="string" defaultvalue="" listvalues="" 
 		displayname="Path to AtmoWinA.exe:"
 		description="Please select the path to the AtmoWinA.exe!"
 		displaylistvalues=""/>
 		
-		<setting entryname="atmolight" name="effectVideo" type="string" defaultvalue="4" listvalues="0|1|2|3|4|5" 
+		<setting entryname="atmolight" name="StartAtmoWin" type="string" defaultvalue="yes" listvalues="Yes|No"
+		displayname="Start AtmoWin with MediaPortal:"    
+		description="Choose if you want MediaPortal/AtmoLight to start AtmoWin for you on."
+		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="ExitAtmoWin" type="string" defaultvalue="yes" listvalues="Yes|No"
+		displayname="Exit AtmoWin with MediaPortal:"    
+		description="Choose if you want MediaPortal/AtmoLight to close AtmoWin for you."
+		displaylistvalues="Yes|No"/>	
+	</settings>
+	
+	<settings section="Hue">
+		<setting entryname="atmolight" name="hueIP" type="string" defaultvalue="127.0.0.1" listvalues="" 
+		displayname="IP:"
+		description="Please enter the IP to AtmoHue!"
+		displaylistvalues=""/>
+		
+		<setting entryname="atmolight" name="huePort" type="int" defaultvalue="20123" minvalue="1" maxvalue="65535"
+		displayname="Port:"    
+		description="Please enter the Port to AtmoHue."/>
+		
+		<setting entryname="atmolight" name="hueMinimalColorDifference" type="int" defaultvalue="25" minvalue="0" maxvalue="255"
+		displayname="Minimal color difference:"    
+		description="Please enter minimal color difference."/>
+	</settings>
+	
+	<settings section="Hyperion">
+		<setting entryname="atmolight" name="hyperionIP" type="string" defaultvalue="127.0.0.1" listvalues="" 
+		displayname="IP:"
+		description="Please enter the IP to Hyperion!"
+		displaylistvalues=""/>
+		
+		<setting entryname="atmolight" name="hyperionPort" type="int" defaultvalue="19445" minvalue="1" maxvalue="65535"
+		displayname="Port:"    
+		description="Please enter the Port to Hyperion."/>
+		
+		<setting entryname="atmolight" name="hyperionPriority" type="int" defaultvalue="1" minvalue="1" maxvalue="1000"
+		displayname="Effect priority:"    
+		description="Please enter the priority for effects."/>
+		
+		<setting entryname="atmolight" name="hyperionStaticColorPriority" type="int" defaultvalue="1" minvalue="1" maxvalue="1000"
+		displayname="Static color priority:"    
+		description="Please enter the priority for static colors."/>
+		
+		<setting entryname="atmolight" name="hyperionReconnectDelay" type="int" defaultvalue="10000" minvalue="1" maxvalue="999999"
+		displayname="Reconnect delay:"    
+		description="Please enter the reconnect delay."/>
+		
+		<setting entryname="atmolight" name="hyperionReconnectAttempts" type="int" defaultvalue="5" minvalue="1" maxvalue="9999"
+		displayname="Reconnect attempts:"    
+		description="Please enter the reconnect attempts."/>
+	</settings>
+	
+	<settings section="Content effects">
+		<setting entryname="atmolight" name="effectVideo" type="string" defaultvalue="MediaPortalLiveMode" listvalues="LEDsDisabled|MediaPortalLiveMode|StaticColor|GIFReader|VUMeter|VUMeterRainbow|ExternalLiveMode|AtmoWinColorchanger|AtmoWinColorchangerLR" 
 		displayname="Video Effect:"
 		description="Choose the effect you want to use for Video/TV/Recording playback!"
-		displaylistvalues="LEDs disabled|AtmoWin Live Mode|Colorchanger|Colorchanger LR|MediaPortal Live Mode|Static Color"/>
+		displaylistvalues="LEDs disabled|MediaPortal Live Mode|Static Color|GIF Reader|VU Meter|VU Meter Rainbow|External Live Mode|Colorchanger|Colorchanger LR"/>
 		
-		<setting entryname="atmolight" name="effectMusic" type="string" defaultvalue="1" listvalues="0|1|2|3|4"
+		<setting entryname="atmolight" name="effectMusic" type="string" defaultvalue="LEDsDisabled" listvalues="LEDsDisabled|MediaPortalLiveMode|StaticColor|GIFReader|VUMeter|VUMeterRainbow|ExternalLiveMode|AtmoWinColorchanger|AtmoWinColorchangerLR"
 		displayname="Music Effect:"    
 		description="Choose the effect you want to use for Music playback!"
-		displaylistvalues="LEDs disabled|AtmoWin Live Mode|Colorchanger|Colorchanger LR|Static Color"/> 
+		displaylistvalues="LEDs disabled|MediaPortal Live Mode|Static Color|GIF Reader|VU Meter|VU Meter Rainbow|External Live Mode|Colorchanger|Colorchanger LR"/> 
 		
-		<setting entryname="atmolight" name="effectRadio" type="string" defaultvalue="0" listvalues="0|1|2|3|4"
+		<setting entryname="atmolight" name="effectRadio" type="string" defaultvalue="LEDsDisabled" listvalues="LEDsDisabled|MediaPortalLiveMode|StaticColor|GIFReader|VUMeter|VUMeterRainbow|ExternalLiveMode|AtmoWinColorchanger|AtmoWinColorchangerLR"
 		displayname="Radio Effect:"    
 		description="Choose the effect you want to use for Radio playback!"
-		displaylistvalues="LEDs disabled|AtmoWin Live Mode|Colorchanger|Colorchanger LR|Static Color"/>
+		displaylistvalues="LEDs disabled|MediaPortal Live Mode|Static Color|GIF Reader|VU Meter|VU Meter Rainbow|External Live Mode|Colorchanger|Colorchanger LR"/>
 		
-		<setting entryname="atmolight" name="effectMenu" type="string" defaultvalue="0" listvalues="0|1|2|3|4"
+		<setting entryname="atmolight" name="effectMenu" type="string" defaultvalue="LEDsDisabled" listvalues="LEDsDisabled|MediaPortalLiveMode|StaticColor|GIFReader|VUMeter|VUMeterRainbow|ExternalLiveMode|AtmoWinColorchanger|AtmoWinColorchangerLR"
 		displayname="Menu/GUI Effect:"    
 		description="Choose the effect you want to use for Radio playback!"
-		displaylistvalues="LEDs disabled|AtmoWin Live Mode|Colorchanger|Colorchanger LR|Static Color"/>
-
+		displaylistvalues="LEDs disabled|MediaPortal Live Mode|Static Color|GIF Reader|VU Meter|VU Meter Rainbow|External Live Mode|Colorchanger|Colorchanger LR"/>
+		
+		<setting entryname="atmolight" name="effectMPExit" type="string" defaultvalue="LEDsDisabled" listvalues="LEDsDisabled|StaticColor|ExternalLiveMode|AtmoWinColorchanger|AtmoWinColorchangerLR"
+		displayname="MediaPortal Exit Effect:"    
+		description="Choose the effect you want to use when you close MediaPortal!"
+		displaylistvalues="LEDs disabled|Static Color|External Live Mode|Colorchanger|Colorchanger LR"/>
+		
+		<setting entryname="atmolight" name="StaticColorRed" type="int" defaultvalue="0" minvalue="0" maxvalue="255"
+		displayname="Static color (Red):"    
+		description="Enter the red value of the static color."/>
+		
+		<setting entryname="atmolight" name="StaticColorGreen" type="int" defaultvalue="0" minvalue="0" maxvalue="255"
+		displayname="Static color (Green):"    
+		description="Enter the green value of the static color."/>
+		
+		<setting entryname="atmolight" name="StaticColorBlue" type="int" defaultvalue="0" minvalue="0" maxvalue="255"
+		displayname="Static color (Blue):"    
+		description="Enter the blue value of the static color."/>
+		
+		<setting entryname="atmolight" name="GIFFile" type="string" defaultvalue="" listvalues="" 
+		displayname="GIF file path:"
+		description="Please select the path to a GIF file!"
+		displaylistvalues=""/>
+		
+		<setting entryname="atmolight" name="OffOnStart" type="string" defaultvalue="no" listvalues="yes|no"
+		displayname="Use manual mode:"    
+		description="Do you want to use the manual mode? (Ambilight will not start automatically when playback begins)"
+		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="excludeTimeStart" type="string" defaultvalue="00:00" listvalues="00:00|01:00|02:00|03:00|04:00|05:00|06:00|07:00|08:00|09:00|10:00|11:00|12:00|13:00|14:00|15:00|16:00|17:00|18:00|19:00|20:00|21:00|22:00|23:00|24:00"
+		displayname="Disable AtmoLight from:"    
+		description="Enter the start of the disabled timeframe."
+		displaylistvalues="00:00|01:00|02:00|03:00|04:00|05:00|06:00|07:00|08:00|09:00|10:00|11:00|12:00|13:00|14:00|15:00|16:00|17:00|18:00|19:00|20:00|21:00|22:00|23:00|24:00"/> 
+		
+		<setting entryname="atmolight" name="excludeTimeEnd" type="string" defaultvalue="24:00" listvalues="00:00|01:00|02:00|03:00|04:00|05:00|06:00|07:00|08:00|09:00|10:00|11:00|12:00|13:00|14:00|15:00|16:00|17:00|18:00|19:00|20:00|21:00|22:00|23:00|24:00"
+		displayname="Disable AtmoLight till:"    
+		description="Enter the end of the disabled timeframe."
+		displaylistvalues="00:00|01:00|02:00|03:00|04:00|05:00|06:00|07:00|08:00|09:00|10:00|11:00|12:00|13:00|14:00|15:00|16:00|17:00|18:00|19:00|20:00|21:00|22:00|23:00|24:00"/>
+	</settings>
+	
+	<settings section="Remote buttons">
 		<setting entryname="atmolight" name="menubutton" type="string" defaultvalue="5" listvalues="0|1|2|3|4|5"
 		displayname="AtmoLight context menu remote button:"    
 		description="Choose the remote button for AtmoLight context menu."
@@ -43,55 +157,37 @@
 		displayname="AtmoWin profile change remote button:"    
 		description="Choose the remote button change AtmoWin profile."
 		displaylistvalues="Red|Green|Yellow|Blue|None"/>
-				
-		<setting entryname="atmolight" name="OffOnStart" type="string" defaultvalue="no" listvalues="yes|no"
-		displayname="Use manual mode:"    
-		description="Do you want to use the manual mode? (Ambilight will not start automatically when playback begins)"
-		displaylistvalues="Yes|No"/>
-		
+	</settings>
+	
+	<settings section="Advanced settings">
 		<setting entryname="atmolight" name="lowCPU" type="string" defaultvalue="no" listvalues="yes|no"
 		displayname="Low CPU usage:"    
 		description="Select if you want to use the LOW CPU mode"
 		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="lowCPUTime" type="int" defaultvalue="0" minvalue="0" maxvalue="1000"
+		displayname="Low CPU delay:"    
+		description="Enter the low cpu delay."/>
 		
 		<setting entryname="atmolight" name="Delay" type="string" defaultvalue="no" listvalues="yes|no"
 		displayname="Use LED Delay:"    
 		description="Select if you want to use a delay"
 		displaylistvalues="Yes|No"/>
 		
-		<setting entryname="atmolight" name="StartAtmoWin" type="string" defaultvalue="yes" listvalues="Yes|No"
-		displayname="Start AtmoWin with MediaPortal:"    
-		description="Choose if you want MediaPortal/AtmoLight to start AtmoWin for you on."
-		displaylistvalues="Yes|No"/>
+		<setting entryname="atmolight" name="DelayTime" type="int" defaultvalue="0" minvalue="0" maxvalue="1000"
+		displayname="Delay time:"    
+		description="Enter the delay time."/>
 		
-		<setting entryname="atmolight" name="ExitAtmoWin" type="string" defaultvalue="yes" listvalues="Yes|No"
-		displayname="Exit AtmoWin with MediaPortal:"    
-		description="Choose if you want MediaPortal/AtmoLight to close AtmoWin for you."
-		displaylistvalues="Yes|No"/>	
-
-		<setting entryname="atmolight" name="RestartOnError" type="string" defaultvalue="yes" listvalues="Yes|No"
-		displayname="Restart AtmoWin and Connection on Error:"    
-		description="Choose if you want MediaPortal/AtmoLight restart Atmowin if something goes wrong."
-		displaylistvalues="Yes|No"/>		
+		<setting entryname="atmolight" name="DelayRefreshRate" type="int" defaultvalue="50" minvalue="1" maxvalue="144"
+		displayname="Delay reference refreshrate:"    
+		description="Please enter the refreshrate at which you have measured the delay time."/>
 		
-		<setting entryname="atmolight" name="enableInternalLiveView" type="string" defaultvalue="no" listvalues="Yes|No"
-		displayname="Enable AtmoWin GDI Live-View on MediaPortal close:"    
-		description="Choose what AtmoLight should do if MediaPortal has been closed!"
-		displaylistvalues="Yes|No"/>
+		<setting entryname="atmolight" name="captureWidth" type="int" defaultvalue="64" minvalue="1" maxvalue="1920"
+		displayname="Capture width:"    
+		description="Enter the capture width you want to use (Will only be used if AtmoWin is disabled!)."/>
 		
-		<setting entryname="atmolight" name="disableOnShutdown" type="string" defaultvalue="Yes" listvalues="yes|no"
-		displayname="Disable Atmolight on Shutdown:"    
-		description="Choose what AtmoLight should do if MediaPortal has been closed!"
-		displaylistvalues="Yes|No"/> 
-		
-		<setting entryname="atmolight" name="excludeTimeStart" type="string" defaultvalue="00:00" listvalues="00:00|01:00|02:00|03:00|04:00|05:00|06:00|07:00|08:00|09:00|10:00|11:00|12:00|13:00|14:00|15:00|16:00|17:00|18:00|19:00|20:00|21:00|22:00|23:00|24:00"
-		displayname="Disable AtmoLight from:"    
-		description="Enter the start of the disabled timeframe."
-		displaylistvalues="00:00|01:00|02:00|03:00|04:00|05:00|06:00|07:00|08:00|09:00|10:00|11:00|12:00|13:00|14:00|15:00|16:00|17:00|18:00|19:00|20:00|21:00|22:00|23:00|24:00"/> 
-		
-		<setting entryname="atmolight" name="excludeTimeEnd" type="string" defaultvalue="24:00" listvalues="00:00|01:00|02:00|03:00|04:00|05:00|06:00|07:00|08:00|09:00|10:00|11:00|12:00|13:00|14:00|15:00|16:00|17:00|18:00|19:00|20:00|21:00|22:00|23:00|24:00"
-		displayname="Disable AtmoLight till:"    
-		description="Enter the end of the disabled timeframe."
-		displaylistvalues="00:00|01:00|02:00|03:00|04:00|05:00|06:00|07:00|08:00|09:00|10:00|11:00|12:00|13:00|14:00|15:00|16:00|17:00|18:00|19:00|20:00|21:00|22:00|23:00|24:00"/>
+		<setting entryname="atmolight" name="captureHeight" type="int" defaultvalue="48" minvalue="1" maxvalue="1080"
+		displayname="Capture height:"    
+		description="Enter the capture height you want to use (Will only be used if AtmoWin is disabled!)."/>
 	</settings>
 </extension_settings>
