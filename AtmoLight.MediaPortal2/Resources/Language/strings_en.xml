@@ -61,4 +61,6 @@
   <string name="AtmoLight.HueIP">IP address</string>
   <string name="AtmoLight.HuePort">Port number</string>
   <string name="AtmoLight.HueMinimalColorDifference">Minimal color difference (0-255)</string>
+  <string name="AtmoLight.CaptureWidth">Capture width (Will only be used if AtmoWin is disabled!)</string>
+  <string name="AtmoLight.CaptureHeight">Capture height (Will only be used if AtmoWin is disabled!)</string>
 </resources>

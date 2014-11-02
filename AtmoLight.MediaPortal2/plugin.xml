@@ -246,6 +246,14 @@
         Id="DelayRefreshRate"
         Text="[AtmoLight.DelayRefreshRate]"
         ClassName="AtmoLight.Configuration.DelayRefreshRate"/>
+      <ConfigSetting
+        Id="CaptureWidth"
+        Text="[AtmoLight.CaptureWidth]"
+        ClassName="AtmoLight.Configuration.CaptureWidth"/>
+    <ConfigSetting
+        Id="CaptureHeight"
+        Text="[AtmoLight.CaptureHeight]"
+        ClassName="AtmoLight.Configuration.CaptureHeight"/>
   </Register>
 
 </Plugin>

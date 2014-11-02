@@ -992,4 +992,56 @@ namespace AtmoLight.Configuration
       AtmoLight.Plugin.AtmoLightObject.hueMinimalColorDifference = (int)_value;
     }
   }
+
+  public class CaptureWidth : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 1920;
+      _value = SettingsManager.Load<Settings>().CaptureWidth;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.CaptureWidth = (int)_value;
+      SettingsManager.Save(settings);
+
+      // AtmoWin has hardcoded dimensions, we cant use any other if AtmoWin is a target.
+      if (!settings.AtmoWinTarget)
+      {
+        AtmoLight.Plugin.AtmoLightObject.SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
+      }
+    }
+  }
+
+  public class CaptureHeight : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 1080;
+      _value = SettingsManager.Load<Settings>().CaptureHeight;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.CaptureHeight = (int)_value;
+      SettingsManager.Save(settings);
+
+      // AtmoWin has hardcoded dimensions, we cant use any other if AtmoWin is a target.
+      if (!settings.AtmoWinTarget)
+      {
+        AtmoLight.Plugin.AtmoLightObject.SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
+      }
+    }
+  }
 }
