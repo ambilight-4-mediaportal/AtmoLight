@@ -26,12 +26,12 @@ namespace AtmoLight.Configuration
       settings.AtmoWinExe = _path + "AtmoWinA.exe";
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.atmoWinPath = settings.AtmoWinExe;
+      Core.GetInstance().atmoWinPath = settings.AtmoWinExe;
       if (settings.AtmoWinTarget)
       {
-        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.AtmoWin);
-        AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.AtmoWin);
-        AtmoLight.Plugin.AtmoLightObject.Initialise();
+        Core.GetInstance().RemoveTarget(Target.AtmoWin);
+        Core.GetInstance().AddTarget(Target.AtmoWin);
+        Core.GetInstance().Initialise();
       }
     }
   }
@@ -51,7 +51,7 @@ namespace AtmoLight.Configuration
       settings.GIFFile = _path;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.SetGIFPath(settings.GIFFile);
+      Core.GetInstance().SetGIFPath(settings.GIFFile);
     }
   }
 
@@ -60,7 +60,7 @@ namespace AtmoLight.Configuration
     private IList<string> effectList = new List<string>();
     public override void Load()
     {
-      List<ContentEffect> supportedEffects = AtmoLight.Plugin.AtmoLightObject.GetSupportedEffects();
+      List<ContentEffect> supportedEffects = Core.GetInstance().GetSupportedEffects();
 
       effectList.Clear();
       foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
@@ -85,7 +85,7 @@ namespace AtmoLight.Configuration
 
       if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(settings.VideoEffect);
+        Core.GetInstance().ChangeEffect(settings.VideoEffect);
       }
     }
   }
@@ -95,7 +95,7 @@ namespace AtmoLight.Configuration
     private IList<string> effectList = new List<string>();
     public override void Load()
     {
-      List<ContentEffect> supportedEffects = AtmoLight.Plugin.AtmoLightObject.GetSupportedEffects();
+      List<ContentEffect> supportedEffects = Core.GetInstance().GetSupportedEffects();
 
       effectList.Clear();
       foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
@@ -120,7 +120,7 @@ namespace AtmoLight.Configuration
 
       if (ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(settings.AudioEffect);
+        Core.GetInstance().ChangeEffect(settings.AudioEffect);
       }
     }
   }
@@ -130,7 +130,7 @@ namespace AtmoLight.Configuration
     private IList<string> effectList = new List<string>();
     public override void Load()
     {
-      List<ContentEffect> supportedEffects = AtmoLight.Plugin.AtmoLightObject.GetSupportedEffects();
+      List<ContentEffect> supportedEffects = Core.GetInstance().GetSupportedEffects();
 
       effectList.Clear();
       foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
@@ -155,7 +155,7 @@ namespace AtmoLight.Configuration
 
       if (!ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive && !ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(settings.MenuEffect);
+        Core.GetInstance().ChangeEffect(settings.MenuEffect);
       }
     }
   }
@@ -165,7 +165,7 @@ namespace AtmoLight.Configuration
     private IList<string> effectList = new List<string>();
     public override void Load()
     {
-      List<ContentEffect> supportedEffects = AtmoLight.Plugin.AtmoLightObject.GetSupportedEffects();
+      List<ContentEffect> supportedEffects = Core.GetInstance().GetSupportedEffects();
 
       effectList.Clear();
       foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
@@ -317,7 +317,7 @@ namespace AtmoLight.Configuration
       settings.StopAtmoWinOnExit = _yes;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.atmoWinAutoStop = _yes;
+      Core.GetInstance().atmoWinAutoStop = _yes;
     }
   }
 
@@ -335,7 +335,7 @@ namespace AtmoLight.Configuration
       settings.StartAtmoWinOnStart = _yes;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.atmoWinAutoStart = _yes;
+      Core.GetInstance().atmoWinAutoStart = _yes;
     }
   }
 
@@ -353,7 +353,7 @@ namespace AtmoLight.Configuration
       settings.RestartAtmoWinOnError = _yes;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.SetReInitOnError(_yes);
+      Core.GetInstance().SetReInitOnError(_yes);
     }
   }
 
@@ -405,15 +405,15 @@ namespace AtmoLight.Configuration
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
 
-      if (settings.Delay != _yes && AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      if (settings.Delay != _yes && Core.GetInstance().GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
         if (_yes)
         {
-          AtmoLight.Plugin.AtmoLightObject.EnableDelay();
+          Core.GetInstance().EnableDelay();
         }
         else
         {
-          AtmoLight.Plugin.AtmoLightObject.DisableDelay();
+          Core.GetInstance().DisableDelay();
         }
       }
 
@@ -440,9 +440,9 @@ namespace AtmoLight.Configuration
       settings.DelayTime = (int)_value;
       SettingsManager.Save(settings);
 
-      if (AtmoLight.Plugin.AtmoLightObject.IsDelayEnabled() && AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      if (Core.GetInstance().IsDelayEnabled() && Core.GetInstance().GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
-        AtmoLight.Plugin.AtmoLightObject.SetDelay((int)_value);
+        Core.GetInstance().SetDelay((int)_value);
       }
     }
   }
@@ -485,10 +485,10 @@ namespace AtmoLight.Configuration
       settings.StaticColorRed = (int)_value;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.SetStaticColor((int)_value, settings.StaticColorGreen, settings.StaticColorBlue);
-      if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
+      Core.GetInstance().SetStaticColor((int)_value, settings.StaticColorGreen, settings.StaticColorBlue);
+      if (Core.GetInstance().GetCurrentEffect() == ContentEffect.StaticColor)
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
+        Core.GetInstance().ChangeEffect(ContentEffect.StaticColor, true);
       }
     }
   }
@@ -511,10 +511,10 @@ namespace AtmoLight.Configuration
       settings.StaticColorGreen = (int)_value;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.SetStaticColor(settings.StaticColorRed, (int)_value, settings.StaticColorBlue);
-      if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
+      Core.GetInstance().SetStaticColor(settings.StaticColorRed, (int)_value, settings.StaticColorBlue);
+      if (Core.GetInstance().GetCurrentEffect() == ContentEffect.StaticColor)
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
+        Core.GetInstance().ChangeEffect(ContentEffect.StaticColor, true);
       }
     }
   }
@@ -537,10 +537,10 @@ namespace AtmoLight.Configuration
       settings.StaticColorBlue = (int)_value;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, (int)_value);
-      if (AtmoLight.Plugin.AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
+      Core.GetInstance().SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, (int)_value);
+      if (Core.GetInstance().GetCurrentEffect() == ContentEffect.StaticColor)
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
+        Core.GetInstance().ChangeEffect(ContentEffect.StaticColor, true);
       }
     }
   }
@@ -645,7 +645,7 @@ namespace AtmoLight.Configuration
   {
     public override void Load()
     {
-      _yes = AtmoLight.Plugin.AtmoLightObject.IsAtmoLightOn();
+      _yes = Core.GetInstance().IsAtmoLightOn();
     }
 
     public override void Save()
@@ -667,11 +667,11 @@ namespace AtmoLight.Configuration
         {
           temp = settings.MenuEffect;
         }
-        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(temp);
+        Core.GetInstance().ChangeEffect(temp);
       }
       else
       {
-        AtmoLight.Plugin.AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+        Core.GetInstance().ChangeEffect(ContentEffect.LEDsDisabled);
       }
     }
   }
@@ -692,12 +692,12 @@ namespace AtmoLight.Configuration
 
       if (_yes)
       {
-        AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.AtmoWin);
-        AtmoLight.Plugin.AtmoLightObject.Initialise();
+        Core.GetInstance().AddTarget(Target.AtmoWin);
+        Core.GetInstance().Initialise();
       }
       else
       {
-        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.AtmoWin);
+        Core.GetInstance().RemoveTarget(Target.AtmoWin);
       }
     }
   }
@@ -718,12 +718,12 @@ namespace AtmoLight.Configuration
 
       if (_yes)
       {
-        AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.Hyperion);
-        AtmoLight.Plugin.AtmoLightObject.Initialise();
+        Core.GetInstance().AddTarget(Target.Hyperion);
+        Core.GetInstance().Initialise();
       }
       else
       {
-        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.Hyperion);
+        Core.GetInstance().RemoveTarget(Target.Hyperion);
       }
     }
   }
@@ -745,7 +745,7 @@ namespace AtmoLight.Configuration
         settings.HyperionIP = _value;
         SettingsManager.Save(settings);
 
-        AtmoLight.Plugin.AtmoLightObject.hyperionIP = _value;
+        Core.GetInstance().hyperionIP = _value;
       }
     }
 
@@ -773,7 +773,7 @@ namespace AtmoLight.Configuration
       settings.HyperionPort = (int)_value;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.hyperionPort = (int)_value;
+      Core.GetInstance().hyperionPort = (int)_value;
     }
   }
 
@@ -795,7 +795,7 @@ namespace AtmoLight.Configuration
       settings.HyperionPriority = (int)_value;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.hyperionPriority = (int)_value;
+      Core.GetInstance().hyperionPriority = (int)_value;
     }
   }
 
@@ -817,7 +817,7 @@ namespace AtmoLight.Configuration
       settings.HyperionPriorityStaticColor = (int)_value;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.hyperionPriorityStaticColor = (int)_value;
+      Core.GetInstance().hyperionPriorityStaticColor = (int)_value;
     }
   }
 
@@ -839,7 +839,7 @@ namespace AtmoLight.Configuration
       settings.HyperionReconnectAttempts = (int)_value;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.hyperionReconnectAttempts = (int)_value;
+      Core.GetInstance().hyperionReconnectAttempts = (int)_value;
     }
   }
 
@@ -861,7 +861,7 @@ namespace AtmoLight.Configuration
       settings.HyperionReconnectDelay = (int)_value;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.hyperionReconnectDelay = (int)_value;
+      Core.GetInstance().hyperionReconnectDelay = (int)_value;
     }
   }
 
@@ -879,7 +879,7 @@ namespace AtmoLight.Configuration
       settings.HyperionLiveReconnect = _yes;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.hyperionLiveReconnect = _yes;
+      Core.GetInstance().hyperionLiveReconnect = _yes;
     }
   }
   public class HueTarget : YesNo
@@ -898,12 +898,12 @@ namespace AtmoLight.Configuration
 
       if (_yes)
       {
-        AtmoLight.Plugin.AtmoLightObject.AddTarget(Target.Hue);
-        AtmoLight.Plugin.AtmoLightObject.Initialise();
+        Core.GetInstance().AddTarget(Target.Hue);
+        Core.GetInstance().Initialise();
       }
       else
       {
-        AtmoLight.Plugin.AtmoLightObject.RemoveTarget(Target.Hue);
+        Core.GetInstance().RemoveTarget(Target.Hue);
       }
     }
   }
@@ -924,7 +924,7 @@ namespace AtmoLight.Configuration
         settings.HueIP = _value;
         SettingsManager.Save(settings);
 
-        AtmoLight.Plugin.AtmoLightObject.hueIP = _value;
+        Core.GetInstance().hueIP = _value;
       }
     }
 
@@ -952,7 +952,7 @@ namespace AtmoLight.Configuration
       settings.HuePort = (int)_value;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.huePort = (int)_value;
+      Core.GetInstance().huePort = (int)_value;
     }
   }
   public class HueMinimalColorDifference : LimitedNumberSelect
@@ -973,7 +973,7 @@ namespace AtmoLight.Configuration
       settings.HueMinimalColorDifference = (int)_value;
       SettingsManager.Save(settings);
 
-      AtmoLight.Plugin.AtmoLightObject.hueMinimalColorDifference = (int)_value;
+      Core.GetInstance().hueMinimalColorDifference = (int)_value;
     }
   }
 
@@ -998,7 +998,7 @@ namespace AtmoLight.Configuration
       // AtmoWin has hardcoded dimensions, we cant use any other if AtmoWin is a target.
       if (!settings.AtmoWinTarget)
       {
-        AtmoLight.Plugin.AtmoLightObject.SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
+        Core.GetInstance().SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
       }
     }
   }
@@ -1024,7 +1024,7 @@ namespace AtmoLight.Configuration
       // AtmoWin has hardcoded dimensions, we cant use any other if AtmoWin is a target.
       if (!settings.AtmoWinTarget)
       {
-        AtmoLight.Plugin.AtmoLightObject.SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
+        Core.GetInstance().SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
       }
     }
   }

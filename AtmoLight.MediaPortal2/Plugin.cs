@@ -28,7 +28,7 @@ namespace AtmoLight
   {
     #region Fields
     protected AsynchronousMessageQueue messageQueue;
-    public static Core AtmoLightObject;
+    private Core AtmoLightObject;
 
     // Settings
     AtmoLight.Settings settings;
