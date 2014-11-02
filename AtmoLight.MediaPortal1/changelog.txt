@@ -5,6 +5,7 @@ Version 1.14.0.0
 - Added possibility to use more then one target software (e.g. AtmoWin and Hyperion at the same time)
 - Added "MediaPortal exit" effect (effect that gets set when MediaPortal gets closed)
 - Fixed dialog shown by wrong thread (LoadSkin: Running in wrong thread)
+- Removed AtmoWin from MPE Installer
 
 
 Version 1.13.0.0

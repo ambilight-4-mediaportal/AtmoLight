@@ -156,120 +156,16 @@ Click Next to continue or Cancel to exit Setup.</Value>
         </Params>
         <Actions>
           <Items>
-            <ActionItem Name="Script: kill atmowin process" ActionType="Script" ConditionGroup="">
-              <Params>
-                <Items>
-                  <SectionParam Name="Script">
-                    <Value>//css_reference "MpeCore.dll";
-
-using MpeCore.Classes;
-using MpeCore;
-using System;
-using System.Diagnostics;
-using System.Windows.Forms;
-
-public class Script
-{
-    public static void Main(PackageClass packageClass, ActionItem actionItem)
-    {
-    }
-}
-</Value>
-                    <ValueType>Script</ValueType>
-                    <Description />
-                  </SectionParam>
-                  <SectionParam Name="Uninstall Script">
-                    <Value>//css_reference "MpeCore.dll";
-
-using MpeCore.Classes;
-using MpeCore;
-
-public class Script
-{
-    public static void Main(PackageClass packageClass, UnInstallItem item)
-    {
-        return;
-    }
-}
-</Value>
-                    <ValueType>Script</ValueType>
-                    <Description />
-                  </SectionParam>
-                </Items>
-              </Params>
-              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
-            </ActionItem>
             <ActionItem Name="InstallFiles" ActionType="InstallFiles" ConditionGroup="">
               <Params>
                 <Items />
               </Params>
               <ExecuteLocation>AfterPanelShow</ExecuteLocation>
             </ActionItem>
-            <ActionItem Name="Extension Installer : Atmowin" ActionType="Extension Installer" ConditionGroup="">
-              <Params>
-                <Items>
-                  <SectionParam Name="Extension package">
-                    <Value />
-                    <ValueType>File</ValueType>
-                    <Description>Location of the extension package</Description>
-                  </SectionParam>
-                  <SectionParam Name="Extension Id">
-                    <Value>e0802934-4e24-4b0c-bf8c-a6f35af1093a</Value>
-                    <ValueType>String</ValueType>
-                    <Description>Global Id of the extension package - it will be downloaded when no file is set.</Description>
-                  </SectionParam>
-                  <SectionParam Name="Extension Version">
-                    <Value>0.0.0.1</Value>
-                    <ValueType>String</ValueType>
-                    <Description>Minimum Version of the extension package - older versions will be updated (only used when downloading via Id).</Description>
-                  </SectionParam>
-                  <SectionParam Name="Silent Install">
-                    <Value>YES</Value>
-                    <ValueType>Bool</ValueType>
-                    <Description>Silent install, No wizard screen will be displayed </Description>
-                  </SectionParam>
-                </Items>
-              </Params>
-              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
-            </ActionItem>
-            <ActionItem Name="Script : configure Atmolight to Atmowin path" ActionType="Script" ConditionGroup="">
+            <ActionItem Name="Delete deprecated files" ActionType="Script" ConditionGroup="">
               <Params>
                 <Items>
                   <SectionParam Name="Script">
-                    <Value>//css_reference "MpeCore.dll";
-//css_reference "Utils.dll";
-
-using MpeCore.Classes;
-using MpeCore;
-using MediaPortal.Profile;
-using System.Diagnostics;
-using System.IO;
-using System.Windows.Forms;
-
-public class Script
-{
-  public static void Main(PackageClass packageClass, ActionItem actionItem)
-  {
-if (File.Exists(Path.Combine(MpeInstaller.TransformInRealPath("%Config%"), "AtmoWin\\AtmoWinA.exe")))
-{
-    using (MediaPortal.Profile.Settings xmlwriter = new MPSettings())
-    {
-      xmlwriter.SetValue("atmolight", "atmowinexe",  Path.Combine(MpeInstaller.TransformInRealPath("%Config%"), "AtmoWin\\AtmoWinA.exe"));
-    }
-    MediaPortal.Profile.Settings.SaveCache();
-}
-else
-{
-MessageBox.Show("No AtmoWin installation found! Please install AtmoWin and select the path to AtmoWinA.exe manually!");
-}
-    return;
-  }
-}
-</Value>
-                    <ValueType>Script</ValueType>
-                    <Description />
-                  </SectionParam>
-                  <SectionParam Name="Uninstall Script">
                     <Value>//css_reference "MpeCore.dll";
 
 using MpeCore.Classes;
@@ -281,40 +177,19 @@ using System.Diagnostics;
 
 public class Script
 {
-public static void Main(PackageClass packageClass, UnInstallItem item)
+public static void Main(PackageClass packageClass, ActionItem actionItem)
         {
-            String SourceFilePath;
-            SourceFilePath = Path.Combine(MpeInstaller.TransformInRealPath("%Config%"), "Atmowin");
-
             String SourceFilePath_plugin;
             SourceFilePath_plugin = MpeInstaller.TransformInRealPath("%Base%");
 			
-			String LanguageFilePath;
-			LanguageFilePath = MpeInstaller.TransformInRealPath("%Language%");
-
             try
             {
-
-                if (File.Exists(Path.Combine(SourceFilePath_plugin, "AtmoDXUtil.dll")))
-                {
-                    File.Delete(Path.Combine(SourceFilePath_plugin, "AtmoDXUtil.dll"));
-                }
 
                 if (File.Exists(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Atmolight.dll")))
                 {
                     File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Atmolight.dll"));
                 }
 				
-				if (File.Exists(Path.Combine(SourceFilePath_plugin, "plugins\\process\\AtmoLight.Core.dll")))
-                {
-                    File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\AtmoLight.Core.dll"));
-                }
-				
-				if (File.Exists(Path.Combine(SourceFilePath_plugin, "plugins\\process\\AtmoLight.MediaPortal1.dll")))
-                {
-                    File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\AtmoLight.MediaPortal1.dll"));
-                }
-
                 if (File.Exists(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Interop.AtmoWinRemoteControl.dll")))
                 {
                     File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Interop.AtmoWinRemoteControl.dll"));
@@ -323,31 +198,6 @@ public static void Main(PackageClass packageClass, UnInstallItem item)
 				if (File.Exists(Path.Combine(SourceFilePath_plugin, "plugins\\process\\AtmoWinRemoteControl.dll")))
                 {
                     File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\AtmoWinRemoteControl.dll"));
-                }
-				
-				if (File.Exists(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Google.ProtocolBuffers.dll")))
-                {
-                    File.Delete(Path.Combine(SourceFilePath_plugin, "plugins\\process\\Google.ProtocolBuffers.dll"));
-                }
-				
-				if (File.Exists(Path.Combine(LanguageFilePath, "Atmolight\\DutchNL.lng")))
-                {
-                    File.Delete(Path.Combine(LanguageFilePath, "Atmolight\\DutchNL.lng"));
-                }
-				
-				if (File.Exists(Path.Combine(LanguageFilePath, "Atmolight\\EnglishUS.lng")))
-                {
-                    File.Delete(Path.Combine(LanguageFilePath, "Atmolight\\EnglishUS.lng"));
-                }
-				
-				if (File.Exists(Path.Combine(LanguageFilePath, "Atmolight\\FrenchFR.lng")))
-                {
-                    File.Delete(Path.Combine(LanguageFilePath, "Atmolight\\FrenchFR.lng"));
-                }
-				
-				if (File.Exists(Path.Combine(LanguageFilePath, "Atmolight\\GermanDE.lng")))
-                {
-                    File.Delete(Path.Combine(LanguageFilePath, "Atmolight\\GermanDE.lng"));
                 }
            }
            catch { }
