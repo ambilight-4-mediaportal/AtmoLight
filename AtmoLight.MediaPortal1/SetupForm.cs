@@ -10,109 +10,6 @@ namespace AtmoLight
   public partial class SetupForm : Form
   {
     private Core coreObject = Core.GetInstance();
-    public void UpdateComboBoxes()
-    {
-      List<ContentEffect> supportedEffects = coreObject.GetSupportedEffects();
-
-      cbVideo.Items.Clear();
-      cbMusic.Items.Clear();
-      cbRadio.Items.Clear();
-      cbMenu.Items.Clear();
-      cbMPExit.Items.Clear();
-
-      foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
-      {
-        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
-        {
-          // Cases in which all effects are possible
-          cbMusic.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
-          cbRadio.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
-
-          // Cases in which VU Meter is not possible
-          if (effect != ContentEffect.VUMeter && effect != ContentEffect.VUMeterRainbow)
-          {
-            cbVideo.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
-            cbMenu.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
-
-            // Cases in which Vu Meter, MPLiveView and GifReader are not possible
-            if (effect != ContentEffect.MediaPortalLiveMode && effect != ContentEffect.GIFReader)
-            {
-              cbMPExit.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
-            }
-          }
-        }
-      }
-
-      cbVideo.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectVideo.ToString());
-      cbMusic.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectMusic.ToString());
-      cbRadio.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectRadio.ToString());
-      cbMenu.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectMenu.ToString());
-      cbMPExit.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectMPExit.ToString());
-    }
-
-    private void ckAtmowinEnabled_CheckedChanged(Object sender, EventArgs e)
-    {
-      if (ckAtmowinEnabled.Checked)
-      {
-        coreObject.AddTarget(Target.AtmoWin);
-      }
-      else
-      {
-        coreObject.RemoveTarget(Target.AtmoWin);
-      }
-      UpdateComboBoxes();
-    }
-
-    private void ckHyperionEnabled_CheckedChanged(Object sender, EventArgs e)
-    {
-      if (ckHyperionEnabled.Checked)
-      {
-        coreObject.AddTarget(Target.Hyperion);
-      }
-      else
-      {
-        coreObject.RemoveTarget(Target.Hyperion);
-      }
-      UpdateComboBoxes();
-    }
-
-    private void ckHueEnabled_CheckedChanged(Object sender, EventArgs e)
-    {
-      if (ckHueEnabled.Checked)
-      {
-        coreObject.AddTarget(Target.Hue);
-      }
-      else
-      {
-        coreObject.RemoveTarget(Target.Hue);
-      }
-      UpdateComboBoxes();
-    }
-
-    private void cbVideo_SelectedIndexChanged(object sender, EventArgs e)
-    {
-      Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
-    }
-
-    private void cbMusic_SelectedIndexChanged(object sender, EventArgs e)
-    {
-      Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
-    }
-
-    private void cbRadio_SelectedIndexChanged(object sender, EventArgs e)
-    {
-      Settings.effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbRadio.Text, "ContextMenu_").Remove(0, 12));
-    }
-
-    private void cbMenu_SelectedIndexChanged(object sender, EventArgs e)
-    {
-      Settings.effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMenu.Text, "ContextMenu_").Remove(0, 12));
-    }
-
-    private void cbMPExit_SelectedIndexChanged(object sender, EventArgs e)
-    {
-      Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMPExit.Text, "ContextMenu_").Remove(0, 12));
-    }
 
     public SetupForm()
     {
@@ -868,6 +765,112 @@ namespace AtmoLight
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
 
+    }
+
+
+    // Dynamic effect changes
+    public void UpdateComboBoxes()
+    {
+      List<ContentEffect> supportedEffects = coreObject.GetSupportedEffects();
+
+      cbVideo.Items.Clear();
+      cbMusic.Items.Clear();
+      cbRadio.Items.Clear();
+      cbMenu.Items.Clear();
+      cbMPExit.Items.Clear();
+
+      foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
+      {
+        if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
+        {
+          // Cases in which all effects are possible
+          cbMusic.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+          cbRadio.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+
+          // Cases in which VU Meter is not possible
+          if (effect != ContentEffect.VUMeter && effect != ContentEffect.VUMeterRainbow)
+          {
+            cbVideo.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+            cbMenu.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+
+            // Cases in which Vu Meter, MPLiveView and GifReader are not possible
+            if (effect != ContentEffect.MediaPortalLiveMode && effect != ContentEffect.GIFReader)
+            {
+              cbMPExit.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+            }
+          }
+        }
+      }
+
+      cbVideo.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectVideo.ToString());
+      cbMusic.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectMusic.ToString());
+      cbRadio.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectRadio.ToString());
+      cbMenu.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectMenu.ToString());
+      cbMPExit.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectMPExit.ToString());
+    }
+
+    private void ckAtmowinEnabled_CheckedChanged(Object sender, EventArgs e)
+    {
+      if (ckAtmowinEnabled.Checked)
+      {
+        coreObject.AddTarget(Target.AtmoWin);
+      }
+      else
+      {
+        coreObject.RemoveTarget(Target.AtmoWin);
+      }
+      UpdateComboBoxes();
+    }
+
+    private void ckHyperionEnabled_CheckedChanged(Object sender, EventArgs e)
+    {
+      if (ckHyperionEnabled.Checked)
+      {
+        coreObject.AddTarget(Target.Hyperion);
+      }
+      else
+      {
+        coreObject.RemoveTarget(Target.Hyperion);
+      }
+      UpdateComboBoxes();
+    }
+
+    private void ckHueEnabled_CheckedChanged(Object sender, EventArgs e)
+    {
+      if (ckHueEnabled.Checked)
+      {
+        coreObject.AddTarget(Target.Hue);
+      }
+      else
+      {
+        coreObject.RemoveTarget(Target.Hue);
+      }
+      UpdateComboBoxes();
+    }
+
+    private void cbVideo_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
+    }
+
+    private void cbMusic_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
+    }
+
+    private void cbRadio_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      Settings.effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbRadio.Text, "ContextMenu_").Remove(0, 12));
+    }
+
+    private void cbMenu_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      Settings.effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMenu.Text, "ContextMenu_").Remove(0, 12));
+    }
+
+    private void cbMPExit_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMPExit.Text, "ContextMenu_").Remove(0, 12));
     }
   }
 }
