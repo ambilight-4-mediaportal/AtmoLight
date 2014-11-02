@@ -69,16 +69,72 @@ namespace AtmoLight
       return dt;
     }
 
+
     public static void LoadSettings()
     {
       using (MediaPortal.Profile.Settings reader = new MediaPortal.Profile.Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
       {
+        // Legacy support
+        // The effect settings were integers in the past, but now are strings.
+        // In order to avoid a lot of people loosing their effect settings during an update,
+        // we convert the old settings to the new ones.
+        int effectVideoInt;
+        if (int.TryParse(reader.GetValueAsString("atmolight", "effectVideo", "MediaPortalLiveMode"), out effectVideoInt))
+        {
+          effectVideo = OldIntToNewContentEffect(effectVideoInt);
+          SaveSpecificSetting("effectVideo", effectVideo.ToString());
+        }
+        else
+        {
+          effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectVideo", "MediaPortalLiveMode"));
+        }
+
+        int effectMusicInt;
+        if (int.TryParse(reader.GetValueAsString("atmolight", "effectMusic", "LEDsDisabled"), out effectMusicInt))
+        {
+          effectMusic = OldIntToNewContentEffect(effectMusicInt);
+          SaveSpecificSetting("effectMusic", effectMusic.ToString());
+        }
+        else
+        {
+          effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMusic", "LEDsDisabled"));
+        }
+
+        int effecRadioInt;
+        if (int.TryParse(reader.GetValueAsString("atmolight", "effectRadio", "LEDsDisabled"), out effecRadioInt))
+        {
+          effectRadio = OldIntToNewContentEffect(effecRadioInt);
+          SaveSpecificSetting("effectRadio", effectRadio.ToString());
+        }
+        else
+        {
+          effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectRadio", "LEDsDisabled"));
+        }
+
+        int effectMenuInt;
+        if (int.TryParse(reader.GetValueAsString("atmolight", "effectMenu", "LEDsDisabled"), out effectMenuInt))
+        {
+          effectMenu = OldIntToNewContentEffect(effectMenuInt);
+          SaveSpecificSetting("effectMenu", effectMenu.ToString());
+        }
+        else
+        {
+          effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMenu", "LEDsDisabled"));
+        }
+
+        int effectMPExitInt;
+        if (int.TryParse(reader.GetValueAsString("atmolight", "effectMPExit", "LEDsDisabled"), out effectMPExitInt))
+        {
+          effectMPExit = OldIntToNewContentEffect(effectMPExitInt == 4 ? 5 : effectMPExitInt);
+          SaveSpecificSetting("effectMPExit", effectMPExit.ToString());
+        }
+        else
+        {
+          effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMPExit", "LEDsDisabled"));
+        }
+        
+        // Normal settings loading
         atmowinExe = reader.GetValueAsString("atmolight", "atmowinexe", "");
-        effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectVideo", "MediaPortalLiveMode"));
-        effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMusic", "LEDsDisabled"));
-        effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectRadio", "LEDsDisabled"));
-        effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMenu", "LEDsDisabled"));
-        effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMPExit", "LEDsDisabled"));
         killButton = reader.GetValueAsInt("atmolight", "killbutton", 4);
         profileButton = reader.GetValueAsInt("atmolight", "cmbutton", 4);
         menuButton = reader.GetValueAsInt("atmolight", "menubutton", 4);
@@ -116,7 +172,6 @@ namespace AtmoLight
         atmoWinTarget = reader.GetValueAsBool("atmolight", "atmoWinTarget", true);
         hueTarget = reader.GetValueAsBool("atmolight", "hueTarget", false);
         hyperionTarget = reader.GetValueAsBool("atmolight", "hyperionTarget", false);
-
       }
     }
     public static void SaveSettings()
@@ -174,6 +229,40 @@ namespace AtmoLight
       using (MediaPortal.Profile.Settings reader = new MediaPortal.Profile.Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
       {
         reader.SetValue("atmolight", Setting, Value);
+      }
+    }
+
+    // Legacy Support
+    /// <summary>
+    /// Converts old ContentEffect integer (before rework) into new ContentEffect.
+    /// This is done to not lose settings after updating AtmoLight.
+    /// </summary>
+    /// <param name="effectInt"></param>
+    /// <returns></returns>
+    private static ContentEffect OldIntToNewContentEffect(int effectInt)
+    {
+      switch (effectInt)
+      {
+        case 0:
+          return ContentEffect.LEDsDisabled;
+        case 1:
+          return ContentEffect.ExternalLiveMode;
+        case 2:
+          return ContentEffect.AtmoWinColorchanger;
+        case 3:
+          return ContentEffect.AtmoWinColorchangerLR;
+        case 4:
+          return ContentEffect.MediaPortalLiveMode;
+        case 5:
+          return ContentEffect.StaticColor;
+        case 6:
+          return ContentEffect.GIFReader;
+        case 7:
+          return ContentEffect.VUMeter;
+        case 8:
+          return ContentEffect.VUMeterRainbow;
+        default:
+          return ContentEffect.LEDsDisabled;
       }
     }
   }
