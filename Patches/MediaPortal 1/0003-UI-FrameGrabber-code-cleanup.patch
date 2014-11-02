@@ -1,0 +1,57 @@
+From 7bf5f6065834a874335025a512ba018cc2e948ba Mon Sep 17 00:00:00 2001
+From: Lightning303 <Lightning303@gmail.com>
+Date: Sun, 2 Nov 2014 01:20:28 +0100
+Subject: [PATCH] UI FrameGrabber code cleanup
+
+---
+ mediaportal/MediaPortal.Application/MediaPortal.cs | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
+
+diff --git a/mediaportal/MediaPortal.Application/MediaPortal.cs b/mediaportal/MediaPortal.Application/MediaPortal.cs
+index 40b2e4d..dd0fab1 100644
+--- a/mediaportal/MediaPortal.Application/MediaPortal.cs
++++ b/mediaportal/MediaPortal.Application/MediaPortal.cs
+@@ -3153,18 +3153,15 @@ public class MediaPortalApp : D3D, IRender
+               GUIGraphicsContext.Render3DMode == GUIGraphicsContext.eRender3DMode.SideBySideTo2D ||
+               GUIGraphicsContext.Render3DMode == GUIGraphicsContext.eRender3DMode.TopAndBottomTo2D)
+           {
++            // Call FrameGrabber with UI Surface
+             if (grabber.HasSubscribers())
+             {
+-              // Call Framegrabber with UI Surface
+-              // Needed for AtmoLight UI capture
+-              Surface atmoLightSurface = GUIGraphicsContext.DX9Device.GetBackBuffer(0, 0, BackBufferType.Mono);
+-              Int16 atmoLightWidth = (Int16)atmoLightSurface.Description.Width;
+-              Int16 atmoLightHeight = (Int16)atmoLightSurface.Description.Height;
++              Surface frameGrabberSurface = GUIGraphicsContext.DX9Device.GetBackBuffer(0, 0, BackBufferType.Mono);
+               unsafe
+               {
+-                grabber.OnFrame(atmoLightWidth, atmoLightHeight, 0, 0, (uint)atmoLightSurface.UnmanagedComPointer);
++                grabber.OnFrame((Int16)frameGrabberSurface.Description.Width, (Int16)frameGrabberSurface.Description.Height, 0, 0, (uint)frameGrabberSurface.UnmanagedComPointer);
+               }
+-              atmoLightSurface.Dispose();
++              frameGrabberSurface.Dispose();
+             }
+ 
+             // clear the surface
+@@ -3200,15 +3197,12 @@ public class MediaPortalApp : D3D, IRender
+ 
+             Surface backbuffer = GUIGraphicsContext.DX9Device.GetBackBuffer(0, 0, BackBufferType.Mono);
+ 
++            // Call FrameGrabber with UI Surface
+             if (grabber.HasSubscribers())
+             {
+-              // Call Framegrabber with UI Surface
+-              // Needed for AtmoLight UI capture
+-              Int16 atmoLightWidth = (Int16)backbuffer.Description.Width;
+-              Int16 atmoLightHeight = (Int16)backbuffer.Description.Height;
+               unsafe
+               {
+-                grabber.OnFrame(atmoLightWidth, atmoLightHeight, 0, 0, (uint)backbuffer.UnmanagedComPointer);
++                grabber.OnFrame((Int16)backbuffer.Description.Width, (Int16)backbuffer.Description.Height, 0, 0, (uint)backbuffer.UnmanagedComPointer);
+               }
+             }
+ 
+-- 
+1.9.0.msysgit.0
+
