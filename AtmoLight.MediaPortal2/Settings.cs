@@ -31,10 +31,10 @@ namespace AtmoLight
     [Setting(SettingScope.User, 2)]
     public int ProfileButton { get; set; }
 
-    [Setting(SettingScope.User, "08:00")]
+    [Setting(SettingScope.User, "00:00")]
     public string ExcludeTimeStart { get; set; }
 
-    [Setting(SettingScope.User, "21:00")]
+    [Setting(SettingScope.User, "00:00")]
     public string ExcludeTimeEnd { get; set; }
 
     [Setting(SettingScope.User, false)]

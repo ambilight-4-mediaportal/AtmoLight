@@ -138,8 +138,8 @@ namespace AtmoLight
         killButton = reader.GetValueAsInt("atmolight", "killbutton", 4);
         profileButton = reader.GetValueAsInt("atmolight", "cmbutton", 4);
         menuButton = reader.GetValueAsInt("atmolight", "menubutton", 4);
-        excludeTimeStart = LoadTimeSetting(reader, "excludeTimeStart", "08:00");
-        excludeTimeEnd = LoadTimeSetting(reader, "excludeTimeEnd", "21:00");
+        excludeTimeStart = LoadTimeSetting(reader, "excludeTimeStart", "00:00");
+        excludeTimeEnd = LoadTimeSetting(reader, "excludeTimeEnd", "00:00");
         manualMode = reader.GetValueAsBool("atmolight", "OffOnStart", false);
         sbs3dOn = reader.GetValueAsBool("atmolight", "SBS_3D_ON", false);
         lowCPU = reader.GetValueAsBool("atmolight", "lowCPU", false);
