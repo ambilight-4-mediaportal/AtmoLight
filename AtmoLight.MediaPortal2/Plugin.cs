@@ -31,8 +31,7 @@ namespace AtmoLight
     private Core AtmoLightObject;
 
     // Settings
-    AtmoLight.Settings settings;
-    private int[] staticColorTemp = { 0, 0, 0 };
+    private AtmoLight.Settings settings;
     private ContentEffect menuEffect = ContentEffect.Undefined;
     private ContentEffect playbackEffect = ContentEffect.Undefined;
 
@@ -106,9 +105,6 @@ namespace AtmoLight
       settings = new AtmoLight.Settings();
       settings.LoadAll();
       settings.SaveAll();
-      staticColorTemp[0] = settings.StaticColorRed;
-      staticColorTemp[1] = settings.StaticColorGreen;
-      staticColorTemp[2] = settings.StaticColorBlue;
 
       // AtmoLight object creation
       Log.Debug("Generating new AtmoLight.Core instance.");
@@ -170,9 +166,10 @@ namespace AtmoLight
 
       // Handlers
       Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
-      AtmoLight.Configuration.OnOffButton.NewOnOffButton += new Configuration.OnOffButton.OnOffButtonHander(ReregisterKeyBindings);
-      AtmoLight.Configuration.ProfileButton.NewProfileButton += new Configuration.ProfileButton.ProfileButtonHander(ReregisterKeyBindings);
+      AtmoLight.Configuration.OnOffButton.ButtonsChanged += new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      AtmoLight.Configuration.ProfileButton.ButtonsChanged += new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
       SkinContext.DeviceSceneEnd += UICapture;
+      RegisterSettingsChangedHandler();
       RegisterKeyBindings();
     }
 
@@ -198,8 +195,9 @@ namespace AtmoLight
       // Unregister Log Handler
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
       Core.OnNewConnectionLost -= new Core.NewConnectionLostHandler(OnNewConnectionLost);
-      AtmoLight.Configuration.OnOffButton.NewOnOffButton -= new Configuration.OnOffButton.OnOffButtonHander(ReregisterKeyBindings);
-      AtmoLight.Configuration.ProfileButton.NewProfileButton -= new Configuration.ProfileButton.ProfileButtonHander(ReregisterKeyBindings);
+      AtmoLight.Configuration.OnOffButton.ButtonsChanged -= new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      AtmoLight.Configuration.ProfileButton.ButtonsChanged -= new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      UnregisterSettingsChangedHandler();
     }
     #endregion
 
@@ -403,6 +401,8 @@ namespace AtmoLight
     private void ReregisterKeyBindings()
     {
       UnregisterKeyBindings();
+      settings.LoadAll();
+      settings.SaveAll();
       RegisterKeyBindings();
     }
 
@@ -514,6 +514,50 @@ namespace AtmoLight
     {
       ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", MediaPortal.Common.Localization.LocalizationHelper.Translate("[AtmoLight.AtmoWinConnectionLost]").Replace("[Target]", target.ToString()), true);
     }
+    #endregion
+
+    #region Settings Lost Hander
+    private void RegisterSettingsChangedHandler()
+    {
+      AtmoLight.Configuration.VideoEffect.SettingsChanged += new Configuration.VideoEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.AudioEffect.SettingsChanged += new Configuration.AudioEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MenuEffect.SettingsChanged += new Configuration.MenuEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MPExitEffect.SettingsChanged += new Configuration.MPExitEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ManualMode.SettingsChanged += new Configuration.ManualMode.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.SBS3D.SettingsChanged += new Configuration.SBS3D.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.LowCPU.SettingsChanged += new Configuration.LowCPU.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.LowCPUTime.SettingsChanged += new Configuration.LowCPUTime.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.DelayTime.SettingsChanged += new Configuration.DelayTime.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.DelayRefreshRate.SettingsChanged += new Configuration.DelayRefreshRate.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeStartHour.SettingsChanged += new Configuration.ExcludeTimeStartHour.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeEndHour.SettingsChanged += new Configuration.ExcludeTimeEndHour.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeStartMinutes.SettingsChanged += new Configuration.ExcludeTimeStartMinutes.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeEndMinutes.SettingsChanged += new Configuration.ExcludeTimeEndMinutes.SettingsChangedHandler(ReloadSettings);
+    }
+
+    private void UnregisterSettingsChangedHandler()
+    {
+      AtmoLight.Configuration.VideoEffect.SettingsChanged -= new Configuration.VideoEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.AudioEffect.SettingsChanged -= new Configuration.AudioEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MenuEffect.SettingsChanged -= new Configuration.MenuEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MPExitEffect.SettingsChanged -= new Configuration.MPExitEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ManualMode.SettingsChanged -= new Configuration.ManualMode.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.SBS3D.SettingsChanged -= new Configuration.SBS3D.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.LowCPU.SettingsChanged -= new Configuration.LowCPU.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.LowCPUTime.SettingsChanged -= new Configuration.LowCPUTime.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.DelayTime.SettingsChanged -= new Configuration.DelayTime.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.DelayRefreshRate.SettingsChanged -= new Configuration.DelayRefreshRate.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeStartHour.SettingsChanged -= new Configuration.ExcludeTimeStartHour.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeEndHour.SettingsChanged -= new Configuration.ExcludeTimeEndHour.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeStartMinutes.SettingsChanged -= new Configuration.ExcludeTimeStartMinutes.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeEndMinutes.SettingsChanged -= new Configuration.ExcludeTimeEndMinutes.SettingsChangedHandler(ReloadSettings);
+    }
+
+    private void ReloadSettings()
+    {
+      settings.LoadAll();
+    }
+
     #endregion
   }
 }

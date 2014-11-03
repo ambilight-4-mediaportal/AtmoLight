@@ -57,6 +57,9 @@ namespace AtmoLight.Configuration
 
   public class VideoEffect : SingleSelectionList
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
+
     private IList<string> effectList = new List<string>();
     public override void Load()
     {
@@ -82,6 +85,7 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.VideoEffect = (ContentEffect)Enum.Parse(typeof(ContentEffect), effectList[Selected].Remove(effectList[Selected].Length - 1).Remove(0, 11));
       SettingsManager.Save(settings);
+      SettingsChanged();
 
       if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
       {
@@ -92,6 +96,9 @@ namespace AtmoLight.Configuration
 
   public class AudioEffect : SingleSelectionList
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
+
     private IList<string> effectList = new List<string>();
     public override void Load()
     {
@@ -117,6 +124,7 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.AudioEffect = (ContentEffect)Enum.Parse(typeof(ContentEffect), effectList[Selected].Remove(effectList[Selected].Length - 1).Remove(0, 11));
       SettingsManager.Save(settings);
+      SettingsChanged();
 
       if (ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
       {
@@ -127,6 +135,9 @@ namespace AtmoLight.Configuration
 
   public class MenuEffect : SingleSelectionList
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
+
     private IList<string> effectList = new List<string>();
     public override void Load()
     {
@@ -152,6 +163,7 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.MenuEffect = (ContentEffect)Enum.Parse(typeof(ContentEffect), effectList[Selected].Remove(effectList[Selected].Length - 1).Remove(0, 11));
       SettingsManager.Save(settings);
+      SettingsChanged();
 
       if (!ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive && !ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
       {
@@ -162,6 +174,9 @@ namespace AtmoLight.Configuration
 
   public class MPExitEffect : SingleSelectionList
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
+
     private IList<string> effectList = new List<string>();
     public override void Load()
     {
@@ -190,13 +205,14 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.MPExitEffect = (ContentEffect)Enum.Parse(typeof(ContentEffect), effectList[Selected].Remove(effectList[Selected].Length - 1).Remove(0, 11));
       SettingsManager.Save(settings);
+      SettingsChanged();
     }
   }
 
   public class OnOffButton : SingleSelectionList
   {
-    public delegate void OnOffButtonHander();
-    public static event OnOffButtonHander NewOnOffButton;
+    public delegate void ButtonsChangedHandler();
+    public static event ButtonsChangedHandler ButtonsChanged;
 
     private IList<string> buttonList = new List<string>();
     public override void Load()
@@ -223,7 +239,7 @@ namespace AtmoLight.Configuration
       {
         settings.OnOffButton = buttonList.IndexOf(buttonList[Selected]);
         SettingsManager.Save(settings);
-        NewOnOffButton();
+        ButtonsChanged();
       }
       else
       {
@@ -234,8 +250,8 @@ namespace AtmoLight.Configuration
 
   public class ProfileButton : SingleSelectionList
   {
-    public delegate void ProfileButtonHander();
-    public static event ProfileButtonHander NewProfileButton;
+    public delegate void ButtonsChangedHandler();
+    public static event ButtonsChangedHandler ButtonsChanged;
 
     private IList<string> buttonList = new List<string>();
     public override void Load()
@@ -262,7 +278,7 @@ namespace AtmoLight.Configuration
       {
         settings.ProfileButton = buttonList.IndexOf(buttonList[Selected]);
         SettingsManager.Save(settings);
-        NewProfileButton();
+        ButtonsChanged();
       }
       else
       {
@@ -273,6 +289,8 @@ namespace AtmoLight.Configuration
 
   public class ManualMode : YesNo
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
     public override void Load()
     {
       _yes = SettingsManager.Load<Settings>().ManualMode;
@@ -284,11 +302,14 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.ManualMode = _yes;
       SettingsManager.Save(settings);
+      SettingsChanged();
     }
   }
 
   public class SBS3D : YesNo
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
     public override void Load()
     {
       _yes = SettingsManager.Load<Settings>().SBS3D;
@@ -300,6 +321,7 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.SBS3D = _yes;
       SettingsManager.Save(settings);
+      SettingsChanged();
     }
   }
 
@@ -359,6 +381,8 @@ namespace AtmoLight.Configuration
 
   public class LowCPU : YesNo
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
     public override void Load()
     {
       _yes = SettingsManager.Load<Settings>().LowCPU;
@@ -370,11 +394,14 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.LowCPU = _yes;
       SettingsManager.Save(settings);
+      SettingsChanged();
     }
   }
 
   public class LowCPUTime : LimitedNumberSelect
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
     public override void Load()
     {
       _type = NumberType.Integer;
@@ -390,6 +417,7 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.LowCPUTime = (int)_value;
       SettingsManager.Save(settings);
+      SettingsChanged();
     }
   }
 
@@ -404,6 +432,8 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
+      settings.Delay = _yes;
+      SettingsManager.Save(settings);
 
       if (settings.Delay != _yes && Core.GetInstance().GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
@@ -416,14 +446,13 @@ namespace AtmoLight.Configuration
           Core.GetInstance().DisableDelay();
         }
       }
-
-      settings.Delay = _yes;
-      SettingsManager.Save(settings);
     }
   }
 
   public class DelayTime : LimitedNumberSelect
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
     public override void Load()
     {
       _type = NumberType.Integer;
@@ -439,6 +468,7 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.DelayTime = (int)_value;
       SettingsManager.Save(settings);
+      SettingsChanged();
 
       if (Core.GetInstance().IsDelayEnabled() && Core.GetInstance().GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
@@ -449,6 +479,8 @@ namespace AtmoLight.Configuration
 
   public class DelayRefreshRate : LimitedNumberSelect
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
     public override void Load()
     {
       _type = NumberType.Integer;
@@ -464,6 +496,7 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.DelayRefreshRate = (int)_value;
       SettingsManager.Save(settings);
+      SettingsChanged();
     }
   }
 
@@ -547,6 +580,8 @@ namespace AtmoLight.Configuration
 
   public class ExcludeTimeStartHour : LimitedNumberSelect
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
     int pos;
     string excludeTimeStart;
     public override void Load()
@@ -566,11 +601,14 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.ExcludeTimeStart = ((_value < 10) ? "0" : "") + _value + ":" + excludeTimeStart.Substring(pos + 1, 2);
       SettingsManager.Save(settings);
+      SettingsChanged();
     }
   }
 
   public class ExcludeTimeEndHour : LimitedNumberSelect
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
     int pos;
     string excludeTimeEnd;
     public override void Load()
@@ -590,11 +628,14 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.ExcludeTimeEnd = ((_value < 10) ? "0" : "") + _value + ":" + excludeTimeEnd.Substring(pos + 1, 2);
       SettingsManager.Save(settings);
+      SettingsChanged();
     }
   }
 
   public class ExcludeTimeStartMinutes : LimitedNumberSelect
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
     int pos;
     string excludeTimeStart;
     public override void Load()
@@ -614,11 +655,14 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.ExcludeTimeStart = excludeTimeStart.Substring(0, pos) + ":" + ((_value < 10) ? "0" : "") + _value;
       SettingsManager.Save(settings);
+      SettingsChanged();
     }
   }
 
   public class ExcludeTimeEndMinutes : LimitedNumberSelect
   {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
     int pos;
     string excludeTimeEnd;
     public override void Load()
@@ -638,6 +682,7 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.ExcludeTimeEnd = excludeTimeEnd.Substring(0, pos) + ":" + ((_value < 10) ? "0" : "") + _value;
       SettingsManager.Save(settings);
+      SettingsChanged();
     }
   }
 
