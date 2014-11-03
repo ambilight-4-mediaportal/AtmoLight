@@ -67,9 +67,7 @@ tabPageGeneric=Algemene instellingen
 grpTargets=Selecteer ondersteunende hardware
 grpAtmowinSettings=Instellingen
 ckDelayText=LED vertraging
-
 lblMPExit=MediaPortal Afgesloten:
-
 [ContextMenu]
 SwitchLEDsON=Schakel LEDs aan
 SwitchLEDsOFF=Schakel LEDs uit
@@ -81,8 +79,8 @@ ChangeStatic=Verander Vaste Kleur
 LEDsDisabled=LEDs uitgeschakeld
 MediaPortalLiveMode=MediaPortal Live Modus
 ExternalLiveMode=Live Modus
-AtmoWinColorchanger=Kleur wisselaar
-AtmoWinColorchangerLR=Kleur wisselaar LR
+AtmoWinColorchanger=AtmoWin Kleur wisselaar
+AtmoWinColorchangerLR=AtmoWin Kleur wisselaar LR
 StaticColor=Vaste kleur
 Manual=Handmatig
 SaveColor=Sla kleur op
