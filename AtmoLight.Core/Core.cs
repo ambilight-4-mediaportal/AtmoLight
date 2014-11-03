@@ -783,6 +783,9 @@ namespace AtmoLight
         }
       }
 
+      currentEffect = changeEffect;
+      changeEffect = ContentEffect.Undefined;
+
       if (effect == ContentEffect.MediaPortalLiveMode)
       {
         if (delayEnabled)
@@ -799,9 +802,6 @@ namespace AtmoLight
       {
         StartVUMeterThread();
       }
-
-      currentEffect = changeEffect;
-      changeEffect = ContentEffect.Undefined;
       return true;
     }
 
