@@ -1,11 +1,13 @@
 Version 1.14.0.0
-- Added interface to allow more targets in the future
+- Added interface to support other targets (not just AtmoWin)
 - Added Hyperion as target software
 - Added Hue as target (AtmoHue needed)
 - Added possibility to use more then one target software (e.g. AtmoWin and Hyperion at the same time)
 - Added "MediaPortal exit" effect (effect that gets set when MediaPortal gets closed)
 - Fixed dialog shown by wrong thread (LoadSkin: Running in wrong thread)
-- Removed AtmoWin from MPE Installer
+- Removed AtmoWin from AtmoLight installer
+- Updated Extensions plugin settings
+- Various small bug fixes
 
 
 Version 1.13.0.0
