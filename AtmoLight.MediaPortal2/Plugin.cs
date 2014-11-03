@@ -44,9 +44,6 @@ namespace AtmoLight
     // Player helper
     private IPlayerManager playerManager;
     private ISharpDXVideoPlayer player;
-
-    // Unsupported effects
-    public static List<ContentEffect> unsupportedEffects = new List<ContentEffect> { ContentEffect.VUMeter, ContentEffect.VUMeterRainbow };
     #endregion
 
     #region Win32API
@@ -166,6 +163,7 @@ namespace AtmoLight
 
       // Handlers
       Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
+      Core.OnNewVUMeter += new Core.NewVUMeterHander(OnNewVUMeter);
       AtmoLight.Configuration.OnOffButton.ButtonsChanged += new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
       AtmoLight.Configuration.ProfileButton.ButtonsChanged += new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
       SkinContext.DeviceSceneEnd += UICapture;
@@ -195,6 +193,7 @@ namespace AtmoLight
       // Unregister Log Handler
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
       Core.OnNewConnectionLost -= new Core.NewConnectionLostHandler(OnNewConnectionLost);
+      Core.OnNewVUMeter -= new Core.NewVUMeterHander(OnNewVUMeter);
       AtmoLight.Configuration.OnOffButton.ButtonsChanged -= new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
       AtmoLight.Configuration.ProfileButton.ButtonsChanged -= new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
       UnregisterSettingsChangedHandler();
@@ -558,6 +557,67 @@ namespace AtmoLight
       settings.LoadAll();
     }
 
+    #endregion
+
+    #region VU Meter Event Handler
+    private double[] OnNewVUMeter()
+    {
+      double[] dbLevel = new double[] { -200.0, -200.0 };
+
+      IPlayerContextManager playerContextManager = ServiceRegistration.Get<IPlayerContextManager>(false);
+      if (playerContextManager == null)
+      {
+        return dbLevel;
+      }
+
+      IPlayerContext playerContext = playerContextManager.GetPlayerContext(PlayerChoice.PrimaryPlayer);
+      if (playerContext == null)
+      {
+        return dbLevel;
+      }
+
+      ISpectrumPlayer player = (playerContext.CurrentPlayer as ISpectrumPlayer);
+      if (player == null)
+      {
+        return dbLevel;
+      }
+
+
+      int maxIndex;
+      int minIndex;
+      bool res = player.GetFFTFrequencyIndex(20000, out maxIndex);
+      res |= player.GetFFTFrequencyIndex(20, out minIndex);
+      if (!res)
+      {
+        return dbLevel;
+      }
+
+      int _maximumFrequencyIndex = Math.Min(maxIndex + 1, 2048 - 1);
+      int _minimumFrequencyIndex = Math.Min(minIndex, 2048 - 1);
+
+      float[] _channelData = new float[2048];
+      if (player.State != PlayerState.Active || !player.GetFFTData(_channelData))
+      {
+        return dbLevel;
+      }
+
+      minIndex = Math.Max(0, Math.Min(_minimumFrequencyIndex, _channelData.Length));
+      maxIndex = Math.Max(0, Math.Min(_maximumFrequencyIndex, _channelData.Length));
+
+      double maxValue = -200f;
+      for (int x = minIndex; x <= maxIndex; x++)
+      {
+        double dbValue = (20 * Math.Log10(_channelData[x])) + 5;
+
+        if (maxValue < dbValue)
+        {
+          maxValue = dbValue;
+        }
+      }
+      dbLevel[0] = maxValue;
+      dbLevel[1] = maxValue;
+      return dbLevel;
+    }
     #endregion
   }
 }

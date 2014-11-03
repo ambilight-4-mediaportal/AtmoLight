@@ -9,6 +9,8 @@
   <string name="AtmoLight.MediaPortalLiveMode">MediaPortal liveview mode</string>
   <string name="AtmoLight.StaticColor">Static Color</string>
   <string name="AtmoLight.gifreader">GIFReader</string>
+  <string name="AtmoLight.VUMeter">VU Meter</string>
+  <string name="AtmoLight.VUMeterRainbow">VU Meter Rainbow</string>
   <string name="AtmoLight.None">None</string>
   <string name="AtmoLight.Red">Red</string>
   <string name="AtmoLight.Green">Green</string>
