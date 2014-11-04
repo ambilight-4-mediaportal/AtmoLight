@@ -5,7 +5,7 @@ namespace AtmoWinRemoteControl
   using System.Runtime.InteropServices;
 
   [ComImport, Guid("E01E2044-5AFC-11D3-8E80-00805F91CEE9"), ClassInterface((short)0), TypeLibType((short)2)]
-  public class AtmoLiveViewControlClass : IAtmoLiveViewControl, AtmoLiveViewControl
+  public class AtmoLiveViewControlClass : IAtmoLiveViewControl
   {
     [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
     public virtual extern void getCurrentLiveViewSource(out ComLiveViewSource modus);

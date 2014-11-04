@@ -67,9 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ITargets.cs" />
-    <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\AtmoLiveViewControl.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\AtmoLiveViewControlClass.cs" />
-    <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\AtmoRemoteControl.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\AtmoRemoteControlClass.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinHandler.cs" />
     <Compile Include="Core.cs" />
@@ -78,8 +76,6 @@
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\GUID.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\IAtmoLiveViewControl.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\IAtmoRemoteControl.cs" />
-    <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\IAtmoRemoteControl2.cs" />
-    <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\IUnknown.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\__MIDL___MIDL_itf_AtmoWin_0003_0001_0001.cs" />
     <Compile Include="Targets\Hue\HueHandler.cs" />
     <Compile Include="Targets\Hyperion\HyperionMessages.cs" />

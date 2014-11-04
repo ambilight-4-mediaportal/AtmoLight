@@ -4,7 +4,7 @@ namespace AtmoWinRemoteControl
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
 
-    [ComImport, InterfaceType((short) 1), Guid("E01E2044-5AFC-11D3-8E80-00805F91CDD9"), TypeLibType((short) 0x100)]
+    [ComImport, InterfaceType((short) 1), Guid("E01E2044-5BFC-11D4-8E80-00805F91CDD9"), TypeLibType((short) 0x100)]
     public interface IAtmoRemoteControl
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType=MethodCodeType.Runtime)]
@@ -17,6 +17,8 @@ namespace AtmoWinRemoteControl
         void setChannelStaticColor([In] int channel, [In] byte red, [In] byte green, [In] byte blue);
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType=MethodCodeType.Runtime)]
         void setChannelValues([In, MarshalAs(UnmanagedType.SafeArray, SafeArraySubType=VarEnum.VT_UI1)] Array channel_values);
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType=MethodCodeType.Runtime)]
+        void getLiveViewRes(out int Width, out int Height);
     }
 }
 

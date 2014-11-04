@@ -49,7 +49,7 @@ namespace AtmoLight
     private volatile bool getAtmoLiveViewSourceLock = false;
 
     // Com  Objects
-    private IAtmoRemoteControl2 atmoRemoteControl = null; // Com Object to control AtmoWin
+    private IAtmoRemoteControl atmoRemoteControl = null; // Com Object to control AtmoWin
     private IAtmoLiveViewControl atmoLiveViewControl = null; // Com Object to control AtmoWins liveview
     private ComLiveViewSource atmoLiveViewSource; // Current liveview source
 
@@ -505,7 +505,7 @@ namespace AtmoLight
     private bool GetAtmoRemoteControl()
     {
       Log.Debug("AtmoWinHandler - Getting AtmoWin Remote Control.");
-      if (TimeoutHandler(() => atmoRemoteControl = (IAtmoRemoteControl2)Marshal.GetActiveObject("AtmoRemoteControl.1")))
+      if (TimeoutHandler(() => atmoRemoteControl = (IAtmoRemoteControl)Marshal.GetActiveObject("AtmoRemoteControl.1")))
       {
         Log.Debug("AtmoWinHandler - Successfully got AtmoWin Remote Control.");
         return true;
