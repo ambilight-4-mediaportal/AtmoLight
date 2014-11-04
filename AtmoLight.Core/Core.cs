@@ -59,7 +59,6 @@ namespace AtmoLight
     // States
     private bool currentState = false; // State of the LEDs
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current active effect
-    private ContentEffect changeEffect = ContentEffect.Undefined; // Effect ChangeEffect() should change to (need for Reinitialise() if ChangeEffect() fails)
 
     // Lists
     private List<ITargets> targets = new List<ITargets>();
@@ -565,15 +564,6 @@ namespace AtmoLight
     }
 
     /// <summary>
-    /// Returns the effect that should be changed to.
-    /// </summary>
-    /// <returns></returns>
-    public ContentEffect GetChangeEffect()
-    {
-      return changeEffect;
-    }
-
-    /// <summary>
     /// Returns the number of active targets.
     /// </summary>
     /// <returns></returns>
@@ -758,8 +748,7 @@ namespace AtmoLight
         Log.Debug("Effect \"{0}\" is already active. Nothing to do.", effect);
         return false;
       }
-      currentEffect = ContentEffect.Undefined;
-      changeEffect = effect;
+      currentEffect = effect;
       Log.Info("Changing AtmoLight effect to: {0}", effect.ToString());
       StopAllThreads();
 
@@ -782,9 +771,6 @@ namespace AtmoLight
           }
         }
       }
-
-      currentEffect = changeEffect;
-      changeEffect = ContentEffect.Undefined;
 
       if (effect == ContentEffect.MediaPortalLiveMode)
       {

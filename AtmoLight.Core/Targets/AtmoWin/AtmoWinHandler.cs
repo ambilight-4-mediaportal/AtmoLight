@@ -309,7 +309,7 @@ namespace AtmoLight
       reInitialiseLock = true;
       Log.Debug("AtmoWinHandler - Reinitialising.");
 
-      if (!Disconnect() || !StopAtmoWin() || !InitialiseThreaded(force) || !ChangeEffect(coreObject.GetChangeEffect() != ContentEffect.Undefined ? coreObject.GetChangeEffect() : coreObject.GetCurrentEffect()))
+      if (!Disconnect() || !StopAtmoWin() || !InitialiseThreaded(force) || !ChangeEffect(coreObject.GetCurrentEffect()))
       {
         Disconnect();
         StopAtmoWin();
