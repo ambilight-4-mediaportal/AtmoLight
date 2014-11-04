@@ -923,7 +923,7 @@ namespace AtmoLight
     }
 
     /// <summary>
-    /// Send pixel data to AtmoWin when MediaPortal liveview is used (external liveview source).
+    /// Send pixel data to targets when MediaPortal liveview is used.
     /// Also add a delay specified in settings.
     /// This method is designed to run as its own thread.
     /// </summary>
@@ -956,7 +956,7 @@ namespace AtmoLight
       }
       catch (Exception ex)
       {
-        Log.Error("Could not send data to AtmoWin.");
+        Log.Error("Could not send pixeldata to targets.");
         Log.Error("Exception: {0}", ex.Message);
 
         ClearDelayLists();
@@ -1033,7 +1033,7 @@ namespace AtmoLight
             MemoryStream gifStream = new MemoryStream();
             gifBitmap.Save(gifStream, ImageFormat.Bmp);
 
-            // Calculations to prepare data for AtmoWin and then send data
+            // Calculations to prepare data and then send data
             CalculateBitmap(gifStream);
 
             // Cleanup
