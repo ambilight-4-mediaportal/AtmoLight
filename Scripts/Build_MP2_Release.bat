@@ -22,7 +22,8 @@ if not "%ProgramFiles(x86)%".=="". set progpath=%ProgramFiles(x86)%
 
 
 REM set logfile where the infos are written to, and clear that file
-set LOG=MP2_Build_%BUILD_TYPE%.log
+mkdir Logs
+set LOG=Logs\MP2_Build_%BUILD_TYPE%.log
 echo. > %LOG%
 
 

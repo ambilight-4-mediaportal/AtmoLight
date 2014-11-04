@@ -22,7 +22,8 @@ if not "%ProgramFiles(x86)%".=="". set progpath=%ProgramFiles(x86)%
 
 
 REM set logfile where the infos are written to, and clear that file
-set LOG=MP1_Build_%BUILD_TYPE%.log
+mkdir Logs
+set LOG=Logs\MP1_Build_%BUILD_TYPE%.log
 echo. > %LOG%
 
 
@@ -30,6 +31,8 @@ echo.
 echo Building AtmoLight
 echo Build mode: %BUILD_TYPE%
 echo.
+
+@"%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBUILD.exe" NuGet/RestorePackages.targets
 
 "%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBUILD.exe" /target:Rebuild /property:VisualStudioVersion=12.0;Configuration=%BUILD_TYPE% "..\AtmoLight.MediaPortal1.sln" >> %LOG%
 
