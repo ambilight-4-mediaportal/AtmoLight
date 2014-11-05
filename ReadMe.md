@@ -31,6 +31,8 @@ AtmoLight is a plugin for MediaPortal1 and MediaPortal2 to add support for ambil
  * [AtmoWin Forum thread](http://forum.team-mediaportal.com/threads/atmowin-release-thread-no-bug-support.125361/)
  * [AtmoHue Forum thread](http://forum.team-mediaportal.com/threads/atmohue-beta-philips-hue-support-for-atmolight-atmowin.128252/)
  * [AtmoWakeHelper Forum thread](http://forum.team-mediaportal.com/threads/solution-for-auto-com-reconnect-on-sleep-resume-beta4.126160/)
+ * [Hyperion official Wiki](https://github.com/tvdzwan/hyperion/wiki)
+ * [Hyperion setup guide] (http://techtalk.christian-moser.ch/wordpress/?p=427)
  
  
 ## Frequently Asked Questions
@@ -38,6 +40,12 @@ AtmoLight is a plugin for MediaPortal1 and MediaPortal2 to add support for ambil
 __Question:__ What is AtmoLight and AtmoWin, which do I need and why?
 
 __Answer:__ AtmoWin is a standalone software that analyses the content on you screen and then sends the colors to your Ambilight controller (Arduino, SEDU and so on). AtmoLight is a MediaPortal plugin that allows to send the screen content directly to your target software (e.g. AtmoWin), making this way more efficient and cpu friendly. AtmoLight also acts as a remote for your target software (e.g. AtmoWin), allowing the user to enable or disable the leds, aswell as change effects and lots more. It is highly recommended that you use the AtmoLight plugin, mainly to ensure smooth video playback.
+
+<br>
+
+__Question:__ What is Hyperion?
+
+__Answer:__ Hyperion is a network controlled Ambilight system which is fully supported by AtmoLight. It's usually installed on an Raspberry Pi and in the Useful Links overview there are several links on how to get you started.
 
 <br>
 
