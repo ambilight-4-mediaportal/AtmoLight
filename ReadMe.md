@@ -41,9 +41,11 @@ __Answer:__ AtmoWin is a standalone software that analyses the content on you sc
 
 
 
+
 __Question:__ My video playback stutters/I have a lot of dropped frames. How can i fix this?
 
 __Answer:__ Make sure that AtmoLight uses the "MediaPortal Liveview Mode". This way AtmoLight handles the capturing of the screen and not your target software. As AtmoLight can work directly with MediaPortal rendering assets this is way faster. Open the MediaPortal Configuration, navigate to Plugins and open the AtmoLight configuration. For Video/TV/Recordings choose "MediaPortal Liveview Mode". Click Save and exit MediaPortal Configuration with OK.
+
 
 
 
@@ -55,6 +57,7 @@ http://forum.team-mediaportal.com/t...o-com-reconnect-on-sleep-resume-beta4.1261
 
 
 
+
 __Question:__ I can't open the context menu/toggle leds/switch profile with the color buttons. What is wrong (MediaPortal 1)?
 
 __Answer:__ You will need to add some new actions to the remote buttons. Open MediaPortal Configuration and navigate to Remotes. In the tab for you remote press on Mapping (for some remotes press Learn and then Mapping). Navigate to "Teletext specific buttons", here you can see the 4 color buttons. Open the button you want to use (e.g. red). Under "No Condition" you will have to add the action "Remote Red Button". This way everytime you press red, no matter where you are in MediaPortal, the "Remote Red Button" action gets triggered and AtmoLight gets informed. Repeat this for all the buttons you want to use.
@@ -62,10 +65,12 @@ __Answer:__ You will need to add some new actions to the remote buttons. Open Me
 
 
 
+
 __Question:__ I choose "MediaPortal Liveview Mode" for Music, Radio or GUI/Menu, but its not working. Why (MediaPortal 1)?
 
 __Answer:__ To use the MediaPortal Liveview Mode outside of video playback you will need a patched MediaPortal.exe. You can find the exe here: https://ambilight-4-mediaportal.googlecode.com/git/MediaPortal/MediaPortal.exe/
 If you use a version that has no patch yet, please let me know and i will generate one for you.
+
 
 
 
