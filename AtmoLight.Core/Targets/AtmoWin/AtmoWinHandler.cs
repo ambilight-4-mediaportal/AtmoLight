@@ -137,7 +137,7 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     public bool IsConnected()
     {
-      if (atmoRemoteControl == null || atmoLiveViewControl == null)
+      if (atmoRemoteControl == null || atmoLiveViewControl == null || initialiseLock || reInitialiseLock)
       {
         return false;
       }
@@ -230,7 +230,6 @@ namespace AtmoLight
       {
         return;
       }
-      Log.Info("AtmoWinHandler - Changing AtmoWin profile.");
       if (!SetColorMode(ComEffectMode.cemColorMode)) return;
 
       // Change the effect to the desired effect.
@@ -278,12 +277,12 @@ namespace AtmoLight
         return false;
       }
 
-      Log.Debug("AtmoWinHandler - Initialising successfull.");
+      Log.Info("AtmoWinHandler - Initialising successfull.");
+      initialiseLock = false;
 
       ChangeEffect(coreObject.GetCurrentEffect());
       coreObject.SetAtmoLightOn(coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true);
 
-      initialiseLock = false;
       return true;
     }
 
@@ -309,7 +308,7 @@ namespace AtmoLight
       reInitialiseLock = true;
       Log.Debug("AtmoWinHandler - Reinitialising.");
 
-      if (!Disconnect() || !StopAtmoWin() || !InitialiseThreaded(force) || !ChangeEffect(coreObject.GetCurrentEffect()))
+      if (!Disconnect() || !StopAtmoWin() || !InitialiseThreaded(force))
       {
         Disconnect();
         StopAtmoWin();
@@ -319,8 +318,10 @@ namespace AtmoLight
         return;
       }
 
-      Log.Debug("AtmoWinHandler - Reinitialising successfull.");
+      Log.Info("AtmoWinHandler - Reinitialising successfull.");
       reInitialiseLock = false;
+
+      ChangeEffect(coreObject.GetCurrentEffect());
       return;
     }
     #endregion
@@ -334,12 +335,10 @@ namespace AtmoLight
     {
       Log.Debug("AtmoWinHandler - Trying to connect to AtmoWin.");
       if (!GetAtmoRemoteControl()) return false;
-      if (!SetAtmoEffect(ComEffectMode.cemLivePicture, true)) return false;
       if (!GetAtmoLiveViewControl()) return false;
-      if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
       if (!GetAtmoLiveViewRes()) return false;
 
-      Log.Debug("AtmoWinHandler - Successfully connected to AtmoWin.");
+      Log.Info("AtmoWinHandler - Successfully connected to AtmoWin.");
       return true;
     }
 
@@ -415,7 +414,7 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     public bool StopAtmoWin()
     {
-      Log.Info("AtmoWinHandler - Trying to stop AtmoWin.");
+      Log.Debug("AtmoWinHandler - Trying to stop AtmoWin.");
       foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension("atmowina")))
       {
         try
@@ -578,9 +577,9 @@ namespace AtmoLight
     /// <param name="effect">Effect to change to.</param>
     /// <param name="force">Currently initialising.</param>
     /// <returns>true if successfull and false if not.</returns>
-    private bool SetAtmoEffect(ComEffectMode effect, bool init = false)
+    private bool SetAtmoEffect(ComEffectMode effect)
     {
-      if (!IsConnected() && !init)
+      if (!IsConnected())
       {
         return false;
       }
@@ -645,7 +644,7 @@ namespace AtmoLight
     /// <returns>true if successfull and false if not.</returns>
     private bool GetAtmoLiveViewRes()
     {
-      if (!IsConnected())
+      if (atmoRemoteControl == null)
       {
         return false;
       }
