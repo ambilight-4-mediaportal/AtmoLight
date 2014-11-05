@@ -33,6 +33,7 @@ AtmoLight is a plugin for MediaPortal1 and MediaPortal2 to add support for ambil
  * [AtmoWakeHelper Forum thread](http://forum.team-mediaportal.com/threads/solution-for-auto-com-reconnect-on-sleep-resume-beta4.126160/)
  * [Hyperion official Wiki](https://github.com/tvdzwan/hyperion/wiki)
  * [Hyperion setup guide] (http://techtalk.christian-moser.ch/wordpress/?p=427)
+ * [AtmoHue setup guide] (http://forum.team-mediaportal.com/threads/atmohue-beta-philips-hue-support-for-atmolight-atmowin.128252/)
  
  
 ## Frequently Asked Questions
@@ -46,6 +47,12 @@ __Answer:__ AtmoWin is a standalone software that analyses the content on you sc
 __Question:__ What is Hyperion?
 
 __Answer:__ Hyperion is a network controlled Ambilight system which is fully supported by AtmoLight. It's usually installed on an Raspberry Pi and in the Useful Links overview there are several links on how to get you started.
+
+<br>
+
+__Question:__ What is Hue?
+
+__Answer:__ Hue is a system Philips developed to support remotely control lights. AtmoLight does support it indirectly by means of an application called AtmoHue and a setup guide for this is listed under the Useful Links overview.
 
 <br>
 
