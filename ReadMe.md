@@ -39,15 +39,13 @@ __Question:__ What is AtmoLight and AtmoWin, which do I need and why?
 
 __Answer:__ AtmoWin is a standalone software that analyses the content on you screen and then sends the colors to your Ambilight controller (Arduino, SEDU and so on). AtmoLight is a MediaPortal plugin that allows to send the screen content directly to your target software (e.g. AtmoWin), making this way more efficient and cpu friendly. AtmoLight also acts as a remote for your target software (e.g. AtmoWin), allowing the user to enable or disable the leds, aswell as change effects and lots more. It is highly recommended that you use the AtmoLight plugin, mainly to ensure smooth video playback.
 
-
-
+<br>
 
 __Question:__ My video playback stutters/I have a lot of dropped frames. How can i fix this?
 
 __Answer:__ Make sure that AtmoLight uses the "MediaPortal Liveview Mode". This way AtmoLight handles the capturing of the screen and not your target software. As AtmoLight can work directly with MediaPortal rendering assets this is way faster. Open the MediaPortal Configuration, navigate to Plugins and open the AtmoLight configuration. For Video/TV/Recordings choose "MediaPortal Liveview Mode". Click Save and exit MediaPortal Configuration with OK.
 
-
-
+<br>
 
 __Question:__ AtmoLight cant connect to AtmoWin, what can i do?
 
@@ -55,24 +53,21 @@ __Answer:__ AtmoWin needs to register its COM interface first. To achieve this, 
 If you have connection issues after resume, you should take a look at this thread:
 http://forum.team-mediaportal.com/t...o-com-reconnect-on-sleep-resume-beta4.126160/
 
-
-
+<br>
 
 __Question:__ I can't open the context menu/toggle leds/switch profile with the color buttons. What is wrong (MediaPortal 1)?
 
 __Answer:__ You will need to add some new actions to the remote buttons. Open MediaPortal Configuration and navigate to Remotes. In the tab for you remote press on Mapping (for some remotes press Learn and then Mapping). Navigate to "Teletext specific buttons", here you can see the 4 color buttons. Open the button you want to use (e.g. red). Under "No Condition" you will have to add the action "Remote Red Button". This way everytime you press red, no matter where you are in MediaPortal, the "Remote Red Button" action gets triggered and AtmoLight gets informed. Repeat this for all the buttons you want to use.
 ![](http://forum.team-mediaportal.com/attachments/upload_2014-5-25_16-8-8-png.151019/)
 
-
-
+<br>
 
 __Question:__ I choose "MediaPortal Liveview Mode" for Music, Radio or GUI/Menu, but its not working. Why (MediaPortal 1)?
 
 __Answer:__ To use the MediaPortal Liveview Mode outside of video playback you will need a patched MediaPortal.exe. You can find the exe here: https://ambilight-4-mediaportal.googlecode.com/git/MediaPortal/MediaPortal.exe/
 If you use a version that has no patch yet, please let me know and i will generate one for you.
 
-
-
+<br>
 
 __Question:__ What does the frequency mean for the delay feature?
 
