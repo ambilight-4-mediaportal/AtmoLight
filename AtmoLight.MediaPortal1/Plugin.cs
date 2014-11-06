@@ -153,6 +153,8 @@ namespace AtmoLight
       AtmoLightObject.huePort = Settings.huePort;
       AtmoLightObject.hueMinimalColorDifference = Settings.hueMinimalColorDifference;
 
+      AtmoLightObject.AddTarget(Target.Boblight);
+
 
       // General settings
       AtmoLightObject.SetDelay(Settings.delayReferenceTime);
