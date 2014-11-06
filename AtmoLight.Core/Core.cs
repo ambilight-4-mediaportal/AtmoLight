@@ -35,6 +35,7 @@ namespace AtmoLight
   public enum Target
   {
     AtmoWin,
+    Boblight,
     Hue,
     Hyperion
   }
@@ -334,6 +335,10 @@ namespace AtmoLight
         else if (target == Target.Hyperion)
         {
           targets.Add(new HyperionHandler());
+        }
+        else if (target == Target.Boblight)
+        {
+          targets.Add(new BoblightHandler());
         }
       }
     }
