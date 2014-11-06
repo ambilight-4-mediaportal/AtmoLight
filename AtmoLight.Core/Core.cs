@@ -34,6 +34,7 @@ namespace AtmoLight
 
   public enum Target
   {
+    AmbiBox,
     AtmoWin,
     Hue,
     Hyperion
@@ -334,6 +335,10 @@ namespace AtmoLight
         else if (target == Target.Hyperion)
         {
           targets.Add(new HyperionHandler());
+        }
+        else if (target == Target.AmbiBox)
+        {
+          targets.Add(new AmbiBoxHandler());
         }
       }
     }
