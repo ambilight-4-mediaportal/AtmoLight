@@ -55,5 +55,10 @@ namespace AtmoLight
 		{
 		// Send a new picture/color infos to your target (MediaPortal Liveview Mode)
 		}
+		
+		public void ChangeProfile()
+		{
+		// Change the profile of your target
+		}
 	}
 }
