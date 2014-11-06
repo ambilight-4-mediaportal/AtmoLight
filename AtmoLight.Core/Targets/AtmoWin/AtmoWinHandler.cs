@@ -335,6 +335,7 @@ namespace AtmoLight
     {
       Log.Debug("AtmoWinHandler - Trying to connect to AtmoWin.");
       if (!GetAtmoRemoteControl()) return false;
+      if (!SetAtmoEffect(ComEffectMode.cemLivePicture, true)) return false;
       if (!GetAtmoLiveViewControl()) return false;
       if (!GetAtmoLiveViewRes()) return false;
 
@@ -577,9 +578,9 @@ namespace AtmoLight
     /// <param name="effect">Effect to change to.</param>
     /// <param name="force">Currently initialising.</param>
     /// <returns>true if successfull and false if not.</returns>
-    private bool SetAtmoEffect(ComEffectMode effect)
+    private bool SetAtmoEffect(ComEffectMode effect, bool force = false)
     {
-      if (!IsConnected())
+      if (!IsConnected() && !force)
       {
         return false;
       }
