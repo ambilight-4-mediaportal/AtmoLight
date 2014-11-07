@@ -7,6 +7,11 @@
 		displayname="Use AtmoWin:"    
 		description="Select if you want to use AtmoWin."
 		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="boblightTarget" type="string" defaultvalue="no" listvalues="Yes|No"
+		displayname="Use Boblight:"    
+		description="Select if you want to use Boblight."
+		displaylistvalues="Yes|No"/>
 
 		<setting entryname="atmolight" name="hueTarget" type="string" defaultvalue="no" listvalues="Yes|No"
 		displayname="Use Hue:"    
@@ -39,6 +44,29 @@
 		displayname="Exit AtmoWin with MediaPortal:"    
 		description="Choose if you want MediaPortal/AtmoLight to close AtmoWin for you."
 		displaylistvalues="Yes|No"/>	
+	</settings>
+	
+	<settings section="Boblight">
+		<setting entryname="atmolight" name="boblightIP" type="string" defaultvalue="127.0.0.1" listvalues="" 
+		displayname="IP:"
+		description="Please enter the IP to Boblight!"
+		displaylistvalues=""/>
+		
+		<setting entryname="atmolight" name="boblightPort" type="int" defaultvalue="19445" minvalue="1" maxvalue="65535"
+		displayname="Port:"    
+		description="Please enter the Port to Boblight."/>
+		
+		<setting entryname="atmolight" name="boblightMaxReconnectAttempts" type="int" defaultvalue="5" minvalue="1" maxvalue="9999"
+		displayname="Reconnect attempts:"    
+		description="Please enter the reconnect attempts."/>
+		
+		<setting entryname="atmolight" name="boblightReconnectDelay" type="int" defaultvalue="5000" minvalue="1" maxvalue="999999"
+		displayname="Reconnect delay:"    
+		description="Please enter the reconnect delay."/>
+		
+		<setting entryname="atmolight" name="boblightMaxFPS" type="int" defaultvalue="10" minvalue="1" maxvalue="144"
+		displayname="Limit capture FPS to:"    
+		description="Please enter the max FPS."/>
 	</settings>
 	
 	<settings section="Hue">
