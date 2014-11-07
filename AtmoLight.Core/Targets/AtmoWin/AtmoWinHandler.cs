@@ -337,6 +337,7 @@ namespace AtmoLight
       if (!GetAtmoRemoteControl()) return false;
       if (!SetAtmoEffect(ComEffectMode.cemLivePicture, true)) return false;
       if (!GetAtmoLiveViewControl()) return false;
+      if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal, true)) return false;
       if (!GetAtmoLiveViewRes()) return false;
 
       Log.Info("AtmoWinHandler - Successfully connected to AtmoWin.");
@@ -623,9 +624,9 @@ namespace AtmoLight
     /// </summary>
     /// <param name="viewSource">The liveview source.</param>
     /// <returns>true if successfull and false if not.</returns>
-    private bool SetAtmoLiveViewSource(ComLiveViewSource viewSource)
+    private bool SetAtmoLiveViewSource(ComLiveViewSource viewSource, bool force = false)
     {
-      if (!IsConnected())
+      if (!IsConnected() && !force)
       {
         return false;
       }
