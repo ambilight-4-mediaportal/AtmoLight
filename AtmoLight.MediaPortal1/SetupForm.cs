@@ -21,12 +21,16 @@ namespace AtmoLight
       {
         coreObject.AddTarget(Target.AtmoWin);
       }
+      // Boblight
+      if (Settings.boblightTarget)
+      {
+        coreObject.AddTarget(Target.Boblight);
+      }
       // Hyperion
       if (Settings.hyperionTarget)
       {
         coreObject.AddTarget(Target.Hyperion);
       }
-
       // Hue
       if (Settings.hueTarget)
       {
@@ -61,7 +65,6 @@ namespace AtmoLight
       tbHueIP.Text = Settings.hueIP;
       tbHuePort.Text = Settings.huePort.ToString();
       tbHueMinimalColorDifference.Text = Settings.hueMinimalColorDifference.ToString();
-
       ckOnMediaStart.Checked = Settings.manualMode;
       ckLowCpu.Checked = Settings.lowCPU;
       ckDelay.Checked = Settings.delay;
@@ -73,6 +76,12 @@ namespace AtmoLight
       ckHyperionEnabled.Checked = Settings.hyperionTarget;
       ckHueEnabled.Checked = Settings.hueTarget;
       ckHyperionLiveReconnect.Checked = Settings.HyperionLiveReconnect;
+      ckBoblightEnabled.Checked = Settings.boblightTarget;
+      tbBoblightIP.Text = Settings.boblightIP;
+      tbBoblightPort.Text = Settings.boblightPort.ToString();
+      tbBoblightMaxReconnectAttempts.Text = Settings.boblightMaxReconnectAttempts.ToString();
+      tbBoblightReconnectDelay.Text = Settings.boblightReconnectDelay.ToString();
+      tbBoblightMaxFPS.Text = Settings.boblightMaxFPS.ToString();
     }
 
     private void UpdateLanguageOnControls()
@@ -132,6 +141,11 @@ namespace AtmoLight
       lblHuePort.Text = LanguageLoader.appStrings.SetupForm_lblHuePort;
       lblHueMinimalColorDifference.Text = LanguageLoader.appStrings.SetupForm_lblHueMinimalColorDifference;
       lblMPExit.Text = LanguageLoader.appStrings.SetupForm_lblMPExit;
+      lblBoblightIP.Text = LanguageLoader.appStrings.SetupForm_lblBoblightIP;
+      lblBoblightPort.Text = LanguageLoader.appStrings.SetupForm_lblBoblightPort;
+      lblBoblightMaxReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblBoblightMaxReconnectAttempts;
+      lblBoblightReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblBoblightReconnectDelay;
+      lblBoblightMaxFPS.Text = LanguageLoader.appStrings.SetupForm_lblBoblightMaxFPS;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -369,6 +383,49 @@ namespace AtmoLight
         return;
       }
 
+      // Boblight IP
+      if (validatorIPAdress(tbBoblightIP.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + tbBoblightIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // Boblight Port
+      minValue = 1;
+      maxValue = 65535;
+      if (validatorInt(tbBoblightPort.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbBoblightPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // Boblight MaxReconnectAttempts
+      minValue = 1;
+      maxValue = 9999;
+      if (validatorInt(tbBoblightMaxReconnectAttempts.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbBoblightMaxReconnectAttempts.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // Boblight ReconnectDelay
+      minValue = 100;
+      maxValue = 999999;
+      if (validatorInt(tbBoblightReconnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbBoblightReconnectDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // Boblight MaxFPS
+      minValue = 1;
+      maxValue = 144;
+      if (validatorInt(tbBoblightMaxFPS.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbBoblightMaxFPS.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
 
       Settings.staticColorRed = int.Parse(tbRed.Text);
       Settings.staticColorGreen = int.Parse(tbGreen.Text);
@@ -406,6 +463,13 @@ namespace AtmoLight
       Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
       Settings.hueTarget = ckHueEnabled.Checked;
       Settings.hyperionTarget = ckHyperionEnabled.Checked;
+      Settings.boblightTarget = ckBoblightEnabled.Checked;
+      Settings.boblightIP = tbBoblightIP.Text;
+      Settings.boblightPort = int.Parse(tbBoblightPort.Text);
+      Settings.boblightMaxReconnectAttempts = int.Parse(tbBoblightMaxReconnectAttempts.Text);
+      Settings.boblightReconnectDelay = int.Parse(tbBoblightReconnectDelay.Text);
+      Settings.boblightMaxFPS = int.Parse(tbBoblightMaxFPS.Text);
+
 
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
       Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
@@ -767,6 +831,55 @@ namespace AtmoLight
 
     }
 
+    // Boblight
+    private void tbBoblightIP_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (validatorIPAdress(tbBoblightIP.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbBoblightPort_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 65535;
+      if (validatorInt(tbBoblightPort.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbBoblightMaxReconnectAttempts_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 9999;
+      if (validatorInt(tbBoblightMaxReconnectAttempts.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbBoblightReconnectDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 100;
+      int maxValue = 999999;
+      if (validatorInt(tbBoblightReconnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbBoblightMaxFPS_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 144;
+      if (validatorInt(tbBoblightMaxFPS.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
 
     // Dynamic effect changes
     public void UpdateComboBoxes()
@@ -818,6 +931,19 @@ namespace AtmoLight
       else
       {
         coreObject.RemoveTarget(Target.AtmoWin);
+      }
+      UpdateComboBoxes();
+    }
+
+    private void ckBoblightEnabled_CheckedChanged(Object sender, EventArgs e)
+    {
+      if (ckBoblightEnabled.Checked)
+      {
+        coreObject.AddTarget(Target.Boblight);
+      }
+      else
+      {
+        coreObject.RemoveTarget(Target.Boblight);
       }
       UpdateComboBoxes();
     }

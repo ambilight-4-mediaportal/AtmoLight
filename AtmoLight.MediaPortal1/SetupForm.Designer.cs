@@ -62,6 +62,7 @@
       this.ckStartAtmoWin = new System.Windows.Forms.CheckBox();
       this.tabPageGeneric = new System.Windows.Forms.TabPage();
       this.grpTargets = new System.Windows.Forms.GroupBox();
+      this.ckBoblightEnabled = new System.Windows.Forms.CheckBox();
       this.ckHueEnabled = new System.Windows.Forms.CheckBox();
       this.lblHintHardware = new System.Windows.Forms.Label();
       this.ckAtmowinEnabled = new System.Windows.Forms.CheckBox();
@@ -120,15 +121,27 @@
       this.comboBox1 = new System.Windows.Forms.ComboBox();
       this.lblLedsOnOff = new System.Windows.Forms.Label();
       this.tabMenu = new System.Windows.Forms.TabControl();
+      this.tabPageBoblight = new System.Windows.Forms.TabPage();
+      this.grpBoblight = new System.Windows.Forms.GroupBox();
+      this.tbBoblightMaxFPS = new System.Windows.Forms.TextBox();
+      this.tbBoblightReconnectDelay = new System.Windows.Forms.TextBox();
+      this.tbBoblightMaxReconnectAttempts = new System.Windows.Forms.TextBox();
+      this.tbBoblightPort = new System.Windows.Forms.TextBox();
+      this.tbBoblightIP = new System.Windows.Forms.TextBox();
+      this.lblBoblightMaxFPS = new System.Windows.Forms.Label();
+      this.lblBoblightReconnectDelay = new System.Windows.Forms.Label();
+      this.lblBoblightMaxReconnectAttempts = new System.Windows.Forms.Label();
+      this.lblBoblightPort = new System.Windows.Forms.Label();
+      this.lblBoblightIP = new System.Windows.Forms.Label();
       this.tabPageHue = new System.Windows.Forms.TabPage();
       this.HueNetworkSettings = new System.Windows.Forms.GroupBox();
-      this.tbHueIP = new System.Windows.Forms.TextBox();
-      this.lblHueIP = new System.Windows.Forms.Label();
-      this.tbHuePort = new System.Windows.Forms.TextBox();
-      this.lblHuePort = new System.Windows.Forms.Label();
-      this.lblHintHue = new System.Windows.Forms.Label();
       this.tbHueMinimalColorDifference = new System.Windows.Forms.TextBox();
       this.lblHueMinimalColorDifference = new System.Windows.Forms.Label();
+      this.lblHintHue = new System.Windows.Forms.Label();
+      this.tbHuePort = new System.Windows.Forms.TextBox();
+      this.lblHuePort = new System.Windows.Forms.Label();
+      this.tbHueIP = new System.Windows.Forms.TextBox();
+      this.lblHueIP = new System.Windows.Forms.Label();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -143,6 +156,8 @@
       this.grpCaptureDimensions.SuspendLayout();
       this.grpDeactivate.SuspendLayout();
       this.tabMenu.SuspendLayout();
+      this.tabPageBoblight.SuspendLayout();
+      this.grpBoblight.SuspendLayout();
       this.tabPageHue.SuspendLayout();
       this.HueNetworkSettings.SuspendLayout();
       this.SuspendLayout();
@@ -300,7 +315,7 @@
       // 
       // tbHyperionReconnectAttempts
       // 
-      this.tbHyperionReconnectAttempts.Location = new System.Drawing.Point(220, 108);
+      this.tbHyperionReconnectAttempts.Location = new System.Drawing.Point(220, 112);
       this.tbHyperionReconnectAttempts.Name = "tbHyperionReconnectAttempts";
       this.tbHyperionReconnectAttempts.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionReconnectAttempts.TabIndex = 7;
@@ -309,7 +324,7 @@
       // lblHyperionReconnectAttempts
       // 
       this.lblHyperionReconnectAttempts.AutoSize = true;
-      this.lblHyperionReconnectAttempts.Location = new System.Drawing.Point(9, 111);
+      this.lblHyperionReconnectAttempts.Location = new System.Drawing.Point(9, 115);
       this.lblHyperionReconnectAttempts.Name = "lblHyperionReconnectAttempts";
       this.lblHyperionReconnectAttempts.Size = new System.Drawing.Size(106, 13);
       this.lblHyperionReconnectAttempts.TabIndex = 8;
@@ -334,7 +349,7 @@
       // 
       // tbHyperionIP
       // 
-      this.tbHyperionIP.Location = new System.Drawing.Point(220, 29);
+      this.tbHyperionIP.Location = new System.Drawing.Point(220, 22);
       this.tbHyperionIP.Name = "tbHyperionIP";
       this.tbHyperionIP.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionIP.TabIndex = 1;
@@ -343,7 +358,7 @@
       // lblHyperionIP
       // 
       this.lblHyperionIP.AutoSize = true;
-      this.lblHyperionIP.Location = new System.Drawing.Point(9, 32);
+      this.lblHyperionIP.Location = new System.Drawing.Point(9, 25);
       this.lblHyperionIP.Name = "lblHyperionIP";
       this.lblHyperionIP.Size = new System.Drawing.Size(20, 13);
       this.lblHyperionIP.TabIndex = 3;
@@ -351,7 +366,7 @@
       // 
       // tbHyperionPort
       // 
-      this.tbHyperionPort.Location = new System.Drawing.Point(220, 55);
+      this.tbHyperionPort.Location = new System.Drawing.Point(220, 52);
       this.tbHyperionPort.Name = "tbHyperionPort";
       this.tbHyperionPort.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPort.TabIndex = 2;
@@ -360,7 +375,7 @@
       // lblHyperionPort
       // 
       this.lblHyperionPort.AutoSize = true;
-      this.lblHyperionPort.Location = new System.Drawing.Point(9, 59);
+      this.lblHyperionPort.Location = new System.Drawing.Point(9, 55);
       this.lblHyperionPort.Name = "lblHyperionPort";
       this.lblHyperionPort.Size = new System.Drawing.Size(29, 13);
       this.lblHyperionPort.TabIndex = 4;
@@ -460,6 +475,7 @@
       // 
       // grpTargets
       // 
+      this.grpTargets.Controls.Add(this.ckBoblightEnabled);
       this.grpTargets.Controls.Add(this.ckHueEnabled);
       this.grpTargets.Controls.Add(this.lblHintHardware);
       this.grpTargets.Controls.Add(this.ckAtmowinEnabled);
@@ -471,10 +487,21 @@
       this.grpTargets.TabStop = false;
       this.grpTargets.Text = "Hardware selection";
       // 
+      // ckBoblightEnabled
+      // 
+      this.ckBoblightEnabled.AutoSize = true;
+      this.ckBoblightEnabled.Location = new System.Drawing.Point(13, 54);
+      this.ckBoblightEnabled.Name = "ckBoblightEnabled";
+      this.ckBoblightEnabled.Size = new System.Drawing.Size(64, 17);
+      this.ckBoblightEnabled.TabIndex = 22;
+      this.ckBoblightEnabled.Text = "Boblight";
+      this.ckBoblightEnabled.UseVisualStyleBackColor = true;
+      this.ckBoblightEnabled.CheckedChanged += new System.EventHandler(this.ckBoblightEnabled_CheckedChanged);
+      // 
       // ckHueEnabled
       // 
       this.ckHueEnabled.AutoSize = true;
-      this.ckHueEnabled.Location = new System.Drawing.Point(13, 54);
+      this.ckHueEnabled.Location = new System.Drawing.Point(13, 77);
       this.ckHueEnabled.Name = "ckHueEnabled";
       this.ckHueEnabled.Size = new System.Drawing.Size(46, 17);
       this.ckHueEnabled.TabIndex = 21;
@@ -508,7 +535,7 @@
       // ckHyperionEnabled
       // 
       this.ckHyperionEnabled.AutoSize = true;
-      this.ckHyperionEnabled.Location = new System.Drawing.Point(14, 77);
+      this.ckHyperionEnabled.Location = new System.Drawing.Point(13, 100);
       this.ckHyperionEnabled.Name = "ckHyperionEnabled";
       this.ckHyperionEnabled.Size = new System.Drawing.Size(68, 17);
       this.ckHyperionEnabled.TabIndex = 2;
@@ -551,7 +578,7 @@
       this.cbMPExit.Name = "cbMPExit";
       this.cbMPExit.Size = new System.Drawing.Size(160, 21);
       this.cbMPExit.TabIndex = 28;
-      this.cbMPExit.SelectedIndexChanged += new System.EventHandler(cbMPExit_SelectedIndexChanged);
+      this.cbMPExit.SelectedIndexChanged += new System.EventHandler(this.cbMPExit_SelectedIndexChanged);
       // 
       // lblMPExit
       // 
@@ -685,7 +712,7 @@
       this.cbMenu.Name = "cbMenu";
       this.cbMenu.Size = new System.Drawing.Size(160, 21);
       this.cbMenu.TabIndex = 19;
-      this.cbMenu.SelectedIndexChanged += new System.EventHandler(cbMenu_SelectedIndexChanged);
+      this.cbMenu.SelectedIndexChanged += new System.EventHandler(this.cbMenu_SelectedIndexChanged);
       // 
       // cbRadio
       // 
@@ -705,7 +732,7 @@
       this.cbRadio.Name = "cbRadio";
       this.cbRadio.Size = new System.Drawing.Size(160, 21);
       this.cbRadio.TabIndex = 18;
-      this.cbRadio.SelectedIndexChanged += new System.EventHandler(cbRadio_SelectedIndexChanged);
+      this.cbRadio.SelectedIndexChanged += new System.EventHandler(this.cbRadio_SelectedIndexChanged);
       // 
       // lblRadio
       // 
@@ -734,7 +761,7 @@
       this.cbMusic.Name = "cbMusic";
       this.cbMusic.Size = new System.Drawing.Size(160, 21);
       this.cbMusic.TabIndex = 17;
-      this.cbMusic.SelectedIndexChanged += new System.EventHandler(cbMusic_SelectedIndexChanged);
+      this.cbMusic.SelectedIndexChanged += new System.EventHandler(this.cbMusic_SelectedIndexChanged);
       // 
       // lblMusic
       // 
@@ -761,7 +788,7 @@
       this.cbVideo.Name = "cbVideo";
       this.cbVideo.Size = new System.Drawing.Size(160, 21);
       this.cbVideo.TabIndex = 16;
-      this.cbVideo.SelectedIndexChanged += new System.EventHandler(cbVideo_SelectedIndexChanged);
+      this.cbVideo.SelectedIndexChanged += new System.EventHandler(this.cbVideo_SelectedIndexChanged);
       // 
       // lblVidTvRec
       // 
@@ -1126,13 +1153,128 @@
       // 
       this.tabMenu.Controls.Add(this.tabPageGeneric);
       this.tabMenu.Controls.Add(this.tabPageAtmowin);
-      this.tabMenu.Controls.Add(this.tabPageHyperion);
+      this.tabMenu.Controls.Add(this.tabPageBoblight);
       this.tabMenu.Controls.Add(this.tabPageHue);
+      this.tabMenu.Controls.Add(this.tabPageHyperion);
       this.tabMenu.Location = new System.Drawing.Point(12, 12);
       this.tabMenu.Name = "tabMenu";
       this.tabMenu.SelectedIndex = 0;
       this.tabMenu.Size = new System.Drawing.Size(849, 475);
       this.tabMenu.TabIndex = 20;
+      // 
+      // tabPageBoblight
+      // 
+      this.tabPageBoblight.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageBoblight.Controls.Add(this.grpBoblight);
+      this.tabPageBoblight.Location = new System.Drawing.Point(4, 22);
+      this.tabPageBoblight.Name = "tabPageBoblight";
+      this.tabPageBoblight.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPageBoblight.Size = new System.Drawing.Size(841, 449);
+      this.tabPageBoblight.TabIndex = 4;
+      this.tabPageBoblight.Text = "Boblight";
+      // 
+      // grpBoblight
+      // 
+      this.grpBoblight.Controls.Add(this.tbBoblightMaxFPS);
+      this.grpBoblight.Controls.Add(this.tbBoblightReconnectDelay);
+      this.grpBoblight.Controls.Add(this.tbBoblightMaxReconnectAttempts);
+      this.grpBoblight.Controls.Add(this.tbBoblightPort);
+      this.grpBoblight.Controls.Add(this.tbBoblightIP);
+      this.grpBoblight.Controls.Add(this.lblBoblightMaxFPS);
+      this.grpBoblight.Controls.Add(this.lblBoblightReconnectDelay);
+      this.grpBoblight.Controls.Add(this.lblBoblightMaxReconnectAttempts);
+      this.grpBoblight.Controls.Add(this.lblBoblightPort);
+      this.grpBoblight.Controls.Add(this.lblBoblightIP);
+      this.grpBoblight.Location = new System.Drawing.Point(10, 10);
+      this.grpBoblight.Name = "grpBoblight";
+      this.grpBoblight.Size = new System.Drawing.Size(817, 175);
+      this.grpBoblight.TabIndex = 0;
+      this.grpBoblight.TabStop = false;
+      // 
+      // tbBoblightMaxFPS
+      // 
+      this.tbBoblightMaxFPS.Location = new System.Drawing.Point(180, 142);
+      this.tbBoblightMaxFPS.Name = "tbBoblightMaxFPS";
+      this.tbBoblightMaxFPS.Size = new System.Drawing.Size(100, 20);
+      this.tbBoblightMaxFPS.TabIndex = 9;
+      this.tbBoblightMaxFPS.Validating += new System.ComponentModel.CancelEventHandler(this.tbBoblightMaxFPS_Validating);
+      // 
+      // tbBoblightReconnectDelay
+      // 
+      this.tbBoblightReconnectDelay.Location = new System.Drawing.Point(180, 112);
+      this.tbBoblightReconnectDelay.Name = "tbBoblightReconnectDelay";
+      this.tbBoblightReconnectDelay.Size = new System.Drawing.Size(100, 20);
+      this.tbBoblightReconnectDelay.TabIndex = 8;
+      this.tbBoblightReconnectDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbBoblightReconnectDelay_Validating);
+      // 
+      // tbBoblightMaxReconnectAttempts
+      // 
+      this.tbBoblightMaxReconnectAttempts.Location = new System.Drawing.Point(180, 82);
+      this.tbBoblightMaxReconnectAttempts.Name = "tbBoblightMaxReconnectAttempts";
+      this.tbBoblightMaxReconnectAttempts.Size = new System.Drawing.Size(100, 20);
+      this.tbBoblightMaxReconnectAttempts.TabIndex = 7;
+      this.tbBoblightMaxReconnectAttempts.Validating += new System.ComponentModel.CancelEventHandler(this.tbBoblightMaxReconnectAttempts_Validating);
+      // 
+      // tbBoblightPort
+      // 
+      this.tbBoblightPort.Location = new System.Drawing.Point(180, 52);
+      this.tbBoblightPort.Name = "tbBoblightPort";
+      this.tbBoblightPort.Size = new System.Drawing.Size(100, 20);
+      this.tbBoblightPort.TabIndex = 6;
+      this.tbBoblightPort.Validating += new System.ComponentModel.CancelEventHandler(this.tbBoblightPort_Validating);
+      // 
+      // tbBoblightIP
+      // 
+      this.tbBoblightIP.Location = new System.Drawing.Point(180, 22);
+      this.tbBoblightIP.Name = "tbBoblightIP";
+      this.tbBoblightIP.Size = new System.Drawing.Size(100, 20);
+      this.tbBoblightIP.TabIndex = 5;
+      this.tbBoblightIP.Validating += new System.ComponentModel.CancelEventHandler(this.tbBoblightIP_Validating);
+      // 
+      // lblBoblightMaxFPS
+      // 
+      this.lblBoblightMaxFPS.AutoSize = true;
+      this.lblBoblightMaxFPS.Location = new System.Drawing.Point(6, 145);
+      this.lblBoblightMaxFPS.Name = "lblBoblightMaxFPS";
+      this.lblBoblightMaxFPS.Size = new System.Drawing.Size(105, 13);
+      this.lblBoblightMaxFPS.TabIndex = 4;
+      this.lblBoblightMaxFPS.Text = "Limit capture FPS to:";
+      // 
+      // lblBoblightReconnectDelay
+      // 
+      this.lblBoblightReconnectDelay.AutoSize = true;
+      this.lblBoblightReconnectDelay.Location = new System.Drawing.Point(6, 115);
+      this.lblBoblightReconnectDelay.Name = "lblBoblightReconnectDelay";
+      this.lblBoblightReconnectDelay.Size = new System.Drawing.Size(91, 13);
+      this.lblBoblightReconnectDelay.TabIndex = 3;
+      this.lblBoblightReconnectDelay.Text = "Reconnect delay:";
+      // 
+      // lblBoblightMaxReconnectAttempts
+      // 
+      this.lblBoblightMaxReconnectAttempts.AutoSize = true;
+      this.lblBoblightMaxReconnectAttempts.Location = new System.Drawing.Point(6, 85);
+      this.lblBoblightMaxReconnectAttempts.Name = "lblBoblightMaxReconnectAttempts";
+      this.lblBoblightMaxReconnectAttempts.Size = new System.Drawing.Size(106, 13);
+      this.lblBoblightMaxReconnectAttempts.TabIndex = 2;
+      this.lblBoblightMaxReconnectAttempts.Text = "Reconnect attempts:";
+      // 
+      // lblBoblightPort
+      // 
+      this.lblBoblightPort.AutoSize = true;
+      this.lblBoblightPort.Location = new System.Drawing.Point(6, 55);
+      this.lblBoblightPort.Name = "lblBoblightPort";
+      this.lblBoblightPort.Size = new System.Drawing.Size(29, 13);
+      this.lblBoblightPort.TabIndex = 1;
+      this.lblBoblightPort.Text = "Port:";
+      // 
+      // lblBoblightIP
+      // 
+      this.lblBoblightIP.AutoSize = true;
+      this.lblBoblightIP.Location = new System.Drawing.Point(6, 25);
+      this.lblBoblightIP.Name = "lblBoblightIP";
+      this.lblBoblightIP.Size = new System.Drawing.Size(20, 13);
+      this.lblBoblightIP.TabIndex = 0;
+      this.lblBoblightIP.Text = "IP:";
       // 
       // tabPageHue
       // 
@@ -1160,22 +1302,31 @@
       this.HueNetworkSettings.TabStop = false;
       this.HueNetworkSettings.Text = "Network";
       // 
-      // tbHueIP
+      // tbHueMinimalColorDifference
       // 
-      this.tbHueIP.Location = new System.Drawing.Point(200, 27);
-      this.tbHueIP.Name = "tbHueIP";
-      this.tbHueIP.Size = new System.Drawing.Size(93, 20);
-      this.tbHueIP.TabIndex = 4;
-      this.tbHueIP.Validating += new System.ComponentModel.CancelEventHandler(this.tbHueIP_Validating);
+      this.tbHueMinimalColorDifference.Location = new System.Drawing.Point(200, 102);
+      this.tbHueMinimalColorDifference.Name = "tbHueMinimalColorDifference";
+      this.tbHueMinimalColorDifference.Size = new System.Drawing.Size(93, 20);
+      this.tbHueMinimalColorDifference.TabIndex = 22;
       // 
-      // lblHueIP
+      // lblHueMinimalColorDifference
       // 
-      this.lblHueIP.AutoSize = true;
-      this.lblHueIP.Location = new System.Drawing.Point(16, 30);
-      this.lblHueIP.Name = "lblHueIP";
-      this.lblHueIP.Size = new System.Drawing.Size(20, 13);
-      this.lblHueIP.TabIndex = 5;
-      this.lblHueIP.Text = "IP:";
+      this.lblHueMinimalColorDifference.AutoSize = true;
+      this.lblHueMinimalColorDifference.Location = new System.Drawing.Point(16, 105);
+      this.lblHueMinimalColorDifference.Name = "lblHueMinimalColorDifference";
+      this.lblHueMinimalColorDifference.Size = new System.Drawing.Size(154, 13);
+      this.lblHueMinimalColorDifference.TabIndex = 23;
+      this.lblHueMinimalColorDifference.Text = "Minimal color difference (0-255)";
+      // 
+      // lblHintHue
+      // 
+      this.lblHintHue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblHintHue.Location = new System.Drawing.Point(6, 169);
+      this.lblHintHue.Name = "lblHintHue";
+      this.lblHintHue.Size = new System.Drawing.Size(397, 62);
+      this.lblHintHue.TabIndex = 21;
+      this.lblHintHue.Text = "Hint: requires AtmoHue to be running on the above IP and Port to function, do not" +
+    " enter your Hue bridge information here\r\n";
       // 
       // tbHuePort
       // 
@@ -1194,37 +1345,28 @@
       this.lblHuePort.TabIndex = 7;
       this.lblHuePort.Text = "Port:";
       // 
-      // lblHintHue
+      // tbHueIP
       // 
-      this.lblHintHue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintHue.Location = new System.Drawing.Point(6, 169);
-      this.lblHintHue.Name = "lblHintHue";
-      this.lblHintHue.Size = new System.Drawing.Size(397, 62);
-      this.lblHintHue.TabIndex = 21;
-      this.lblHintHue.Text = "Hint: requires AtmoHue to be running on the above IP and Port to function, do not" +
-    " enter your Hue bridge information here\r\n";
+      this.tbHueIP.Location = new System.Drawing.Point(200, 27);
+      this.tbHueIP.Name = "tbHueIP";
+      this.tbHueIP.Size = new System.Drawing.Size(93, 20);
+      this.tbHueIP.TabIndex = 4;
+      this.tbHueIP.Validating += new System.ComponentModel.CancelEventHandler(this.tbHueIP_Validating);
       // 
-      // tbHueMinimalColorDifference
+      // lblHueIP
       // 
-      this.tbHueMinimalColorDifference.Location = new System.Drawing.Point(200, 102);
-      this.tbHueMinimalColorDifference.Name = "tbHueMinimalColorDifference";
-      this.tbHueMinimalColorDifference.Size = new System.Drawing.Size(93, 20);
-      this.tbHueMinimalColorDifference.TabIndex = 22;
-      // 
-      // lblHueMinimalColorDifference
-      // 
-      this.lblHueMinimalColorDifference.AutoSize = true;
-      this.lblHueMinimalColorDifference.Location = new System.Drawing.Point(16, 105);
-      this.lblHueMinimalColorDifference.Name = "lblHueMinimalColorDifference";
-      this.lblHueMinimalColorDifference.Size = new System.Drawing.Size(154, 13);
-      this.lblHueMinimalColorDifference.TabIndex = 23;
-      this.lblHueMinimalColorDifference.Text = "Minimal color difference (0-255)";
+      this.lblHueIP.AutoSize = true;
+      this.lblHueIP.Location = new System.Drawing.Point(16, 30);
+      this.lblHueIP.Name = "lblHueIP";
+      this.lblHueIP.Size = new System.Drawing.Size(20, 13);
+      this.lblHueIP.TabIndex = 5;
+      this.lblHueIP.Text = "IP:";
       // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(884, 531);
+      this.ClientSize = new System.Drawing.Size(884, 532);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
@@ -1262,6 +1404,9 @@
       this.grpDeactivate.ResumeLayout(false);
       this.grpDeactivate.PerformLayout();
       this.tabMenu.ResumeLayout(false);
+      this.tabPageBoblight.ResumeLayout(false);
+      this.grpBoblight.ResumeLayout(false);
+      this.grpBoblight.PerformLayout();
       this.tabPageHue.ResumeLayout(false);
       this.HueNetworkSettings.ResumeLayout(false);
       this.HueNetworkSettings.PerformLayout();
@@ -1372,5 +1517,18 @@
     private System.Windows.Forms.Label lblHintHue;
     private System.Windows.Forms.TextBox tbHueMinimalColorDifference;
     private System.Windows.Forms.Label lblHueMinimalColorDifference;
+    private System.Windows.Forms.TabPage tabPageBoblight;
+    private System.Windows.Forms.CheckBox ckBoblightEnabled;
+    private System.Windows.Forms.GroupBox grpBoblight;
+    private System.Windows.Forms.TextBox tbBoblightMaxFPS;
+    private System.Windows.Forms.TextBox tbBoblightReconnectDelay;
+    private System.Windows.Forms.TextBox tbBoblightMaxReconnectAttempts;
+    private System.Windows.Forms.TextBox tbBoblightPort;
+    private System.Windows.Forms.TextBox tbBoblightIP;
+    private System.Windows.Forms.Label lblBoblightMaxFPS;
+    private System.Windows.Forms.Label lblBoblightReconnectDelay;
+    private System.Windows.Forms.Label lblBoblightMaxReconnectAttempts;
+    private System.Windows.Forms.Label lblBoblightPort;
+    private System.Windows.Forms.Label lblBoblightIP;
   }
 }

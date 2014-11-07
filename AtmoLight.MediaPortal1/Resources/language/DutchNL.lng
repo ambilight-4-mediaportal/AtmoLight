@@ -68,6 +68,11 @@ grpTargets=Selecteer ondersteunende hardware
 grpAtmowinSettings=Instellingen
 ckDelayText=LED vertraging
 lblMPExit=MediaPortal Afgesloten:
+lblBoblightIP=IP:
+lblBoblightPort=Port:
+lblBoblightMaxReconnectAttempts=Reconnect attempts:
+lblBoblightReconnectDelay=Reconnect delay:
+lblBoblightMaxFPS=Limit capture FPS to:
 [ContextMenu]
 SwitchLEDsON=Schakel LEDs aan
 SwitchLEDsOFF=Schakel LEDs uit

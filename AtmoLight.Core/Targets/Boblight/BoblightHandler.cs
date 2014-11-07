@@ -4,13 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Threading;
 
 namespace AtmoLight
 {
-  unsafe class BoblightHandler : ITargets
+  class BoblightHandler : ITargets
   {
-    // http://mirrors.xbmc.org/build-deps/addon-deps/binaries/libboblight/win32/libboblight-win32.0.dll.zip
     #region libboblight Import
+    // Boblight lib needed.
+    // Source: https://code.google.com/p/boblight/source/browse/#svn%2Ftrunk%2Fsrc%2Flib
+    // Binary: http://mirrors.xbmc.org/build-deps/addon-deps/binaries/libboblight/win32/libboblight-win32.0.dll.zip
+
     [DllImport("libboblight-win32.0.dll")]
     private static extern IntPtr boblight_init();
     [DllImport("libboblight-win32.0.dll")]
@@ -64,38 +68,44 @@ namespace AtmoLight
 
     private Core coreObject = Core.GetInstance();
     private IntPtr boblightHandle;
-    private bool isConnected = false;
+    private volatile bool isConnected = false;
+    Stopwatch maxFPSStopwatch = new Stopwatch();
+    private Thread initThreadHelper;
+    private volatile bool initLock = false;
+    private volatile int reconnectAttempts = 0;
+    private int timeout = 1000000;
     #endregion
 
+    #region Constructor
     public BoblightHandler()
     {
       boblightHandle = boblight_init();
     }
+    #endregion
 
+    #region ITargets methods
     public void Initialise(bool force = false)
     {
-      string address = "192.168.1.33";
-      int port = 19333;
-      int timeout = 1000000;
-      if (boblight_connect(boblightHandle, address, port, timeout) != 0)
+      if (!initLock)
       {
-        isConnected = true;
-        Log.Info("BoblightHandler - Successfully connected to {0}:{1}.", address, port);
-      }
-      else
-      {
-        isConnected = false;
-        Log.Error("BoblightHandler - Error connecting to {0}:{1}.", address, port);
+        initThreadHelper = new Thread(() => InitThreaded(force));
+        initThreadHelper.Name = "AtmoLight Boblight Init";
+        initThreadHelper.IsBackground = true;
+        initThreadHelper.Start();
       }
     }
 
     public void ReInitialise(bool force = false)
     {
-      return;
+      if (coreObject.reInitOnError || force)
+      {
+        Initialise(force);
+      }
     }
 
     public void Dispose()
     {
+      Log.Debug("BoblightHandler - Disposing Boblight handler.");
       boblight_destroy(boblightHandle);
       isConnected = false;
     }
@@ -107,7 +117,48 @@ namespace AtmoLight
 
     public bool ChangeEffect(ContentEffect effect)
     {
-      return true;
+      if (!IsConnected())
+      {
+        return false;
+      }
+      switch (effect)
+      {
+        case ContentEffect.MediaPortalLiveMode:
+        case ContentEffect.GIFReader:
+        case ContentEffect.VUMeter:
+        case ContentEffect.VUMeterRainbow:
+          return true;
+        case ContentEffect.StaticColor:
+          boblight_setscanrange(boblightHandle, 1, 1);
+          boblight_addpixelxy(boblightHandle, 0, 0, coreObject.staticColor);
+          boblight_setpriority(boblightHandle, 128);
+          if (boblight_sendrgb(boblightHandle, 1, null) != 0)
+          {
+            Log.Info("BoblightHandler - Successfully set static color to R:{0} G:{1} B:{2}.", coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
+            return true;
+          }
+          else
+          {
+            ReInitialise();
+            return false;
+          }
+        case ContentEffect.LEDsDisabled:
+        case ContentEffect.Undefined:
+        default:
+          boblight_setscanrange(boblightHandle, 1, 1);
+          boblight_addpixelxy(boblightHandle, 0, 0, new int[] { 0, 0, 0 });
+          boblight_setpriority(boblightHandle, 128);
+          if (boblight_sendrgb(boblightHandle, 1, null) != 0)
+          {
+            Log.Info("BoblightHandler - Successfully disabled LEDs.");
+            return true;
+          }
+          else
+          {
+            ReInitialise();
+            return false;
+          }
+      }
     }
 
     public void ChangeProfile()
@@ -115,16 +166,18 @@ namespace AtmoLight
       return;
     }
 
-    Stopwatch stopwatch = new Stopwatch();
     public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
-      if (!stopwatch.IsRunning && IsConnected())
+      if (!maxFPSStopwatch.IsRunning && IsConnected())
       {
-        stopwatch.Start();
+        maxFPSStopwatch.Start();
       }
-      if (stopwatch.ElapsedMilliseconds < 100 || !IsConnected())
+      if (maxFPSStopwatch.ElapsedMilliseconds < (1000 / coreObject.boblightMaxFPS) || !IsConnected())
       {
-        stopwatch.Stop();
+        if (!IsConnected() && maxFPSStopwatch.IsRunning)
+        {
+          maxFPSStopwatch.Stop();
+        }
         return;
       }
       boblight_setscanrange(boblightHandle, coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
@@ -141,8 +194,58 @@ namespace AtmoLight
         }
       }
       boblight_setpriority(boblightHandle, 128);
-      boblight_sendrgb(boblightHandle, 1, null);
-      stopwatch.Restart();
+      if (boblight_sendrgb(boblightHandle, 1, null) == 0)
+      {
+        maxFPSStopwatch.Stop();
+        ReInitialise();
+        return;
+      }
+      maxFPSStopwatch.Restart();
     }
+    #endregion
+
+    #region Threads
+    private bool InitThreaded(bool force = false)
+    {
+      if (initLock)
+      {
+        Log.Debug("BoblightHandler - Initialising locked.");
+        return false;
+      }
+      initLock = true;
+      isConnected = false;
+      reconnectAttempts++;
+      if (boblight_connect(boblightHandle, coreObject.boblightIP, coreObject.boblightPort, timeout) != 0)
+      {
+        Log.Info("BoblightHandler - Successfully connected to {0}:{1}.", coreObject.boblightIP, coreObject.boblightPort);
+        isConnected = true;
+        reconnectAttempts = 0;
+        initLock = false;
+
+        ChangeEffect(coreObject.GetCurrentEffect());
+        coreObject.SetAtmoLightOn(coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true);
+
+        return true;
+      }
+      else
+      {
+        Log.Error("BoblightHandler - Error connecting to {0}:{1}.", coreObject.boblightIP, coreObject.boblightPort);
+        isConnected = false;
+        if ((coreObject.reInitOnError || force) && reconnectAttempts < coreObject.boblightMaxReconnectAttempts)
+        {
+          System.Threading.Thread.Sleep(coreObject.boblightReconnectDelay);
+          initLock = false;
+          InitThreaded();
+        }
+        else
+        {
+          reconnectAttempts = 0;
+          coreObject.NewConnectionLost(Name);
+          initLock = false;
+        }
+        return false;
+      }
+    }
+    #endregion
   }
 }

@@ -131,6 +131,17 @@ namespace AtmoLight
       AtmoLightObject.atmoWinAutoStart = Settings.startAtmoWin;
       AtmoLightObject.atmoWinAutoStop = Settings.exitAtmoWin;
 
+      // Boblight
+      if (Settings.boblightTarget)
+      {
+        AtmoLightObject.AddTarget(Target.Boblight);
+      }
+      AtmoLightObject.boblightIP = Settings.boblightIP;
+      AtmoLightObject.boblightPort = Settings.boblightPort;
+      AtmoLightObject.boblightMaxFPS = Settings.boblightMaxFPS;
+      AtmoLightObject.boblightMaxReconnectAttempts = Settings.boblightMaxReconnectAttempts;
+      AtmoLightObject.boblightReconnectDelay = Settings.boblightReconnectDelay;
+
       // Hyperion
       if (Settings.hyperionTarget)
       {
@@ -152,9 +163,6 @@ namespace AtmoLight
       AtmoLightObject.hueIP = Settings.hueIP;
       AtmoLightObject.huePort = Settings.huePort;
       AtmoLightObject.hueMinimalColorDifference = Settings.hueMinimalColorDifference;
-
-      AtmoLightObject.AddTarget(Target.Boblight);
-
 
       // General settings
       AtmoLightObject.SetDelay(Settings.delayReferenceTime);

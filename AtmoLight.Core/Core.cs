@@ -101,6 +101,13 @@ namespace AtmoLight
     public bool atmoWinAutoStop;
     public string atmoWinPath;
 
+    // Boblight Settings Fields
+    public string boblightIP;
+    public int boblightPort;
+    public int boblightMaxFPS;
+    public int boblightMaxReconnectAttempts;
+    public int boblightReconnectDelay;
+
     // Hyperion Settings Fields
     public string hyperionIP;
     public int hyperionPort;

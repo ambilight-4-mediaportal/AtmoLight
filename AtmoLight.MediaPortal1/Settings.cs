@@ -8,7 +8,7 @@ namespace AtmoLight
   {
     #region Config variables
 
-    //Generic
+    // Generic
     public static ContentEffect effectVideo;
     public static ContentEffect effectMusic;
     public static ContentEffect effectRadio;
@@ -36,13 +36,21 @@ namespace AtmoLight
     public static int captureWidth = 0;
     public static int captureHeight = 0;
 
-    //Atmowin
+    // Atmowin
     public static bool atmoWinTarget;
     public static string atmowinExe = "";
     public static bool startAtmoWin = true;
     public static bool exitAtmoWin = true;
 
-    //Hyperion
+    // Boblight
+    public static bool boblightTarget;
+    public static string boblightIP;
+    public static int boblightPort;
+    public static int boblightMaxFPS;
+    public static int boblightMaxReconnectAttempts;
+    public static int boblightReconnectDelay;
+
+    // Hyperion
     public static bool hyperionTarget;
     public static string hyperionIP = "";
     public static int hyperionPort = 0;
@@ -52,7 +60,7 @@ namespace AtmoLight
     public static int HyperionPriorityStaticColor = 0;
     public static bool HyperionLiveReconnect;
 
-    //Hue
+    // Hue
     public static bool hueTarget;
     public static string hueIP = "";
     public static int huePort = 0;
@@ -158,7 +166,7 @@ namespace AtmoLight
         gifFile = reader.GetValueAsString("atmolight", "GIFFile", "");
         captureWidth = reader.GetValueAsInt("atmolight", "captureWidth", 64);
         captureHeight = reader.GetValueAsInt("atmolight", "captureHeight", 64);
-        hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "0.0.0.0");
+        hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "127.0.0.1");
         hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 19445);
         hyperionReconnectDelay = reader.GetValueAsInt("atmolight", "hyperionReconnectDelay", 10000);
         hyperionReconnectAttempts = reader.GetValueAsInt("atmolight", "hyperionReconnectAttempts", 5);
@@ -168,8 +176,14 @@ namespace AtmoLight
         hueIP = reader.GetValueAsString("atmolight", "hueIP", "127.0.0.1");
         huePort = reader.GetValueAsInt("atmolight", "huePort", 20123);
         hueMinimalColorDifference = reader.GetValueAsInt("atmolight", "hueMinimalColorDifference", 25);
+        boblightIP = reader.GetValueAsString("atmolight", "boblightIP", "127.0.0.1");
+        boblightPort = reader.GetValueAsInt("atmolight", "boblightPort", 19333);
+        boblightMaxFPS = reader.GetValueAsInt("atmolight", "boblightMaxFPS", 10);
+        boblightMaxReconnectAttempts = reader.GetValueAsInt("atmolight", "boblightMaxReconnectAttempts", 5);
+        boblightReconnectDelay = reader.GetValueAsInt("atmolight", "boblightReconnectDelay", 5000);
 
         atmoWinTarget = reader.GetValueAsBool("atmolight", "atmoWinTarget", true);
+        boblightTarget = reader.GetValueAsBool("atmolight", "boblightTarget", false);
         hueTarget = reader.GetValueAsBool("atmolight", "hueTarget", false);
         hyperionTarget = reader.GetValueAsBool("atmolight", "hyperionTarget", false);
       }
@@ -218,7 +232,14 @@ namespace AtmoLight
         reader.SetValue("atmolight", "hueIP", hueIP);
         reader.SetValue("atmolight", "huePort", (int)huePort);
         reader.SetValue("atmolight", "hueMinimalColorDifference", (int)hueMinimalColorDifference);
+        reader.SetValue("atmolight", "boblightIP", boblightIP);
+        reader.SetValue("atmolight", "boblightPort", boblightPort);
+        reader.SetValue("atmolight", "boblightMaxFPS", boblightMaxFPS);
+        reader.SetValue("atmolight", "boblightMaxReconnectAttempts", boblightMaxReconnectAttempts);
+        reader.SetValue("atmolight", "boblightReconnectDelay", boblightReconnectDelay);
+
         reader.SetValueAsBool("atmolight", "atmoWinTarget", atmoWinTarget);
+        reader.SetValueAsBool("atmolight", "boblightTarget", boblightTarget);
         reader.SetValueAsBool("atmolight", "hueTarget", hueTarget);
         reader.SetValueAsBool("atmolight", "hyperionTarget", hyperionTarget);
       }
