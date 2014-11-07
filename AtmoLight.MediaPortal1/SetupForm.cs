@@ -489,6 +489,7 @@ namespace AtmoLight
         LanguageLoader.LoadLanguageFile(openFileDialog2.FileName);
         LanguageLoader.strCurrentLanguageFile = openFileDialog2.FileName;
         UpdateLanguageOnControls();
+        UpdateComboBoxes();
         openFileDialog2.FileName = "";
       }
     }
