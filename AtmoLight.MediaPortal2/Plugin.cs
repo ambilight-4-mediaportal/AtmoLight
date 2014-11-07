@@ -576,46 +576,19 @@ namespace AtmoLight
         return dbLevel;
       }
 
-      ISpectrumPlayer player = (playerContext.CurrentPlayer as ISpectrumPlayer);
+      IAudioPlayerAnalyze player = (playerContext.CurrentPlayer as IAudioPlayerAnalyze);
       if (player == null)
       {
         return dbLevel;
       }
 
-
-      int maxIndex;
-      int minIndex;
-      bool res = player.GetFFTFrequencyIndex(20000, out maxIndex);
-      res |= player.GetFFTFrequencyIndex(20, out minIndex);
-      if (!res)
+      double dbLevelL;
+      double dbLevelR;
+      if (player.GetChannelLevel(out dbLevelL, out dbLevelR))
       {
-        return dbLevel;
+        dbLevel[0] = dbLevelL;
+        dbLevel[1] = dbLevelR;
       }
-
-      int _maximumFrequencyIndex = Math.Min(maxIndex + 1, 2048 - 1);
-      int _minimumFrequencyIndex = Math.Min(minIndex, 2048 - 1);
-
-      float[] _channelData = new float[2048];
-      if (player.State != PlayerState.Active || !player.GetFFTData(_channelData))
-      {
-        return dbLevel;
-      }
-
-      minIndex = Math.Max(0, Math.Min(_minimumFrequencyIndex, _channelData.Length));
-      maxIndex = Math.Max(0, Math.Min(_maximumFrequencyIndex, _channelData.Length));
-
-      double maxValue = -200f;
-      for (int x = minIndex; x <= maxIndex; x++)
-      {
-        double dbValue = (20 * Math.Log10(_channelData[x])) + 5;
-
-        if (maxValue < dbValue)
-        {
-          maxValue = dbValue;
-        }
-      }
-      dbLevel[0] = maxValue;
-      dbLevel[1] = maxValue;
       return dbLevel;
     }
     #endregion
