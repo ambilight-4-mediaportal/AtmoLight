@@ -1353,7 +1353,7 @@
       this.ckStartHue.AutoSize = true;
       this.ckStartHue.Checked = true;
       this.ckStartHue.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckStartHue.Location = new System.Drawing.Point(9, 83);
+      this.ckStartHue.Location = new System.Drawing.Point(7, 84);
       this.ckStartHue.Name = "ckStartHue";
       this.ckStartHue.Size = new System.Drawing.Size(176, 17);
       this.ckStartHue.TabIndex = 3;
@@ -1439,6 +1439,7 @@
       // openFileDialog4
       // 
       this.openFileDialog4.FileName = "openFileDialog4";
+      this.openFileDialog4.Filter = "AtmoHue.exe|*.exe";
       // 
       // SetupForm
       // 
