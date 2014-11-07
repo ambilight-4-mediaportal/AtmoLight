@@ -68,6 +68,11 @@ tabPageGeneric=Generic settings
 grpTargets=Select supported hardware
 grpAtmowinSettings=Settings
 ckDelayText=LED Delay
+lblBoblightIP=IP:
+lblBoblightPort=Port:
+lblBoblightMaxReconnectAttempts=Reconnect attempts:
+lblBoblightReconnectDelay=Reconnect delay:
+lblBoblightMaxFPS=Limit capture FPS to:
 [ContextMenu]
 SwitchLEDsON=Switch LEDs on
 SwitchLEDsOFF=Switch LEDs off

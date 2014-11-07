@@ -35,6 +35,7 @@ namespace AtmoLight
   public enum Target
   {
     AtmoWin,
+    Boblight,
     Hue,
     Hyperion
   }
@@ -99,6 +100,13 @@ namespace AtmoLight
     public bool atmoWinAutoStart;
     public bool atmoWinAutoStop;
     public string atmoWinPath;
+
+    // Boblight Settings Fields
+    public string boblightIP;
+    public int boblightPort;
+    public int boblightMaxFPS;
+    public int boblightMaxReconnectAttempts;
+    public int boblightReconnectDelay;
 
     // Hyperion Settings Fields
     public string hyperionIP;
@@ -334,6 +342,10 @@ namespace AtmoLight
         else if (target == Target.Hyperion)
         {
           targets.Add(new HyperionHandler());
+        }
+        else if (target == Target.Boblight)
+        {
+          targets.Add(new BoblightHandler());
         }
       }
     }

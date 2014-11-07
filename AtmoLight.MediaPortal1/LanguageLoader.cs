@@ -322,7 +322,11 @@ namespace Language
     public String SetupForm_tabPageGeneric;
     public String SetupForm_grpTargets;
     public String SetupForm_grpAtmowinSettings;
-
+    public String SetupForm_lblBoblightIP;
+    public String SetupForm_lblBoblightPort;
+    public String SetupForm_lblBoblightMaxReconnectAttempts;
+    public String SetupForm_lblBoblightReconnectDelay;
+    public String SetupForm_lblBoblightMaxFPS;
 
     public String ContextMenu_SwitchLEDsON;
     public String ContextMenu_SwitchLEDsOFF;

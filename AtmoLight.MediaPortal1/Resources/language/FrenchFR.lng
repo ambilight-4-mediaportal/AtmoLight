@@ -70,6 +70,11 @@ lblHueIP=IP:
 lblHuePort=Port:
 lblHueMinimalColorDifference=Minimal color difference (0-255)
 lblHintHue=Hint: requires AtmoHue to be running on the above IP and Port to function, do not enter your Hue bridge information here
+lblBoblightIP=IP:
+lblBoblightPort=Port:
+lblBoblightMaxReconnectAttempts=Reconnect attempts:
+lblBoblightReconnectDelay=Reconnect delay:
+lblBoblightMaxFPS=Limit capture FPS to:
 
 [ContextMenu]
 SwitchLEDsON=LEDs > ON

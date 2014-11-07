@@ -68,6 +68,11 @@ ErrorInvalidIntegerStarting=Bitte geben Sie eine Zahl ein die mindestens [minInt
 ErrorInvalidIntegerBetween=Bitte geben sie eine Zahl zwischen [minInteger] und [maxInteger] ein.
 ErrorInvalidIP=Bitte geben Sie eine gültige IP Adresse ein.
 ErrorInvalidPath=Bitte geben Sie einen gültigen Dateipfad ein.
+lblBoblightIP=IP:
+lblBoblightPort=Port:
+lblBoblightMaxReconnectAttempts=Wiederverbindungs Versuche:
+lblBoblightReconnectDelay=Wiederverbindungs Verzögerung:
+lblBoblightMaxFPS=Limitiere Aufnahme FPS auf:
 [ContextMenu]
 SwitchLEDsON=Schalte LEDs an
 SwitchLEDsOFF=Schalte LEDs aus
