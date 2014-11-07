@@ -1,5 +1,5 @@
 [SetupForm]
-lblPathInfoText=Pad en Bestandsnaam van AtmoWin:
+lblPathInfoAtmoWin=Pad en Bestandsnaam van AtmoWin:
 grpModeText=Modus per sectie
 grpPluginOptionText=Plugin opties
 lblVidTvRecText=Video/Tv/Opnames
@@ -34,6 +34,7 @@ ckRestartOnError=Opnieuw verbinden bij een fout
 lblRefreshRate=Hz
 Error=Fout
 ErrorAtmoWinA=Ongeldige bestandsnaam. Selecteer het pad naar AtmoWinA.exe.
+ErrorHue=Ongeldige bestandsnaam. Selecteer het pad naar AtmoHue.exe.
 ErrorStartTime=Voer een geldige starttijd in.
 ErrorEndTime=Voer een geldige eindtijd in.
 ErrorMiliseconds=Voor een geldig getal voor het aantal ms. in.
@@ -58,6 +59,9 @@ lblHyperionReconnectAttempts=Verbindingspogingen:
 lblHyperionPriorityStaticColor=Prioriteit statische kleur:
 lblCaptureWidth=Breedte:
 lblCaptureHeight=Hoogte:
+ckStartHue=Start AtmoHue met MediaPortal
+ckhueIsRemoteMachine=AtmoHue draait op externe machine (schakelt bestand/pad controle uit)
+lblPathInfoHue=Pad en Bestandsnaam van AtmoHue:
 lblHueIP=IP adres:
 lblHuePort=Poort:
 lblHueMinimalColorDifference=Minimaal kleur verschil (0-255)

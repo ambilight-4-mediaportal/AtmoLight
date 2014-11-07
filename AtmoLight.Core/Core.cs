@@ -118,6 +118,9 @@ namespace AtmoLight
     public bool hyperionLiveReconnect;
 
     // Hue Settings Fields
+    public string huePath;
+    public bool hueStart;
+    public bool hueIsRemoteMachine;
     public string hueIP;
     public int huePort;
     public int hueMinimalColorDifference;

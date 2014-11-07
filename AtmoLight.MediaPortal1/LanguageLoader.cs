@@ -254,7 +254,7 @@ namespace Language
 
   public class ApplicationStrings
   {
-    public String SetupForm_lblPathInfoText;
+    public String SetupForm_lblPathInfoAtmoWin;
     public String SetupForm_grpModeText;
     public String SetupForm_grpPluginOptionText;
     public String SetupForm_lblVidTvRecText;
@@ -288,6 +288,7 @@ namespace Language
     public String SetupForm_ckRestartOnError;
     public String SetupForm_Error;
     public String SetupForm_ErrorAtmoWinA;
+    public String SetupForm_ErrorHue;
     public String SetupForm_ErrorStartTime;
     public String SetupForm_ErrorEndTime;
     public String SetupForm_ErrorMiliseconds;
@@ -314,6 +315,9 @@ namespace Language
     public String SetupForm_ckHyperionLiveReconnect;
     public String SetupForm_lblCaptureWidth;
     public String SetupForm_lblCaptureHeight;
+    public String SetupForm_ckhueIsRemoteMachine;
+    public String SetupForm_ckStartHue;
+    public String SetupForm_lblPathInfoHue;
     public String SetupForm_lblHueIP;
     public String SetupForm_lblHuePort;
     public String SetupForm_lblHueMinimalColorDifference;    
