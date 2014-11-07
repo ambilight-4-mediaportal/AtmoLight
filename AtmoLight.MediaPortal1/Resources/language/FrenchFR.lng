@@ -39,8 +39,6 @@ ErrorBlue=Veuillez saisir une chiffre compris entre 0 et 255 pour le Bleu.
 ErrorRemoteButtons=Vous ne pouvez pas utiliser le même bouton pour plusieurs actions.
 ckBlackbarDetection=Blackbar Detection toute les
 grpGIF=GIF Effet
-
-;We need the strings below translated into french!
 grpModeText=Effect Settings
 grpDeactivateText=Disable LEDs between
 ckRestartOnError=Auto-Reconnect on Error
@@ -79,7 +77,6 @@ lblBoblightPort=Port:
 lblBoblightMaxReconnectAttempts=Reconnect attempts:
 lblBoblightReconnectDelay=Reconnect delay:
 lblBoblightMaxFPS=Limit capture FPS to:
-
 [ContextMenu]
 SwitchLEDsON=LEDs > ON
 SwitchLEDsOFF=LEDs > OFF
@@ -121,8 +118,6 @@ GIFReader=GIF Effet
 VUMeter=VU Meter
 VUMeterRainbow=VU Meter ArcEnCiel
 ConnectionLost=Connexion à [Target] perdu!
-
-;We need the strings below translated into french!
 ReInitialise=Reconnect to lost targets
 ExternalLiveMode=External Live Mode
 ConnectLine1=Connection to target lost.

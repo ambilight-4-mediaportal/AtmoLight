@@ -171,15 +171,45 @@ namespace Language
         strSection = strArray[0];
         strKey = strArray[1];
         strValue = iniAccess.ReadString(strSection, strKey, (String)(field.GetValue(obj)));
-        field.SetValue(obj, strValue);
+        if (string.IsNullOrEmpty(strValue))
+        {
+          int pos = strLanguageFile.LastIndexOf("\\") + 1;
+          AtmoLight.Log.Error("Missing translation for field {0} in {1}", field.Name, strLanguageFile.Substring(pos, strLanguageFile.Length - pos));
+          field.SetValue(obj, GetFallbackTranslation(field.Name));
+        }
+        else
+        {
+          field.SetValue(obj, strValue);
+        }
       }
-
-      // re-write the file in case there are new strings in the application 
-      // that are not yet in this language file
-      WriteLanguageFile(strLanguageFile);
-
       return true;
+    }
 
+    public static string GetFallbackTranslation(string fieldName)
+    {
+      INIReaderForCE iniAccess = new INIReaderForCE(Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\Atmolight\\EnglishUS.lng");
+
+      Object obj = appStrings;
+      Type t = appStrings.GetType();
+
+      FieldInfo[] fi = t.GetFields();
+      String[] strArray;
+      char[] strSeps = { '_' };
+      String strSection;
+      String strKey;
+      String strValue;
+      foreach (FieldInfo field in fi)
+      {
+        strArray = field.Name.Split(strSeps);
+        strSection = strArray[0];
+        strKey = strArray[1];
+        strValue = iniAccess.ReadString(strSection, strKey, (String)(field.GetValue(obj)));
+        if (field.Name == fieldName)
+        {
+          return strValue;
+        }
+      }
+      return "";
     }
 
     public static string GetTranslationFromFieldName(string fieldName)

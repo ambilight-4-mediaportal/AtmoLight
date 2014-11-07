@@ -652,7 +652,7 @@
       // 
       // tbGreen
       // 
-      this.tbGreen.Location = new System.Drawing.Point(168, 19);
+      this.tbGreen.Location = new System.Drawing.Point(171, 19);
       this.tbGreen.Name = "tbGreen";
       this.tbGreen.Size = new System.Drawing.Size(40, 20);
       this.tbGreen.TabIndex = 21;
@@ -670,7 +670,7 @@
       // 
       // tbRed
       // 
-      this.tbRed.Location = new System.Drawing.Point(50, 19);
+      this.tbRed.Location = new System.Drawing.Point(55, 19);
       this.tbRed.Name = "tbRed";
       this.tbRed.Size = new System.Drawing.Size(40, 20);
       this.tbRed.TabIndex = 20;
@@ -680,7 +680,7 @@
       // lblGreen
       // 
       this.lblGreen.AutoSize = true;
-      this.lblGreen.Location = new System.Drawing.Point(123, 22);
+      this.lblGreen.Location = new System.Drawing.Point(121, 22);
       this.lblGreen.Name = "lblGreen";
       this.lblGreen.Size = new System.Drawing.Size(39, 13);
       this.lblGreen.TabIndex = 20;
@@ -689,7 +689,7 @@
       // lblBlue
       // 
       this.lblBlue.AutoSize = true;
-      this.lblBlue.Location = new System.Drawing.Point(245, 22);
+      this.lblBlue.Location = new System.Drawing.Point(240, 22);
       this.lblBlue.Name = "lblBlue";
       this.lblBlue.Size = new System.Drawing.Size(31, 13);
       this.lblBlue.TabIndex = 21;
@@ -1444,7 +1444,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(884, 531);
+      this.ClientSize = new System.Drawing.Size(884, 532);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
