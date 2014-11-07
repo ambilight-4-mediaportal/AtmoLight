@@ -152,14 +152,17 @@ namespace AtmoLight
       AtmoLightObject.hyperionPriority = Settings.hyperionPriority;
       AtmoLightObject.hyperionReconnectDelay = Settings.hyperionReconnectDelay;
       AtmoLightObject.hyperionReconnectAttempts = Settings.hyperionReconnectAttempts;
-      AtmoLightObject.hyperionPriorityStaticColor = Settings.HyperionPriorityStaticColor;
-      AtmoLightObject.hyperionLiveReconnect = Settings.HyperionLiveReconnect;
+      AtmoLightObject.hyperionPriorityStaticColor = Settings.hyperionPriorityStaticColor;
+      AtmoLightObject.hyperionLiveReconnect = Settings.hyperionLiveReconnect;
 
       // Hue
       if (Settings.hueTarget)
       {
         AtmoLightObject.AddTarget(Target.Hue);
       }
+      AtmoLightObject.huePath = Settings.hueExe;
+      AtmoLightObject.hueStart = Settings.hueStart;
+      AtmoLightObject.hueIsRemoteMachine = Settings.hueIsRemoteMachine;
       AtmoLightObject.hueIP = Settings.hueIP;
       AtmoLightObject.huePort = Settings.huePort;
       AtmoLightObject.hueMinimalColorDifference = Settings.hueMinimalColorDifference;

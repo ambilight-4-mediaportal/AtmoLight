@@ -1,5 +1,5 @@
 [SetupForm]
-lblPathInfoText=Dossier+Nom de AtmoWinA.exe
+lblPathInfoAtmoWin=Dossier+Nom de AtmoWinA.exe
 grpPluginOptionText=Plugin options
 lblVidTvRecText=Video/TV/Enregistrement:
 lblMusicText=Musique:
@@ -28,6 +28,7 @@ lblDelay=ms Délais à
 lblRefreshRate=Hz
 Error=Error
 ErrorAtmoWinA=Introuvable, Veuillez indiquer l'emplacement d'AtmoWinA.exe.
+ErrorHue=Introuvable, Veuillez indiquer l'emplacement d'AtmoHue.exe.
 ErrorStartTime=Saisissez une horaire de début valide.
 ErrorEndTime=Saisissez une horaire de fin valide.
 ErrorMiliseconds=Saisissez une valeur de délai en ms.
@@ -66,6 +67,9 @@ ErrorInvalidIntegerStarting=You have to enter a valid number starting at [minInt
 ErrorInvalidIntegerBetween=You have to enter a valid number between [minInteger] and [maxInteger]
 ErrorInvalidIP=You have entered an invalid IP address
 ErrorInvalidPath=You have selected an invalid file/path
+ckStartHue=Start AtmoHue with MediaPortal
+ckhueIsRemoteMachine=AtmoHue is on remote machine (skips file/path check)
+lblPathInfoHue=Path+Filename of AtmoHue.exe
 lblHueIP=IP:
 lblHuePort=Port:
 lblHueMinimalColorDifference=Minimal color difference (0-255)

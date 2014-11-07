@@ -55,9 +55,9 @@
       this.lblHyperionPort = new System.Windows.Forms.Label();
       this.tabPageAtmowin = new System.Windows.Forms.TabPage();
       this.grpAtmowinSettings = new System.Windows.Forms.GroupBox();
-      this.lblPathInfo = new System.Windows.Forms.Label();
-      this.btnSelectFile = new System.Windows.Forms.Button();
-      this.edFile = new System.Windows.Forms.TextBox();
+      this.lblPathInfoAtmoWin = new System.Windows.Forms.Label();
+      this.btnSelectFileAtmoWin = new System.Windows.Forms.Button();
+      this.edFileAtmoWin = new System.Windows.Forms.TextBox();
       this.ckExitAtmoWin = new System.Windows.Forms.CheckBox();
       this.ckStartAtmoWin = new System.Windows.Forms.CheckBox();
       this.tabPageGeneric = new System.Windows.Forms.TabPage();
@@ -134,6 +134,12 @@
       this.lblBoblightPort = new System.Windows.Forms.Label();
       this.lblBoblightIP = new System.Windows.Forms.Label();
       this.tabPageHue = new System.Windows.Forms.TabPage();
+      this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.ckhueIsRemoteMachine = new System.Windows.Forms.CheckBox();
+      this.lblPathInfoHue = new System.Windows.Forms.Label();
+      this.btnSelectFileHue = new System.Windows.Forms.Button();
+      this.edFileHue = new System.Windows.Forms.TextBox();
+      this.ckStartHue = new System.Windows.Forms.CheckBox();
       this.HueNetworkSettings = new System.Windows.Forms.GroupBox();
       this.tbHueMinimalColorDifference = new System.Windows.Forms.TextBox();
       this.lblHueMinimalColorDifference = new System.Windows.Forms.Label();
@@ -142,6 +148,7 @@
       this.lblHuePort = new System.Windows.Forms.Label();
       this.tbHueIP = new System.Windows.Forms.TextBox();
       this.lblHueIP = new System.Windows.Forms.Label();
+      this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -159,6 +166,7 @@
       this.tabPageBoblight.SuspendLayout();
       this.grpBoblight.SuspendLayout();
       this.tabPageHue.SuspendLayout();
+      this.groupBox1.SuspendLayout();
       this.HueNetworkSettings.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -394,9 +402,9 @@
       // 
       // grpAtmowinSettings
       // 
-      this.grpAtmowinSettings.Controls.Add(this.lblPathInfo);
-      this.grpAtmowinSettings.Controls.Add(this.btnSelectFile);
-      this.grpAtmowinSettings.Controls.Add(this.edFile);
+      this.grpAtmowinSettings.Controls.Add(this.lblPathInfoAtmoWin);
+      this.grpAtmowinSettings.Controls.Add(this.btnSelectFileAtmoWin);
+      this.grpAtmowinSettings.Controls.Add(this.edFileAtmoWin);
       this.grpAtmowinSettings.Controls.Add(this.ckExitAtmoWin);
       this.grpAtmowinSettings.Controls.Add(this.ckStartAtmoWin);
       this.grpAtmowinSettings.Location = new System.Drawing.Point(6, 19);
@@ -406,35 +414,35 @@
       this.grpAtmowinSettings.TabStop = false;
       this.grpAtmowinSettings.Text = "Settings";
       // 
-      // lblPathInfo
+      // lblPathInfoAtmoWin
       // 
-      this.lblPathInfo.AutoSize = true;
-      this.lblPathInfo.Location = new System.Drawing.Point(6, 25);
-      this.lblPathInfo.Name = "lblPathInfo";
-      this.lblPathInfo.Size = new System.Drawing.Size(162, 13);
-      this.lblPathInfo.TabIndex = 0;
-      this.lblPathInfo.Text = "Path+Filename of AtmoWinA.exe";
+      this.lblPathInfoAtmoWin.AutoSize = true;
+      this.lblPathInfoAtmoWin.Location = new System.Drawing.Point(6, 25);
+      this.lblPathInfoAtmoWin.Name = "lblPathInfoAtmoWin";
+      this.lblPathInfoAtmoWin.Size = new System.Drawing.Size(162, 13);
+      this.lblPathInfoAtmoWin.TabIndex = 0;
+      this.lblPathInfoAtmoWin.Text = "Path+Filename of AtmoWinA.exe";
       // 
-      // btnSelectFile
+      // btnSelectFileAtmoWin
       // 
-      this.btnSelectFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnSelectFile.Location = new System.Drawing.Point(713, 40);
-      this.btnSelectFile.Name = "btnSelectFile";
-      this.btnSelectFile.Size = new System.Drawing.Size(92, 23);
-      this.btnSelectFile.TabIndex = 2;
-      this.btnSelectFile.Text = "...";
-      this.btnSelectFile.UseVisualStyleBackColor = true;
-      this.btnSelectFile.Click += new System.EventHandler(this.btnSelectFile_Click);
+      this.btnSelectFileAtmoWin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.btnSelectFileAtmoWin.Location = new System.Drawing.Point(713, 40);
+      this.btnSelectFileAtmoWin.Name = "btnSelectFileAtmoWin";
+      this.btnSelectFileAtmoWin.Size = new System.Drawing.Size(92, 23);
+      this.btnSelectFileAtmoWin.TabIndex = 2;
+      this.btnSelectFileAtmoWin.Text = "...";
+      this.btnSelectFileAtmoWin.UseVisualStyleBackColor = true;
+      this.btnSelectFileAtmoWin.Click += new System.EventHandler(this.btnSelectFile_Click);
       // 
-      // edFile
+      // edFileAtmoWin
       // 
-      this.edFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+      this.edFileAtmoWin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.edFile.Location = new System.Drawing.Point(9, 42);
-      this.edFile.Name = "edFile";
-      this.edFile.Size = new System.Drawing.Size(698, 20);
-      this.edFile.TabIndex = 1;
-      this.edFile.Validating += new System.ComponentModel.CancelEventHandler(this.edFile_Validating);
+      this.edFileAtmoWin.Location = new System.Drawing.Point(9, 42);
+      this.edFileAtmoWin.Name = "edFileAtmoWin";
+      this.edFileAtmoWin.Size = new System.Drawing.Size(698, 20);
+      this.edFileAtmoWin.TabIndex = 1;
+      this.edFileAtmoWin.Validating += new System.ComponentModel.CancelEventHandler(this.edFile_Validating);
       // 
       // ckExitAtmoWin
       // 
@@ -1279,12 +1287,78 @@
       // tabPageHue
       // 
       this.tabPageHue.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageHue.Controls.Add(this.groupBox1);
       this.tabPageHue.Controls.Add(this.HueNetworkSettings);
       this.tabPageHue.Location = new System.Drawing.Point(4, 22);
       this.tabPageHue.Name = "tabPageHue";
       this.tabPageHue.Size = new System.Drawing.Size(841, 449);
       this.tabPageHue.TabIndex = 3;
       this.tabPageHue.Text = "Hue";
+      // 
+      // groupBox1
+      // 
+      this.groupBox1.Controls.Add(this.ckhueIsRemoteMachine);
+      this.groupBox1.Controls.Add(this.lblPathInfoHue);
+      this.groupBox1.Controls.Add(this.btnSelectFileHue);
+      this.groupBox1.Controls.Add(this.edFileHue);
+      this.groupBox1.Controls.Add(this.ckStartHue);
+      this.groupBox1.Location = new System.Drawing.Point(13, 17);
+      this.groupBox1.Name = "groupBox1";
+      this.groupBox1.Size = new System.Drawing.Size(822, 154);
+      this.groupBox1.TabIndex = 27;
+      this.groupBox1.TabStop = false;
+      this.groupBox1.Text = "Settings";
+      // 
+      // ckhueIsRemoteMachine
+      // 
+      this.ckhueIsRemoteMachine.AutoSize = true;
+      this.ckhueIsRemoteMachine.Location = new System.Drawing.Point(7, 107);
+      this.ckhueIsRemoteMachine.Name = "ckhueIsRemoteMachine";
+      this.ckhueIsRemoteMachine.Size = new System.Drawing.Size(281, 17);
+      this.ckhueIsRemoteMachine.TabIndex = 4;
+      this.ckhueIsRemoteMachine.Text = "AtmoHue is on remote machine (skips file/path check)\r\n";
+      this.ckhueIsRemoteMachine.UseVisualStyleBackColor = true;
+      // 
+      // lblPathInfoHue
+      // 
+      this.lblPathInfoHue.AutoSize = true;
+      this.lblPathInfoHue.Location = new System.Drawing.Point(6, 25);
+      this.lblPathInfoHue.Name = "lblPathInfoHue";
+      this.lblPathInfoHue.Size = new System.Drawing.Size(156, 13);
+      this.lblPathInfoHue.TabIndex = 0;
+      this.lblPathInfoHue.Text = "Path+Filename of AtmoHue.exe\r\n";
+      // 
+      // btnSelectFileHue
+      // 
+      this.btnSelectFileHue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.btnSelectFileHue.Location = new System.Drawing.Point(714, 40);
+      this.btnSelectFileHue.Name = "btnSelectFileHue";
+      this.btnSelectFileHue.Size = new System.Drawing.Size(92, 23);
+      this.btnSelectFileHue.TabIndex = 2;
+      this.btnSelectFileHue.Text = "...";
+      this.btnSelectFileHue.UseVisualStyleBackColor = true;
+      this.btnSelectFileHue.Click += new System.EventHandler(this.btnSelectFileHue_Click);
+      // 
+      // edFileHue
+      // 
+      this.edFileHue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.edFileHue.Location = new System.Drawing.Point(9, 42);
+      this.edFileHue.Name = "edFileHue";
+      this.edFileHue.Size = new System.Drawing.Size(699, 20);
+      this.edFileHue.TabIndex = 1;
+      // 
+      // ckStartHue
+      // 
+      this.ckStartHue.AutoSize = true;
+      this.ckStartHue.Checked = true;
+      this.ckStartHue.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.ckStartHue.Location = new System.Drawing.Point(9, 83);
+      this.ckStartHue.Name = "ckStartHue";
+      this.ckStartHue.Size = new System.Drawing.Size(176, 17);
+      this.ckStartHue.TabIndex = 3;
+      this.ckStartHue.Text = "Start AtmoHue with MediaPortal";
+      this.ckStartHue.UseVisualStyleBackColor = true;
       // 
       // HueNetworkSettings
       // 
@@ -1295,7 +1369,7 @@
       this.HueNetworkSettings.Controls.Add(this.lblHuePort);
       this.HueNetworkSettings.Controls.Add(this.tbHueIP);
       this.HueNetworkSettings.Controls.Add(this.lblHueIP);
-      this.HueNetworkSettings.Location = new System.Drawing.Point(23, 26);
+      this.HueNetworkSettings.Location = new System.Drawing.Point(416, 191);
       this.HueNetworkSettings.Name = "HueNetworkSettings";
       this.HueNetworkSettings.Size = new System.Drawing.Size(419, 255);
       this.HueNetworkSettings.TabIndex = 0;
@@ -1362,11 +1436,15 @@
       this.lblHueIP.TabIndex = 5;
       this.lblHueIP.Text = "IP:";
       // 
+      // openFileDialog4
+      // 
+      this.openFileDialog4.FileName = "openFileDialog4";
+      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(884, 532);
+      this.ClientSize = new System.Drawing.Size(884, 531);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
@@ -1408,6 +1486,8 @@
       this.grpBoblight.ResumeLayout(false);
       this.grpBoblight.PerformLayout();
       this.tabPageHue.ResumeLayout(false);
+      this.groupBox1.ResumeLayout(false);
+      this.groupBox1.PerformLayout();
       this.HueNetworkSettings.ResumeLayout(false);
       this.HueNetworkSettings.PerformLayout();
       this.ResumeLayout(false);
@@ -1443,9 +1523,9 @@
     private System.Windows.Forms.Label lblHyperionPort;
     private System.Windows.Forms.TabPage tabPageAtmowin;
     private System.Windows.Forms.GroupBox grpAtmowinSettings;
-    private System.Windows.Forms.Label lblPathInfo;
-    private System.Windows.Forms.Button btnSelectFile;
-    private System.Windows.Forms.TextBox edFile;
+    private System.Windows.Forms.Label lblPathInfoAtmoWin;
+    private System.Windows.Forms.Button btnSelectFileAtmoWin;
+    private System.Windows.Forms.TextBox edFileAtmoWin;
     private System.Windows.Forms.CheckBox ckExitAtmoWin;
     private System.Windows.Forms.CheckBox ckStartAtmoWin;
     private System.Windows.Forms.TabPage tabPageGeneric;
@@ -1530,5 +1610,12 @@
     private System.Windows.Forms.Label lblBoblightMaxReconnectAttempts;
     private System.Windows.Forms.Label lblBoblightPort;
     private System.Windows.Forms.Label lblBoblightIP;
+    private System.Windows.Forms.GroupBox groupBox1;
+    private System.Windows.Forms.Label lblPathInfoHue;
+    private System.Windows.Forms.Button btnSelectFileHue;
+    private System.Windows.Forms.TextBox edFileHue;
+    private System.Windows.Forms.CheckBox ckStartHue;
+    private System.Windows.Forms.CheckBox ckhueIsRemoteMachine;
+    private System.Windows.Forms.OpenFileDialog openFileDialog4;
   }
 }

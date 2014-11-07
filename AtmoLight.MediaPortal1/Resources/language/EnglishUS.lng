@@ -1,5 +1,5 @@
 [SetupForm]
-lblPathInfoText=Path+Filename of AtmoWinA.exe
+lblPathInfoAtmoWin=Path+Filename of AtmoWinA.exe
 grpModeText=Effect Settings
 grpPluginOptionText=Plugin options
 lblVidTvRecText=Video/TV/Recordings:
@@ -31,6 +31,7 @@ ckRestartOnError=Auto-Reconnect on Error
 lblRefreshRate=Hz
 Error=Error
 ErrorAtmoWinA=Invalid Filename. Please choose path to AtmoWinA.exe.
+ErrorHue=Invalid Filename. Please choose path to AtmoHue.exe.
 ErrorStartTime=You have to enter a valid start time.
 ErrorEndTime=You have to enter a valid end time.
 ErrorMiliseconds=You have to enter a valid number of ms.
@@ -59,6 +60,9 @@ lblHyperionReconnectAttempts=Reconnect attempts:
 lblHyperionPriorityStaticColor=Priority static color:
 lblCaptureWidth=Width:
 lblCaptureHeight=Height:
+ckStartHue=Start AtmoHue with MediaPortal
+ckhueIsRemoteMachine=AtmoHue is on remote machine (skips file/path check)
+lblPathInfoHue=Path+Filename of AtmoHue.exe
 lblHueIP=IP:
 lblHuePort=Port:
 lblHueMinimalColorDifference=Minimal color difference (0-255)

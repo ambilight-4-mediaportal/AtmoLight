@@ -40,7 +40,7 @@ namespace AtmoLight
       UpdateComboBoxes();
 
       lblVersionVal.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-      edFile.Text = Settings.atmowinExe;
+      edFileAtmoWin.Text = Settings.atmowinExe;
       comboBox1.SelectedIndex = (int)Settings.killButton;
       comboBox2.SelectedIndex = (int)Settings.profileButton;
       cbMenuButton.SelectedIndex = (int)Settings.menuButton;
@@ -59,9 +59,12 @@ namespace AtmoLight
       tbHyperionReconnectDelay.Text = Settings.hyperionReconnectDelay.ToString();
       tbHyperionReconnectAttempts.Text = Settings.hyperionReconnectAttempts.ToString();
       tbHyperionPriority.Text = Settings.hyperionPriority.ToString();
-      tbHyperionPriorityStaticColor.Text = Settings.HyperionPriorityStaticColor.ToString();
+      tbHyperionPriorityStaticColor.Text = Settings.hyperionPriorityStaticColor.ToString();
       tbCaptureWidth.Text = Settings.captureWidth.ToString();
       tbCaptureHeight.Text = Settings.captureHeight.ToString();
+      edFileHue.Text = Settings.hueExe;
+      ckStartHue.Checked = Settings.hueStart;
+      ckhueIsRemoteMachine.Checked = Settings.hueIsRemoteMachine;
       tbHueIP.Text = Settings.hueIP;
       tbHuePort.Text = Settings.huePort.ToString();
       tbHueMinimalColorDifference.Text = Settings.hueMinimalColorDifference.ToString();
@@ -75,7 +78,7 @@ namespace AtmoLight
       ckAtmowinEnabled.Checked = Settings.atmoWinTarget;
       ckHyperionEnabled.Checked = Settings.hyperionTarget;
       ckHueEnabled.Checked = Settings.hueTarget;
-      ckHyperionLiveReconnect.Checked = Settings.HyperionLiveReconnect;
+      ckHyperionLiveReconnect.Checked = Settings.hyperionLiveReconnect;
       ckBoblightEnabled.Checked = Settings.boblightTarget;
       tbBoblightIP.Text = Settings.boblightIP;
       tbBoblightPort.Text = Settings.boblightPort.ToString();
@@ -87,7 +90,7 @@ namespace AtmoLight
     private void UpdateLanguageOnControls()
     {
       // this function places language specific text on all "skin-able" text items.
-      lblPathInfo.Text = LanguageLoader.appStrings.SetupForm_lblPathInfoText;
+      lblPathInfoAtmoWin.Text = LanguageLoader.appStrings.SetupForm_lblPathInfoAtmoWin;
       grpMode.Text = LanguageLoader.appStrings.SetupForm_grpModeText;
       grpPluginOption.Text = LanguageLoader.appStrings.SetupForm_grpPluginOptionText;
       lblVidTvRec.Text = LanguageLoader.appStrings.SetupForm_lblVidTvRecText;
@@ -137,6 +140,9 @@ namespace AtmoLight
       grpHyperionNetworkSettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionNetworkSettings;
       grpHyperionPrioritySettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionPrioritySettings;
       grpCaptureDimensions.Text = LanguageLoader.appStrings.SetupForm_grpCaptureDimensions;
+      lblPathInfoHue.Text = LanguageLoader.appStrings.SetupForm_lblPathInfoHue;
+      ckStartHue.Text = LanguageLoader.appStrings.SetupForm_ckStartHue;
+      ckhueIsRemoteMachine.Text = LanguageLoader.appStrings.SetupForm_ckhueIsRemoteMachine;
       lblHueIP.Text = LanguageLoader.appStrings.SetupForm_lblHueIP;
       lblHuePort.Text = LanguageLoader.appStrings.SetupForm_lblHuePort;
       lblHueMinimalColorDifference.Text = LanguageLoader.appStrings.SetupForm_lblHueMinimalColorDifference;
@@ -156,12 +162,12 @@ namespace AtmoLight
         string filename = filenameNoExtension.ToLower();
         if (filename == "atmowina")
         {
-          edFile.Text = openFileDialog1.FileName;
+          edFileAtmoWin.Text = openFileDialog1.FileName;
         }
         else
         {
           MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorAtmoWinA, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-          edFile.Text = "";
+          edFileAtmoWin.Text = "";
           return;
         }
       }
@@ -290,11 +296,11 @@ namespace AtmoLight
       }
 
       //Atmowin path
-      if (validatorPath(edFile.Text) == false && string.IsNullOrEmpty(edFile.Text) == false)
+      if (validatorPath(edFileAtmoWin.Text) == false && string.IsNullOrEmpty(edFileAtmoWin.Text) == false)
       {
         if (ckAtmowinEnabled.Checked)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + lblPathInfo.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + lblPathInfoAtmoWin.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
       }
@@ -374,6 +380,16 @@ namespace AtmoLight
         return;
       }
 
+      //Hue path
+      if (validatorPath(edFileHue.Text) == false && string.IsNullOrEmpty(edFileHue.Text) == false)
+      {
+        if (ckHueEnabled.Checked)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + lblPathInfoHue.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+      }
+
       //Hue port
       minValue = 1;
       maxValue = 65535;
@@ -426,11 +442,10 @@ namespace AtmoLight
         return;
       }
 
-
       Settings.staticColorRed = int.Parse(tbRed.Text);
       Settings.staticColorGreen = int.Parse(tbGreen.Text);
       Settings.staticColorBlue = int.Parse(tbBlue.Text);
-      Settings.atmowinExe = edFile.Text;
+      Settings.atmowinExe = edFileAtmoWin.Text;
       Settings.excludeTimeStart = DateTime.Parse(edExcludeStart.Text);
       Settings.excludeTimeEnd = DateTime.Parse(edExcludeEnd.Text);
       Settings.killButton = comboBox1.SelectedIndex;
@@ -453,10 +468,13 @@ namespace AtmoLight
       Settings.hyperionPriority = int.Parse(tbHyperionPriority.Text);
       Settings.hyperionReconnectDelay = int.Parse(tbHyperionReconnectDelay.Text);
       Settings.hyperionReconnectAttempts = int.Parse(tbHyperionReconnectAttempts.Text);
-      Settings.HyperionPriorityStaticColor = int.Parse(tbHyperionPriorityStaticColor.Text);
-      Settings.HyperionLiveReconnect = ckHyperionLiveReconnect.Checked;
+      Settings.hyperionPriorityStaticColor = int.Parse(tbHyperionPriorityStaticColor.Text);
+      Settings.hyperionLiveReconnect = ckHyperionLiveReconnect.Checked;
       Settings.captureWidth = int.Parse(tbCaptureWidth.Text);
       Settings.captureHeight = int.Parse(tbCaptureHeight.Text);
+      Settings.hueExe = edFileHue.Text;
+      Settings.hueStart = ckStartHue.Checked;
+      Settings.hueIsRemoteMachine = ckhueIsRemoteMachine.Checked;
       Settings.hueIP = tbHueIP.Text;
       Settings.huePort = int.Parse(tbHuePort.Text);
       Settings.hueMinimalColorDifference = int.Parse(tbHueMinimalColorDifference.Text);
@@ -748,7 +766,7 @@ namespace AtmoLight
 
     private void edFile_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (validatorPath(edFile.Text) == false && string.IsNullOrEmpty(edFile.Text) == false)
+      if (validatorPath(edFileAtmoWin.Text) == false && string.IsNullOrEmpty(edFileAtmoWin.Text) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
@@ -999,5 +1017,25 @@ namespace AtmoLight
     {
       Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMPExit.Text, "ContextMenu_").Remove(0, 12));
     }
+    private void btnSelectFileHue_Click(object sender, EventArgs e)
+    {
+      if (openFileDialog4.ShowDialog() == DialogResult.OK)
+      {
+        string filenameNoExtension = Path.GetFileNameWithoutExtension(openFileDialog4.FileName);
+        string filename = filenameNoExtension.ToLower();
+        if (filename == "atmohue")
+        {
+          edFileHue.Text = openFileDialog4.FileName;
+        }
+        else
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorHue, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          edFileHue.Text = "";
+          return;
+        }
+      }
+
+    }
+
   }
 }
