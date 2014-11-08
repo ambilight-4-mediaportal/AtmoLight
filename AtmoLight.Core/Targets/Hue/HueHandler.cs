@@ -209,6 +209,12 @@ namespace AtmoLight.Targets
         isInit = false;
       }
 
+      //Failed to connect to AtmoHue, output to log and show Connection Lost message
+      if (Connected == false)
+      {
+        Log.Error("HueHandler - Error while connecting to AtmoHue");
+        coreObject.NewConnectionLost(Name);
+      }
     }
 
     public void ChangeColor(int red, int green, int blue, int priority)
