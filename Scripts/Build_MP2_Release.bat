@@ -26,7 +26,6 @@ mkdir Logs
 set LOG=Logs\MP2_Build_%BUILD_TYPE%.log
 echo. > %LOG%
 
-
 echo.
 echo Building AtmoLight
 echo Build mode: %BUILD_TYPE%
@@ -35,6 +34,11 @@ echo.
 @"%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBUILD.exe" NuGet/RestorePackages.targets
 
 "%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBUILD.exe" /target:Rebuild /property:VisualStudioVersion=12.0;Configuration=%BUILD_TYPE% "..\AtmoLight.MediaPortal2.sln" >> %LOG%
+
+if not exist "..\Packages\libboblight-win32.0.dll\libboblight-win32.0.dll" (
+	mkdir ""..\Packages\libboblight-win32.0.dll"
+	Call powershell.exe "(New-Object Net.WebClient).DownloadFile('https://code.google.com/p/ambilight-4-mediaportal/source/browse/MPEI Release/External libs/libboblight-win32.0.dll', '..\Packages\libboblight-win32.0.dll\libboblight-win32.0.dll')"
+)
 
 if %1!==Debug! goto END
 
@@ -48,6 +52,7 @@ mkdir "..\Release\MP2\AtmoLight\Language"
 copy "..\AtmoLight.Core\bin\Release\AtmoLight.Core.dll" "..\Release\MP2\AtmoLight\AtmoLight.Core.dll"
 copy "..\AtmoLight.Core\bin\Release\Google.ProtocolBuffers.dll" "..\Release\MP2\AtmoLight\Google.ProtocolBuffers.dll"
 copy "..\AtmoLight.MediaPortal2\bin\x86\Release\AtmoLight.MediaPortal2.dll" "..\Release\MP2\AtmoLight\AtmoLight.MediaPortal2.dll"
+copy "..\Packages\libboblight-win32.0.dll\libboblight-win32.0.dll" "..\Release\MP2\AtmoLight\libboblight-win32.0.dll"
 copy "..\AtmoLight.MediaPortal2\plugin.xml" "..\Release\MP2\AtmoLight\plugin.xml"
 copy "..\AtmoLight.MediaPortal2\Resources\Language\strings_en.xml" "..\Release\MP2\AtmoLight\Language\strings_en.xml"
 

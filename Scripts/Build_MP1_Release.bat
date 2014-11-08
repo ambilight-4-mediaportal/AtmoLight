@@ -36,6 +36,11 @@ echo.
 
 "%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBUILD.exe" /target:Rebuild /property:VisualStudioVersion=12.0;Configuration=%BUILD_TYPE% "..\AtmoLight.MediaPortal1.sln" >> %LOG%
 
+if not exist "..\Packages\libboblight-win32.0.dll\libboblight-win32.0.dll" (
+	mkdir ""..\Packages\libboblight-win32.0.dll"
+	Call powershell.exe "(New-Object Net.WebClient).DownloadFile('https://code.google.com/p/ambilight-4-mediaportal/source/browse/MPEI Release/External libs/libboblight-win32.0.dll', '..\Packages\libboblight-win32.0.dll\libboblight-win32.0.dll')"
+)
+
 if %1!==Debug! goto END
 
 echo Building MPEI
