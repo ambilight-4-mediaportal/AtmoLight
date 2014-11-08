@@ -13,13 +13,13 @@
     <PluginReference PluginId="{A965AFE5-44F9-46e0-980E-40BBE17F25CA}"/> <!-- VideoPlayers -->
     <PluginReference PluginId="{1AFF4467-64B0-4ca1-AF28-9AEDF3525BCE}"/> <!-- ConfigurationManager -->
     <PluginReference PluginId="{B765A4B6-F455-4941-BDAE-2CE45208BFEB}"/> <!-- Configuration plugin -->
+    <PluginReference PluginId="{9886EB43-B3EB-4cf1-A979-8D4D8874C555}"/> <!-- BassPlayer plugin -->
   </DependsOn>
     
   <Runtime>
     <Assembly FileName="AtmoLight.MediaPortal2.dll"/>
     <Assembly FileName="AtmoLight.Core.dll"/>
     <Assembly FileName="Google.ProtocolBuffers.dll"/>
-    <Assembly FileName="../SkinEngine/SkinEngine.dll"/>
     <PluginStateTracker ClassName="AtmoLight.Plugin"/>
   </Runtime>
 
