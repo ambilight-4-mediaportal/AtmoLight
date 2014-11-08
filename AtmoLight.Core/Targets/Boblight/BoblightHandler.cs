@@ -24,19 +24,19 @@ namespace AtmoLight
     [DllImport("libboblight-win32.0.dll")]
     private static extern int boblight_setpriority(IntPtr vpboblight, int priority);
     [DllImport("libboblight-win32.0.dll")]
-    private static extern string boblight_geterror(IntPtr vpboblight);
+    private static extern IntPtr boblight_geterror(IntPtr vpboblight);
     [DllImport("libboblight-win32.0.dll")]
     private static extern int boblight_getnrlights(IntPtr vpboblight);
     [DllImport("libboblight-win32.0.dll")]
-    private static extern string boblight_getlightname(IntPtr vpboblight, int lightnr);
+    private static extern IntPtr boblight_getlightname(IntPtr vpboblight, int lightnr);
     [DllImport("libboblight-win32.0.dll")]
     private static extern int boblight_getnroptions(IntPtr vpboblight);
     [DllImport("libboblight-win32.0.dll")]
-    private static extern string boblight_getoptiondescript(IntPtr vpboblight, int option);
+    private static extern IntPtr boblight_getoptiondescript(IntPtr vpboblight, int option);
     [DllImport("libboblight-win32.0.dll")]
     private static extern int boblight_setoption(IntPtr vpboblight, int lightnr, string option);
     [DllImport("libboblight-win32.0.dll")]
-    private static extern int boblight_getoption(IntPtr vpboblight, int lightnr, string option, string[] output);
+    private static extern int boblight_getoption(IntPtr vpboblight, int lightnr, string option, [In][MarshalAsAttribute(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] output);
     [DllImport("libboblight-win32.0.dll")]
     private static extern void boblight_setscanrange(IntPtr vpboblight, int width, int height);
     [DllImport("libboblight-win32.0.dll")]
@@ -67,8 +67,10 @@ namespace AtmoLight
     }
 
     private Core coreObject = Core.GetInstance();
-    private IntPtr boblightHandle;
+
+    private IntPtr boblightHandle = IntPtr.Zero;
     private volatile bool isConnected = false;
+
     Stopwatch maxFPSStopwatch = new Stopwatch();
     private Thread initThreadHelper;
     private volatile bool initLock = false;
@@ -79,7 +81,7 @@ namespace AtmoLight
     #region Constructor
     public BoblightHandler()
     {
-      boblightHandle = boblight_init();
+      Log.Debug("BoblightHandler - Boblight as target added.");
     }
     #endregion
 
@@ -107,6 +109,7 @@ namespace AtmoLight
     {
       Log.Debug("BoblightHandler - Disposing Boblight handler.");
       boblight_destroy(boblightHandle);
+      boblightHandle = IntPtr.Zero;
       isConnected = false;
     }
 
@@ -129,9 +132,7 @@ namespace AtmoLight
         case ContentEffect.VUMeterRainbow:
           return true;
         case ContentEffect.StaticColor:
-          boblight_setscanrange(boblightHandle, 1, 1);
-          boblight_addpixelxy(boblightHandle, 0, 0, coreObject.staticColor);
-          boblight_setpriority(boblightHandle, 128);
+          boblight_addpixel(boblightHandle, -1, coreObject.staticColor);
           if (boblight_sendrgb(boblightHandle, 1, null) != 0)
           {
             Log.Info("BoblightHandler - Successfully set static color to R:{0} G:{1} B:{2}.", coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
@@ -145,9 +146,7 @@ namespace AtmoLight
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
         default:
-          boblight_setscanrange(boblightHandle, 1, 1);
-          boblight_addpixelxy(boblightHandle, 0, 0, new int[] { 0, 0, 0 });
-          boblight_setpriority(boblightHandle, 128);
+          boblight_addpixel(boblightHandle, -1, new int[] { 0, 0, 0 });
           if (boblight_sendrgb(boblightHandle, 1, null) != 0)
           {
             Log.Info("BoblightHandler - Successfully disabled LEDs.");
@@ -215,9 +214,21 @@ namespace AtmoLight
       initLock = true;
       isConnected = false;
       reconnectAttempts++;
+      if (boblightHandle == IntPtr.Zero)
+      {
+        boblightHandle = boblight_init();
+      }
       if (boblight_connect(boblightHandle, coreObject.boblightIP, coreObject.boblightPort, timeout) != 0)
       {
         Log.Info("BoblightHandler - Successfully connected to {0}:{1}.", coreObject.boblightIP, coreObject.boblightPort);
+
+        SetOption("speed", coreObject.boblightSpeed.ToString());
+        SetOption("autospeed", coreObject.boblightAutospeed.ToString());
+        SetOption("interpolation", Convert.ToInt32(coreObject.boblightInterpolation).ToString());
+        SetOption("saturation", coreObject.boblightSaturation.ToString());
+        SetOption("value", coreObject.boblightValue.ToString());
+        SetOption("threshold", coreObject.boblightThreshold.ToString());
+
         isConnected = true;
         reconnectAttempts = 0;
         initLock = false;
@@ -230,6 +241,11 @@ namespace AtmoLight
       else
       {
         Log.Error("BoblightHandler - Error connecting to {0}:{1}.", coreObject.boblightIP, coreObject.boblightPort);
+        string err = Marshal.PtrToStringAnsi(boblight_geterror(boblightHandle));
+        if (string.IsNullOrEmpty(err))
+        {
+          Log.Error("BoblightHandler - {0}", err);
+        }
         isConnected = false;
         if ((coreObject.reInitOnError || force) && reconnectAttempts < coreObject.boblightMaxReconnectAttempts)
         {
@@ -244,6 +260,21 @@ namespace AtmoLight
           initLock = false;
         }
         return false;
+      }
+    }
+    #endregion
+
+    #region Utilities
+    private void SetOption(string option, string value)
+    {
+      if (boblight_setoption(boblightHandle, -1, option + " " + value.ToString()) == 0)
+      {
+        Log.Error("BoblightHandler - Error setting {0} to {1}", option, value);
+        string err = Marshal.PtrToStringAnsi(boblight_geterror(boblightHandle));
+        if (string.IsNullOrEmpty(err))
+        {
+          Log.Error("BoblightHandler - {0}", err);
+        }
       }
     }
     #endregion
