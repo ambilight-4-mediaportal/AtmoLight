@@ -13,7 +13,7 @@ namespace AtmoLight
     #region libboblight Import
     // Boblight lib needed.
     // Source: https://code.google.com/p/boblight/source/browse/#svn%2Ftrunk%2Fsrc%2Flib
-    // Binary: http://mirrors.xbmc.org/build-deps/addon-deps/binaries/libboblight/win32/libboblight-win32.0.dll.zip
+    // Binary: https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/External%20libs/libboblight-win32.0.dll
 
     [DllImport("libboblight-win32.0.dll")]
     private static extern IntPtr boblight_init();

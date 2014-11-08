@@ -141,6 +141,12 @@ namespace AtmoLight
       AtmoLightObject.boblightMaxFPS = Settings.boblightMaxFPS;
       AtmoLightObject.boblightMaxReconnectAttempts = Settings.boblightMaxReconnectAttempts;
       AtmoLightObject.boblightReconnectDelay = Settings.boblightReconnectDelay;
+      AtmoLightObject.boblightSpeed = Settings.boblightSpeed;
+      AtmoLightObject.boblightAutospeed = Settings.boblightAutospeed;
+      AtmoLightObject.boblightInterpolation = Settings.boblightInterpolation;
+      AtmoLightObject.boblightSaturation = Settings.boblightSaturation;
+      AtmoLightObject.boblightValue = Settings.boblightValue;
+      AtmoLightObject.boblightThreshold = Settings.boblightThreshold;
 
       // Hyperion
       if (Settings.hyperionTarget)

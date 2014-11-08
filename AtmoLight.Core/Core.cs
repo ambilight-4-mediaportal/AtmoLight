@@ -107,12 +107,12 @@ namespace AtmoLight
     public int boblightMaxFPS;
     public int boblightMaxReconnectAttempts;
     public int boblightReconnectDelay;
-    public float boblightSpeed = 100;
-    public float boblightAutospeed = 0;
-    public bool boblightInterpolation = false;
-    public float boblightSaturation = 1;
-    public float boblightValue = 1;
-    public int boblightThreshold = 0;
+    public int boblightSpeed;
+    public int boblightAutospeed;
+    public bool boblightInterpolation;
+    public int boblightSaturation;
+    public int boblightValue;
+    public int boblightThreshold;
 
     // Hyperion Settings Fields
     public string hyperionIP;

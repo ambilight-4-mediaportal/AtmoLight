@@ -85,6 +85,17 @@ namespace AtmoLight
       tbBoblightMaxReconnectAttempts.Text = Settings.boblightMaxReconnectAttempts.ToString();
       tbBoblightReconnectDelay.Text = Settings.boblightReconnectDelay.ToString();
       tbBoblightMaxFPS.Text = Settings.boblightMaxFPS.ToString();
+      tbarBoblightSpeed.Value = (int)Settings.boblightSpeed;
+      tbarBoblightAutospeed.Value = (int)Settings.boblightAutospeed;
+      tbarBoblightSaturation.Value = (int)Settings.boblightSaturation;
+      tbarBoblightValue.Value = (int)Settings.boblightValue;
+      tbarBoblightThreshold.Value = Settings.boblightThreshold;
+      ckBoblightInterpolation.Checked = Settings.boblightInterpolation;
+      tbBoblightSpeed.Text = Settings.boblightSpeed.ToString();
+      tbBoblightAutospeed.Text = Settings.boblightAutospeed.ToString();
+      tbBoblightSaturation.Text = Settings.boblightSaturation.ToString();
+      tbBoblightValue.Text = Settings.boblightValue.ToString();
+      tbBoblightThreshold.Text = Settings.boblightThreshold.ToString();
     }
 
     private void UpdateLanguageOnControls()
@@ -152,6 +163,14 @@ namespace AtmoLight
       lblBoblightMaxReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblBoblightMaxReconnectAttempts;
       lblBoblightReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblBoblightReconnectDelay;
       lblBoblightMaxFPS.Text = LanguageLoader.appStrings.SetupForm_lblBoblightMaxFPS;
+      lblBoblightSpeed.Text = LanguageLoader.appStrings.SetupForm_lblBoblightSpeed;
+      lblBoblightAutospeed.Text = LanguageLoader.appStrings.SetupForm_lblBoblightAutospeed;
+      lblBoblightSaturation.Text = LanguageLoader.appStrings.SetupForm_lblBoblightSaturation;
+      lblBoblightValue.Text = LanguageLoader.appStrings.SetupForm_lblBoblightValue;
+      lblBoblightThreshold.Text = LanguageLoader.appStrings.SetupForm_lblBoblightThreshold;
+      lblBoblightInterpolation.Text = LanguageLoader.appStrings.SetupForm_lblBoblightInterpolation;
+      grpBoblightGeneral.Text = LanguageLoader.appStrings.SetupForm_grpBoblightGeneral;
+      grpBoblightSettings.Text = LanguageLoader.appStrings.SetupForm_grpBoblightSettings;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -487,6 +506,12 @@ namespace AtmoLight
       Settings.boblightMaxReconnectAttempts = int.Parse(tbBoblightMaxReconnectAttempts.Text);
       Settings.boblightReconnectDelay = int.Parse(tbBoblightReconnectDelay.Text);
       Settings.boblightMaxFPS = int.Parse(tbBoblightMaxFPS.Text);
+      Settings.boblightSpeed = tbarBoblightSpeed.Value;
+      Settings.boblightAutospeed = tbarBoblightAutospeed.Value;
+      Settings.boblightSaturation = tbarBoblightSaturation.Value;
+      Settings.boblightValue = tbarBoblightValue.Value;
+      Settings.boblightThreshold = tbarBoblightThreshold.Value;
+      Settings.boblightInterpolation = ckBoblightInterpolation.Checked;
 
 
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
@@ -899,6 +924,30 @@ namespace AtmoLight
       }
     }
 
+    private void tbarBoblightSpeed_ValueChanged(Object sender, EventArgs e)
+    {
+      tbBoblightSpeed.Text = tbarBoblightSpeed.Value.ToString();
+    }
+
+    private void tbarBoblightAutospeed_ValueChanged(Object sender, EventArgs e)
+    {
+      tbBoblightAutospeed.Text = tbarBoblightAutospeed.Value.ToString();
+    }
+
+    private void tbarBoblightSaturation_ValueChanged(Object sender, EventArgs e)
+    {
+      tbBoblightSaturation.Text = tbarBoblightSaturation.Value.ToString();
+    }
+
+    private void tbarBoblightValue_ValueChanged(Object sender, EventArgs e)
+    {
+      tbBoblightValue.Text = tbarBoblightValue.Value.ToString();
+    }
+
+    private void tbarBoblightThreshold_ValueChanged(Object sender, EventArgs e)
+    {
+      tbBoblightThreshold.Text = tbarBoblightThreshold.Value.ToString();
+    }
 
     // Dynamic effect changes
     public void UpdateComboBoxes()

@@ -49,6 +49,12 @@ namespace AtmoLight
     public static int boblightMaxFPS;
     public static int boblightMaxReconnectAttempts;
     public static int boblightReconnectDelay;
+    public static int boblightSpeed;
+    public static int boblightAutospeed;
+    public static bool boblightInterpolation;
+    public static int boblightSaturation;
+    public static int boblightValue;
+    public static int boblightThreshold;
 
     // Hyperion
     public static bool hyperionTarget;
@@ -187,6 +193,12 @@ namespace AtmoLight
         boblightMaxFPS = reader.GetValueAsInt("atmolight", "boblightMaxFPS", 10);
         boblightMaxReconnectAttempts = reader.GetValueAsInt("atmolight", "boblightMaxReconnectAttempts", 5);
         boblightReconnectDelay = reader.GetValueAsInt("atmolight", "boblightReconnectDelay", 5000);
+        boblightSpeed = reader.GetValueAsInt("atmolight", "boblightSpeed", 100);
+        boblightAutospeed = reader.GetValueAsInt("atmolight", "boblightAutospeed", 0);
+        boblightInterpolation = reader.GetValueAsBool("atmolight", "boblightInterpolation", false);
+        boblightSaturation = reader.GetValueAsInt("atmolight", "boblightSaturation", 1);
+        boblightValue = reader.GetValueAsInt("atmolight", "boblightValue", 1);
+        boblightThreshold = reader.GetValueAsInt("atmolight", "boblightThreshold", 0);
 
         atmoWinTarget = reader.GetValueAsBool("atmolight", "atmoWinTarget", true);
         boblightTarget = reader.GetValueAsBool("atmolight", "boblightTarget", false);
@@ -246,6 +258,12 @@ namespace AtmoLight
         reader.SetValue("atmolight", "boblightMaxFPS", boblightMaxFPS);
         reader.SetValue("atmolight", "boblightMaxReconnectAttempts", boblightMaxReconnectAttempts);
         reader.SetValue("atmolight", "boblightReconnectDelay", boblightReconnectDelay);
+        reader.SetValue("atmolight", "boblightSpeed", boblightSpeed);
+        reader.SetValue("atmolight", "boblightAutospeed", boblightAutospeed);
+        reader.SetValue("atmolight", "boblightSaturation", boblightSaturation);
+        reader.SetValue("atmolight", "boblightValue", boblightValue);
+        reader.SetValue("atmolight", "boblightThreshold", boblightThreshold);
+        reader.SetValueAsBool("atmolight", "boblightInterpolation", boblightInterpolation);
 
         reader.SetValueAsBool("atmolight", "atmoWinTarget", atmoWinTarget);
         reader.SetValueAsBool("atmolight", "boblightTarget", boblightTarget);

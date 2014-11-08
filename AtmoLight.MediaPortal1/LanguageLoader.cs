@@ -361,6 +361,14 @@ namespace Language
     public String SetupForm_lblBoblightMaxReconnectAttempts;
     public String SetupForm_lblBoblightReconnectDelay;
     public String SetupForm_lblBoblightMaxFPS;
+    public String SetupForm_lblBoblightSpeed;
+    public String SetupForm_lblBoblightAutospeed;
+    public String SetupForm_lblBoblightSaturation;
+    public String SetupForm_lblBoblightValue;
+    public String SetupForm_lblBoblightThreshold;
+    public String SetupForm_lblBoblightInterpolation;
+    public String SetupForm_grpBoblightGeneral;
+    public String SetupForm_grpBoblightSettings;
 
     public String ContextMenu_SwitchLEDsON;
     public String ContextMenu_SwitchLEDsOFF;

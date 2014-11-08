@@ -77,6 +77,14 @@ lblBoblightPort=Port:
 lblBoblightMaxReconnectAttempts=Reconnect attempts:
 lblBoblightReconnectDelay=Reconnect delay:
 lblBoblightMaxFPS=Limit capture FPS to:
+lblBoblightSpeed=Speed:
+lblBoblightAutospeed=Autospeed:
+lblBoblightSaturation=Saturation:
+lblBoblightValue=Value:
+lblBoblightThreshold=Threshold:
+lblBoblightInterpolation=Interpolation:
+grpBoblightGeneral=General settings
+grpBoblightSettings=Boblight settings
 [ContextMenu]
 SwitchLEDsON=Switch LEDs on
 SwitchLEDsOFF=Switch LEDs off

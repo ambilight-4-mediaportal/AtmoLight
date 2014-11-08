@@ -122,7 +122,7 @@
       this.lblLedsOnOff = new System.Windows.Forms.Label();
       this.tabMenu = new System.Windows.Forms.TabControl();
       this.tabPageBoblight = new System.Windows.Forms.TabPage();
-      this.grpBoblight = new System.Windows.Forms.GroupBox();
+      this.grpBoblightGeneral = new System.Windows.Forms.GroupBox();
       this.tbBoblightMaxFPS = new System.Windows.Forms.TextBox();
       this.tbBoblightReconnectDelay = new System.Windows.Forms.TextBox();
       this.tbBoblightMaxReconnectAttempts = new System.Windows.Forms.TextBox();
@@ -149,6 +149,24 @@
       this.tbHueIP = new System.Windows.Forms.TextBox();
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
+      this.grpBoblightSettings = new System.Windows.Forms.GroupBox();
+      this.tbarBoblightSpeed = new System.Windows.Forms.TrackBar();
+      this.tbarBoblightAutospeed = new System.Windows.Forms.TrackBar();
+      this.tbarBoblightSaturation = new System.Windows.Forms.TrackBar();
+      this.tbarBoblightValue = new System.Windows.Forms.TrackBar();
+      this.tbarBoblightThreshold = new System.Windows.Forms.TrackBar();
+      this.lblBoblightSpeed = new System.Windows.Forms.Label();
+      this.lblBoblightAutospeed = new System.Windows.Forms.Label();
+      this.lblBoblightSaturation = new System.Windows.Forms.Label();
+      this.lblBoblightValue = new System.Windows.Forms.Label();
+      this.lblBoblightThreshold = new System.Windows.Forms.Label();
+      this.ckBoblightInterpolation = new System.Windows.Forms.CheckBox();
+      this.lblBoblightInterpolation = new System.Windows.Forms.Label();
+      this.tbBoblightSpeed = new System.Windows.Forms.TextBox();
+      this.tbBoblightAutospeed = new System.Windows.Forms.TextBox();
+      this.tbBoblightSaturation = new System.Windows.Forms.TextBox();
+      this.tbBoblightValue = new System.Windows.Forms.TextBox();
+      this.tbBoblightThreshold = new System.Windows.Forms.TextBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -164,10 +182,16 @@
       this.grpDeactivate.SuspendLayout();
       this.tabMenu.SuspendLayout();
       this.tabPageBoblight.SuspendLayout();
-      this.grpBoblight.SuspendLayout();
+      this.grpBoblightGeneral.SuspendLayout();
       this.tabPageHue.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.HueNetworkSettings.SuspendLayout();
+      this.grpBoblightSettings.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightSpeed)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightAutospeed)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightSaturation)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightValue)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightThreshold)).BeginInit();
       this.SuspendLayout();
       // 
       // btnSave
@@ -1173,7 +1197,8 @@
       // tabPageBoblight
       // 
       this.tabPageBoblight.BackColor = System.Drawing.SystemColors.Control;
-      this.tabPageBoblight.Controls.Add(this.grpBoblight);
+      this.tabPageBoblight.Controls.Add(this.grpBoblightSettings);
+      this.tabPageBoblight.Controls.Add(this.grpBoblightGeneral);
       this.tabPageBoblight.Location = new System.Drawing.Point(4, 22);
       this.tabPageBoblight.Name = "tabPageBoblight";
       this.tabPageBoblight.Padding = new System.Windows.Forms.Padding(3);
@@ -1181,23 +1206,24 @@
       this.tabPageBoblight.TabIndex = 4;
       this.tabPageBoblight.Text = "Boblight";
       // 
-      // grpBoblight
+      // grpBoblightGeneral
       // 
-      this.grpBoblight.Controls.Add(this.tbBoblightMaxFPS);
-      this.grpBoblight.Controls.Add(this.tbBoblightReconnectDelay);
-      this.grpBoblight.Controls.Add(this.tbBoblightMaxReconnectAttempts);
-      this.grpBoblight.Controls.Add(this.tbBoblightPort);
-      this.grpBoblight.Controls.Add(this.tbBoblightIP);
-      this.grpBoblight.Controls.Add(this.lblBoblightMaxFPS);
-      this.grpBoblight.Controls.Add(this.lblBoblightReconnectDelay);
-      this.grpBoblight.Controls.Add(this.lblBoblightMaxReconnectAttempts);
-      this.grpBoblight.Controls.Add(this.lblBoblightPort);
-      this.grpBoblight.Controls.Add(this.lblBoblightIP);
-      this.grpBoblight.Location = new System.Drawing.Point(10, 10);
-      this.grpBoblight.Name = "grpBoblight";
-      this.grpBoblight.Size = new System.Drawing.Size(817, 175);
-      this.grpBoblight.TabIndex = 0;
-      this.grpBoblight.TabStop = false;
+      this.grpBoblightGeneral.Controls.Add(this.tbBoblightMaxFPS);
+      this.grpBoblightGeneral.Controls.Add(this.tbBoblightReconnectDelay);
+      this.grpBoblightGeneral.Controls.Add(this.tbBoblightMaxReconnectAttempts);
+      this.grpBoblightGeneral.Controls.Add(this.tbBoblightPort);
+      this.grpBoblightGeneral.Controls.Add(this.tbBoblightIP);
+      this.grpBoblightGeneral.Controls.Add(this.lblBoblightMaxFPS);
+      this.grpBoblightGeneral.Controls.Add(this.lblBoblightReconnectDelay);
+      this.grpBoblightGeneral.Controls.Add(this.lblBoblightMaxReconnectAttempts);
+      this.grpBoblightGeneral.Controls.Add(this.lblBoblightPort);
+      this.grpBoblightGeneral.Controls.Add(this.lblBoblightIP);
+      this.grpBoblightGeneral.Location = new System.Drawing.Point(10, 10);
+      this.grpBoblightGeneral.Name = "grpBoblightGeneral";
+      this.grpBoblightGeneral.Size = new System.Drawing.Size(817, 175);
+      this.grpBoblightGeneral.TabIndex = 0;
+      this.grpBoblightGeneral.TabStop = false;
+      this.grpBoblightGeneral.Text = "General settings";
       // 
       // tbBoblightMaxFPS
       // 
@@ -1441,6 +1467,181 @@
       this.openFileDialog4.FileName = "openFileDialog4";
       this.openFileDialog4.Filter = "AtmoHue.exe|*.exe";
       // 
+      // grpBoblightSettings
+      // 
+      this.grpBoblightSettings.Controls.Add(this.tbBoblightThreshold);
+      this.grpBoblightSettings.Controls.Add(this.tbBoblightValue);
+      this.grpBoblightSettings.Controls.Add(this.tbBoblightSaturation);
+      this.grpBoblightSettings.Controls.Add(this.tbBoblightAutospeed);
+      this.grpBoblightSettings.Controls.Add(this.tbBoblightSpeed);
+      this.grpBoblightSettings.Controls.Add(this.lblBoblightInterpolation);
+      this.grpBoblightSettings.Controls.Add(this.ckBoblightInterpolation);
+      this.grpBoblightSettings.Controls.Add(this.lblBoblightThreshold);
+      this.grpBoblightSettings.Controls.Add(this.lblBoblightValue);
+      this.grpBoblightSettings.Controls.Add(this.lblBoblightSaturation);
+      this.grpBoblightSettings.Controls.Add(this.lblBoblightAutospeed);
+      this.grpBoblightSettings.Controls.Add(this.lblBoblightSpeed);
+      this.grpBoblightSettings.Controls.Add(this.tbarBoblightThreshold);
+      this.grpBoblightSettings.Controls.Add(this.tbarBoblightValue);
+      this.grpBoblightSettings.Controls.Add(this.tbarBoblightSaturation);
+      this.grpBoblightSettings.Controls.Add(this.tbarBoblightAutospeed);
+      this.grpBoblightSettings.Controls.Add(this.tbarBoblightSpeed);
+      this.grpBoblightSettings.Location = new System.Drawing.Point(10, 192);
+      this.grpBoblightSettings.Name = "grpBoblightSettings";
+      this.grpBoblightSettings.Size = new System.Drawing.Size(817, 243);
+      this.grpBoblightSettings.TabIndex = 1;
+      this.grpBoblightSettings.TabStop = false;
+      this.grpBoblightSettings.Text = "Boblight settings";
+      // 
+      // tbarBoblightSpeed
+      // 
+      this.tbarBoblightSpeed.Location = new System.Drawing.Point(150, 20);
+      this.tbarBoblightSpeed.Maximum = 100;
+      this.tbarBoblightSpeed.Name = "tbarBoblightSpeed";
+      this.tbarBoblightSpeed.Size = new System.Drawing.Size(350, 45);
+      this.tbarBoblightSpeed.TabIndex = 0;
+      this.tbarBoblightSpeed.ValueChanged += new System.EventHandler(this.tbarBoblightSpeed_ValueChanged);
+      // 
+      // tbarBoblightAutospeed
+      // 
+      this.tbarBoblightAutospeed.Location = new System.Drawing.Point(150, 55);
+      this.tbarBoblightAutospeed.Maximum = 100;
+      this.tbarBoblightAutospeed.Name = "tbarBoblightAutospeed";
+      this.tbarBoblightAutospeed.Size = new System.Drawing.Size(350, 45);
+      this.tbarBoblightAutospeed.TabIndex = 1;
+      this.tbarBoblightAutospeed.ValueChanged += new System.EventHandler(this.tbarBoblightAutospeed_ValueChanged);
+      // 
+      // tbarBoblightSaturation
+      // 
+      this.tbarBoblightSaturation.Location = new System.Drawing.Point(150, 90);
+      this.tbarBoblightSaturation.Maximum = 20;
+      this.tbarBoblightSaturation.Name = "tbarBoblightSaturation";
+      this.tbarBoblightSaturation.Size = new System.Drawing.Size(350, 45);
+      this.tbarBoblightSaturation.TabIndex = 2;
+      this.tbarBoblightSaturation.ValueChanged += new System.EventHandler(this.tbarBoblightSaturation_ValueChanged);
+      // 
+      // tbarBoblightValue
+      // 
+      this.tbarBoblightValue.Location = new System.Drawing.Point(150, 125);
+      this.tbarBoblightValue.Maximum = 20;
+      this.tbarBoblightValue.Name = "tbarBoblightValue";
+      this.tbarBoblightValue.Size = new System.Drawing.Size(350, 45);
+      this.tbarBoblightValue.TabIndex = 3;
+      this.tbarBoblightValue.ValueChanged += new System.EventHandler(this.tbarBoblightValue_ValueChanged);
+      // 
+      // tbarBoblightThreshold
+      // 
+      this.tbarBoblightThreshold.Location = new System.Drawing.Point(150, 160);
+      this.tbarBoblightThreshold.Maximum = 255;
+      this.tbarBoblightThreshold.Name = "tbarBoblightThreshold";
+      this.tbarBoblightThreshold.Size = new System.Drawing.Size(350, 45);
+      this.tbarBoblightThreshold.TabIndex = 4;
+      this.tbarBoblightThreshold.ValueChanged += new System.EventHandler(this.tbarBoblightThreshold_ValueChanged);
+      // 
+      // lblBoblightSpeed
+      // 
+      this.lblBoblightSpeed.AutoSize = true;
+      this.lblBoblightSpeed.Location = new System.Drawing.Point(6, 25);
+      this.lblBoblightSpeed.Name = "lblBoblightSpeed";
+      this.lblBoblightSpeed.Size = new System.Drawing.Size(41, 13);
+      this.lblBoblightSpeed.TabIndex = 5;
+      this.lblBoblightSpeed.Text = "Speed:";
+      // 
+      // lblBoblightAutospeed
+      // 
+      this.lblBoblightAutospeed.AutoSize = true;
+      this.lblBoblightAutospeed.Location = new System.Drawing.Point(6, 60);
+      this.lblBoblightAutospeed.Name = "lblBoblightAutospeed";
+      this.lblBoblightAutospeed.Size = new System.Drawing.Size(61, 13);
+      this.lblBoblightAutospeed.TabIndex = 6;
+      this.lblBoblightAutospeed.Text = "Autospeed:";
+      // 
+      // lblBoblightSaturation
+      // 
+      this.lblBoblightSaturation.AutoSize = true;
+      this.lblBoblightSaturation.Location = new System.Drawing.Point(6, 95);
+      this.lblBoblightSaturation.Name = "lblBoblightSaturation";
+      this.lblBoblightSaturation.Size = new System.Drawing.Size(58, 13);
+      this.lblBoblightSaturation.TabIndex = 7;
+      this.lblBoblightSaturation.Text = "Saturation:";
+      // 
+      // lblBoblightValue
+      // 
+      this.lblBoblightValue.AutoSize = true;
+      this.lblBoblightValue.Location = new System.Drawing.Point(6, 130);
+      this.lblBoblightValue.Name = "lblBoblightValue";
+      this.lblBoblightValue.Size = new System.Drawing.Size(37, 13);
+      this.lblBoblightValue.TabIndex = 8;
+      this.lblBoblightValue.Text = "Value:";
+      // 
+      // lblBoblightThreshold
+      // 
+      this.lblBoblightThreshold.AutoSize = true;
+      this.lblBoblightThreshold.Location = new System.Drawing.Point(6, 165);
+      this.lblBoblightThreshold.Name = "lblBoblightThreshold";
+      this.lblBoblightThreshold.Size = new System.Drawing.Size(57, 13);
+      this.lblBoblightThreshold.TabIndex = 9;
+      this.lblBoblightThreshold.Text = "Threshold:";
+      // 
+      // ckBoblightInterpolation
+      // 
+      this.ckBoblightInterpolation.AutoSize = true;
+      this.ckBoblightInterpolation.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.ckBoblightInterpolation.Location = new System.Drawing.Point(156, 200);
+      this.ckBoblightInterpolation.Name = "ckBoblightInterpolation";
+      this.ckBoblightInterpolation.Size = new System.Drawing.Size(15, 14);
+      this.ckBoblightInterpolation.TabIndex = 10;
+      this.ckBoblightInterpolation.UseVisualStyleBackColor = true;
+      // 
+      // lblBoblightInterpolation
+      // 
+      this.lblBoblightInterpolation.AutoSize = true;
+      this.lblBoblightInterpolation.Location = new System.Drawing.Point(6, 200);
+      this.lblBoblightInterpolation.Name = "lblBoblightInterpolation";
+      this.lblBoblightInterpolation.Size = new System.Drawing.Size(68, 13);
+      this.lblBoblightInterpolation.TabIndex = 11;
+      this.lblBoblightInterpolation.Text = "Interpolation:";
+      // 
+      // tbBoblightSpeed
+      // 
+      this.tbBoblightSpeed.Location = new System.Drawing.Point(520, 22);
+      this.tbBoblightSpeed.Name = "tbBoblightSpeed";
+      this.tbBoblightSpeed.ReadOnly = true;
+      this.tbBoblightSpeed.Size = new System.Drawing.Size(50, 20);
+      this.tbBoblightSpeed.TabIndex = 12;
+      // 
+      // tbBoblightAutospeed
+      // 
+      this.tbBoblightAutospeed.Location = new System.Drawing.Point(520, 57);
+      this.tbBoblightAutospeed.Name = "tbBoblightAutospeed";
+      this.tbBoblightAutospeed.ReadOnly = true;
+      this.tbBoblightAutospeed.Size = new System.Drawing.Size(50, 20);
+      this.tbBoblightAutospeed.TabIndex = 13;
+      // 
+      // tbBoblightSaturation
+      // 
+      this.tbBoblightSaturation.Location = new System.Drawing.Point(520, 92);
+      this.tbBoblightSaturation.Name = "tbBoblightSaturation";
+      this.tbBoblightSaturation.ReadOnly = true;
+      this.tbBoblightSaturation.Size = new System.Drawing.Size(50, 20);
+      this.tbBoblightSaturation.TabIndex = 14;
+      // 
+      // tbBoblightValue
+      // 
+      this.tbBoblightValue.Location = new System.Drawing.Point(520, 125);
+      this.tbBoblightValue.Name = "tbBoblightValue";
+      this.tbBoblightValue.ReadOnly = true;
+      this.tbBoblightValue.Size = new System.Drawing.Size(50, 20);
+      this.tbBoblightValue.TabIndex = 15;
+      // 
+      // tbBoblightThreshold
+      // 
+      this.tbBoblightThreshold.Location = new System.Drawing.Point(520, 162);
+      this.tbBoblightThreshold.Name = "tbBoblightThreshold";
+      this.tbBoblightThreshold.ReadOnly = true;
+      this.tbBoblightThreshold.Size = new System.Drawing.Size(50, 20);
+      this.tbBoblightThreshold.TabIndex = 16;
+      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1484,13 +1685,20 @@
       this.grpDeactivate.PerformLayout();
       this.tabMenu.ResumeLayout(false);
       this.tabPageBoblight.ResumeLayout(false);
-      this.grpBoblight.ResumeLayout(false);
-      this.grpBoblight.PerformLayout();
+      this.grpBoblightGeneral.ResumeLayout(false);
+      this.grpBoblightGeneral.PerformLayout();
       this.tabPageHue.ResumeLayout(false);
       this.groupBox1.ResumeLayout(false);
       this.groupBox1.PerformLayout();
       this.HueNetworkSettings.ResumeLayout(false);
       this.HueNetworkSettings.PerformLayout();
+      this.grpBoblightSettings.ResumeLayout(false);
+      this.grpBoblightSettings.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightSpeed)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightAutospeed)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightSaturation)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightValue)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightThreshold)).EndInit();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1600,7 +1808,7 @@
     private System.Windows.Forms.Label lblHueMinimalColorDifference;
     private System.Windows.Forms.TabPage tabPageBoblight;
     private System.Windows.Forms.CheckBox ckBoblightEnabled;
-    private System.Windows.Forms.GroupBox grpBoblight;
+    private System.Windows.Forms.GroupBox grpBoblightGeneral;
     private System.Windows.Forms.TextBox tbBoblightMaxFPS;
     private System.Windows.Forms.TextBox tbBoblightReconnectDelay;
     private System.Windows.Forms.TextBox tbBoblightMaxReconnectAttempts;
@@ -1618,5 +1826,23 @@
     private System.Windows.Forms.CheckBox ckStartHue;
     private System.Windows.Forms.CheckBox ckhueIsRemoteMachine;
     private System.Windows.Forms.OpenFileDialog openFileDialog4;
+    private System.Windows.Forms.GroupBox grpBoblightSettings;
+    private System.Windows.Forms.TextBox tbBoblightThreshold;
+    private System.Windows.Forms.TextBox tbBoblightValue;
+    private System.Windows.Forms.TextBox tbBoblightSaturation;
+    private System.Windows.Forms.TextBox tbBoblightAutospeed;
+    private System.Windows.Forms.TextBox tbBoblightSpeed;
+    private System.Windows.Forms.Label lblBoblightInterpolation;
+    private System.Windows.Forms.CheckBox ckBoblightInterpolation;
+    private System.Windows.Forms.Label lblBoblightThreshold;
+    private System.Windows.Forms.Label lblBoblightValue;
+    private System.Windows.Forms.Label lblBoblightSaturation;
+    private System.Windows.Forms.Label lblBoblightAutospeed;
+    private System.Windows.Forms.Label lblBoblightSpeed;
+    private System.Windows.Forms.TrackBar tbarBoblightThreshold;
+    private System.Windows.Forms.TrackBar tbarBoblightValue;
+    private System.Windows.Forms.TrackBar tbarBoblightSaturation;
+    private System.Windows.Forms.TrackBar tbarBoblightAutospeed;
+    private System.Windows.Forms.TrackBar tbarBoblightSpeed;
   }
 }
