@@ -96,6 +96,12 @@ namespace AtmoLight
     public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
     public bool reInitOnError;
 
+    // AmbiBox Settings Fields
+    public string ambiBoxIP = "127.0.0.1";
+    public int ambiBoxPort = 3636;
+    public int ambiBoxMaxReconnectAttempts = 5;
+    public int ambiBoxtReconnectDelay = 5000;
+
     // AtmoWin Settings Fields
     public bool atmoWinAutoStart;
     public bool atmoWinAutoStop;
@@ -114,7 +120,6 @@ namespace AtmoLight
     public string hueIP;
     public int huePort;
     public int hueMinimalColorDifference;
-
     #endregion
 
     #region class Win32API
