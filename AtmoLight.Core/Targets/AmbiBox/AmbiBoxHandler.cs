@@ -100,7 +100,7 @@ namespace AtmoLight
 
         viewStream.Seek(0, SeekOrigin.Begin);
         viewStream.WriteByte(0xF0); // Begin
-        viewStream.WriteByte((byte)(((byte)coreObject.GetCaptureWidth() >> 8) & 0xff)); // Width
+        viewStream.WriteByte((byte)(coreObject.GetCaptureWidth() & 0xff)); // Width
         viewStream.WriteByte((byte)((coreObject.GetCaptureWidth() >> 8) & 0xff)); // With
         viewStream.WriteByte((byte)(coreObject.GetCaptureHeight() & 0xff)); // Height
         viewStream.WriteByte((byte)((coreObject.GetCaptureHeight() >> 8) & 0xff)); // Height
