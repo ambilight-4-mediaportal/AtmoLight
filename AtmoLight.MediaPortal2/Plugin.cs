@@ -116,6 +116,23 @@ namespace AtmoLight
       AtmoLightObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
       AtmoLightObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
 
+      // Boblight
+      if (settings.BoblightTarget)
+      {
+        AtmoLightObject.AddTarget(Target.Boblight);
+      }
+      AtmoLightObject.boblightIP = settings.BoblightIP;
+      AtmoLightObject.boblightPort = settings.BoblightPort;
+      AtmoLightObject.boblightMaxFPS = settings.BoblightMaxFPS;
+      AtmoLightObject.boblightMaxReconnectAttempts = settings.BoblightMaxReconnectAttempts;
+      AtmoLightObject.boblightReconnectDelay = settings.BoblightReconnectDelay;
+      AtmoLightObject.boblightSpeed = settings.BoblightSpeed;
+      AtmoLightObject.boblightAutospeed = settings.BoblightAutospeed;
+      AtmoLightObject.boblightInterpolation = settings.BoblightInterpolation;
+      AtmoLightObject.boblightSaturation = settings.BoblightSaturation;
+      AtmoLightObject.boblightValue = settings.BoblightValue;
+      AtmoLightObject.boblightThreshold = settings.BoblightThreshold;
+
       // Hyperion
       if (settings.HyperionTarget)
       {

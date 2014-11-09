@@ -65,4 +65,17 @@
   <string name="AtmoLight.HueMinimalColorDifference">Minimal color difference (0-255)</string>
   <string name="AtmoLight.CaptureWidth">Capture width (Will only be used if AtmoWin is disabled!)</string>
   <string name="AtmoLight.CaptureHeight">Capture height (Will only be used if AtmoWin is disabled!)</string>
+  <string name="AtmoLight.Boblight">Boblight</string>
+  <string name="AtmoLight.BoblightTarget">Use Boblight</string>
+  <string name="AtmoLight.BoblightIP">IP address</string>
+  <string name="AtmoLight.BoblightPort">Port number</string>
+  <string name="AtmoLight.BoblightMaxReconnectAttempts">Reconnect attempts</string>
+  <string name="AtmoLight.BoblightReconnectDelay">Reconnect delay</string>
+  <string name="AtmoLight.BoblightMaxFPS">Maximum FPS</string>
+  <string name="AtmoLight.BoblightSpeed">Speed</string>
+  <string name="AtmoLight.BoblightAutospeed">Autospeed</string>
+  <string name="AtmoLight.BoblightInterpolation">Interpolation</string>
+  <string name="AtmoLight.BoblightSaturation">Saturation</string>
+  <string name="AtmoLight.BoblightValue">Value</string>
+  <string name="AtmoLight.BoblightThreshold">Threshold</string>
 </resources>
