@@ -1014,7 +1014,7 @@ namespace AtmoLight.Configuration
       settings.hueIsRemoteMachine = _yes;
       SettingsManager.Save(settings);
 
-      Core.GetInstance().hueStart = _yes;
+      Core.GetInstance().hueIsRemoteMachine = _yes;
     }
   }
 
