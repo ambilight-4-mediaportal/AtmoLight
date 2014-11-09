@@ -974,7 +974,7 @@ namespace AtmoLight.Configuration
       settings.hueExe = _path;
       SettingsManager.Save(settings);
 
-      Core.GetInstance().SetGIFPath(settings.hueExe);
+      Core.GetInstance().huePath = _path;
     }
   }
 
@@ -993,7 +993,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.hueStart = _yes;
       SettingsManager.Save(settings);
-      SettingsChanged();
+
+      Core.GetInstance().hueStart = _yes;
     }
   }
 
@@ -1012,7 +1013,8 @@ namespace AtmoLight.Configuration
       Settings settings = SettingsManager.Load<Settings>();
       settings.hueIsRemoteMachine = _yes;
       SettingsManager.Save(settings);
-      SettingsChanged();
+
+      Core.GetInstance().hueStart = _yes;
     }
   }
 
