@@ -980,8 +980,6 @@ namespace AtmoLight.Configuration
 
   public class HueStart : YesNo
   {
-    public delegate void SettingsChangedHandler();
-    public static event SettingsChangedHandler SettingsChanged;
     public override void Load()
     {
       _yes = SettingsManager.Load<Settings>().hueStart;
@@ -1000,8 +998,6 @@ namespace AtmoLight.Configuration
 
   public class HueIsRemoteMachine : YesNo
   {
-    public delegate void SettingsChangedHandler();
-    public static event SettingsChangedHandler SettingsChanged;
     public override void Load()
     {
       _yes = SettingsManager.Load<Settings>().hueIsRemoteMachine;
