@@ -38,13 +38,6 @@
               <ZipFileName>Installer{CopyFile}\{d79ac7b0-ad9d-4428-ad98-860bad85324d}-Google.ProtocolBuffers.dll</ZipFileName>
               <DestinationFilename>%Plugins%\process\Google.ProtocolBuffers.dll</DestinationFilename>
             </FileItem>
-            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
-              <Param1 />
-              <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\Packages\libboblight-win32.0.dll\libboblight-win32.0.dll</LocalFileName>
-              <ZipFileName>Installer{CopyFile}\{dedc4632-abcf-4dca-aa3c-9264a37c86a3}-libboblight-win32.0.dll</ZipFileName>
-              <DestinationFilename>%Base%\libboblight-win32.0.dll</DestinationFilename>
-            </FileItem>
           </Items>
         </Files>
       </GroupItem>
@@ -404,13 +397,6 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <LocalFileName>..\AtmoLight.Core\bin\Release\Google.ProtocolBuffers.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{d79ac7b0-ad9d-4428-ad98-860bad85324d}-Google.ProtocolBuffers.dll</ZipFileName>
         <DestinationFilename>%Plugins%\process\Google.ProtocolBuffers.dll</DestinationFilename>
-      </FileItem>
-      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
-        <Param1 />
-        <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\Packages\libboblight-win32.0.dll\libboblight-win32.0.dll</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{dedc4632-abcf-4dca-aa3c-9264a37c86a3}-libboblight-win32.0.dll</ZipFileName>
-        <DestinationFilename>%Base%\libboblight-win32.0.dll</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
