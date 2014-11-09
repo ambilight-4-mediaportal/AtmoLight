@@ -133,6 +133,42 @@ namespace AtmoLight
     [Setting(SettingScope.User, 25)]
     public int HueMinimalColorDifference { get; set; }
 
+    [Setting(SettingScope.User, false)]
+    public bool BoblightTarget { get; set; }
+
+    [Setting(SettingScope.User, "127.0.0.1")]
+    public string BoblightIP { get; set; }
+
+    [Setting(SettingScope.User, 19333)]
+    public int BoblightPort { get; set; }
+
+    [Setting(SettingScope.User, 10)]
+    public int BoblightMaxFPS { get; set; }
+
+    [Setting(SettingScope.User, 5)]
+    public int BoblightMaxReconnectAttempts { get; set; }
+
+    [Setting(SettingScope.User, 5000)]
+    public int BoblightReconnectDelay { get; set; }
+
+    [Setting(SettingScope.User, 100)]
+    public int BoblightSpeed { get; set; }
+
+    [Setting(SettingScope.User, 0)]
+    public int BoblightAutospeed { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool BoblightInterpolation { get; set; }
+
+    [Setting(SettingScope.User, 1)]
+    public int BoblightSaturation { get; set; }
+
+    [Setting(SettingScope.User, 1)]
+    public int BoblightValue { get; set; }
+
+    [Setting(SettingScope.User, 0)]
+    public int BoblightThreshold { get; set; }
+
 
     ISettingsManager settingsManager = ServiceRegistration.Get<ISettingsManager>();
     Settings settings;
@@ -181,6 +217,18 @@ namespace AtmoLight
       HueMinimalColorDifference = settings.HueMinimalColorDifference;
       CaptureHeight = settings.CaptureHeight;
       CaptureWidth = settings.CaptureWidth;
+      BoblightTarget = settings.BoblightTarget;
+      BoblightIP = settings.BoblightIP;
+      BoblightPort = settings.BoblightPort;
+      BoblightMaxFPS = settings.BoblightMaxFPS;
+      BoblightMaxReconnectAttempts = settings.BoblightMaxReconnectAttempts;
+      BoblightReconnectDelay = settings.BoblightReconnectDelay;
+      BoblightSpeed = settings.BoblightSpeed;
+      BoblightAutospeed = settings.BoblightAutospeed;
+      BoblightInterpolation = settings.BoblightInterpolation;
+      BoblightSaturation = settings.BoblightSaturation;
+      BoblightValue = settings.BoblightValue;
+      BoblightThreshold = settings.BoblightThreshold;
       return true;
     }
 
@@ -227,6 +275,18 @@ namespace AtmoLight
       settings.HueMinimalColorDifference = HueMinimalColorDifference;
       settings.CaptureWidth = CaptureWidth;
       settings.CaptureHeight = CaptureHeight;
+      settings.BoblightTarget = BoblightTarget;
+      settings.BoblightIP = BoblightIP;
+      settings.BoblightPort = BoblightPort;
+      settings.BoblightMaxFPS = BoblightMaxFPS;
+      settings.BoblightMaxReconnectAttempts = BoblightMaxReconnectAttempts;
+      settings.BoblightReconnectDelay = BoblightReconnectDelay;
+      settings.BoblightSpeed = BoblightSpeed;
+      settings.BoblightAutospeed = BoblightAutospeed;
+      settings.BoblightInterpolation = BoblightInterpolation;
+      settings.BoblightSaturation = BoblightSaturation;
+      settings.BoblightValue = BoblightValue;
+      settings.BoblightThreshold = BoblightThreshold;
       settingsManager.Save(settings);
       return true;
     }
