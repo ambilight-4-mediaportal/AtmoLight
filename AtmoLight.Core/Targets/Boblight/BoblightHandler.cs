@@ -447,6 +447,10 @@ namespace AtmoLight
     #region Utilities
     private string CleanupReadString(string readString)
     {
+      if (readString.Length == 0)
+      {
+        return null;
+      }
       return readString.Remove(readString.Length - 1, 1);
     }
     #endregion
