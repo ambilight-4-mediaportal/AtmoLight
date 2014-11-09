@@ -134,6 +134,9 @@ namespace AtmoLight
       {
         AtmoLightObject.AddTarget(Target.Hue);
       }
+      AtmoLightObject.huePath = settings.hueExe;
+      AtmoLightObject.hueStart = settings.hueStart;
+      AtmoLightObject.hueIsRemoteMachine = settings.hueIsRemoteMachine;
       AtmoLightObject.hueIP = settings.HueIP;
       AtmoLightObject.huePort = settings.HuePort;
       AtmoLightObject.hueMinimalColorDifference = settings.HueMinimalColorDifference;

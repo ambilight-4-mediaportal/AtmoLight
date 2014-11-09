@@ -115,6 +115,15 @@ namespace AtmoLight
     [Setting(SettingScope.User, false)]
     public bool HyperionLiveReconnect { get; set; }
 
+    [Setting(SettingScope.User, "")]
+    public string hueExe { get; set; }
+
+    [Setting(SettingScope.User, true)]
+    public bool hueStart { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool hueIsRemoteMachine { get; set; }
+
     [Setting(SettingScope.User, "127.0.0.1")]
     public string HueIP { get; set; }
 
@@ -164,6 +173,9 @@ namespace AtmoLight
       HyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
       HyperionReconnectAttempts = settings.HyperionReconnectAttempts;
       HyperionReconnectDelay = settings.HyperionReconnectDelay;
+      hueExe = settings.hueExe;
+      hueStart = settings.hueStart;
+      hueIsRemoteMachine = settings.hueIsRemoteMachine;
       HueIP = settings.HueIP;
       HuePort = settings.HuePort;
       HueMinimalColorDifference = settings.HueMinimalColorDifference;
@@ -207,6 +219,9 @@ namespace AtmoLight
       settings.HyperionPriorityStaticColor = HyperionPriorityStaticColor;
       settings.HyperionReconnectAttempts = HyperionReconnectAttempts;
       settings.HyperionReconnectDelay = HyperionReconnectDelay;
+      settings.hueExe = hueExe;
+      settings.hueStart = hueStart;
+      settings.hueIsRemoteMachine = hueIsRemoteMachine;
       settings.HueIP = HueIP;
       settings.HuePort = HuePort;
       settings.HueMinimalColorDifference = HueMinimalColorDifference;

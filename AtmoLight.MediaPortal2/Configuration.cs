@@ -958,6 +958,64 @@ namespace AtmoLight.Configuration
       }
     }
   }
+
+  public class HueExe : PathEntry
+  {
+    public override void Load()
+    {
+      _pathSelectionType = PathSelectionType.File;
+      _path = SettingsManager.Load<Settings>().hueExe;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.hueExe = _path;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().SetGIFPath(settings.hueExe);
+    }
+  }
+
+  public class HueStart : YesNo
+  {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().hueStart;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.hueStart = _yes;
+      SettingsManager.Save(settings);
+      SettingsChanged();
+    }
+  }
+
+  public class HueIsRemoteMachine : YesNo
+  {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().hueIsRemoteMachine;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.hueIsRemoteMachine = _yes;
+      SettingsManager.Save(settings);
+      SettingsChanged();
+    }
+  }
+
   public class HueIP : Entry
   {
     public override void Load()

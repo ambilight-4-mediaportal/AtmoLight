@@ -60,6 +60,9 @@
   <string name="AtmoLight.HyperionReconnectDelay">Reconnect delay</string>
   <string name="AtmoLight.HyperionReconnectAttempts">Reconnect attempts</string>
   <string name="AtmoLight.HyperionLiveReconnect">Live reconnect (mainly debugging)</string>
+  <string name="AtmoLight.HueExe">Path to AtmoHue.exe</string>
+  <string name="AtmoLight.HueStart">Start AtmoHue with MediaPortal</string>
+  <string name="AtmoLight.HueIsRemoteMachine">AtmoHue is on remote machine (skips file/path check)</string>
   <string name="AtmoLight.HueIP">IP address</string>
   <string name="AtmoLight.HuePort">Port number</string>
   <string name="AtmoLight.HueMinimalColorDifference">Minimal color difference (0-255)</string>
