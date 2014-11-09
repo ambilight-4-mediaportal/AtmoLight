@@ -166,6 +166,7 @@ namespace AtmoLight
 
       if (Connect())
       {
+        Log.Info("BoblightHandler - Successfully connected to {0}:{1}.", coreObject.boblightIP, coreObject.boblightPort);
         reconnectAttempts = 0;
         initLock = false;
 
@@ -176,6 +177,7 @@ namespace AtmoLight
       }
       else
       {
+        Log.Error("BoblightHandler - Error connecting to {0}:{1}.", coreObject.boblightIP, coreObject.boblightPort);
         if ((coreObject.reInitOnError || force) && reconnectAttempts < coreObject.boblightMaxReconnectAttempts)
         {
           System.Threading.Thread.Sleep(coreObject.boblightReconnectDelay);
@@ -213,7 +215,6 @@ namespace AtmoLight
           boblightConnection.WriteLine("hello");
           if (CleanupReadString(boblightConnection.Read()) != "hello")
           {
-            Log.Error("BoblightHandler - Error connecting to {0}:{1}.", coreObject.boblightIP, coreObject.boblightPort);
             return false;
           }
 
@@ -221,10 +222,10 @@ namespace AtmoLight
           string lights = CleanupReadString(boblightConnection.Read());
           if (string.IsNullOrEmpty(lights))
           {
-            Log.Error("BoblightHandler - Error connecting to {0}:{1}.", coreObject.boblightIP, coreObject.boblightPort);
             return false;
           }
           string[] lightsArray = lights.Split(' ', '\n');
+          int x = 0;
           for (int i = 0; i < lightsArray.Length; i++)
           {
             if (lightsArray[i] == "lights")
@@ -243,21 +244,24 @@ namespace AtmoLight
               rgbValuesPrev.Add(new int[] { 0, 0, 0 });
               singleChange.Add(0.0f);
               rgbCount.Add(0);
+              x++;
               i += 6;
             }
           }
-          Log.Info("BoblightHandler - Successfully connected to {0}:{1}.", coreObject.boblightIP, coreObject.boblightPort);
+          if (x != totalLights)
+          {
+            return false;
+          }
           return true;
         }
         else
         {
-          Log.Error("BoblightHandler - Error connecting to {0}:{1}.", coreObject.boblightIP, coreObject.boblightPort);
           return false;
         }
       }
       catch (Exception ex)
       {
-        Log.Error("BoblightHandler - Error connecting to {0}:{1}.", coreObject.boblightIP, coreObject.boblightPort);
+        Log.Error("BoblightHandler - Error during connecting.");
         Log.Error("BoblightHandler - Exception: {0}", ex.Message);
         return false;
       }
