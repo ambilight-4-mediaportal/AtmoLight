@@ -7,7 +7,7 @@ AtmoLight is a plugin for MediaPortal1 and MediaPortal2 to add support for ambil
 ## Features
 
  * __Control__ your Amibilight from within MediaPortal
- * Support for different targets: __[AtmoWin](https://github.com/ambilight-4-mediaportal/AtmoWin)__, __[Hue](https://github.com/ambilight-4-mediaportal/AtmoHue)__ and __[Hyperion](https://github.com/tvdzwan/hyperion)__
+ * Support for different targets: __[AtmoWin](https://github.com/ambilight-4-mediaportal/AtmoWin)__, __[Boblight](https://code.google.com/p/boblight/)__, __[Hue](https://github.com/ambilight-4-mediaportal/AtmoHue)__ and __[Hyperion](https://github.com/tvdzwan/hyperion)__
  * Ability to use __more than one__ target __at the same time__
  * __Internal capture mode__ to reduce cpu load
  * Change effects __automatically__, depending on the media type that is playing
