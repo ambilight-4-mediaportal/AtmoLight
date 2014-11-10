@@ -80,7 +80,7 @@ namespace AtmoLight
     public void Dispose()
     {
       Log.Debug("BoblightHandler - Disposing Boblight handler.");
-      boblightConnection.Dispose();
+      Disconnect();
     }
 
     public bool IsConnected()
@@ -98,21 +98,31 @@ namespace AtmoLight
       {
         return false;
       }
-      switch (effect)
+      try
       {
-        case ContentEffect.MediaPortalLiveMode:
-        case ContentEffect.GIFReader:
-        case ContentEffect.VUMeter:
-        case ContentEffect.VUMeterRainbow:
-          return true;
-        case ContentEffect.StaticColor:
-          ChangeStaticColor(coreObject.staticColor);
-          return true;
-        case ContentEffect.LEDsDisabled:
-        case ContentEffect.Undefined:
-        default:
-          ChangeStaticColor(new int[] { 0, 0, 0 });
-          return true;
+        switch (effect)
+        {
+          case ContentEffect.MediaPortalLiveMode:
+          case ContentEffect.GIFReader:
+          case ContentEffect.VUMeter:
+          case ContentEffect.VUMeterRainbow:
+            return true;
+          case ContentEffect.StaticColor:
+            ChangeStaticColor(coreObject.staticColor);
+            return true;
+          case ContentEffect.LEDsDisabled:
+          case ContentEffect.Undefined:
+          default:
+            ChangeStaticColor(new int[] { 0, 0, 0 });
+            return true;
+        }
+      }
+      catch (Exception ex)
+      {
+        Log.Error("BoblightHandler - Error changing effect to {0}", effect.ToString());
+        Log.Error("BoblightHandler - Exception: {0}", ex.Message);
+        ReInitialise();
+        return false;
       }
     }
 
@@ -135,39 +145,48 @@ namespace AtmoLight
         return;
       }
 
-      // Check if settings have changed and need updating
-      if (coreObject.boblightInterpolation != oldIterpolation)
+      try
       {
-        SetOption("interpolation", Convert.ToInt32(coreObject.boblightInterpolation).ToString());
-        oldIterpolation = coreObject.boblightInterpolation;
-      }
-      if (coreObject.boblightSpeed != oldSpeed)
-      {
-        SetOption("speed", coreObject.boblightSpeed.ToString());
-        oldSpeed = coreObject.boblightSpeed;
-      }
-      if (coreObject.boblightGamma != oldGamma)
-      {
-        CalcGammaCurve();
-        oldGamma = coreObject.boblightGamma;
-      }
-
-      // Analyze image
-      int[] rgb = new int[] { 0, 0, 0 };
-      for (int y = 0; y < coreObject.GetCaptureHeight(); y++)
-      {
-        int row = coreObject.GetCaptureWidth() * y * 4;
-        for (int x = 0; x < coreObject.GetCaptureWidth(); x++)
+        // Check if settings have changed and need updating
+        if (coreObject.boblightInterpolation != oldIterpolation)
         {
-          rgb[0] = pixeldata[row + x * 4 + 2];
-          rgb[1] = pixeldata[row + x * 4 + 1];
-          rgb[2] = pixeldata[row + x * 4];
-          AddPixelXY(x, y, rgb);
+          SetOption("interpolation", Convert.ToInt32(coreObject.boblightInterpolation).ToString());
+          oldIterpolation = coreObject.boblightInterpolation;
         }
+        if (coreObject.boblightSpeed != oldSpeed)
+        {
+          SetOption("speed", coreObject.boblightSpeed.ToString());
+          oldSpeed = coreObject.boblightSpeed;
+        }
+        if (coreObject.boblightGamma != oldGamma)
+        {
+          CalcGammaCurve();
+          oldGamma = coreObject.boblightGamma;
+        }
+
+        // Analyze image
+        int[] rgb = new int[] { 0, 0, 0 };
+        for (int y = 0; y < coreObject.GetCaptureHeight(); y++)
+        {
+          int row = coreObject.GetCaptureWidth() * y * 4;
+          for (int x = 0; x < coreObject.GetCaptureWidth(); x++)
+          {
+            rgb[0] = pixeldata[row + x * 4 + 2];
+            rgb[1] = pixeldata[row + x * 4 + 1];
+            rgb[2] = pixeldata[row + x * 4];
+            AddPixelXY(x, y, rgb);
+          }
+        }
+        SetPriority(128);
+        SendRGB();
+        maxFPSStopwatch.Restart();
       }
-      SetPriority(128);
-      SendRGB();
-      maxFPSStopwatch.Restart();
+      catch (Exception ex)
+      {
+        Log.Error("BoblightHandler - Error in ChangeImage.");
+        Log.Error("BoblightHandler - Exception: {0}", ex.Message);
+        ReInitialise();
+      }
     }
     #endregion
 
@@ -180,7 +199,7 @@ namespace AtmoLight
         return false;
       }
       initLock = true;
-
+      Disconnect();
       reconnectAttempts++;
 
       if (Connect())
@@ -205,6 +224,7 @@ namespace AtmoLight
         }
         else
         {
+          Disconnect();
           reconnectAttempts = 0;
           coreObject.NewConnectionLost(Name);
           initLock = false;
@@ -271,6 +291,15 @@ namespace AtmoLight
         Log.Error("BoblightHandler - Error during connecting.");
         Log.Error("BoblightHandler - Exception: {0}", ex.Message);
         return false;
+      }
+    }
+
+    private void Disconnect()
+    {
+      if (boblightConnection != null)
+      {
+        boblightConnection.Dispose();
+        boblightConnection = null;
       }
     }
 
