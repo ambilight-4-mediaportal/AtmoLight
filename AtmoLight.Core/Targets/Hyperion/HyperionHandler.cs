@@ -12,6 +12,7 @@ using System.Drawing.Imaging;
 using System.Net.Sockets;
 using System.Linq;
 using proto;
+using Microsoft.Win32;
 
 namespace AtmoLight.Targets
 {
@@ -40,32 +41,38 @@ namespace AtmoLight.Targets
     private Stream Stream;
     private Boolean Connected = false;
     private Boolean isInit = false;
-    int hyperionReconnectCounter = 0;
-    public int hyperionReconnectAttempts = 0;
+    private int hyperionReconnectCounter = 0;
     private Stopwatch liveReconnectSW = new Stopwatch();
 
     private Core coreObject;
 
     #endregion
 
+    #region Hyperion
     public HyperionHandler()
     {
+
       coreObject = Core.GetInstance();
     }
-    #region Hyperion
 
     public void Initialise(bool force = false)
     {
       try
       {
         isInit = true;
-        Connect();
-        ClearPriority(coreObject.hyperionPriority);
+
+        //Start monitoring powerstate for on resume reconnection
+        monitorPowerState();
 
         if (coreObject.hyperionLiveReconnect)
         {
           liveReconnect();
         }
+        else
+        {
+          Connect();
+        }
+        ClearPriority(coreObject.hyperionPriority);
       }
       catch (Exception e)
       {
@@ -146,7 +153,7 @@ namespace AtmoLight.Targets
 
     private void ConnectThread()
     {
-      while (hyperionReconnectCounter <= coreObject.hyperionReconnectAttempts)
+      while (hyperionReconnectCounter <= coreObject.hyperionReconnectAttempts && Connected == false)
       {
         if (Connected == false)
         {
@@ -170,8 +177,8 @@ namespace AtmoLight.Targets
                 Log.Error("HyperionHandler - Exception: {0}", e.Message);
               }
             }
-            Socket = new TcpClient();
 
+            Socket = new TcpClient();
             Socket.SendTimeout = 5000;
             Socket.ReceiveTimeout = 5000;
             Socket.Connect(coreObject.hyperionIP, coreObject.hyperionPort);
@@ -187,10 +194,10 @@ namespace AtmoLight.Targets
           {
             if (coreObject.hyperionLiveReconnect == false)
             {
-
               Log.Error("HyperionHandler - Error while connecting");
               Log.Error("HyperionHandler - Exception: {0}", e.Message);
             }
+
             Connected = false;
           }
 
@@ -204,9 +211,12 @@ namespace AtmoLight.Targets
             //Increment times tried
             hyperionReconnectCounter++;
 
-            if (hyperionReconnectCounter > coreObject.hyperionReconnectAttempts)
+            //Show error if reconnect attempts exhausted
+            if (hyperionReconnectCounter > coreObject.hyperionReconnectAttempts && Connected == false)
             {
-                coreObject.NewConnectionLost(Name);
+              Log.Error("HyperionHandler - Error while connecting and connection attempts exhausted");
+              coreObject.NewConnectionLost(Name);
+              break;
             }
 
             //Sleep for specified time
@@ -234,6 +244,9 @@ namespace AtmoLight.Targets
       {
         isInit = false;
       }
+
+      //Reset counter when we have finished
+      hyperionReconnectCounter = 0;
     }
 
     public void ChangeColor(int red, int green, int blue)
@@ -350,7 +363,7 @@ namespace AtmoLight.Targets
     {
       try
       {
-        if (Socket.Connected)
+        if (Connected)
         {
           int size = request.SerializedSize;
 
@@ -365,11 +378,6 @@ namespace AtmoLight.Targets
           request.WriteTo(Stream);
           Stream.Flush();
           HyperionReply reply = receiveReply();
-        }
-        else
-        {
-          Connected = false;
-          Connect();
         }
       }
       catch (Exception e)
@@ -397,6 +405,30 @@ namespace AtmoLight.Targets
         Log.Error("HyperionHandler - Error while receiving reply from proto request");
         Log.Error("HyperionHandler - Exception: {0}", e.Message);
         return null;
+      }
+    }
+    #endregion
+
+    #region powerstate monitoring
+    private void monitorPowerState()
+    {
+      SystemEvents.PowerModeChanged += OnPowerModeChanged;
+    }
+    private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs e)
+    {
+      if (e.Mode.ToString().ToLower() == "resume")
+      {
+        // Close old socket and create new TCP client which allows it to reconnect when calling Connect()
+        try
+        {
+          Socket.Close();
+        }
+        catch { };
+
+        //Reconnect Hyperion after standby
+        Log.Error("HyperionHandler - Connecting after standby...");
+        Connected = false;
+        Connect();
       }
     }
     #endregion

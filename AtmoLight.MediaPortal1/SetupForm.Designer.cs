@@ -123,6 +123,9 @@
       this.tabMenu = new System.Windows.Forms.TabControl();
       this.tabPageBoblight = new System.Windows.Forms.TabPage();
       this.grpBoblightSettings = new System.Windows.Forms.GroupBox();
+      this.tbBoblightGamma = new System.Windows.Forms.TextBox();
+      this.tbarBoblightGamma = new System.Windows.Forms.TrackBar();
+      this.lblBoblightGamma = new System.Windows.Forms.Label();
       this.tbBoblightThreshold = new System.Windows.Forms.TextBox();
       this.tbBoblightValue = new System.Windows.Forms.TextBox();
       this.tbBoblightSaturation = new System.Windows.Forms.TextBox();
@@ -166,9 +169,10 @@
       this.tbHueIP = new System.Windows.Forms.TextBox();
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
-      this.lblBoblightGamma = new System.Windows.Forms.Label();
-      this.tbarBoblightGamma = new System.Windows.Forms.TrackBar();
-      this.tbBoblightGamma = new System.Windows.Forms.TextBox();
+      this.tbHueReconnectAttempts = new System.Windows.Forms.TextBox();
+      this.lblHueReconnectAttempts = new System.Windows.Forms.Label();
+      this.tbHueReconnectDelay = new System.Windows.Forms.TextBox();
+      this.lblHueReconnectDelay = new System.Windows.Forms.Label();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -185,6 +189,7 @@
       this.tabMenu.SuspendLayout();
       this.tabPageBoblight.SuspendLayout();
       this.grpBoblightSettings.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightGamma)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightThreshold)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightValue)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightSaturation)).BeginInit();
@@ -194,7 +199,6 @@
       this.tabPageHue.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.HueNetworkSettings.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightGamma)).BeginInit();
       this.SuspendLayout();
       // 
       // btnSave
@@ -1237,6 +1241,32 @@
       this.grpBoblightSettings.TabStop = false;
       this.grpBoblightSettings.Text = "Boblight settings";
       // 
+      // tbBoblightGamma
+      // 
+      this.tbBoblightGamma.Location = new System.Drawing.Point(520, 197);
+      this.tbBoblightGamma.Name = "tbBoblightGamma";
+      this.tbBoblightGamma.ReadOnly = true;
+      this.tbBoblightGamma.Size = new System.Drawing.Size(50, 20);
+      this.tbBoblightGamma.TabIndex = 19;
+      // 
+      // tbarBoblightGamma
+      // 
+      this.tbarBoblightGamma.Location = new System.Drawing.Point(150, 195);
+      this.tbarBoblightGamma.Maximum = 100;
+      this.tbarBoblightGamma.Name = "tbarBoblightGamma";
+      this.tbarBoblightGamma.Size = new System.Drawing.Size(350, 45);
+      this.tbarBoblightGamma.TabIndex = 18;
+      this.tbarBoblightGamma.ValueChanged += new System.EventHandler(this.tbarBoblightGamma_ValueChanged);
+      // 
+      // lblBoblightGamma
+      // 
+      this.lblBoblightGamma.AutoSize = true;
+      this.lblBoblightGamma.Location = new System.Drawing.Point(6, 200);
+      this.lblBoblightGamma.Name = "lblBoblightGamma";
+      this.lblBoblightGamma.Size = new System.Drawing.Size(46, 13);
+      this.lblBoblightGamma.TabIndex = 17;
+      this.lblBoblightGamma.Text = "Gamma:";
+      // 
       // tbBoblightThreshold
       // 
       this.tbBoblightThreshold.Location = new System.Drawing.Point(520, 162);
@@ -1559,8 +1589,12 @@
       // 
       // HueNetworkSettings
       // 
+      this.HueNetworkSettings.Controls.Add(this.tbHueReconnectAttempts);
+      this.HueNetworkSettings.Controls.Add(this.lblHueReconnectAttempts);
       this.HueNetworkSettings.Controls.Add(this.tbHueMinimalColorDifference);
+      this.HueNetworkSettings.Controls.Add(this.tbHueReconnectDelay);
       this.HueNetworkSettings.Controls.Add(this.lblHueMinimalColorDifference);
+      this.HueNetworkSettings.Controls.Add(this.lblHueReconnectDelay);
       this.HueNetworkSettings.Controls.Add(this.lblHintHue);
       this.HueNetworkSettings.Controls.Add(this.tbHuePort);
       this.HueNetworkSettings.Controls.Add(this.lblHuePort);
@@ -1575,7 +1609,7 @@
       // 
       // tbHueMinimalColorDifference
       // 
-      this.tbHueMinimalColorDifference.Location = new System.Drawing.Point(200, 102);
+      this.tbHueMinimalColorDifference.Location = new System.Drawing.Point(200, 162);
       this.tbHueMinimalColorDifference.Name = "tbHueMinimalColorDifference";
       this.tbHueMinimalColorDifference.Size = new System.Drawing.Size(93, 20);
       this.tbHueMinimalColorDifference.TabIndex = 22;
@@ -1583,7 +1617,7 @@
       // lblHueMinimalColorDifference
       // 
       this.lblHueMinimalColorDifference.AutoSize = true;
-      this.lblHueMinimalColorDifference.Location = new System.Drawing.Point(16, 105);
+      this.lblHueMinimalColorDifference.Location = new System.Drawing.Point(16, 165);
       this.lblHueMinimalColorDifference.Name = "lblHueMinimalColorDifference";
       this.lblHueMinimalColorDifference.Size = new System.Drawing.Size(154, 13);
       this.lblHueMinimalColorDifference.TabIndex = 23;
@@ -1592,9 +1626,9 @@
       // lblHintHue
       // 
       this.lblHintHue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintHue.Location = new System.Drawing.Point(6, 169);
+      this.lblHintHue.Location = new System.Drawing.Point(16, 206);
       this.lblHintHue.Name = "lblHintHue";
-      this.lblHintHue.Size = new System.Drawing.Size(397, 62);
+      this.lblHintHue.Size = new System.Drawing.Size(397, 46);
       this.lblHintHue.TabIndex = 21;
       this.lblHintHue.Text = "Hint: requires AtmoHue to be running on the above IP and Port to function, do not" +
     " enter your Hue bridge information here\r\n";
@@ -1638,37 +1672,45 @@
       this.openFileDialog4.FileName = "openFileDialog4";
       this.openFileDialog4.Filter = "AtmoHue.exe|*.exe";
       // 
-      // lblBoblightGamma
+      // tbHueReconnectAttempts
       // 
-      this.lblBoblightGamma.AutoSize = true;
-      this.lblBoblightGamma.Location = new System.Drawing.Point(6, 200);
-      this.lblBoblightGamma.Name = "lblBoblightGamma";
-      this.lblBoblightGamma.Size = new System.Drawing.Size(46, 13);
-      this.lblBoblightGamma.TabIndex = 17;
-      this.lblBoblightGamma.Text = "Gamma:";
+      this.tbHueReconnectAttempts.Location = new System.Drawing.Point(200, 127);
+      this.tbHueReconnectAttempts.Name = "tbHueReconnectAttempts";
+      this.tbHueReconnectAttempts.Size = new System.Drawing.Size(93, 20);
+      this.tbHueReconnectAttempts.TabIndex = 26;
+      this.tbHueReconnectAttempts.Validating += new System.ComponentModel.CancelEventHandler(this.tbHueReconnectAttempts_Validating);
       // 
-      // tbarBoblightGamma
+      // lblHueReconnectAttempts
       // 
-      this.tbarBoblightGamma.Location = new System.Drawing.Point(150, 195);
-      this.tbarBoblightGamma.Maximum = 100;
-      this.tbarBoblightGamma.Name = "tbarBoblightGamma";
-      this.tbarBoblightGamma.Size = new System.Drawing.Size(350, 45);
-      this.tbarBoblightGamma.TabIndex = 18;
-      this.tbarBoblightGamma.ValueChanged += new System.EventHandler(this.tbarBoblightGamma_ValueChanged);
+      this.lblHueReconnectAttempts.AutoSize = true;
+      this.lblHueReconnectAttempts.Location = new System.Drawing.Point(16, 130);
+      this.lblHueReconnectAttempts.Name = "lblHueReconnectAttempts";
+      this.lblHueReconnectAttempts.Size = new System.Drawing.Size(106, 13);
+      this.lblHueReconnectAttempts.TabIndex = 27;
+      this.lblHueReconnectAttempts.Text = "Reconnect attempts:";
       // 
-      // tbBoblightGamma
+      // tbHueReconnectDelay
       // 
-      this.tbBoblightGamma.Location = new System.Drawing.Point(520, 197);
-      this.tbBoblightGamma.Name = "tbBoblightGamma";
-      this.tbBoblightGamma.ReadOnly = true;
-      this.tbBoblightGamma.Size = new System.Drawing.Size(50, 20);
-      this.tbBoblightGamma.TabIndex = 19;
+      this.tbHueReconnectDelay.Location = new System.Drawing.Point(200, 97);
+      this.tbHueReconnectDelay.Name = "tbHueReconnectDelay";
+      this.tbHueReconnectDelay.Size = new System.Drawing.Size(93, 20);
+      this.tbHueReconnectDelay.TabIndex = 24;
+      this.tbHueReconnectDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbHueReconnectDelay_Validating);
+      // 
+      // lblHueReconnectDelay
+      // 
+      this.lblHueReconnectDelay.AutoSize = true;
+      this.lblHueReconnectDelay.Location = new System.Drawing.Point(16, 100);
+      this.lblHueReconnectDelay.Name = "lblHueReconnectDelay";
+      this.lblHueReconnectDelay.Size = new System.Drawing.Size(113, 13);
+      this.lblHueReconnectDelay.TabIndex = 25;
+      this.lblHueReconnectDelay.Text = "Reconnect delay (ms):";
       // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(884, 532);
+      this.ClientSize = new System.Drawing.Size(884, 531);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
@@ -1709,6 +1751,7 @@
       this.tabPageBoblight.ResumeLayout(false);
       this.grpBoblightSettings.ResumeLayout(false);
       this.grpBoblightSettings.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightGamma)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightThreshold)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightValue)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightSaturation)).EndInit();
@@ -1721,7 +1764,6 @@
       this.groupBox1.PerformLayout();
       this.HueNetworkSettings.ResumeLayout(false);
       this.HueNetworkSettings.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightGamma)).EndInit();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1869,5 +1911,9 @@
     private System.Windows.Forms.TextBox tbBoblightGamma;
     private System.Windows.Forms.TrackBar tbarBoblightGamma;
     private System.Windows.Forms.Label lblBoblightGamma;
+    private System.Windows.Forms.TextBox tbHueReconnectAttempts;
+    private System.Windows.Forms.Label lblHueReconnectAttempts;
+    private System.Windows.Forms.TextBox tbHueReconnectDelay;
+    private System.Windows.Forms.Label lblHueReconnectDelay;
   }
 }

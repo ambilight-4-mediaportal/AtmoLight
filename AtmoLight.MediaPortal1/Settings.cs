@@ -74,6 +74,8 @@ namespace AtmoLight
     public static bool hueIsRemoteMachine;
     public static string hueIP = "";
     public static int huePort = 0;
+    public static int hueReconnectDelay = 0;
+    public static int hueReconnectAttempts = 0;
     public static int hueMinimalColorDifference;
 
     #endregion
@@ -188,6 +190,8 @@ namespace AtmoLight
         hueIsRemoteMachine = reader.GetValueAsBool("atmolight", "hueIsRemoteMachine", false);
         hueIP = reader.GetValueAsString("atmolight", "hueIP", "127.0.0.1");
         huePort = reader.GetValueAsInt("atmolight", "huePort", 20123);
+        hueReconnectDelay = reader.GetValueAsInt("atmolight", "hueReconnectDelay", 10000);
+        hueReconnectAttempts = reader.GetValueAsInt("atmolight", "hueReconnectAttempts", 5);
         hueMinimalColorDifference = reader.GetValueAsInt("atmolight", "hueMinimalColorDifference", 25);
         boblightIP = reader.GetValueAsString("atmolight", "boblightIP", "127.0.0.1");
         boblightPort = reader.GetValueAsInt("atmolight", "boblightPort", 19333);
@@ -253,6 +257,8 @@ namespace AtmoLight
         reader.SetValueAsBool("atmolight", "hueIsRemoteMachine", hueIsRemoteMachine);
         reader.SetValue("atmolight", "hueIP", hueIP);
         reader.SetValue("atmolight", "huePort", (int)huePort);
+        reader.SetValue("atmolight", "hueReconnectDelay", (int)hueReconnectDelay);
+        reader.SetValue("atmolight", "hueReconnectAttempts", (int)hueReconnectAttempts);
         reader.SetValue("atmolight", "hueMinimalColorDifference", (int)hueMinimalColorDifference);
         reader.SetValue("atmolight", "boblightIP", boblightIP);
         reader.SetValue("atmolight", "boblightPort", boblightPort);

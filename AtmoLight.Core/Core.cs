@@ -130,6 +130,8 @@ namespace AtmoLight
     public bool hueIsRemoteMachine;
     public string hueIP;
     public int huePort;
+    public int hueReconnectDelay;
+    public int hueReconnectAttempts;
     public int hueMinimalColorDifference;
 
     #endregion

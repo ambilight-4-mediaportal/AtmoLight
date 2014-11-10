@@ -67,6 +67,8 @@ namespace AtmoLight
       ckhueIsRemoteMachine.Checked = Settings.hueIsRemoteMachine;
       tbHueIP.Text = Settings.hueIP;
       tbHuePort.Text = Settings.huePort.ToString();
+      tbHueReconnectDelay.Text = Settings.hueReconnectDelay.ToString();
+      tbHueReconnectAttempts.Text = Settings.hueReconnectAttempts.ToString();
       tbHueMinimalColorDifference.Text = Settings.hueMinimalColorDifference.ToString();
       ckOnMediaStart.Checked = Settings.manualMode;
       ckLowCpu.Checked = Settings.lowCPU;
@@ -158,6 +160,8 @@ namespace AtmoLight
       ckhueIsRemoteMachine.Text = LanguageLoader.appStrings.SetupForm_ckhueIsRemoteMachine;
       lblHueIP.Text = LanguageLoader.appStrings.SetupForm_lblHueIP;
       lblHuePort.Text = LanguageLoader.appStrings.SetupForm_lblHuePort;
+      lblHueReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblHueReconnectDelay;
+      lblHueReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblHueReconnectAttempts;
       lblHueMinimalColorDifference.Text = LanguageLoader.appStrings.SetupForm_lblHueMinimalColorDifference;
       lblMPExit.Text = LanguageLoader.appStrings.SetupForm_lblMPExit;
       lblBoblightIP.Text = LanguageLoader.appStrings.SetupForm_lblBoblightIP;
@@ -384,6 +388,15 @@ namespace AtmoLight
         return;
       }
 
+      //Hyperion reconnect delay
+      minValue = 100;
+      maxValue = 999999;
+      if (validatorInt(tbHyperionReconnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHyperionReconnectDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       //Hyperion priority
       minValue = 1;
       maxValue = 0;
@@ -418,6 +431,24 @@ namespace AtmoLight
       if (validatorInt(tbHuePort.Text, minValue, maxValue, true) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHueIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      //Hue reconnect attempts
+      minValue = 1;
+      maxValue = 0;
+      if (validatorInt(tbHueReconnectAttempts.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - ["+ lblHueReconnectAttempts.Text +"]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      //Hue reconnect delay
+      minValue = 100;
+      maxValue = 999999;
+      if (validatorInt(tbHueReconnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHueReconnectDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -499,6 +530,8 @@ namespace AtmoLight
       Settings.hueIsRemoteMachine = ckhueIsRemoteMachine.Checked;
       Settings.hueIP = tbHueIP.Text;
       Settings.huePort = int.Parse(tbHuePort.Text);
+      Settings.hueReconnectDelay = int.Parse(tbHueReconnectDelay.Text);
+      Settings.hueReconnectAttempts = int.Parse(tbHueReconnectAttempts.Text);
       Settings.hueMinimalColorDifference = int.Parse(tbHueMinimalColorDifference.Text);
       Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
       Settings.hueTarget = ckHueEnabled.Checked;
@@ -821,7 +854,7 @@ namespace AtmoLight
     private void tbHyperionReconnectDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
       int minValue = 10;
-      int maxValue = 0;
+      int maxValue = 999999;
       if (validatorInt(tbHyperionReconnectDelay.Text, minValue, maxValue, false) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]",minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -875,7 +908,25 @@ namespace AtmoLight
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
+    }
+    private void tbHueReconnectDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 100;
+      int maxValue = 999999;
+      if (validatorInt(tbHueReconnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
 
+    private void tbHueReconnectAttempts_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 9999;
+      if (validatorInt(tbHueReconnectAttempts.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
     }
 
     // Boblight
@@ -1093,6 +1144,5 @@ namespace AtmoLight
       }
 
     }
-
   }
 }
