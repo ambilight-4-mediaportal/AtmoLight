@@ -190,7 +190,7 @@ namespace AtmoLight
     }
     #endregion
 
-    #region Threads
+    #region Init Thread
     private bool InitThreaded(bool force = false)
     {
       if (initLock)
@@ -234,7 +234,7 @@ namespace AtmoLight
     }
     #endregion
 
-    #region Boblight
+    #region Connect
     private bool Connect()
     {
       try
@@ -302,7 +302,9 @@ namespace AtmoLight
         boblightConnection = null;
       }
     }
+    #endregion
 
+    #region Boblight
     private void AddPixelXY(int x, int y, int[] rgb)
     {
       for (int i = 0; i < totalLights; i++)
