@@ -350,6 +350,8 @@ namespace Language
     public String SetupForm_lblPathInfoHue;
     public String SetupForm_lblHueIP;
     public String SetupForm_lblHuePort;
+    public String SetupForm_lblHueReconnectDelay;
+    public String SetupForm_lblHueReconnectAttempts;
     public String SetupForm_lblHueMinimalColorDifference;    
     public String SetupForm_grpHyperionNetworkSettings;
     public String SetupForm_grpHyperionPrioritySettings;

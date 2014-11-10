@@ -12,6 +12,7 @@ using System.Drawing.Imaging;
 using System.Net;
 using System.Net.Sockets;
 using System.Linq;
+using Microsoft.Win32;
 
 namespace AtmoLight.Targets
 {
@@ -38,8 +39,8 @@ namespace AtmoLight.Targets
 
     // CORE
     private Core coreObject;
-    private const int delayHueConnect = 5000; // Delay between starting AtmoHue and connection to it
-
+    private int hueDelayAtmoHue = 5000; 
+    private int hueReconnectCounter = 0;
 
     // TCP
     private static TcpClient Socket = new TcpClient();
@@ -53,7 +54,7 @@ namespace AtmoLight.Targets
 
     // Locks
     private Boolean isInit = false;
-    private volatile bool isAtmoHueRunning = false;
+    private Boolean isAtmoHueRunning = false;
 
     #endregion
 
@@ -66,6 +67,10 @@ namespace AtmoLight.Targets
     public void Initialise(bool force = false)
     {
       isInit = true;
+
+      //Start monitoring powerstate for on resume reconnection
+      monitorPowerState();
+
       Thread t = new Thread(() => InitialiseThread(force));
       t.IsBackground = true;
       t.Start();
@@ -78,7 +83,7 @@ namespace AtmoLight.Targets
         if (coreObject.hueStart)
         {
           isAtmoHueRunning = StartHue();
-          System.Threading.Thread.Sleep(delayHueConnect);
+          System.Threading.Thread.Sleep(hueDelayAtmoHue);
           if (isAtmoHueRunning)
           {
             Connect();
@@ -180,26 +185,59 @@ namespace AtmoLight.Targets
 
     private void ConnectThread()
     {
-      //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
-      try
+
+      while (hueReconnectCounter <= coreObject.hueReconnectAttempts)
       {
-        Socket.Close();
-      }
-      catch (Exception e)
-      {
-        if (coreObject.hyperionLiveReconnect == false)
+        if (Connected == false)
         {
-          Log.Error("HyperionHandler - Error while closing socket");
-          Log.Error("HyperionHandler - Exception: {0}", e.Message);
+          //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
+          try
+          {
+            Socket.Close();
+          }
+          catch (Exception e)
+          {
+            Log.Error("HueHandler - Error while closing socket");
+            Log.Error("HueHandler - Exception: {0}", e.Message);
+          }
+          try
+          {
+            Socket = new TcpClient();
+
+            Socket.SendTimeout = 5000;
+            Socket.ReceiveTimeout = 5000;
+            Socket.Connect(coreObject.hueIP, coreObject.huePort);
+            Stream = Socket.GetStream();
+            Connected = Socket.Connected;
+            Log.Debug("HueHandler - Connected to AtmoHue");
+          }
+          catch (Exception e)
+          {
+            Connected = false;
+            Log.Error("HyperionHandler - Error while connecting");
+            Log.Error("HyperionHandler - Exception: {0}", e.Message);
+          }
+
+          //Increment times tried
+          hueReconnectCounter++;
+
+          //Show error if reconnect attempts exhausted
+          if (hueReconnectCounter > coreObject.hueReconnectAttempts && Connected == false)
+          {
+            Log.Error("HueHandler - Error while connecting and connection attempts exhausted");
+            coreObject.NewConnectionLost(Name);
+            break;
+          }
+
+          //Sleep for specified time
+          Thread.Sleep(coreObject.hyperionReconnectDelay);
+        }
+        else
+        {
+          //Log.Debug("HueHandler - Connected after {0} attempts.", hyperionReconnectCounter);
+          break;
         }
       }
-      Socket = new TcpClient();
-
-      Socket.SendTimeout = 5000;
-      Socket.ReceiveTimeout = 5000;
-      Socket.Connect(coreObject.hueIP, coreObject.huePort);
-      Stream = Socket.GetStream();
-      Connected = Socket.Connected;
 
       //On first initialize set the effect after we are done trying to connect
       if (isInit && Connected)
@@ -209,12 +247,8 @@ namespace AtmoLight.Targets
         isInit = false;
       }
 
-      //Failed to connect to AtmoHue, output to log and show Connection Lost message
-      if (Connected == false)
-      {
-        Log.Error("HueHandler - Error while connecting to AtmoHue");
-        coreObject.NewConnectionLost(Name);
-      }
+      //Reset counter when we have finished
+      hueReconnectCounter = 0;
     }
 
     public void ChangeColor(int red, int green, int blue, int priority)
@@ -389,6 +423,24 @@ namespace AtmoLight.Targets
       ChangeColor(0, 0, 0,200);
     }
     #endregion
+
+    #region powerstate monitoring
+    private void monitorPowerState()
+    {
+      SystemEvents.PowerModeChanged += OnPowerModeChanged;
+    }
+    private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs e)
+    {
+      if (e.Mode.ToString().ToLower() == "resume")
+      {
+        //Reconnect AtmoHue after standby
+        Log.Debug("HueHandler - Reconnecting after standby");
+        Connected = false;
+        Connect();
+      }
+    }
+    #endregion
+
   }
   #region class Win32API
   public sealed class Win32API

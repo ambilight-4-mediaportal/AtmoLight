@@ -157,6 +157,8 @@ namespace AtmoLight
       AtmoLightObject.hueIsRemoteMachine = settings.hueIsRemoteMachine;
       AtmoLightObject.hueIP = settings.HueIP;
       AtmoLightObject.huePort = settings.HuePort;
+      AtmoLightObject.hueReconnectDelay = settings.HueReconnectDelay;
+      AtmoLightObject.hueReconnectAttempts = settings.HueReconnectAttempts;
       AtmoLightObject.hueMinimalColorDifference = settings.HueMinimalColorDifference;
 
       // General settings

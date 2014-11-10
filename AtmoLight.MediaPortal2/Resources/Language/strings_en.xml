@@ -65,6 +65,8 @@
   <string name="AtmoLight.HueIsRemoteMachine">AtmoHue is on remote machine (skips file/path check)</string>
   <string name="AtmoLight.HueIP">IP address</string>
   <string name="AtmoLight.HuePort">Port number</string>
+  <string name="AtmoLight.HueReconnectDelay">Reconnect delay</string>
+  <string name="AtmoLight.HueReconnectAttempts">Reconnect attempts</string>
   <string name="AtmoLight.HueMinimalColorDifference">Minimal color difference (0-255)</string>
   <string name="AtmoLight.CaptureWidth">Capture width (Will only be used if AtmoWin is disabled!)</string>
   <string name="AtmoLight.CaptureHeight">Capture height (Will only be used if AtmoWin is disabled!)</string>

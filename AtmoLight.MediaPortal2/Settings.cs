@@ -130,6 +130,12 @@ namespace AtmoLight
     [Setting(SettingScope.User, 20123)]
     public int HuePort { get; set; }
 
+    [Setting(SettingScope.User, 10000)]
+    public int HueReconnectDelay { get; set; }
+
+    [Setting(SettingScope.User, 5)]
+    public int HueReconnectAttempts { get; set; }
+
     [Setting(SettingScope.User, 25)]
     public int HueMinimalColorDifference { get; set; }
 
