@@ -223,6 +223,8 @@ namespace AtmoLight
       hueIsRemoteMachine = settings.hueIsRemoteMachine;
       HueIP = settings.HueIP;
       HuePort = settings.HuePort;
+      HueReconnectDelay = settings.HueReconnectDelay;
+      HueReconnectAttempts = settings.HueReconnectAttempts;
       HueMinimalColorDifference = settings.HueMinimalColorDifference;
       CaptureHeight = settings.CaptureHeight;
       CaptureWidth = settings.CaptureWidth;
@@ -282,6 +284,8 @@ namespace AtmoLight
       settings.hueIsRemoteMachine = hueIsRemoteMachine;
       settings.HueIP = HueIP;
       settings.HuePort = HuePort;
+      settings.HueReconnectDelay = HueReconnectDelay;
+      settings.HueReconnectAttempts = HueReconnectAttempts;
       settings.HueMinimalColorDifference = HueMinimalColorDifference;
       settings.CaptureWidth = CaptureWidth;
       settings.CaptureHeight = CaptureHeight;

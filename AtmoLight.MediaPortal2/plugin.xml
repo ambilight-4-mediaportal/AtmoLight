@@ -198,6 +198,18 @@
   <!-- Hue -->
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/Hue">
     <ConfigSetting
+        Id="HueExe"
+        Text="[AtmoLight.HueExe]"
+        ClassName="AtmoLight.Configuration.HueExe"/>
+    <ConfigSetting
+        Id="HueStart"
+        Text="[AtmoLight.HueStart]"
+        ClassName="AtmoLight.Configuration.HueStart"/>
+    <ConfigSetting
+        Id="HueIsRemoteMachine"
+        Text="[AtmoLight.HueIsRemoteMachine]"
+        ClassName="AtmoLight.Configuration.HueIsRemoteMachine"/>
+    <ConfigSetting
         Id="HueIP"
         Text="[AtmoLight.HueIP]"
         ClassName="AtmoLight.Configuration.HueIP"/>
@@ -205,6 +217,14 @@
         Id="HuePort"
         Text="[AtmoLight.HuePort]"
         ClassName="AtmoLight.Configuration.HuePort"/>
+    <ConfigSetting
+        Id="HueReconnectDelay"
+        Text="[AtmoLight.HueReconnectDelay]"
+        ClassName="AtmoLight.Configuration.HueReconnectDelay"/>
+    <ConfigSetting
+        Id="HueReconnectAttempts"
+        Text="[AtmoLight.HueReconnectAttempts]"
+        ClassName="AtmoLight.Configuration.HueReconnectAttempts"/>
     <ConfigSetting
         Id="HueMinimalColorDifference"
         Text="[AtmoLight.HueMinimalColorDifference]"
