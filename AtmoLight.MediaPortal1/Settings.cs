@@ -204,7 +204,7 @@ namespace AtmoLight
         boblightSaturation = reader.GetValueAsInt("atmolight", "boblightSaturation", 1);
         boblightValue = reader.GetValueAsInt("atmolight", "boblightValue", 1);
         boblightThreshold = reader.GetValueAsInt("atmolight", "boblightThreshold", 0);
-        boblightGamma = Convert.ToDouble(reader.GetValueAsString("atmolight", "boblightGamma", "1.0"));
+        boblightGamma = Convert.ToDouble(reader.GetValueAsString("atmolight", "boblightGamma", "1"));
         atmoWinTarget = reader.GetValueAsBool("atmolight", "atmoWinTarget", true);
         boblightTarget = reader.GetValueAsBool("atmolight", "boblightTarget", false);
         hueTarget = reader.GetValueAsBool("atmolight", "hueTarget", false);

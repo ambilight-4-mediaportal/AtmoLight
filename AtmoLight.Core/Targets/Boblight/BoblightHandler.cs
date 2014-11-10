@@ -34,15 +34,7 @@ namespace AtmoLight
     private Thread initThreadHelper;
 
     private TelnetConnection boblightConnection;
-    private List<string> lightNames = new List<string>();
-    private List<int> vscanStart = new List<int>();
-    private List<int> vscanEnd = new List<int>();
-    private List<int> hscanStart = new List<int>();
-    private List<int> hscanEnd = new List<int>();
-    private List<int[]> rgbValues = new List<int[]>();
-    private List<int[]> rgbValuesPrev = new List<int[]>();
-    private List<double> singleChange = new List<double>();
-    private List<int> rgbCount = new List<int>();
+    private List<Light> lights = new List<Light>();
     private int totalLights;
     private double[] gammaCurve = new double[256];
 
@@ -227,15 +219,7 @@ namespace AtmoLight
     {
       try
       {
-        lightNames.Clear();
-        vscanStart.Clear();
-        vscanEnd.Clear();
-        hscanStart.Clear();
-        hscanEnd.Clear();
-        rgbValues.Clear();
-        rgbValuesPrev.Clear();
-        singleChange.Clear();
-        rgbCount.Clear();
+        lights.Clear();
         boblightConnection = new TelnetConnection(coreObject.boblightIP, coreObject.boblightPort);
         if (boblightConnection.IsConnected)
         {
@@ -246,13 +230,12 @@ namespace AtmoLight
           }
 
           boblightConnection.WriteLine("get lights");
-          string lights = CleanupReadString(boblightConnection.Read());
-          if (string.IsNullOrEmpty(lights))
+          string lightsMessage = CleanupReadString(boblightConnection.Read());
+          if (string.IsNullOrEmpty(lightsMessage))
           {
             return false;
           }
-          string[] lightsArray = lights.Split(' ', '\n');
-          int x = 0;
+          string[] lightsArray = lightsMessage.Split(' ', '\n');
           for (int i = 0; i < lightsArray.Length; i++)
           {
             if (lightsArray[i] == "lights")
@@ -262,20 +245,15 @@ namespace AtmoLight
             }
             else if (lightsArray[i] == "light")
             {
-              lightNames.Add(lightsArray[i + 1]);
-              vscanStart.Add((int)Math.Round((Convert.ToDouble(lightsArray[i + 3]) / 100 * (coreObject.GetCaptureHeight() - 1))));
-              vscanEnd.Add((int)Math.Round((Convert.ToDouble(lightsArray[i + 4]) / 100 * (coreObject.GetCaptureHeight() - 1))));
-              hscanStart.Add((int)Math.Round((Convert.ToDouble(lightsArray[i + 5]) / 100 * (coreObject.GetCaptureWidth() - 1))));
-              hscanEnd.Add((int)Math.Round((Convert.ToDouble(lightsArray[i + 6]) / 100 * (coreObject.GetCaptureWidth() - 1))));
-              rgbValues.Add(new int[] { 0, 0, 0 });
-              rgbValuesPrev.Add(new int[] { 0, 0, 0 });
-              singleChange.Add(0.0f);
-              rgbCount.Add(0);
-              x++;
+              lights.Add(new Light(lightsArray[i + 1],
+                (int)Math.Round((Convert.ToDouble(lightsArray[i + 3]) / 100 * (coreObject.GetCaptureHeight() - 1))),
+                (int)Math.Round((Convert.ToDouble(lightsArray[i + 4]) / 100 * (coreObject.GetCaptureHeight() - 1))),
+                (int)Math.Round((Convert.ToDouble(lightsArray[i + 5]) / 100 * (coreObject.GetCaptureWidth() - 1))),
+                (int)Math.Round((Convert.ToDouble(lightsArray[i + 6]) / 100 * (coreObject.GetCaptureWidth() - 1)))));
               i += 6;
             }
           }
-          if (x != totalLights)
+          if (lights.Count != totalLights)
           {
             return false;
           }
@@ -300,7 +278,7 @@ namespace AtmoLight
     {
       for (int i = 0; i < totalLights; i++)
       {
-        if (x >= hscanStart[i] && x <= hscanEnd[i] && y >= vscanStart[i] && y <= vscanEnd[i])
+        if (x >= lights[i].hScanStart && x <= lights[i].hScanEnd && y >= lights[i].vScanStart && y <= lights[i].vScanEnd)
         {
           AddPixel(i, rgb);
         }
@@ -313,18 +291,18 @@ namespace AtmoLight
       {
         if (coreObject.boblightGamma == 1.0)
         {
-          rgbValues[index][0] += Math.Min(Math.Max(rgb[0], 0), 255);
-          rgbValues[index][1] += Math.Min(Math.Max(rgb[1], 0), 255);
-          rgbValues[index][2] += Math.Min(Math.Max(rgb[2], 0), 255);
+          lights[index].rgb[0] += Math.Min(Math.Max(rgb[0], 0), 255);
+          lights[index].rgb[1] += Math.Min(Math.Max(rgb[1], 0), 255);
+          lights[index].rgb[2] += Math.Min(Math.Max(rgb[2], 0), 255);
         }
         else
         {
-          rgbValues[index][0] += (int)gammaCurve[Math.Min(Math.Max(rgb[0], 0), gammaCurve.Length - 1)];
-          rgbValues[index][1] += (int)gammaCurve[Math.Min(Math.Max(rgb[1], 0), gammaCurve.Length - 1)];
-          rgbValues[index][2] += (int)gammaCurve[Math.Min(Math.Max(rgb[2], 0), gammaCurve.Length - 1)];
+          lights[index].rgb[0] += (int)gammaCurve[Math.Min(Math.Max(rgb[0], 0), gammaCurve.Length - 1)];
+          lights[index].rgb[1] += (int)gammaCurve[Math.Min(Math.Max(rgb[1], 0), gammaCurve.Length - 1)];
+          lights[index].rgb[2] += (int)gammaCurve[Math.Min(Math.Max(rgb[2], 0), gammaCurve.Length - 1)];
         }
       }
-      rgbCount[index]++;
+      lights[index].rgbCount++;
     }
 
     private void SendRGB()
@@ -333,10 +311,10 @@ namespace AtmoLight
       for (int i = 0; i < totalLights; i++)
       {
         double[] rgb = GetRGB(i);
-        data += "set light " + lightNames[i] + " rgb " + rgb[0].ToString() + " " + rgb[1].ToString() + " " + rgb[2].ToString() + "\n";
-        if (coreObject.boblightAutospeed > 0 && singleChange[i] > 0.0)
+        data += "set light " + lights[i].name + " rgb " + rgb[0].ToString() + " " + rgb[1].ToString() + " " + rgb[2].ToString() + "\n";
+        if (coreObject.boblightAutospeed > 0 && lights[i].singleChange > 0.0)
         {
-          data += "set light " + lightNames[i] + " singlechange " + singleChange[i].ToString() + "\n";
+          data += "set light " + lights[i].name + " singlechange " + lights[i].singleChange.ToString() + "\n";
         }
       }
       data += "sync\n";
@@ -346,40 +324,40 @@ namespace AtmoLight
     private double[] GetRGB(int index)
     {
       double[] rgb = new double[3];
-      if (rgbCount[index] == 0)
+      if (lights[index].rgbCount == 0)
       {
         for (int i = 0; i < 3; i++)
         {
-          rgbValues[index][i] = 0;
+          lights[index].rgb[i] = 0;
         }
         return new double[] { 0, 0, 0 };
       }
 
       for (int i = 0; i < 3; i++)
       {
-        rgb[i] = Math.Min(Math.Max((double)rgbValues[index][i] / (double)rgbCount[index] / 255.0f, 0.0f), 1.0f);
-        rgbValues[index][i] = 0;
+        rgb[i] = Math.Min(Math.Max((double)lights[index].rgb[i] / (double)lights[index].rgbCount / 255.0f, 0.0f), 1.0f);
+        lights[index].rgb[i] = 0;
       }
-      rgbCount[index] = 0;
+      lights[index].rgbCount = 0;
 
       if (coreObject.boblightAutospeed > 0)
       {
-        double change = Math.Abs(rgb[0] - rgbValuesPrev[index][0]) + Math.Abs(rgb[1] - rgbValuesPrev[index][1]) + Math.Abs(rgb[2] - rgbValuesPrev[index][2]);
+        double change = Math.Abs(rgb[0] - lights[index].rgbPrev[0]) + Math.Abs(rgb[1] - lights[index].rgbPrev[1]) + Math.Abs(rgb[2] - lights[index].rgbPrev[2]);
         change /= 3.0;
 
         if (change > 0.001)
         {
-          singleChange[index] = Math.Min(Math.Max(change * coreObject.boblightAutospeed / 10.0, 0.0), 1.0);
+          lights[index].singleChange = Math.Min(Math.Max(change * coreObject.boblightAutospeed / 10.0, 0.0), 1.0);
         }
         else
         {
-          singleChange[index] = 0.0;
+          lights[index].singleChange = 0.0;
         }
       }
 
-      rgbValuesPrev[index][0] = (int)rgb[0];
-      rgbValuesPrev[index][1] = (int)rgb[1];
-      rgbValuesPrev[index][2] = (int)rgb[2];
+      lights[index].rgbPrev[0] = (int)rgb[0];
+      lights[index].rgbPrev[1] = (int)rgb[1];
+      lights[index].rgbPrev[2] = (int)rgb[2];
 
       if (coreObject.boblightValue != 1.0 || coreObject.boblightSaturation != 1.0)
       {
@@ -478,7 +456,7 @@ namespace AtmoLight
       string data = null;
       for (int i = 0; i < totalLights; i++)
       {
-        data += "set light " + lightNames[i] + " " + option + " " + value + "\n";
+        data += "set light " + lights[i].name + " " + option + " " + value + "\n";
       }
       boblightConnection.Write(data);
     }
