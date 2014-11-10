@@ -163,7 +163,7 @@ namespace AtmoLight
     [Setting(SettingScope.User, 0)]
     public int BoblightAutospeed { get; set; }
 
-    [Setting(SettingScope.User, false)]
+    [Setting(SettingScope.User, true)]
     public bool BoblightInterpolation { get; set; }
 
     [Setting(SettingScope.User, 1)]
@@ -172,10 +172,10 @@ namespace AtmoLight
     [Setting(SettingScope.User, 1)]
     public int BoblightValue { get; set; }
 
-    [Setting(SettingScope.User, 0)]
+    [Setting(SettingScope.User, 20)]
     public int BoblightThreshold { get; set; }
 
-    [Setting(SettingScope.User, 1.0)]
+    [Setting(SettingScope.User, 2.2)]
     public double BoblightGamma { get; set; }
 
 

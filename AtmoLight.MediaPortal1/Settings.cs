@@ -1,6 +1,8 @@
 ﻿using System;
 using MediaPortal.Profile;
 using Language;
+using System.Globalization;
+
 
 namespace AtmoLight
 {
@@ -200,11 +202,11 @@ namespace AtmoLight
         boblightReconnectDelay = reader.GetValueAsInt("atmolight", "boblightReconnectDelay", 5000);
         boblightSpeed = reader.GetValueAsInt("atmolight", "boblightSpeed", 100);
         boblightAutospeed = reader.GetValueAsInt("atmolight", "boblightAutospeed", 0);
-        boblightInterpolation = reader.GetValueAsBool("atmolight", "boblightInterpolation", false);
+        boblightInterpolation = reader.GetValueAsBool("atmolight", "boblightInterpolation", true);
         boblightSaturation = reader.GetValueAsInt("atmolight", "boblightSaturation", 1);
         boblightValue = reader.GetValueAsInt("atmolight", "boblightValue", 1);
-        boblightThreshold = reader.GetValueAsInt("atmolight", "boblightThreshold", 0);
-        boblightGamma = Convert.ToDouble(reader.GetValueAsString("atmolight", "boblightGamma", "1"));
+        boblightThreshold = reader.GetValueAsInt("atmolight", "boblightThreshold", 20);
+        boblightGamma = Double.Parse(reader.GetValueAsString("atmolight", "boblightGamma", "2.2").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
         atmoWinTarget = reader.GetValueAsBool("atmolight", "atmoWinTarget", true);
         boblightTarget = reader.GetValueAsBool("atmolight", "boblightTarget", false);
         hueTarget = reader.GetValueAsBool("atmolight", "hueTarget", false);
