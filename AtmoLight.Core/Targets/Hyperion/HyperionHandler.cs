@@ -425,7 +425,7 @@ namespace AtmoLight.Targets
         catch { };
 
         //Reconnect Hyperion after standby
-        Log.Error("HyperionHandler - Connecting after standby...");
+        Log.Debug("HyperionHandler - Reconnecting after standby");
         Connected = false;
         Connect();
       }

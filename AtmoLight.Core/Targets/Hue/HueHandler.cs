@@ -427,6 +427,8 @@ namespace AtmoLight.Targets
       if (e.Mode.ToString().ToLower() == "resume")
       {
         //Reconnect AtmoHue after standby
+        Log.Debug("HueHandler - Reconnecting after standby");
+        Connected = false;
         Connect();
       }
     }
