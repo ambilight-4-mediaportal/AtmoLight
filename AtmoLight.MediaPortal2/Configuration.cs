@@ -1296,12 +1296,6 @@ namespace AtmoLight.Configuration
       SettingsManager.Save(settings);
 
       Core.GetInstance().boblightSpeed = (int)_value;
-      if (settings.BoblightTarget)
-      {
-        Core.GetInstance().RemoveTarget(Target.Boblight);
-        Core.GetInstance().AddTarget(Target.Boblight);
-        Core.GetInstance().Initialise();
-      }
     }
   }
 
@@ -1324,12 +1318,6 @@ namespace AtmoLight.Configuration
       SettingsManager.Save(settings);
 
       Core.GetInstance().boblightAutospeed = (int)_value;
-      if (settings.BoblightTarget)
-      {
-        Core.GetInstance().RemoveTarget(Target.Boblight);
-        Core.GetInstance().AddTarget(Target.Boblight);
-        Core.GetInstance().Initialise();
-      }
     }
   }
 
@@ -1352,12 +1340,6 @@ namespace AtmoLight.Configuration
       SettingsManager.Save(settings);
 
       Core.GetInstance().boblightSaturation = (int)_value;
-      if (settings.BoblightTarget)
-      {
-        Core.GetInstance().RemoveTarget(Target.Boblight);
-        Core.GetInstance().AddTarget(Target.Boblight);
-        Core.GetInstance().Initialise();
-      }
     }
   }
 
@@ -1380,12 +1362,6 @@ namespace AtmoLight.Configuration
       SettingsManager.Save(settings);
 
       Core.GetInstance().boblightValue = (int)_value;
-      if (settings.BoblightTarget)
-      {
-        Core.GetInstance().RemoveTarget(Target.Boblight);
-        Core.GetInstance().AddTarget(Target.Boblight);
-        Core.GetInstance().Initialise();
-      }
     }
   }
 
@@ -1408,12 +1384,6 @@ namespace AtmoLight.Configuration
       SettingsManager.Save(settings);
 
       Core.GetInstance().boblightThreshold = (int)_value;
-      if (settings.BoblightTarget)
-      {
-        Core.GetInstance().RemoveTarget(Target.Boblight);
-        Core.GetInstance().AddTarget(Target.Boblight);
-        Core.GetInstance().Initialise();
-      }
     }
   }
 
@@ -1432,13 +1402,28 @@ namespace AtmoLight.Configuration
       SettingsManager.Save(settings);
 
       Core.GetInstance().boblightInterpolation = _yes;
-      if (settings.BoblightTarget)
-      {
-        Core.GetInstance().RemoveTarget(Target.Boblight);
-        Core.GetInstance().AddTarget(Target.Boblight);
-        Core.GetInstance().Initialise();
-      }
     }
   }
 
+  public class BoblightGamma : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 0.1;
+      _lowerLimit = 0;
+      _upperLimit = 10;
+      _value = SettingsManager.Load<Settings>().BoblightGamma;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BoblightGamma = _value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().boblightGamma = (int)_value;
+    }
+  }
 }

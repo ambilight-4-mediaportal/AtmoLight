@@ -132,6 +132,7 @@ namespace AtmoLight
       AtmoLightObject.boblightSaturation = settings.BoblightSaturation;
       AtmoLightObject.boblightValue = settings.BoblightValue;
       AtmoLightObject.boblightThreshold = settings.BoblightThreshold;
+      AtmoLightObject.boblightGamma = settings.BoblightGamma;
 
       // Hyperion
       if (settings.HyperionTarget)

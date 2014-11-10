@@ -85,6 +85,7 @@ lblBoblightThreshold=Schwelle:
 lblBoblightInterpolation=Interpolation:
 grpBoblightGeneral=Allgemeine Einstellungen
 grpBoblightSettings=Boblight Einstellungen
+lblBoblightGamma=Gamma:
 [ContextMenu]
 SwitchLEDsON=Schalte LEDs an
 SwitchLEDsOFF=Schalte LEDs aus

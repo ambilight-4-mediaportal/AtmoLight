@@ -90,12 +90,14 @@ namespace AtmoLight
       tbarBoblightSaturation.Value = (int)Settings.boblightSaturation;
       tbarBoblightValue.Value = (int)Settings.boblightValue;
       tbarBoblightThreshold.Value = Settings.boblightThreshold;
+      tbarBoblightGamma.Value = (int)(Settings.boblightGamma * 10);
       ckBoblightInterpolation.Checked = Settings.boblightInterpolation;
       tbBoblightSpeed.Text = Settings.boblightSpeed.ToString();
       tbBoblightAutospeed.Text = Settings.boblightAutospeed.ToString();
       tbBoblightSaturation.Text = Settings.boblightSaturation.ToString();
       tbBoblightValue.Text = Settings.boblightValue.ToString();
       tbBoblightThreshold.Text = Settings.boblightThreshold.ToString();
+      tbBoblightGamma.Text = Settings.boblightGamma.ToString();
     }
 
     private void UpdateLanguageOnControls()
@@ -168,9 +170,10 @@ namespace AtmoLight
       lblBoblightSaturation.Text = LanguageLoader.appStrings.SetupForm_lblBoblightSaturation;
       lblBoblightValue.Text = LanguageLoader.appStrings.SetupForm_lblBoblightValue;
       lblBoblightThreshold.Text = LanguageLoader.appStrings.SetupForm_lblBoblightThreshold;
-      lblBoblightInterpolation.Text = LanguageLoader.appStrings.SetupForm_lblBoblightInterpolation;
+      ckBoblightInterpolation.Text = LanguageLoader.appStrings.SetupForm_lblBoblightInterpolation;
       grpBoblightGeneral.Text = LanguageLoader.appStrings.SetupForm_grpBoblightGeneral;
       grpBoblightSettings.Text = LanguageLoader.appStrings.SetupForm_grpBoblightSettings;
+      lblBoblightGamma.Text = LanguageLoader.appStrings.SetupForm_lblBoblightGamma;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -512,7 +515,7 @@ namespace AtmoLight
       Settings.boblightValue = tbarBoblightValue.Value;
       Settings.boblightThreshold = tbarBoblightThreshold.Value;
       Settings.boblightInterpolation = ckBoblightInterpolation.Checked;
-
+      Settings.boblightGamma = (double)tbarBoblightGamma.Value / 10;
 
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
       Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
@@ -947,6 +950,11 @@ namespace AtmoLight
     private void tbarBoblightThreshold_ValueChanged(Object sender, EventArgs e)
     {
       tbBoblightThreshold.Text = tbarBoblightThreshold.Value.ToString();
+    }
+
+    private void tbarBoblightGamma_ValueChanged(Object sender, EventArgs e)
+    {
+      tbBoblightGamma.Text = ((double)tbarBoblightGamma.Value / 10).ToString();
     }
 
     // Dynamic effect changes

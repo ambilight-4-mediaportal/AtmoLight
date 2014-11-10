@@ -169,6 +169,9 @@ namespace AtmoLight
     [Setting(SettingScope.User, 0)]
     public int BoblightThreshold { get; set; }
 
+    [Setting(SettingScope.User, 1.0)]
+    public double BoblightGamma { get; set; }
+
 
     ISettingsManager settingsManager = ServiceRegistration.Get<ISettingsManager>();
     Settings settings;
@@ -229,6 +232,7 @@ namespace AtmoLight
       BoblightSaturation = settings.BoblightSaturation;
       BoblightValue = settings.BoblightValue;
       BoblightThreshold = settings.BoblightThreshold;
+      BoblightGamma = settings.BoblightGamma;
       return true;
     }
 
@@ -287,6 +291,7 @@ namespace AtmoLight
       settings.BoblightSaturation = BoblightSaturation;
       settings.BoblightValue = BoblightValue;
       settings.BoblightThreshold = BoblightThreshold;
+      settings.BoblightGamma = BoblightGamma;
       settingsManager.Save(settings);
       return true;
     }

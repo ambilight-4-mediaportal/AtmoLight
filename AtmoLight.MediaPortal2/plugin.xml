@@ -157,6 +157,10 @@
         Id="BoblightThreshold"
         Text="[AtmoLight.BoblightThreshold]"
         ClassName="AtmoLight.Configuration.BoblightThreshold"/>
+    <ConfigSetting
+        Id="BoblightGamma"
+        Text="[AtmoLight.BoblightGamma]"
+        ClassName="AtmoLight.Configuration.BoblightGamma"/>
   </Register>
   
   <!-- Hyperion -->

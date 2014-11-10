@@ -113,6 +113,7 @@ namespace AtmoLight
     public int boblightSaturation;
     public int boblightValue;
     public int boblightThreshold;
+    public double boblightGamma;
 
     // Hyperion Settings Fields
     public string hyperionIP;

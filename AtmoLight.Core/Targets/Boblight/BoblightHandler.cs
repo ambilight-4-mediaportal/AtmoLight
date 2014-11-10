@@ -44,16 +44,24 @@ namespace AtmoLight
     private List<double> singleChange = new List<double>();
     private List<int> rgbCount = new List<int>();
     private int totalLights;
-    private double gamma = 1.0;
+    private double[] gammaCurve = new double[256];
 
     private volatile bool initLock = false;
     private volatile int reconnectAttempts = 0;
+
+    private bool oldIterpolation;
+    private int oldSpeed;
+    private double oldGamma;
     #endregion
 
     #region Constructor
     public BoblightHandler()
     {
       Log.Debug("BoblightHandler - Boblight as target added.");
+      oldIterpolation = coreObject.boblightInterpolation;
+      oldSpeed = coreObject.boblightSpeed;
+      oldGamma = coreObject.boblightGamma;
+      CalcGammaCurve();
     }
     #endregion
 
@@ -134,6 +142,25 @@ namespace AtmoLight
         }
         return;
       }
+
+      // Check if settings have changed and need updating
+      if (coreObject.boblightInterpolation != oldIterpolation)
+      {
+        SetOption("interpolation", Convert.ToInt32(coreObject.boblightInterpolation).ToString());
+        oldIterpolation = coreObject.boblightInterpolation;
+      }
+      if (coreObject.boblightSpeed != oldSpeed)
+      {
+        SetOption("speed", coreObject.boblightSpeed.ToString());
+        oldSpeed = coreObject.boblightSpeed;
+      }
+      if (coreObject.boblightGamma != oldGamma)
+      {
+        CalcGammaCurve();
+        oldGamma = coreObject.boblightGamma;
+      }
+
+      // Analyze image
       int[] rgb = new int[] { 0, 0, 0 };
       for (int y = 0; y < coreObject.GetCaptureHeight(); y++)
       {
@@ -252,6 +279,8 @@ namespace AtmoLight
           {
             return false;
           }
+          SetOption("speed", coreObject.boblightSpeed.ToString());
+          SetOption("interpolation", Convert.ToInt32(coreObject.boblightInterpolation).ToString());
           return true;
         }
         else
@@ -282,7 +311,7 @@ namespace AtmoLight
     {
       if (rgb[0] >= coreObject.boblightThreshold || rgb[1] >= coreObject.boblightThreshold || rgb[2] >= coreObject.boblightThreshold)
       {
-        if (gamma == 1.0)
+        if (coreObject.boblightGamma == 1.0)
         {
           rgbValues[index][0] += Math.Min(Math.Max(rgb[0], 0), 255);
           rgbValues[index][1] += Math.Min(Math.Max(rgb[1], 0), 255);
@@ -290,12 +319,9 @@ namespace AtmoLight
         }
         else
         {
-          Log.Error("BoblightHandler - You should never see this error message.");
-          /*
-          m_rgb[0] += m_gammacurve[Clamp(rgb[0], 0, GAMMASIZE - 1)];
-          m_rgb[1] += m_gammacurve[Clamp(rgb[1], 0, GAMMASIZE - 1)];
-          m_rgb[2] += m_gammacurve[Clamp(rgb[2], 0, GAMMASIZE - 1)];
-           * */
+          rgbValues[index][0] += (int)gammaCurve[Math.Min(Math.Max(rgb[0], 0), gammaCurve.Length - 1)];
+          rgbValues[index][1] += (int)gammaCurve[Math.Min(Math.Max(rgb[1], 0), gammaCurve.Length - 1)];
+          rgbValues[index][2] += (int)gammaCurve[Math.Min(Math.Max(rgb[2], 0), gammaCurve.Length - 1)];
         }
       }
       rgbCount[index]++;
@@ -303,7 +329,7 @@ namespace AtmoLight
 
     private void SendRGB()
     {
-      string data = "";
+      string data = null;
       for (int i = 0; i < totalLights; i++)
       {
         double[] rgb = GetRGB(i);
@@ -446,6 +472,16 @@ namespace AtmoLight
     {
       boblightConnection.WriteLine("set priority " + priority.ToString());
     }
+
+    private void SetOption(string option, string value)
+    {
+      string data = null;
+      for (int i = 0; i < totalLights; i++)
+      {
+        data += "set light " + lightNames[i] + " " + option + " " + value + "\n";
+      }
+      boblightConnection.Write(data);
+    }
     #endregion;
 
     #region Utilities
@@ -456,6 +492,14 @@ namespace AtmoLight
         return null;
       }
       return readString.Remove(readString.Length - 1, 1);
+    }
+
+    private void CalcGammaCurve()
+    {
+      for (int i = 0; i < gammaCurve.Length; i++)
+      {
+        gammaCurve[i] = Math.Pow((double)i / ((double)gammaCurve.Length - 1.0f), coreObject.boblightGamma) * (gammaCurve.Length - 1.0f);
+      }
     }
     #endregion
   }

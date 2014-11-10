@@ -67,6 +67,36 @@
 		<setting entryname="atmolight" name="boblightMaxFPS" type="int" defaultvalue="10" minvalue="1" maxvalue="144"
 		displayname="Limit capture FPS to:"    
 		description="Please enter the max FPS."/>
+	
+		<setting entryname="atmolight" name="boblightSpeed" type="int" defaultvalue="100" minvalue="0" maxvalue="100"
+		displayname="Speed:"    
+		description="Please enter the value for speed."/>
+
+		<setting entryname="atmolight" name="boblightAutospeed" type="int" defaultvalue="0" minvalue="0" maxvalue="100"
+		displayname="Autospeed:"    
+		description="Please enter the value for autospeed."/>
+		
+		<setting entryname="atmolight" name="boblightInterpolation" type="string" defaultvalue="no" listvalues="Yes|No"
+		displayname="Interpolation:"    
+		description="Choose if you want to use interpolation."
+		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="boblightSaturation" type="int" defaultvalue="1" minvalue="0" maxvalue="20"
+		displayname="Saturation:"    
+		description="Please enter the value for saturation."/>
+		
+		<setting entryname="atmolight" name="boblightValue" type="int" defaultvalue="1" minvalue="0" maxvalue="20"
+		displayname="Value:"    
+		description="Please enter the value."/>
+		
+		<setting entryname="atmolight" name="boblightThreshold" type="int" defaultvalue="0" minvalue="0" maxvalue="255"
+		displayname="Threshold:"    
+		description="Please enter the value for threshold."/>
+		
+		<setting entryname="atmolight" name="boblightGamma" type="string" defaultvalue="1" listvalues="1|2|3|4|5|6|7|8|9|10"
+		displayname="Gamma:"    
+		description="Please enter the value for gamma."
+		displaylistvalues="1|2|3|4|5|6|7|8|9|10"/>
 	</settings>
 	
 	<settings section="Hue">

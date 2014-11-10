@@ -81,4 +81,5 @@
   <string name="AtmoLight.BoblightSaturation">Saturation</string>
   <string name="AtmoLight.BoblightValue">Value</string>
   <string name="AtmoLight.BoblightThreshold">Threshold</string>
+  <string name="AtmoLight.BoblightGamma">Gamma</string>
 </resources>
