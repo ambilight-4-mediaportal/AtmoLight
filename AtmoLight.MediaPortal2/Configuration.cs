@@ -1062,6 +1062,51 @@ namespace AtmoLight.Configuration
       Core.GetInstance().huePort = (int)_value;
     }
   }
+
+  public class HueReconnectAttempts : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 9999;
+      _value = SettingsManager.Load<Settings>().HueReconnectAttempts;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueReconnectAttempts = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueReconnectAttempts = (int)_value;
+    }
+  }
+
+  public class HueReconnectDelay : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 99999;
+      _value = SettingsManager.Load<Settings>().HueReconnectDelay;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueReconnectDelay = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueReconnectDelay = (int)_value;
+    }
+  }
+
   public class HueMinimalColorDifference : LimitedNumberSelect
   {
     public override void Load()

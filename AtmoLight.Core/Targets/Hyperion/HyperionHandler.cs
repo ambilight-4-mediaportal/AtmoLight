@@ -51,7 +51,6 @@ namespace AtmoLight.Targets
     #region Hyperion
     public HyperionHandler()
     {
-
       coreObject = Core.GetInstance();
     }
 
