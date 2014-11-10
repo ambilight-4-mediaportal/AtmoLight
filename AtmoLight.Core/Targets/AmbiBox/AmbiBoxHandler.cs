@@ -79,6 +79,10 @@ namespace AtmoLight
 
     public bool IsConnected()
     {
+      if (ambiBoxConnection == null)
+      {
+        return false;
+      }
       return ambiBoxConnection.IsConnected && !initLock;
     }
 
@@ -86,51 +90,33 @@ namespace AtmoLight
     {
       switch (effect)
       {
+        case ContentEffect.ExternalLiveMode:
         case ContentEffect.MediaPortalLiveMode:
         case ContentEffect.GIFReader:
         case ContentEffect.VUMeter:
         case ContentEffect.VUMeterRainbow:
+          SendCommand("lock");
+          SendCommand("setstatus:on");
+          SendCommand("unlock");
           return true;
         case ContentEffect.StaticColor:
           string staticColorString = "setcolor:";
-          for (int i = 0; i <= 256; i++)
+          for (int i = 1; i <= 20; i++)
           {
             staticColorString += i + "-" + coreObject.staticColor[0] + "," + coreObject.staticColor[1] + "," + coreObject.staticColor[2] + ";";
           }
-          if (SendCommand("lock") != "lock:success")
-          {
-            Log.Error("AmbiBoxHandler - Error changing static color.");
-            return false;
-          }
-          if (SendCommand(staticColorString) != "ok")
-          {
-            Log.Error("AmbiBoxHandler - Error changing static color.");
-            return false;
-          }
-          if (SendCommand("unlock") != "unlock:success")
-          {
-            Log.Error("AmbiBoxHandler - Error changing static color.");
-            return false;
-          }
+          SendCommand("lock");
+          SendCommand(staticColorString);
+          SendCommand("unlock");
+
           return true;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
         default:
-          if (SendCommand("lock") != "lock:success")
-          {
-            Log.Error("AmbiBoxHandler - Error switching off leds.");
-            return false;
-          }
-          if (SendCommand("setstatus: off") != "ok")
-          {
-            Log.Error("AmbiBoxHandler - Error switching off leds.");
-            return false;
-          }
-          if (SendCommand("unlock") != "unlock:success")
-          {
-            Log.Error("AmbiBoxHandler - Error switching off leds.");
-            return false;
-          }
+          SendCommand("lock");
+          SendCommand("setstatus:off");
+          SendCommand("unlock");
+
           return true;
       }
     }
@@ -218,7 +204,7 @@ namespace AtmoLight
       try
       {
         ambiBoxConnection = new TelnetConnection(coreObject.ambiBoxIP, coreObject.ambiBoxPort);
-        if (ambiBoxConnection.IsConnected)
+        if (ambiBoxConnection != null && ambiBoxConnection.IsConnected)
         {
           ambiBoxConnection.Read();
           char[] separators = { ':', ';' };
@@ -231,6 +217,8 @@ namespace AtmoLight
             }
           }
           currentProfile = SendCommand("getprofile").Split(separators)[1];
+
+          SendCommand("unlock");
 
           Log.Info("AmbiBoxHandler - Successfully connected to {0}:{1}", coreObject.ambiBoxIP, coreObject.ambiBoxPort);
           reconnectAttempts = 0;
@@ -267,6 +255,10 @@ namespace AtmoLight
     {
       ambiBoxConnection.WriteLine(command);
       string rcvd = ambiBoxConnection.Read();
+      if (rcvd.Length < 2)
+      {
+        return null;
+      }
       return rcvd.Remove(rcvd.Length - 2, 2);
     }
   }
