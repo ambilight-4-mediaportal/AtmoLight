@@ -186,51 +186,58 @@ namespace AtmoLight.Targets
     private void ConnectThread()
     {
 
-      while (hueReconnectCounter <= coreObject.hueReconnectAttempts && Connected == false)
+      while (hueReconnectCounter <= coreObject.hueReconnectAttempts)
       {
-        //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
-        try
+        if (Connected == false)
         {
-          Socket.Close();
-        }
-        catch (Exception e)
-        {
-          Log.Error("HueHandler - Error while closing socket");
-          Log.Error("HueHandler - Exception: {0}", e.Message);
-        }
-        try
-        {
-          Socket = new TcpClient();
+          //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
+          try
+          {
+            Socket.Close();
+          }
+          catch (Exception e)
+          {
+            Log.Error("HueHandler - Error while closing socket");
+            Log.Error("HueHandler - Exception: {0}", e.Message);
+          }
+          try
+          {
+            Socket = new TcpClient();
 
-          Socket.SendTimeout = 5000;
-          Socket.ReceiveTimeout = 5000;
-          Socket.Connect(coreObject.hueIP, coreObject.huePort);
-          Stream = Socket.GetStream();
-          Connected = Socket.Connected;
-          Log.Debug("HueHandler - Connected to AtmoHue");
-        }
-        catch (Exception e)
-        {
-          Connected = false;
-          Log.Error("HyperionHandler - Error while connecting");
-          Log.Error("HyperionHandler - Exception: {0}", e.Message);
-        }
+            Socket.SendTimeout = 5000;
+            Socket.ReceiveTimeout = 5000;
+            Socket.Connect(coreObject.hueIP, coreObject.huePort);
+            Stream = Socket.GetStream();
+            Connected = Socket.Connected;
+            Log.Debug("HueHandler - Connected to AtmoHue");
+          }
+          catch (Exception e)
+          {
+            Connected = false;
+            Log.Error("HyperionHandler - Error while connecting");
+            Log.Error("HyperionHandler - Exception: {0}", e.Message);
+          }
 
-        //Increment times tried
-        hueReconnectCounter++;
+          //Increment times tried
+          hueReconnectCounter++;
 
-        //Show error if reconnect attempts exhausted
-        if (hueReconnectCounter > coreObject.hueReconnectAttempts && Connected == false)
+          //Show error if reconnect attempts exhausted
+          if (hueReconnectCounter > coreObject.hueReconnectAttempts && Connected == false)
+          {
+            Log.Error("HueHandler - Error while connecting and connection attempts exhausted");
+            coreObject.NewConnectionLost(Name);
+            break;
+          }
+
+          //Sleep for specified time
+          Thread.Sleep(coreObject.hyperionReconnectDelay);
+        }
+        else
         {
-          Log.Error("HueHandler - Error while connecting and connection attempts exhausted");
-          coreObject.NewConnectionLost(Name);
+          //Log.Debug("HueHandler - Connected after {0} attempts.", hyperionReconnectCounter);
           break;
         }
-
-        //Sleep for specified time
-        Thread.Sleep(coreObject.hyperionReconnectDelay);
       }
-
 
       //On first initialize set the effect after we are done trying to connect
       if (isInit && Connected)

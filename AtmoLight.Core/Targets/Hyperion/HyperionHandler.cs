@@ -152,7 +152,7 @@ namespace AtmoLight.Targets
 
     private void ConnectThread()
     {
-      while (hyperionReconnectCounter <= coreObject.hyperionReconnectAttempts && Connected == false)
+      while (hyperionReconnectCounter <= coreObject.hyperionReconnectAttempts)
       {
         if (Connected == false)
         {
@@ -226,7 +226,6 @@ namespace AtmoLight.Targets
         else
         {
           //Log.Debug("HyperionHandler - Connected after {0} attempts.", hyperionReconnectCounter);
-          hyperionReconnectCounter = 0;
           break;
         }
       }
