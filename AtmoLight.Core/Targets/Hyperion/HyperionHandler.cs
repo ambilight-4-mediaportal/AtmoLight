@@ -414,19 +414,24 @@ namespace AtmoLight.Targets
     }
     private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs e)
     {
-      if (e.Mode.ToString().ToLower() == "resume")
+      switch (e.Mode)
       {
-        // Close old socket and create new TCP client which allows it to reconnect when calling Connect()
-        try
-        {
-          Socket.Close();
-        }
-        catch { };
+        case PowerModes.Resume:
+          // Close old socket and create new TCP client which allows it to reconnect when calling Connect()
+          try
+          {
+            Socket.Close();
+          }
+          catch { };
 
-        //Reconnect Hyperion after standby
-        Log.Debug("HyperionHandler - Reconnecting after standby");
-        Connected = false;
-        Connect();
+          //Reconnect Hyperion after standby
+          Log.Debug("HyperionHandler - Reconnecting after standby");
+          Connected = false;
+          Connect();
+
+          break;
+        case PowerModes.Suspend:
+          break;
       }
     }
     #endregion
