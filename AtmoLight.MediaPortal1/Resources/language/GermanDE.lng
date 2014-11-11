@@ -81,13 +81,14 @@ lblBoblightReconnectDelay=Wiederverbindungs Verzögerung:
 lblBoblightMaxFPS=Limitiere Aufnahme FPS auf:
 lblBoblightSpeed=Geschwindigkeit:
 lblBoblightAutospeed=Auto. Geschwindigkeit:
-lblBoblightSaturation=Sättigung:
-lblBoblightValue=Wert:
+lblBoblightSaturation=Sättigung (HSV Korrektur):
+lblBoblightValue=Wert (HSV Korrektur):
 lblBoblightThreshold=Schwelle:
 lblBoblightInterpolation=Interpolation:
 grpBoblightGeneral=Allgemeine Einstellungen
 grpBoblightSettings=Boblight Einstellungen
 lblBoblightGamma=Gamma:
+lblBlackbarDetectionThreshold=ms, mit Schwelle
 [ContextMenu]
 SwitchLEDsON=Schalte LEDs an
 SwitchLEDsOFF=Schalte LEDs aus

@@ -167,6 +167,9 @@ namespace AtmoLight
       AtmoLightObject.SetReInitOnError(settings.RestartAtmoWinOnError);
       AtmoLightObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, settings.StaticColorBlue);
       AtmoLightObject.SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
+      AtmoLightObject.blackbarDetection = settings.BlackbarDetection;
+      AtmoLightObject.blackbarDetectionTime = settings.BlackbarDetectionTime;
+      AtmoLightObject.blackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
 
       menuEffect = settings.MenuEffect;
       if (CheckForStartRequirements())
@@ -344,7 +347,6 @@ namespace AtmoLight
           lastFrame = Win32API.GetTickCount();
         }
       }
-
 
       Rectangle rectangleDestination = new Rectangle(0, 0, AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
       try

@@ -81,13 +81,14 @@ lblBoblightReconnectDelay=Reconnect delay:
 lblBoblightMaxFPS=Limit capture FPS to:
 lblBoblightSpeed=Speed:
 lblBoblightAutospeed=Autospeed:
-lblBoblightSaturation=Saturation:
-lblBoblightValue=Value:
+lblBoblightSaturation=Saturation (HSV correction):
+lblBoblightValue=Value (HSV correction):
 lblBoblightThreshold=Threshold:
 lblBoblightInterpolation=Interpolation:
 grpBoblightGeneral=General settings
 grpBoblightSettings=Boblight settings
 lblBoblightGamma=Gamma:
+lblBlackbarDetectionThreshold=ms, with Threshold
 [ContextMenu]
 SwitchLEDsON=Switch LEDs on
 SwitchLEDsOFF=Switch LEDs off

@@ -326,7 +326,19 @@
         Id="DelayRefreshRate"
         Text="[AtmoLight.DelayRefreshRate]"
         ClassName="AtmoLight.Configuration.DelayRefreshRate"/>
-      <ConfigSetting
+    <ConfigSetting
+        Id="BlackbarDetection"
+        Text="[AtmoLight.BlackbarDetection]"
+        ClassName="AtmoLight.Configuration.BlackbarDetection"/>
+    <ConfigSetting
+        Id="BlackbarDetectionTime"
+        Text="[AtmoLight.BlackbarDetectionTime]"
+        ClassName="AtmoLight.Configuration.BlackbarDetectionTime"/>    
+    <ConfigSetting
+        Id="BlackbarDetectionThreshold"
+        Text="[AtmoLight.BlackbarDetectionThreshold]"
+        ClassName="AtmoLight.Configuration.BlackbarDetectionThreshold"/>    
+    <ConfigSetting
         Id="CaptureWidth"
         Text="[AtmoLight.CaptureWidth]"
         ClassName="AtmoLight.Configuration.CaptureWidth"/>

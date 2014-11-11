@@ -178,6 +178,15 @@ namespace AtmoLight
     [Setting(SettingScope.User, 2.2)]
     public double BoblightGamma { get; set; }
 
+    [Setting(SettingScope.User, false)]
+    public bool BlackbarDetection { get; set; }
+
+    [Setting(SettingScope.User, 1000)]
+    public int BlackbarDetectionTime { get; set; }
+
+    [Setting(SettingScope.User, 20)]
+    public int BlackbarDetectionThreshold { get; set; }
+
 
     ISettingsManager settingsManager = ServiceRegistration.Get<ISettingsManager>();
     Settings settings;
@@ -241,6 +250,9 @@ namespace AtmoLight
       BoblightValue = settings.BoblightValue;
       BoblightThreshold = settings.BoblightThreshold;
       BoblightGamma = settings.BoblightGamma;
+      BlackbarDetection = settings.BlackbarDetection;
+      BlackbarDetectionTime = settings.BlackbarDetectionTime;
+      BlackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
       return true;
     }
 
@@ -302,6 +314,9 @@ namespace AtmoLight
       settings.BoblightValue = BoblightValue;
       settings.BoblightThreshold = BoblightThreshold;
       settings.BoblightGamma = BoblightGamma;
+      settings.BlackbarDetection = BlackbarDetection;
+      settings.BlackbarDetectionTime = BlackbarDetectionTime;
+      settings.BlackbarDetectionThreshold = BlackbarDetectionThreshold;
       settingsManager.Save(settings);
       return true;
     }

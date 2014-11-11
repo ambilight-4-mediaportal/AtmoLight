@@ -173,6 +173,7 @@
       this.tbHueIP = new System.Windows.Forms.TextBox();
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
+      this.tbBlackbarDetectionThreshold = new System.Windows.Forms.TextBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -840,6 +841,7 @@
       // 
       // grpPluginOption
       // 
+      this.grpPluginOption.Controls.Add(this.tbBlackbarDetectionThreshold);
       this.grpPluginOption.Controls.Add(this.ckRestartOnError);
       this.grpPluginOption.Controls.Add(this.grpCaptureDimensions);
       this.grpPluginOption.Controls.Add(this.lblBlackarDetectionMS);
@@ -945,9 +947,9 @@
       this.lblBlackarDetectionMS.AutoSize = true;
       this.lblBlackarDetectionMS.Location = new System.Drawing.Point(256, 170);
       this.lblBlackarDetectionMS.Name = "lblBlackarDetectionMS";
-      this.lblBlackarDetectionMS.Size = new System.Drawing.Size(20, 13);
+      this.lblBlackarDetectionMS.Size = new System.Drawing.Size(95, 13);
       this.lblBlackarDetectionMS.TabIndex = 30;
-      this.lblBlackarDetectionMS.Text = "ms";
+      this.lblBlackarDetectionMS.Text = "ms, with Threshold";
       // 
       // grpDeactivate
       // 
@@ -1706,6 +1708,14 @@
       this.openFileDialog4.FileName = "openFileDialog4";
       this.openFileDialog4.Filter = "AtmoHue.exe|*.exe";
       // 
+      // tbBlackbarDetectionThreshold
+      // 
+      this.tbBlackbarDetectionThreshold.Location = new System.Drawing.Point(373, 167);
+      this.tbBlackbarDetectionThreshold.Name = "tbBlackbarDetectionThreshold";
+      this.tbBlackbarDetectionThreshold.Size = new System.Drawing.Size(41, 20);
+      this.tbBlackbarDetectionThreshold.TabIndex = 33;
+      this.tbBlackbarDetectionThreshold.Validating += new System.ComponentModel.CancelEventHandler(this.tbBlackbarDetectionThreshold_Validating);
+      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1915,5 +1925,6 @@
     private System.Windows.Forms.Label lblHueReconnectAttempts;
     private System.Windows.Forms.TextBox tbHueReconnectDelay;
     private System.Windows.Forms.Label lblHueReconnectDelay;
+    private System.Windows.Forms.TextBox tbBlackbarDetectionThreshold;
   }
 }

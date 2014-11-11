@@ -47,14 +47,6 @@ namespace AtmoLight
     private Surface rgbSurface = null; // RGB Surface
     private Int64 lastFrame = 0; // Tick count of the last frame
 
-    // Blackbar detection
-    private object blackbarAnalyzerClass; // Helper for reflection
-    private Assembly blackbarAnalyzerAssembly; // Helper for reflection
-    private Type blackbarAnalyzerType; // Helper for reflection
-    private MethodInfo blackbarAnalyzerMethodInfo; // Helper for reflection
-    private Rectangle blackbarDetectionRect = new Rectangle(); // Rectangle with the dimensions of the picture (without blackbars)
-    private Int64 blackbarDetectionLastTime = 0; // Last time blackbar detection was run
-
     // Static Color
     private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
     private int staticColorHelper; // Helper var for static color change
@@ -106,14 +98,6 @@ namespace AtmoLight
 
       // VU Meter Handler
       Core.OnNewVUMeter += new Core.NewVUMeterHander(OnNewVUMeter);
-
-      // Frameanalyzer
-      // Reflection needed to access the FrameAnalyzer as it is an internal class
-      blackbarAnalyzerAssembly = Assembly.LoadFrom("plugins\\process\\ProcessPlugins.dll");
-      blackbarAnalyzerClass = blackbarAnalyzerAssembly.CreateInstance("ProcessPlugins.ViewModeSwitcher.FrameAnalyzer");
-      blackbarAnalyzerType = blackbarAnalyzerClass.GetType();
-      blackbarAnalyzerMethodInfo = blackbarAnalyzerType.GetMethod("FindBounds");
-
 
       staticColorTemp[0] = Settings.staticColorRed;
       staticColorTemp[1] = Settings.staticColorGreen;
@@ -183,6 +167,9 @@ namespace AtmoLight
       AtmoLightObject.SetReInitOnError(Settings.restartOnError);
       AtmoLightObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
       AtmoLightObject.SetCaptureDimensions(Settings.captureWidth, Settings.captureHeight);
+      AtmoLightObject.blackbarDetection = Settings.blackbarDetection;
+      AtmoLightObject.blackbarDetectionTime = Settings.blackbarDetectionTime;
+      AtmoLightObject.blackbarDetectionThreshold = Settings.blackbarDetectionThreshold;
 
       // Get the effects that are supported by at least one target
       supportedEffects = AtmoLightObject.GetSupportedEffects();
@@ -498,41 +485,6 @@ namespace AtmoLight
 
           Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
 
-          if (Settings.blackbarDetection)
-          {
-            if (Win32API.GetTickCount() >= (blackbarDetectionLastTime + Settings.blackbarDetectionTime))
-            {
-              blackbarDetectionLastTime = Win32API.GetTickCount();
-
-              // Analyzing the frame for black bars.
-              // Has to be done in low res, as it would be to cpu heavy otherwise (0-2ms vs. 1000ms).
-              Bitmap streamBitmap = new Bitmap(stream);
-              object[] arguments = new Object[] { streamBitmap, null };
-
-              // Call FindBounds.
-              bool blackbarblackbarAnalyzerSuccess = (bool)blackbarAnalyzerMethodInfo.Invoke(blackbarAnalyzerClass, arguments);
-              streamBitmap.Dispose();
-
-              if (blackbarblackbarAnalyzerSuccess)
-              {
-                // Retrieving the bounds.
-                blackbarDetectionRect = (System.Drawing.Rectangle)arguments[1];
-              }
-            }
-
-            // New bitmap that has to have to dimensions AtmoWin expects.
-            Bitmap target = new Bitmap(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
-
-            using (Graphics g = Graphics.FromImage(target))
-            {
-              // Cropping and resizing the original bitmap
-              g.DrawImage(new Bitmap(stream), new Rectangle(0, 0, target.Width, target.Height), blackbarDetectionRect, GraphicsUnit.Pixel);
-            }
-
-            // Saving cropped and resized bitmap to stream
-            target.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
-            target.Dispose();
-          }
           AtmoLightObject.CalculateBitmap(stream);
 
           stream.Close();
@@ -835,11 +787,13 @@ namespace AtmoLight
         {
           Log.Info("Switching blackbar detection off.");
           Settings.blackbarDetection = false;
+          AtmoLightObject.blackbarDetection = false;
         }
         else
         {
           Log.Info("Switching blackbar detection on.");
           Settings.blackbarDetection = true;
+          AtmoLightObject.blackbarDetection = true;
         }
       }
       // Toggle Delay

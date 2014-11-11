@@ -81,13 +81,14 @@ lblBoblightReconnectDelay=Opnieuw verbinden vertraging (ms):
 lblBoblightMaxFPS=Limiteer framerate (FPS) tot:
 lblBoblightSpeed=Snelheid:
 lblBoblightAutospeed=Automatische snelheid:
-lblBoblightSaturation=Saturatie:
-lblBoblightValue=Waarde:
+lblBoblightSaturation=Saturatie (HSV correctie):
+lblBoblightValue=Waarde (HSV correctie):
 lblBoblightThreshold=Drempel:
 lblBoblightInterpolation=Interpolatie:
 grpBoblightGeneral=Algemene instellingen
 grpBoblightSettings=Boblight instellingen
 lblBoblightGamma=Gamma:
+lblBlackbarDetectionThreshold=ms, with Threshold
 [ContextMenu]
 SwitchLEDsON=Schakel LEDs aan
 SwitchLEDsOFF=Schakel LEDs uit

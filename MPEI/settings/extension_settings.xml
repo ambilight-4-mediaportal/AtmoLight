@@ -255,6 +255,19 @@
 		displayname="Delay reference refreshrate:"    
 		description="Please enter the refreshrate at which you have measured the delay time."/>
 		
+		<setting entryname="atmolight" name="blackbarDetection" type="string" defaultvalue="no" listvalues="yes|no"
+		displayname="Use blackbar detection:"    
+		description="Select if you want to use the blackbar detection."
+		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="blackbarDetectionTime" type="int" defaultvalue="1000" minvalue="1" maxvalue="999999"
+		displayname="Blackbar detection time:"    
+		description="Enter the blackbar detection time."/>
+
+		<setting entryname="atmolight" name="blackbarDetectionThreshold" type="int" defaultvalue="20" minvalue="0" maxvalue="255"
+		displayname="Blackbar detection threshold:"    
+		description="Enter the blackbar detection threshold."/>		
+		
 		<setting entryname="atmolight" name="captureWidth" type="int" defaultvalue="64" minvalue="1" maxvalue="1920"
 		displayname="Capture width:"    
 		description="Enter the capture width you want to use (Will only be used if AtmoWin is disabled!)."/>

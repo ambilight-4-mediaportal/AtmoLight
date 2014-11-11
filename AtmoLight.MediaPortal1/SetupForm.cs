@@ -100,6 +100,7 @@ namespace AtmoLight
       tbBoblightValue.Text = Settings.boblightValue.ToString();
       tbBoblightThreshold.Text = Settings.boblightThreshold.ToString();
       tbBoblightGamma.Text = Settings.boblightGamma.ToString();
+      tbBlackbarDetectionThreshold.Text = Settings.blackbarDetectionThreshold.ToString();
     }
 
     private void UpdateLanguageOnControls()
@@ -139,6 +140,7 @@ namespace AtmoLight
       ckRestartOnError.Text = LanguageLoader.appStrings.SetupForm_ckRestartOnError;
       lblRefreshRate.Text = LanguageLoader.appStrings.SetupForm_lblRefreshRate;
       ckBlackbarDetection.Text = LanguageLoader.appStrings.SetupForm_ckBlackbarDetection;
+      lblBlackarDetectionMS.Text = LanguageLoader.appStrings.SetupForm_lblBlackbarDetectionThreshold;
       grpGIF.Text = LanguageLoader.appStrings.SetupForm_grpGIF;
       lblHyperionIP.Text = LanguageLoader.appStrings.SetupForm_lblHyperionIP;
       lblHyperionPort.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPort;
@@ -495,6 +497,15 @@ namespace AtmoLight
         return;
       }
 
+      // Blackbar Detection Threshold
+      minValue = 0;
+      maxValue = 255;
+      if (validatorInt(tbBlackbarDetectionThreshold.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbBlackbarDetectionThreshold.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       Settings.staticColorRed = int.Parse(tbRed.Text);
       Settings.staticColorGreen = int.Parse(tbGreen.Text);
       Settings.staticColorBlue = int.Parse(tbBlue.Text);
@@ -549,6 +560,7 @@ namespace AtmoLight
       Settings.boblightThreshold = tbarBoblightThreshold.Value;
       Settings.boblightInterpolation = ckBoblightInterpolation.Checked;
       Settings.boblightGamma = (double)tbarBoblightGamma.Value / 10;
+      Settings.blackbarDetectionThreshold = int.Parse(tbBlackbarDetectionThreshold.Text);
 
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
       Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
@@ -973,6 +985,16 @@ namespace AtmoLight
       int minValue = 1;
       int maxValue = 144;
       if (validatorInt(tbBoblightMaxFPS.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbBlackbarDetectionThreshold_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 255;
+      if (validatorInt(tbBlackbarDetectionThreshold.Text, minValue, maxValue, true) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }

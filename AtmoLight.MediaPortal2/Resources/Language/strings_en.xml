@@ -80,8 +80,11 @@
   <string name="AtmoLight.BoblightSpeed">Speed</string>
   <string name="AtmoLight.BoblightAutospeed">Autospeed</string>
   <string name="AtmoLight.BoblightInterpolation">Interpolation</string>
-  <string name="AtmoLight.BoblightSaturation">Saturation</string>
-  <string name="AtmoLight.BoblightValue">Value</string>
+  <string name="AtmoLight.BoblightSaturation">Saturation (HSV correction)</string>
+  <string name="AtmoLight.BoblightValue">Value (HSV correction)</string>
   <string name="AtmoLight.BoblightThreshold">Threshold</string>
   <string name="AtmoLight.BoblightGamma">Gamma</string>
+  <string name="AtmoLight.BlackbarDetection">Blackbar detection</string>
+  <string name="AtmoLight.BlackbarDetectionTime">Blackbar detection delay</string>
+  <string name="AtmoLight.BlackbarDetectionThreshold">Blackbar detection threshold</string>
 </resources>

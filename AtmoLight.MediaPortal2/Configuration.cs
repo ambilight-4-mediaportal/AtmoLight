@@ -1471,4 +1471,66 @@ namespace AtmoLight.Configuration
       Core.GetInstance().boblightGamma = (int)_value;
     }
   }
+
+  public class BlackbarDetection : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().BlackbarDetection;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BlackbarDetection = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().blackbarDetection = _yes;
+    }
+  }
+
+  public class BlackbarDetectionTime : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 99999;
+      _value = SettingsManager.Load<Settings>().BlackbarDetectionTime;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BlackbarDetectionTime = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().blackbarDetectionTime = (int)_value;
+    }
+  }
+
+  public class BlackbarDetectionThreshold : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 255;
+      _value = SettingsManager.Load<Settings>().BlackbarDetectionThreshold;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BlackbarDetectionThreshold = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().blackbarDetectionThreshold = (int)_value;
+    }
+  }
 }

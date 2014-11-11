@@ -84,6 +84,9 @@ namespace AtmoLight
     public delegate double[] NewVUMeterHander();
     public static event NewVUMeterHander OnNewVUMeter;
 
+    // Stopwatches
+    private Stopwatch blackbarStopwatch = new Stopwatch();
+
     // Generic Fields
     private int captureWidth = 64; // Default fallback capture width
     private int captureHeight = 48; // Default fallback capture height
@@ -91,10 +94,14 @@ namespace AtmoLight
     private int delayTime = 0;
     private string gifPath = "";
     private bool initialEffect = false;
+    private Rectangle blackbarDetectionRect;
 
     // General settings for targets
     public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
     public bool reInitOnError;
+    public bool blackbarDetection;
+    public int blackbarDetectionTime;
+    public int blackbarDetectionThreshold;
 
     // AtmoWin Settings Fields
     public bool atmoWinAutoStart;
@@ -701,6 +708,13 @@ namespace AtmoLight
     {
       // Debug file output
       // new Bitmap(stream).Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
+      if (blackbarDetection)
+      {
+        stream = BlackbarDetection(stream);
+      }
+      // Debug file output after blackbar detection
+      // new Bitmap(stream).Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
+
       BinaryReader reader = new BinaryReader(stream);
       stream.Position = 0; // ensure that what start at the beginning of the stream. 
       reader.ReadBytes(14); // skip bitmap file info header
@@ -750,6 +764,113 @@ namespace AtmoLight
           }
         }
       }
+    }
+
+    private Stream BlackbarDetection(Stream stream)
+    {
+      if (!blackbarStopwatch.IsRunning)
+      {
+        blackbarStopwatch.Start();
+      }
+      if (blackbarStopwatch.ElapsedMilliseconds >= blackbarDetectionTime)
+      {
+        Bitmap blackBarBitmap = new Bitmap(stream);
+        Color colorTemp;
+        int yTopBound = -1;
+        int yBottomBound = -1;
+        int xLeftBound = -1;
+        int xRightBound = -1;
+
+        // Horizontal Scan
+        for (int y = 0; y < (int)(blackBarBitmap.Height / 3); y++)
+        {
+          if (yTopBound != -1 && yBottomBound != -1)
+          {
+            break;
+          }
+          for (int x = (int)(blackBarBitmap.Width * 0.33); x < (int)(blackBarBitmap.Width * 0.66); x++)
+          {
+            if (yTopBound != -1 && yBottomBound != -1)
+            {
+              break;
+            }
+
+            if (yTopBound == -1)
+            {
+              colorTemp = blackBarBitmap.GetPixel(x, y);
+              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              {
+                yTopBound = y;
+              }
+            }
+
+            if (yBottomBound == -1)
+            {
+              colorTemp = blackBarBitmap.GetPixel(x, blackBarBitmap.Height - 1 - y);
+              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              {
+                yBottomBound = blackBarBitmap.Height - y;
+              }
+            }
+          }
+        }
+
+        // Vertical Scan
+        for (int x = 0; x < (int)(blackBarBitmap.Width / 3); x++)
+        {
+          if (xLeftBound != -1 && xRightBound != -1)
+          {
+            break;
+          }
+          for (int y = (int)(blackBarBitmap.Height * 0.33); y < (int)(blackBarBitmap.Height * 0.66); y++)
+          {
+            if (xLeftBound != -1 && xRightBound != -1)
+            {
+              break;
+            }
+
+            if (xLeftBound == -1)
+            {
+              colorTemp = blackBarBitmap.GetPixel(x, y);
+              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              {
+                xLeftBound = x;
+              }
+            }
+
+            if (xRightBound == -1)
+            {
+              colorTemp = blackBarBitmap.GetPixel(blackBarBitmap.Width - 1 - x, y);
+              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              {
+                xRightBound = blackBarBitmap.Width - x;
+              }
+            }
+          }
+        }
+        if ((yTopBound != 0 || yBottomBound != blackBarBitmap.Height || xLeftBound != 0 || xRightBound != blackBarBitmap.Width) && (yTopBound != -1 && yBottomBound != -1 && xLeftBound != -1 && xRightBound != -1))
+        {
+          blackbarDetectionRect = new Rectangle(xLeftBound, yTopBound, xRightBound - xLeftBound, yBottomBound - yTopBound);
+        }
+        blackBarBitmap.Dispose();
+        blackbarStopwatch.Restart();
+      }
+
+      if (blackbarDetectionRect != new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight()) && blackbarDetectionRect != null)
+      {
+        Bitmap blackBarBitmapOutput = new Bitmap(GetCaptureWidth(), GetCaptureHeight());
+
+        using (Graphics g = Graphics.FromImage(blackBarBitmapOutput))
+        {
+          // Cropping and resizing the original bitmap
+          g.DrawImage(new Bitmap(stream), new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight()), blackbarDetectionRect, GraphicsUnit.Pixel);
+        }
+
+        // Saving cropped and resized bitmap to stream
+        blackBarBitmapOutput.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+        blackBarBitmapOutput.Dispose();
+      }
+      return stream;
     }
     #endregion
 

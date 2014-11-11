@@ -34,6 +34,7 @@ namespace AtmoLight
     public static bool restartOnError = true;
     public static bool blackbarDetection = false;
     public static int blackbarDetectionTime = 0;
+    public static int blackbarDetectionThreshold;
     public static string gifFile = "";
     public static int captureWidth = 0;
     public static int captureHeight = 0;
@@ -176,7 +177,7 @@ namespace AtmoLight
         restartOnError = reader.GetValueAsBool("atmolight", "RestartOnError", true);
         delayReferenceRefreshRate = reader.GetValueAsInt("atmolight", "DelayRefreshRate", 50);
         blackbarDetection = reader.GetValueAsBool("atmolight", "BlackbarDetection", false);
-        blackbarDetectionTime = reader.GetValueAsInt("atmolight", "BlackbarDetectionTime", 0);
+        blackbarDetectionTime = reader.GetValueAsInt("atmolight", "BlackbarDetectionTime", 1000);
         gifFile = reader.GetValueAsString("atmolight", "GIFFile", "");
         captureWidth = reader.GetValueAsInt("atmolight", "captureWidth", 64);
         captureHeight = reader.GetValueAsInt("atmolight", "captureHeight", 64);
@@ -211,6 +212,7 @@ namespace AtmoLight
         boblightTarget = reader.GetValueAsBool("atmolight", "boblightTarget", false);
         hueTarget = reader.GetValueAsBool("atmolight", "hueTarget", false);
         hyperionTarget = reader.GetValueAsBool("atmolight", "hyperionTarget", false);
+        blackbarDetectionThreshold = reader.GetValueAsInt("atmolight", "blackbarDetectionThreshold", 20);
       }
     }
     public static void SaveSettings()
@@ -274,6 +276,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "boblightThreshold", boblightThreshold);
         reader.SetValueAsBool("atmolight", "boblightInterpolation", boblightInterpolation);
         reader.SetValue("atmolight", "boblightGamma", boblightGamma.ToString());
+        reader.SetValue("atmolight", "blackbarDetectionThreshold", blackbarDetectionThreshold.ToString());
 
         reader.SetValueAsBool("atmolight", "atmoWinTarget", atmoWinTarget);
         reader.SetValueAsBool("atmolight", "boblightTarget", boblightTarget);

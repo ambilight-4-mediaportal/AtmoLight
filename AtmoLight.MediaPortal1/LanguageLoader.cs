@@ -372,6 +372,7 @@ namespace Language
     public String SetupForm_grpBoblightGeneral;
     public String SetupForm_grpBoblightSettings;
     public String SetupForm_lblBoblightGamma;
+    public String SetupForm_lblBlackbarDetectionThreshold;
 
     public String ContextMenu_SwitchLEDsON;
     public String ContextMenu_SwitchLEDsOFF;
