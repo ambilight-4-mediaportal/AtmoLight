@@ -246,6 +246,10 @@ namespace AtmoLight.Targets
         coreObject.SetAtmoLightOn(coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true);
         isInit = false;
       }
+      else if (isInit)
+      {
+        isInit = false;
+      }
 
       //Reset counter when we have finished
       hueReconnectCounter = 0;
@@ -380,12 +384,43 @@ namespace AtmoLight.Targets
 
       int minDifferencePreviousColors = coreObject.hueMinimalColorDifference;
 
-      int avgR = (int)(totals[2] / count);
-      int avgG = (int)(totals[1] / count);
-      int avgB = (int)(totals[0] / count);
+
+      int avgR = 0;
+      int avgG = 0;
+      int avgB = 0;
+      bool invalidColorValue = false;
+
+      // Doesn't work all the time, will return divide by zero errors sometimes due to invalid values.
+      // If we get an invalid value we return 0 and skip that image
+      try
+      {
+        avgR = (int)(totals[2] / count);
+      }
+      catch
+      {
+        invalidColorValue = true;
+      }
+
+      try
+      {
+        avgG = (int)(totals[1] / count);
+      }
+      catch
+      {
+        invalidColorValue = true;
+      }
+
+      try
+      {
+        avgB = (int)(totals[0] / count);
+      }
+      catch
+      {
+        invalidColorValue = true;
+      }
 
       //If users sets minimal difference to 0 disable the average color check
-      if (minDifferencePreviousColors == 0)
+      if (minDifferencePreviousColors == 0 && invalidColorValue == false)
       {
         //Send average colors to Bridge
         ChangeColor(avgR, avgG, avgB, 200);
@@ -400,7 +435,10 @@ namespace AtmoLight.Targets
           avgB_previous = avgB;
 
           //Send average colors to Bridge
-          ChangeColor(avgR, avgG, avgB,200);
+          if (invalidColorValue == false)
+          {
+            ChangeColor(avgR, avgG, avgB, 200);
+          }
         }
       }
     }
@@ -442,6 +480,9 @@ namespace AtmoLight.Targets
           catch { };
           //Reconnect AtmoHue after standby
           Log.Debug("HueHandler - Reconnecting after standby");
+
+          //reset Init so we restore the effect on resume
+          isInit = true;
           Connected = false;
           Connect();
           break;
