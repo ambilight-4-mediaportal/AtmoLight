@@ -33,7 +33,7 @@ ErrorStartTime=Saisissez une horaire de début valide.
 ErrorEndTime=Saisissez une horaire de fin valide.
 ErrorMiliseconds=Saisissez une valeur de délai en ms.
 ErrorRefreshRate=Saisissez une valeur de raffraichissement en Hz.
-ErrorRed==Veuillez saisir une chiffre compris entre 0 et 255 pour le Rouge.
+ErrorRed=Veuillez saisir une chiffre compris entre 0 et 255 pour le Rouge.
 ErrorGreen=Veuillez saisir une chiffre compris entre 0 et 255 pour le Vert.
 ErrorBlue=Veuillez saisir une chiffre compris entre 0 et 255 pour le Bleu.
 ErrorRemoteButtons=Vous ne pouvez pas utiliser le même bouton pour plusieurs actions.
@@ -79,6 +79,15 @@ lblBoblightPort=Port:
 lblBoblightMaxReconnectAttempts=Reconnect attempts:
 lblBoblightReconnectDelay=Reconnect delay:
 lblBoblightMaxFPS=Limit capture FPS to:
+lblBoblightSpeed=Speed:
+lblBoblightAutospeed=Autospeed:
+lblBoblightSaturation=Saturation:
+lblBoblightValue=Value:
+lblBoblightThreshold=Threshold:
+lblBoblightInterpolation=Interpolation:
+grpBoblightGeneral=General settings
+grpBoblightSettings=Boblight settings
+lblBoblightGamma=Gamma:
 [ContextMenu]
 SwitchLEDsON=LEDs > ON
 SwitchLEDsOFF=LEDs > OFF

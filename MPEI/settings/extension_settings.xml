@@ -100,6 +100,21 @@
 	</settings>
 	
 	<settings section="Hue">
+		<setting entryname="atmolight" name="hueExe" type="string" defaultvalue="" listvalues="" 
+		displayname="Path to AtmoHue.exe:"
+		description="Please select the path to the AtmoHue.exe!"
+		displaylistvalues=""/>
+		
+		<setting entryname="atmolight" name="hueStart" type="string" defaultvalue="yes" listvalues="Yes|No"
+		displayname="Start AtmoHue with MediaPortal:"    
+		description="Choose if you want to start AtmoHue with MediaPortal."
+		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="hueIsRemoteMachine" type="string" defaultvalue="no" listvalues="Yes|No"
+		displayname="AtmoHue is on remote machine:"    
+		description="Choose if AtmoHue is located on another PC."
+		displaylistvalues="Yes|No"/>
+		
 		<setting entryname="atmolight" name="hueIP" type="string" defaultvalue="127.0.0.1" listvalues="" 
 		displayname="IP:"
 		description="Please enter the IP to AtmoHue!"
