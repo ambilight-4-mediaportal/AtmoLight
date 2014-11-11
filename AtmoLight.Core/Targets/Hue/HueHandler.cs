@@ -246,6 +246,10 @@ namespace AtmoLight.Targets
         coreObject.SetAtmoLightOn(coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true);
         isInit = false;
       }
+      else if (isInit)
+      {
+        isInit = false;
+      }
 
       //Reset counter when we have finished
       hueReconnectCounter = 0;
