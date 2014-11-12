@@ -281,7 +281,6 @@ namespace AtmoLight
       initialiseLock = false;
 
       ChangeEffect(coreObject.GetCurrentEffect());
-      coreObject.SetAtmoLightOn(coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true);
 
       return true;
     }

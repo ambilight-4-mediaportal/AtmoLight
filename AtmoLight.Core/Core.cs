@@ -58,7 +58,6 @@ namespace AtmoLight
     private Thread vuMeterThreadHelper;
 
     // States
-    private bool currentState = false; // State of the LEDs
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current active effect
 
     // Lists
@@ -468,15 +467,6 @@ namespace AtmoLight
       }
       return false;
     }
-
-    /// <summary>
-    /// Sets the current state field.
-    /// </summary>
-    /// <param name="on"></param>
-    public void SetAtmoLightOn(bool on)
-    {
-      currentState = on;
-    }
     #endregion
 
     #region Information Methods (get)
@@ -537,7 +527,11 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     public bool IsAtmoLightOn()
     {
-      return currentState;
+      if (!IsConnected())
+      {
+        return false;
+      }
+      return GetCurrentEffect() == ContentEffect.LEDsDisabled || GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true;
     }
 
     /// <summary>
@@ -896,15 +890,6 @@ namespace AtmoLight
       currentEffect = effect;
       Log.Info("Changing AtmoLight effect to: {0}", effect.ToString());
       StopAllThreads();
-
-      if (effect == ContentEffect.LEDsDisabled || effect == ContentEffect.Undefined)
-      {
-        currentState = false;
-      }
-      else
-      {
-        currentState = true;
-      }
 
       lock (targetsLock)
       {
