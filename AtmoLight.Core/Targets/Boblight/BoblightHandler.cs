@@ -83,6 +83,7 @@ namespace AtmoLight
     {
       Log.Debug("BoblightHandler - Disposing Boblight handler.");
       Disconnect();
+      SystemEvents.PowerModeChanged -= OnPowerModeChanged;
     }
 
     public bool IsConnected()
