@@ -5,6 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
+using Microsoft.Win32;
 using MinimalisticTelnet;
 
 namespace AtmoLight
@@ -50,6 +51,7 @@ namespace AtmoLight
     public BoblightHandler()
     {
       Log.Debug("BoblightHandler - Boblight as target added.");
+      SystemEvents.PowerModeChanged += OnPowerModeChanged;
       oldIterpolation = coreObject.boblightInterpolation;
       oldSpeed = coreObject.boblightSpeed;
       oldGamma = coreObject.boblightGamma;
@@ -508,6 +510,17 @@ namespace AtmoLight
       for (int i = 0; i < gammaCurve.Length; i++)
       {
         gammaCurve[i] = Math.Pow((double)i / ((double)gammaCurve.Length - 1.0f), coreObject.boblightGamma) * (gammaCurve.Length - 1.0f);
+      }
+    }
+    #endregion
+
+    #region PowerModeChanged Event
+    private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs powerMode)
+    {
+      if (powerMode.Mode == PowerModes.Resume)
+      {
+        Disconnect();
+        Initialise();
       }
     }
     #endregion
