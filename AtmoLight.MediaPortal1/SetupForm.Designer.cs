@@ -156,6 +156,7 @@
       this.lblBoblightIP = new System.Windows.Forms.Label();
       this.tabPageHue = new System.Windows.Forms.TabPage();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.ckHueBridgeDisableOnSuspend = new System.Windows.Forms.CheckBox();
       this.ckHueBridgeEnableOnResume = new System.Windows.Forms.CheckBox();
       this.ckhueIsRemoteMachine = new System.Windows.Forms.CheckBox();
       this.lblPathInfoHue = new System.Windows.Forms.Label();
@@ -175,7 +176,9 @@
       this.tbHueIP = new System.Windows.Forms.TextBox();
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
-      this.ckHueBridgeDisableOnSuspend = new System.Windows.Forms.CheckBox();
+      this.lblpowerModeChangedDelay = new System.Windows.Forms.Label();
+      this.tbpowerModeChangedDelay = new System.Windows.Forms.TextBox();
+      this.lblpowerModeChangedDelayMS = new System.Windows.Forms.Label();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -843,7 +846,10 @@
       // 
       // grpPluginOption
       // 
+      this.grpPluginOption.Controls.Add(this.lblpowerModeChangedDelayMS);
+      this.grpPluginOption.Controls.Add(this.lblpowerModeChangedDelay);
       this.grpPluginOption.Controls.Add(this.tbBlackbarDetectionThreshold);
+      this.grpPluginOption.Controls.Add(this.tbpowerModeChangedDelay);
       this.grpPluginOption.Controls.Add(this.ckRestartOnError);
       this.grpPluginOption.Controls.Add(this.grpCaptureDimensions);
       this.grpPluginOption.Controls.Add(this.lblBlackarDetectionMS);
@@ -900,7 +906,7 @@
       this.grpCaptureDimensions.Controls.Add(this.lblCaptureWidth);
       this.grpCaptureDimensions.Controls.Add(this.tbCaptureWidth);
       this.grpCaptureDimensions.Controls.Add(this.tbCaptureHeight);
-      this.grpCaptureDimensions.Location = new System.Drawing.Point(6, 222);
+      this.grpCaptureDimensions.Location = new System.Drawing.Point(6, 249);
       this.grpCaptureDimensions.Name = "grpCaptureDimensions";
       this.grpCaptureDimensions.Size = new System.Drawing.Size(444, 76);
       this.grpCaptureDimensions.TabIndex = 31;
@@ -967,7 +973,7 @@
       this.grpDeactivate.Controls.Add(this.lblEnd);
       this.grpDeactivate.Controls.Add(this.edExcludeStart);
       this.grpDeactivate.Controls.Add(this.lblStart);
-      this.grpDeactivate.Location = new System.Drawing.Point(6, 302);
+      this.grpDeactivate.Location = new System.Drawing.Point(6, 332);
       this.grpDeactivate.Name = "grpDeactivate";
       this.grpDeactivate.Size = new System.Drawing.Size(444, 85);
       this.grpDeactivate.TabIndex = 8;
@@ -1550,6 +1556,16 @@
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Settings";
       // 
+      // ckHueBridgeDisableOnSuspend
+      // 
+      this.ckHueBridgeDisableOnSuspend.AutoSize = true;
+      this.ckHueBridgeDisableOnSuspend.Location = new System.Drawing.Point(7, 130);
+      this.ckHueBridgeDisableOnSuspend.Name = "ckHueBridgeDisableOnSuspend";
+      this.ckHueBridgeDisableOnSuspend.Size = new System.Drawing.Size(177, 17);
+      this.ckHueBridgeDisableOnSuspend.TabIndex = 6;
+      this.ckHueBridgeDisableOnSuspend.Text = "Turn off Hue Bridge on suspend\r\n";
+      this.ckHueBridgeDisableOnSuspend.UseVisualStyleBackColor = true;
+      // 
       // ckHueBridgeEnableOnResume
       // 
       this.ckHueBridgeEnableOnResume.AutoSize = true;
@@ -1730,15 +1746,32 @@
       this.openFileDialog4.FileName = "openFileDialog4";
       this.openFileDialog4.Filter = "AtmoHue.exe|*.exe";
       // 
-      // ckHueBridgeDisableOnSuspend
+      // lblpowerModeChangedDelay
       // 
-      this.ckHueBridgeDisableOnSuspend.AutoSize = true;
-      this.ckHueBridgeDisableOnSuspend.Location = new System.Drawing.Point(7, 130);
-      this.ckHueBridgeDisableOnSuspend.Name = "ckHueBridgeDisableOnSuspend";
-      this.ckHueBridgeDisableOnSuspend.Size = new System.Drawing.Size(177, 17);
-      this.ckHueBridgeDisableOnSuspend.TabIndex = 6;
-      this.ckHueBridgeDisableOnSuspend.Text = "Turn off Hue Bridge on suspend\r\n";
-      this.ckHueBridgeDisableOnSuspend.UseVisualStyleBackColor = true;
+      this.lblpowerModeChangedDelay.AutoSize = true;
+      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(10, 218);
+      this.lblpowerModeChangedDelay.Name = "lblpowerModeChangedDelay";
+      this.lblpowerModeChangedDelay.Size = new System.Drawing.Size(128, 13);
+      this.lblpowerModeChangedDelay.TabIndex = 34;
+      this.lblpowerModeChangedDelay.Text = "Standby reconnect delay:";
+      // 
+      // tbpowerModeChangedDelay
+      // 
+      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(246, 215);
+      this.tbpowerModeChangedDelay.Name = "tbpowerModeChangedDelay";
+      this.tbpowerModeChangedDelay.Size = new System.Drawing.Size(50, 20);
+      this.tbpowerModeChangedDelay.TabIndex = 33;
+      this.tbpowerModeChangedDelay.Text = "0";
+      this.tbpowerModeChangedDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbpowerModeChangedDelay_Validating);
+      // 
+      // lblpowerModeChangedDelayMS
+      // 
+      this.lblpowerModeChangedDelayMS.AutoSize = true;
+      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(302, 218);
+      this.lblpowerModeChangedDelayMS.Name = "lblpowerModeChangedDelayMS";
+      this.lblpowerModeChangedDelayMS.Size = new System.Drawing.Size(20, 13);
+      this.lblpowerModeChangedDelayMS.TabIndex = 35;
+      this.lblpowerModeChangedDelayMS.Text = "ms";
       // 
       // SetupForm
       // 
@@ -1952,5 +1985,8 @@
     private System.Windows.Forms.TextBox tbBlackbarDetectionThreshold;
     private System.Windows.Forms.CheckBox ckHueBridgeEnableOnResume;
     private System.Windows.Forms.CheckBox ckHueBridgeDisableOnSuspend;
+    private System.Windows.Forms.Label lblpowerModeChangedDelayMS;
+    private System.Windows.Forms.Label lblpowerModeChangedDelay;
+    private System.Windows.Forms.TextBox tbpowerModeChangedDelay;
   }
 }

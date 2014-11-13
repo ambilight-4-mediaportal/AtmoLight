@@ -103,6 +103,7 @@ namespace AtmoLight
       tbBoblightThreshold.Text = Settings.boblightThreshold.ToString();
       tbBoblightGamma.Text = Settings.boblightGamma.ToString();
       tbBlackbarDetectionThreshold.Text = Settings.blackbarDetectionThreshold.ToString();
+      tbpowerModeChangedDelay.Text = Settings.powerModeChangedDelay.ToString();
     }
 
     private void UpdateLanguageOnControls()
@@ -143,6 +144,7 @@ namespace AtmoLight
       lblRefreshRate.Text = LanguageLoader.appStrings.SetupForm_lblRefreshRate;
       ckBlackbarDetection.Text = LanguageLoader.appStrings.SetupForm_ckBlackbarDetection;
       lblBlackarDetectionMS.Text = LanguageLoader.appStrings.SetupForm_lblBlackbarDetectionThreshold;
+      lblpowerModeChangedDelay.Text = LanguageLoader.appStrings.SetupForm_lblpowerModeChangedDelay;
       grpGIF.Text = LanguageLoader.appStrings.SetupForm_grpGIF;
       lblHyperionIP.Text = LanguageLoader.appStrings.SetupForm_lblHyperionIP;
       lblHyperionPort.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPort;
@@ -469,7 +471,7 @@ namespace AtmoLight
       maxValue = 65535;
       if (validatorInt(tbBoblightPort.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbBoblightPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -478,7 +480,7 @@ namespace AtmoLight
       maxValue = 9999;
       if (validatorInt(tbBoblightMaxReconnectAttempts.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbBoblightMaxReconnectAttempts.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightMaxReconnectAttempts.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -487,7 +489,7 @@ namespace AtmoLight
       maxValue = 999999;
       if (validatorInt(tbBoblightReconnectDelay.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbBoblightReconnectDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightSaturation.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -496,7 +498,7 @@ namespace AtmoLight
       maxValue = 144;
       if (validatorInt(tbBoblightMaxFPS.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbBoblightMaxFPS.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightMaxFPS.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -505,7 +507,16 @@ namespace AtmoLight
       maxValue = 255;
       if (validatorInt(tbBlackbarDetectionThreshold.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbBlackbarDetectionThreshold.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + ckBlackbarDetection.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // Power mode change delay
+      minValue = 0;
+      maxValue = 999999;
+      if (validatorInt(tbpowerModeChangedDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblpowerModeChangedDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -566,6 +577,7 @@ namespace AtmoLight
       Settings.boblightInterpolation = ckBoblightInterpolation.Checked;
       Settings.boblightGamma = (double)tbarBoblightGamma.Value / 10;
       Settings.blackbarDetectionThreshold = int.Parse(tbBlackbarDetectionThreshold.Text);
+      Settings.powerModeChangedDelay = int.Parse(tbpowerModeChangedDelay.Text);
 
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
       Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
@@ -1000,6 +1012,16 @@ namespace AtmoLight
       int minValue = 0;
       int maxValue = 255;
       if (validatorInt(tbBlackbarDetectionThreshold.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbpowerModeChangedDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 999999;
+      if (validatorInt(tbpowerModeChangedDelay.Text, minValue, maxValue, true) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }

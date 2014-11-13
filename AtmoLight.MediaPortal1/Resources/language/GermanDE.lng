@@ -91,6 +91,7 @@ grpBoblightGeneral=Allgemeine Einstellungen
 grpBoblightSettings=Boblight Einstellungen
 lblBoblightGamma=Gamma:
 lblBlackbarDetectionThreshold=ms, mit Schwelle
+lblpowerModeChangedDelay=Standby reconnect delay:
 [ContextMenu]
 SwitchLEDsON=Schalte LEDs an
 SwitchLEDsOFF=Schalte LEDs aus
