@@ -60,5 +60,11 @@ namespace AtmoLight
 		{
 		// Change the profile of your target
 		}
+		
+		public void PowerModeChanged(PowerModes powerMode)
+		{
+		// Reconnect on resume if needed
+		// ChangeEffect to Core.currentEffect
+		}
 	}
 }
