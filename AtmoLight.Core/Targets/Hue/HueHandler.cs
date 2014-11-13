@@ -205,8 +205,8 @@ namespace AtmoLight.Targets
           catch (Exception e)
           {
             Connected = false;
-            Log.Error("HyperionHandler - Error while connecting");
-            Log.Error("HyperionHandler - Exception: {0}", e.Message);
+            Log.Error("HueHandler - Error while connecting");
+            Log.Error("HueHandler - Exception: {0}", e.Message);
           }
 
           //Increment times tried
@@ -496,7 +496,7 @@ namespace AtmoLight.Targets
 
     private void HueBridgePower(string powerCommand)
     {
-      string message = string.Format("{0},{1},{2}", "ATMOLIGHT",APIcommandType.Power,powerCommand);
+      string message = string.Format("{0},{1},{2}", "ATMOLIGHT", APIcommandType.Power, powerCommand);
       sendAPIcommand(message);
     }
 

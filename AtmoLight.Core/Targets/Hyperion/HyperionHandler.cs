@@ -415,11 +415,14 @@ namespace AtmoLight.Targets
 
           //Reconnect Hyperion after standby
           Log.Debug("HyperionHandler - Reconnecting after standby");
+          isInit = true;
           Connected = false;
           Connect();
 
           break;
         case PowerModes.Suspend:
+          ClearPriority(coreObject.hyperionPriorityStaticColor);
+          ClearPriority(coreObject.hyperionPriority);
           break;
       }
     }
