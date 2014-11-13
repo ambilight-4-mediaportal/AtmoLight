@@ -38,6 +38,7 @@ namespace AtmoLight
     public static string gifFile = "";
     public static int captureWidth = 0;
     public static int captureHeight = 0;
+    public static int powerModeChangedDelay;
 
     // Atmowin
     public static bool atmoWinTarget;
@@ -218,6 +219,7 @@ namespace AtmoLight
         hueTarget = reader.GetValueAsBool("atmolight", "hueTarget", false);
         hyperionTarget = reader.GetValueAsBool("atmolight", "hyperionTarget", false);
         blackbarDetectionThreshold = reader.GetValueAsInt("atmolight", "blackbarDetectionThreshold", 20);
+        powerModeChangedDelay = reader.GetValueAsInt("atmolight", "powerModeChangedDelay", 5000);
       }
     }
     public static void SaveSettings()
@@ -284,6 +286,7 @@ namespace AtmoLight
         reader.SetValueAsBool("atmolight", "boblightInterpolation", boblightInterpolation);
         reader.SetValue("atmolight", "boblightGamma", boblightGamma.ToString());
         reader.SetValue("atmolight", "blackbarDetectionThreshold", blackbarDetectionThreshold.ToString());
+        reader.SetValue("atmolight", "powerModeChangedDelay", powerModeChangedDelay.ToString());
 
         reader.SetValueAsBool("atmolight", "atmoWinTarget", atmoWinTarget);
         reader.SetValueAsBool("atmolight", "boblightTarget", boblightTarget);

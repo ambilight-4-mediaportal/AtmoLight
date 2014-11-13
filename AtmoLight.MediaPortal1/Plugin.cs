@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.IO;
 using Microsoft.DirectX.Direct3D;
+using Microsoft.Win32;
 using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
 using Language;
@@ -81,6 +82,9 @@ namespace AtmoLight
       Settings.LoadSettings();
 
       Log.Debug("Initialising event handler.");
+
+      // PowerModeChanged Handler
+      SystemEvents.PowerModeChanged += PowerModeChanged;
 
       // g_Player Handler
       g_Player.PlayBackStarted += new g_Player.StartedHandler(g_Player_PlayBackStarted);
@@ -172,6 +176,7 @@ namespace AtmoLight
       AtmoLightObject.blackbarDetection = Settings.blackbarDetection;
       AtmoLightObject.blackbarDetectionTime = Settings.blackbarDetectionTime;
       AtmoLightObject.blackbarDetectionThreshold = Settings.blackbarDetectionThreshold;
+      AtmoLightObject.powerModeChangedDelay = Settings.powerModeChangedDelay;
 
       // Get the effects that are supported by at least one target
       supportedEffects = AtmoLightObject.GetSupportedEffects();
@@ -200,7 +205,7 @@ namespace AtmoLight
     public void Stop()
     {
       MediaPortal.FrameGrabber.GetInstance().OnNewFrame -= new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
-
+      SystemEvents.PowerModeChanged -= PowerModeChanged;
       g_Player.PlayBackStarted -= new g_Player.StartedHandler(g_Player_PlayBackStarted);
       g_Player.PlayBackStopped -= new g_Player.StoppedHandler(g_Player_PlayBackStopped);
       g_Player.PlayBackEnded -= new g_Player.EndedHandler(g_Player_PlayBackEnded);
@@ -969,6 +974,25 @@ namespace AtmoLight
       }
       // Start the dialog again (without reset) so we can enter the other colors.
       DialogRGBManualStaticColorChanger(false, dlgRGB.SelectedLabel);
+    }
+    #endregion
+
+    #region PowerModeChanged Event
+    private void PowerModeChanged(object sender, PowerModeChangedEventArgs powerMode)
+    {
+      if (powerMode.Mode == PowerModes.Resume)
+      {
+        if (CheckForStartRequirements())
+        {
+          AtmoLightObject.SetInitialEffect(menuEffect);
+        }
+        else
+        {
+          AtmoLightObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+        }
+      }
+
+      Task.Factory.StartNew(() => { AtmoLightObject.PowerModeChanged(powerMode.Mode); });
     }
     #endregion
 

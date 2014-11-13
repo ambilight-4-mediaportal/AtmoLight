@@ -51,7 +51,6 @@ namespace AtmoLight
     public BoblightHandler()
     {
       Log.Debug("BoblightHandler - Boblight as target added.");
-      SystemEvents.PowerModeChanged += OnPowerModeChanged;
       oldIterpolation = coreObject.boblightInterpolation;
       oldSpeed = coreObject.boblightSpeed;
       oldGamma = coreObject.boblightGamma;
@@ -83,7 +82,6 @@ namespace AtmoLight
     {
       Log.Debug("BoblightHandler - Disposing Boblight handler.");
       Disconnect();
-      SystemEvents.PowerModeChanged -= OnPowerModeChanged;
     }
 
     public bool IsConnected()
@@ -189,6 +187,15 @@ namespace AtmoLight
         Log.Error("BoblightHandler - Error in ChangeImage.");
         Log.Error("BoblightHandler - Exception: {0}", ex.Message);
         ReInitialise();
+      }
+    }
+
+    public void PowerModeChanged(PowerModes powerMode)
+    {
+      if (powerMode == PowerModes.Resume)
+      {
+        Disconnect();
+        Connect();
       }
     }
     #endregion
@@ -510,17 +517,6 @@ namespace AtmoLight
       for (int i = 0; i < gammaCurve.Length; i++)
       {
         gammaCurve[i] = Math.Pow((double)i / ((double)gammaCurve.Length - 1.0f), coreObject.boblightGamma) * (gammaCurve.Length - 1.0f);
-      }
-    }
-    #endregion
-
-    #region PowerModeChanged Event
-    private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs powerMode)
-    {
-      if (powerMode.Mode == PowerModes.Resume)
-      {
-        Disconnect();
-        Initialise();
       }
     }
     #endregion

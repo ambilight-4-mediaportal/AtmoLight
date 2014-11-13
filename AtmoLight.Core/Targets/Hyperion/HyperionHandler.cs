@@ -60,9 +60,6 @@ namespace AtmoLight.Targets
       {
         isInit = true;
 
-        //Start monitoring powerstate for on resume reconnection
-        monitorPowerState();
-
         if (coreObject.hyperionLiveReconnect)
         {
           liveReconnect();
@@ -409,13 +406,9 @@ namespace AtmoLight.Targets
     #endregion
 
     #region powerstate monitoring
-    private void monitorPowerState()
+    public void PowerModeChanged(PowerModes powerMode)
     {
-      SystemEvents.PowerModeChanged += OnPowerModeChanged;
-    }
-    private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs e)
-    {
-      switch (e.Mode)
+      switch (powerMode)
       {
         case PowerModes.Resume:
           Disconnect();

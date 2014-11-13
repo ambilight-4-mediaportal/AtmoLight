@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
 using System.Net.Sockets;
 using System.Linq;
+using Microsoft.Win32;
 
 namespace AtmoLight
 {
@@ -235,6 +236,14 @@ namespace AtmoLight
       // Change the effect to the desired effect.
       // Needed for AtmoWin 1.0.0.5+
       if (!ChangeEffect(coreObject.GetCurrentEffect())) return;
+    }
+
+    public void PowerModeChanged(PowerModes powerMode)
+    {
+      if (powerMode == PowerModes.Resume)
+      {
+        ChangeEffect(coreObject.GetCurrentEffect());
+      }
     }
     #endregion
 

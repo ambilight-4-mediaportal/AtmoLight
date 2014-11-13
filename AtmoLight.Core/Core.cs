@@ -5,13 +5,13 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
-using AtmoWinRemoteControl;
 using System.Drawing;
 using System.IO;
 using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
 using System.Net.Sockets;
 using System.Linq;
+using Microsoft.Win32;
 using proto;
 using AtmoLight.Targets;
 
@@ -92,7 +92,6 @@ namespace AtmoLight
     private bool delayEnabled = false;
     private int delayTime = 0;
     private string gifPath = "";
-    private bool initialEffect = false;
     private Rectangle blackbarDetectionRect;
 
     // General settings for targets
@@ -101,6 +100,7 @@ namespace AtmoLight
     public bool blackbarDetection;
     public int blackbarDetectionTime;
     public int blackbarDetectionThreshold;
+    public int powerModeChangedDelay;
 
     // AtmoWin Settings Fields
     public bool atmoWinAutoStart;
@@ -396,15 +396,9 @@ namespace AtmoLight
     /// </summary>
     /// <param name="effect"></param>
     /// <returns></returns>
-    public bool SetInitialEffect(ContentEffect effect)
+    public void SetInitialEffect(ContentEffect effect)
     {
-      if (!initialEffect)
-      {
-        currentEffect = effect;
-        initialEffect = true;
-        return true;
-      }
-      return false;
+      currentEffect = effect;
     }
 
     /// <summary>
@@ -966,6 +960,21 @@ namespace AtmoLight
       Log.Info("Removing delay.");
       delayEnabled = false;
       StopSetPixelDataThread();
+    }
+
+    public void PowerModeChanged(PowerModes powerMode)
+    {
+      if (powerMode == PowerModes.Resume)
+      {
+        System.Threading.Thread.Sleep(powerModeChangedDelay);
+      }
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          target.PowerModeChanged(powerMode);
+        }
+      }
     }
     #endregion
 

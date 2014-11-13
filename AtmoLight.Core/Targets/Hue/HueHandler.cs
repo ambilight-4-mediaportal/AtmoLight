@@ -78,9 +78,6 @@ namespace AtmoLight.Targets
     {
       isInit = true;
 
-      //Start monitoring powerstate for on resume reconnection
-      monitorPowerState();
-
       Thread t = new Thread(() => InitialiseThread(force));
       t.IsBackground = true;
       t.Start();
@@ -506,13 +503,9 @@ namespace AtmoLight.Targets
     #endregion
 
     #region powerstate monitoring
-    private void monitorPowerState()
+    public void PowerModeChanged(PowerModes powerMode)
     {
-      SystemEvents.PowerModeChanged += OnPowerModeChanged;
-    }
-    private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs e)
-    {
-      switch (e.Mode)
+      switch (powerMode)
       {
         case PowerModes.Resume:
           // Close old socket and create new TCP client which allows it to reconnect when calling Connect()
