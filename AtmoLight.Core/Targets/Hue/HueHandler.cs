@@ -272,7 +272,7 @@ namespace AtmoLight.Targets
       }
       catch (Exception e)
       {
-        Log.Error(string.Format("HueHandler - {0}", "Error during dispose"));
+        Log.Error(string.Format("HueHandler - {0}", "Error during disconnect"));
         Log.Error(string.Format("HueHandler - {0}", e.Message));
       }
     }

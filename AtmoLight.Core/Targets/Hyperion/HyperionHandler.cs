@@ -242,7 +242,7 @@ namespace AtmoLight.Targets
       }
       catch (Exception e)
       {
-        Log.Error(string.Format("HyperionHandler - {0}", "Error during dispose"));
+        Log.Error(string.Format("HyperionHandler - {0}", "Error during disconnect"));
         Log.Error(string.Format("HyperionHandler - {0}", e.Message));
       }
     }
