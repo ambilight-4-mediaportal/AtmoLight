@@ -306,8 +306,8 @@ namespace AtmoLight.Targets
     {
       try
       {
-          string message = string.Format("{0},{1},{2},{3},{4}", APIcommandType.Color ,red.ToString(), green.ToString(), blue.ToString(), priority.ToString());
-          sendAPIcommand(message);
+        string message = string.Format("{0},{1},{2},{3},{4},{5}", "ATMOLIGHT", APIcommandType.Color, red.ToString(), green.ToString(), blue.ToString(), priority.ToString());
+        sendAPIcommand(message);
       }
       catch (Exception e)
       {
@@ -499,7 +499,7 @@ namespace AtmoLight.Targets
 
     private void HueBridgePower(string powerCommand)
     {
-      string message = string.Format("{0},{1}", APIcommandType.Power,powerCommand);
+      string message = string.Format("{0},{1},{2}", "ATMOLIGHT",APIcommandType.Power,powerCommand);
       sendAPIcommand(message);
     }
 
@@ -541,7 +541,7 @@ namespace AtmoLight.Targets
         case PowerModes.Suspend:
           if (coreObject.hueBridgeDisableOnSuspend)
           {
-            //Send Power ON command
+            //Send Power OFF command
             if (Socket.Connected)
             {
               HueBridgePower("OFF");

@@ -1563,7 +1563,7 @@
       // ckhueIsRemoteMachine
       // 
       this.ckhueIsRemoteMachine.AutoSize = true;
-      this.ckhueIsRemoteMachine.Location = new System.Drawing.Point(7, 147);
+      this.ckhueIsRemoteMachine.Location = new System.Drawing.Point(7, 152);
       this.ckhueIsRemoteMachine.Name = "ckhueIsRemoteMachine";
       this.ckhueIsRemoteMachine.Size = new System.Drawing.Size(281, 17);
       this.ckhueIsRemoteMachine.TabIndex = 4;
@@ -1733,7 +1733,7 @@
       // ckHueBridgeDisableOnSuspend
       // 
       this.ckHueBridgeDisableOnSuspend.AutoSize = true;
-      this.ckHueBridgeDisableOnSuspend.Location = new System.Drawing.Point(7, 127);
+      this.ckHueBridgeDisableOnSuspend.Location = new System.Drawing.Point(7, 130);
       this.ckHueBridgeDisableOnSuspend.Name = "ckHueBridgeDisableOnSuspend";
       this.ckHueBridgeDisableOnSuspend.Size = new System.Drawing.Size(177, 17);
       this.ckHueBridgeDisableOnSuspend.TabIndex = 6;
