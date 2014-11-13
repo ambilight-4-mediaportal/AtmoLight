@@ -698,7 +698,7 @@ namespace AtmoLight
     {
       // Debug file output
       // new Bitmap(stream).Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
-      if (blackbarDetection)
+      if (blackbarDetection && currentEffect == ContentEffect.MediaPortalLiveMode)
       {
         stream = BlackbarDetection(stream);
       }
@@ -838,7 +838,7 @@ namespace AtmoLight
             }
           }
         }
-        if ((yTopBound != 0 || yBottomBound != blackBarBitmap.Height || xLeftBound != 0 || xRightBound != blackBarBitmap.Width) && (yTopBound != -1 && yBottomBound != -1 && xLeftBound != -1 && xRightBound != -1))
+        if (yTopBound != -1 && yBottomBound != -1 && xLeftBound != -1 && xRightBound != -1)
         {
           blackbarDetectionRect = new Rectangle(xLeftBound, yTopBound, xRightBound - xLeftBound, yBottomBound - yTopBound);
         }
@@ -846,7 +846,7 @@ namespace AtmoLight
         blackbarStopwatch.Restart();
       }
 
-      if (blackbarDetectionRect != new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight()) && blackbarDetectionRect != null)
+      if (blackbarDetectionRect != new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight()) && blackbarDetectionRect != new Rectangle(0, 0, 0, 0))
       {
         Bitmap blackBarBitmapOutput = new Bitmap(GetCaptureWidth(), GetCaptureHeight());
 
@@ -900,6 +900,7 @@ namespace AtmoLight
 
       if (effect == ContentEffect.MediaPortalLiveMode)
       {
+        blackbarDetectionRect = new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight());
         if (delayEnabled)
         {
           Log.Debug("Adding {0}ms delay to the LEDs.", delayTime);
