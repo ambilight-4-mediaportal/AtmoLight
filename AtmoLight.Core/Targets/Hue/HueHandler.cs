@@ -36,11 +36,21 @@ namespace AtmoLight.Targets
         };
       }
     }
+    private enum APIcommandType
+    {
+      Color,
+      Group,
+      Power,
+      Room,
+    }
 
     // CORE
     private Core coreObject;
+
+    // HUE
     private int hueDelayAtmoHue = 5000; 
     private int hueReconnectCounter = 0;
+    private Boolean HueBridgeStartOnResume = false;
 
     // TCP
     private static TcpClient Socket = new TcpClient();
@@ -130,8 +140,8 @@ namespace AtmoLight.Targets
         }
         catch (Exception e)
         {
-          Log.Error(string.Format("Hue - {0}", "Error during dispose"));
-          Log.Error(string.Format("Hue - {0}", e.Message));
+          Log.Error(string.Format("HueHandler - {0}", "Error during dispose"));
+          Log.Error(string.Format("HueHandler - {0}", e.Message));
         }
       }
     }
@@ -239,6 +249,23 @@ namespace AtmoLight.Targets
         }
       }
 
+      //Reset counter when we have finished
+      hueReconnectCounter = 0;
+
+      //Power ON bridge if connected and enabled
+      if (HueBridgeStartOnResume && Connected)
+      {
+        //Reset start variable
+        HueBridgeStartOnResume = false;
+
+        //Send Power ON command
+        HueBridgePower("ON");
+
+        //Sleep for 2s to allow for Hue Bridge startup
+        Thread.Sleep(2000);
+      }
+
+
       //On first initialize set the effect after we are done trying to connect
       if (isInit && Connected)
       {
@@ -249,9 +276,23 @@ namespace AtmoLight.Targets
       {
         isInit = false;
       }
+    }
+    private void sendAPIcommand(string message)
+    {
+      try
+      {
+        ASCIIEncoding encoder = new ASCIIEncoding();
+        byte[] buffer = encoder.GetBytes(message);
 
-      //Reset counter when we have finished
-      hueReconnectCounter = 0;
+        Stream.Write(buffer, 0, buffer.Length);
+        Stream.Flush();
+      }
+      catch (Exception e)
+      {
+        Log.Error("HueHandler - error during sending power command");
+        Log.Error(string.Format("HueHandler - {0}", e.Message));
+
+      }
     }
 
     public void ChangeColor(int red, int green, int blue, int priority)
@@ -265,17 +306,13 @@ namespace AtmoLight.Targets
     {
       try
       {
-          string message = string.Format("{0},{1},{2},{3}", red.ToString(), green.ToString(), blue.ToString(), priority.ToString());
-          ASCIIEncoding encoder = new ASCIIEncoding();
-          byte[] buffer = encoder.GetBytes(message);
-
-          Stream.Write(buffer, 0, buffer.Length);
-          Stream.Flush();
+          string message = string.Format("{0},{1},{2},{3},{4}", APIcommandType.Color ,red.ToString(), green.ToString(), blue.ToString(), priority.ToString());
+          sendAPIcommand(message);
       }
       catch (Exception e)
       {
-        Log.Error("Hue - error during sending color");
-        Log.Error(string.Format("Hue - {0}", e.Message));
+        Log.Error("HueHandler - error during sending color");
+        Log.Error(string.Format("HueHandler - {0}", e.Message));
       }
     }
     public bool ChangeEffect(ContentEffect effect)
@@ -333,8 +370,8 @@ namespace AtmoLight.Targets
       }
       catch(Exception e)
       {
-        Log.Error(string.Format("Hue - {0}", "Error during average color calculations"));
-        Log.Error(string.Format("Hue - {0}", e.Message));
+        Log.Error(string.Format("HueHandler - {0}", "Error during average color calculations"));
+        Log.Error(string.Format("HueHandler - {0}", e.Message));
       }
     }
     public void CalculateAverageColorAndSendToHue(Bitmap bm)
@@ -459,6 +496,13 @@ namespace AtmoLight.Targets
       }
       ChangeColor(0, 0, 0,200);
     }
+
+    private void HueBridgePower(string powerCommand)
+    {
+      string message = string.Format("{0},{1}", APIcommandType.Power,powerCommand);
+      sendAPIcommand(message);
+    }
+
     #endregion
 
     #region powerstate monitoring
@@ -483,9 +527,26 @@ namespace AtmoLight.Targets
           //reset Init so we restore the effect on resume
           isInit = true;
           Connected = false;
-          Connect();
+
+          if (coreObject.hueBridgeEnableOnResume)
+          {
+            HueBridgeStartOnResume = true;
+            Connect();
+          }
+          else
+          {
+            Connect();
+          }
           break;
         case PowerModes.Suspend:
+          if (coreObject.hueBridgeDisableOnSuspend)
+          {
+            //Send Power ON command
+            if (Socket.Connected)
+            {
+              HueBridgePower("OFF");
+            }
+          }
           break;
       }
     }

@@ -140,6 +140,12 @@ namespace AtmoLight
     public int HueMinimalColorDifference { get; set; }
 
     [Setting(SettingScope.User, false)]
+    public bool HueBridgeEnableOnResume { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool HueBridgeDisableOnSuspend { get; set; }
+    
+    [Setting(SettingScope.User, false)]
     public bool BoblightTarget { get; set; }
 
     [Setting(SettingScope.User, "127.0.0.1")]
@@ -235,6 +241,7 @@ namespace AtmoLight
       HueReconnectDelay = settings.HueReconnectDelay;
       HueReconnectAttempts = settings.HueReconnectAttempts;
       HueMinimalColorDifference = settings.HueMinimalColorDifference;
+      HueBridgeEnableOnResume = settings.HueBridgeEnableOnResume;
       CaptureHeight = settings.CaptureHeight;
       CaptureWidth = settings.CaptureWidth;
       BoblightTarget = settings.BoblightTarget;
@@ -299,6 +306,7 @@ namespace AtmoLight
       settings.HueReconnectDelay = HueReconnectDelay;
       settings.HueReconnectAttempts = HueReconnectAttempts;
       settings.HueMinimalColorDifference = HueMinimalColorDifference;
+      settings.HueBridgeEnableOnResume = HueBridgeEnableOnResume;
       settings.CaptureWidth = CaptureWidth;
       settings.CaptureHeight = CaptureHeight;
       settings.BoblightTarget = BoblightTarget;

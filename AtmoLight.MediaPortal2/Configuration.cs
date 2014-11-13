@@ -1129,6 +1129,42 @@ namespace AtmoLight.Configuration
     }
   }
 
+  public class HueBridgeEnableOnResume : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().HueBridgeEnableOnResume;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueBridgeEnableOnResume = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueBridgeEnableOnResume = _yes;
+    }
+  }
+
+  public class HueBridgeDisableOnSuspend : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().HueBridgeDisableOnSuspend;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueBridgeDisableOnSuspend = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueBridgeDisableOnSuspend = _yes;
+    }
+  }
+
   public class CaptureWidth : LimitedNumberSelect
   {
     public override void Load()

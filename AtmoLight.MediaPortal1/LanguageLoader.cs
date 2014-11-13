@@ -352,7 +352,9 @@ namespace Language
     public String SetupForm_lblHuePort;
     public String SetupForm_lblHueReconnectDelay;
     public String SetupForm_lblHueReconnectAttempts;
-    public String SetupForm_lblHueMinimalColorDifference;    
+    public String SetupForm_lblHueMinimalColorDifference;
+    public String SetupForm_ckHueBridgeEnableOnResume;
+    public String SetupForm_ckHueBridgeDisableOnSuspend;
     public String SetupForm_grpHyperionNetworkSettings;
     public String SetupForm_grpHyperionPrioritySettings;
     public String SetupForm_tabPageGeneric;

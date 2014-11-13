@@ -158,8 +158,10 @@ namespace AtmoLight
       AtmoLightObject.huePort = Settings.huePort;
       AtmoLightObject.hueReconnectDelay = Settings.hueReconnectDelay;
       AtmoLightObject.hueReconnectAttempts = Settings.hueReconnectAttempts;
-
       AtmoLightObject.hueMinimalColorDifference = Settings.hueMinimalColorDifference;
+      AtmoLightObject.hueBridgeEnableOnResume = Settings.hueBridgeEnableOnResume;
+      AtmoLightObject.hueBridgeDisableOnSuspend = Settings.hueBridgeDisableOnSuspend;
+      
 
       // General settings
       AtmoLightObject.SetDelay(Settings.delayReferenceTime);

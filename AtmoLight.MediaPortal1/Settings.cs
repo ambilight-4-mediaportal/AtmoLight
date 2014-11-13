@@ -80,6 +80,9 @@ namespace AtmoLight
     public static int hueReconnectDelay = 0;
     public static int hueReconnectAttempts = 0;
     public static int hueMinimalColorDifference;
+    public static bool hueBridgeEnableOnResume;
+    public static bool hueBridgeDisableOnSuspend;
+
 
     #endregion
 
@@ -196,6 +199,8 @@ namespace AtmoLight
         hueReconnectDelay = reader.GetValueAsInt("atmolight", "hueReconnectDelay", 10000);
         hueReconnectAttempts = reader.GetValueAsInt("atmolight", "hueReconnectAttempts", 5);
         hueMinimalColorDifference = reader.GetValueAsInt("atmolight", "hueMinimalColorDifference", 25);
+        hueBridgeEnableOnResume = reader.GetValueAsBool("atmolight", "hueBridgeEnableOnResume", false);
+        hueBridgeDisableOnSuspend = reader.GetValueAsBool("atmolight", "hueBridgeDisableOnSuspend", false);
         boblightIP = reader.GetValueAsString("atmolight", "boblightIP", "127.0.0.1");
         boblightPort = reader.GetValueAsInt("atmolight", "boblightPort", 19333);
         boblightMaxFPS = reader.GetValueAsInt("atmolight", "boblightMaxFPS", 10);
@@ -264,6 +269,8 @@ namespace AtmoLight
         reader.SetValue("atmolight", "hueReconnectDelay", (int)hueReconnectDelay);
         reader.SetValue("atmolight", "hueReconnectAttempts", (int)hueReconnectAttempts);
         reader.SetValue("atmolight", "hueMinimalColorDifference", (int)hueMinimalColorDifference);
+        reader.SetValueAsBool("atmolight", "HueBridgeEnableOnResume", hueBridgeEnableOnResume);
+        reader.SetValueAsBool("atmolight", "hueBridgeDisableOnSuspend", hueBridgeDisableOnSuspend);
         reader.SetValue("atmolight", "boblightIP", boblightIP);
         reader.SetValue("atmolight", "boblightPort", boblightPort);
         reader.SetValue("atmolight", "boblightMaxFPS", boblightMaxFPS);

@@ -89,6 +89,7 @@
       this.cbVideo = new System.Windows.Forms.ComboBox();
       this.lblVidTvRec = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
+      this.tbBlackbarDetectionThreshold = new System.Windows.Forms.TextBox();
       this.ckRestartOnError = new System.Windows.Forms.CheckBox();
       this.grpCaptureDimensions = new System.Windows.Forms.GroupBox();
       this.lblHintCaptureDimensions = new System.Windows.Forms.Label();
@@ -155,6 +156,7 @@
       this.lblBoblightIP = new System.Windows.Forms.Label();
       this.tabPageHue = new System.Windows.Forms.TabPage();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.ckHueBridgeEnableOnResume = new System.Windows.Forms.CheckBox();
       this.ckhueIsRemoteMachine = new System.Windows.Forms.CheckBox();
       this.lblPathInfoHue = new System.Windows.Forms.Label();
       this.btnSelectFileHue = new System.Windows.Forms.Button();
@@ -173,7 +175,7 @@
       this.tbHueIP = new System.Windows.Forms.TextBox();
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
-      this.tbBlackbarDetectionThreshold = new System.Windows.Forms.TextBox();
+      this.ckHueBridgeDisableOnSuspend = new System.Windows.Forms.CheckBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -871,6 +873,14 @@
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
       // 
+      // tbBlackbarDetectionThreshold
+      // 
+      this.tbBlackbarDetectionThreshold.Location = new System.Drawing.Point(373, 167);
+      this.tbBlackbarDetectionThreshold.Name = "tbBlackbarDetectionThreshold";
+      this.tbBlackbarDetectionThreshold.Size = new System.Drawing.Size(41, 20);
+      this.tbBlackbarDetectionThreshold.TabIndex = 33;
+      this.tbBlackbarDetectionThreshold.Validating += new System.ComponentModel.CancelEventHandler(this.tbBlackbarDetectionThreshold_Validating);
+      // 
       // ckRestartOnError
       // 
       this.ckRestartOnError.AutoSize = true;
@@ -1526,6 +1536,8 @@
       // 
       // groupBox1
       // 
+      this.groupBox1.Controls.Add(this.ckHueBridgeDisableOnSuspend);
+      this.groupBox1.Controls.Add(this.ckHueBridgeEnableOnResume);
       this.groupBox1.Controls.Add(this.ckhueIsRemoteMachine);
       this.groupBox1.Controls.Add(this.lblPathInfoHue);
       this.groupBox1.Controls.Add(this.btnSelectFileHue);
@@ -1533,15 +1545,25 @@
       this.groupBox1.Controls.Add(this.ckStartHue);
       this.groupBox1.Location = new System.Drawing.Point(13, 17);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(822, 154);
+      this.groupBox1.Size = new System.Drawing.Size(822, 179);
       this.groupBox1.TabIndex = 27;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Settings";
       // 
+      // ckHueBridgeEnableOnResume
+      // 
+      this.ckHueBridgeEnableOnResume.AutoSize = true;
+      this.ckHueBridgeEnableOnResume.Location = new System.Drawing.Point(7, 107);
+      this.ckHueBridgeEnableOnResume.Name = "ckHueBridgeEnableOnResume";
+      this.ckHueBridgeEnableOnResume.Size = new System.Drawing.Size(246, 17);
+      this.ckHueBridgeEnableOnResume.TabIndex = 5;
+      this.ckHueBridgeEnableOnResume.Text = "Turn on Hue Bridge upon resume from standby";
+      this.ckHueBridgeEnableOnResume.UseVisualStyleBackColor = true;
+      // 
       // ckhueIsRemoteMachine
       // 
       this.ckhueIsRemoteMachine.AutoSize = true;
-      this.ckhueIsRemoteMachine.Location = new System.Drawing.Point(7, 107);
+      this.ckhueIsRemoteMachine.Location = new System.Drawing.Point(7, 147);
       this.ckhueIsRemoteMachine.Name = "ckhueIsRemoteMachine";
       this.ckhueIsRemoteMachine.Size = new System.Drawing.Size(281, 17);
       this.ckhueIsRemoteMachine.TabIndex = 4;
@@ -1602,9 +1624,9 @@
       this.HueNetworkSettings.Controls.Add(this.lblHuePort);
       this.HueNetworkSettings.Controls.Add(this.tbHueIP);
       this.HueNetworkSettings.Controls.Add(this.lblHueIP);
-      this.HueNetworkSettings.Location = new System.Drawing.Point(416, 191);
+      this.HueNetworkSettings.Location = new System.Drawing.Point(416, 202);
       this.HueNetworkSettings.Name = "HueNetworkSettings";
-      this.HueNetworkSettings.Size = new System.Drawing.Size(419, 255);
+      this.HueNetworkSettings.Size = new System.Drawing.Size(419, 244);
       this.HueNetworkSettings.TabIndex = 0;
       this.HueNetworkSettings.TabStop = false;
       this.HueNetworkSettings.Text = "Network";
@@ -1662,7 +1684,7 @@
       // lblHintHue
       // 
       this.lblHintHue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintHue.Location = new System.Drawing.Point(16, 206);
+      this.lblHintHue.Location = new System.Drawing.Point(16, 201);
       this.lblHintHue.Name = "lblHintHue";
       this.lblHintHue.Size = new System.Drawing.Size(397, 46);
       this.lblHintHue.TabIndex = 21;
@@ -1708,19 +1730,21 @@
       this.openFileDialog4.FileName = "openFileDialog4";
       this.openFileDialog4.Filter = "AtmoHue.exe|*.exe";
       // 
-      // tbBlackbarDetectionThreshold
+      // ckHueBridgeDisableOnSuspend
       // 
-      this.tbBlackbarDetectionThreshold.Location = new System.Drawing.Point(373, 167);
-      this.tbBlackbarDetectionThreshold.Name = "tbBlackbarDetectionThreshold";
-      this.tbBlackbarDetectionThreshold.Size = new System.Drawing.Size(41, 20);
-      this.tbBlackbarDetectionThreshold.TabIndex = 33;
-      this.tbBlackbarDetectionThreshold.Validating += new System.ComponentModel.CancelEventHandler(this.tbBlackbarDetectionThreshold_Validating);
+      this.ckHueBridgeDisableOnSuspend.AutoSize = true;
+      this.ckHueBridgeDisableOnSuspend.Location = new System.Drawing.Point(7, 127);
+      this.ckHueBridgeDisableOnSuspend.Name = "ckHueBridgeDisableOnSuspend";
+      this.ckHueBridgeDisableOnSuspend.Size = new System.Drawing.Size(177, 17);
+      this.ckHueBridgeDisableOnSuspend.TabIndex = 6;
+      this.ckHueBridgeDisableOnSuspend.Text = "Turn off Hue Bridge on suspend\r\n";
+      this.ckHueBridgeDisableOnSuspend.UseVisualStyleBackColor = true;
       // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(884, 532);
+      this.ClientSize = new System.Drawing.Size(884, 531);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
@@ -1926,5 +1950,7 @@
     private System.Windows.Forms.TextBox tbHueReconnectDelay;
     private System.Windows.Forms.Label lblHueReconnectDelay;
     private System.Windows.Forms.TextBox tbBlackbarDetectionThreshold;
+    private System.Windows.Forms.CheckBox ckHueBridgeEnableOnResume;
+    private System.Windows.Forms.CheckBox ckHueBridgeDisableOnSuspend;
   }
 }

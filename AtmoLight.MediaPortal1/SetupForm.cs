@@ -70,6 +70,8 @@ namespace AtmoLight
       tbHueReconnectDelay.Text = Settings.hueReconnectDelay.ToString();
       tbHueReconnectAttempts.Text = Settings.hueReconnectAttempts.ToString();
       tbHueMinimalColorDifference.Text = Settings.hueMinimalColorDifference.ToString();
+      ckHueBridgeEnableOnResume.Checked = Settings.hueBridgeEnableOnResume;
+      ckHueBridgeDisableOnSuspend.Checked = Settings.hueBridgeDisableOnSuspend;
       ckOnMediaStart.Checked = Settings.manualMode;
       ckLowCpu.Checked = Settings.lowCPU;
       ckDelay.Checked = Settings.delay;
@@ -165,6 +167,7 @@ namespace AtmoLight
       lblHueReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblHueReconnectDelay;
       lblHueReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblHueReconnectAttempts;
       lblHueMinimalColorDifference.Text = LanguageLoader.appStrings.SetupForm_lblHueMinimalColorDifference;
+      ckHueBridgeEnableOnResume.Text = LanguageLoader.appStrings.SetupForm_ckHueBridgeEnableOnResume;
       lblMPExit.Text = LanguageLoader.appStrings.SetupForm_lblMPExit;
       lblBoblightIP.Text = LanguageLoader.appStrings.SetupForm_lblBoblightIP;
       lblBoblightPort.Text = LanguageLoader.appStrings.SetupForm_lblBoblightPort;
@@ -544,6 +547,8 @@ namespace AtmoLight
       Settings.hueReconnectDelay = int.Parse(tbHueReconnectDelay.Text);
       Settings.hueReconnectAttempts = int.Parse(tbHueReconnectAttempts.Text);
       Settings.hueMinimalColorDifference = int.Parse(tbHueMinimalColorDifference.Text);
+      Settings.hueBridgeEnableOnResume = ckHueBridgeEnableOnResume.Checked;
+      Settings.hueBridgeDisableOnSuspend = ckHueBridgeDisableOnSuspend.Checked;
       Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
       Settings.hueTarget = ckHueEnabled.Checked;
       Settings.hyperionTarget = ckHyperionEnabled.Checked;

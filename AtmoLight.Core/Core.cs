@@ -139,6 +139,8 @@ namespace AtmoLight
     public int hueReconnectDelay;
     public int hueReconnectAttempts;
     public int hueMinimalColorDifference;
+    public bool hueBridgeEnableOnResume;
+    public bool hueBridgeDisableOnSuspend;
 
     #endregion
 

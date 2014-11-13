@@ -229,6 +229,14 @@
         Id="HueMinimalColorDifference"
         Text="[AtmoLight.HueMinimalColorDifference]"
         ClassName="AtmoLight.Configuration.HueMinimalColorDifference"/>
+    <ConfigSetting
+        Id="HueBridgeEnableOnResume"
+        Text="[AtmoLight.HueBridgeEnableOnResume]"
+        ClassName="AtmoLight.Configuration.HueBridgeEnableOnResume"/>
+    <ConfigSetting
+        Id="HueBridgeDisableOnSuspend"
+        Text="[AtmoLight.HueBridgeDisableOnSuspend]"
+        ClassName="AtmoLight.Configuration.HueBridgeDisableOnSuspend"/>    
   </Register>
 
 

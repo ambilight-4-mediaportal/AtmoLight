@@ -114,7 +114,7 @@
 		displayname="AtmoHue is on remote machine:"    
 		description="Choose if AtmoHue is located on another PC."
 		displaylistvalues="Yes|No"/>
-		
+				
 		<setting entryname="atmolight" name="hueIP" type="string" defaultvalue="127.0.0.1" listvalues="" 
 		displayname="IP:"
 		description="Please enter the IP to AtmoHue!"
@@ -127,6 +127,17 @@
 		<setting entryname="atmolight" name="hueMinimalColorDifference" type="int" defaultvalue="25" minvalue="0" maxvalue="255"
 		displayname="Minimal color difference:"    
 		description="Please enter minimal color difference."/>
+		
+		<setting entryname="atmolight" name="hueBridgeEnableOnResume" type="string" defaultvalue="no" listvalues="Yes|No"
+		displayname="Turn on Hue Bridge upon resume from standby"    
+		description="Enable if you want to start reconnection to the Hue bridge upon resume"
+		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="hueBridgeDisableOnSuspend" type="string" defaultvalue="no" listvalues="Yes|No"
+		displayname="Turn off Hue Bridge on suspend"    
+		description="Enable if you want to turn off the Hue Bridge on suspend"
+		displaylistvalues="Yes|No"/>
+
 	</settings>
 	
 	<settings section="Hyperion">
