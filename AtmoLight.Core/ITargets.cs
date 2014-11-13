@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Win32;
 
 namespace AtmoLight
 {
@@ -16,5 +17,6 @@ namespace AtmoLight
     bool ChangeEffect(ContentEffect effect);
     void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader);
     void ChangeProfile();
+    void PowerModeChanged(PowerModes powerMode);
   }
 }
