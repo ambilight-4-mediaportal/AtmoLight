@@ -89,4 +89,5 @@
   <string name="AtmoLight.BlackbarDetection">Blackbar detection</string>
   <string name="AtmoLight.BlackbarDetectionTime">Blackbar detection delay</string>
   <string name="AtmoLight.BlackbarDetectionThreshold">Blackbar detection threshold</string>
+  <string name="AtmoLight.PowerModeChangedDelay">Delay after standby</string>
 </resources>

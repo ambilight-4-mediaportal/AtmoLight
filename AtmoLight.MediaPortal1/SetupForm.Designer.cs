@@ -89,7 +89,10 @@
       this.cbVideo = new System.Windows.Forms.ComboBox();
       this.lblVidTvRec = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
+      this.lblpowerModeChangedDelayMS = new System.Windows.Forms.Label();
+      this.lblpowerModeChangedDelay = new System.Windows.Forms.Label();
       this.tbBlackbarDetectionThreshold = new System.Windows.Forms.TextBox();
+      this.tbpowerModeChangedDelay = new System.Windows.Forms.TextBox();
       this.ckRestartOnError = new System.Windows.Forms.CheckBox();
       this.grpCaptureDimensions = new System.Windows.Forms.GroupBox();
       this.lblHintCaptureDimensions = new System.Windows.Forms.Label();
@@ -176,9 +179,6 @@
       this.tbHueIP = new System.Windows.Forms.TextBox();
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
-      this.lblpowerModeChangedDelay = new System.Windows.Forms.Label();
-      this.tbpowerModeChangedDelay = new System.Windows.Forms.TextBox();
-      this.lblpowerModeChangedDelayMS = new System.Windows.Forms.Label();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -883,6 +883,24 @@
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
       // 
+      // lblpowerModeChangedDelayMS
+      // 
+      this.lblpowerModeChangedDelayMS.AutoSize = true;
+      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(256, 216);
+      this.lblpowerModeChangedDelayMS.Name = "lblpowerModeChangedDelayMS";
+      this.lblpowerModeChangedDelayMS.Size = new System.Drawing.Size(20, 13);
+      this.lblpowerModeChangedDelayMS.TabIndex = 35;
+      this.lblpowerModeChangedDelayMS.Text = "ms";
+      // 
+      // lblpowerModeChangedDelay
+      // 
+      this.lblpowerModeChangedDelay.AutoSize = true;
+      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(10, 216);
+      this.lblpowerModeChangedDelay.Name = "lblpowerModeChangedDelay";
+      this.lblpowerModeChangedDelay.Size = new System.Drawing.Size(101, 13);
+      this.lblpowerModeChangedDelay.TabIndex = 34;
+      this.lblpowerModeChangedDelay.Text = "Delay after standby:";
+      // 
       // tbBlackbarDetectionThreshold
       // 
       this.tbBlackbarDetectionThreshold.Location = new System.Drawing.Point(373, 167);
@@ -892,12 +910,21 @@
       this.tbBlackbarDetectionThreshold.Text = "20";
       this.tbBlackbarDetectionThreshold.Validating += new System.ComponentModel.CancelEventHandler(this.tbBlackbarDetectionThreshold_Validating);
       // 
+      // tbpowerModeChangedDelay
+      // 
+      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(209, 213);
+      this.tbpowerModeChangedDelay.Name = "tbpowerModeChangedDelay";
+      this.tbpowerModeChangedDelay.Size = new System.Drawing.Size(41, 20);
+      this.tbpowerModeChangedDelay.TabIndex = 33;
+      this.tbpowerModeChangedDelay.Text = "0";
+      this.tbpowerModeChangedDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbpowerModeChangedDelay_Validating);
+      // 
       // ckRestartOnError
       // 
       this.ckRestartOnError.AutoSize = true;
       this.ckRestartOnError.Checked = true;
       this.ckRestartOnError.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckRestartOnError.Location = new System.Drawing.Point(13, 192);
+      this.ckRestartOnError.Location = new System.Drawing.Point(13, 193);
       this.ckRestartOnError.Name = "ckRestartOnError";
       this.ckRestartOnError.Size = new System.Drawing.Size(144, 17);
       this.ckRestartOnError.TabIndex = 32;
@@ -1043,7 +1070,7 @@
       // ckBlackbarDetection
       // 
       this.ckBlackbarDetection.AutoSize = true;
-      this.ckBlackbarDetection.Location = new System.Drawing.Point(13, 169);
+      this.ckBlackbarDetection.Location = new System.Drawing.Point(13, 170);
       this.ckBlackbarDetection.Name = "ckBlackbarDetection";
       this.ckBlackbarDetection.Size = new System.Drawing.Size(146, 17);
       this.ckBlackbarDetection.TabIndex = 12;
@@ -1089,7 +1116,7 @@
       // ckDelay
       // 
       this.ckDelay.AutoSize = true;
-      this.ckDelay.Location = new System.Drawing.Point(13, 146);
+      this.ckDelay.Location = new System.Drawing.Point(13, 147);
       this.ckDelay.Name = "ckDelay";
       this.ckDelay.Size = new System.Drawing.Size(77, 17);
       this.ckDelay.TabIndex = 9;
@@ -1169,7 +1196,7 @@
       // ckLowCpu
       // 
       this.ckLowCpu.AutoSize = true;
-      this.ckLowCpu.Location = new System.Drawing.Point(13, 123);
+      this.ckLowCpu.Location = new System.Drawing.Point(13, 124);
       this.ckLowCpu.Name = "ckLowCpu";
       this.ckLowCpu.Size = new System.Drawing.Size(71, 17);
       this.ckLowCpu.TabIndex = 7;
@@ -1179,7 +1206,7 @@
       // ckOnMediaStart
       // 
       this.ckOnMediaStart.AutoSize = true;
-      this.ckOnMediaStart.Location = new System.Drawing.Point(13, 100);
+      this.ckOnMediaStart.Location = new System.Drawing.Point(13, 101);
       this.ckOnMediaStart.Name = "ckOnMediaStart";
       this.ckOnMediaStart.Size = new System.Drawing.Size(208, 17);
       this.ckOnMediaStart.TabIndex = 6;
@@ -1753,38 +1780,11 @@
       this.openFileDialog4.FileName = "openFileDialog4";
       this.openFileDialog4.Filter = "AtmoHue.exe|*.exe";
       // 
-      // lblpowerModeChangedDelay
-      // 
-      this.lblpowerModeChangedDelay.AutoSize = true;
-      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(10, 218);
-      this.lblpowerModeChangedDelay.Name = "lblpowerModeChangedDelay";
-      this.lblpowerModeChangedDelay.Size = new System.Drawing.Size(101, 13);
-      this.lblpowerModeChangedDelay.TabIndex = 34;
-      this.lblpowerModeChangedDelay.Text = "Delay after standby:";
-      // 
-      // tbpowerModeChangedDelay
-      // 
-      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(246, 215);
-      this.tbpowerModeChangedDelay.Name = "tbpowerModeChangedDelay";
-      this.tbpowerModeChangedDelay.Size = new System.Drawing.Size(50, 20);
-      this.tbpowerModeChangedDelay.TabIndex = 33;
-      this.tbpowerModeChangedDelay.Text = "0";
-      this.tbpowerModeChangedDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbpowerModeChangedDelay_Validating);
-      // 
-      // lblpowerModeChangedDelayMS
-      // 
-      this.lblpowerModeChangedDelayMS.AutoSize = true;
-      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(302, 218);
-      this.lblpowerModeChangedDelayMS.Name = "lblpowerModeChangedDelayMS";
-      this.lblpowerModeChangedDelayMS.Size = new System.Drawing.Size(20, 13);
-      this.lblpowerModeChangedDelayMS.TabIndex = 35;
-      this.lblpowerModeChangedDelayMS.Text = "ms";
-      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(884, 531);
+      this.ClientSize = new System.Drawing.Size(884, 532);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);

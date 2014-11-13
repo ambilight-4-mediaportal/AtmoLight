@@ -279,6 +279,10 @@
 		displayname="Blackbar detection threshold:"    
 		description="Enter the blackbar detection threshold."/>		
 		
+		<setting entryname="atmolight" name="powerModeChangedDelay" type="int" defaultvalue="5000" minvalue="0" maxvalue="99999"
+		displayname="Delay after standby:"    
+		description="Enter the the delay after standby."/>		
+		
 		<setting entryname="atmolight" name="captureWidth" type="int" defaultvalue="64" minvalue="1" maxvalue="1920"
 		displayname="Capture width:"    
 		description="Enter the capture width you want to use (Will only be used if AtmoWin is disabled!)."/>

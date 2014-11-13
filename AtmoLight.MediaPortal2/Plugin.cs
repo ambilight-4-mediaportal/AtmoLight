@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.IO;
+using Microsoft.Win32;
 using MediaPortal.Common;
 using MediaPortal.UI.Presentation.Players;
 using MediaPortal.UI.Presentation.UiNotifications;
@@ -172,6 +173,7 @@ namespace AtmoLight
       AtmoLightObject.blackbarDetection = settings.BlackbarDetection;
       AtmoLightObject.blackbarDetectionTime = settings.BlackbarDetectionTime;
       AtmoLightObject.blackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
+      AtmoLightObject.powerModeChangedDelay = settings.PowerModeChangedDelay;
 
       menuEffect = settings.MenuEffect;
       if (CheckForStartRequirements())
@@ -195,6 +197,7 @@ namespace AtmoLight
       AtmoLight.Configuration.OnOffButton.ButtonsChanged += new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
       AtmoLight.Configuration.ProfileButton.ButtonsChanged += new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
       SkinContext.DeviceSceneEnd += UICapture;
+      SystemEvents.PowerModeChanged += PowerModeChanged;
       RegisterSettingsChangedHandler();
       RegisterKeyBindings();
     }
@@ -224,6 +227,7 @@ namespace AtmoLight
       Core.OnNewVUMeter -= new Core.NewVUMeterHander(OnNewVUMeter);
       AtmoLight.Configuration.OnOffButton.ButtonsChanged -= new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
       AtmoLight.Configuration.ProfileButton.ButtonsChanged -= new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      SystemEvents.PowerModeChanged -= PowerModeChanged;
       UnregisterSettingsChangedHandler();
     }
     #endregion
@@ -617,6 +621,25 @@ namespace AtmoLight
         dbLevel[1] = dbLevelR;
       }
       return dbLevel;
+    }
+    #endregion
+
+    #region PowerModeChanged Event
+    private void PowerModeChanged(object sender, PowerModeChangedEventArgs powerMode)
+    {
+      if (powerMode.Mode == PowerModes.Resume)
+      {
+        if (CheckForStartRequirements())
+        {
+          AtmoLightObject.SetInitialEffect(menuEffect);
+        }
+        else
+        {
+          AtmoLightObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+        }
+      }
+
+      Task.Factory.StartNew(() => { AtmoLightObject.PowerModeChanged(powerMode.Mode); });
     }
     #endregion
   }

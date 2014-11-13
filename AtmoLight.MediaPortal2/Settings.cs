@@ -193,6 +193,9 @@ namespace AtmoLight
     [Setting(SettingScope.User, 20)]
     public int BlackbarDetectionThreshold { get; set; }
 
+    [Setting(SettingScope.User, 5000)]
+    public int PowerModeChangedDelay { get; set; }
+
 
     ISettingsManager settingsManager = ServiceRegistration.Get<ISettingsManager>();
     Settings settings;
@@ -260,6 +263,7 @@ namespace AtmoLight
       BlackbarDetection = settings.BlackbarDetection;
       BlackbarDetectionTime = settings.BlackbarDetectionTime;
       BlackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
+      PowerModeChangedDelay = settings.PowerModeChangedDelay;
       return true;
     }
 
@@ -325,6 +329,7 @@ namespace AtmoLight
       settings.BlackbarDetection = BlackbarDetection;
       settings.BlackbarDetectionTime = BlackbarDetectionTime;
       settings.BlackbarDetectionThreshold = BlackbarDetectionThreshold;
+      settings.PowerModeChangedDelay = PowerModeChangedDelay;
       settingsManager.Save(settings);
       return true;
     }

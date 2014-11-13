@@ -1569,4 +1569,26 @@ namespace AtmoLight.Configuration
       Core.GetInstance().blackbarDetectionThreshold = (int)_value;
     }
   }
+
+  public class PowerModeChangedDelay : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 99999;
+      _value = SettingsManager.Load<Settings>().PowerModeChangedDelay;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.PowerModeChangedDelay = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().powerModeChangedDelay = (int)_value;
+    }
+  }
 }
