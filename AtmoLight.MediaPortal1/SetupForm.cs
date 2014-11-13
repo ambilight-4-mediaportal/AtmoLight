@@ -170,6 +170,7 @@ namespace AtmoLight
       lblHueReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblHueReconnectAttempts;
       lblHueMinimalColorDifference.Text = LanguageLoader.appStrings.SetupForm_lblHueMinimalColorDifference;
       ckHueBridgeEnableOnResume.Text = LanguageLoader.appStrings.SetupForm_ckHueBridgeEnableOnResume;
+      ckHueBridgeDisableOnSuspend.Text = LanguageLoader.appStrings.SetupForm_ckHueBridgeDisableOnSuspend;
       lblMPExit.Text = LanguageLoader.appStrings.SetupForm_lblMPExit;
       lblBoblightIP.Text = LanguageLoader.appStrings.SetupForm_lblBoblightIP;
       lblBoblightPort.Text = LanguageLoader.appStrings.SetupForm_lblBoblightPort;

@@ -475,6 +475,8 @@
       // 
       this.edFileAtmoWin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.edFileAtmoWin.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+      this.edFileAtmoWin.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
       this.edFileAtmoWin.Location = new System.Drawing.Point(9, 42);
       this.edFileAtmoWin.Name = "edFileAtmoWin";
       this.edFileAtmoWin.Size = new System.Drawing.Size(698, 20);
@@ -657,6 +659,8 @@
       // 
       // tbGIF
       // 
+      this.tbGIF.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+      this.tbGIF.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
       this.tbGIF.Location = new System.Drawing.Point(6, 19);
       this.tbGIF.Name = "tbGIF";
       this.tbGIF.Size = new System.Drawing.Size(266, 20);
@@ -885,6 +889,7 @@
       this.tbBlackbarDetectionThreshold.Name = "tbBlackbarDetectionThreshold";
       this.tbBlackbarDetectionThreshold.Size = new System.Drawing.Size(41, 20);
       this.tbBlackbarDetectionThreshold.TabIndex = 33;
+      this.tbBlackbarDetectionThreshold.Text = "20";
       this.tbBlackbarDetectionThreshold.Validating += new System.ComponentModel.CancelEventHandler(this.tbBlackbarDetectionThreshold_Validating);
       // 
       // ckRestartOnError
@@ -1610,6 +1615,8 @@
       // 
       this.edFileHue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.edFileHue.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+      this.edFileHue.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
       this.edFileHue.Location = new System.Drawing.Point(9, 42);
       this.edFileHue.Name = "edFileHue";
       this.edFileHue.Size = new System.Drawing.Size(699, 20);
@@ -1751,9 +1758,9 @@
       this.lblpowerModeChangedDelay.AutoSize = true;
       this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(10, 218);
       this.lblpowerModeChangedDelay.Name = "lblpowerModeChangedDelay";
-      this.lblpowerModeChangedDelay.Size = new System.Drawing.Size(128, 13);
+      this.lblpowerModeChangedDelay.Size = new System.Drawing.Size(101, 13);
       this.lblpowerModeChangedDelay.TabIndex = 34;
-      this.lblpowerModeChangedDelay.Text = "Standby reconnect delay:";
+      this.lblpowerModeChangedDelay.Text = "Delay after standby:";
       // 
       // tbpowerModeChangedDelay
       // 

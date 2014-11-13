@@ -271,7 +271,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "hueReconnectDelay", (int)hueReconnectDelay);
         reader.SetValue("atmolight", "hueReconnectAttempts", (int)hueReconnectAttempts);
         reader.SetValue("atmolight", "hueMinimalColorDifference", (int)hueMinimalColorDifference);
-        reader.SetValueAsBool("atmolight", "HueBridgeEnableOnResume", hueBridgeEnableOnResume);
+        reader.SetValueAsBool("atmolight", "hueBridgeEnableOnResume", hueBridgeEnableOnResume);
         reader.SetValueAsBool("atmolight", "hueBridgeDisableOnSuspend", hueBridgeDisableOnSuspend);
         reader.SetValue("atmolight", "boblightIP", boblightIP);
         reader.SetValue("atmolight", "boblightPort", boblightPort);
