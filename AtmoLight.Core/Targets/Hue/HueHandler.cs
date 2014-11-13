@@ -253,16 +253,19 @@ namespace AtmoLight.Targets
       hueReconnectCounter = 0;
 
       //Power ON bridge if connected and enabled
-      if (HueBridgeStartOnResume && Connected)
+      if (HueBridgeStartOnResume)
       {
         //Reset start variable
         HueBridgeStartOnResume = false;
 
-        //Send Power ON command
-        HueBridgePower("ON");
+        if (Connected)
+        {
+          //Send Power ON command
+          HueBridgePower("ON");
 
-        //Sleep for 2s to allow for Hue Bridge startup
-        Thread.Sleep(2000);
+          //Sleep for 2s to allow for Hue Bridge startup
+          Thread.Sleep(2000);
+        }
       }
 
 
