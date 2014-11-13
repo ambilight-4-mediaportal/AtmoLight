@@ -101,6 +101,7 @@ namespace AtmoLight
     public int ambiBoxPort = 3636;
     public int ambiBoxMaxReconnectAttempts = 5;
     public int ambiBoxtReconnectDelay = 5000;
+    public int ambiBoxLEDCount = 50;
 
     // AtmoWin Settings Fields
     public bool atmoWinAutoStart;

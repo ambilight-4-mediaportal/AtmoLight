@@ -95,28 +95,35 @@ namespace AtmoLight
         case ContentEffect.GIFReader:
         case ContentEffect.VUMeter:
         case ContentEffect.VUMeterRainbow:
-          SendCommand("lock");
-          SendCommand("setstatus:on");
           SendCommand("unlock");
           return true;
         case ContentEffect.StaticColor:
+          SendCommand("lock");
           string staticColorString = "setcolor:";
-          for (int i = 1; i <= 20; i++)
+          for (int i = 1; i <= coreObject.ambiBoxLEDCount; i++)
           {
             staticColorString += i + "-" + coreObject.staticColor[0] + "," + coreObject.staticColor[1] + "," + coreObject.staticColor[2] + ";";
           }
-          SendCommand("lock");
           SendCommand(staticColorString);
-          SendCommand("unlock");
-
+          System.Threading.Thread.Sleep(50);
+          SendCommand(staticColorString);
+          System.Threading.Thread.Sleep(50);
+          SendCommand(staticColorString);
           return true;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
         default:
           SendCommand("lock");
-          SendCommand("setstatus:off");
-          SendCommand("unlock");
-
+          string disableString = "setcolor:";
+          for (int i = 1; i <= coreObject.ambiBoxLEDCount; i++)
+          {
+            disableString += i + "-" + 0 + "," + 0 + "," + 0 + ";";
+          }
+          SendCommand(disableString);
+          System.Threading.Thread.Sleep(50);
+          SendCommand(disableString);
+          System.Threading.Thread.Sleep(50);
+          SendCommand(disableString);
           return true;
       }
     }
