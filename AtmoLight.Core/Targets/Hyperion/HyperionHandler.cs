@@ -97,7 +97,7 @@ namespace AtmoLight.Targets
           ClearPriority(coreObject.hyperionPriority);
           ClearPriority(coreObject.hyperionPriorityStaticColor);
         }
-        Socket.Close();
+        Disconnect();
       }
 
       //Stop live reconnect so it doesn't start new connect threads.
@@ -164,18 +164,7 @@ namespace AtmoLight.Targets
             }
 
             //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
-            try
-            {
-              Socket.Close();
-            }
-            catch (Exception e)
-            {
-              if (coreObject.hyperionLiveReconnect == false)
-              {
-                Log.Error("HyperionHandler - Error while closing socket");
-                Log.Error("HyperionHandler - Exception: {0}", e.Message);
-              }
-            }
+            Disconnect();
 
             Socket = new TcpClient();
             Socket.SendTimeout = 5000;
@@ -245,6 +234,19 @@ namespace AtmoLight.Targets
       //Reset counter when we have finished
       hyperionReconnectCounter = 0;
     }
+    private void Disconnect()
+    {
+      try
+      {
+        Socket.Close();
+      }
+      catch (Exception e)
+      {
+        Log.Error(string.Format("HyperionHandler - {0}", "Error during dispose"));
+        Log.Error(string.Format("HyperionHandler - {0}", e.Message));
+      }
+    }
+
 
     public void ChangeColor(int red, int green, int blue)
     {
@@ -416,12 +418,7 @@ namespace AtmoLight.Targets
       switch (e.Mode)
       {
         case PowerModes.Resume:
-          // Close old socket and create new TCP client which allows it to reconnect when calling Connect()
-          try
-          {
-            Socket.Close();
-          }
-          catch { };
+          Disconnect();
 
           //Reconnect Hyperion after standby
           Log.Debug("HyperionHandler - Reconnecting after standby");

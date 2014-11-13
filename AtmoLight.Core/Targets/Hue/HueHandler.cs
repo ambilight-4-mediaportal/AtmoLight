@@ -134,15 +134,7 @@ namespace AtmoLight.Targets
     {
       if (Socket.Connected)
       {
-        try
-        {
-          Socket.Close();
-        }
-        catch (Exception e)
-        {
-          Log.Error(string.Format("HueHandler - {0}", "Error during dispose"));
-          Log.Error(string.Format("HueHandler - {0}", e.Message));
-        }
+        Disconnect();
       }
     }
 
@@ -192,7 +184,6 @@ namespace AtmoLight.Targets
       t.IsBackground = true;
       t.Start();
     }
-
     private void ConnectThread()
     {
 
@@ -201,15 +192,8 @@ namespace AtmoLight.Targets
         if (Connected == false)
         {
           //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
-          try
-          {
-            Socket.Close();
-          }
-          catch (Exception e)
-          {
-            Log.Error("HueHandler - Error while closing socket");
-            Log.Error("HueHandler - Exception: {0}", e.Message);
-          }
+          Disconnect();
+
           try
           {
             Socket = new TcpClient();
@@ -280,6 +264,19 @@ namespace AtmoLight.Targets
         isInit = false;
       }
     }
+    private void Disconnect()
+    {
+      try
+      {
+        Socket.Close();
+      }
+      catch (Exception e)
+      {
+        Log.Error(string.Format("HueHandler - {0}", "Error during dispose"));
+        Log.Error(string.Format("HueHandler - {0}", e.Message));
+      }
+    }
+
     private void sendAPIcommand(string message)
     {
       try
@@ -519,11 +516,7 @@ namespace AtmoLight.Targets
       {
         case PowerModes.Resume:
           // Close old socket and create new TCP client which allows it to reconnect when calling Connect()
-          try
-          {
-            Socket.Close();
-          }
-          catch { };
+          Disconnect();
           //Reconnect AtmoHue after standby
           Log.Debug("HueHandler - Reconnecting after standby");
 
