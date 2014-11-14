@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using Microsoft.Win32;
 using MinimalisticTelnet;
 
 namespace AtmoLight
@@ -171,6 +172,7 @@ namespace AtmoLight
       SendCommand("setprofile:" + currentProfile);
       SendCommand("unlock");
     }
+
     public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
       if (changeImageLock)
@@ -178,6 +180,15 @@ namespace AtmoLight
         return;
       }
       Task.Factory.StartNew(() => { ChangeImageTask(pixeldata); });
+    }
+
+    public void PowerModeChanged(PowerModes powerMode)
+    {
+      if (powerMode == PowerModes.Resume)
+      {
+        Disconnect();
+        Initialise();
+      }
     }
     #endregion
 
