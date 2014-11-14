@@ -79,7 +79,7 @@ namespace AtmoLight
     {
       Log.Debug("AmbiBoxHandler - Disposing AmbiBox handler.");
       Disconnect();
-      if (coreObject.ambiBoxAutostop)
+      if (coreObject.ambiBoxAutoStop)
       {
         StopAmbiBox();
       }
@@ -249,7 +249,7 @@ namespace AtmoLight
             Log.Error("AmbiBoxHandler - Error connecting to {0}:{1}", coreObject.ambiBoxIP, coreObject.ambiBoxPort);
             if ((coreObject.reInitOnError || force) && reconnectAttempts < coreObject.ambiBoxMaxReconnectAttempts)
             {
-              System.Threading.Thread.Sleep(coreObject.ambiBoxtReconnectDelay);
+              System.Threading.Thread.Sleep(coreObject.ambiBoxReconnectDelay);
               initLock = false;
               InitThreaded();
               return;
@@ -262,7 +262,7 @@ namespace AtmoLight
           Log.Error("AmbiBoxHandler - Error connecting to {0}:{1}", coreObject.ambiBoxIP, coreObject.ambiBoxPort);
           if ((coreObject.reInitOnError || force) && reconnectAttempts < coreObject.ambiBoxMaxReconnectAttempts)
           {
-            System.Threading.Thread.Sleep(coreObject.ambiBoxtReconnectDelay);
+            System.Threading.Thread.Sleep(coreObject.ambiBoxReconnectDelay);
             initLock = false;
             InitThreaded();
             return;
@@ -279,7 +279,7 @@ namespace AtmoLight
         Log.Error("AmbiBoxHandler - Exception: {0}", ex.Message);
         if ((coreObject.reInitOnError || force) && reconnectAttempts < coreObject.ambiBoxMaxReconnectAttempts)
         {
-          System.Threading.Thread.Sleep(coreObject.ambiBoxtReconnectDelay);
+          System.Threading.Thread.Sleep(coreObject.ambiBoxReconnectDelay);
           initLock = false;
           InitThreaded();
         }

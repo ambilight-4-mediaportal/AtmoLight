@@ -16,6 +16,11 @@ namespace AtmoLight
       InitializeComponent();
       UpdateLanguageOnControls();
 
+      // AmbiBox
+      if (Settings.ambiBoxTarget)
+      {
+        coreObject.AddTarget(Target.AmbiBox);
+      }
       // AtmoWin
       if (Settings.atmoWinTarget)
       {
@@ -104,6 +109,17 @@ namespace AtmoLight
       tbBoblightGamma.Text = Settings.boblightGamma.ToString();
       tbBlackbarDetectionThreshold.Text = Settings.blackbarDetectionThreshold.ToString();
       tbpowerModeChangedDelay.Text = Settings.powerModeChangedDelay.ToString();
+      ckAmbiBoxEnabled.Checked = Settings.ambiBoxTarget;
+      tbAmbiBoxPath.Text = Settings.ambiBoxPath;
+      cbAmbiBoxAutoStart.Checked = Settings.ambiBoxAutoStart;
+      cbAmbiBoxAutoStop.Checked = Settings.ambiBoxAutoStop;
+      tbAmbiBoxIP.Text = Settings.ambiBoxIP;
+      tbAmbiBoxPort.Text = Settings.ambiBoxPort.ToString();
+      tbAmbiBoxMaxReconnectAttempts.Text = Settings.ambiBoxMaxReconnectAttempts.ToString();
+      tbAmbiBoxReconnectDelay.Text = Settings.ambiBoxReconnectDelay.ToString();
+      tbAmbiBoxLEDCount.Text = Settings.ambiBoxLEDCount.ToString();
+      tbAmbiBoxMediaPortalProfile.Text = Settings.ambiBoxMediaPortalProfile;
+      tbAmbiBoxExternalProfile.Text = Settings.ambiBoxExternalProfile;
     }
 
     private void UpdateLanguageOnControls()
@@ -186,6 +202,16 @@ namespace AtmoLight
       grpBoblightGeneral.Text = LanguageLoader.appStrings.SetupForm_grpBoblightGeneral;
       grpBoblightSettings.Text = LanguageLoader.appStrings.SetupForm_grpBoblightSettings;
       lblBoblightGamma.Text = LanguageLoader.appStrings.SetupForm_lblBoblightGamma;
+      lblAmbiBoxExternalProfile.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxExternalProfile;
+      lblAmbiBoxIP.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxIP;
+      lblAmbiBoxLEDCount.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxLEDCount;
+      lblAmbiBoxMaxReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxMaxReconnectAttempts;
+      lblAmbiBoxMediaPortalProfile.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxMediaPortalProfile;
+      lblAmbiBoxPath.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxPath;
+      lblAmbiBoxPort.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxPort;
+      lblAmbiBoxReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxReconnectDelay;
+      cbAmbiBoxAutoStart.Text = LanguageLoader.appStrings.SetupForm_cbAmbiBoxAutoStart;
+      cbAmbiBoxAutoStop.Text = LanguageLoader.appStrings.SetupForm_cbAmbiBoxAutoStop;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -521,6 +547,49 @@ namespace AtmoLight
         return;
       }
 
+      // AmbiBox IP
+      if (validatorIPAdress(tbAmbiBoxIP.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + tbAmbiBoxIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // AmbiBox Port
+      minValue = 1;
+      maxValue = 65535;
+      if (validatorInt(tbAmbiBoxPort.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAmbiBoxPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // AmbiBox Reconnect Attempts
+      minValue = 1;
+      maxValue = 9999;
+      if (validatorInt(tbAmbiBoxMaxReconnectAttempts.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAmbiBoxMaxReconnectAttempts.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // AmbiBox Reconnect Delay
+      minValue = 1;
+      maxValue = 99999;
+      if (validatorInt(tbAmbiBoxReconnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAmbiBoxReconnectDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // AmbiBox LED Count
+      minValue = 1;
+      maxValue = 300;
+      if (validatorInt(tbAmbiBoxLEDCount.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAmbiBoxLEDCount.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       Settings.staticColorRed = int.Parse(tbRed.Text);
       Settings.staticColorGreen = int.Parse(tbGreen.Text);
       Settings.staticColorBlue = int.Parse(tbBlue.Text);
@@ -579,6 +648,17 @@ namespace AtmoLight
       Settings.boblightGamma = (double)tbarBoblightGamma.Value / 10;
       Settings.blackbarDetectionThreshold = int.Parse(tbBlackbarDetectionThreshold.Text);
       Settings.powerModeChangedDelay = int.Parse(tbpowerModeChangedDelay.Text);
+      Settings.ambiBoxTarget = ckAmbiBoxEnabled.Checked;
+      Settings.ambiBoxPath = tbAmbiBoxPath.Text;
+      Settings.ambiBoxAutoStart = cbAmbiBoxAutoStart.Checked;
+      Settings.ambiBoxAutoStop = cbAmbiBoxAutoStop.Checked;
+      Settings.ambiBoxIP = tbAmbiBoxIP.Text;
+      Settings.ambiBoxPort = int.Parse(tbAmbiBoxPort.Text);
+      Settings.ambiBoxMaxReconnectAttempts = int.Parse(tbAmbiBoxMaxReconnectAttempts.Text);
+      Settings.ambiBoxReconnectDelay = int.Parse(tbAmbiBoxReconnectDelay.Text);
+      Settings.ambiBoxLEDCount = int.Parse(tbAmbiBoxLEDCount.Text);
+      Settings.ambiBoxMediaPortalProfile = tbAmbiBoxMediaPortalProfile.Text;
+      Settings.ambiBoxExternalProfile = tbAmbiBoxExternalProfile.Text;
 
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
       Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
@@ -608,6 +688,14 @@ namespace AtmoLight
       if (openFileDialog3.ShowDialog() == DialogResult.OK)
       {
         tbGIF.Text = openFileDialog3.FileName;
+      }
+    }
+
+    private void btnSelectFileAmbiBox_Click(object sender, EventArgs e)
+    {
+      if (openFileDialog5.ShowDialog() == DialogResult.OK)
+      {
+        tbAmbiBoxPath.Text = openFileDialog5.FileName;
       }
     }
 
@@ -1058,6 +1146,55 @@ namespace AtmoLight
       tbBoblightGamma.Text = ((double)tbarBoblightGamma.Value / 10).ToString();
     }
 
+    // AmbiBox
+    private void tbAmbiBoxIP_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (validatorIPAdress(tbAmbiBoxIP.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAmbiBoxPort_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 65535;
+      if (validatorInt(tbAmbiBoxPort.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAmbiBoxMaxReconnectAttempts_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 9999;
+      if (validatorInt(tbAmbiBoxMaxReconnectAttempts.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAmbiBoxReconnectDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 99999;
+      if (validatorInt(tbAmbiBoxReconnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAmbiBoxLEDCount_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 300;
+      if (validatorInt(tbAmbiBoxLEDCount.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
     // Dynamic effect changes
     public void UpdateComboBoxes()
     {
@@ -1147,6 +1284,19 @@ namespace AtmoLight
       else
       {
         coreObject.RemoveTarget(Target.Hue);
+      }
+      UpdateComboBoxes();
+    }
+
+    private void ckAmbiBoxEnabled_CheckedChanged(Object sender, EventArgs e)
+    {
+      if (ckAmbiBoxEnabled.Checked)
+      {
+        coreObject.AddTarget(Target.AmbiBox);
+      }
+      else
+      {
+        coreObject.RemoveTarget(Target.AmbiBox);
       }
       UpdateComboBoxes();
     }

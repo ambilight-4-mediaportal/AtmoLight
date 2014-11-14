@@ -110,6 +110,22 @@ namespace AtmoLight
       Log.Debug("Generating new AtmoLight.Core instance.");
       AtmoLightObject = Core.GetInstance();
 
+      // AmbiBox
+      if (Settings.ambiBoxTarget)
+      {
+        AtmoLightObject.AddTarget(Target.AmbiBox);
+      }
+      AtmoLightObject.ambiBoxIP = Settings.ambiBoxIP;
+      AtmoLightObject.ambiBoxPort = Settings.ambiBoxPort;
+      AtmoLightObject.ambiBoxMaxReconnectAttempts = Settings.ambiBoxMaxReconnectAttempts;
+      AtmoLightObject.ambiBoxReconnectDelay = Settings.ambiBoxReconnectDelay;
+      AtmoLightObject.ambiBoxLEDCount = Settings.ambiBoxLEDCount;
+      AtmoLightObject.ambiBoxMediaPortalProfile = Settings.ambiBoxMediaPortalProfile;
+      AtmoLightObject.ambiBoxExternalProfile = Settings.ambiBoxExternalProfile;
+      AtmoLightObject.ambiBoxPath = Settings.ambiBoxPath;
+      AtmoLightObject.ambiBoxAutoStart = Settings.ambiBoxAutoStart;
+      AtmoLightObject.ambiBoxAutoStop = Settings.ambiBoxAutoStop;
+
       // AtmoWin
       if (Settings.atmoWinTarget)
       {
@@ -166,9 +182,6 @@ namespace AtmoLight
       AtmoLightObject.hueBridgeEnableOnResume = Settings.hueBridgeEnableOnResume;
       AtmoLightObject.hueBridgeDisableOnSuspend = Settings.hueBridgeDisableOnSuspend;
       
-
-      AtmoLightObject.AddTarget(Target.AmbiBox);
-
       // General settings
       AtmoLightObject.SetDelay(Settings.delayReferenceTime);
       AtmoLightObject.SetGIFPath(Settings.gifFile);

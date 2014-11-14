@@ -62,6 +62,7 @@
       this.ckStartAtmoWin = new System.Windows.Forms.CheckBox();
       this.tabPageGeneric = new System.Windows.Forms.TabPage();
       this.grpTargets = new System.Windows.Forms.GroupBox();
+      this.ckAmbiBoxEnabled = new System.Windows.Forms.CheckBox();
       this.ckBoblightEnabled = new System.Windows.Forms.CheckBox();
       this.ckHueEnabled = new System.Windows.Forms.CheckBox();
       this.lblHintHardware = new System.Windows.Forms.Label();
@@ -125,6 +126,28 @@
       this.comboBox1 = new System.Windows.Forms.ComboBox();
       this.lblLedsOnOff = new System.Windows.Forms.Label();
       this.tabMenu = new System.Windows.Forms.TabControl();
+      this.tabPageAmbiBox = new System.Windows.Forms.TabPage();
+      this.grpAmbiBoxNetwork = new System.Windows.Forms.GroupBox();
+      this.tbAmbiBoxExternalProfile = new System.Windows.Forms.TextBox();
+      this.tbAmbiBoxMediaPortalProfile = new System.Windows.Forms.TextBox();
+      this.tbAmbiBoxLEDCount = new System.Windows.Forms.TextBox();
+      this.tbAmbiBoxReconnectDelay = new System.Windows.Forms.TextBox();
+      this.tbAmbiBoxMaxReconnectAttempts = new System.Windows.Forms.TextBox();
+      this.tbAmbiBoxPort = new System.Windows.Forms.TextBox();
+      this.tbAmbiBoxIP = new System.Windows.Forms.TextBox();
+      this.lblAmbiBoxExternalProfile = new System.Windows.Forms.Label();
+      this.lblAmbiBoxMediaPortalProfile = new System.Windows.Forms.Label();
+      this.lblAmbiBoxLEDCount = new System.Windows.Forms.Label();
+      this.lblAmbiBoxReconnectDelay = new System.Windows.Forms.Label();
+      this.lblAmbiBoxMaxReconnectAttempts = new System.Windows.Forms.Label();
+      this.lblAmbiBoxPort = new System.Windows.Forms.Label();
+      this.lblAmbiBoxIP = new System.Windows.Forms.Label();
+      this.grpAmbiBoxLocal = new System.Windows.Forms.GroupBox();
+      this.cbAmbiBoxAutoStop = new System.Windows.Forms.CheckBox();
+      this.cbAmbiBoxAutoStart = new System.Windows.Forms.CheckBox();
+      this.lblAmbiBoxPath = new System.Windows.Forms.Label();
+      this.tbAmbiBoxPath = new System.Windows.Forms.TextBox();
+      this.btnSelectFileAmbiBox = new System.Windows.Forms.Button();
       this.tabPageBoblight = new System.Windows.Forms.TabPage();
       this.grpBoblightSettings = new System.Windows.Forms.GroupBox();
       this.tbBoblightGamma = new System.Windows.Forms.TextBox();
@@ -179,6 +202,7 @@
       this.tbHueIP = new System.Windows.Forms.TextBox();
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
+      this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -193,6 +217,9 @@
       this.grpCaptureDimensions.SuspendLayout();
       this.grpDeactivate.SuspendLayout();
       this.tabMenu.SuspendLayout();
+      this.tabPageAmbiBox.SuspendLayout();
+      this.grpAmbiBoxNetwork.SuspendLayout();
+      this.grpAmbiBoxLocal.SuspendLayout();
       this.tabPageBoblight.SuspendLayout();
       this.grpBoblightSettings.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightGamma)).BeginInit();
@@ -522,6 +549,7 @@
       // 
       // grpTargets
       // 
+      this.grpTargets.Controls.Add(this.ckAmbiBoxEnabled);
       this.grpTargets.Controls.Add(this.ckBoblightEnabled);
       this.grpTargets.Controls.Add(this.ckHueEnabled);
       this.grpTargets.Controls.Add(this.lblHintHardware);
@@ -529,15 +557,26 @@
       this.grpTargets.Controls.Add(this.ckHyperionEnabled);
       this.grpTargets.Location = new System.Drawing.Point(19, 18);
       this.grpTargets.Name = "grpTargets";
-      this.grpTargets.Size = new System.Drawing.Size(347, 139);
+      this.grpTargets.Size = new System.Drawing.Size(347, 152);
       this.grpTargets.TabIndex = 19;
       this.grpTargets.TabStop = false;
       this.grpTargets.Text = "Hardware selection";
       // 
+      // ckAmbiBoxEnabled
+      // 
+      this.ckAmbiBoxEnabled.AutoSize = true;
+      this.ckAmbiBoxEnabled.Location = new System.Drawing.Point(13, 26);
+      this.ckAmbiBoxEnabled.Name = "ckAmbiBoxEnabled";
+      this.ckAmbiBoxEnabled.Size = new System.Drawing.Size(67, 17);
+      this.ckAmbiBoxEnabled.TabIndex = 23;
+      this.ckAmbiBoxEnabled.Text = "AmbiBox";
+      this.ckAmbiBoxEnabled.UseVisualStyleBackColor = true;
+      this.ckAmbiBoxEnabled.CheckedChanged += new System.EventHandler(this.ckAmbiBoxEnabled_CheckedChanged);
+      // 
       // ckBoblightEnabled
       // 
       this.ckBoblightEnabled.AutoSize = true;
-      this.ckBoblightEnabled.Location = new System.Drawing.Point(13, 54);
+      this.ckBoblightEnabled.Location = new System.Drawing.Point(13, 72);
       this.ckBoblightEnabled.Name = "ckBoblightEnabled";
       this.ckBoblightEnabled.Size = new System.Drawing.Size(64, 17);
       this.ckBoblightEnabled.TabIndex = 22;
@@ -548,7 +587,7 @@
       // ckHueEnabled
       // 
       this.ckHueEnabled.AutoSize = true;
-      this.ckHueEnabled.Location = new System.Drawing.Point(13, 77);
+      this.ckHueEnabled.Location = new System.Drawing.Point(13, 95);
       this.ckHueEnabled.Name = "ckHueEnabled";
       this.ckHueEnabled.Size = new System.Drawing.Size(46, 17);
       this.ckHueEnabled.TabIndex = 21;
@@ -571,7 +610,7 @@
       this.ckAtmowinEnabled.AutoSize = true;
       this.ckAtmowinEnabled.Checked = true;
       this.ckAtmowinEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckAtmowinEnabled.Location = new System.Drawing.Point(13, 31);
+      this.ckAtmowinEnabled.Location = new System.Drawing.Point(13, 49);
       this.ckAtmowinEnabled.Name = "ckAtmowinEnabled";
       this.ckAtmowinEnabled.Size = new System.Drawing.Size(69, 17);
       this.ckAtmowinEnabled.TabIndex = 1;
@@ -582,7 +621,7 @@
       // ckHyperionEnabled
       // 
       this.ckHyperionEnabled.AutoSize = true;
-      this.ckHyperionEnabled.Location = new System.Drawing.Point(13, 100);
+      this.ckHyperionEnabled.Location = new System.Drawing.Point(13, 118);
       this.ckHyperionEnabled.Name = "ckHyperionEnabled";
       this.ckHyperionEnabled.Size = new System.Drawing.Size(68, 17);
       this.ckHyperionEnabled.TabIndex = 2;
@@ -604,7 +643,7 @@
       this.grpMode.Controls.Add(this.lblMusic);
       this.grpMode.Controls.Add(this.cbVideo);
       this.grpMode.Controls.Add(this.lblVidTvRec);
-      this.grpMode.Location = new System.Drawing.Point(19, 163);
+      this.grpMode.Location = new System.Drawing.Point(19, 176);
       this.grpMode.Name = "grpMode";
       this.grpMode.Size = new System.Drawing.Size(347, 267);
       this.grpMode.TabIndex = 7;
@@ -1241,6 +1280,7 @@
       // tabMenu
       // 
       this.tabMenu.Controls.Add(this.tabPageGeneric);
+      this.tabMenu.Controls.Add(this.tabPageAmbiBox);
       this.tabMenu.Controls.Add(this.tabPageAtmowin);
       this.tabMenu.Controls.Add(this.tabPageBoblight);
       this.tabMenu.Controls.Add(this.tabPageHue);
@@ -1250,6 +1290,219 @@
       this.tabMenu.SelectedIndex = 0;
       this.tabMenu.Size = new System.Drawing.Size(849, 475);
       this.tabMenu.TabIndex = 20;
+      // 
+      // tabPageAmbiBox
+      // 
+      this.tabPageAmbiBox.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageAmbiBox.Controls.Add(this.grpAmbiBoxNetwork);
+      this.tabPageAmbiBox.Controls.Add(this.grpAmbiBoxLocal);
+      this.tabPageAmbiBox.Location = new System.Drawing.Point(4, 22);
+      this.tabPageAmbiBox.Name = "tabPageAmbiBox";
+      this.tabPageAmbiBox.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPageAmbiBox.Size = new System.Drawing.Size(841, 449);
+      this.tabPageAmbiBox.TabIndex = 5;
+      this.tabPageAmbiBox.Text = "AmbiBox";
+      // 
+      // grpAmbiBoxNetwork
+      // 
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxExternalProfile);
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxMediaPortalProfile);
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxLEDCount);
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxReconnectDelay);
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxMaxReconnectAttempts);
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxPort);
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxIP);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxExternalProfile);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxMediaPortalProfile);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxLEDCount);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxReconnectDelay);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxMaxReconnectAttempts);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxPort);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxIP);
+      this.grpAmbiBoxNetwork.Location = new System.Drawing.Point(10, 153);
+      this.grpAmbiBoxNetwork.Name = "grpAmbiBoxNetwork";
+      this.grpAmbiBoxNetwork.Size = new System.Drawing.Size(817, 277);
+      this.grpAmbiBoxNetwork.TabIndex = 1;
+      this.grpAmbiBoxNetwork.TabStop = false;
+      this.grpAmbiBoxNetwork.Text = "AmbiBox API";
+      // 
+      // tbAmbiBoxExternalProfile
+      // 
+      this.tbAmbiBoxExternalProfile.Location = new System.Drawing.Point(200, 202);
+      this.tbAmbiBoxExternalProfile.Name = "tbAmbiBoxExternalProfile";
+      this.tbAmbiBoxExternalProfile.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiBoxExternalProfile.TabIndex = 13;
+      // 
+      // tbAmbiBoxMediaPortalProfile
+      // 
+      this.tbAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(200, 172);
+      this.tbAmbiBoxMediaPortalProfile.Name = "tbAmbiBoxMediaPortalProfile";
+      this.tbAmbiBoxMediaPortalProfile.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiBoxMediaPortalProfile.TabIndex = 12;
+      // 
+      // tbAmbiBoxLEDCount
+      // 
+      this.tbAmbiBoxLEDCount.Location = new System.Drawing.Point(200, 142);
+      this.tbAmbiBoxLEDCount.Name = "tbAmbiBoxLEDCount";
+      this.tbAmbiBoxLEDCount.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiBoxLEDCount.TabIndex = 11;
+      this.tbAmbiBoxLEDCount.Validating += new System.ComponentModel.CancelEventHandler(this.tbAmbiBoxLEDCount_Validating);
+      // 
+      // tbAmbiBoxReconnectDelay
+      // 
+      this.tbAmbiBoxReconnectDelay.Location = new System.Drawing.Point(200, 112);
+      this.tbAmbiBoxReconnectDelay.Name = "tbAmbiBoxReconnectDelay";
+      this.tbAmbiBoxReconnectDelay.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiBoxReconnectDelay.TabIndex = 10;
+      this.tbAmbiBoxReconnectDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAmbiBoxReconnectDelay_Validating);
+      // 
+      // tbAmbiBoxMaxReconnectAttempts
+      // 
+      this.tbAmbiBoxMaxReconnectAttempts.Location = new System.Drawing.Point(200, 82);
+      this.tbAmbiBoxMaxReconnectAttempts.Name = "tbAmbiBoxMaxReconnectAttempts";
+      this.tbAmbiBoxMaxReconnectAttempts.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiBoxMaxReconnectAttempts.TabIndex = 9;
+      this.tbAmbiBoxMaxReconnectAttempts.Validating += new System.ComponentModel.CancelEventHandler(this.tbAmbiBoxMaxReconnectAttempts_Validating);
+      // 
+      // tbAmbiBoxPort
+      // 
+      this.tbAmbiBoxPort.Location = new System.Drawing.Point(200, 52);
+      this.tbAmbiBoxPort.Name = "tbAmbiBoxPort";
+      this.tbAmbiBoxPort.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiBoxPort.TabIndex = 8;
+      this.tbAmbiBoxPort.Validating += new System.ComponentModel.CancelEventHandler(this.tbAmbiBoxPort_Validating);
+      // 
+      // tbAmbiBoxIP
+      // 
+      this.tbAmbiBoxIP.Location = new System.Drawing.Point(200, 22);
+      this.tbAmbiBoxIP.Name = "tbAmbiBoxIP";
+      this.tbAmbiBoxIP.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiBoxIP.TabIndex = 7;
+      this.tbAmbiBoxIP.Validating += new System.ComponentModel.CancelEventHandler(this.tbAmbiBoxIP_Validating);
+      // 
+      // lblAmbiBoxExternalProfile
+      // 
+      this.lblAmbiBoxExternalProfile.AutoSize = true;
+      this.lblAmbiBoxExternalProfile.Location = new System.Drawing.Point(6, 205);
+      this.lblAmbiBoxExternalProfile.Name = "lblAmbiBoxExternalProfile";
+      this.lblAmbiBoxExternalProfile.Size = new System.Drawing.Size(118, 13);
+      this.lblAmbiBoxExternalProfile.TabIndex = 6;
+      this.lblAmbiBoxExternalProfile.Text = "External capture profile:";
+      // 
+      // lblAmbiBoxMediaPortalProfile
+      // 
+      this.lblAmbiBoxMediaPortalProfile.AutoSize = true;
+      this.lblAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(6, 175);
+      this.lblAmbiBoxMediaPortalProfile.Name = "lblAmbiBoxMediaPortalProfile";
+      this.lblAmbiBoxMediaPortalProfile.Size = new System.Drawing.Size(136, 13);
+      this.lblAmbiBoxMediaPortalProfile.TabIndex = 5;
+      this.lblAmbiBoxMediaPortalProfile.Text = "MediaPortal capture profile:";
+      // 
+      // lblAmbiBoxLEDCount
+      // 
+      this.lblAmbiBoxLEDCount.AutoSize = true;
+      this.lblAmbiBoxLEDCount.Location = new System.Drawing.Point(6, 145);
+      this.lblAmbiBoxLEDCount.Name = "lblAmbiBoxLEDCount";
+      this.lblAmbiBoxLEDCount.Size = new System.Drawing.Size(61, 13);
+      this.lblAmbiBoxLEDCount.TabIndex = 4;
+      this.lblAmbiBoxLEDCount.Text = "LED count:";
+      // 
+      // lblAmbiBoxReconnectDelay
+      // 
+      this.lblAmbiBoxReconnectDelay.AutoSize = true;
+      this.lblAmbiBoxReconnectDelay.Location = new System.Drawing.Point(6, 115);
+      this.lblAmbiBoxReconnectDelay.Name = "lblAmbiBoxReconnectDelay";
+      this.lblAmbiBoxReconnectDelay.Size = new System.Drawing.Size(91, 13);
+      this.lblAmbiBoxReconnectDelay.TabIndex = 3;
+      this.lblAmbiBoxReconnectDelay.Text = "Reconnect delay:";
+      // 
+      // lblAmbiBoxMaxReconnectAttempts
+      // 
+      this.lblAmbiBoxMaxReconnectAttempts.AutoSize = true;
+      this.lblAmbiBoxMaxReconnectAttempts.Location = new System.Drawing.Point(6, 85);
+      this.lblAmbiBoxMaxReconnectAttempts.Name = "lblAmbiBoxMaxReconnectAttempts";
+      this.lblAmbiBoxMaxReconnectAttempts.Size = new System.Drawing.Size(106, 13);
+      this.lblAmbiBoxMaxReconnectAttempts.TabIndex = 2;
+      this.lblAmbiBoxMaxReconnectAttempts.Text = "Reconnect attempts:";
+      // 
+      // lblAmbiBoxPort
+      // 
+      this.lblAmbiBoxPort.AutoSize = true;
+      this.lblAmbiBoxPort.Location = new System.Drawing.Point(6, 55);
+      this.lblAmbiBoxPort.Name = "lblAmbiBoxPort";
+      this.lblAmbiBoxPort.Size = new System.Drawing.Size(29, 13);
+      this.lblAmbiBoxPort.TabIndex = 1;
+      this.lblAmbiBoxPort.Text = "Port:";
+      // 
+      // lblAmbiBoxIP
+      // 
+      this.lblAmbiBoxIP.AutoSize = true;
+      this.lblAmbiBoxIP.Location = new System.Drawing.Point(6, 25);
+      this.lblAmbiBoxIP.Name = "lblAmbiBoxIP";
+      this.lblAmbiBoxIP.Size = new System.Drawing.Size(20, 13);
+      this.lblAmbiBoxIP.TabIndex = 0;
+      this.lblAmbiBoxIP.Text = "IP:";
+      // 
+      // grpAmbiBoxLocal
+      // 
+      this.grpAmbiBoxLocal.Controls.Add(this.cbAmbiBoxAutoStop);
+      this.grpAmbiBoxLocal.Controls.Add(this.cbAmbiBoxAutoStart);
+      this.grpAmbiBoxLocal.Controls.Add(this.lblAmbiBoxPath);
+      this.grpAmbiBoxLocal.Controls.Add(this.tbAmbiBoxPath);
+      this.grpAmbiBoxLocal.Controls.Add(this.btnSelectFileAmbiBox);
+      this.grpAmbiBoxLocal.Location = new System.Drawing.Point(10, 10);
+      this.grpAmbiBoxLocal.Name = "grpAmbiBoxLocal";
+      this.grpAmbiBoxLocal.Size = new System.Drawing.Size(817, 137);
+      this.grpAmbiBoxLocal.TabIndex = 0;
+      this.grpAmbiBoxLocal.TabStop = false;
+      this.grpAmbiBoxLocal.Text = "AmbiBox.exe";
+      // 
+      // cbAmbiBoxAutoStop
+      // 
+      this.cbAmbiBoxAutoStop.AutoSize = true;
+      this.cbAmbiBoxAutoStop.Location = new System.Drawing.Point(9, 112);
+      this.cbAmbiBoxAutoStop.Name = "cbAmbiBoxAutoStop";
+      this.cbAmbiBoxAutoStop.Size = new System.Drawing.Size(173, 17);
+      this.cbAmbiBoxAutoStop.TabIndex = 7;
+      this.cbAmbiBoxAutoStop.Text = "Stop AmbiBox with MediaPortal";
+      this.cbAmbiBoxAutoStop.UseVisualStyleBackColor = true;
+      // 
+      // cbAmbiBoxAutoStart
+      // 
+      this.cbAmbiBoxAutoStart.AutoSize = true;
+      this.cbAmbiBoxAutoStart.Location = new System.Drawing.Point(9, 89);
+      this.cbAmbiBoxAutoStart.Name = "cbAmbiBoxAutoStart";
+      this.cbAmbiBoxAutoStart.Size = new System.Drawing.Size(173, 17);
+      this.cbAmbiBoxAutoStart.TabIndex = 6;
+      this.cbAmbiBoxAutoStart.Text = "Start AmbiBox with MediaPortal";
+      this.cbAmbiBoxAutoStart.UseVisualStyleBackColor = true;
+      // 
+      // lblAmbiBoxPath
+      // 
+      this.lblAmbiBoxPath.AutoSize = true;
+      this.lblAmbiBoxPath.Location = new System.Drawing.Point(6, 25);
+      this.lblAmbiBoxPath.Name = "lblAmbiBoxPath";
+      this.lblAmbiBoxPath.Size = new System.Drawing.Size(153, 13);
+      this.lblAmbiBoxPath.TabIndex = 5;
+      this.lblAmbiBoxPath.Text = "Path+Filename to AmbiBox.exe";
+      // 
+      // tbAmbiBoxPath
+      // 
+      this.tbAmbiBoxPath.Location = new System.Drawing.Point(9, 42);
+      this.tbAmbiBoxPath.Name = "tbAmbiBoxPath";
+      this.tbAmbiBoxPath.Size = new System.Drawing.Size(700, 20);
+      this.tbAmbiBoxPath.TabIndex = 4;
+      // 
+      // btnSelectFileAmbiBox
+      // 
+      this.btnSelectFileAmbiBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.btnSelectFileAmbiBox.Location = new System.Drawing.Point(715, 40);
+      this.btnSelectFileAmbiBox.Name = "btnSelectFileAmbiBox";
+      this.btnSelectFileAmbiBox.Size = new System.Drawing.Size(92, 23);
+      this.btnSelectFileAmbiBox.TabIndex = 3;
+      this.btnSelectFileAmbiBox.Text = "...";
+      this.btnSelectFileAmbiBox.UseVisualStyleBackColor = true;
+      this.btnSelectFileAmbiBox.Click += new System.EventHandler(this.btnSelectFileAmbiBox_Click);
       // 
       // tabPageBoblight
       // 
@@ -1777,8 +2030,11 @@
       // 
       // openFileDialog4
       // 
-      this.openFileDialog4.FileName = "openFileDialog4";
       this.openFileDialog4.Filter = "AtmoHue.exe|*.exe";
+      // 
+      // openFileDialog5
+      // 
+      this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
       // SetupForm
       // 
@@ -1822,6 +2078,11 @@
       this.grpDeactivate.ResumeLayout(false);
       this.grpDeactivate.PerformLayout();
       this.tabMenu.ResumeLayout(false);
+      this.tabPageAmbiBox.ResumeLayout(false);
+      this.grpAmbiBoxNetwork.ResumeLayout(false);
+      this.grpAmbiBoxNetwork.PerformLayout();
+      this.grpAmbiBoxLocal.ResumeLayout(false);
+      this.grpAmbiBoxLocal.PerformLayout();
       this.tabPageBoblight.ResumeLayout(false);
       this.grpBoblightSettings.ResumeLayout(false);
       this.grpBoblightSettings.PerformLayout();
@@ -1995,5 +2256,29 @@
     private System.Windows.Forms.Label lblpowerModeChangedDelayMS;
     private System.Windows.Forms.Label lblpowerModeChangedDelay;
     private System.Windows.Forms.TextBox tbpowerModeChangedDelay;
+    private System.Windows.Forms.CheckBox ckAmbiBoxEnabled;
+    private System.Windows.Forms.TabPage tabPageAmbiBox;
+    private System.Windows.Forms.GroupBox grpAmbiBoxNetwork;
+    private System.Windows.Forms.GroupBox grpAmbiBoxLocal;
+    private System.Windows.Forms.CheckBox cbAmbiBoxAutoStop;
+    private System.Windows.Forms.CheckBox cbAmbiBoxAutoStart;
+    private System.Windows.Forms.Label lblAmbiBoxPath;
+    private System.Windows.Forms.TextBox tbAmbiBoxPath;
+    private System.Windows.Forms.Button btnSelectFileAmbiBox;
+    private System.Windows.Forms.OpenFileDialog openFileDialog5;
+    private System.Windows.Forms.Label lblAmbiBoxReconnectDelay;
+    private System.Windows.Forms.Label lblAmbiBoxMaxReconnectAttempts;
+    private System.Windows.Forms.Label lblAmbiBoxPort;
+    private System.Windows.Forms.Label lblAmbiBoxIP;
+    private System.Windows.Forms.TextBox tbAmbiBoxExternalProfile;
+    private System.Windows.Forms.TextBox tbAmbiBoxMediaPortalProfile;
+    private System.Windows.Forms.TextBox tbAmbiBoxLEDCount;
+    private System.Windows.Forms.TextBox tbAmbiBoxReconnectDelay;
+    private System.Windows.Forms.TextBox tbAmbiBoxMaxReconnectAttempts;
+    private System.Windows.Forms.TextBox tbAmbiBoxPort;
+    private System.Windows.Forms.TextBox tbAmbiBoxIP;
+    private System.Windows.Forms.Label lblAmbiBoxExternalProfile;
+    private System.Windows.Forms.Label lblAmbiBoxMediaPortalProfile;
+    private System.Windows.Forms.Label lblAmbiBoxLEDCount;
   }
 }

@@ -92,6 +92,16 @@ grpBoblightSettings=Boblight instellingen
 lblBoblightGamma=Gamma:
 lblBlackbarDetectionThreshold=ms, met Drempel
 lblpowerModeChangedDelay=Vertraging na standby:
+lblAmbiBoxExternalProfile=External capture profile:
+lblAmbiBoxIP=IP:
+lblAmbiBoxLEDCount=LED Count:
+lblAmbiBoxMaxReconnectAttempts=Verbindingspogingen:
+lblAmbiBoxMediaPortalProfile=MediaPortal capture profile:
+lblAmbiBoxPath=Pad en Bestandsnaam van AmbiBox.exe
+lblAmbiBoxPort=Port:
+lblAmbiBoxReconnectDelay=Opnieuw verbinden vertraging (ms):
+cbAmbiBoxAutoStart=Start AmbiBox met MediaPortal
+cbAmbiBoxAutoStop=Sluit AmbiBox met MediaPortal
 [ContextMenu]
 SwitchLEDsON=Schakel LEDs aan
 SwitchLEDsOFF=Schakel LEDs uit

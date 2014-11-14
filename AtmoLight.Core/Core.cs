@@ -104,16 +104,16 @@ namespace AtmoLight
     public int powerModeChangedDelay;
 
     // AmbiBox Settings Fields
-    public string ambiBoxIP = "127.0.0.1";
-    public int ambiBoxPort = 3636;
-    public int ambiBoxMaxReconnectAttempts = 5;
-    public int ambiBoxtReconnectDelay = 5000;
-    public int ambiBoxLEDCount = 50;
-    public string ambiBoxMediaPortalProfile = "MediaPortal";
-    public string ambiBoxExternalProfile = "Test";
-    public string ambiBoxPath = "C:\\Program Files (x86)\\AmbiBox\\AmbiBox.exe";
-    public bool ambiBoxAutoStart = true;
-    public bool ambiBoxAutostop = true;
+    public string ambiBoxIP;
+    public int ambiBoxPort;
+    public int ambiBoxMaxReconnectAttempts;
+    public int ambiBoxReconnectDelay;
+    public int ambiBoxLEDCount;
+    public string ambiBoxMediaPortalProfile;
+    public string ambiBoxExternalProfile;
+    public string ambiBoxPath;
+    public bool ambiBoxAutoStart;
+    public bool ambiBoxAutoStop;
 
     // AtmoWin Settings Fields
     public bool atmoWinAutoStart;
