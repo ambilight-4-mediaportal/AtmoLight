@@ -91,10 +91,28 @@ namespace AtmoLight
       switch (effect)
       {
         case ContentEffect.ExternalLiveMode:
+          ChangeEffect(ContentEffect.LEDsDisabled);
+          if (profileList.Contains(coreObject.ambiBoxExternalProfile))
+          {
+            SendCommand("lock");
+            SendCommand("setprofile:" + coreObject.ambiBoxExternalProfile);
+            currentProfile = coreObject.ambiBoxExternalProfile;
+            SendCommand("setstatus:on");
+            SendCommand("unlock");
+          }
+          return true;
         case ContentEffect.MediaPortalLiveMode:
         case ContentEffect.GIFReader:
         case ContentEffect.VUMeter:
         case ContentEffect.VUMeterRainbow:
+          SendCommand("lock");
+          System.Threading.Thread.Sleep(50);
+          if (profileList.Contains(coreObject.ambiBoxMediaPortalProfile))
+          {
+            SendCommand("setprofile:" + coreObject.ambiBoxMediaPortalProfile);
+            currentProfile = coreObject.ambiBoxMediaPortalProfile;
+          }
+          SendCommand("setstatus:on");
           SendCommand("unlock");
           return true;
         case ContentEffect.StaticColor:
@@ -109,6 +127,7 @@ namespace AtmoLight
           SendCommand(staticColorString);
           System.Threading.Thread.Sleep(50);
           SendCommand(staticColorString);
+          SendCommand("setstatus:off");
           return true;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
@@ -124,6 +143,7 @@ namespace AtmoLight
           SendCommand(disableString);
           System.Threading.Thread.Sleep(50);
           SendCommand(disableString);
+          SendCommand("setstatus:off");
           return true;
       }
     }
@@ -139,21 +159,10 @@ namespace AtmoLight
       {
         currentProfile = profileList[0];
       }
-      if (SendCommand("lock") != "lock:success")
-      {
-        Log.Error("AmbiBoxHandler - Error changing profile.");
-        return;
-      }
-      if (SendCommand("setprofile:" + currentProfile) != "ok")
-      {
-        Log.Error("AmbiBoxHandler - Error changing profile.");
-        return;
-      }
-      if (SendCommand("unlock") != "unlock:success")
-      {
-        Log.Error("AmbiBoxHandler - Error changing profile.");
-        return;
-      }
+      Log.Info("AmbiBoxHandler - Changing profile to: {0}", currentProfile);
+      SendCommand("lock");
+      SendCommand("setprofile:" + currentProfile);
+      SendCommand("unlock");
     }
     public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {

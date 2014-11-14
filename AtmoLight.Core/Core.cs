@@ -102,6 +102,8 @@ namespace AtmoLight
     public int ambiBoxMaxReconnectAttempts = 5;
     public int ambiBoxtReconnectDelay = 5000;
     public int ambiBoxLEDCount = 50;
+    public string ambiBoxMediaPortalProfile = "MediaPortal";
+    public string ambiBoxExternalProfile = "Test";
 
     // AtmoWin Settings Fields
     public bool atmoWinAutoStart;
