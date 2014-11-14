@@ -1,6 +1,8 @@
 ﻿using System;
 using MediaPortal.Profile;
 using Language;
+using System.Globalization;
+
 
 namespace AtmoLight
 {
@@ -8,7 +10,7 @@ namespace AtmoLight
   {
     #region Config variables
 
-    //Generic
+    // Generic
     public static ContentEffect effectVideo;
     public static ContentEffect effectMusic;
     public static ContentEffect effectRadio;
@@ -32,31 +34,56 @@ namespace AtmoLight
     public static bool restartOnError = true;
     public static bool blackbarDetection = false;
     public static int blackbarDetectionTime = 0;
+    public static int blackbarDetectionThreshold;
     public static string gifFile = "";
     public static int captureWidth = 0;
     public static int captureHeight = 0;
+    public static int powerModeChangedDelay;
 
-    //Atmowin
+    // Atmowin
     public static bool atmoWinTarget;
     public static string atmowinExe = "";
     public static bool startAtmoWin = true;
     public static bool exitAtmoWin = true;
 
-    //Hyperion
+    // Boblight
+    public static bool boblightTarget;
+    public static string boblightIP;
+    public static int boblightPort;
+    public static int boblightMaxFPS;
+    public static int boblightMaxReconnectAttempts;
+    public static int boblightReconnectDelay;
+    public static int boblightSpeed;
+    public static int boblightAutospeed;
+    public static bool boblightInterpolation;
+    public static int boblightSaturation;
+    public static int boblightValue;
+    public static int boblightThreshold;
+    public static double boblightGamma;
+
+    // Hyperion
     public static bool hyperionTarget;
     public static string hyperionIP = "";
     public static int hyperionPort = 0;
     public static int hyperionPriority = 0;
     public static int hyperionReconnectDelay = 0;
     public static int hyperionReconnectAttempts = 0;
-    public static int HyperionPriorityStaticColor = 0;
-    public static bool HyperionLiveReconnect;
+    public static int hyperionPriorityStaticColor = 0;
+    public static bool hyperionLiveReconnect;
 
-    //Hue
+    // Hue
     public static bool hueTarget;
+    public static string hueExe = "";
+    public static bool hueStart;
+    public static bool hueIsRemoteMachine;
     public static string hueIP = "";
     public static int huePort = 0;
+    public static int hueReconnectDelay = 0;
+    public static int hueReconnectAttempts = 0;
     public static int hueMinimalColorDifference;
+    public static bool hueBridgeEnableOnResume;
+    public static bool hueBridgeDisableOnSuspend;
+
 
     #endregion
 
@@ -154,24 +181,45 @@ namespace AtmoLight
         restartOnError = reader.GetValueAsBool("atmolight", "RestartOnError", true);
         delayReferenceRefreshRate = reader.GetValueAsInt("atmolight", "DelayRefreshRate", 50);
         blackbarDetection = reader.GetValueAsBool("atmolight", "BlackbarDetection", false);
-        blackbarDetectionTime = reader.GetValueAsInt("atmolight", "BlackbarDetectionTime", 0);
+        blackbarDetectionTime = reader.GetValueAsInt("atmolight", "BlackbarDetectionTime", 1000);
         gifFile = reader.GetValueAsString("atmolight", "GIFFile", "");
         captureWidth = reader.GetValueAsInt("atmolight", "captureWidth", 64);
         captureHeight = reader.GetValueAsInt("atmolight", "captureHeight", 64);
-        hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "0.0.0.0");
+        hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "127.0.0.1");
         hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 19445);
         hyperionReconnectDelay = reader.GetValueAsInt("atmolight", "hyperionReconnectDelay", 10000);
         hyperionReconnectAttempts = reader.GetValueAsInt("atmolight", "hyperionReconnectAttempts", 5);
         hyperionPriority = reader.GetValueAsInt("atmolight", "hyperionPriority", 1);
-        HyperionPriorityStaticColor = reader.GetValueAsInt("atmolight", "hyperionStaticColorPriority", 1);
-        HyperionLiveReconnect = reader.GetValueAsBool("atmolight", "HyperionLiveReconnect", false);
+        hyperionPriorityStaticColor = reader.GetValueAsInt("atmolight", "hyperionStaticColorPriority", 1);
+        hyperionLiveReconnect = reader.GetValueAsBool("atmolight", "hyperionLiveReconnect", false);
+        hueExe = reader.GetValueAsString("atmolight", "hueExe", "");
+        hueStart = reader.GetValueAsBool("atmolight", "hueStart", true);
+        hueIsRemoteMachine = reader.GetValueAsBool("atmolight", "hueIsRemoteMachine", false);
         hueIP = reader.GetValueAsString("atmolight", "hueIP", "127.0.0.1");
         huePort = reader.GetValueAsInt("atmolight", "huePort", 20123);
+        hueReconnectDelay = reader.GetValueAsInt("atmolight", "hueReconnectDelay", 10000);
+        hueReconnectAttempts = reader.GetValueAsInt("atmolight", "hueReconnectAttempts", 5);
         hueMinimalColorDifference = reader.GetValueAsInt("atmolight", "hueMinimalColorDifference", 25);
-
+        hueBridgeEnableOnResume = reader.GetValueAsBool("atmolight", "hueBridgeEnableOnResume", false);
+        hueBridgeDisableOnSuspend = reader.GetValueAsBool("atmolight", "hueBridgeDisableOnSuspend", false);
+        boblightIP = reader.GetValueAsString("atmolight", "boblightIP", "127.0.0.1");
+        boblightPort = reader.GetValueAsInt("atmolight", "boblightPort", 19333);
+        boblightMaxFPS = reader.GetValueAsInt("atmolight", "boblightMaxFPS", 10);
+        boblightMaxReconnectAttempts = reader.GetValueAsInt("atmolight", "boblightMaxReconnectAttempts", 5);
+        boblightReconnectDelay = reader.GetValueAsInt("atmolight", "boblightReconnectDelay", 5000);
+        boblightSpeed = reader.GetValueAsInt("atmolight", "boblightSpeed", 100);
+        boblightAutospeed = reader.GetValueAsInt("atmolight", "boblightAutospeed", 0);
+        boblightInterpolation = reader.GetValueAsBool("atmolight", "boblightInterpolation", true);
+        boblightSaturation = reader.GetValueAsInt("atmolight", "boblightSaturation", 1);
+        boblightValue = reader.GetValueAsInt("atmolight", "boblightValue", 1);
+        boblightThreshold = reader.GetValueAsInt("atmolight", "boblightThreshold", 20);
+        boblightGamma = Double.Parse(reader.GetValueAsString("atmolight", "boblightGamma", "2.2").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
         atmoWinTarget = reader.GetValueAsBool("atmolight", "atmoWinTarget", true);
+        boblightTarget = reader.GetValueAsBool("atmolight", "boblightTarget", false);
         hueTarget = reader.GetValueAsBool("atmolight", "hueTarget", false);
         hyperionTarget = reader.GetValueAsBool("atmolight", "hyperionTarget", false);
+        blackbarDetectionThreshold = reader.GetValueAsInt("atmolight", "blackbarDetectionThreshold", 20);
+        powerModeChangedDelay = reader.GetValueAsInt("atmolight", "powerModeChangedDelay", 5000);
       }
     }
     public static void SaveSettings()
@@ -213,12 +261,35 @@ namespace AtmoLight
         reader.SetValue("atmolight", "hyperionPriority", (int)hyperionPriority);
         reader.SetValue("atmolight", "hyperionReconnectDelay", (int)hyperionReconnectDelay);
         reader.SetValue("atmolight", "hyperionReconnectAttempts", (int)hyperionReconnectAttempts);
-        reader.SetValue("atmolight", "hyperionStaticColorPriority", (int)HyperionPriorityStaticColor);
-        reader.SetValueAsBool("atmolight", "HyperionLiveReconnect", HyperionLiveReconnect);     
+        reader.SetValue("atmolight", "hyperionStaticColorPriority", (int)hyperionPriorityStaticColor);
+        reader.SetValueAsBool("atmolight", "hyperionLiveReconnect", hyperionLiveReconnect);
+        reader.SetValue("atmolight", "hueExe", hueExe);
+        reader.SetValueAsBool("atmolight", "hueStart", hueStart);
+        reader.SetValueAsBool("atmolight", "hueIsRemoteMachine", hueIsRemoteMachine);
         reader.SetValue("atmolight", "hueIP", hueIP);
         reader.SetValue("atmolight", "huePort", (int)huePort);
+        reader.SetValue("atmolight", "hueReconnectDelay", (int)hueReconnectDelay);
+        reader.SetValue("atmolight", "hueReconnectAttempts", (int)hueReconnectAttempts);
         reader.SetValue("atmolight", "hueMinimalColorDifference", (int)hueMinimalColorDifference);
+        reader.SetValueAsBool("atmolight", "hueBridgeEnableOnResume", hueBridgeEnableOnResume);
+        reader.SetValueAsBool("atmolight", "hueBridgeDisableOnSuspend", hueBridgeDisableOnSuspend);
+        reader.SetValue("atmolight", "boblightIP", boblightIP);
+        reader.SetValue("atmolight", "boblightPort", boblightPort);
+        reader.SetValue("atmolight", "boblightMaxFPS", boblightMaxFPS);
+        reader.SetValue("atmolight", "boblightMaxReconnectAttempts", boblightMaxReconnectAttempts);
+        reader.SetValue("atmolight", "boblightReconnectDelay", boblightReconnectDelay);
+        reader.SetValue("atmolight", "boblightSpeed", boblightSpeed);
+        reader.SetValue("atmolight", "boblightAutospeed", boblightAutospeed);
+        reader.SetValue("atmolight", "boblightSaturation", boblightSaturation);
+        reader.SetValue("atmolight", "boblightValue", boblightValue);
+        reader.SetValue("atmolight", "boblightThreshold", boblightThreshold);
+        reader.SetValueAsBool("atmolight", "boblightInterpolation", boblightInterpolation);
+        reader.SetValue("atmolight", "boblightGamma", boblightGamma.ToString());
+        reader.SetValue("atmolight", "blackbarDetectionThreshold", blackbarDetectionThreshold.ToString());
+        reader.SetValue("atmolight", "powerModeChangedDelay", powerModeChangedDelay.ToString());
+
         reader.SetValueAsBool("atmolight", "atmoWinTarget", atmoWinTarget);
+        reader.SetValueAsBool("atmolight", "boblightTarget", boblightTarget);
         reader.SetValueAsBool("atmolight", "hueTarget", hueTarget);
         reader.SetValueAsBool("atmolight", "hyperionTarget", hyperionTarget);
       }

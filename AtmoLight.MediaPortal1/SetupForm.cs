@@ -21,12 +21,16 @@ namespace AtmoLight
       {
         coreObject.AddTarget(Target.AtmoWin);
       }
+      // Boblight
+      if (Settings.boblightTarget)
+      {
+        coreObject.AddTarget(Target.Boblight);
+      }
       // Hyperion
       if (Settings.hyperionTarget)
       {
         coreObject.AddTarget(Target.Hyperion);
       }
-
       // Hue
       if (Settings.hueTarget)
       {
@@ -36,7 +40,7 @@ namespace AtmoLight
       UpdateComboBoxes();
 
       lblVersionVal.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-      edFile.Text = Settings.atmowinExe;
+      edFileAtmoWin.Text = Settings.atmowinExe;
       comboBox1.SelectedIndex = (int)Settings.killButton;
       comboBox2.SelectedIndex = (int)Settings.profileButton;
       cbMenuButton.SelectedIndex = (int)Settings.menuButton;
@@ -55,13 +59,19 @@ namespace AtmoLight
       tbHyperionReconnectDelay.Text = Settings.hyperionReconnectDelay.ToString();
       tbHyperionReconnectAttempts.Text = Settings.hyperionReconnectAttempts.ToString();
       tbHyperionPriority.Text = Settings.hyperionPriority.ToString();
-      tbHyperionPriorityStaticColor.Text = Settings.HyperionPriorityStaticColor.ToString();
+      tbHyperionPriorityStaticColor.Text = Settings.hyperionPriorityStaticColor.ToString();
       tbCaptureWidth.Text = Settings.captureWidth.ToString();
       tbCaptureHeight.Text = Settings.captureHeight.ToString();
+      edFileHue.Text = Settings.hueExe;
+      ckStartHue.Checked = Settings.hueStart;
+      ckhueIsRemoteMachine.Checked = Settings.hueIsRemoteMachine;
       tbHueIP.Text = Settings.hueIP;
       tbHuePort.Text = Settings.huePort.ToString();
+      tbHueReconnectDelay.Text = Settings.hueReconnectDelay.ToString();
+      tbHueReconnectAttempts.Text = Settings.hueReconnectAttempts.ToString();
       tbHueMinimalColorDifference.Text = Settings.hueMinimalColorDifference.ToString();
-
+      ckHueBridgeEnableOnResume.Checked = Settings.hueBridgeEnableOnResume;
+      ckHueBridgeDisableOnSuspend.Checked = Settings.hueBridgeDisableOnSuspend;
       ckOnMediaStart.Checked = Settings.manualMode;
       ckLowCpu.Checked = Settings.lowCPU;
       ckDelay.Checked = Settings.delay;
@@ -72,13 +82,34 @@ namespace AtmoLight
       ckAtmowinEnabled.Checked = Settings.atmoWinTarget;
       ckHyperionEnabled.Checked = Settings.hyperionTarget;
       ckHueEnabled.Checked = Settings.hueTarget;
-      ckHyperionLiveReconnect.Checked = Settings.HyperionLiveReconnect;
+      ckHyperionLiveReconnect.Checked = Settings.hyperionLiveReconnect;
+      ckBoblightEnabled.Checked = Settings.boblightTarget;
+      tbBoblightIP.Text = Settings.boblightIP;
+      tbBoblightPort.Text = Settings.boblightPort.ToString();
+      tbBoblightMaxReconnectAttempts.Text = Settings.boblightMaxReconnectAttempts.ToString();
+      tbBoblightReconnectDelay.Text = Settings.boblightReconnectDelay.ToString();
+      tbBoblightMaxFPS.Text = Settings.boblightMaxFPS.ToString();
+      tbarBoblightSpeed.Value = (int)Settings.boblightSpeed;
+      tbarBoblightAutospeed.Value = (int)Settings.boblightAutospeed;
+      tbarBoblightSaturation.Value = (int)Settings.boblightSaturation;
+      tbarBoblightValue.Value = (int)Settings.boblightValue;
+      tbarBoblightThreshold.Value = Settings.boblightThreshold;
+      tbarBoblightGamma.Value = (int)(Settings.boblightGamma * 10);
+      ckBoblightInterpolation.Checked = Settings.boblightInterpolation;
+      tbBoblightSpeed.Text = Settings.boblightSpeed.ToString();
+      tbBoblightAutospeed.Text = Settings.boblightAutospeed.ToString();
+      tbBoblightSaturation.Text = Settings.boblightSaturation.ToString();
+      tbBoblightValue.Text = Settings.boblightValue.ToString();
+      tbBoblightThreshold.Text = Settings.boblightThreshold.ToString();
+      tbBoblightGamma.Text = Settings.boblightGamma.ToString();
+      tbBlackbarDetectionThreshold.Text = Settings.blackbarDetectionThreshold.ToString();
+      tbpowerModeChangedDelay.Text = Settings.powerModeChangedDelay.ToString();
     }
 
     private void UpdateLanguageOnControls()
     {
       // this function places language specific text on all "skin-able" text items.
-      lblPathInfo.Text = LanguageLoader.appStrings.SetupForm_lblPathInfoText;
+      lblPathInfoAtmoWin.Text = LanguageLoader.appStrings.SetupForm_lblPathInfoAtmoWin;
       grpMode.Text = LanguageLoader.appStrings.SetupForm_grpModeText;
       grpPluginOption.Text = LanguageLoader.appStrings.SetupForm_grpPluginOptionText;
       lblVidTvRec.Text = LanguageLoader.appStrings.SetupForm_lblVidTvRecText;
@@ -112,6 +143,8 @@ namespace AtmoLight
       ckRestartOnError.Text = LanguageLoader.appStrings.SetupForm_ckRestartOnError;
       lblRefreshRate.Text = LanguageLoader.appStrings.SetupForm_lblRefreshRate;
       ckBlackbarDetection.Text = LanguageLoader.appStrings.SetupForm_ckBlackbarDetection;
+      lblBlackarDetectionMS.Text = LanguageLoader.appStrings.SetupForm_lblBlackbarDetectionThreshold;
+      lblpowerModeChangedDelay.Text = LanguageLoader.appStrings.SetupForm_lblpowerModeChangedDelay;
       grpGIF.Text = LanguageLoader.appStrings.SetupForm_grpGIF;
       lblHyperionIP.Text = LanguageLoader.appStrings.SetupForm_lblHyperionIP;
       lblHyperionPort.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPort;
@@ -128,10 +161,31 @@ namespace AtmoLight
       grpHyperionNetworkSettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionNetworkSettings;
       grpHyperionPrioritySettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionPrioritySettings;
       grpCaptureDimensions.Text = LanguageLoader.appStrings.SetupForm_grpCaptureDimensions;
+      lblPathInfoHue.Text = LanguageLoader.appStrings.SetupForm_lblPathInfoHue;
+      ckStartHue.Text = LanguageLoader.appStrings.SetupForm_ckStartHue;
+      ckhueIsRemoteMachine.Text = LanguageLoader.appStrings.SetupForm_ckhueIsRemoteMachine;
       lblHueIP.Text = LanguageLoader.appStrings.SetupForm_lblHueIP;
       lblHuePort.Text = LanguageLoader.appStrings.SetupForm_lblHuePort;
+      lblHueReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblHueReconnectDelay;
+      lblHueReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblHueReconnectAttempts;
       lblHueMinimalColorDifference.Text = LanguageLoader.appStrings.SetupForm_lblHueMinimalColorDifference;
+      ckHueBridgeEnableOnResume.Text = LanguageLoader.appStrings.SetupForm_ckHueBridgeEnableOnResume;
+      ckHueBridgeDisableOnSuspend.Text = LanguageLoader.appStrings.SetupForm_ckHueBridgeDisableOnSuspend;
       lblMPExit.Text = LanguageLoader.appStrings.SetupForm_lblMPExit;
+      lblBoblightIP.Text = LanguageLoader.appStrings.SetupForm_lblBoblightIP;
+      lblBoblightPort.Text = LanguageLoader.appStrings.SetupForm_lblBoblightPort;
+      lblBoblightMaxReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblBoblightMaxReconnectAttempts;
+      lblBoblightReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblBoblightReconnectDelay;
+      lblBoblightMaxFPS.Text = LanguageLoader.appStrings.SetupForm_lblBoblightMaxFPS;
+      lblBoblightSpeed.Text = LanguageLoader.appStrings.SetupForm_lblBoblightSpeed;
+      lblBoblightAutospeed.Text = LanguageLoader.appStrings.SetupForm_lblBoblightAutospeed;
+      lblBoblightSaturation.Text = LanguageLoader.appStrings.SetupForm_lblBoblightSaturation;
+      lblBoblightValue.Text = LanguageLoader.appStrings.SetupForm_lblBoblightValue;
+      lblBoblightThreshold.Text = LanguageLoader.appStrings.SetupForm_lblBoblightThreshold;
+      ckBoblightInterpolation.Text = LanguageLoader.appStrings.SetupForm_lblBoblightInterpolation;
+      grpBoblightGeneral.Text = LanguageLoader.appStrings.SetupForm_grpBoblightGeneral;
+      grpBoblightSettings.Text = LanguageLoader.appStrings.SetupForm_grpBoblightSettings;
+      lblBoblightGamma.Text = LanguageLoader.appStrings.SetupForm_lblBoblightGamma;
     }
 
     private void btnSelectFile_Click(object sender, EventArgs e)
@@ -142,12 +196,12 @@ namespace AtmoLight
         string filename = filenameNoExtension.ToLower();
         if (filename == "atmowina")
         {
-          edFile.Text = openFileDialog1.FileName;
+          edFileAtmoWin.Text = openFileDialog1.FileName;
         }
         else
         {
           MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorAtmoWinA, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-          edFile.Text = "";
+          edFileAtmoWin.Text = "";
           return;
         }
       }
@@ -276,11 +330,11 @@ namespace AtmoLight
       }
 
       //Atmowin path
-      if (validatorPath(edFile.Text) == false && string.IsNullOrEmpty(edFile.Text) == false)
+      if (validatorPath(edFileAtmoWin.Text) == false && string.IsNullOrEmpty(edFileAtmoWin.Text) == false)
       {
         if (ckAtmowinEnabled.Checked)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + lblPathInfo.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + lblPathInfoAtmoWin.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
       }
@@ -342,6 +396,15 @@ namespace AtmoLight
         return;
       }
 
+      //Hyperion reconnect delay
+      minValue = 100;
+      maxValue = 999999;
+      if (validatorInt(tbHyperionReconnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHyperionReconnectDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       //Hyperion priority
       minValue = 1;
       maxValue = 0;
@@ -360,6 +423,16 @@ namespace AtmoLight
         return;
       }
 
+      //Hue path
+      if (validatorPath(edFileHue.Text) == false && string.IsNullOrEmpty(edFileHue.Text) == false)
+      {
+        if (ckHueEnabled.Checked)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + lblPathInfoHue.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+      }
+
       //Hue port
       minValue = 1;
       maxValue = 65535;
@@ -369,11 +442,89 @@ namespace AtmoLight
         return;
       }
 
+      //Hue reconnect attempts
+      minValue = 1;
+      maxValue = 0;
+      if (validatorInt(tbHueReconnectAttempts.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - ["+ lblHueReconnectAttempts.Text +"]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      //Hue reconnect delay
+      minValue = 100;
+      maxValue = 999999;
+      if (validatorInt(tbHueReconnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHueReconnectDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // Boblight IP
+      if (validatorIPAdress(tbBoblightIP.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + tbBoblightIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // Boblight Port
+      minValue = 1;
+      maxValue = 65535;
+      if (validatorInt(tbBoblightPort.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // Boblight MaxReconnectAttempts
+      minValue = 1;
+      maxValue = 9999;
+      if (validatorInt(tbBoblightMaxReconnectAttempts.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightMaxReconnectAttempts.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // Boblight ReconnectDelay
+      minValue = 100;
+      maxValue = 999999;
+      if (validatorInt(tbBoblightReconnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightSaturation.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // Boblight MaxFPS
+      minValue = 1;
+      maxValue = 144;
+      if (validatorInt(tbBoblightMaxFPS.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightMaxFPS.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // Blackbar Detection Threshold
+      minValue = 0;
+      maxValue = 255;
+      if (validatorInt(tbBlackbarDetectionThreshold.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + ckBlackbarDetection.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // Power mode change delay
+      minValue = 0;
+      maxValue = 999999;
+      if (validatorInt(tbpowerModeChangedDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblpowerModeChangedDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
 
       Settings.staticColorRed = int.Parse(tbRed.Text);
       Settings.staticColorGreen = int.Parse(tbGreen.Text);
       Settings.staticColorBlue = int.Parse(tbBlue.Text);
-      Settings.atmowinExe = edFile.Text;
+      Settings.atmowinExe = edFileAtmoWin.Text;
       Settings.excludeTimeStart = DateTime.Parse(edExcludeStart.Text);
       Settings.excludeTimeEnd = DateTime.Parse(edExcludeEnd.Text);
       Settings.killButton = comboBox1.SelectedIndex;
@@ -396,16 +547,38 @@ namespace AtmoLight
       Settings.hyperionPriority = int.Parse(tbHyperionPriority.Text);
       Settings.hyperionReconnectDelay = int.Parse(tbHyperionReconnectDelay.Text);
       Settings.hyperionReconnectAttempts = int.Parse(tbHyperionReconnectAttempts.Text);
-      Settings.HyperionPriorityStaticColor = int.Parse(tbHyperionPriorityStaticColor.Text);
-      Settings.HyperionLiveReconnect = ckHyperionLiveReconnect.Checked;
+      Settings.hyperionPriorityStaticColor = int.Parse(tbHyperionPriorityStaticColor.Text);
+      Settings.hyperionLiveReconnect = ckHyperionLiveReconnect.Checked;
       Settings.captureWidth = int.Parse(tbCaptureWidth.Text);
       Settings.captureHeight = int.Parse(tbCaptureHeight.Text);
+      Settings.hueExe = edFileHue.Text;
+      Settings.hueStart = ckStartHue.Checked;
+      Settings.hueIsRemoteMachine = ckhueIsRemoteMachine.Checked;
       Settings.hueIP = tbHueIP.Text;
       Settings.huePort = int.Parse(tbHuePort.Text);
+      Settings.hueReconnectDelay = int.Parse(tbHueReconnectDelay.Text);
+      Settings.hueReconnectAttempts = int.Parse(tbHueReconnectAttempts.Text);
       Settings.hueMinimalColorDifference = int.Parse(tbHueMinimalColorDifference.Text);
+      Settings.hueBridgeEnableOnResume = ckHueBridgeEnableOnResume.Checked;
+      Settings.hueBridgeDisableOnSuspend = ckHueBridgeDisableOnSuspend.Checked;
       Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
       Settings.hueTarget = ckHueEnabled.Checked;
       Settings.hyperionTarget = ckHyperionEnabled.Checked;
+      Settings.boblightTarget = ckBoblightEnabled.Checked;
+      Settings.boblightIP = tbBoblightIP.Text;
+      Settings.boblightPort = int.Parse(tbBoblightPort.Text);
+      Settings.boblightMaxReconnectAttempts = int.Parse(tbBoblightMaxReconnectAttempts.Text);
+      Settings.boblightReconnectDelay = int.Parse(tbBoblightReconnectDelay.Text);
+      Settings.boblightMaxFPS = int.Parse(tbBoblightMaxFPS.Text);
+      Settings.boblightSpeed = tbarBoblightSpeed.Value;
+      Settings.boblightAutospeed = tbarBoblightAutospeed.Value;
+      Settings.boblightSaturation = tbarBoblightSaturation.Value;
+      Settings.boblightValue = tbarBoblightValue.Value;
+      Settings.boblightThreshold = tbarBoblightThreshold.Value;
+      Settings.boblightInterpolation = ckBoblightInterpolation.Checked;
+      Settings.boblightGamma = (double)tbarBoblightGamma.Value / 10;
+      Settings.blackbarDetectionThreshold = int.Parse(tbBlackbarDetectionThreshold.Text);
+      Settings.powerModeChangedDelay = int.Parse(tbpowerModeChangedDelay.Text);
 
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
       Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
@@ -425,6 +598,7 @@ namespace AtmoLight
         LanguageLoader.LoadLanguageFile(openFileDialog2.FileName);
         LanguageLoader.strCurrentLanguageFile = openFileDialog2.FileName;
         UpdateLanguageOnControls();
+        UpdateComboBoxes();
         openFileDialog2.FileName = "";
       }
     }
@@ -683,7 +857,7 @@ namespace AtmoLight
 
     private void edFile_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (validatorPath(edFile.Text) == false && string.IsNullOrEmpty(edFile.Text) == false)
+      if (validatorPath(edFileAtmoWin.Text) == false && string.IsNullOrEmpty(edFileAtmoWin.Text) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
@@ -710,7 +884,7 @@ namespace AtmoLight
     private void tbHyperionReconnectDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
       int minValue = 10;
-      int maxValue = 0;
+      int maxValue = 999999;
       if (validatorInt(tbHyperionReconnectDelay.Text, minValue, maxValue, false) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]",minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -764,9 +938,125 @@ namespace AtmoLight
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
-
+    }
+    private void tbHueReconnectDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 100;
+      int maxValue = 999999;
+      if (validatorInt(tbHueReconnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
     }
 
+    private void tbHueReconnectAttempts_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 9999;
+      if (validatorInt(tbHueReconnectAttempts.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    // Boblight
+    private void tbBoblightIP_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (validatorIPAdress(tbBoblightIP.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbBoblightPort_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 65535;
+      if (validatorInt(tbBoblightPort.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbBoblightMaxReconnectAttempts_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 9999;
+      if (validatorInt(tbBoblightMaxReconnectAttempts.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbBoblightReconnectDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 100;
+      int maxValue = 999999;
+      if (validatorInt(tbBoblightReconnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbBoblightMaxFPS_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 144;
+      if (validatorInt(tbBoblightMaxFPS.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbBlackbarDetectionThreshold_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 255;
+      if (validatorInt(tbBlackbarDetectionThreshold.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbpowerModeChangedDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 999999;
+      if (validatorInt(tbpowerModeChangedDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbarBoblightSpeed_ValueChanged(Object sender, EventArgs e)
+    {
+      tbBoblightSpeed.Text = tbarBoblightSpeed.Value.ToString();
+    }
+
+    private void tbarBoblightAutospeed_ValueChanged(Object sender, EventArgs e)
+    {
+      tbBoblightAutospeed.Text = tbarBoblightAutospeed.Value.ToString();
+    }
+
+    private void tbarBoblightSaturation_ValueChanged(Object sender, EventArgs e)
+    {
+      tbBoblightSaturation.Text = tbarBoblightSaturation.Value.ToString();
+    }
+
+    private void tbarBoblightValue_ValueChanged(Object sender, EventArgs e)
+    {
+      tbBoblightValue.Text = tbarBoblightValue.Value.ToString();
+    }
+
+    private void tbarBoblightThreshold_ValueChanged(Object sender, EventArgs e)
+    {
+      tbBoblightThreshold.Text = tbarBoblightThreshold.Value.ToString();
+    }
+
+    private void tbarBoblightGamma_ValueChanged(Object sender, EventArgs e)
+    {
+      tbBoblightGamma.Text = ((double)tbarBoblightGamma.Value / 10).ToString();
+    }
 
     // Dynamic effect changes
     public void UpdateComboBoxes()
@@ -822,6 +1112,19 @@ namespace AtmoLight
       UpdateComboBoxes();
     }
 
+    private void ckBoblightEnabled_CheckedChanged(Object sender, EventArgs e)
+    {
+      if (ckBoblightEnabled.Checked)
+      {
+        coreObject.AddTarget(Target.Boblight);
+      }
+      else
+      {
+        coreObject.RemoveTarget(Target.Boblight);
+      }
+      UpdateComboBoxes();
+    }
+
     private void ckHyperionEnabled_CheckedChanged(Object sender, EventArgs e)
     {
       if (ckHyperionEnabled.Checked)
@@ -871,6 +1174,25 @@ namespace AtmoLight
     private void cbMPExit_SelectedIndexChanged(object sender, EventArgs e)
     {
       Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMPExit.Text, "ContextMenu_").Remove(0, 12));
+    }
+    private void btnSelectFileHue_Click(object sender, EventArgs e)
+    {
+      if (openFileDialog4.ShowDialog() == DialogResult.OK)
+      {
+        string filenameNoExtension = Path.GetFileNameWithoutExtension(openFileDialog4.FileName);
+        string filename = filenameNoExtension.ToLower();
+        if (filename == "atmohue")
+        {
+          edFileHue.Text = openFileDialog4.FileName;
+        }
+        else
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorHue, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          edFileHue.Text = "";
+          return;
+        }
+      }
+
     }
   }
 }

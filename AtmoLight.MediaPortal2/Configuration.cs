@@ -958,6 +958,62 @@ namespace AtmoLight.Configuration
       }
     }
   }
+
+  public class HueExe : PathEntry
+  {
+    public override void Load()
+    {
+      _pathSelectionType = PathSelectionType.File;
+      _path = SettingsManager.Load<Settings>().hueExe;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.hueExe = _path;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().huePath = _path;
+    }
+  }
+
+  public class HueStart : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().hueStart;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.hueStart = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueStart = _yes;
+    }
+  }
+
+  public class HueIsRemoteMachine : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().hueIsRemoteMachine;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.hueIsRemoteMachine = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueIsRemoteMachine = _yes;
+    }
+  }
+
   public class HueIP : Entry
   {
     public override void Load()
@@ -1006,6 +1062,51 @@ namespace AtmoLight.Configuration
       Core.GetInstance().huePort = (int)_value;
     }
   }
+
+  public class HueReconnectAttempts : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 9999;
+      _value = SettingsManager.Load<Settings>().HueReconnectAttempts;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueReconnectAttempts = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueReconnectAttempts = (int)_value;
+    }
+  }
+
+  public class HueReconnectDelay : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 99999;
+      _value = SettingsManager.Load<Settings>().HueReconnectDelay;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueReconnectDelay = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueReconnectDelay = (int)_value;
+    }
+  }
+
   public class HueMinimalColorDifference : LimitedNumberSelect
   {
     public override void Load()
@@ -1025,6 +1126,42 @@ namespace AtmoLight.Configuration
       SettingsManager.Save(settings);
 
       Core.GetInstance().hueMinimalColorDifference = (int)_value;
+    }
+  }
+
+  public class HueBridgeEnableOnResume : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().HueBridgeEnableOnResume;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueBridgeEnableOnResume = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueBridgeEnableOnResume = _yes;
+    }
+  }
+
+  public class HueBridgeDisableOnSuspend : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().HueBridgeDisableOnSuspend;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueBridgeDisableOnSuspend = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueBridgeDisableOnSuspend = _yes;
     }
   }
 
@@ -1077,6 +1214,381 @@ namespace AtmoLight.Configuration
       {
         Core.GetInstance().SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
       }
+    }
+  }
+
+  public class BoblightTarget : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().BoblightTarget;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BoblightTarget = _yes;
+      SettingsManager.Save(settings);
+
+      if (_yes)
+      {
+        Core.GetInstance().AddTarget(Target.Boblight);
+        Core.GetInstance().Initialise();
+      }
+      else
+      {
+        Core.GetInstance().RemoveTarget(Target.Boblight);
+      }
+    }
+  }
+
+  public class BoblightIP : Entry
+  {
+    public override void Load()
+    {
+      _value = SettingsManager.Load<Settings>().BoblightIP;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      IPAddress ip;
+      if (IPAddress.TryParse(_value, out ip))
+      {
+        settings.BoblightIP = _value;
+        SettingsManager.Save(settings);
+
+        Core.GetInstance().boblightIP = _value;
+      }
+    }
+
+    public override int DisplayLength
+    {
+      get { return 15; }
+    }
+  }
+
+  public class BoblightPort : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 65535;
+      _value = SettingsManager.Load<Settings>().BoblightPort;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BoblightPort = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().boblightPort = (int)_value;
+    }
+  }
+
+  public class BoblightMaxFPS : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 144;
+      _value = SettingsManager.Load<Settings>().BoblightMaxFPS;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BoblightMaxFPS = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().boblightMaxFPS = (int)_value;
+    }
+  }
+
+  public class BoblightMaxReconnectAttempts : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 9999;
+      _value = SettingsManager.Load<Settings>().BoblightMaxReconnectAttempts;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BoblightMaxReconnectAttempts = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().boblightMaxReconnectAttempts = (int)_value;
+    }
+  }
+
+  public class BoblightReconnectDelay : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 999999;
+      _value = SettingsManager.Load<Settings>().BoblightReconnectDelay;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BoblightReconnectDelay = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().boblightReconnectDelay = (int)_value;
+    }
+  }
+
+  public class BoblightSpeed : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 100;
+      _value = SettingsManager.Load<Settings>().BoblightSpeed;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BoblightSpeed = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().boblightSpeed = (int)_value;
+    }
+  }
+
+  public class BoblightAutospeed : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 100;
+      _value = SettingsManager.Load<Settings>().BoblightAutospeed;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BoblightAutospeed = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().boblightAutospeed = (int)_value;
+    }
+  }
+
+  public class BoblightSaturation : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 20;
+      _value = SettingsManager.Load<Settings>().BoblightSaturation;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BoblightSaturation = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().boblightSaturation = (int)_value;
+    }
+  }
+
+  public class BoblightValue : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 20;
+      _value = SettingsManager.Load<Settings>().BoblightValue;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BoblightValue = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().boblightValue = (int)_value;
+    }
+  }
+
+  public class BoblightThreshold : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 255;
+      _value = SettingsManager.Load<Settings>().BoblightThreshold;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BoblightThreshold = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().boblightThreshold = (int)_value;
+    }
+  }
+
+  public class BoblightInterpolation : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().BoblightInterpolation;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BoblightInterpolation = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().boblightInterpolation = _yes;
+    }
+  }
+
+  public class BoblightGamma : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 0.1;
+      _lowerLimit = 0;
+      _upperLimit = 10;
+      _value = SettingsManager.Load<Settings>().BoblightGamma;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BoblightGamma = _value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().boblightGamma = (int)_value;
+    }
+  }
+
+  public class BlackbarDetection : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().BlackbarDetection;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BlackbarDetection = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().blackbarDetection = _yes;
+    }
+  }
+
+  public class BlackbarDetectionTime : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 99999;
+      _value = SettingsManager.Load<Settings>().BlackbarDetectionTime;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BlackbarDetectionTime = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().blackbarDetectionTime = (int)_value;
+    }
+  }
+
+  public class BlackbarDetectionThreshold : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 255;
+      _value = SettingsManager.Load<Settings>().BlackbarDetectionThreshold;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BlackbarDetectionThreshold = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().blackbarDetectionThreshold = (int)_value;
+    }
+  }
+
+  public class PowerModeChangedDelay : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 99999;
+      _value = SettingsManager.Load<Settings>().PowerModeChangedDelay;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.PowerModeChangedDelay = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().powerModeChangedDelay = (int)_value;
     }
   }
 }

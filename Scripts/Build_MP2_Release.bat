@@ -26,7 +26,6 @@ mkdir Logs
 set LOG=Logs\MP2_Build_%BUILD_TYPE%.log
 echo. > %LOG%
 
-
 echo.
 echo Building AtmoLight
 echo Build mode: %BUILD_TYPE%

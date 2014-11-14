@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.IO;
+using Microsoft.Win32;
 using MediaPortal.Common;
 using MediaPortal.UI.Presentation.Players;
 using MediaPortal.UI.Presentation.UiNotifications;
@@ -116,6 +117,24 @@ namespace AtmoLight
       AtmoLightObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
       AtmoLightObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
 
+      // Boblight
+      if (settings.BoblightTarget)
+      {
+        AtmoLightObject.AddTarget(Target.Boblight);
+      }
+      AtmoLightObject.boblightIP = settings.BoblightIP;
+      AtmoLightObject.boblightPort = settings.BoblightPort;
+      AtmoLightObject.boblightMaxFPS = settings.BoblightMaxFPS;
+      AtmoLightObject.boblightMaxReconnectAttempts = settings.BoblightMaxReconnectAttempts;
+      AtmoLightObject.boblightReconnectDelay = settings.BoblightReconnectDelay;
+      AtmoLightObject.boblightSpeed = settings.BoblightSpeed;
+      AtmoLightObject.boblightAutospeed = settings.BoblightAutospeed;
+      AtmoLightObject.boblightInterpolation = settings.BoblightInterpolation;
+      AtmoLightObject.boblightSaturation = settings.BoblightSaturation;
+      AtmoLightObject.boblightValue = settings.BoblightValue;
+      AtmoLightObject.boblightThreshold = settings.BoblightThreshold;
+      AtmoLightObject.boblightGamma = settings.BoblightGamma;
+
       // Hyperion
       if (settings.HyperionTarget)
       {
@@ -134,9 +153,16 @@ namespace AtmoLight
       {
         AtmoLightObject.AddTarget(Target.Hue);
       }
+      AtmoLightObject.huePath = settings.hueExe;
+      AtmoLightObject.hueStart = settings.hueStart;
+      AtmoLightObject.hueIsRemoteMachine = settings.hueIsRemoteMachine;
       AtmoLightObject.hueIP = settings.HueIP;
       AtmoLightObject.huePort = settings.HuePort;
+      AtmoLightObject.hueReconnectDelay = settings.HueReconnectDelay;
+      AtmoLightObject.hueReconnectAttempts = settings.HueReconnectAttempts;
       AtmoLightObject.hueMinimalColorDifference = settings.HueMinimalColorDifference;
+      AtmoLightObject.hueBridgeEnableOnResume = settings.HueBridgeEnableOnResume;
+      AtmoLightObject.hueBridgeDisableOnSuspend = settings.HueBridgeDisableOnSuspend;
 
       // General settings
       AtmoLightObject.SetDelay(settings.DelayTime);
@@ -144,6 +170,10 @@ namespace AtmoLight
       AtmoLightObject.SetReInitOnError(settings.RestartAtmoWinOnError);
       AtmoLightObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, settings.StaticColorBlue);
       AtmoLightObject.SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
+      AtmoLightObject.blackbarDetection = settings.BlackbarDetection;
+      AtmoLightObject.blackbarDetectionTime = settings.BlackbarDetectionTime;
+      AtmoLightObject.blackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
+      AtmoLightObject.powerModeChangedDelay = settings.PowerModeChangedDelay;
 
       menuEffect = settings.MenuEffect;
       if (CheckForStartRequirements())
@@ -167,6 +197,7 @@ namespace AtmoLight
       AtmoLight.Configuration.OnOffButton.ButtonsChanged += new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
       AtmoLight.Configuration.ProfileButton.ButtonsChanged += new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
       SkinContext.DeviceSceneEnd += UICapture;
+      SystemEvents.PowerModeChanged += PowerModeChanged;
       RegisterSettingsChangedHandler();
       RegisterKeyBindings();
     }
@@ -196,6 +227,7 @@ namespace AtmoLight
       Core.OnNewVUMeter -= new Core.NewVUMeterHander(OnNewVUMeter);
       AtmoLight.Configuration.OnOffButton.ButtonsChanged -= new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
       AtmoLight.Configuration.ProfileButton.ButtonsChanged -= new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      SystemEvents.PowerModeChanged -= PowerModeChanged;
       UnregisterSettingsChangedHandler();
     }
     #endregion
@@ -321,7 +353,6 @@ namespace AtmoLight
           lastFrame = Win32API.GetTickCount();
         }
       }
-
 
       Rectangle rectangleDestination = new Rectangle(0, 0, AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
       try
@@ -576,47 +607,39 @@ namespace AtmoLight
         return dbLevel;
       }
 
-      ISpectrumPlayer player = (playerContext.CurrentPlayer as ISpectrumPlayer);
+      IAudioPlayerAnalyze player = (playerContext.CurrentPlayer as IAudioPlayerAnalyze);
       if (player == null)
       {
         return dbLevel;
       }
 
-
-      int maxIndex;
-      int minIndex;
-      bool res = player.GetFFTFrequencyIndex(20000, out maxIndex);
-      res |= player.GetFFTFrequencyIndex(20, out minIndex);
-      if (!res)
+      double dbLevelL;
+      double dbLevelR;
+      if (player.GetChannelLevel(out dbLevelL, out dbLevelR))
       {
-        return dbLevel;
+        dbLevel[0] = dbLevelL;
+        dbLevel[1] = dbLevelR;
       }
+      return dbLevel;
+    }
+    #endregion
 
-      int _maximumFrequencyIndex = Math.Min(maxIndex + 1, 2048 - 1);
-      int _minimumFrequencyIndex = Math.Min(minIndex, 2048 - 1);
-
-      float[] _channelData = new float[2048];
-      if (player.State != PlayerState.Active || !player.GetFFTData(_channelData))
+    #region PowerModeChanged Event
+    private void PowerModeChanged(object sender, PowerModeChangedEventArgs powerMode)
+    {
+      if (powerMode.Mode == PowerModes.Resume)
       {
-        return dbLevel;
-      }
-
-      minIndex = Math.Max(0, Math.Min(_minimumFrequencyIndex, _channelData.Length));
-      maxIndex = Math.Max(0, Math.Min(_maximumFrequencyIndex, _channelData.Length));
-
-      double maxValue = -200f;
-      for (int x = minIndex; x <= maxIndex; x++)
-      {
-        double dbValue = (20 * Math.Log10(_channelData[x])) + 5;
-
-        if (maxValue < dbValue)
+        if (CheckForStartRequirements())
         {
-          maxValue = dbValue;
+          AtmoLightObject.SetInitialEffect(menuEffect);
+        }
+        else
+        {
+          AtmoLightObject.SetInitialEffect(ContentEffect.LEDsDisabled);
         }
       }
-      dbLevel[0] = maxValue;
-      dbLevel[1] = maxValue;
-      return dbLevel;
+
+      Task.Factory.StartNew(() => { AtmoLightObject.PowerModeChanged(powerMode.Mode); });
     }
     #endregion
   }

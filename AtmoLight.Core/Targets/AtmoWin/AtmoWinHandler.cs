@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
 using System.Net.Sockets;
 using System.Linq;
+using Microsoft.Win32;
 
 namespace AtmoLight
 {
@@ -236,6 +237,14 @@ namespace AtmoLight
       // Needed for AtmoWin 1.0.0.5+
       if (!ChangeEffect(coreObject.GetCurrentEffect())) return;
     }
+
+    public void PowerModeChanged(PowerModes powerMode)
+    {
+      if (powerMode == PowerModes.Resume)
+      {
+        ChangeEffect(coreObject.GetCurrentEffect());
+      }
+    }
     #endregion
 
     #region Initialise
@@ -281,7 +290,6 @@ namespace AtmoLight
       initialiseLock = false;
 
       ChangeEffect(coreObject.GetCurrentEffect());
-      coreObject.SetAtmoLightOn(coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true);
 
       return true;
     }
@@ -335,7 +343,9 @@ namespace AtmoLight
     {
       Log.Debug("AtmoWinHandler - Trying to connect to AtmoWin.");
       if (!GetAtmoRemoteControl()) return false;
+      if (!SetAtmoEffect(ComEffectMode.cemLivePicture, true)) return false;
       if (!GetAtmoLiveViewControl()) return false;
+      if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal, true)) return false;
       if (!GetAtmoLiveViewRes()) return false;
 
       Log.Info("AtmoWinHandler - Successfully connected to AtmoWin.");
@@ -577,9 +587,9 @@ namespace AtmoLight
     /// <param name="effect">Effect to change to.</param>
     /// <param name="force">Currently initialising.</param>
     /// <returns>true if successfull and false if not.</returns>
-    private bool SetAtmoEffect(ComEffectMode effect)
+    private bool SetAtmoEffect(ComEffectMode effect, bool force = false)
     {
-      if (!IsConnected())
+      if (!IsConnected() && !force)
       {
         return false;
       }
@@ -622,9 +632,9 @@ namespace AtmoLight
     /// </summary>
     /// <param name="viewSource">The liveview source.</param>
     /// <returns>true if successfull and false if not.</returns>
-    private bool SetAtmoLiveViewSource(ComLiveViewSource viewSource)
+    private bool SetAtmoLiveViewSource(ComLiveViewSource viewSource, bool force = false)
     {
-      if (!IsConnected())
+      if (!IsConnected() && !force)
       {
         return false;
       }

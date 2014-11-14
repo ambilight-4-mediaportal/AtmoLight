@@ -13,13 +13,13 @@
     <PluginReference PluginId="{A965AFE5-44F9-46e0-980E-40BBE17F25CA}"/> <!-- VideoPlayers -->
     <PluginReference PluginId="{1AFF4467-64B0-4ca1-AF28-9AEDF3525BCE}"/> <!-- ConfigurationManager -->
     <PluginReference PluginId="{B765A4B6-F455-4941-BDAE-2CE45208BFEB}"/> <!-- Configuration plugin -->
+    <PluginReference PluginId="{9886EB43-B3EB-4cf1-A979-8D4D8874C555}"/> <!-- BassPlayer plugin -->
   </DependsOn>
     
   <Runtime>
     <Assembly FileName="AtmoLight.MediaPortal2.dll"/>
     <Assembly FileName="AtmoLight.Core.dll"/>
     <Assembly FileName="Google.ProtocolBuffers.dll"/>
-    <Assembly FileName="../SkinEngine/SkinEngine.dll"/>
     <PluginStateTracker ClassName="AtmoLight.Plugin"/>
   </Runtime>
 
@@ -38,31 +38,35 @@
   <Register Location="/Configuration/Settings/Plugins/AtmoLight">
     <ConfigSection
         Id="General"
-        Sort="1"
+        Sort="100"
         Text="[AtmoLight.General]"/>
     <ConfigSection
         Id="AtmoWin"
-        Sort="2"
+        Sort="200"
         Text="[AtmoLight.AtmoWin]"/>
     <ConfigSection
+        Id="Boblight"
+        Sort="300"
+        Text="[AtmoLight.Boblight]"/>
+    <ConfigSection
         Id="Hue"
-        Sort="3"
+        Sort="400"
         Text="[AtmoLight.Hue]"/>
     <ConfigSection
         Id="Hyperion"
-        Sort="4"
+        Sort="500"
         Text="[AtmoLight.Hyperion]"/>
     <ConfigSection
         Id="Effects"
-        Sort="5"
+        Sort="600"
         Text="[AtmoLight.Effects]"/>
     <ConfigSection
         Id="Buttons"
-        Sort="6"
+        Sort="700"
         Text="[AtmoLight.Buttons]"/>
     <ConfigSection
         Id="Advanced"
-        Sort="7"
+        Sort="800"
         Text="[AtmoLight.Advanced]"/>
   </Register>
   
@@ -73,6 +77,10 @@
         Id="AtmoWinTarget"
         Text="[AtmoLight.AtmoWinTarget]"
         ClassName="AtmoLight.Configuration.AtmoWinTarget"/>
+    <ConfigSetting
+        Id="BoblightTarget"
+        Text="[AtmoLight.BoblightTarget]"
+        ClassName="AtmoLight.Configuration.BoblightTarget"/>
     <ConfigSetting
         Id="HyperionTarget"
         Text="[AtmoLight.HyperionTarget]"
@@ -101,6 +109,58 @@
         Id="StopAtmoWinOnExit"
         Text="[AtmoLight.StopAtmoWinOnExit]"
         ClassName="AtmoLight.Configuration.StopAtmoWinOnExit"/>
+  </Register>
+  
+  <!-- Boblight -->
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/Boblight">
+    <ConfigSetting
+        Id="BoblightIP"
+        Text="[AtmoLight.BoblightIP]"
+        ClassName="AtmoLight.Configuration.BoblightIP"/>
+    <ConfigSetting
+        Id="BoblightPort"
+        Text="[AtmoLight.BoblightPort]"
+        ClassName="AtmoLight.Configuration.BoblightPort"/>
+    <ConfigSetting
+        Id="BoblightMaxReconnectAttempts"
+        Text="[AtmoLight.BoblightMaxReconnectAttempts]"
+        ClassName="AtmoLight.Configuration.BoblightMaxReconnectAttempts"/>
+    <ConfigSetting
+        Id="BoblightReconnectDelay"
+        Text="[AtmoLight.BoblightReconnectDelay]"
+        ClassName="AtmoLight.Configuration.BoblightReconnectDelay"/>
+    <ConfigSetting
+        Id="BoblightMaxFPS"
+        Text="[AtmoLight.BoblightMaxFPS]"
+        ClassName="AtmoLight.Configuration.BoblightMaxFPS"/>
+    <ConfigSetting
+        Id="BoblightInterpolation"
+        Text="[AtmoLight.BoblightInterpolation]"
+        ClassName="AtmoLight.Configuration.BoblightInterpolation"/>
+    <ConfigSetting
+        Id="BoblightSpeed"
+        Text="[AtmoLight.BoblightSpeed]"
+        ClassName="AtmoLight.Configuration.BoblightSpeed"/>
+    <ConfigSetting
+        Id="BoblightAutospeed"
+        Text="[AtmoLight.BoblightAutospeed]"
+        ClassName="AtmoLight.Configuration.BoblightAutospeed"/>
+    <ConfigSetting
+        Id="BoblightSaturation"
+        Text="[AtmoLight.BoblightSaturation]"
+        ClassName="AtmoLight.Configuration.BoblightSaturation"/>
+    <ConfigSetting
+        Id="BoblightValue"
+        Text="[AtmoLight.BoblightValue]"
+        ClassName="AtmoLight.Configuration.BoblightValue"/>
+    <ConfigSetting
+        Id="BoblightThreshold"
+        Text="[AtmoLight.BoblightThreshold]"
+        ClassName="AtmoLight.Configuration.BoblightThreshold"/>
+    <ConfigSetting
+        Id="BoblightGamma"
+        Text="[AtmoLight.BoblightGamma]"
+        ClassName="AtmoLight.Configuration.BoblightGamma"/>
   </Register>
   
   <!-- Hyperion -->
@@ -138,6 +198,18 @@
   <!-- Hue -->
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/Hue">
     <ConfigSetting
+        Id="HueExe"
+        Text="[AtmoLight.HueExe]"
+        ClassName="AtmoLight.Configuration.HueExe"/>
+    <ConfigSetting
+        Id="HueStart"
+        Text="[AtmoLight.HueStart]"
+        ClassName="AtmoLight.Configuration.HueStart"/>
+    <ConfigSetting
+        Id="HueIsRemoteMachine"
+        Text="[AtmoLight.HueIsRemoteMachine]"
+        ClassName="AtmoLight.Configuration.HueIsRemoteMachine"/>
+    <ConfigSetting
         Id="HueIP"
         Text="[AtmoLight.HueIP]"
         ClassName="AtmoLight.Configuration.HueIP"/>
@@ -146,9 +218,25 @@
         Text="[AtmoLight.HuePort]"
         ClassName="AtmoLight.Configuration.HuePort"/>
     <ConfigSetting
+        Id="HueReconnectDelay"
+        Text="[AtmoLight.HueReconnectDelay]"
+        ClassName="AtmoLight.Configuration.HueReconnectDelay"/>
+    <ConfigSetting
+        Id="HueReconnectAttempts"
+        Text="[AtmoLight.HueReconnectAttempts]"
+        ClassName="AtmoLight.Configuration.HueReconnectAttempts"/>
+    <ConfigSetting
         Id="HueMinimalColorDifference"
         Text="[AtmoLight.HueMinimalColorDifference]"
         ClassName="AtmoLight.Configuration.HueMinimalColorDifference"/>
+    <ConfigSetting
+        Id="HueBridgeEnableOnResume"
+        Text="[AtmoLight.HueBridgeEnableOnResume]"
+        ClassName="AtmoLight.Configuration.HueBridgeEnableOnResume"/>
+    <ConfigSetting
+        Id="HueBridgeDisableOnSuspend"
+        Text="[AtmoLight.HueBridgeDisableOnSuspend]"
+        ClassName="AtmoLight.Configuration.HueBridgeDisableOnSuspend"/>    
   </Register>
 
 
@@ -246,7 +334,23 @@
         Id="DelayRefreshRate"
         Text="[AtmoLight.DelayRefreshRate]"
         ClassName="AtmoLight.Configuration.DelayRefreshRate"/>
-      <ConfigSetting
+    <ConfigSetting
+        Id="BlackbarDetection"
+        Text="[AtmoLight.BlackbarDetection]"
+        ClassName="AtmoLight.Configuration.BlackbarDetection"/>
+    <ConfigSetting
+        Id="BlackbarDetectionTime"
+        Text="[AtmoLight.BlackbarDetectionTime]"
+        ClassName="AtmoLight.Configuration.BlackbarDetectionTime"/>    
+    <ConfigSetting
+        Id="BlackbarDetectionThreshold"
+        Text="[AtmoLight.BlackbarDetectionThreshold]"
+        ClassName="AtmoLight.Configuration.BlackbarDetectionThreshold"/>    
+    <ConfigSetting
+        Id="PowerModeChangedDelay"
+        Text="[AtmoLight.PowerModeChangedDelay]"
+        ClassName="AtmoLight.Configuration.PowerModeChangedDelay"/>
+    <ConfigSetting
         Id="CaptureWidth"
         Text="[AtmoLight.CaptureWidth]"
         ClassName="AtmoLight.Configuration.CaptureWidth"/>

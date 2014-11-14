@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.IO;
 using Microsoft.DirectX.Direct3D;
+using Microsoft.Win32;
 using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
 using Language;
@@ -46,14 +47,6 @@ namespace AtmoLight
     // Frame Fields
     private Surface rgbSurface = null; // RGB Surface
     private Int64 lastFrame = 0; // Tick count of the last frame
-
-    // Blackbar detection
-    private object blackbarAnalyzerClass; // Helper for reflection
-    private Assembly blackbarAnalyzerAssembly; // Helper for reflection
-    private Type blackbarAnalyzerType; // Helper for reflection
-    private MethodInfo blackbarAnalyzerMethodInfo; // Helper for reflection
-    private Rectangle blackbarDetectionRect = new Rectangle(); // Rectangle with the dimensions of the picture (without blackbars)
-    private Int64 blackbarDetectionLastTime = 0; // Last time blackbar detection was run
 
     // Static Color
     private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
@@ -90,6 +83,9 @@ namespace AtmoLight
 
       Log.Debug("Initialising event handler.");
 
+      // PowerModeChanged Handler
+      SystemEvents.PowerModeChanged += PowerModeChanged;
+
       // g_Player Handler
       g_Player.PlayBackStarted += new g_Player.StartedHandler(g_Player_PlayBackStarted);
       g_Player.PlayBackStopped += new g_Player.StoppedHandler(g_Player_PlayBackStopped);
@@ -107,14 +103,6 @@ namespace AtmoLight
       // VU Meter Handler
       Core.OnNewVUMeter += new Core.NewVUMeterHander(OnNewVUMeter);
 
-      // Frameanalyzer
-      // Reflection needed to access the FrameAnalyzer as it is an internal class
-      blackbarAnalyzerAssembly = Assembly.LoadFrom("plugins\\process\\ProcessPlugins.dll");
-      blackbarAnalyzerClass = blackbarAnalyzerAssembly.CreateInstance("ProcessPlugins.ViewModeSwitcher.FrameAnalyzer");
-      blackbarAnalyzerType = blackbarAnalyzerClass.GetType();
-      blackbarAnalyzerMethodInfo = blackbarAnalyzerType.GetMethod("FindBounds");
-
-
       staticColorTemp[0] = Settings.staticColorRed;
       staticColorTemp[1] = Settings.staticColorGreen;
       staticColorTemp[2] = Settings.staticColorBlue;
@@ -131,6 +119,24 @@ namespace AtmoLight
       AtmoLightObject.atmoWinAutoStart = Settings.startAtmoWin;
       AtmoLightObject.atmoWinAutoStop = Settings.exitAtmoWin;
 
+      // Boblight
+      if (Settings.boblightTarget)
+      {
+        AtmoLightObject.AddTarget(Target.Boblight);
+      }
+      AtmoLightObject.boblightIP = Settings.boblightIP;
+      AtmoLightObject.boblightPort = Settings.boblightPort;
+      AtmoLightObject.boblightMaxFPS = Settings.boblightMaxFPS;
+      AtmoLightObject.boblightMaxReconnectAttempts = Settings.boblightMaxReconnectAttempts;
+      AtmoLightObject.boblightReconnectDelay = Settings.boblightReconnectDelay;
+      AtmoLightObject.boblightSpeed = Settings.boblightSpeed;
+      AtmoLightObject.boblightAutospeed = Settings.boblightAutospeed;
+      AtmoLightObject.boblightInterpolation = Settings.boblightInterpolation;
+      AtmoLightObject.boblightSaturation = Settings.boblightSaturation;
+      AtmoLightObject.boblightValue = Settings.boblightValue;
+      AtmoLightObject.boblightThreshold = Settings.boblightThreshold;
+      AtmoLightObject.boblightGamma = Settings.boblightGamma;
+
       // Hyperion
       if (Settings.hyperionTarget)
       {
@@ -141,17 +147,25 @@ namespace AtmoLight
       AtmoLightObject.hyperionPriority = Settings.hyperionPriority;
       AtmoLightObject.hyperionReconnectDelay = Settings.hyperionReconnectDelay;
       AtmoLightObject.hyperionReconnectAttempts = Settings.hyperionReconnectAttempts;
-      AtmoLightObject.hyperionPriorityStaticColor = Settings.HyperionPriorityStaticColor;
-      AtmoLightObject.hyperionLiveReconnect = Settings.HyperionLiveReconnect;
+      AtmoLightObject.hyperionPriorityStaticColor = Settings.hyperionPriorityStaticColor;
+      AtmoLightObject.hyperionLiveReconnect = Settings.hyperionLiveReconnect;
 
       // Hue
       if (Settings.hueTarget)
       {
         AtmoLightObject.AddTarget(Target.Hue);
       }
+      AtmoLightObject.huePath = Settings.hueExe;
+      AtmoLightObject.hueStart = Settings.hueStart;
+      AtmoLightObject.hueIsRemoteMachine = Settings.hueIsRemoteMachine;
       AtmoLightObject.hueIP = Settings.hueIP;
       AtmoLightObject.huePort = Settings.huePort;
+      AtmoLightObject.hueReconnectDelay = Settings.hueReconnectDelay;
+      AtmoLightObject.hueReconnectAttempts = Settings.hueReconnectAttempts;
       AtmoLightObject.hueMinimalColorDifference = Settings.hueMinimalColorDifference;
+      AtmoLightObject.hueBridgeEnableOnResume = Settings.hueBridgeEnableOnResume;
+      AtmoLightObject.hueBridgeDisableOnSuspend = Settings.hueBridgeDisableOnSuspend;
+      
 
       AtmoLightObject.AddTarget(Target.AmbiBox);
 
@@ -161,6 +175,10 @@ namespace AtmoLight
       AtmoLightObject.SetReInitOnError(Settings.restartOnError);
       AtmoLightObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
       AtmoLightObject.SetCaptureDimensions(Settings.captureWidth, Settings.captureHeight);
+      AtmoLightObject.blackbarDetection = Settings.blackbarDetection;
+      AtmoLightObject.blackbarDetectionTime = Settings.blackbarDetectionTime;
+      AtmoLightObject.blackbarDetectionThreshold = Settings.blackbarDetectionThreshold;
+      AtmoLightObject.powerModeChangedDelay = Settings.powerModeChangedDelay;
 
       // Get the effects that are supported by at least one target
       supportedEffects = AtmoLightObject.GetSupportedEffects();
@@ -189,7 +207,7 @@ namespace AtmoLight
     public void Stop()
     {
       MediaPortal.FrameGrabber.GetInstance().OnNewFrame -= new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
-
+      SystemEvents.PowerModeChanged -= PowerModeChanged;
       g_Player.PlayBackStarted -= new g_Player.StartedHandler(g_Player_PlayBackStarted);
       g_Player.PlayBackStopped -= new g_Player.StoppedHandler(g_Player_PlayBackStopped);
       g_Player.PlayBackEnded -= new g_Player.EndedHandler(g_Player_PlayBackEnded);
@@ -476,41 +494,6 @@ namespace AtmoLight
 
           Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
 
-          if (Settings.blackbarDetection)
-          {
-            if (Win32API.GetTickCount() >= (blackbarDetectionLastTime + Settings.blackbarDetectionTime))
-            {
-              blackbarDetectionLastTime = Win32API.GetTickCount();
-
-              // Analyzing the frame for black bars.
-              // Has to be done in low res, as it would be to cpu heavy otherwise (0-2ms vs. 1000ms).
-              Bitmap streamBitmap = new Bitmap(stream);
-              object[] arguments = new Object[] { streamBitmap, null };
-
-              // Call FindBounds.
-              bool blackbarblackbarAnalyzerSuccess = (bool)blackbarAnalyzerMethodInfo.Invoke(blackbarAnalyzerClass, arguments);
-              streamBitmap.Dispose();
-
-              if (blackbarblackbarAnalyzerSuccess)
-              {
-                // Retrieving the bounds.
-                blackbarDetectionRect = (System.Drawing.Rectangle)arguments[1];
-              }
-            }
-
-            // New bitmap that has to have to dimensions AtmoWin expects.
-            Bitmap target = new Bitmap(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
-
-            using (Graphics g = Graphics.FromImage(target))
-            {
-              // Cropping and resizing the original bitmap
-              g.DrawImage(new Bitmap(stream), new Rectangle(0, 0, target.Width, target.Height), blackbarDetectionRect, GraphicsUnit.Pixel);
-            }
-
-            // Saving cropped and resized bitmap to stream
-            target.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
-            target.Dispose();
-          }
           AtmoLightObject.CalculateBitmap(stream);
 
           stream.Close();
@@ -813,11 +796,13 @@ namespace AtmoLight
         {
           Log.Info("Switching blackbar detection off.");
           Settings.blackbarDetection = false;
+          AtmoLightObject.blackbarDetection = false;
         }
         else
         {
           Log.Info("Switching blackbar detection on.");
           Settings.blackbarDetection = true;
+          AtmoLightObject.blackbarDetection = true;
         }
       }
       // Toggle Delay
@@ -991,6 +976,25 @@ namespace AtmoLight
       }
       // Start the dialog again (without reset) so we can enter the other colors.
       DialogRGBManualStaticColorChanger(false, dlgRGB.SelectedLabel);
+    }
+    #endregion
+
+    #region PowerModeChanged Event
+    private void PowerModeChanged(object sender, PowerModeChangedEventArgs powerMode)
+    {
+      if (powerMode.Mode == PowerModes.Resume)
+      {
+        if (CheckForStartRequirements())
+        {
+          AtmoLightObject.SetInitialEffect(menuEffect);
+        }
+        else
+        {
+          AtmoLightObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+        }
+      }
+
+      Task.Factory.StartNew(() => { AtmoLightObject.PowerModeChanged(powerMode.Mode); });
     }
     #endregion
 

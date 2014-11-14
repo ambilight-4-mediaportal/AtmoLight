@@ -5,13 +5,13 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
-using AtmoWinRemoteControl;
 using System.Drawing;
 using System.IO;
 using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
 using System.Net.Sockets;
 using System.Linq;
+using Microsoft.Win32;
 using proto;
 using AtmoLight.Targets;
 
@@ -36,6 +36,7 @@ namespace AtmoLight
   {
     AmbiBox,
     AtmoWin,
+    Boblight,
     Hue,
     Hyperion
   }
@@ -58,7 +59,6 @@ namespace AtmoLight
     private Thread vuMeterThreadHelper;
 
     // States
-    private bool currentState = false; // State of the LEDs
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current active effect
 
     // Lists
@@ -84,17 +84,24 @@ namespace AtmoLight
     public delegate double[] NewVUMeterHander();
     public static event NewVUMeterHander OnNewVUMeter;
 
+    // Stopwatches
+    private Stopwatch blackbarStopwatch = new Stopwatch();
+
     // Generic Fields
     private int captureWidth = 64; // Default fallback capture width
     private int captureHeight = 48; // Default fallback capture height
     private bool delayEnabled = false;
     private int delayTime = 0;
     private string gifPath = "";
-    private bool initialEffect = false;
+    private Rectangle blackbarDetectionRect;
 
     // General settings for targets
     public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
     public bool reInitOnError;
+    public bool blackbarDetection;
+    public int blackbarDetectionTime;
+    public int blackbarDetectionThreshold;
+    public int powerModeChangedDelay;
 
     // AmbiBox Settings Fields
     public string ambiBoxIP = "127.0.0.1";
@@ -113,6 +120,20 @@ namespace AtmoLight
     public bool atmoWinAutoStop;
     public string atmoWinPath;
 
+    // Boblight Settings Fields
+    public string boblightIP;
+    public int boblightPort;
+    public int boblightMaxFPS;
+    public int boblightMaxReconnectAttempts;
+    public int boblightReconnectDelay;
+    public int boblightSpeed;
+    public int boblightAutospeed;
+    public bool boblightInterpolation;
+    public int boblightSaturation;
+    public int boblightValue;
+    public int boblightThreshold;
+    public double boblightGamma;
+
     // Hyperion Settings Fields
     public string hyperionIP;
     public int hyperionPort;
@@ -123,9 +144,17 @@ namespace AtmoLight
     public bool hyperionLiveReconnect;
 
     // Hue Settings Fields
+    public string huePath;
+    public bool hueStart;
+    public bool hueIsRemoteMachine;
     public string hueIP;
     public int huePort;
+    public int hueReconnectDelay;
+    public int hueReconnectAttempts;
     public int hueMinimalColorDifference;
+    public bool hueBridgeEnableOnResume;
+    public bool hueBridgeDisableOnSuspend;
+
     #endregion
 
     #region class Win32API
@@ -351,6 +380,10 @@ namespace AtmoLight
         {
           targets.Add(new AmbiBoxHandler());
         }
+        else if (target == Target.Boblight)
+        {
+          targets.Add(new BoblightHandler());
+        }
       }
     }
 
@@ -380,15 +413,9 @@ namespace AtmoLight
     /// </summary>
     /// <param name="effect"></param>
     /// <returns></returns>
-    public bool SetInitialEffect(ContentEffect effect)
+    public void SetInitialEffect(ContentEffect effect)
     {
-      if (!initialEffect)
-      {
-        currentEffect = effect;
-        initialEffect = true;
-        return true;
-      }
-      return false;
+      currentEffect = effect;
     }
 
     /// <summary>
@@ -453,15 +480,6 @@ namespace AtmoLight
       }
       return false;
     }
-
-    /// <summary>
-    /// Sets the current state field.
-    /// </summary>
-    /// <param name="on"></param>
-    public void SetAtmoLightOn(bool on)
-    {
-      currentState = on;
-    }
     #endregion
 
     #region Information Methods (get)
@@ -522,7 +540,11 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     public bool IsAtmoLightOn()
     {
-      return currentState;
+      if (!IsConnected())
+      {
+        return false;
+      }
+      return GetCurrentEffect() == ContentEffect.LEDsDisabled || GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true;
     }
 
     /// <summary>
@@ -693,6 +715,13 @@ namespace AtmoLight
     {
       // Debug file output
       // new Bitmap(stream).Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
+      if (blackbarDetection && currentEffect == ContentEffect.MediaPortalLiveMode)
+      {
+        stream = BlackbarDetection(stream);
+      }
+      // Debug file output after blackbar detection
+      // new Bitmap(stream).Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
+
       BinaryReader reader = new BinaryReader(stream);
       stream.Position = 0; // ensure that what start at the beginning of the stream. 
       reader.ReadBytes(14); // skip bitmap file info header
@@ -743,6 +772,113 @@ namespace AtmoLight
         }
       }
     }
+
+    private Stream BlackbarDetection(Stream stream)
+    {
+      if (!blackbarStopwatch.IsRunning)
+      {
+        blackbarStopwatch.Start();
+      }
+      if (blackbarStopwatch.ElapsedMilliseconds >= blackbarDetectionTime)
+      {
+        Bitmap blackBarBitmap = new Bitmap(stream);
+        Color colorTemp;
+        int yTopBound = -1;
+        int yBottomBound = -1;
+        int xLeftBound = -1;
+        int xRightBound = -1;
+
+        // Horizontal Scan
+        for (int y = 0; y < (int)(blackBarBitmap.Height / 3); y++)
+        {
+          if (yTopBound != -1 && yBottomBound != -1)
+          {
+            break;
+          }
+          for (int x = (int)(blackBarBitmap.Width * 0.33); x < (int)(blackBarBitmap.Width * 0.66); x++)
+          {
+            if (yTopBound != -1 && yBottomBound != -1)
+            {
+              break;
+            }
+
+            if (yTopBound == -1)
+            {
+              colorTemp = blackBarBitmap.GetPixel(x, y);
+              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              {
+                yTopBound = y;
+              }
+            }
+
+            if (yBottomBound == -1)
+            {
+              colorTemp = blackBarBitmap.GetPixel(x, blackBarBitmap.Height - 1 - y);
+              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              {
+                yBottomBound = blackBarBitmap.Height - y;
+              }
+            }
+          }
+        }
+
+        // Vertical Scan
+        for (int x = 0; x < (int)(blackBarBitmap.Width / 3); x++)
+        {
+          if (xLeftBound != -1 && xRightBound != -1)
+          {
+            break;
+          }
+          for (int y = (int)(blackBarBitmap.Height * 0.33); y < (int)(blackBarBitmap.Height * 0.66); y++)
+          {
+            if (xLeftBound != -1 && xRightBound != -1)
+            {
+              break;
+            }
+
+            if (xLeftBound == -1)
+            {
+              colorTemp = blackBarBitmap.GetPixel(x, y);
+              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              {
+                xLeftBound = x;
+              }
+            }
+
+            if (xRightBound == -1)
+            {
+              colorTemp = blackBarBitmap.GetPixel(blackBarBitmap.Width - 1 - x, y);
+              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              {
+                xRightBound = blackBarBitmap.Width - x;
+              }
+            }
+          }
+        }
+        if (yTopBound != -1 && yBottomBound != -1 && xLeftBound != -1 && xRightBound != -1)
+        {
+          blackbarDetectionRect = new Rectangle(xLeftBound, yTopBound, xRightBound - xLeftBound, yBottomBound - yTopBound);
+        }
+        blackBarBitmap.Dispose();
+        blackbarStopwatch.Restart();
+      }
+
+      if (blackbarDetectionRect != new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight()) && blackbarDetectionRect != new Rectangle(0, 0, 0, 0))
+      {
+        Bitmap blackBarBitmapOutput = new Bitmap(GetCaptureWidth(), GetCaptureHeight());
+
+        using (Graphics g = Graphics.FromImage(blackBarBitmapOutput))
+        {
+          // Cropping and resizing the original bitmap
+          g.DrawImage(new Bitmap(stream), new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight()), blackbarDetectionRect, GraphicsUnit.Pixel);
+        }
+
+        // Saving cropped and resized bitmap to stream
+        blackBarBitmapOutput.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+        blackBarBitmapOutput.Dispose();
+      }
+      return stream;
+    }
     #endregion
 
     #region Control Methods
@@ -768,15 +904,6 @@ namespace AtmoLight
       Log.Info("Changing AtmoLight effect to: {0}", effect.ToString());
       StopAllThreads();
 
-      if (effect == ContentEffect.LEDsDisabled || effect == ContentEffect.Undefined)
-      {
-        currentState = false;
-      }
-      else
-      {
-        currentState = true;
-      }
-
       lock (targetsLock)
       {
         foreach (var target in targets)
@@ -790,6 +917,7 @@ namespace AtmoLight
 
       if (effect == ContentEffect.MediaPortalLiveMode)
       {
+        blackbarDetectionRect = new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight());
         if (delayEnabled)
         {
           Log.Debug("Adding {0}ms delay to the LEDs.", delayTime);
@@ -850,6 +978,21 @@ namespace AtmoLight
       Log.Info("Removing delay.");
       delayEnabled = false;
       StopSetPixelDataThread();
+    }
+
+    public void PowerModeChanged(PowerModes powerMode)
+    {
+      if (powerMode == PowerModes.Resume)
+      {
+        System.Threading.Thread.Sleep(powerModeChangedDelay);
+      }
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          target.PowerModeChanged(powerMode);
+        }
+      }
     }
     #endregion
 

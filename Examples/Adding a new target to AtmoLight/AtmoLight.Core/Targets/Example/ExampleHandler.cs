@@ -55,5 +55,16 @@ namespace AtmoLight
 		{
 		// Send a new picture/color infos to your target (MediaPortal Liveview Mode)
 		}
+		
+		public void ChangeProfile()
+		{
+		// Change the profile of your target
+		}
+		
+		public void PowerModeChanged(PowerModes powerMode)
+		{
+		// Reconnect on resume if needed
+		// ChangeEffect to Core.currentEffect
+		}
 	}
 }

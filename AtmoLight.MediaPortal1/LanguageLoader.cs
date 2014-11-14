@@ -171,15 +171,45 @@ namespace Language
         strSection = strArray[0];
         strKey = strArray[1];
         strValue = iniAccess.ReadString(strSection, strKey, (String)(field.GetValue(obj)));
-        field.SetValue(obj, strValue);
+        if (string.IsNullOrEmpty(strValue))
+        {
+          int pos = strLanguageFile.LastIndexOf("\\") + 1;
+          AtmoLight.Log.Error("Missing translation for field {0} in {1}", field.Name, strLanguageFile.Substring(pos, strLanguageFile.Length - pos));
+          field.SetValue(obj, GetFallbackTranslation(field.Name));
+        }
+        else
+        {
+          field.SetValue(obj, strValue);
+        }
       }
-
-      // re-write the file in case there are new strings in the application 
-      // that are not yet in this language file
-      WriteLanguageFile(strLanguageFile);
-
       return true;
+    }
 
+    public static string GetFallbackTranslation(string fieldName)
+    {
+      INIReaderForCE iniAccess = new INIReaderForCE(Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\Atmolight\\EnglishUS.lng");
+
+      Object obj = appStrings;
+      Type t = appStrings.GetType();
+
+      FieldInfo[] fi = t.GetFields();
+      String[] strArray;
+      char[] strSeps = { '_' };
+      String strSection;
+      String strKey;
+      String strValue;
+      foreach (FieldInfo field in fi)
+      {
+        strArray = field.Name.Split(strSeps);
+        strSection = strArray[0];
+        strKey = strArray[1];
+        strValue = iniAccess.ReadString(strSection, strKey, (String)(field.GetValue(obj)));
+        if (field.Name == fieldName)
+        {
+          return strValue;
+        }
+      }
+      return "";
     }
 
     public static string GetTranslationFromFieldName(string fieldName)
@@ -254,7 +284,7 @@ namespace Language
 
   public class ApplicationStrings
   {
-    public String SetupForm_lblPathInfoText;
+    public String SetupForm_lblPathInfoAtmoWin;
     public String SetupForm_grpModeText;
     public String SetupForm_grpPluginOptionText;
     public String SetupForm_lblVidTvRecText;
@@ -288,6 +318,7 @@ namespace Language
     public String SetupForm_ckRestartOnError;
     public String SetupForm_Error;
     public String SetupForm_ErrorAtmoWinA;
+    public String SetupForm_ErrorHue;
     public String SetupForm_ErrorStartTime;
     public String SetupForm_ErrorEndTime;
     public String SetupForm_ErrorMiliseconds;
@@ -314,14 +345,37 @@ namespace Language
     public String SetupForm_ckHyperionLiveReconnect;
     public String SetupForm_lblCaptureWidth;
     public String SetupForm_lblCaptureHeight;
+    public String SetupForm_ckhueIsRemoteMachine;
+    public String SetupForm_ckStartHue;
+    public String SetupForm_lblPathInfoHue;
     public String SetupForm_lblHueIP;
     public String SetupForm_lblHuePort;
-    public String SetupForm_lblHueMinimalColorDifference;    
+    public String SetupForm_lblHueReconnectDelay;
+    public String SetupForm_lblHueReconnectAttempts;
+    public String SetupForm_lblHueMinimalColorDifference;
+    public String SetupForm_ckHueBridgeEnableOnResume;
+    public String SetupForm_ckHueBridgeDisableOnSuspend;
     public String SetupForm_grpHyperionNetworkSettings;
     public String SetupForm_grpHyperionPrioritySettings;
     public String SetupForm_tabPageGeneric;
     public String SetupForm_grpTargets;
     public String SetupForm_grpAtmowinSettings;
+    public String SetupForm_lblBoblightIP;
+    public String SetupForm_lblBoblightPort;
+    public String SetupForm_lblBoblightMaxReconnectAttempts;
+    public String SetupForm_lblBoblightReconnectDelay;
+    public String SetupForm_lblBoblightMaxFPS;
+    public String SetupForm_lblBoblightSpeed;
+    public String SetupForm_lblBoblightAutospeed;
+    public String SetupForm_lblBoblightSaturation;
+    public String SetupForm_lblBoblightValue;
+    public String SetupForm_lblBoblightThreshold;
+    public String SetupForm_lblBoblightInterpolation;
+    public String SetupForm_grpBoblightGeneral;
+    public String SetupForm_grpBoblightSettings;
+    public String SetupForm_lblBoblightGamma;
+    public String SetupForm_lblBlackbarDetectionThreshold;
+    public String SetupForm_lblpowerModeChangedDelay;
 
 
     public String ContextMenu_SwitchLEDsON;

@@ -12,6 +12,7 @@ using System.Drawing.Imaging;
 using System.Net;
 using System.Net.Sockets;
 using System.Linq;
+using Microsoft.Win32;
 
 namespace AtmoLight.Targets
 {
@@ -35,16 +36,35 @@ namespace AtmoLight.Targets
         };
       }
     }
+    private enum APIcommandType
+    {
+      Color,
+      Group,
+      Power,
+      Room,
+    }
 
-    private TcpClient client = new TcpClient();
-    private IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"),20123);
-    private Boolean Connected = false;
+    // CORE
     private Core coreObject;
-    private Boolean isInit = false;
+
+    // HUE
+    private int hueDelayAtmoHue = 5000; 
+    private int hueReconnectCounter = 0;
+    private Boolean HueBridgeStartOnResume = false;
+
+    // TCP
+    private static TcpClient Socket = new TcpClient();
+    private Stream Stream;
+    private Boolean Connected = false;
+
+    // Color checks
     private int avgR_previous = 0;
     private int avgG_previous = 0;
     private int avgB_previous = 0;
 
+    // Locks
+    private Boolean isInit = false;
+    private Boolean isAtmoHueRunning = false;
 
     #endregion
 
@@ -57,37 +77,94 @@ namespace AtmoLight.Targets
     public void Initialise(bool force = false)
     {
       isInit = true;
-      serverEndPoint = new IPEndPoint(IPAddress.Parse(coreObject.hueIP),coreObject.huePort);
-      Connect();
+
+      Thread t = new Thread(() => InitialiseThread(force));
+      t.IsBackground = true;
+      t.Start();
     }
+
+    private bool InitialiseThread(bool force = false)
+    {
+      if (!Win32API.IsProcessRunning("atmohue.exe") && coreObject.hueIsRemoteMachine == false)
+      {
+        if (coreObject.hueStart)
+        {
+          isAtmoHueRunning = StartHue();
+          System.Threading.Thread.Sleep(hueDelayAtmoHue);
+          if (isAtmoHueRunning)
+          {
+            Connect();
+          }
+        }
+        else
+        {
+          Log.Error("HueHandler - AtmoHue is not running.");
+          return false;
+        }
+      }
+      else
+      {
+        isAtmoHueRunning = true;
+        if (Socket.Connected)
+        {
+          Log.Debug("HueHandler - already connect to AtmoHue");
+          return true;
+        }
+        else
+        {
+          Connect();
+          return true;
+        }
+      }
+      return true;
+    }
+
 
     public void ReInitialise(bool force = false)
     {
-      if (client.Connected == false)
-      {
-        Connected = false;
-        Connect();
-      }
+      Thread t = new Thread(() => InitialiseThread(force));
+      t.IsBackground = true;
+      t.Start();
     }
 
     public void Dispose()
     {
-      if (client.Connected)
+      if (Socket.Connected)
       {
-        try
-        {
-          client.Close();
-        }
-        catch (Exception e)
-        {
-          Log.Error(string.Format("Hue - {0}", "Error during dispose"));
-          Log.Error(string.Format("Hue - {0}", e.Message));
-        }
+        Disconnect();
       }
     }
+
+    public bool StartHue()
+    {
+      Log.Debug("HueHandler - Trying to start AtmoHue.");
+      if (!System.IO.File.Exists(coreObject.huePath))
+      {
+        Log.Error("HueHandler - AtmoHue.exe not found!");
+        return false;
+      }
+      
+      Process Hue = new Process();
+      Hue.StartInfo.FileName = coreObject.huePath;
+      Hue.StartInfo.WorkingDirectory = Path.GetDirectoryName(coreObject.huePath);
+      Hue.StartInfo.UseShellExecute = true;
+      try
+      {
+        Hue.Start();
+      }
+      catch (Exception)
+      {
+        Log.Error("HueHander - Starting Hue failed.");
+        return false;
+      }
+      Log.Info("HueHander - AtmoHue successfully started.");
+      return true;
+    }
+
+
     public bool IsConnected()
     {
-      if (client.Connected)
+      if (Socket.Connected)
       {
         Connected = true;
       }
@@ -100,36 +177,119 @@ namespace AtmoLight.Targets
 
     private void Connect()
     {
-      if (Connected == false)
-      {
-        Thread t = new Thread(ConnectThread);
-        t.IsBackground = true;
-        t.Start();
-      }
+      Thread t = new Thread(ConnectThread);
+      t.IsBackground = true;
+      t.Start();
     }
-
     private void ConnectThread()
     {
-      try
+
+      while (hueReconnectCounter <= coreObject.hueReconnectAttempts)
       {
-        client.Connect(serverEndPoint);
-        Connected = true;
+        if (Connected == false)
+        {
+          //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
+          Disconnect();
+
+          try
+          {
+            Socket = new TcpClient();
+
+            Socket.SendTimeout = 5000;
+            Socket.ReceiveTimeout = 5000;
+            Socket.Connect(coreObject.hueIP, coreObject.huePort);
+            Stream = Socket.GetStream();
+            Connected = Socket.Connected;
+            Log.Debug("HueHandler - Connected to AtmoHue");
+          }
+          catch (Exception e)
+          {
+            Connected = false;
+            Log.Error("HueHandler - Error while connecting");
+            Log.Error("HueHandler - Exception: {0}", e.Message);
+          }
+
+          //Increment times tried
+          hueReconnectCounter++;
+
+          //Show error if reconnect attempts exhausted
+          if (hueReconnectCounter > coreObject.hueReconnectAttempts && Connected == false)
+          {
+            Log.Error("HueHandler - Error while connecting and connection attempts exhausted");
+            coreObject.NewConnectionLost(Name);
+            break;
+          }
+
+          //Sleep for specified time
+          Thread.Sleep(coreObject.hyperionReconnectDelay);
+        }
+        else
+        {
+          //Log.Debug("HueHandler - Connected after {0} attempts.", hyperionReconnectCounter);
+          break;
+        }
       }
-      catch (Exception e)
+
+      //Reset counter when we have finished
+      hueReconnectCounter = 0;
+
+      //Power ON bridge if connected and enabled
+      if (HueBridgeStartOnResume)
       {
-        Log.Error("Hue - error during connect");
-        Log.Error(string.Format("Hue - {0}", e.Message));
-        Connected = false;
+        //Reset start variable
+        HueBridgeStartOnResume = false;
+
+        if (Connected)
+        {
+          //Send Power ON command
+          HueBridgePower("ON");
+
+          //Sleep for 2s to allow for Hue Bridge startup
+          Thread.Sleep(2000);
+        }
       }
+
 
       //On first initialize set the effect after we are done trying to connect
       if (isInit && Connected)
       {
         ChangeEffect(coreObject.GetCurrentEffect());
-        coreObject.SetAtmoLightOn(coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true);
         isInit = false;
       }
+      else if (isInit)
+      {
+        isInit = false;
+      }
+    }
+    private void Disconnect()
+    {
+      try
+      {
+        Socket.Close();
+      }
+      catch (Exception e)
+      {
+        Log.Error(string.Format("HueHandler - {0}", "Error during disconnect"));
+        Log.Error(string.Format("HueHandler - {0}", e.Message));
+      }
+    }
 
+    private void sendAPIcommand(string message)
+    {
+      try
+      {
+        ASCIIEncoding encoder = new ASCIIEncoding();
+        byte[] buffer = encoder.GetBytes(message);
+
+        Stream.Write(buffer, 0, buffer.Length);
+        Stream.Flush();
+      }
+      catch (Exception e)
+      {
+        Log.Error("HueHandler - error during sending power command");
+        Log.Error(string.Format("HueHandler - {0}", e.Message));
+
+      }
     }
 
     public void ChangeColor(int red, int green, int blue, int priority)
@@ -143,19 +303,13 @@ namespace AtmoLight.Targets
     {
       try
       {
-          string message = string.Format("{0},{1},{2},{3}", red.ToString(), green.ToString(), blue.ToString(), priority.ToString());
-          NetworkStream clientStream = client.GetStream();
-          ASCIIEncoding encoder = new ASCIIEncoding();
-          byte[] buffer = encoder.GetBytes(message);
-
-          clientStream.Write(buffer, 0, buffer.Length);
-          clientStream.Flush();
-
+        string message = string.Format("{0},{1},{2},{3},{4},{5}", "ATMOLIGHT", APIcommandType.Color, red.ToString(), green.ToString(), blue.ToString(), priority.ToString());
+        sendAPIcommand(message);
       }
       catch (Exception e)
       {
-        Log.Error("Hue - error during sending color");
-        Log.Error(string.Format("Hue - {0}", e.Message));
+        Log.Error("HueHandler - error during sending color");
+        Log.Error(string.Format("HueHandler - {0}", e.Message));
       }
     }
     public bool ChangeEffect(ContentEffect effect)
@@ -213,8 +367,8 @@ namespace AtmoLight.Targets
       }
       catch(Exception e)
       {
-        Log.Error(string.Format("Hue - {0}", "Error during average color calculations"));
-        Log.Error(string.Format("Hue - {0}", e.Message));
+        Log.Error(string.Format("HueHandler - {0}", "Error during average color calculations"));
+        Log.Error(string.Format("HueHandler - {0}", e.Message));
       }
     }
     public void CalculateAverageColorAndSendToHue(Bitmap bm)
@@ -263,12 +417,43 @@ namespace AtmoLight.Targets
 
       int minDifferencePreviousColors = coreObject.hueMinimalColorDifference;
 
-      int avgR = (int)(totals[2] / count);
-      int avgG = (int)(totals[1] / count);
-      int avgB = (int)(totals[0] / count);
+
+      int avgR = 0;
+      int avgG = 0;
+      int avgB = 0;
+      bool invalidColorValue = false;
+
+      // Doesn't work all the time, will return divide by zero errors sometimes due to invalid values.
+      // If we get an invalid value we return 0 and skip that image
+      try
+      {
+        avgR = (int)(totals[2] / count);
+      }
+      catch
+      {
+        invalidColorValue = true;
+      }
+
+      try
+      {
+        avgG = (int)(totals[1] / count);
+      }
+      catch
+      {
+        invalidColorValue = true;
+      }
+
+      try
+      {
+        avgB = (int)(totals[0] / count);
+      }
+      catch
+      {
+        invalidColorValue = true;
+      }
 
       //If users sets minimal difference to 0 disable the average color check
-      if (minDifferencePreviousColors == 0)
+      if (minDifferencePreviousColors == 0 && invalidColorValue == false)
       {
         //Send average colors to Bridge
         ChangeColor(avgR, avgG, avgB, 200);
@@ -283,7 +468,10 @@ namespace AtmoLight.Targets
           avgB_previous = avgB;
 
           //Send average colors to Bridge
-          ChangeColor(avgR, avgG, avgB,200);
+          if (invalidColorValue == false)
+          {
+            ChangeColor(avgR, avgG, avgB, 200);
+          }
         }
       }
     }
@@ -305,6 +493,171 @@ namespace AtmoLight.Targets
       }
       ChangeColor(0, 0, 0,200);
     }
+
+    private void HueBridgePower(string powerCommand)
+    {
+      string message = string.Format("{0},{1},{2}", "ATMOLIGHT", APIcommandType.Power, powerCommand);
+      sendAPIcommand(message);
+    }
+
     #endregion
+
+    #region powerstate monitoring
+    public void PowerModeChanged(PowerModes powerMode)
+    {
+      switch (powerMode)
+      {
+        case PowerModes.Resume:
+          // Close old socket and create new TCP client which allows it to reconnect when calling Connect()
+          Disconnect();
+          //Reconnect AtmoHue after standby
+          Log.Debug("HueHandler - Reconnecting after standby");
+
+          //reset Init so we restore the effect on resume
+          isInit = true;
+          Connected = false;
+
+          if (coreObject.hueBridgeEnableOnResume)
+          {
+            HueBridgeStartOnResume = true;
+            Connect();
+          }
+          else
+          {
+            Connect();
+          }
+          break;
+        case PowerModes.Suspend:
+          if (coreObject.hueBridgeDisableOnSuspend)
+          {
+            //Send Power OFF command
+            if (Socket.Connected)
+            {
+              HueBridgePower("OFF");
+            }
+          }
+          break;
+      }
+    }
+    #endregion
+
   }
+  #region class Win32API
+  public sealed class Win32API
+  {
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RECT
+    {
+      public int left;
+      public int top;
+      public int right;
+      public int bottom;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct PROCESSENTRY32
+    {
+      public uint dwSize;
+      public uint cntUsage;
+      public uint th32ProcessID;
+      public IntPtr th32DefaultHeapID;
+      public uint th32ModuleID;
+      public uint cntThreads;
+      public uint th32ParentProcessID;
+      public int pcPriClassBase;
+      public uint dwFlags;
+      [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+      public string szExeFile;
+    }
+
+    private const uint TH32CS_SNAPPROCESS = 0x00000002;
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr FindWindow(string lpClassName, String lpWindowName);
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+
+    [DllImport("user32.dll")]
+    public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+
+    private const int WM_CLOSE = 0x10;
+    private const int WM_DESTROY = 0x2;
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+    public static extern Int64 GetTickCount();
+
+    [DllImport("kernel32.dll")]
+    private static extern int Process32First(IntPtr hSnapshot,
+                                     ref PROCESSENTRY32 lppe);
+
+    [DllImport("kernel32.dll")]
+    private static extern int Process32Next(IntPtr hSnapshot,
+                                    ref PROCESSENTRY32 lppe);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern IntPtr CreateToolhelp32Snapshot(uint dwFlags,
+                                                   uint th32ProcessID);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool CloseHandle(IntPtr hSnapshot);
+    private const int WM_MouseMove = 0x0200;
+
+    public static void RefreshTrayArea()
+    {
+
+      RECT rect;
+
+      IntPtr systemTrayContainerHandle = FindWindow("Shell_TrayWnd", null);
+      IntPtr systemTrayHandle = FindWindowEx(systemTrayContainerHandle, IntPtr.Zero, "TrayNotifyWnd", null);
+      IntPtr sysPagerHandle = FindWindowEx(systemTrayHandle, IntPtr.Zero, "SysPager", null);
+      IntPtr notificationAreaHandle = FindWindowEx(sysPagerHandle, IntPtr.Zero, "ToolbarWindow32", null);
+      GetClientRect(notificationAreaHandle, out rect);
+      for (var x = 0; x < rect.right; x += 5)
+        for (var y = 0; y < rect.bottom; y += 5)
+          SendMessage(notificationAreaHandle, WM_MouseMove, 0, (y << 16) + x);
+    }
+
+    public static bool IsProcessRunning(string applicationName)
+    {
+      IntPtr handle = IntPtr.Zero;
+      try
+      {
+        // Create snapshot of the processes
+        handle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+        PROCESSENTRY32 info = new PROCESSENTRY32();
+        info.dwSize = (uint)System.Runtime.InteropServices.
+                      Marshal.SizeOf(typeof(PROCESSENTRY32));
+
+        // Get the first process
+        int first = Process32First(handle, ref info);
+
+        // While there's another process, retrieve it
+        do
+        {
+          if (string.Compare(info.szExeFile,
+                applicationName, true) == 0)
+          {
+            return true;
+          }
+        }
+        while (Process32Next(handle, ref info) != 0);
+      }
+      catch
+      {
+        throw;
+      }
+      finally
+      {
+        // Release handle of the snapshot
+        CloseHandle(handle);
+        handle = IntPtr.Zero;
+      }
+      return false;
+    }
+  }
+  #endregion
 }

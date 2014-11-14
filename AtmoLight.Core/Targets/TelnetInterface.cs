@@ -34,7 +34,6 @@ namespace MinimalisticTelnet
         public TelnetConnection(string Hostname, int Port)
         {
             tcpSocket = new TcpClient(Hostname, Port);
-
         }
 
         public void Dispose()
