@@ -104,6 +104,9 @@ namespace AtmoLight
     public int ambiBoxLEDCount = 50;
     public string ambiBoxMediaPortalProfile = "MediaPortal";
     public string ambiBoxExternalProfile = "Test";
+    public string ambiBoxPath = "C:\\Program Files (x86)\\AmbiBox\\AmbiBox.exe";
+    public bool ambiBoxAutoStart = true;
+    public bool ambiBoxAutostop = true;
 
     // AtmoWin Settings Fields
     public bool atmoWinAutoStart;

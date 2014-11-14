@@ -7,6 +7,8 @@ using System.IO.MemoryMappedFiles;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Threading;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 using MinimalisticTelnet;
 
 namespace AtmoLight
@@ -75,6 +77,10 @@ namespace AtmoLight
     {
       Log.Debug("AmbiBoxHandler - Disposing AmbiBox handler.");
       ambiBoxConnection.Dispose();
+      if (coreObject.ambiBoxAutostop)
+      {
+        StopAmbiBox();
+      }
     }
 
     public bool IsConnected()
@@ -219,31 +225,22 @@ namespace AtmoLight
       reconnectAttempts++;
       try
       {
-        ambiBoxConnection = new TelnetConnection(coreObject.ambiBoxIP, coreObject.ambiBoxPort);
-        if (ambiBoxConnection != null && ambiBoxConnection.IsConnected)
+        if (coreObject.ambiBoxAutoStart && !Win32API.IsProcessRunning("AmbiBox.exe"))
         {
-          ambiBoxConnection.Read();
-          char[] separators = { ':', ';' };
-          string[] profiles = SendCommand("getprofiles").Split(separators);
-          for (int i = 1; i < profiles.Length; i++)
+          if (!StartAmbiBox())
           {
-            if (!string.IsNullOrEmpty(profiles[i]))
+            Log.Error("AmbiBoxHandler - Error connecting to {0}:{1}", coreObject.ambiBoxIP, coreObject.ambiBoxPort);
+            if ((coreObject.reInitOnError || force) && reconnectAttempts < coreObject.ambiBoxMaxReconnectAttempts)
             {
-              profileList.Add(profiles[i]);
+              System.Threading.Thread.Sleep(coreObject.ambiBoxtReconnectDelay);
+              initLock = false;
+              InitThreaded();
+              return;
             }
           }
-          currentProfile = SendCommand("getprofile").Split(separators)[1];
-
-          SendCommand("unlock");
-
-          Log.Info("AmbiBoxHandler - Successfully connected to {0}:{1}", coreObject.ambiBoxIP, coreObject.ambiBoxPort);
-          reconnectAttempts = 0;
-          initLock = false;
-
-          ChangeEffect(coreObject.GetCurrentEffect());
-          coreObject.SetAtmoLightOn(coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true);
         }
-        else
+
+        if (!Connect())
         {
           Log.Error("AmbiBoxHandler - Error connecting to {0}:{1}", coreObject.ambiBoxIP, coreObject.ambiBoxPort);
           if ((coreObject.reInitOnError || force) && reconnectAttempts < coreObject.ambiBoxMaxReconnectAttempts)
@@ -251,8 +248,14 @@ namespace AtmoLight
             System.Threading.Thread.Sleep(coreObject.ambiBoxtReconnectDelay);
             initLock = false;
             InitThreaded();
+            return;
           }
         }
+        reconnectAttempts = 0;
+        initLock = false;
+
+        ChangeEffect(coreObject.GetCurrentEffect());
+        coreObject.SetAtmoLightOn(coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true);
       }
       catch (Exception ex)
       {
@@ -267,6 +270,31 @@ namespace AtmoLight
       }
     }
 
+    private bool Connect()
+    {
+      ambiBoxConnection = new TelnetConnection(coreObject.ambiBoxIP, coreObject.ambiBoxPort);
+      if (ambiBoxConnection == null || !ambiBoxConnection.IsConnected)
+      {
+        return false;
+      }
+      ambiBoxConnection.Read();
+      char[] separators = { ':', ';' };
+      string[] profiles = SendCommand("getprofiles").Split(separators);
+      for (int i = 1; i < profiles.Length; i++)
+      {
+        if (!string.IsNullOrEmpty(profiles[i]))
+        {
+          profileList.Add(profiles[i]);
+        }
+      }
+      currentProfile = SendCommand("getprofile").Split(separators)[1];
+
+      SendCommand("unlock");
+
+      Log.Info("AmbiBoxHandler - Successfully connected to {0}:{1}", coreObject.ambiBoxIP, coreObject.ambiBoxPort);
+      return true;
+    }
+
     private string SendCommand(string command)
     {
       ambiBoxConnection.WriteLine(command);
@@ -277,5 +305,173 @@ namespace AtmoLight
       }
       return rcvd.Remove(rcvd.Length - 2, 2);
     }
+
+    #region AmbiBox
+    public bool StartAmbiBox()
+    {
+      Log.Debug("AmbiBoxHandler - Trying to start AmbiBox.");
+      if (!System.IO.File.Exists(coreObject.ambiBoxPath))
+      {
+        Log.Error("AmbiBoxHandler - AmbiBox.exe not found!");
+        return false;
+      }
+      Process AmbiBox = new Process();
+      AmbiBox.StartInfo.FileName = coreObject.ambiBoxPath;
+      AmbiBox.StartInfo.UseShellExecute = true;
+      AmbiBox.StartInfo.Verb = "open";
+      try
+      {
+        AmbiBox.Start();
+      }
+      catch (Exception)
+      {
+        Log.Error("AmbiBoxHandler - Starting AmbiBox failed.");
+        return false;
+      }
+      Log.Info("AmbiBoxHandler - AmbiBox successfully started.");
+      return true;
+    }
+
+    public bool StopAmbiBox()
+    {
+      Log.Debug("AmbiBoxHandler - Trying to stop AmbiBox.");
+      foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension("AmbiBox")))
+      {
+        try
+        {
+          process.Kill();
+          process.WaitForExit();
+          Win32API.RefreshTrayArea();
+        }
+        catch (Exception ex)
+        {
+          Log.Error("AmbiBoxHandler - Stopping AmbiBox failed.");
+          Log.Error("AmbiBoxHandler - Exception: {0}", ex.Message);
+          return false;
+        }
+      }
+      Log.Info("AmbiBoxHandler - AmbiBox successfully stopped.");
+      return true;
+    }
+    #endregion
+
+    #region class Win32API
+    public sealed class Win32API
+    {
+      [StructLayout(LayoutKind.Sequential)]
+      public struct RECT
+      {
+        public int left;
+        public int top;
+        public int right;
+        public int bottom;
+      }
+
+      [StructLayout(LayoutKind.Sequential)]
+      private struct PROCESSENTRY32
+      {
+        public uint dwSize;
+        public uint cntUsage;
+        public uint th32ProcessID;
+        public IntPtr th32DefaultHeapID;
+        public uint th32ModuleID;
+        public uint cntThreads;
+        public uint th32ParentProcessID;
+        public int pcPriClassBase;
+        public uint dwFlags;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+        public string szExeFile;
+      }
+
+      private const uint TH32CS_SNAPPROCESS = 0x00000002;
+
+      [DllImport("user32.dll")]
+      public static extern IntPtr FindWindow(string lpClassName, String lpWindowName);
+
+      [DllImport("user32.dll")]
+      public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+
+      [DllImport("user32.dll")]
+      public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+
+      private const int WM_CLOSE = 0x10;
+      private const int WM_DESTROY = 0x2;
+
+      [DllImport("user32.dll")]
+      public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
+
+      [DllImport("kernel32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+      public static extern Int64 GetTickCount();
+
+      [DllImport("kernel32.dll")]
+      private static extern int Process32First(IntPtr hSnapshot,
+                                       ref PROCESSENTRY32 lppe);
+
+      [DllImport("kernel32.dll")]
+      private static extern int Process32Next(IntPtr hSnapshot,
+                                      ref PROCESSENTRY32 lppe);
+
+      [DllImport("kernel32.dll", SetLastError = true)]
+      private static extern IntPtr CreateToolhelp32Snapshot(uint dwFlags,
+                                                     uint th32ProcessID);
+
+      [DllImport("kernel32.dll", SetLastError = true)]
+      private static extern bool CloseHandle(IntPtr hSnapshot);
+      private const int WM_MouseMove = 0x0200;
+
+      public static void RefreshTrayArea()
+      {
+
+        RECT rect;
+
+        IntPtr systemTrayContainerHandle = FindWindow("Shell_TrayWnd", null);
+        IntPtr systemTrayHandle = FindWindowEx(systemTrayContainerHandle, IntPtr.Zero, "TrayNotifyWnd", null);
+        IntPtr sysPagerHandle = FindWindowEx(systemTrayHandle, IntPtr.Zero, "SysPager", null);
+        IntPtr notificationAreaHandle = FindWindowEx(sysPagerHandle, IntPtr.Zero, "ToolbarWindow32", null);
+        GetClientRect(notificationAreaHandle, out rect);
+        for (var x = 0; x < rect.right; x += 5)
+          for (var y = 0; y < rect.bottom; y += 5)
+            SendMessage(notificationAreaHandle, WM_MouseMove, 0, (y << 16) + x);
+      }
+
+      public static bool IsProcessRunning(string applicationName)
+      {
+        IntPtr handle = IntPtr.Zero;
+        try
+        {
+          // Create snapshot of the processes
+          handle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+          PROCESSENTRY32 info = new PROCESSENTRY32();
+          info.dwSize = (uint)System.Runtime.InteropServices.
+                        Marshal.SizeOf(typeof(PROCESSENTRY32));
+
+          // Get the first process
+          int first = Process32First(handle, ref info);
+
+          // While there's another process, retrieve it
+          do
+          {
+            if (string.Compare(info.szExeFile,
+                  applicationName, true) == 0)
+            {
+              return true;
+            }
+          }
+          while (Process32Next(handle, ref info) != 0);
+        }
+        catch
+        {
+          throw;
+        }
+        finally
+        {
+          // Release handle of the snapshot
+          CloseHandle(handle);
+          handle = IntPtr.Zero;
+        }
+        return false;
+      }
+    }
+    #endregion
   }
 }
