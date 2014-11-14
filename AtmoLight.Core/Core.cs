@@ -611,6 +611,25 @@ namespace AtmoLight
       }
       return tempList;
     }
+
+    /// <summary>
+    /// Returns if at least one target allows the use of a delay
+    /// </summary>
+    /// <returns></returns>
+    public bool IsAllowDelayTargetPresent()
+    {
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          if (target.AllowDelay)
+          {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
     #endregion
 
     #region Events
@@ -740,9 +759,19 @@ namespace AtmoLight
     /// <param name="force"></param>
     private void SendPixelData(byte[] pixelData, byte[] bmiInfoHeader, bool force = false)
     {
-      if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
       {
         AddDelayListItem(pixelData, bmiInfoHeader);
+        lock (targetsLock)
+        {
+          foreach (var target in targets)
+          {
+            if (!target.AllowDelay)
+            {
+              target.ChangeImage(pixelData, bmiInfoHeader);
+            }
+          }
+        }
       }
       else
       {
@@ -750,7 +779,10 @@ namespace AtmoLight
         {
           foreach (var target in targets)
           {
-            target.ChangeImage(pixelData, bmiInfoHeader);
+            if (target.AllowDelay || !force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
+            {
+              target.ChangeImage(pixelData, bmiInfoHeader);
+            }
           }
         }
       }

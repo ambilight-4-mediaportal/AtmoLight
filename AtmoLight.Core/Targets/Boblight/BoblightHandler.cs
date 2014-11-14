@@ -14,7 +14,7 @@ namespace AtmoLight
   {
     #region Fields
     public Target Name { get { return Target.Boblight; } }
-
+    public bool AllowDelay { get { return true; } }
     public List<ContentEffect> SupportedEffects
     {
       get

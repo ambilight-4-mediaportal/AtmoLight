@@ -22,7 +22,7 @@ namespace AtmoLight.Targets
 
     public Target Name { get { return Target.Hyperion; } }
     public TargetType Type { get { return TargetType.Network; } }
-
+    public bool AllowDelay { get { return true; } }
     public List<ContentEffect> SupportedEffects
     {
       get

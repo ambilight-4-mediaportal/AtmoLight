@@ -5,6 +5,10 @@ namespace AtmoLight
 	class ExampleHandler : ITargets
 	{
 	    public Target Name { get { return Target.Example; } }
+		
+		// Define if you want this target to use the delay feature.
+		// In most cases this should return true.
+		public bool AllowDelay { get { return true; } }
 
 		// List of all the effects supported by your target.
 		// Typically targets support at least the setting of a color.

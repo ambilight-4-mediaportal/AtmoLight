@@ -22,7 +22,7 @@ namespace AtmoLight.Targets
 
     public Target Name { get { return Target.Hue; } }
     public TargetType Type { get { return TargetType.Network; } }
-
+    public bool AllowDelay { get { return false; } }
     public List<ContentEffect> SupportedEffects
     {
       get
