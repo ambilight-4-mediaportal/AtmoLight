@@ -113,6 +113,7 @@ namespace AtmoLight
         case ContentEffect.GIFReader:
         case ContentEffect.VUMeter:
         case ContentEffect.VUMeterRainbow:
+          ChangeEffect(ContentEffect.LEDsDisabled);
           SendCommand("lock");
           System.Threading.Thread.Sleep(50);
           if (profileList.Contains(coreObject.ambiBoxMediaPortalProfile))
