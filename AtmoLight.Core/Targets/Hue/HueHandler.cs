@@ -58,9 +58,12 @@ namespace AtmoLight.Targets
     private Boolean Connected = false;
 
     // Color checks
-    private int avgR_previous = 0;
-    private int avgG_previous = 0;
-    private int avgB_previous = 0;
+    private int avgR_previousLive = 0;
+    private int avgG_previousLive = 0;
+    private int avgB_previousLive = 0;
+    private int avgR_previousVU = 0;
+    private int avgG_previousVU = 0;
+    private int avgB_previousVU = 0;
 
     // Locks
     private Boolean isInit = false;
@@ -461,11 +464,11 @@ namespace AtmoLight.Targets
       else
       {
         //Minimal differcence new compared to previous colors
-        if (Math.Abs(avgR_previous - avgR) > minDifferencePreviousColors || Math.Abs(avgG_previous - avgG) > minDifferencePreviousColors || Math.Abs(avgG_previous - avgG_previous) > minDifferencePreviousColors)
+        if (Math.Abs(avgR_previousLive - avgR) > minDifferencePreviousColors || Math.Abs(avgG_previousLive - avgG) > minDifferencePreviousColors || Math.Abs(avgB_previousLive - avgB) > minDifferencePreviousColors)
         {
-          avgR_previous = avgR;
-          avgG_previous = avgG;
-          avgB_previous = avgB;
+          avgR_previousLive = avgR;
+          avgG_previousLive = avgG;
+          avgB_previousLive = avgB;
 
           //Send average colors to Bridge
           if (invalidColorValue == false)
@@ -478,16 +481,38 @@ namespace AtmoLight.Targets
 
     private void CalculateVUMeterColorAndSendToHue(Bitmap vuMeterBitmap)
     {
+      int minDifferencePreviousColors = coreObject.hueMinimalColorDifference;
+
       for (int i = 0; i < vuMeterBitmap.Height; i++)
       {
         if (vuMeterBitmap.GetPixel(0, i).R != 0 || vuMeterBitmap.GetPixel(0, i).G != 0 || vuMeterBitmap.GetPixel(0, i).B != 0)
         {
-          ChangeColor(vuMeterBitmap.GetPixel(0, i).R, vuMeterBitmap.GetPixel(0, i).G, vuMeterBitmap.GetPixel(0, i).B, 200);
+          int red = vuMeterBitmap.GetPixel(0, i).R;
+          int green = vuMeterBitmap.GetPixel(0, i).G;
+          int blue = vuMeterBitmap.GetPixel(0, i).B;
+
+          if (Math.Abs(avgR_previousVU - red) > minDifferencePreviousColors || Math.Abs(avgG_previousVU - green) > minDifferencePreviousColors || Math.Abs(avgB_previousVU - blue) > minDifferencePreviousColors)
+          {
+            avgR_previousVU = red;
+            avgG_previousVU = green;
+            avgB_previousVU = blue;
+            ChangeColor(red, green, blue, 200);
+          }
           return;
         }
         else if (vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).R != 0 || vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).G != 0 || vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).B != 0)
         {
-          ChangeColor(vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).R, vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).G, vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).B, 200);
+          int red = vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).R;
+          int green = vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).G;
+          int blue = vuMeterBitmap.GetPixel(vuMeterBitmap.Width - 1, i).B;
+
+          if (Math.Abs(avgR_previousVU - red) > minDifferencePreviousColors || Math.Abs(avgG_previousVU - green) > minDifferencePreviousColors || Math.Abs(avgB_previousVU - blue) > minDifferencePreviousColors)
+          {
+            avgR_previousVU = red;
+            avgG_previousVU = green;
+            avgB_previousVU = blue;
+            ChangeColor(red, green, blue, 200);
+          }
           return;
         }
       }
