@@ -53,6 +53,7 @@ namespace AtmoLight
     }
     #endregion
 
+    #region ITargets Methods
     public void Initialise(bool force = false)
     {
       if (!initLock)
@@ -76,7 +77,7 @@ namespace AtmoLight
     public void Dispose()
     {
       Log.Debug("AmbiBoxHandler - Disposing AmbiBox handler.");
-      ambiBoxConnection.Dispose();
+      Disconnect();
       if (coreObject.ambiBoxAutostop)
       {
         StopAmbiBox();
@@ -178,7 +179,9 @@ namespace AtmoLight
       }
       Task.Factory.StartNew(() => { ChangeImageTask(pixeldata); });
     }
+    #endregion
 
+    #region ChangeImage
     private void ChangeImageTask(byte[] pixeldata)
     {
       changeImageLock = true;
@@ -213,7 +216,9 @@ namespace AtmoLight
       }
       changeImageLock = false;
     }
+    #endregion
 
+    #region AmbiBox API
     private void InitThreaded(bool force = false)
     {
       if (initLock)
@@ -295,6 +300,11 @@ namespace AtmoLight
       return true;
     }
 
+    private void Disconnect()
+    {
+      ambiBoxConnection.Dispose();
+    }
+
     private string SendCommand(string command)
     {
       ambiBoxConnection.WriteLine(command);
@@ -305,6 +315,7 @@ namespace AtmoLight
       }
       return rcvd.Remove(rcvd.Length - 2, 2);
     }
+    #endregion
 
     #region AmbiBox
     public bool StartAmbiBox()
