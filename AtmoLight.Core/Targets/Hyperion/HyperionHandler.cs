@@ -39,7 +39,8 @@ namespace AtmoLight.Targets
 
     private static TcpClient Socket = new TcpClient();
     private Stream Stream;
-    private Boolean isInit = false;
+    private bool isInit = false;
+    private volatile bool initLock = false;
     private int hyperionReconnectCounter = 0;
     private Stopwatch liveReconnectSW = new Stopwatch();
 
@@ -57,16 +58,20 @@ namespace AtmoLight.Targets
     {
       try
       {
-        isInit = true;
-        Log.Debug("HyperionHandler - Initialising");
+        if (!initLock)
+        {
+          Log.Debug("HyperionHandler - Initialising");
+          hyperionReconnectCounter = 0;
+          isInit = true;
 
-        if (coreObject.hyperionLiveReconnect)
-        {
-          liveReconnect();
-        }
-        else
-        {
-          Connect();
+          if (coreObject.hyperionLiveReconnect)
+          {
+            liveReconnect();
+          }
+          else
+          {
+            Connect();
+          }
         }
       }
       catch (Exception e)
@@ -78,7 +83,7 @@ namespace AtmoLight.Targets
 
     public void ReInitialise(bool force = false)
     {
-      Log.Error("HyperionHandler - Reinitialising");
+      Log.Debug("HyperionHandler - Reinitialising");
       if (coreObject.reInitOnError || force)
       {
         Initialise(force);
@@ -111,12 +116,26 @@ namespace AtmoLight.Targets
 
     private void Connect()
     {
+      if (initLock)
+      {
+        Log.Debug("HyperionHandler - Initialising locked.");
+        return;
+      }
+
+      initLock = true;
       Thread t = new Thread(ConnectThread);
       t.IsBackground = true;
       t.Start();
     }
     private void liveReconnect()
     {
+      if (initLock)
+      {
+        Log.Debug("HyperionHandler - Initialising locked.");
+        return;
+      }
+
+      initLock = true;
       Thread t = new Thread(liveReconnectThread);
       t.IsBackground = true;
       t.Start();
@@ -141,13 +160,14 @@ namespace AtmoLight.Targets
 
     private void ConnectThread()
     {
+
       while (hyperionReconnectCounter <= coreObject.hyperionReconnectAttempts)
       {
-        if (Socket.Connected == false)
+        if (!Socket.Connected)
         {
           try
           {
-            if (coreObject.hyperionLiveReconnect == false)
+            if (!coreObject.hyperionLiveReconnect)
             {
               Log.Debug("HyperionHandler - Trying to connect");
             }
@@ -161,14 +181,14 @@ namespace AtmoLight.Targets
             Socket.Connect(coreObject.hyperionIP, coreObject.hyperionPort);
             Stream = Socket.GetStream();
 
-            if (coreObject.hyperionLiveReconnect == false)
+            if (!coreObject.hyperionLiveReconnect)
             {
               Log.Debug("HyperionHandler - Connected");
             }
           }
           catch (Exception e)
           {
-            if (coreObject.hyperionLiveReconnect == false)
+            if (!coreObject.hyperionLiveReconnect)
             {
               Log.Error("HyperionHandler - Error while connecting");
               Log.Error("HyperionHandler - Exception: {0}", e.Message);
@@ -186,7 +206,7 @@ namespace AtmoLight.Targets
             hyperionReconnectCounter++;
 
             //Show error if reconnect attempts exhausted
-            if (hyperionReconnectCounter > coreObject.hyperionReconnectAttempts && Socket.Connected == false)
+            if (hyperionReconnectCounter > coreObject.hyperionReconnectAttempts && !Socket.Connected)
             {
               Log.Error("HyperionHandler - Error while connecting and connection attempts exhausted");
               coreObject.NewConnectionLost(Name);
@@ -209,7 +229,6 @@ namespace AtmoLight.Targets
       if (isInit && Socket.Connected)
       {
         ChangeEffect(coreObject.GetCurrentEffect());
-
         isInit = false;
       }
       else if (isInit)
@@ -219,6 +238,9 @@ namespace AtmoLight.Targets
 
       //Reset counter when we have finished
       hyperionReconnectCounter = 0;
+
+      //Reset Init lock
+      initLock = false;
     }
     private void Disconnect()
     {
@@ -371,7 +393,10 @@ namespace AtmoLight.Targets
         Log.Error("HyperionHandler - Exception: {0}", e.Message);
 
         //Try to Reinitialise if needed
-        ReInitialise(true);
+        if (!initLock)
+        {
+          ReInitialise(false);
+        }
       }
     }
 
@@ -392,6 +417,12 @@ namespace AtmoLight.Targets
       {
         Log.Error("HyperionHandler - Error while receiving reply from proto request");
         Log.Error("HyperionHandler - Exception: {0}", e.Message);
+
+        //Try to Reinitialise if needed
+        if (!initLock)
+        {
+          ReInitialise(false);
+        }
         return null;
       }
     }
