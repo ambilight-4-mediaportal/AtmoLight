@@ -55,7 +55,6 @@ namespace AtmoLight.Targets
     // TCP
     private static TcpClient Socket = new TcpClient();
     private Stream Stream;
-    private Boolean Connected = false;
 
     // Color checks
     private int avgR_previousLive = 0;
@@ -66,8 +65,9 @@ namespace AtmoLight.Targets
     private int avgB_previousVU = 0;
 
     // Locks
-    private Boolean isInit = false;
-    private Boolean isAtmoHueRunning = false;
+    private bool isInit = false;
+    private volatile bool initLock = false;
+    private bool isAtmoHueRunning = false;
 
     #endregion
 
@@ -79,15 +79,25 @@ namespace AtmoLight.Targets
 
     public void Initialise(bool force = false)
     {
-      isInit = true;
+      if (!initLock)
+      {
+        isInit = true;
+        Thread t = new Thread(() => InitialiseThread(force));
+        t.IsBackground = true;
+        t.Start();
+      }
+      else
+      {
+        Log.Debug("HueHandler - Initialising locked.");
+      }
 
-      Thread t = new Thread(() => InitialiseThread(force));
-      t.IsBackground = true;
-      t.Start();
     }
 
     private bool InitialiseThread(bool force = false)
     {
+      //Set Init lock
+      initLock = true;
+
       if (!Win32API.IsProcessRunning("atmohue.exe") && coreObject.hueIsRemoteMachine == false)
       {
         if (coreObject.hueStart)
@@ -102,6 +112,7 @@ namespace AtmoLight.Targets
         else
         {
           Log.Error("HueHandler - AtmoHue is not running.");
+          initLock = false;
           return false;
         }
       }
@@ -111,6 +122,7 @@ namespace AtmoLight.Targets
         if (Socket.Connected)
         {
           Log.Debug("HueHandler - already connect to AtmoHue");
+          initLock = false;
           return true;
         }
         else
@@ -125,9 +137,12 @@ namespace AtmoLight.Targets
 
     public void ReInitialise(bool force = false)
     {
-      Thread t = new Thread(() => InitialiseThread(force));
-      t.IsBackground = true;
-      t.Start();
+      if (coreObject.reInitOnError || force)
+      {
+        Thread t = new Thread(() => Initialise(force));
+        t.IsBackground = true;
+        t.Start();
+      }
     }
 
     public void Dispose()
@@ -144,6 +159,7 @@ namespace AtmoLight.Targets
       if (!System.IO.File.Exists(coreObject.huePath))
       {
         Log.Error("HueHandler - AtmoHue.exe not found!");
+        initLock = false;
         return false;
       }
       
@@ -158,6 +174,7 @@ namespace AtmoLight.Targets
       catch (Exception)
       {
         Log.Error("HueHander - Starting Hue failed.");
+        initLock = false;
         return false;
       }
       Log.Info("HueHander - AtmoHue successfully started.");
@@ -167,15 +184,7 @@ namespace AtmoLight.Targets
 
     public bool IsConnected()
     {
-      if (Socket.Connected)
-      {
-        Connected = true;
-      }
-      else
-      {
-        Connected = false;
-      }
-      return Connected;
+      return Socket.Connected;
     }
 
     private void Connect()
@@ -189,7 +198,7 @@ namespace AtmoLight.Targets
 
       while (hueReconnectCounter <= coreObject.hueReconnectAttempts)
       {
-        if (Connected == false)
+        if (!Socket.Connected)
         {
           //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
           Disconnect();
@@ -202,12 +211,10 @@ namespace AtmoLight.Targets
             Socket.ReceiveTimeout = 5000;
             Socket.Connect(coreObject.hueIP, coreObject.huePort);
             Stream = Socket.GetStream();
-            Connected = Socket.Connected;
             Log.Debug("HueHandler - Connected to AtmoHue");
           }
           catch (Exception e)
           {
-            Connected = false;
             Log.Error("HueHandler - Error while connecting");
             Log.Error("HueHandler - Exception: {0}", e.Message);
           }
@@ -216,7 +223,7 @@ namespace AtmoLight.Targets
           hueReconnectCounter++;
 
           //Show error if reconnect attempts exhausted
-          if (hueReconnectCounter > coreObject.hueReconnectAttempts && Connected == false)
+          if (hueReconnectCounter > coreObject.hueReconnectAttempts && !Socket.Connected)
           {
             Log.Error("HueHandler - Error while connecting and connection attempts exhausted");
             coreObject.NewConnectionLost(Name);
@@ -242,7 +249,7 @@ namespace AtmoLight.Targets
         //Reset start variable
         HueBridgeStartOnResume = false;
 
-        if (Connected)
+        if (Socket.Connected)
         {
           //Send Power ON command
           HueBridgePower("ON");
@@ -254,7 +261,7 @@ namespace AtmoLight.Targets
 
 
       //On first initialize set the effect after we are done trying to connect
-      if (isInit && Connected)
+      if (isInit && Socket.Connected)
       {
         ChangeEffect(coreObject.GetCurrentEffect());
         isInit = false;
@@ -263,6 +270,9 @@ namespace AtmoLight.Targets
       {
         isInit = false;
       }
+
+      //Reset Init lock
+      initLock = false;
     }
     private void Disconnect()
     {
@@ -291,7 +301,7 @@ namespace AtmoLight.Targets
       {
         Log.Error("HueHandler - error during sending power command");
         Log.Error(string.Format("HueHandler - {0}", e.Message));
-
+        ReInitialise(false);
       }
     }
 
@@ -313,6 +323,7 @@ namespace AtmoLight.Targets
       {
         Log.Error("HueHandler - error during sending color");
         Log.Error(string.Format("HueHandler - {0}", e.Message));
+        ReInitialise(false);
       }
     }
     public bool ChangeEffect(ContentEffect effect)
@@ -540,7 +551,6 @@ namespace AtmoLight.Targets
 
           //reset Init so we restore the effect on resume
           isInit = true;
-          Connected = false;
 
           if (coreObject.hueBridgeEnableOnResume)
           {

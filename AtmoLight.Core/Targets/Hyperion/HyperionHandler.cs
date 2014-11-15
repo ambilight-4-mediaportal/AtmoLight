@@ -73,6 +73,10 @@ namespace AtmoLight.Targets
             Connect();
           }
         }
+        else
+        {
+          Log.Debug("HyperionHandler - Initialising locked.");
+        }
       }
       catch (Exception e)
       {
