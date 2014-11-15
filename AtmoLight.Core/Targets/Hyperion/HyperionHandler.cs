@@ -39,7 +39,6 @@ namespace AtmoLight.Targets
 
     private static TcpClient Socket = new TcpClient();
     private Stream Stream;
-    private Boolean Connected = false;
     private Boolean isInit = false;
     private int hyperionReconnectCounter = 0;
     private Stopwatch liveReconnectSW = new Stopwatch();
@@ -59,6 +58,7 @@ namespace AtmoLight.Targets
       try
       {
         isInit = true;
+        Log.Debug("HyperionHandler - Initialising");
 
         if (coreObject.hyperionLiveReconnect)
         {
@@ -68,7 +68,6 @@ namespace AtmoLight.Targets
         {
           Connect();
         }
-        ClearPriority(coreObject.hyperionPriority);
       }
       catch (Exception e)
       {
@@ -79,9 +78,11 @@ namespace AtmoLight.Targets
 
     public void ReInitialise(bool force = false)
     {
-      //Reset reconnect counter if needed
-      hyperionReconnectCounter = 0;
-      Connect();
+      Log.Error("HyperionHandler - Reinitialising");
+      if (coreObject.reInitOnError || force)
+      {
+        Initialise(force);
+      }
     }
 
     public void Dispose()
@@ -105,16 +106,7 @@ namespace AtmoLight.Targets
     }
     public bool IsConnected()
     {
-      if (Socket.Connected)
-      {
-        Connected = true;
-      }
-      else
-      {
-        Connected = false;
-      }
-
-      return Connected;
+      return Socket.Connected;
     }
 
     private void Connect()
@@ -137,7 +129,7 @@ namespace AtmoLight.Targets
       //Start live reconnect with set delay in config
       while (coreObject.hyperionLiveReconnect)
       {
-        if (liveReconnectSW.ElapsedMilliseconds >= coreObject.hyperionReconnectDelay && Connected == false)
+        if (liveReconnectSW.ElapsedMilliseconds >= coreObject.hyperionReconnectDelay && Socket.Connected == false)
         {
           Connect();
           liveReconnectSW.Restart();
@@ -151,7 +143,7 @@ namespace AtmoLight.Targets
     {
       while (hyperionReconnectCounter <= coreObject.hyperionReconnectAttempts)
       {
-        if (Connected == false)
+        if (Socket.Connected == false)
         {
           try
           {
@@ -168,7 +160,6 @@ namespace AtmoLight.Targets
             Socket.ReceiveTimeout = 5000;
             Socket.Connect(coreObject.hyperionIP, coreObject.hyperionPort);
             Stream = Socket.GetStream();
-            Connected = Socket.Connected;
 
             if (coreObject.hyperionLiveReconnect == false)
             {
@@ -182,8 +173,6 @@ namespace AtmoLight.Targets
               Log.Error("HyperionHandler - Error while connecting");
               Log.Error("HyperionHandler - Exception: {0}", e.Message);
             }
-
-            Connected = false;
           }
 
           //if live connect enabled don't use this loop and let liveReconnectThread() fire up new connections
@@ -197,7 +186,7 @@ namespace AtmoLight.Targets
             hyperionReconnectCounter++;
 
             //Show error if reconnect attempts exhausted
-            if (hyperionReconnectCounter > coreObject.hyperionReconnectAttempts && Connected == false)
+            if (hyperionReconnectCounter > coreObject.hyperionReconnectAttempts && Socket.Connected == false)
             {
               Log.Error("HyperionHandler - Error while connecting and connection attempts exhausted");
               coreObject.NewConnectionLost(Name);
@@ -217,7 +206,7 @@ namespace AtmoLight.Targets
       }
 
       //On first initialize set the effect after we are done trying to connect
-      if (isInit && Connected)
+      if (isInit && Socket.Connected)
       {
         ChangeEffect(coreObject.GetCurrentEffect());
 
@@ -359,7 +348,7 @@ namespace AtmoLight.Targets
     {
       try
       {
-        if (Connected)
+        if (Socket.Connected)
         {
           int size = request.SerializedSize;
 
@@ -380,6 +369,9 @@ namespace AtmoLight.Targets
       {
         Log.Error("HyperionHandler - Error while sending proto request");
         Log.Error("HyperionHandler - Exception: {0}", e.Message);
+
+        //Try to Reinitialise if needed
+        ReInitialise(true);
       }
     }
 
@@ -416,7 +408,6 @@ namespace AtmoLight.Targets
           //Reconnect Hyperion after standby
           Log.Debug("HyperionHandler - Reconnecting after standby");
           isInit = true;
-          Connected = false;
           Connect();
 
           break;
