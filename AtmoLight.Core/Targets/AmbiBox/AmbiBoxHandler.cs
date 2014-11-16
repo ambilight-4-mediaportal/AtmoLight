@@ -19,6 +19,7 @@ namespace AtmoLight
     #region Fields
     public Target Name { get { return Target.AmbiBox; } }
     public TargetType Type { get { return TargetType.Local; } }
+    public bool AllowDelay { get { return true; } }
 
     public List<ContentEffect> SupportedEffects
     {
