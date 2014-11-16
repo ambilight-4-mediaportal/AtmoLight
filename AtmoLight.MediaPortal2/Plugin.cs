@@ -108,6 +108,22 @@ namespace AtmoLight
       Log.Debug("Generating new AtmoLight.Core instance.");
       AtmoLightObject = Core.GetInstance();
 
+      // AmbiBox
+      if (settings.AmbiBoxTarget)
+      {
+        AtmoLightObject.AddTarget(Target.AmbiBox);
+      }
+      AtmoLightObject.ambiBoxAutoStart = settings.AmbiBoxAutoStart;
+      AtmoLightObject.ambiBoxAutoStop = settings.AmbiBoxAutoStop;
+      AtmoLightObject.ambiBoxExternalProfile = settings.AmbiBoxExternalProfile;
+      AtmoLightObject.ambiBoxIP = settings.AmbiBoxIP;
+      AtmoLightObject.ambiBoxLEDCount = settings.AmbiBoxLEDCount;
+      AtmoLightObject.ambiBoxMaxReconnectAttempts = settings.AmbiBoxMaxReconnectAttempts;
+      AtmoLightObject.ambiBoxMediaPortalProfile = settings.AmbiBoxMediaPortalProfile;
+      AtmoLightObject.ambiBoxPath = settings.AmbiBoxPath;
+      AtmoLightObject.ambiBoxPort = settings.AmbiBoxPort;
+      AtmoLightObject.ambiBoxReconnectDelay = settings.AmbiBoxReconnectDelay;
+
       // AtmoWin
       if (settings.AtmoWinTarget)
       {

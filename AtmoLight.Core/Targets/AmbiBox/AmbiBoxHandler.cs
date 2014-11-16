@@ -50,7 +50,6 @@ namespace AtmoLight
     public AmbiBoxHandler()
     {
       Log.Debug("AmbiBoxHandler - AmbiBox as target added.");
-      Initialise();
     }
     #endregion
 
