@@ -318,13 +318,24 @@ namespace AtmoLight
 
     private string SendCommand(string command)
     {
-      ambiBoxConnection.WriteLine(command);
-      string rcvd = ambiBoxConnection.Read();
-      if (rcvd.Length < 2)
+      try
       {
+        ambiBoxConnection.WriteLine(command);
+        string rcvd = ambiBoxConnection.Read();
+        if (rcvd.Length < 2)
+        {
+          return null;
+        }
+        return rcvd.Remove(rcvd.Length - 2, 2);
+      }
+      catch (Exception ex)
+      {
+        Log.Error("AmbiBoxHanlder - Error communicating with API server.");
+        Log.Error("AmbiBoxHanlder - Command: {0}", command);
+        Log.Error("AmbiBoxHandler - Exception: {0}", ex.Message);
+        ReInitialise();
         return null;
       }
-      return rcvd.Remove(rcvd.Length - 2, 2);
     }
     #endregion
 
