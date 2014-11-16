@@ -358,7 +358,16 @@ namespace AtmoLight
         }
       }
       data += "sync\n";
-      boblightConnection.Write(data);
+      try
+      {
+        boblightConnection.Write(data);
+      }
+      catch (Exception ex)
+      {
+        Log.Error("BoblightHandler - Error sending RGB data.");
+        Log.Error("BoblightHandler - Exception: {0}", ex.Message);
+        ReInitialise();
+      }
     }
 
     private double[] GetRGB(int index)
@@ -488,7 +497,16 @@ namespace AtmoLight
 
     private void SetPriority(int priority)
     {
-      boblightConnection.WriteLine("set priority " + priority.ToString());
+      try
+      {
+        boblightConnection.WriteLine("set priority " + priority.ToString());
+      }
+      catch (Exception ex)
+      {
+        Log.Error("BoblightHandler - Error changing priority.");
+        Log.Error("BoblightHandler - Exception: {0}", ex.Message);
+        ReInitialise();
+      }
     }
 
     private void SetOption(string option, string value)
@@ -498,7 +516,16 @@ namespace AtmoLight
       {
         data += "set light " + lights[i].name + " " + option + " " + value + "\n";
       }
-      boblightConnection.Write(data);
+      try
+      {
+        boblightConnection.Write(data);
+      }
+      catch (Exception ex)
+      {
+        Log.Error("BoblightHandler - Error changing option.");
+        Log.Error("BoblightHandler - Exception: {0}", ex.Message);
+        ReInitialise();
+      }
     }
     #endregion;
 
