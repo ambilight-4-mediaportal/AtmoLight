@@ -10,6 +10,7 @@ namespace AtmoLight
   {
     Target Name { get; }
     List<ContentEffect> SupportedEffects { get; }
+    bool AllowDelay { get; }
     void Initialise(bool force);
     void ReInitialise(bool force);
     void Dispose();

@@ -331,7 +331,7 @@ namespace AtmoLight
             AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
           }
         }
-        else if (messageType == PlayerManagerMessaging.MessageType.PlayerStopped)
+        else if (messageType == PlayerManagerMessaging.MessageType.PlayerStopped || messageType == PlayerManagerMessaging.MessageType.PlayerEnded)
         {
           Log.Info("Playback stopped.");
           if (CheckForStartRequirements())

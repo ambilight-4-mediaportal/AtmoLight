@@ -14,7 +14,7 @@ namespace AtmoLight
   {
     #region Fields
     public Target Name { get { return Target.Boblight; } }
-
+    public bool AllowDelay { get { return true; } }
     public List<ContentEffect> SupportedEffects
     {
       get
@@ -195,7 +195,7 @@ namespace AtmoLight
       if (powerMode == PowerModes.Resume)
       {
         Disconnect();
-        Connect();
+        Initialise();
       }
     }
     #endregion
@@ -252,14 +252,12 @@ namespace AtmoLight
         boblightConnection = new TelnetConnection(coreObject.boblightIP, coreObject.boblightPort);
         if (boblightConnection.IsConnected)
         {
-          boblightConnection.WriteLine("hello");
-          if (CleanupReadString(boblightConnection.Read()) != "hello")
+          if (SendCommand("hello\n", true) != "hello")
           {
             return false;
           }
 
-          boblightConnection.WriteLine("get lights");
-          string lightsMessage = CleanupReadString(boblightConnection.Read());
+          string lightsMessage = SendCommand("get lights", true);
           if (string.IsNullOrEmpty(lightsMessage))
           {
             return false;
@@ -358,7 +356,7 @@ namespace AtmoLight
         }
       }
       data += "sync\n";
-      boblightConnection.Write(data);
+      SendCommand(data);
     }
 
     private double[] GetRGB(int index)
@@ -488,7 +486,7 @@ namespace AtmoLight
 
     private void SetPriority(int priority)
     {
-      boblightConnection.WriteLine("set priority " + priority.ToString());
+      SendCommand("set priority " + priority.ToString() + "\n");
     }
 
     private void SetOption(string option, string value)
@@ -498,7 +496,27 @@ namespace AtmoLight
       {
         data += "set light " + lights[i].name + " " + option + " " + value + "\n";
       }
-      boblightConnection.Write(data);
+      SendCommand(data);
+    }
+
+    private string SendCommand(string command, bool noReinit = false)
+    {
+      try
+      {
+        boblightConnection.Write(command);
+        return CleanupReadString(boblightConnection.Read());
+      }
+      catch (Exception ex)
+      {
+        Log.Error("BoblightHandler - Error communicating with server.");
+        Log.Error("BoblightHandler - Command: {0}", command);
+        Log.Error("BoblightHandler - Exception: {0}", ex.Message);
+        if (!noReinit)
+        {
+          ReInitialise();
+        }
+        return null;
+      }
     }
     #endregion;
 

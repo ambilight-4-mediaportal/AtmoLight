@@ -8,6 +8,7 @@ Version 2.0.0.0
 - Added possibility to change every setting on the fly (no MediaPortal2 restart for specific settings required anymore)
 - Added VU Meter and VU Meter Rainbow effects
 - Added blackbar detection and removal
+- Fixed bug where AtmoLight would do nothing when a player ends
 - Various small bug fixes
 
 Version 2.0.0.0 Beta 2
