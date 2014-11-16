@@ -252,14 +252,12 @@ namespace AtmoLight
         boblightConnection = new TelnetConnection(coreObject.boblightIP, coreObject.boblightPort);
         if (boblightConnection.IsConnected)
         {
-          boblightConnection.WriteLine("hello");
-          if (CleanupReadString(boblightConnection.Read()) != "hello")
+          if (SendCommand("hello\n", true) != "hello")
           {
             return false;
           }
 
-          boblightConnection.WriteLine("get lights");
-          string lightsMessage = CleanupReadString(boblightConnection.Read());
+          string lightsMessage = SendCommand("get lights", true);
           if (string.IsNullOrEmpty(lightsMessage))
           {
             return false;
@@ -358,16 +356,7 @@ namespace AtmoLight
         }
       }
       data += "sync\n";
-      try
-      {
-        boblightConnection.Write(data);
-      }
-      catch (Exception ex)
-      {
-        Log.Error("BoblightHandler - Error sending RGB data.");
-        Log.Error("BoblightHandler - Exception: {0}", ex.Message);
-        ReInitialise();
-      }
+      SendCommand(data);
     }
 
     private double[] GetRGB(int index)
@@ -497,16 +486,7 @@ namespace AtmoLight
 
     private void SetPriority(int priority)
     {
-      try
-      {
-        boblightConnection.WriteLine("set priority " + priority.ToString());
-      }
-      catch (Exception ex)
-      {
-        Log.Error("BoblightHandler - Error changing priority.");
-        Log.Error("BoblightHandler - Exception: {0}", ex.Message);
-        ReInitialise();
-      }
+      SendCommand("set priority " + priority.ToString() + "\n");
     }
 
     private void SetOption(string option, string value)
@@ -516,15 +496,26 @@ namespace AtmoLight
       {
         data += "set light " + lights[i].name + " " + option + " " + value + "\n";
       }
+      SendCommand(data);
+    }
+
+    private string SendCommand(string command, bool noReinit = false)
+    {
       try
       {
-        boblightConnection.Write(data);
+        boblightConnection.Write(command);
+        return CleanupReadString(boblightConnection.Read());
       }
       catch (Exception ex)
       {
-        Log.Error("BoblightHandler - Error changing option.");
+        Log.Error("BoblightHandler - Error communicating with server.");
+        Log.Error("BoblightHandler - Command: {0}", command);
         Log.Error("BoblightHandler - Exception: {0}", ex.Message);
-        ReInitialise();
+        if (!noReinit)
+        {
+          ReInitialise();
+        }
+        return null;
       }
     }
     #endregion;
