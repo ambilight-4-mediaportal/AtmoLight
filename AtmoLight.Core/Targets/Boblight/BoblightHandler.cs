@@ -195,7 +195,7 @@ namespace AtmoLight
       if (powerMode == PowerModes.Resume)
       {
         Disconnect();
-        Connect();
+        Initialise();
       }
     }
     #endregion
