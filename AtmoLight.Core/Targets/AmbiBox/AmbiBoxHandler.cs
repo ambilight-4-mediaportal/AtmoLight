@@ -317,11 +317,11 @@ namespace AtmoLight
 
     private void Disconnect()
     {
-      try
+      if (ambiBoxConnection != null)
       {
         ambiBoxConnection.Dispose();
+        ambiBoxConnection = null;
       }
-      catch { }
     }
 
     private string SendCommand(string command, bool noReinit = false)
