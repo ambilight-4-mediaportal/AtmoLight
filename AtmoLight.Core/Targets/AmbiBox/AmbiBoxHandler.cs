@@ -295,7 +295,12 @@ namespace AtmoLight
       }
       ambiBoxConnection.Read();
       char[] separators = { ':', ';' };
-      string[] profiles = SendCommand("getprofiles").Split(separators);
+      string profilesString = SendCommand("getprofiles", true);
+      if (string.IsNullOrEmpty(profilesString))
+      {
+        return false;
+      }
+      string[] profiles = profilesString.Split(separators);
       for (int i = 1; i < profiles.Length; i++)
       {
         if (!string.IsNullOrEmpty(profiles[i]))
@@ -303,9 +308,9 @@ namespace AtmoLight
           profileList.Add(profiles[i]);
         }
       }
-      currentProfile = SendCommand("getprofile").Split(separators)[1];
+      currentProfile = SendCommand("getprofile", true).Split(separators)[1];
 
-      SendCommand("unlock");
+      SendCommand("unlock", true);
 
       Log.Info("AmbiBoxHandler - Successfully connected to {0}:{1}", coreObject.ambiBoxIP, coreObject.ambiBoxPort);
       return true;
@@ -316,7 +321,7 @@ namespace AtmoLight
       ambiBoxConnection.Dispose();
     }
 
-    private string SendCommand(string command)
+    private string SendCommand(string command, bool noReinit = false)
     {
       try
       {
@@ -333,7 +338,10 @@ namespace AtmoLight
         Log.Error("AmbiBoxHanlder - Error communicating with API server.");
         Log.Error("AmbiBoxHanlder - Command: {0}", command);
         Log.Error("AmbiBoxHandler - Exception: {0}", ex.Message);
-        ReInitialise();
+        if (!noReinit)
+        {
+          ReInitialise();
+        }
         return null;
       }
     }
