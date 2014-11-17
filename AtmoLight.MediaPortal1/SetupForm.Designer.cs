@@ -488,7 +488,7 @@
       // btnSelectFileAtmoWin
       // 
       this.btnSelectFileAtmoWin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnSelectFileAtmoWin.Location = new System.Drawing.Point(725, 38);
+      this.btnSelectFileAtmoWin.Location = new System.Drawing.Point(725, 41);
       this.btnSelectFileAtmoWin.Name = "btnSelectFileAtmoWin";
       this.btnSelectFileAtmoWin.Size = new System.Drawing.Size(85, 23);
       this.btnSelectFileAtmoWin.TabIndex = 2;
@@ -502,7 +502,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.edFileAtmoWin.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
       this.edFileAtmoWin.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
-      this.edFileAtmoWin.Location = new System.Drawing.Point(12, 40);
+      this.edFileAtmoWin.Location = new System.Drawing.Point(12, 43);
       this.edFileAtmoWin.Name = "edFileAtmoWin";
       this.edFileAtmoWin.Size = new System.Drawing.Size(700, 20);
       this.edFileAtmoWin.TabIndex = 1;
@@ -1467,7 +1467,7 @@
       // 
       // tbAmbiBoxPath
       // 
-      this.tbAmbiBoxPath.Location = new System.Drawing.Point(12, 40);
+      this.tbAmbiBoxPath.Location = new System.Drawing.Point(12, 43);
       this.tbAmbiBoxPath.Name = "tbAmbiBoxPath";
       this.tbAmbiBoxPath.Size = new System.Drawing.Size(700, 20);
       this.tbAmbiBoxPath.TabIndex = 4;
@@ -1475,7 +1475,7 @@
       // btnSelectFileAmbiBox
       // 
       this.btnSelectFileAmbiBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnSelectFileAmbiBox.Location = new System.Drawing.Point(725, 38);
+      this.btnSelectFileAmbiBox.Location = new System.Drawing.Point(725, 41);
       this.btnSelectFileAmbiBox.Name = "btnSelectFileAmbiBox";
       this.btnSelectFileAmbiBox.Size = new System.Drawing.Size(85, 23);
       this.btnSelectFileAmbiBox.TabIndex = 3;
@@ -1862,7 +1862,7 @@
       // btnSelectFileHue
       // 
       this.btnSelectFileHue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnSelectFileHue.Location = new System.Drawing.Point(723, 38);
+      this.btnSelectFileHue.Location = new System.Drawing.Point(723, 41);
       this.btnSelectFileHue.Name = "btnSelectFileHue";
       this.btnSelectFileHue.Size = new System.Drawing.Size(85, 23);
       this.btnSelectFileHue.TabIndex = 2;
@@ -1876,7 +1876,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.edFileHue.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
       this.edFileHue.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
-      this.edFileHue.Location = new System.Drawing.Point(12, 40);
+      this.edFileHue.Location = new System.Drawing.Point(12, 43);
       this.edFileHue.Name = "edFileHue";
       this.edFileHue.Size = new System.Drawing.Size(698, 20);
       this.edFileHue.TabIndex = 1;
