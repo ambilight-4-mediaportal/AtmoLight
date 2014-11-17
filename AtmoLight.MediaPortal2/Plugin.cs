@@ -33,8 +33,6 @@ namespace AtmoLight
 
     // Settings
     private AtmoLight.Settings settings;
-    private ContentEffect menuEffect = ContentEffect.Undefined;
-    private ContentEffect playbackEffect = ContentEffect.Undefined;
 
     private Int64 lastFrame = 0;
 
@@ -43,7 +41,6 @@ namespace AtmoLight
     private SharpDX.Direct3D9.Surface surfaceDestination; // Destination Surface (resized)
 
     // Player helper
-    private IPlayerManager playerManager;
     private ISharpDXVideoPlayer player;
     #endregion
 
@@ -175,10 +172,9 @@ namespace AtmoLight
       AtmoLightObject.blackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
       AtmoLightObject.powerModeChangedDelay = settings.PowerModeChangedDelay;
 
-      menuEffect = settings.MenuEffect;
       if (CheckForStartRequirements())
       {
-        AtmoLightObject.SetInitialEffect(menuEffect);
+        AtmoLightObject.SetInitialEffect(settings.MenuEffect);
       }
       else
       {
@@ -292,22 +288,27 @@ namespace AtmoLight
         PlayerManagerMessaging.MessageType messageType = (PlayerManagerMessaging.MessageType)message.MessageType;
         if (messageType == PlayerManagerMessaging.MessageType.PlayerStarted)
         {
+          Log.Info("Playback started.");
+          ContentEffect effect;
           // What kind of playback?
+          // Video gets highest priority in PiP.
           if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
           {
-            Log.Info("Video started.");
-            playbackEffect = settings.VideoEffect;
+            effect = settings.VideoEffect;
           }
           else if (ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
           {
-            Log.Info("Audio started.");
-            playbackEffect = settings.AudioEffect;
+            effect = settings.AudioEffect;
+          }
+          else
+          {
+            return;
           }
 
           // Start the right effect.
           if (CheckForStartRequirements())
           {
-            AtmoLightObject.ChangeEffect(playbackEffect);
+            AtmoLightObject.ChangeEffect(effect);
             CalculateDelay();
           }
           else
@@ -318,15 +319,34 @@ namespace AtmoLight
         else if (messageType == PlayerManagerMessaging.MessageType.PlayerStopped || messageType == PlayerManagerMessaging.MessageType.PlayerEnded)
         {
           Log.Info("Playback stopped.");
+          ContentEffect effect;
+          // Is there still something playing? (PiP)
+          // If yes, what?
+          if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
+          {
+            Log.Info("Another video player is still active (PiP).");
+            effect = settings.VideoEffect;
+          }
+          else if (ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
+          {
+            Log.Info("Another audio player is still active (PiP).");
+            effect = settings.AudioEffect;
+          }
+          else
+          {
+            effect = settings.MenuEffect;
+          }
+
           if (CheckForStartRequirements())
           {
-            AtmoLightObject.ChangeEffect(menuEffect);
+            AtmoLightObject.ChangeEffect(effect);
             CalculateDelay();
           }
           else
           {
             AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
           }
+
         }
       }
     }
@@ -366,16 +386,8 @@ namespace AtmoLight
         // This results in lower time to calculate aswell as blackbar removal
         if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
         {
-          playerManager = ServiceRegistration.Get<IPlayerManager>();
-          playerManager.ForEach(psc =>
-          {
-            player = psc.CurrentPlayer as ISharpDXVideoPlayer;
-            if (player == null || player.Surface == null)
-            {
-              return;
-            }
-            surfaceSource = player.Surface;
-          });
+          player = ServiceRegistration.Get<IPlayerContextManager>().PrimaryPlayerContext.CurrentPlayer as ISharpDXVideoPlayer;
+          surfaceSource = player.Surface;
         }
         else
         {
@@ -631,7 +643,7 @@ namespace AtmoLight
       {
         if (CheckForStartRequirements())
         {
-          AtmoLightObject.SetInitialEffect(menuEffect);
+          AtmoLightObject.SetInitialEffect(settings.MenuEffect);
         }
         else
         {

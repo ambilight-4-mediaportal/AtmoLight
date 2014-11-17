@@ -9,6 +9,7 @@ Version 2.0.0.0
 - Added VU Meter and VU Meter Rainbow effects
 - Added blackbar detection and removal
 - Fixed bug where AtmoLight would do nothing when a player ends
+- Added support for Picture-in-Picture mode
 - Various small bug fixes
 
 Version 2.0.0.0 Beta 2
