@@ -36,13 +36,6 @@ namespace AtmoLight.Targets
         };
       }
     }
-    private enum APIcommandType
-    {
-      Color,
-      Group,
-      Power,
-      Room,
-    }
 
     // CORE
     private Core coreObject;
@@ -69,6 +62,14 @@ namespace AtmoLight.Targets
     private volatile bool initLock = false;
     private bool isAtmoHueRunning = false;
 
+    private enum APIcommandType
+    {
+      Color,
+      Group,
+      Power,
+      Room,
+    }
+
     #endregion
 
     #region Hue
@@ -81,6 +82,8 @@ namespace AtmoLight.Targets
     {
       if (!initLock)
       {
+        //Set Init lock
+        initLock = true;
         isInit = true;
         Thread t = new Thread(() => InitialiseThread(force));
         t.IsBackground = true;
@@ -95,9 +98,6 @@ namespace AtmoLight.Targets
 
     private bool InitialiseThread(bool force = false)
     {
-      //Set Init lock
-      initLock = true;
-
       if (!Win32API.IsProcessRunning("atmohue.exe") && coreObject.hueIsRemoteMachine == false)
       {
         if (coreObject.hueStart)
@@ -544,22 +544,21 @@ namespace AtmoLight.Targets
       switch (powerMode)
       {
         case PowerModes.Resume:
-          // Close old socket and create new TCP client which allows it to reconnect when calling Connect()
-          Disconnect();
-          //Reconnect AtmoHue after standby
-          Log.Debug("HueHandler - Reconnecting after standby");
 
-          //reset Init so we restore the effect on resume
-          isInit = true;
+          // Close old socket
+          Disconnect();
+
+          //Reconnect to AtmoHue after standby
+          Log.Debug("HueHandler - Reconnecting after standby");
 
           if (coreObject.hueBridgeEnableOnResume)
           {
             HueBridgeStartOnResume = true;
-            Connect();
+            Initialise();
           }
           else
           {
-            Connect();
+            Initialise();
           }
           break;
         case PowerModes.Suspend:

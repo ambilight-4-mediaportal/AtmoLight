@@ -164,7 +164,6 @@ namespace AtmoLight.Targets
 
     private void ConnectThread()
     {
-
       while (hyperionReconnectCounter <= coreObject.hyperionReconnectAttempts)
       {
         if (!Socket.Connected)
@@ -438,17 +437,20 @@ namespace AtmoLight.Targets
       switch (powerMode)
       {
         case PowerModes.Resume:
+
+          // Close old socket
           Disconnect();
 
-          //Reconnect Hyperion after standby
-          Log.Debug("HyperionHandler - Reconnecting after standby");
-          isInit = true;
-          Connect();
+          //Reconnect to Hyperion after standby
+          Log.Debug("HyperionHandler - Initialising after standby");
+          Initialise();
 
           break;
         case PowerModes.Suspend:
+
           ClearPriority(coreObject.hyperionPriorityStaticColor);
           ClearPriority(coreObject.hyperionPriority);
+
           break;
       }
     }
