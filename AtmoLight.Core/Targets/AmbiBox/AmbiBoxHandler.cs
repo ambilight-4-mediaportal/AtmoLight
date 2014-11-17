@@ -45,6 +45,7 @@ namespace AtmoLight
     private List<string> profileList = new List<string>();
     private string currentProfile;
     private int reconnectAttempts = 0;
+    private int ledCount;
     #endregion
 
     #region Constructor
@@ -127,7 +128,7 @@ namespace AtmoLight
         case ContentEffect.StaticColor:
           SendCommand("lock");
           string staticColorString = "setcolor:";
-          for (int i = 1; i <= coreObject.ambiBoxLEDCount; i++)
+          for (int i = 1; i <= ledCount; i++)
           {
             staticColorString += i + "-" + coreObject.staticColor[0] + "," + coreObject.staticColor[1] + "," + coreObject.staticColor[2] + ";";
           }
@@ -143,7 +144,7 @@ namespace AtmoLight
         default:
           SendCommand("lock");
           string disableString = "setcolor:";
-          for (int i = 1; i <= coreObject.ambiBoxLEDCount; i++)
+          for (int i = 1; i <= ledCount; i++)
           {
             disableString += i + "-" + 0 + "," + 0 + "," + 0 + ";";
           }
@@ -309,6 +310,12 @@ namespace AtmoLight
         }
       }
       currentProfile = SendCommand("getprofile", true).Split(separators)[1];
+
+      ledCount = int.Parse(SendCommand("getcountleds", true).Split(separators)[1]);
+      if (ledCount <= 0)
+      {
+        return false;
+      }
 
       SendCommand("unlock", true);
 

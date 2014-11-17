@@ -117,7 +117,6 @@ namespace AtmoLight
       AtmoLightObject.ambiBoxAutoStop = settings.AmbiBoxAutoStop;
       AtmoLightObject.ambiBoxExternalProfile = settings.AmbiBoxExternalProfile;
       AtmoLightObject.ambiBoxIP = settings.AmbiBoxIP;
-      AtmoLightObject.ambiBoxLEDCount = settings.AmbiBoxLEDCount;
       AtmoLightObject.ambiBoxMaxReconnectAttempts = settings.AmbiBoxMaxReconnectAttempts;
       AtmoLightObject.ambiBoxMediaPortalProfile = settings.AmbiBoxMediaPortalProfile;
       AtmoLightObject.ambiBoxPath = settings.AmbiBoxPath;

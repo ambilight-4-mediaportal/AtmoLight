@@ -378,7 +378,6 @@ namespace Language
     public String SetupForm_lblpowerModeChangedDelay;
     public String SetupForm_lblAmbiBoxExternalProfile;
     public String SetupForm_lblAmbiBoxIP;
-    public String SetupForm_lblAmbiBoxLEDCount;
     public String SetupForm_lblAmbiBoxMaxReconnectAttempts;
     public String SetupForm_lblAmbiBoxMediaPortalProfile;
     public String SetupForm_lblAmbiBoxPath;

@@ -208,9 +208,6 @@ namespace AtmoLight
     [Setting(SettingScope.User, 5000)]
     public int AmbiBoxReconnectDelay { get; set; }
 
-    [Setting(SettingScope.User, 50)]
-    public int AmbiBoxLEDCount { get; set; }
-
     [Setting(SettingScope.User, "")]
     public string AmbiBoxMediaPortalProfile { get; set; }
 
@@ -301,7 +298,6 @@ namespace AtmoLight
       AmbiBoxAutoStop = settings.AmbiBoxAutoStop;
       AmbiBoxExternalProfile = settings.AmbiBoxExternalProfile;
       AmbiBoxIP = settings.AmbiBoxIP;
-      AmbiBoxLEDCount = settings.AmbiBoxLEDCount;
       AmbiBoxMaxReconnectAttempts = settings.AmbiBoxMaxReconnectAttempts;
       AmbiBoxMediaPortalProfile = settings.AmbiBoxMediaPortalProfile;
       AmbiBoxPath = settings.AmbiBoxPath;
@@ -378,7 +374,6 @@ namespace AtmoLight
       settings.AmbiBoxAutoStop = AmbiBoxAutoStop;
       settings.AmbiBoxExternalProfile = AmbiBoxExternalProfile;
       settings.AmbiBoxIP = AmbiBoxIP;
-      settings.AmbiBoxLEDCount = AmbiBoxLEDCount;
       settings.AmbiBoxMaxReconnectAttempts = AmbiBoxMaxReconnectAttempts;
       settings.AmbiBoxMediaPortalProfile = AmbiBoxMediaPortalProfile;
       settings.AmbiBoxPath = AmbiBoxPath;

@@ -130,14 +130,12 @@
       this.grpAmbiBoxNetwork = new System.Windows.Forms.GroupBox();
       this.tbAmbiBoxExternalProfile = new System.Windows.Forms.TextBox();
       this.tbAmbiBoxMediaPortalProfile = new System.Windows.Forms.TextBox();
-      this.tbAmbiBoxLEDCount = new System.Windows.Forms.TextBox();
       this.tbAmbiBoxReconnectDelay = new System.Windows.Forms.TextBox();
       this.tbAmbiBoxMaxReconnectAttempts = new System.Windows.Forms.TextBox();
       this.tbAmbiBoxPort = new System.Windows.Forms.TextBox();
       this.tbAmbiBoxIP = new System.Windows.Forms.TextBox();
       this.lblAmbiBoxExternalProfile = new System.Windows.Forms.Label();
       this.lblAmbiBoxMediaPortalProfile = new System.Windows.Forms.Label();
-      this.lblAmbiBoxLEDCount = new System.Windows.Forms.Label();
       this.lblAmbiBoxReconnectDelay = new System.Windows.Forms.Label();
       this.lblAmbiBoxMaxReconnectAttempts = new System.Windows.Forms.Label();
       this.lblAmbiBoxPort = new System.Windows.Forms.Label();
@@ -1307,14 +1305,12 @@
       // 
       this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxExternalProfile);
       this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxMediaPortalProfile);
-      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxLEDCount);
       this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxReconnectDelay);
       this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxMaxReconnectAttempts);
       this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxPort);
       this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxIP);
       this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxExternalProfile);
       this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxMediaPortalProfile);
-      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxLEDCount);
       this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxReconnectDelay);
       this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxMaxReconnectAttempts);
       this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxPort);
@@ -1328,25 +1324,17 @@
       // 
       // tbAmbiBoxExternalProfile
       // 
-      this.tbAmbiBoxExternalProfile.Location = new System.Drawing.Point(200, 172);
+      this.tbAmbiBoxExternalProfile.Location = new System.Drawing.Point(200, 147);
       this.tbAmbiBoxExternalProfile.Name = "tbAmbiBoxExternalProfile";
       this.tbAmbiBoxExternalProfile.Size = new System.Drawing.Size(100, 20);
       this.tbAmbiBoxExternalProfile.TabIndex = 13;
       // 
       // tbAmbiBoxMediaPortalProfile
       // 
-      this.tbAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(200, 147);
+      this.tbAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(200, 122);
       this.tbAmbiBoxMediaPortalProfile.Name = "tbAmbiBoxMediaPortalProfile";
       this.tbAmbiBoxMediaPortalProfile.Size = new System.Drawing.Size(100, 20);
       this.tbAmbiBoxMediaPortalProfile.TabIndex = 12;
-      // 
-      // tbAmbiBoxLEDCount
-      // 
-      this.tbAmbiBoxLEDCount.Location = new System.Drawing.Point(200, 122);
-      this.tbAmbiBoxLEDCount.Name = "tbAmbiBoxLEDCount";
-      this.tbAmbiBoxLEDCount.Size = new System.Drawing.Size(100, 20);
-      this.tbAmbiBoxLEDCount.TabIndex = 11;
-      this.tbAmbiBoxLEDCount.Validating += new System.ComponentModel.CancelEventHandler(this.tbAmbiBoxLEDCount_Validating);
       // 
       // tbAmbiBoxReconnectDelay
       // 
@@ -1383,7 +1371,7 @@
       // lblAmbiBoxExternalProfile
       // 
       this.lblAmbiBoxExternalProfile.AutoSize = true;
-      this.lblAmbiBoxExternalProfile.Location = new System.Drawing.Point(10, 175);
+      this.lblAmbiBoxExternalProfile.Location = new System.Drawing.Point(10, 150);
       this.lblAmbiBoxExternalProfile.Name = "lblAmbiBoxExternalProfile";
       this.lblAmbiBoxExternalProfile.Size = new System.Drawing.Size(118, 13);
       this.lblAmbiBoxExternalProfile.TabIndex = 6;
@@ -1392,20 +1380,11 @@
       // lblAmbiBoxMediaPortalProfile
       // 
       this.lblAmbiBoxMediaPortalProfile.AutoSize = true;
-      this.lblAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(10, 150);
+      this.lblAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(10, 125);
       this.lblAmbiBoxMediaPortalProfile.Name = "lblAmbiBoxMediaPortalProfile";
       this.lblAmbiBoxMediaPortalProfile.Size = new System.Drawing.Size(136, 13);
       this.lblAmbiBoxMediaPortalProfile.TabIndex = 5;
       this.lblAmbiBoxMediaPortalProfile.Text = "MediaPortal capture profile:";
-      // 
-      // lblAmbiBoxLEDCount
-      // 
-      this.lblAmbiBoxLEDCount.AutoSize = true;
-      this.lblAmbiBoxLEDCount.Location = new System.Drawing.Point(10, 125);
-      this.lblAmbiBoxLEDCount.Name = "lblAmbiBoxLEDCount";
-      this.lblAmbiBoxLEDCount.Size = new System.Drawing.Size(61, 13);
-      this.lblAmbiBoxLEDCount.TabIndex = 4;
-      this.lblAmbiBoxLEDCount.Text = "LED count:";
       // 
       // lblAmbiBoxReconnectDelay
       // 
@@ -2272,13 +2251,11 @@
     private System.Windows.Forms.Label lblAmbiBoxIP;
     private System.Windows.Forms.TextBox tbAmbiBoxExternalProfile;
     private System.Windows.Forms.TextBox tbAmbiBoxMediaPortalProfile;
-    private System.Windows.Forms.TextBox tbAmbiBoxLEDCount;
     private System.Windows.Forms.TextBox tbAmbiBoxReconnectDelay;
     private System.Windows.Forms.TextBox tbAmbiBoxMaxReconnectAttempts;
     private System.Windows.Forms.TextBox tbAmbiBoxPort;
     private System.Windows.Forms.TextBox tbAmbiBoxIP;
     private System.Windows.Forms.Label lblAmbiBoxExternalProfile;
     private System.Windows.Forms.Label lblAmbiBoxMediaPortalProfile;
-    private System.Windows.Forms.Label lblAmbiBoxLEDCount;
   }
 }

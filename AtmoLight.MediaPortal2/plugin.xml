@@ -134,10 +134,6 @@
         Text="[AtmoLight.AmbiBoxReconnectDelay]"
         ClassName="AtmoLight.Configuration.AmbiBoxReconnectDelay"/>
     <ConfigSetting
-        Id="AmbiBoxLEDCount"
-        Text="[AtmoLight.AmbiBoxLEDCount]"
-        ClassName="AtmoLight.Configuration.AmbiBoxLEDCount"/>
-    <ConfigSetting
         Id="AmbiBoxMediaPortalProfile"
         Text="[AtmoLight.AmbiBoxMediaPortalProfile]"
         ClassName="AtmoLight.Configuration.AmbiBoxMediaPortalProfile"/>

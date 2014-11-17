@@ -96,7 +96,6 @@
   <string name="AtmoLight.AmbiBoxPort">Port number</string>
   <string name="AtmoLight.AmbiBoxMaxReconnectAttempts">Reconnect attempts</string>
   <string name="AtmoLight.AmbiBoxReconnectDelay">Reconnect delay</string>
-  <string name="AtmoLight.AmbiBoxLEDCount">LED count</string>
   <string name="AtmoLight.AmbiBoxMediaPortalProfile">MediaPortal capture profile</string>
   <string name="AtmoLight.AmbiBoxExternalProfile">External capture profile</string>
   <string name="AtmoLight.AmbiBoxPath">Path to AmbiBox.exe</string>

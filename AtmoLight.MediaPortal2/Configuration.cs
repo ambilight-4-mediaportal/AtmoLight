@@ -1717,28 +1717,6 @@ namespace AtmoLight.Configuration
     }
   }
 
-  public class AmbiBoxLEDCount : LimitedNumberSelect
-  {
-    public override void Load()
-    {
-      _type = NumberType.Integer;
-      _step = 1;
-      _lowerLimit = 1;
-      _upperLimit = 300;
-      _value = SettingsManager.Load<Settings>().AmbiBoxLEDCount;
-    }
-
-    public override void Save()
-    {
-      base.Save();
-      Settings settings = SettingsManager.Load<Settings>();
-      settings.AmbiBoxLEDCount = (int)_value;
-      SettingsManager.Save(settings);
-
-      Core.GetInstance().ambiBoxLEDCount = (int)_value;
-    }
-  }
-
   public class AmbiBoxMediaPortalProfile : Entry
   {
     public override void Load()

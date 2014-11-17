@@ -119,7 +119,6 @@ namespace AtmoLight
       AtmoLightObject.ambiBoxPort = Settings.ambiBoxPort;
       AtmoLightObject.ambiBoxMaxReconnectAttempts = Settings.ambiBoxMaxReconnectAttempts;
       AtmoLightObject.ambiBoxReconnectDelay = Settings.ambiBoxReconnectDelay;
-      AtmoLightObject.ambiBoxLEDCount = Settings.ambiBoxLEDCount;
       AtmoLightObject.ambiBoxMediaPortalProfile = Settings.ambiBoxMediaPortalProfile;
       AtmoLightObject.ambiBoxExternalProfile = Settings.ambiBoxExternalProfile;
       AtmoLightObject.ambiBoxPath = Settings.ambiBoxPath;

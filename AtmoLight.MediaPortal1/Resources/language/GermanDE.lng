@@ -94,7 +94,6 @@ lblBlackbarDetectionThreshold=ms, mit Schwelle
 lblpowerModeChangedDelay=Verzögerung nach Standby:
 lblAmbiBoxExternalProfile=Externes aufnahme Profil:
 lblAmbiBoxIP=IP:
-lblAmbiBoxLEDCount=LED Anzahl:
 lblAmbiBoxMaxReconnectAttempts=Wiederverbindungs Versuche::
 lblAmbiBoxMediaPortalProfile=MediaPortal aufnahme Profil:
 lblAmbiBoxPath=Pfad+Dateiname zu AmbiBox.exe

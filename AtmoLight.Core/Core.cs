@@ -108,7 +108,6 @@ namespace AtmoLight
     public int ambiBoxPort;
     public int ambiBoxMaxReconnectAttempts;
     public int ambiBoxReconnectDelay;
-    public int ambiBoxLEDCount;
     public string ambiBoxMediaPortalProfile;
     public string ambiBoxExternalProfile;
     public string ambiBoxPath;

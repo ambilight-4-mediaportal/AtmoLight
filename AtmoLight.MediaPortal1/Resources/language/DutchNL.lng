@@ -94,7 +94,6 @@ lblBlackbarDetectionThreshold=ms, met Drempel
 lblpowerModeChangedDelay=Vertraging na standby:
 lblAmbiBoxExternalProfile=External capture profile:
 lblAmbiBoxIP=IP:
-lblAmbiBoxLEDCount=LED Count:
 lblAmbiBoxMaxReconnectAttempts=Verbindingspogingen:
 lblAmbiBoxMediaPortalProfile=MediaPortal capture profile:
 lblAmbiBoxPath=Pad en Bestandsnaam van AmbiBox.exe

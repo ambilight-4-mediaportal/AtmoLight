@@ -67,10 +67,6 @@
 		displayname="Reconnect delay:"    
 		description="Please enter the reconnect delay."/>
 		
-		<setting entryname="atmolight" name="ambiBoxLEDCount" type="int" defaultvalue="50" minvalue="1" maxvalue="300"
-		displayname="LED count:"    
-		description="Please enter how many leds you have."/>
-		
 		<setting entryname="atmolight" name="ambiBoxMediaPortalProfile" type="string" defaultvalue="" listvalues="" 
 		displayname="MediaPortal capture profile:"
 		description="Please enter the MediaPortal capture profile."

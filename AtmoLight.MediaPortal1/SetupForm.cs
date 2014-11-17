@@ -117,7 +117,6 @@ namespace AtmoLight
       tbAmbiBoxPort.Text = Settings.ambiBoxPort.ToString();
       tbAmbiBoxMaxReconnectAttempts.Text = Settings.ambiBoxMaxReconnectAttempts.ToString();
       tbAmbiBoxReconnectDelay.Text = Settings.ambiBoxReconnectDelay.ToString();
-      tbAmbiBoxLEDCount.Text = Settings.ambiBoxLEDCount.ToString();
       tbAmbiBoxMediaPortalProfile.Text = Settings.ambiBoxMediaPortalProfile;
       tbAmbiBoxExternalProfile.Text = Settings.ambiBoxExternalProfile;
     }
@@ -204,7 +203,6 @@ namespace AtmoLight
       lblBoblightGamma.Text = LanguageLoader.appStrings.SetupForm_lblBoblightGamma;
       lblAmbiBoxExternalProfile.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxExternalProfile;
       lblAmbiBoxIP.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxIP;
-      lblAmbiBoxLEDCount.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxLEDCount;
       lblAmbiBoxMaxReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxMaxReconnectAttempts;
       lblAmbiBoxMediaPortalProfile.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxMediaPortalProfile;
       lblAmbiBoxPath.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxPath;
@@ -581,15 +579,6 @@ namespace AtmoLight
         return;
       }
 
-      // AmbiBox LED Count
-      minValue = 1;
-      maxValue = 300;
-      if (validatorInt(tbAmbiBoxLEDCount.Text, minValue, maxValue, true) == false)
-      {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAmbiBoxLEDCount.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-        return;
-      }
-
       Settings.staticColorRed = int.Parse(tbRed.Text);
       Settings.staticColorGreen = int.Parse(tbGreen.Text);
       Settings.staticColorBlue = int.Parse(tbBlue.Text);
@@ -656,7 +645,6 @@ namespace AtmoLight
       Settings.ambiBoxPort = int.Parse(tbAmbiBoxPort.Text);
       Settings.ambiBoxMaxReconnectAttempts = int.Parse(tbAmbiBoxMaxReconnectAttempts.Text);
       Settings.ambiBoxReconnectDelay = int.Parse(tbAmbiBoxReconnectDelay.Text);
-      Settings.ambiBoxLEDCount = int.Parse(tbAmbiBoxLEDCount.Text);
       Settings.ambiBoxMediaPortalProfile = tbAmbiBoxMediaPortalProfile.Text;
       Settings.ambiBoxExternalProfile = tbAmbiBoxExternalProfile.Text;
 
@@ -1180,16 +1168,6 @@ namespace AtmoLight
       int minValue = 1;
       int maxValue = 99999;
       if (validatorInt(tbAmbiBoxReconnectDelay.Text, minValue, maxValue, true) == false)
-      {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-      }
-    }
-
-    private void tbAmbiBoxLEDCount_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-    {
-      int minValue = 1;
-      int maxValue = 300;
-      if (validatorInt(tbAmbiBoxLEDCount.Text, minValue, maxValue, true) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
