@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	...
+	<string name="AtmoLight.Example">Example</string>
+	<string name="AtmoLight.ExampleTarget">Use Example</string>
+	<string name="AtmoLight.ExampleIP">IP address</string>
+	<string name="AtmoLight.ExamplePort">Port number</string>
+	...
+</resources>

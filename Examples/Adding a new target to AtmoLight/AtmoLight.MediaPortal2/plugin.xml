@@ -1,0 +1,50 @@
+<Plugin
+	.../>
+	
+...
+
+<!-- Sections -->
+<Register Location="/Configuration/Settings/Plugins/AtmoLight">
+	<ConfigSection
+		.../>
+	<ConfigSection
+		.../>
+    <ConfigSection
+        Id="Example"
+        Sort="250"
+        Text="[AtmoLight.Example]"/>
+	<ConfigSection
+		.../>		
+</Register>
+
+...
+
+<!-- General -->
+<Register Location="/Configuration/Settings/Plugins/AtmoLight/General">
+	<ConfigSetting
+		.../>
+	<ConfigSetting
+		.../>
+    <ConfigSetting
+        Id="ExampleTarget"
+        Text="[AtmoLight.ExampleTarget]"
+        ClassName="AtmoLight.Configuration.ExampleTarget"/>
+	<ConfigSetting
+		.../>
+</Register>		
+
+...
+
+<!-- Example -->
+<Register Location="/Configuration/Settings/Plugins/AtmoLight/Example">
+    <ConfigSetting
+        Id="ExampleIP"
+        Text="[AtmoLight.ExampleIP]"
+        ClassName="AtmoLight.Configuration.ExampleIP"/>
+    <ConfigSetting
+        Id="ExamplePort"
+        Text="[AtmoLight.ExamplePort]"
+        ClassName="AtmoLight.Configuration.ExamplePort"/>
+</Register>
+
+...

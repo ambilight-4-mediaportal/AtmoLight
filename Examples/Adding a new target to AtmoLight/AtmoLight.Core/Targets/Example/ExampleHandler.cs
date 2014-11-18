@@ -32,43 +32,53 @@ namespace AtmoLight
 	
 		public void Initialise(bool force = false)
 		{
-		// Initialise your target
+			// Initialise your target
+			// Best practice is to start a new thread which will try to connect to your software
+			// Make sure this thread cant be called more than once at the same time.
 		}
 		
 		public void ReInitialise(bool force = false)
 		{
-		// Reinitialise your target
+			// Reinitialise your target
+			// In general this looks like this:
+			/*
+			if (coreObject.reInitOnError || force)
+			{
+				Initialise(force);
+			}
+			*/
+			// Make sure ReInitialise can only happen if the user allows it or if force==true (when user chooses to reconnect via context menu)
 		}
 		
 		public void Dispose()
 		{
-		// Close connections, applications (if needed), ...
+			// Close connections, applications (if needed), ...
 		}
 		
 		public bool IsConnected()
 		{
-		// Return if you are connected to your target
+			// Return if you are connected to your target
 		}
 		
 		public bool ChangeEffect(ContentEffect effect)
 		{
-		// Change the effect on your target
+			// Change the effect on your target
 		}
 		
 		public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
 		{
-		// Send a new picture/color infos to your target (MediaPortal Liveview Mode)
+			// Send a new picture/color infos to your target (MediaPortal Liveview Mode)
 		}
 		
 		public void ChangeProfile()
 		{
-		// Change the profile of your target
+			// Change the profile of your target
 		}
 		
 		public void PowerModeChanged(PowerModes powerMode)
 		{
-		// Reconnect on resume if needed
-		// ChangeEffect to Core.currentEffect
+			// Reconnect on resume if needed
+			// ChangeEffect to Core.currentEffect
 		}
 	}
 }
