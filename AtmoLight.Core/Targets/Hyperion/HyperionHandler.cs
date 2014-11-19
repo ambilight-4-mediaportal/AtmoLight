@@ -62,6 +62,7 @@ namespace AtmoLight.Targets
         {
           Log.Debug("HyperionHandler - Initialising");
           hyperionReconnectCounter = 0;
+          initLock = true;
           isInit = true;
 
           if (coreObject.hyperionLiveReconnect)
@@ -120,26 +121,12 @@ namespace AtmoLight.Targets
 
     private void Connect()
     {
-      if (initLock)
-      {
-        Log.Debug("HyperionHandler - Initialising locked.");
-        return;
-      }
-
-      initLock = true;
       Thread t = new Thread(ConnectThread);
       t.IsBackground = true;
       t.Start();
     }
     private void liveReconnect()
     {
-      if (initLock)
-      {
-        Log.Debug("HyperionHandler - Initialising locked.");
-        return;
-      }
-
-      initLock = true;
       Thread t = new Thread(liveReconnectThread);
       t.IsBackground = true;
       t.Start();
@@ -395,11 +382,7 @@ namespace AtmoLight.Targets
         Log.Error("HyperionHandler - Error while sending proto request");
         Log.Error("HyperionHandler - Exception: {0}", e.Message);
 
-        //Try to Reinitialise if needed
-        if (!initLock)
-        {
-          ReInitialise(false);
-        }
+        ReInitialise(false);
       }
     }
 
@@ -421,11 +404,7 @@ namespace AtmoLight.Targets
         Log.Error("HyperionHandler - Error while receiving reply from proto request");
         Log.Error("HyperionHandler - Exception: {0}", e.Message);
 
-        //Try to Reinitialise if needed
-        if (!initLock)
-        {
-          ReInitialise(false);
-        }
+        ReInitialise(false);
         return null;
       }
     }

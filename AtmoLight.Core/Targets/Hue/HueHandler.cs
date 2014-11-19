@@ -85,6 +85,7 @@ namespace AtmoLight.Targets
         //Set Init lock
         initLock = true;
         isInit = true;
+        hueReconnectCounter = 0;
         Thread t = new Thread(() => InitialiseThread(force));
         t.IsBackground = true;
         t.Start();
@@ -549,7 +550,7 @@ namespace AtmoLight.Targets
           Disconnect();
 
           //Reconnect to AtmoHue after standby
-          Log.Debug("HueHandler - Reconnecting after standby");
+          Log.Debug("HueHandler - Initialising after standby");
 
           if (coreObject.hueBridgeEnableOnResume)
           {
