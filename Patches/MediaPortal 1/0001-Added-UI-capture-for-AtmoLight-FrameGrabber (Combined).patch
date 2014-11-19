@@ -1,0 +1,85 @@
+From 23d9c20595d3f10c5849a605d128521662d4a498 Mon Sep 17 00:00:00 2001
+From: Lightning303 <Lightning303@gmail.com>
+Date: Wed, 30 Apr 2014 23:16:58 +0200
+Subject: [PATCH] Added UI capture for AtmoLight/FrameGrabber
+
+---
+ mediaportal/Core/Player/FrameGrabber.cs            | 13 ++++++++++++
+ mediaportal/MediaPortal.Application/MediaPortal.cs | 23 ++++++++++++++++++++++
+ 2 files changed, 36 insertions(+)
+
+diff --git a/mediaportal/Core/Player/FrameGrabber.cs b/mediaportal/Core/Player/FrameGrabber.cs
+index c45de1a..19e8408 100644
+--- a/mediaportal/Core/Player/FrameGrabber.cs
++++ b/mediaportal/Core/Player/FrameGrabber.cs
+@@ -192,5 +192,18 @@ namespace MediaPortal
+         Log.Error(e.ToString());
+       }
+     }
++
++    /// <summary>
++    /// Method to tell if anything is subscribed to the FrameGrabber event.
++    /// </summary>
++    /// <returns></returns>
++    public bool HasSubscribers()
++    {
++      if (OnNewFrame == null)
++      {
++        return false;
++      }
++      return true;
++    }
+   }
+ }
+\ No newline at end of file
+diff --git a/mediaportal/MediaPortal.Application/MediaPortal.cs b/mediaportal/MediaPortal.Application/MediaPortal.cs
+index f113863..dd0fab1 100644
+--- a/mediaportal/MediaPortal.Application/MediaPortal.cs
++++ b/mediaportal/MediaPortal.Application/MediaPortal.cs
+@@ -194,6 +194,9 @@ public class MediaPortalApp : D3D, IRender
+ 
+   private ShellNotifications Notifications = new ShellNotifications();
+ 
++  // Framegrabber instance
++  private FrameGrabber grabber = FrameGrabber.GetInstance();
++
+   #endregion
+ 
+   #region enumns
+@@ -3150,6 +3153,17 @@ public class MediaPortalApp : D3D, IRender
+               GUIGraphicsContext.Render3DMode == GUIGraphicsContext.eRender3DMode.SideBySideTo2D ||
+               GUIGraphicsContext.Render3DMode == GUIGraphicsContext.eRender3DMode.TopAndBottomTo2D)
+           {
++            // Call FrameGrabber with UI Surface
++            if (grabber.HasSubscribers())
++            {
++              Surface frameGrabberSurface = GUIGraphicsContext.DX9Device.GetBackBuffer(0, 0, BackBufferType.Mono);
++              unsafe
++              {
++                grabber.OnFrame((Int16)frameGrabberSurface.Description.Width, (Int16)frameGrabberSurface.Description.Height, 0, 0, (uint)frameGrabberSurface.UnmanagedComPointer);
++              }
++              frameGrabberSurface.Dispose();
++            }
++
+             // clear the surface
+             GUIGraphicsContext.DX9Device.Clear(ClearFlags.Target, Color.Black, 1.0f, 0);
+             GUIGraphicsContext.DX9Device.BeginScene();
+@@ -3183,6 +3197,15 @@ public class MediaPortalApp : D3D, IRender
+ 
+             Surface backbuffer = GUIGraphicsContext.DX9Device.GetBackBuffer(0, 0, BackBufferType.Mono);
+ 
++            // Call FrameGrabber with UI Surface
++            if (grabber.HasSubscribers())
++            {
++              unsafe
++              {
++                grabber.OnFrame((Int16)backbuffer.Description.Width, (Int16)backbuffer.Description.Height, 0, 0, (uint)backbuffer.UnmanagedComPointer);
++              }
++            }
++
+             // create texture/surface for preparation for 3D output if they don't exist
+ 
+             Texture auto3DTexture = new Texture(GUIGraphicsContext.DX9Device,
+-- 
+1.9.0.msysgit.0
+
