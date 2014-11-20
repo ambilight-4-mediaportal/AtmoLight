@@ -119,6 +119,14 @@ namespace AtmoLight
       tbAmbiBoxReconnectDelay.Text = Settings.ambiBoxReconnectDelay.ToString();
       tbAmbiBoxMediaPortalProfile.Text = Settings.ambiBoxMediaPortalProfile;
       tbAmbiBoxExternalProfile.Text = Settings.ambiBoxExternalProfile;
+
+      // Temp disable for AmbiBox
+      tabMenu.TabPages.Remove(tabPageAmbiBox);
+      ckAmbiBoxEnabled.Visible = false;
+      ckHyperionEnabled.Location = ckHueEnabled.Location;
+      ckHueEnabled.Location = ckBoblightEnabled.Location;
+      ckBoblightEnabled.Location = ckAtmowinEnabled.Location;
+      ckAtmowinEnabled.Location = ckAmbiBoxEnabled.Location;
     }
 
     private void UpdateLanguageOnControls()
