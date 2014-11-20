@@ -987,7 +987,7 @@
       this.lblHintCaptureDimensions.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.lblHintCaptureDimensions.Location = new System.Drawing.Point(195, 25);
       this.lblHintCaptureDimensions.Name = "lblHintCaptureDimensions";
-      this.lblHintCaptureDimensions.Size = new System.Drawing.Size(248, 54);
+      this.lblHintCaptureDimensions.Size = new System.Drawing.Size(248, 38);
       this.lblHintCaptureDimensions.TabIndex = 32;
       this.lblHintCaptureDimensions.Text = "Hint: Only used when Atmowin is disabled";
       // 
