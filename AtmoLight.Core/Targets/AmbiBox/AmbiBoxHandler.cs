@@ -191,6 +191,10 @@ namespace AtmoLight
         Disconnect();
         Initialise();
       }
+      else if (powerMode == PowerModes.Suspend)
+      {
+        ChangeEffect(ContentEffect.LEDsDisabled);
+      }
     }
     #endregion
 

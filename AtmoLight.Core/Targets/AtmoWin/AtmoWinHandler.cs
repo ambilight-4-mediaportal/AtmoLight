@@ -244,6 +244,10 @@ namespace AtmoLight
       {
         ChangeEffect(coreObject.GetCurrentEffect());
       }
+      else if (powerMode == PowerModes.Suspend)
+      {
+        ChangeEffect(ContentEffect.LEDsDisabled);
+      }
     }
     #endregion
 
