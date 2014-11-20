@@ -55,7 +55,7 @@ namespace AtmoLight
     // Delay Feature
     private int delayTimeHelper; // Helper var for delay time change
 
-    public Core AtmoLightObject;
+    public Core coreObject;
     #endregion
 
     #region Plugin Ctor/Start/Stop
@@ -108,104 +108,104 @@ namespace AtmoLight
       staticColorTemp[2] = Settings.staticColorBlue;
 
       Log.Debug("Generating new AtmoLight.Core instance.");
-      AtmoLightObject = Core.GetInstance();
+      coreObject = Core.GetInstance();
 
       // AmbiBox
       if (Settings.ambiBoxTarget)
       {
-        AtmoLightObject.AddTarget(Target.AmbiBox);
+        coreObject.AddTarget(Target.AmbiBox);
       }
-      AtmoLightObject.ambiBoxIP = Settings.ambiBoxIP;
-      AtmoLightObject.ambiBoxPort = Settings.ambiBoxPort;
-      AtmoLightObject.ambiBoxMaxReconnectAttempts = Settings.ambiBoxMaxReconnectAttempts;
-      AtmoLightObject.ambiBoxReconnectDelay = Settings.ambiBoxReconnectDelay;
-      AtmoLightObject.ambiBoxMediaPortalProfile = Settings.ambiBoxMediaPortalProfile;
-      AtmoLightObject.ambiBoxExternalProfile = Settings.ambiBoxExternalProfile;
-      AtmoLightObject.ambiBoxPath = Settings.ambiBoxPath;
-      AtmoLightObject.ambiBoxAutoStart = Settings.ambiBoxAutoStart;
-      AtmoLightObject.ambiBoxAutoStop = Settings.ambiBoxAutoStop;
+      coreObject.ambiBoxIP = Settings.ambiBoxIP;
+      coreObject.ambiBoxPort = Settings.ambiBoxPort;
+      coreObject.ambiBoxMaxReconnectAttempts = Settings.ambiBoxMaxReconnectAttempts;
+      coreObject.ambiBoxReconnectDelay = Settings.ambiBoxReconnectDelay;
+      coreObject.ambiBoxMediaPortalProfile = Settings.ambiBoxMediaPortalProfile;
+      coreObject.ambiBoxExternalProfile = Settings.ambiBoxExternalProfile;
+      coreObject.ambiBoxPath = Settings.ambiBoxPath;
+      coreObject.ambiBoxAutoStart = Settings.ambiBoxAutoStart;
+      coreObject.ambiBoxAutoStop = Settings.ambiBoxAutoStop;
 
       // AtmoWin
       if (Settings.atmoWinTarget)
       {
-        AtmoLightObject.AddTarget(Target.AtmoWin);
+        coreObject.AddTarget(Target.AtmoWin);
       }
-      AtmoLightObject.atmoWinPath = Settings.atmowinExe;
-      AtmoLightObject.atmoWinAutoStart = Settings.startAtmoWin;
-      AtmoLightObject.atmoWinAutoStop = Settings.exitAtmoWin;
+      coreObject.atmoWinPath = Settings.atmowinExe;
+      coreObject.atmoWinAutoStart = Settings.startAtmoWin;
+      coreObject.atmoWinAutoStop = Settings.exitAtmoWin;
 
       // Boblight
       if (Settings.boblightTarget)
       {
-        AtmoLightObject.AddTarget(Target.Boblight);
+        coreObject.AddTarget(Target.Boblight);
       }
-      AtmoLightObject.boblightIP = Settings.boblightIP;
-      AtmoLightObject.boblightPort = Settings.boblightPort;
-      AtmoLightObject.boblightMaxFPS = Settings.boblightMaxFPS;
-      AtmoLightObject.boblightMaxReconnectAttempts = Settings.boblightMaxReconnectAttempts;
-      AtmoLightObject.boblightReconnectDelay = Settings.boblightReconnectDelay;
-      AtmoLightObject.boblightSpeed = Settings.boblightSpeed;
-      AtmoLightObject.boblightAutospeed = Settings.boblightAutospeed;
-      AtmoLightObject.boblightInterpolation = Settings.boblightInterpolation;
-      AtmoLightObject.boblightSaturation = Settings.boblightSaturation;
-      AtmoLightObject.boblightValue = Settings.boblightValue;
-      AtmoLightObject.boblightThreshold = Settings.boblightThreshold;
-      AtmoLightObject.boblightGamma = Settings.boblightGamma;
+      coreObject.boblightIP = Settings.boblightIP;
+      coreObject.boblightPort = Settings.boblightPort;
+      coreObject.boblightMaxFPS = Settings.boblightMaxFPS;
+      coreObject.boblightMaxReconnectAttempts = Settings.boblightMaxReconnectAttempts;
+      coreObject.boblightReconnectDelay = Settings.boblightReconnectDelay;
+      coreObject.boblightSpeed = Settings.boblightSpeed;
+      coreObject.boblightAutospeed = Settings.boblightAutospeed;
+      coreObject.boblightInterpolation = Settings.boblightInterpolation;
+      coreObject.boblightSaturation = Settings.boblightSaturation;
+      coreObject.boblightValue = Settings.boblightValue;
+      coreObject.boblightThreshold = Settings.boblightThreshold;
+      coreObject.boblightGamma = Settings.boblightGamma;
 
       // Hyperion
       if (Settings.hyperionTarget)
       {
-        AtmoLightObject.AddTarget(Target.Hyperion);
+        coreObject.AddTarget(Target.Hyperion);
       }
-      AtmoLightObject.hyperionIP = Settings.hyperionIP;
-      AtmoLightObject.hyperionPort = Settings.hyperionPort;
-      AtmoLightObject.hyperionPriority = Settings.hyperionPriority;
-      AtmoLightObject.hyperionReconnectDelay = Settings.hyperionReconnectDelay;
-      AtmoLightObject.hyperionReconnectAttempts = Settings.hyperionReconnectAttempts;
-      AtmoLightObject.hyperionPriorityStaticColor = Settings.hyperionPriorityStaticColor;
-      AtmoLightObject.hyperionLiveReconnect = Settings.hyperionLiveReconnect;
+      coreObject.hyperionIP = Settings.hyperionIP;
+      coreObject.hyperionPort = Settings.hyperionPort;
+      coreObject.hyperionPriority = Settings.hyperionPriority;
+      coreObject.hyperionReconnectDelay = Settings.hyperionReconnectDelay;
+      coreObject.hyperionReconnectAttempts = Settings.hyperionReconnectAttempts;
+      coreObject.hyperionPriorityStaticColor = Settings.hyperionPriorityStaticColor;
+      coreObject.hyperionLiveReconnect = Settings.hyperionLiveReconnect;
 
       // Hue
       if (Settings.hueTarget)
       {
-        AtmoLightObject.AddTarget(Target.Hue);
+        coreObject.AddTarget(Target.Hue);
       }
-      AtmoLightObject.huePath = Settings.hueExe;
-      AtmoLightObject.hueStart = Settings.hueStart;
-      AtmoLightObject.hueIsRemoteMachine = Settings.hueIsRemoteMachine;
-      AtmoLightObject.hueIP = Settings.hueIP;
-      AtmoLightObject.huePort = Settings.huePort;
-      AtmoLightObject.hueReconnectDelay = Settings.hueReconnectDelay;
-      AtmoLightObject.hueReconnectAttempts = Settings.hueReconnectAttempts;
-      AtmoLightObject.hueMinimalColorDifference = Settings.hueMinimalColorDifference;
-      AtmoLightObject.hueBridgeEnableOnResume = Settings.hueBridgeEnableOnResume;
-      AtmoLightObject.hueBridgeDisableOnSuspend = Settings.hueBridgeDisableOnSuspend;
+      coreObject.huePath = Settings.hueExe;
+      coreObject.hueStart = Settings.hueStart;
+      coreObject.hueIsRemoteMachine = Settings.hueIsRemoteMachine;
+      coreObject.hueIP = Settings.hueIP;
+      coreObject.huePort = Settings.huePort;
+      coreObject.hueReconnectDelay = Settings.hueReconnectDelay;
+      coreObject.hueReconnectAttempts = Settings.hueReconnectAttempts;
+      coreObject.hueMinimalColorDifference = Settings.hueMinimalColorDifference;
+      coreObject.hueBridgeEnableOnResume = Settings.hueBridgeEnableOnResume;
+      coreObject.hueBridgeDisableOnSuspend = Settings.hueBridgeDisableOnSuspend;
       
       // General settings
-      AtmoLightObject.SetDelay(Settings.delayReferenceTime);
-      AtmoLightObject.SetGIFPath(Settings.gifFile);
-      AtmoLightObject.SetReInitOnError(Settings.restartOnError);
-      AtmoLightObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
-      AtmoLightObject.SetCaptureDimensions(Settings.captureWidth, Settings.captureHeight);
-      AtmoLightObject.blackbarDetection = Settings.blackbarDetection;
-      AtmoLightObject.blackbarDetectionTime = Settings.blackbarDetectionTime;
-      AtmoLightObject.blackbarDetectionThreshold = Settings.blackbarDetectionThreshold;
-      AtmoLightObject.powerModeChangedDelay = Settings.powerModeChangedDelay;
+      coreObject.SetDelay(Settings.delayReferenceTime);
+      coreObject.SetGIFPath(Settings.gifFile);
+      coreObject.SetReInitOnError(Settings.restartOnError);
+      coreObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
+      coreObject.SetCaptureDimensions(Settings.captureWidth, Settings.captureHeight);
+      coreObject.blackbarDetection = Settings.blackbarDetection;
+      coreObject.blackbarDetectionTime = Settings.blackbarDetectionTime;
+      coreObject.blackbarDetectionThreshold = Settings.blackbarDetectionThreshold;
+      coreObject.powerModeChangedDelay = Settings.powerModeChangedDelay;
 
       // Get the effects that are supported by at least one target
-      supportedEffects = AtmoLightObject.GetSupportedEffects();
+      supportedEffects = coreObject.GetSupportedEffects();
 
       menuEffect = Settings.effectMenu;
       if (CheckForStartRequirements())
       {
-        AtmoLightObject.SetInitialEffect(menuEffect);
+        coreObject.SetInitialEffect(menuEffect);
       }
       else
       {
-        AtmoLightObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+        coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
       }
 
-      if (!AtmoLightObject.Initialise())
+      if (!coreObject.Initialise())
       {
         Log.Error("Initialising failed.");
         return;
@@ -226,9 +226,9 @@ namespace AtmoLight
 
       GUIWindowManager.OnNewAction -= new OnActionHandler(OnNewAction);
 
-      AtmoLightObject.ChangeEffect(Settings.effectMPExit);
+      coreObject.ChangeEffect(Settings.effectMPExit);
 
-      AtmoLightObject.Dispose();
+      coreObject.Dispose();
 
       Log.Debug("Plugin Stopped.");
 
@@ -285,9 +285,9 @@ namespace AtmoLight
     /// </summary>
     private void CalculateDelay()
     {
-      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
+      if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && coreObject.IsDelayEnabled())
       {
-        AtmoLightObject.SetDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
+        coreObject.SetDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
       }
     }
     #endregion
@@ -378,12 +378,12 @@ namespace AtmoLight
 
         if (CheckForStartRequirements())
         {
-          AtmoLightObject.ChangeEffect(playbackEffect);
+          coreObject.ChangeEffect(playbackEffect);
           CalculateDelay();
         }
         else
         {
-          AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
         }
       }
       catch (Exception ex)
@@ -400,7 +400,7 @@ namespace AtmoLight
     /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
     {
-        if (!AtmoLightObject.IsConnected())
+        if (!coreObject.IsConnected())
         {
             return;
         }
@@ -408,12 +408,12 @@ namespace AtmoLight
         {
             if (CheckForStartRequirements())
             {
-                AtmoLightObject.ChangeEffect(menuEffect);
+                coreObject.ChangeEffect(menuEffect);
                 CalculateDelay();
             }
             else
             {
-                AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+                coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
             }
         }
         catch (Exception ex)
@@ -431,7 +431,7 @@ namespace AtmoLight
     /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackStopped(g_Player.MediaType type, int stoptime, string filename)
     {
-      if (!AtmoLightObject.IsConnected())
+      if (!coreObject.IsConnected())
       {
         return;
       }
@@ -439,12 +439,12 @@ namespace AtmoLight
       {
         if (CheckForStartRequirements())
         {
-          AtmoLightObject.ChangeEffect(menuEffect);
+          coreObject.ChangeEffect(menuEffect);
           CalculateDelay();
         }
         else
         {
-          AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
         }
       }
       catch (Exception ex)
@@ -465,7 +465,7 @@ namespace AtmoLight
     /// <param name="pSurface">Surface.</param>
     private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
     {
-      if (AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || width == 0 || height == 0)
+      if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() || !coreObject.IsAtmoLightOn() || width == 0 || height == 0)
       {
         return;
       }
@@ -486,7 +486,7 @@ namespace AtmoLight
 
       if (rgbSurface == null)
       {
-        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight(), Format.A8R8G8B8,
+        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight(), Format.A8R8G8B8,
           MultiSampleType.None, 0, true);
       }
       unsafe
@@ -496,17 +496,17 @@ namespace AtmoLight
           if (Settings.sbs3dOn)
           {
             VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
+              coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
           }
           else
           {
             VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
+              coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
           }
 
           Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
 
-          AtmoLightObject.CalculateBitmap(stream);
+          coreObject.CalculateBitmap(stream);
 
           stream.Close();
           stream.Dispose();
@@ -536,11 +536,11 @@ namespace AtmoLight
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.menuButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.menuButton == 3))
       {
-        if (!AtmoLightObject.IsConnected())
+        if (!coreObject.IsConnected())
         {
           if (DialogYesNo(LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2))
           {
-            AtmoLightObject.ReInitialise();
+            coreObject.ReInitialise();
           }
         }
         else
@@ -550,7 +550,7 @@ namespace AtmoLight
       }
 
       // No connection
-      if (!AtmoLightObject.IsConnected())
+      if (!coreObject.IsConnected())
       {
         return;
       }
@@ -561,22 +561,22 @@ namespace AtmoLight
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.killButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.killButton == 3))
       {
-        if (!AtmoLightObject.IsAtmoLightOn())
+        if (!coreObject.IsAtmoLightOn())
         {
           if (g_Player.Playing)
           {
-            AtmoLightObject.ChangeEffect(playbackEffect);
+            coreObject.ChangeEffect(playbackEffect);
             CalculateDelay();
           }
           else
           {
-            AtmoLightObject.ChangeEffect(menuEffect);
+            coreObject.ChangeEffect(menuEffect);
             CalculateDelay();
           }
         }
         else
         {
-          AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
         }
       }
 
@@ -586,7 +586,7 @@ namespace AtmoLight
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.profileButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.profileButton == 3))
       {
-        AtmoLightObject.ChangeProfile();
+        coreObject.ChangeProfile();
       }
     }
     #endregion
@@ -651,7 +651,7 @@ namespace AtmoLight
       dlg.SetHeading("AtmoLight");
 
       // Toggle On/Off
-      if (!AtmoLightObject.IsAtmoLightOn())
+      if (!coreObject.IsAtmoLightOn())
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchLEDsON));
       }
@@ -687,13 +687,13 @@ namespace AtmoLight
       }
 
       // Delay
-      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
         // Toggle Delay and Change Delay
-        if (AtmoLightObject.IsDelayEnabled())
+        if (coreObject.IsDelayEnabled())
         {
           dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_DelayOFF));
-          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + AtmoLightObject.GetDelayTime() + "ms)"));
+          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + coreObject.GetDelayTime() + "ms)"));
         }
         else
         {
@@ -702,13 +702,13 @@ namespace AtmoLight
       }
 
       // Change Static Color
-      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
+      if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeStatic));
       }
 
       // ReInit
-      if (!AtmoLightObject.AreAllConnected())
+      if (!coreObject.AreAllConnected())
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ReInitialise));
       }
@@ -720,22 +720,22 @@ namespace AtmoLight
       // Toggle LEDs
       if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchLEDsON || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchLEDsOFF)
       {
-        if (!AtmoLightObject.IsAtmoLightOn())
+        if (!coreObject.IsAtmoLightOn())
         {
           if (g_Player.Playing)
           {
-            AtmoLightObject.ChangeEffect(playbackEffect);
+            coreObject.ChangeEffect(playbackEffect);
             CalculateDelay();
           }
           else
           {
-            AtmoLightObject.ChangeEffect(menuEffect);
+            coreObject.ChangeEffect(menuEffect);
             CalculateDelay();
           }
         }
         else
         {
-          AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
         }
       }
       // Change Effect
@@ -778,14 +778,14 @@ namespace AtmoLight
           {
             menuEffect = temp;
           }
-          AtmoLightObject.ChangeEffect(temp);
+          coreObject.ChangeEffect(temp);
           CalculateDelay();
         }
       }
       // Change Profile
       else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeAWProfile)
       {
-        AtmoLightObject.ChangeProfile();
+        coreObject.ChangeProfile();
       }
       // Toggle 3D
       else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_Switch3DOFF || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_Switch3DON)
@@ -808,34 +808,34 @@ namespace AtmoLight
         {
           Log.Info("Switching blackbar detection off.");
           Settings.blackbarDetection = false;
-          AtmoLightObject.blackbarDetection = false;
+          coreObject.blackbarDetection = false;
         }
         else
         {
           Log.Info("Switching blackbar detection on.");
           Settings.blackbarDetection = true;
-          AtmoLightObject.blackbarDetection = true;
+          coreObject.blackbarDetection = true;
         }
       }
       // Toggle Delay
       else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_DelayOFF || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_DelayON)
       {
-        if (AtmoLightObject.IsDelayEnabled())
+        if (coreObject.IsDelayEnabled())
         {
           Log.Info("Switching LED delay off.");
-          AtmoLightObject.DisableDelay();
+          coreObject.DisableDelay();
         }
         else
         {
-          AtmoLightObject.EnableDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
+          coreObject.EnableDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
         }
       }
       // Change Delay
-      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + AtmoLightObject.GetDelayTime() + "ms)")
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + coreObject.GetDelayTime() + "ms)")
       {
         if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) && (delayTimeHelper <= 1000))
         {
-          AtmoLightObject.SetDelay(delayTimeHelper);
+          coreObject.SetDelay(delayTimeHelper);
           Settings.delayReferenceTime = (int)(((float)delayTimeHelper * (float)GetRefreshRate()) / Settings.delayReferenceRefreshRate);
         }
         else
@@ -870,43 +870,43 @@ namespace AtmoLight
             DialogRGBManualStaticColorChanger();
             break;
           case 1:
-            Settings.SaveSpecificSetting("StaticColorRed", AtmoLightObject.GetStaticColor()[0].ToString());
-            Settings.staticColorRed = AtmoLightObject.GetStaticColor()[0];
-            Settings.SaveSpecificSetting("StaticColorGreen", AtmoLightObject.GetStaticColor()[1].ToString());
-            Settings.staticColorGreen = AtmoLightObject.GetStaticColor()[1];
-            Settings.SaveSpecificSetting("StaticColorBlue", AtmoLightObject.GetStaticColor()[2].ToString());
-            Settings.staticColorBlue = AtmoLightObject.GetStaticColor()[2];
+            Settings.SaveSpecificSetting("StaticColorRed", coreObject.GetStaticColor()[0].ToString());
+            Settings.staticColorRed = coreObject.GetStaticColor()[0];
+            Settings.SaveSpecificSetting("StaticColorGreen", coreObject.GetStaticColor()[1].ToString());
+            Settings.staticColorGreen = coreObject.GetStaticColor()[1];
+            Settings.SaveSpecificSetting("StaticColorBlue", coreObject.GetStaticColor()[2].ToString());
+            Settings.staticColorBlue = coreObject.GetStaticColor()[2];
             break;
           case 2:
-            AtmoLightObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
+            coreObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
             break;
           case 3:
-            AtmoLightObject.SetStaticColor(255, 255, 255);
+            coreObject.SetStaticColor(255, 255, 255);
             break;
           case 4:
-            AtmoLightObject.SetStaticColor(255, 0, 0);
+            coreObject.SetStaticColor(255, 0, 0);
             break;
           case 5:
-            AtmoLightObject.SetStaticColor(0, 255, 0);
+            coreObject.SetStaticColor(0, 255, 0);
             break;
           case 6:
-            AtmoLightObject.SetStaticColor(0, 0, 255);
+            coreObject.SetStaticColor(0, 0, 255);
             break;
           case 7:
-            AtmoLightObject.SetStaticColor(0, 255, 255);
+            coreObject.SetStaticColor(0, 255, 255);
             break;
           case 8:
-            AtmoLightObject.SetStaticColor(255, 0, 255);
+            coreObject.SetStaticColor(255, 0, 255);
             break;
           case 9:
-            AtmoLightObject.SetStaticColor(255, 255, 0);
+            coreObject.SetStaticColor(255, 255, 0);
             break;
         }
-        AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
+        coreObject.ChangeEffect(ContentEffect.StaticColor, true);
       }
       else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ReInitialise)
       {
-        AtmoLightObject.ReInitialise();
+        coreObject.ReInitialise();
       }
     }
 
@@ -980,7 +980,7 @@ namespace AtmoLight
           }
           else
           {
-            AtmoLightObject.SetStaticColor(staticColorTemp[0], staticColorTemp[1], staticColorTemp[2]);
+            coreObject.SetStaticColor(staticColorTemp[0], staticColorTemp[1], staticColorTemp[2]);
             return;
           }
         case 4:
@@ -998,15 +998,15 @@ namespace AtmoLight
       {
         if (CheckForStartRequirements())
         {
-          AtmoLightObject.SetInitialEffect(menuEffect);
+          coreObject.SetInitialEffect(menuEffect);
         }
         else
         {
-          AtmoLightObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+          coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
         }
       }
 
-      Task.Factory.StartNew(() => { AtmoLightObject.PowerModeChanged(powerMode.Mode); });
+      Task.Factory.StartNew(() => { coreObject.PowerModeChanged(powerMode.Mode); });
     }
     #endregion
 

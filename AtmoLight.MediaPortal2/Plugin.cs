@@ -29,7 +29,7 @@ namespace AtmoLight
   {
     #region Fields
     protected AsynchronousMessageQueue messageQueue;
-    private Core AtmoLightObject;
+    private Core coreObject;
 
     // Settings
     private AtmoLight.Settings settings;
@@ -103,100 +103,100 @@ namespace AtmoLight
 
       // AtmoLight object creation
       Log.Debug("Generating new AtmoLight.Core instance.");
-      AtmoLightObject = Core.GetInstance();
+      coreObject = Core.GetInstance();
 
       // AmbiBox
       if (settings.AmbiBoxTarget)
       {
-        AtmoLightObject.AddTarget(Target.AmbiBox);
+        coreObject.AddTarget(Target.AmbiBox);
       }
-      AtmoLightObject.ambiBoxAutoStart = settings.AmbiBoxAutoStart;
-      AtmoLightObject.ambiBoxAutoStop = settings.AmbiBoxAutoStop;
-      AtmoLightObject.ambiBoxExternalProfile = settings.AmbiBoxExternalProfile;
-      AtmoLightObject.ambiBoxIP = settings.AmbiBoxIP;
-      AtmoLightObject.ambiBoxMaxReconnectAttempts = settings.AmbiBoxMaxReconnectAttempts;
-      AtmoLightObject.ambiBoxMediaPortalProfile = settings.AmbiBoxMediaPortalProfile;
-      AtmoLightObject.ambiBoxPath = settings.AmbiBoxPath;
-      AtmoLightObject.ambiBoxPort = settings.AmbiBoxPort;
-      AtmoLightObject.ambiBoxReconnectDelay = settings.AmbiBoxReconnectDelay;
+      coreObject.ambiBoxAutoStart = settings.AmbiBoxAutoStart;
+      coreObject.ambiBoxAutoStop = settings.AmbiBoxAutoStop;
+      coreObject.ambiBoxExternalProfile = settings.AmbiBoxExternalProfile;
+      coreObject.ambiBoxIP = settings.AmbiBoxIP;
+      coreObject.ambiBoxMaxReconnectAttempts = settings.AmbiBoxMaxReconnectAttempts;
+      coreObject.ambiBoxMediaPortalProfile = settings.AmbiBoxMediaPortalProfile;
+      coreObject.ambiBoxPath = settings.AmbiBoxPath;
+      coreObject.ambiBoxPort = settings.AmbiBoxPort;
+      coreObject.ambiBoxReconnectDelay = settings.AmbiBoxReconnectDelay;
 
       // AtmoWin
       if (settings.AtmoWinTarget)
       {
-        AtmoLightObject.AddTarget(Target.AtmoWin);
+        coreObject.AddTarget(Target.AtmoWin);
       }
-      AtmoLightObject.atmoWinPath = settings.AtmoWinExe;
-      AtmoLightObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
-      AtmoLightObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
+      coreObject.atmoWinPath = settings.AtmoWinExe;
+      coreObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
+      coreObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
 
       // Boblight
       if (settings.BoblightTarget)
       {
-        AtmoLightObject.AddTarget(Target.Boblight);
+        coreObject.AddTarget(Target.Boblight);
       }
-      AtmoLightObject.boblightIP = settings.BoblightIP;
-      AtmoLightObject.boblightPort = settings.BoblightPort;
-      AtmoLightObject.boblightMaxFPS = settings.BoblightMaxFPS;
-      AtmoLightObject.boblightMaxReconnectAttempts = settings.BoblightMaxReconnectAttempts;
-      AtmoLightObject.boblightReconnectDelay = settings.BoblightReconnectDelay;
-      AtmoLightObject.boblightSpeed = settings.BoblightSpeed;
-      AtmoLightObject.boblightAutospeed = settings.BoblightAutospeed;
-      AtmoLightObject.boblightInterpolation = settings.BoblightInterpolation;
-      AtmoLightObject.boblightSaturation = settings.BoblightSaturation;
-      AtmoLightObject.boblightValue = settings.BoblightValue;
-      AtmoLightObject.boblightThreshold = settings.BoblightThreshold;
-      AtmoLightObject.boblightGamma = settings.BoblightGamma;
+      coreObject.boblightIP = settings.BoblightIP;
+      coreObject.boblightPort = settings.BoblightPort;
+      coreObject.boblightMaxFPS = settings.BoblightMaxFPS;
+      coreObject.boblightMaxReconnectAttempts = settings.BoblightMaxReconnectAttempts;
+      coreObject.boblightReconnectDelay = settings.BoblightReconnectDelay;
+      coreObject.boblightSpeed = settings.BoblightSpeed;
+      coreObject.boblightAutospeed = settings.BoblightAutospeed;
+      coreObject.boblightInterpolation = settings.BoblightInterpolation;
+      coreObject.boblightSaturation = settings.BoblightSaturation;
+      coreObject.boblightValue = settings.BoblightValue;
+      coreObject.boblightThreshold = settings.BoblightThreshold;
+      coreObject.boblightGamma = settings.BoblightGamma;
 
       // Hyperion
       if (settings.HyperionTarget)
       {
-        AtmoLightObject.AddTarget(Target.Hyperion);
+        coreObject.AddTarget(Target.Hyperion);
       }
-      AtmoLightObject.hyperionIP = settings.HyperionIP;
-      AtmoLightObject.hyperionPort = settings.HyperionPort;
-      AtmoLightObject.hyperionPriority = settings.HyperionPriority;
-      AtmoLightObject.hyperionReconnectDelay = settings.HyperionReconnectDelay;
-      AtmoLightObject.hyperionReconnectAttempts = settings.HyperionReconnectAttempts;
-      AtmoLightObject.hyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
-      AtmoLightObject.hyperionLiveReconnect = settings.HyperionLiveReconnect;
+      coreObject.hyperionIP = settings.HyperionIP;
+      coreObject.hyperionPort = settings.HyperionPort;
+      coreObject.hyperionPriority = settings.HyperionPriority;
+      coreObject.hyperionReconnectDelay = settings.HyperionReconnectDelay;
+      coreObject.hyperionReconnectAttempts = settings.HyperionReconnectAttempts;
+      coreObject.hyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
+      coreObject.hyperionLiveReconnect = settings.HyperionLiveReconnect;
 
       //Hue
       if (settings.HueTarget)
       {
-        AtmoLightObject.AddTarget(Target.Hue);
+        coreObject.AddTarget(Target.Hue);
       }
-      AtmoLightObject.huePath = settings.hueExe;
-      AtmoLightObject.hueStart = settings.hueStart;
-      AtmoLightObject.hueIsRemoteMachine = settings.hueIsRemoteMachine;
-      AtmoLightObject.hueIP = settings.HueIP;
-      AtmoLightObject.huePort = settings.HuePort;
-      AtmoLightObject.hueReconnectDelay = settings.HueReconnectDelay;
-      AtmoLightObject.hueReconnectAttempts = settings.HueReconnectAttempts;
-      AtmoLightObject.hueMinimalColorDifference = settings.HueMinimalColorDifference;
-      AtmoLightObject.hueBridgeEnableOnResume = settings.HueBridgeEnableOnResume;
-      AtmoLightObject.hueBridgeDisableOnSuspend = settings.HueBridgeDisableOnSuspend;
+      coreObject.huePath = settings.hueExe;
+      coreObject.hueStart = settings.hueStart;
+      coreObject.hueIsRemoteMachine = settings.hueIsRemoteMachine;
+      coreObject.hueIP = settings.HueIP;
+      coreObject.huePort = settings.HuePort;
+      coreObject.hueReconnectDelay = settings.HueReconnectDelay;
+      coreObject.hueReconnectAttempts = settings.HueReconnectAttempts;
+      coreObject.hueMinimalColorDifference = settings.HueMinimalColorDifference;
+      coreObject.hueBridgeEnableOnResume = settings.HueBridgeEnableOnResume;
+      coreObject.hueBridgeDisableOnSuspend = settings.HueBridgeDisableOnSuspend;
 
       // General settings
-      AtmoLightObject.SetDelay(settings.DelayTime);
-      AtmoLightObject.SetGIFPath(settings.GIFFile);
-      AtmoLightObject.SetReInitOnError(settings.RestartAtmoWinOnError);
-      AtmoLightObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, settings.StaticColorBlue);
-      AtmoLightObject.SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
-      AtmoLightObject.blackbarDetection = settings.BlackbarDetection;
-      AtmoLightObject.blackbarDetectionTime = settings.BlackbarDetectionTime;
-      AtmoLightObject.blackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
-      AtmoLightObject.powerModeChangedDelay = settings.PowerModeChangedDelay;
+      coreObject.SetDelay(settings.DelayTime);
+      coreObject.SetGIFPath(settings.GIFFile);
+      coreObject.SetReInitOnError(settings.RestartAtmoWinOnError);
+      coreObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, settings.StaticColorBlue);
+      coreObject.SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
+      coreObject.blackbarDetection = settings.BlackbarDetection;
+      coreObject.blackbarDetectionTime = settings.BlackbarDetectionTime;
+      coreObject.blackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
+      coreObject.powerModeChangedDelay = settings.PowerModeChangedDelay;
 
       if (CheckForStartRequirements())
       {
-        AtmoLightObject.SetInitialEffect(settings.MenuEffect);
+        coreObject.SetInitialEffect(settings.MenuEffect);
       }
       else
       {
-        AtmoLightObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+        coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
       }
 
-      if (!AtmoLightObject.Initialise())
+      if (!coreObject.Initialise())
       {
         Log.Error("Initialising failed.");
         return;
@@ -228,9 +228,9 @@ namespace AtmoLight
       messageQueue.MessageReceived -= OnMessageReceived;
 
       // Dispose of the AtmoLight Core
-      AtmoLightObject.ChangeEffect(settings.MPExitEffect);
+      coreObject.ChangeEffect(settings.MPExitEffect);
 
-      AtmoLightObject.Dispose();
+      coreObject.Dispose();
 
       // Unregister Log Handler
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
@@ -275,10 +275,10 @@ namespace AtmoLight
     /// </summary>
     private void CalculateDelay()
     {
-      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
+      if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && coreObject.IsDelayEnabled())
       {
         int refreshRate = SkinContext.Direct3D.GetAdapterDisplayModeEx(0).RefreshRate;
-        AtmoLightObject.SetDelay((int)(((float)settings.DelayRefreshRate / (float)refreshRate) * (float)settings.DelayTime));
+        coreObject.SetDelay((int)(((float)settings.DelayRefreshRate / (float)refreshRate) * (float)settings.DelayTime));
       }
     }
     #endregion
@@ -323,12 +323,12 @@ namespace AtmoLight
           // Start the right effect.
           if (CheckForStartRequirements())
           {
-            AtmoLightObject.ChangeEffect(effect);
+            coreObject.ChangeEffect(effect);
             CalculateDelay();
           }
           else
           {
-            AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+            coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
           }
         }
         else if (messageType == PlayerManagerMessaging.MessageType.PlayerStopped || messageType == PlayerManagerMessaging.MessageType.PlayerEnded)
@@ -354,12 +354,12 @@ namespace AtmoLight
 
           if (CheckForStartRequirements())
           {
-            AtmoLightObject.ChangeEffect(effect);
+            coreObject.ChangeEffect(effect);
             CalculateDelay();
           }
           else
           {
-            AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+            coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
           }
 
         }
@@ -370,7 +370,7 @@ namespace AtmoLight
     #region UI Capture Event Handler
     public void UICapture(object sender, EventArgs args)
     {
-      if (!AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
+      if (!coreObject.IsConnected() || !coreObject.IsAtmoLightOn() || coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
       {
         return;
       }
@@ -389,12 +389,12 @@ namespace AtmoLight
         }
       }
 
-      Rectangle rectangleDestination = new Rectangle(0, 0, AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
+      Rectangle rectangleDestination = new Rectangle(0, 0, coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
       try
       {
         if (surfaceDestination == null)
         {
-          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device, AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight(), SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
+          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device, coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight(), SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
         }
 
         // Use the Player Surface if video is playing.
@@ -412,7 +412,7 @@ namespace AtmoLight
         surfaceSource.Device.StretchRectangle(surfaceSource, null, surfaceDestination, rectangleDestination, SharpDX.Direct3D9.TextureFilter.None);
         DataStream stream = SharpDX.Direct3D9.Surface.ToStream(surfaceDestination, SharpDX.Direct3D9.ImageFileFormat.Bmp);
 
-        AtmoLightObject.CalculateBitmap(stream);
+        coreObject.CalculateBitmap(stream);
 
         stream.Close();
         stream.Dispose();
@@ -518,11 +518,11 @@ namespace AtmoLight
 
     private void ToggleEffectOnOff()
     {
-      if (AtmoLightObject.IsConnected())
+      if (coreObject.IsConnected())
       {
-        if (AtmoLightObject.IsAtmoLightOn())
+        if (coreObject.IsAtmoLightOn())
         {
-          AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
         }
         else
         {
@@ -539,25 +539,25 @@ namespace AtmoLight
           {
             temp = settings.MenuEffect;
           }
-          AtmoLightObject.ChangeEffect(temp);
+          coreObject.ChangeEffect(temp);
           CalculateDelay();
         }
       }
       else
       {
-        AtmoLightObject.ReInitialise();
+        coreObject.ReInitialise();
       }
     }
 
     private void ChangeAtmoWinProfile()
     {
-      if (AtmoLightObject.IsConnected())
+      if (coreObject.IsConnected())
       {
-        AtmoLightObject.ChangeProfile();
+        coreObject.ChangeProfile();
       }
       else
       {
-        AtmoLightObject.ReInitialise();
+        coreObject.ReInitialise();
       }
     }
     #endregion
@@ -658,15 +658,15 @@ namespace AtmoLight
       {
         if (CheckForStartRequirements())
         {
-          AtmoLightObject.SetInitialEffect(settings.MenuEffect);
+          coreObject.SetInitialEffect(settings.MenuEffect);
         }
         else
         {
-          AtmoLightObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+          coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
         }
       }
 
-      Task.Factory.StartNew(() => { AtmoLightObject.PowerModeChanged(powerMode.Mode); });
+      Task.Factory.StartNew(() => { coreObject.PowerModeChanged(powerMode.Mode); });
     }
     #endregion
   }
