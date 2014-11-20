@@ -971,10 +971,16 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      settings.hueExe = _path;
+      settings.hueExe = _path + "AtmoHue.exe";
       SettingsManager.Save(settings);
 
-      Core.GetInstance().huePath = _path;
+      Core.GetInstance().huePath = settings.hueExe;
+      if (settings.HueTarget)
+      {
+        Core.GetInstance().RemoveTarget(Target.Hue);
+        Core.GetInstance().AddTarget(Target.Hue);
+        Core.GetInstance().Initialise();
+      }
     }
   }
 
@@ -1589,6 +1595,231 @@ namespace AtmoLight.Configuration
       SettingsManager.Save(settings);
 
       Core.GetInstance().powerModeChangedDelay = (int)_value;
+    }
+  }
+
+  public class AmbiBoxTarget : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().AmbiBoxTarget;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AmbiBoxTarget = _yes;
+      SettingsManager.Save(settings);
+
+      if (_yes)
+      {
+        Core.GetInstance().AddTarget(Target.AmbiBox);
+        Core.GetInstance().Initialise();
+      }
+      else
+      {
+        Core.GetInstance().RemoveTarget(Target.AmbiBox);
+      }
+    }
+  }
+
+  public class AmbiBoxIP : Entry
+  {
+    public override void Load()
+    {
+      _value = SettingsManager.Load<Settings>().AmbiBoxIP;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      IPAddress ip;
+      if (IPAddress.TryParse(_value, out ip))
+      {
+        settings.AmbiBoxIP = _value;
+        SettingsManager.Save(settings);
+
+        Core.GetInstance().ambiBoxIP = _value;
+      }
+    }
+
+    public override int DisplayLength
+    {
+      get { return 15; }
+    }
+  }
+
+  public class AmbiBoxPort : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 65535;
+      _value = SettingsManager.Load<Settings>().AmbiBoxPort;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AmbiBoxPort = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().ambiBoxPort = (int)_value;
+    }
+  }
+
+  public class AmbiBoxMaxReconnectAttempts : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 9999;
+      _value = SettingsManager.Load<Settings>().AmbiBoxMaxReconnectAttempts;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AmbiBoxMaxReconnectAttempts = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().ambiBoxMaxReconnectAttempts = (int)_value;
+    }
+  }
+
+  public class AmbiBoxReconnectDelay : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 1;
+      _upperLimit = 99999;
+      _value = SettingsManager.Load<Settings>().AmbiBoxReconnectDelay;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AmbiBoxReconnectDelay = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().ambiBoxReconnectDelay = (int)_value;
+    }
+  }
+
+  public class AmbiBoxMediaPortalProfile : Entry
+  {
+    public override void Load()
+    {
+      _value = SettingsManager.Load<Settings>().AmbiBoxMediaPortalProfile;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AmbiBoxMediaPortalProfile = _value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().ambiBoxMediaPortalProfile = _value;
+    }
+
+    public override int DisplayLength
+    {
+      get { return 15; }
+    }
+  }
+
+  public class AmbiBoxExternalProfile : Entry
+  {
+    public override void Load()
+    {
+      _value = SettingsManager.Load<Settings>().AmbiBoxExternalProfile;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AmbiBoxExternalProfile = _value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().ambiBoxExternalProfile = _value;
+    }
+
+    public override int DisplayLength
+    {
+      get { return 15; }
+    }
+  }
+
+  public class AmbiBoxPath : PathEntry
+  {
+    public override void Load()
+    {
+      _path = SettingsManager.Load<Settings>().AmbiBoxPath;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AmbiBoxPath = _path + "AmbiBox.exe";
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().ambiBoxPath = settings.AmbiBoxPath;
+      if (settings.AmbiBoxTarget)
+      {
+        Core.GetInstance().RemoveTarget(Target.AmbiBox);
+        Core.GetInstance().AddTarget(Target.AmbiBox);
+        Core.GetInstance().Initialise();
+      }
+    }
+  }
+
+  public class AmbiBoxAutoStart : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().AmbiBoxAutoStart;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AmbiBoxAutoStart = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().ambiBoxAutoStart = _yes;
+    }
+  }
+
+  public class AmbiBoxAutoStop : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().AmbiBoxAutoStop;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AmbiBoxAutoStop = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().ambiBoxAutoStop = _yes;
     }
   }
 }

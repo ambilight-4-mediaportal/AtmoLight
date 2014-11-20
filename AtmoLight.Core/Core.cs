@@ -34,6 +34,7 @@ namespace AtmoLight
 
   public enum Target
   {
+    AmbiBox,
     AtmoWin,
     Boblight,
     Hue,
@@ -101,6 +102,17 @@ namespace AtmoLight
     public int blackbarDetectionTime;
     public int blackbarDetectionThreshold;
     public int powerModeChangedDelay;
+
+    // AmbiBox Settings Fields
+    public string ambiBoxIP;
+    public int ambiBoxPort;
+    public int ambiBoxMaxReconnectAttempts;
+    public int ambiBoxReconnectDelay;
+    public string ambiBoxMediaPortalProfile;
+    public string ambiBoxExternalProfile;
+    public string ambiBoxPath;
+    public bool ambiBoxAutoStart;
+    public bool ambiBoxAutoStop;
 
     // AtmoWin Settings Fields
     public bool atmoWinAutoStart;
@@ -362,6 +374,10 @@ namespace AtmoLight
         else if (target == Target.Hyperion)
         {
           targets.Add(new HyperionHandler());
+        }
+        else if (target == Target.AmbiBox)
+        {
+          targets.Add(new AmbiBoxHandler());
         }
         else if (target == Target.Boblight)
         {

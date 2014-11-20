@@ -3,6 +3,11 @@
         <setting entryname="plugins" name="atmolight" displayname="Plugin Enabled" defaultvalue="yes" type="string" listvalues="yes|no" displaylistvalues="Yes|No"/>
     </disable_entry>
     <settings section="General settings">
+		<setting entryname="atmolight" name="ambiBoxTarget" type="string" defaultvalue="no" listvalues="Yes|No"
+		displayname="Use AmbiBox:"    
+		description="Select if you want to use AmbiBox."
+		displaylistvalues="Yes|No"/>
+		
 		<setting entryname="atmolight" name="atmoWinTarget" type="string" defaultvalue="yes" listvalues="Yes|No"
 		displayname="Use AtmoWin:"    
 		description="Select if you want to use AtmoWin."
@@ -27,6 +32,50 @@
 		displayname="Reconnection to target software on Error:"    
 		description="Choose if you want MediaPortal/AtmoLight to reconnect if something goes wrong."
 		displaylistvalues="Yes|No"/>		
+	</settings>
+	
+	<settings section="AmbiBox">
+		<setting entryname="atmolight" name="ambiBoxPath" type="string" defaultvalue="" listvalues="" 
+		displayname="Path to AmbiBox.exe:"
+		description="Please select the path to the AmbiBox.exe!"
+		displaylistvalues=""/>
+		
+		<setting entryname="atmolight" name="ambiBoxAutoStart" type="string" defaultvalue="yes" listvalues="Yes|No"
+		displayname="Start AmbiBox with MediaPortal:"    
+		description="Choose if you want MediaPortal/AtmoLight to start AmbiBox for you on."
+		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="ambiBoxAutoStop" type="string" defaultvalue="yes" listvalues="Yes|No"
+		displayname="Exit AmbiBox with MediaPortal:"    
+		description="Choose if you want MediaPortal/AtmoLight to close AmbiBox for you."
+		displaylistvalues="Yes|No"/>
+
+		<setting entryname="atmolight" name="ambiBoxIP" type="string" defaultvalue="127.0.0.1" listvalues="" 
+		displayname="IP:"
+		description="Please enter the IP to AmbiBox!"
+		displaylistvalues=""/>
+		
+		<setting entryname="atmolight" name="ambiBoxPort" type="int" defaultvalue="3636" minvalue="1" maxvalue="65535"
+		displayname="Port:"    
+		description="Please enter the Port to AmbiBox."/>
+		
+		<setting entryname="atmolight" name="ambiBoxMaxReconnectAttempts" type="int" defaultvalue="5" minvalue="1" maxvalue="9999"
+		displayname="Reconnect attempts:"    
+		description="Please enter the reconnect attempts."/>
+		
+		<setting entryname="atmolight" name="ambiBoxReconnectDelay" type="int" defaultvalue="5000" minvalue="1" maxvalue="999999"
+		displayname="Reconnect delay:"    
+		description="Please enter the reconnect delay."/>
+		
+		<setting entryname="atmolight" name="ambiBoxMediaPortalProfile" type="string" defaultvalue="" listvalues="" 
+		displayname="MediaPortal capture profile:"
+		description="Please enter the MediaPortal capture profile."
+		displaylistvalues=""/>
+		
+		<setting entryname="atmolight" name="ambiBoxExternalProfile" type="string" defaultvalue="" listvalues="" 
+		displayname="External capture profile:"
+		description="Please enter the external capture profile."
+		displaylistvalues=""/>
 	</settings>
 	
 	<settings section="AtmoWin">

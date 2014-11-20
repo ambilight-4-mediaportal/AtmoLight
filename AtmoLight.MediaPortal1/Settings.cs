@@ -84,6 +84,18 @@ namespace AtmoLight
     public static bool hueBridgeEnableOnResume;
     public static bool hueBridgeDisableOnSuspend;
 
+    // AmbiBox
+    public static bool ambiBoxTarget;
+    public static string ambiBoxIP;
+    public static int ambiBoxPort;
+    public static int ambiBoxMaxReconnectAttempts;
+    public static int ambiBoxReconnectDelay;
+    public static string ambiBoxMediaPortalProfile;
+    public static string ambiBoxExternalProfile;
+    public static string ambiBoxPath;
+    public static bool ambiBoxAutoStart;
+    public static bool ambiBoxAutoStop;
+
 
     #endregion
 
@@ -220,6 +232,16 @@ namespace AtmoLight
         hyperionTarget = reader.GetValueAsBool("atmolight", "hyperionTarget", false);
         blackbarDetectionThreshold = reader.GetValueAsInt("atmolight", "blackbarDetectionThreshold", 20);
         powerModeChangedDelay = reader.GetValueAsInt("atmolight", "powerModeChangedDelay", 5000);
+        ambiBoxTarget = reader.GetValueAsBool("atmolight", "ambiBoxTarget", false);
+        ambiBoxIP = reader.GetValueAsString("atmolight", "ambiBoxIP", "127.0.0.1");
+        ambiBoxPort = reader.GetValueAsInt("atmolight", "ambiBoxPort", 3636);
+        ambiBoxMaxReconnectAttempts = reader.GetValueAsInt("atmolight", "ambiBoxMaxReconnectAttempts", 5);
+        ambiBoxReconnectDelay = reader.GetValueAsInt("atmolight", "ambiBoxReconnectDelay", 5000);
+        ambiBoxMediaPortalProfile = reader.GetValueAsString("atmolight", "ambiBoxMediaPortalProfile", "MediaPortal");
+        ambiBoxExternalProfile = reader.GetValueAsString("atmolight", "ambiBoxExternalProfile", "External");
+        ambiBoxPath = reader.GetValueAsString("atmolight", "ambiBoxPath", "C:\\Program Files (x86)\\AmbiBox\\AmbiBox.exe");
+        ambiBoxAutoStart = reader.GetValueAsBool("atmolight", "ambiBoxAutoStart", false);
+        ambiBoxAutoStop = reader.GetValueAsBool("atmolight", "ambiBoxAutoStop", false);
       }
     }
     public static void SaveSettings()
@@ -287,11 +309,21 @@ namespace AtmoLight
         reader.SetValue("atmolight", "boblightGamma", boblightGamma.ToString());
         reader.SetValue("atmolight", "blackbarDetectionThreshold", blackbarDetectionThreshold.ToString());
         reader.SetValue("atmolight", "powerModeChangedDelay", powerModeChangedDelay.ToString());
+        reader.SetValue("atmolight", "ambiBoxIP", ambiBoxIP.ToString());
+        reader.SetValue("atmolight", "ambiBoxPort", ambiBoxPort.ToString());
+        reader.SetValue("atmolight", "ambiBoxMaxReconnectAttempts", ambiBoxMaxReconnectAttempts.ToString());
+        reader.SetValue("atmolight", "ambiBoxReconnectDelay", ambiBoxReconnectDelay.ToString());
+        reader.SetValue("atmolight", "ambiBoxMediaPortalProfile", ambiBoxMediaPortalProfile.ToString());
+        reader.SetValue("atmolight", "ambiBoxExternalProfile", ambiBoxExternalProfile.ToString());
+        reader.SetValue("atmolight", "ambiBoxPath", ambiBoxPath.ToString());
+        reader.SetValueAsBool("atmolight", "ambiBoxAutoStart", ambiBoxAutoStart);
+        reader.SetValueAsBool("atmolight", "ambiBoxAutoStop", ambiBoxAutoStop);
 
         reader.SetValueAsBool("atmolight", "atmoWinTarget", atmoWinTarget);
         reader.SetValueAsBool("atmolight", "boblightTarget", boblightTarget);
         reader.SetValueAsBool("atmolight", "hueTarget", hueTarget);
         reader.SetValueAsBool("atmolight", "hyperionTarget", hyperionTarget);
+        reader.SetValueAsBool("atmolight", "ambiBoxTarget", ambiBoxTarget);
       }
     }
 

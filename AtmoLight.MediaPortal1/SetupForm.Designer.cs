@@ -62,6 +62,7 @@
       this.ckStartAtmoWin = new System.Windows.Forms.CheckBox();
       this.tabPageGeneric = new System.Windows.Forms.TabPage();
       this.grpTargets = new System.Windows.Forms.GroupBox();
+      this.ckAmbiBoxEnabled = new System.Windows.Forms.CheckBox();
       this.ckBoblightEnabled = new System.Windows.Forms.CheckBox();
       this.ckHueEnabled = new System.Windows.Forms.CheckBox();
       this.lblHintHardware = new System.Windows.Forms.Label();
@@ -125,6 +126,26 @@
       this.comboBox1 = new System.Windows.Forms.ComboBox();
       this.lblLedsOnOff = new System.Windows.Forms.Label();
       this.tabMenu = new System.Windows.Forms.TabControl();
+      this.tabPageAmbiBox = new System.Windows.Forms.TabPage();
+      this.grpAmbiBoxNetwork = new System.Windows.Forms.GroupBox();
+      this.tbAmbiBoxExternalProfile = new System.Windows.Forms.TextBox();
+      this.tbAmbiBoxMediaPortalProfile = new System.Windows.Forms.TextBox();
+      this.tbAmbiBoxReconnectDelay = new System.Windows.Forms.TextBox();
+      this.tbAmbiBoxMaxReconnectAttempts = new System.Windows.Forms.TextBox();
+      this.tbAmbiBoxPort = new System.Windows.Forms.TextBox();
+      this.tbAmbiBoxIP = new System.Windows.Forms.TextBox();
+      this.lblAmbiBoxExternalProfile = new System.Windows.Forms.Label();
+      this.lblAmbiBoxMediaPortalProfile = new System.Windows.Forms.Label();
+      this.lblAmbiBoxReconnectDelay = new System.Windows.Forms.Label();
+      this.lblAmbiBoxMaxReconnectAttempts = new System.Windows.Forms.Label();
+      this.lblAmbiBoxPort = new System.Windows.Forms.Label();
+      this.lblAmbiBoxIP = new System.Windows.Forms.Label();
+      this.grpAmbiBoxLocal = new System.Windows.Forms.GroupBox();
+      this.cbAmbiBoxAutoStop = new System.Windows.Forms.CheckBox();
+      this.cbAmbiBoxAutoStart = new System.Windows.Forms.CheckBox();
+      this.lblAmbiBoxPath = new System.Windows.Forms.Label();
+      this.tbAmbiBoxPath = new System.Windows.Forms.TextBox();
+      this.btnSelectFileAmbiBox = new System.Windows.Forms.Button();
       this.tabPageBoblight = new System.Windows.Forms.TabPage();
       this.grpBoblightSettings = new System.Windows.Forms.GroupBox();
       this.tbBoblightGamma = new System.Windows.Forms.TextBox();
@@ -179,6 +200,7 @@
       this.tbHueIP = new System.Windows.Forms.TextBox();
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
+      this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -193,6 +215,9 @@
       this.grpCaptureDimensions.SuspendLayout();
       this.grpDeactivate.SuspendLayout();
       this.tabMenu.SuspendLayout();
+      this.tabPageAmbiBox.SuspendLayout();
+      this.grpAmbiBoxNetwork.SuspendLayout();
+      this.grpAmbiBoxLocal.SuspendLayout();
       this.tabPageBoblight.SuspendLayout();
       this.grpBoblightSettings.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightGamma)).BeginInit();
@@ -210,7 +235,7 @@
       // btnSave
       // 
       this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnSave.Location = new System.Drawing.Point(16, 497);
+      this.btnSave.Location = new System.Drawing.Point(16, 495);
       this.btnSave.Name = "btnSave";
       this.btnSave.Size = new System.Drawing.Size(105, 23);
       this.btnSave.TabIndex = 100;
@@ -221,7 +246,7 @@
       // btnCancel
       // 
       this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnCancel.Location = new System.Drawing.Point(141, 497);
+      this.btnCancel.Location = new System.Drawing.Point(141, 495);
       this.btnCancel.Name = "btnCancel";
       this.btnCancel.Size = new System.Drawing.Size(105, 23);
       this.btnCancel.TabIndex = 101;
@@ -237,7 +262,7 @@
       // lblVersion
       // 
       this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-      this.lblVersion.Location = new System.Drawing.Point(766, 497);
+      this.lblVersion.Location = new System.Drawing.Point(754, 494);
       this.lblVersion.Name = "lblVersion";
       this.lblVersion.Size = new System.Drawing.Size(95, 26);
       this.lblVersion.TabIndex = 13;
@@ -247,7 +272,7 @@
       // 
       this.lblVersionVal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.lblVersionVal.AutoSize = true;
-      this.lblVersionVal.Location = new System.Drawing.Point(811, 510);
+      this.lblVersionVal.Location = new System.Drawing.Point(799, 507);
       this.lblVersionVal.Name = "lblVersionVal";
       this.lblVersionVal.Size = new System.Drawing.Size(40, 13);
       this.lblVersionVal.TabIndex = 14;
@@ -256,7 +281,7 @@
       // btnLanguage
       // 
       this.btnLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnLanguage.Location = new System.Drawing.Point(266, 497);
+      this.btnLanguage.Location = new System.Drawing.Point(266, 495);
       this.btnLanguage.Name = "btnLanguage";
       this.btnLanguage.Size = new System.Drawing.Size(105, 23);
       this.btnLanguage.TabIndex = 102;
@@ -279,7 +304,7 @@
       this.tabPageHyperion.Controls.Add(this.grpHyperionNetworkSettings);
       this.tabPageHyperion.Location = new System.Drawing.Point(4, 22);
       this.tabPageHyperion.Name = "tabPageHyperion";
-      this.tabPageHyperion.Size = new System.Drawing.Size(841, 449);
+      this.tabPageHyperion.Size = new System.Drawing.Size(842, 449);
       this.tabPageHyperion.TabIndex = 2;
       this.tabPageHyperion.Text = "Hyperion";
       // 
@@ -289,9 +314,9 @@
       this.grpHyperionPrioritySettings.Controls.Add(this.tbHyperionPriorityStaticColor);
       this.grpHyperionPrioritySettings.Controls.Add(this.lblHyperionPriority);
       this.grpHyperionPrioritySettings.Controls.Add(this.tbHyperionPriority);
-      this.grpHyperionPrioritySettings.Location = new System.Drawing.Point(15, 218);
+      this.grpHyperionPrioritySettings.Location = new System.Drawing.Point(10, 175);
       this.grpHyperionPrioritySettings.Name = "grpHyperionPrioritySettings";
-      this.grpHyperionPrioritySettings.Size = new System.Drawing.Size(340, 100);
+      this.grpHyperionPrioritySettings.Size = new System.Drawing.Size(820, 75);
       this.grpHyperionPrioritySettings.TabIndex = 10;
       this.grpHyperionPrioritySettings.TabStop = false;
       this.grpHyperionPrioritySettings.Text = "Priority";
@@ -299,7 +324,7 @@
       // lblHyperionPriorityStaticColor
       // 
       this.lblHyperionPriorityStaticColor.AutoSize = true;
-      this.lblHyperionPriorityStaticColor.Location = new System.Drawing.Point(6, 68);
+      this.lblHyperionPriorityStaticColor.Location = new System.Drawing.Point(10, 50);
       this.lblHyperionPriorityStaticColor.Name = "lblHyperionPriorityStaticColor";
       this.lblHyperionPriorityStaticColor.Size = new System.Drawing.Size(95, 13);
       this.lblHyperionPriorityStaticColor.TabIndex = 8;
@@ -307,7 +332,7 @@
       // 
       // tbHyperionPriorityStaticColor
       // 
-      this.tbHyperionPriorityStaticColor.Location = new System.Drawing.Point(220, 65);
+      this.tbHyperionPriorityStaticColor.Location = new System.Drawing.Point(220, 47);
       this.tbHyperionPriorityStaticColor.Name = "tbHyperionPriorityStaticColor";
       this.tbHyperionPriorityStaticColor.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPriorityStaticColor.TabIndex = 6;
@@ -316,7 +341,7 @@
       // lblHyperionPriority
       // 
       this.lblHyperionPriority.AutoSize = true;
-      this.lblHyperionPriority.Location = new System.Drawing.Point(6, 30);
+      this.lblHyperionPriority.Location = new System.Drawing.Point(10, 25);
       this.lblHyperionPriority.Name = "lblHyperionPriority";
       this.lblHyperionPriority.Size = new System.Drawing.Size(60, 13);
       this.lblHyperionPriority.TabIndex = 5;
@@ -324,7 +349,7 @@
       // 
       // tbHyperionPriority
       // 
-      this.tbHyperionPriority.Location = new System.Drawing.Point(220, 27);
+      this.tbHyperionPriority.Location = new System.Drawing.Point(220, 22);
       this.tbHyperionPriority.Name = "tbHyperionPriority";
       this.tbHyperionPriority.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPriority.TabIndex = 5;
@@ -341,16 +366,16 @@
       this.grpHyperionNetworkSettings.Controls.Add(this.lblHyperionIP);
       this.grpHyperionNetworkSettings.Controls.Add(this.tbHyperionPort);
       this.grpHyperionNetworkSettings.Controls.Add(this.lblHyperionPort);
-      this.grpHyperionNetworkSettings.Location = new System.Drawing.Point(15, 16);
+      this.grpHyperionNetworkSettings.Location = new System.Drawing.Point(10, 10);
       this.grpHyperionNetworkSettings.Name = "grpHyperionNetworkSettings";
-      this.grpHyperionNetworkSettings.Size = new System.Drawing.Size(803, 196);
+      this.grpHyperionNetworkSettings.Size = new System.Drawing.Size(820, 160);
       this.grpHyperionNetworkSettings.TabIndex = 7;
       this.grpHyperionNetworkSettings.TabStop = false;
       this.grpHyperionNetworkSettings.Text = "Network";
       // 
       // ckHyperionLiveReconnect
       // 
-      this.ckHyperionLiveReconnect.Location = new System.Drawing.Point(12, 151);
+      this.ckHyperionLiveReconnect.Location = new System.Drawing.Point(12, 125);
       this.ckHyperionLiveReconnect.Name = "ckHyperionLiveReconnect";
       this.ckHyperionLiveReconnect.Size = new System.Drawing.Size(518, 30);
       this.ckHyperionLiveReconnect.TabIndex = 9;
@@ -360,7 +385,7 @@
       // 
       // tbHyperionReconnectAttempts
       // 
-      this.tbHyperionReconnectAttempts.Location = new System.Drawing.Point(220, 112);
+      this.tbHyperionReconnectAttempts.Location = new System.Drawing.Point(220, 97);
       this.tbHyperionReconnectAttempts.Name = "tbHyperionReconnectAttempts";
       this.tbHyperionReconnectAttempts.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionReconnectAttempts.TabIndex = 7;
@@ -369,7 +394,7 @@
       // lblHyperionReconnectAttempts
       // 
       this.lblHyperionReconnectAttempts.AutoSize = true;
-      this.lblHyperionReconnectAttempts.Location = new System.Drawing.Point(9, 115);
+      this.lblHyperionReconnectAttempts.Location = new System.Drawing.Point(10, 100);
       this.lblHyperionReconnectAttempts.Name = "lblHyperionReconnectAttempts";
       this.lblHyperionReconnectAttempts.Size = new System.Drawing.Size(106, 13);
       this.lblHyperionReconnectAttempts.TabIndex = 8;
@@ -377,7 +402,7 @@
       // 
       // tbHyperionReconnectDelay
       // 
-      this.tbHyperionReconnectDelay.Location = new System.Drawing.Point(220, 82);
+      this.tbHyperionReconnectDelay.Location = new System.Drawing.Point(220, 72);
       this.tbHyperionReconnectDelay.Name = "tbHyperionReconnectDelay";
       this.tbHyperionReconnectDelay.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionReconnectDelay.TabIndex = 5;
@@ -386,7 +411,7 @@
       // lblHyperionReconnectDelay
       // 
       this.lblHyperionReconnectDelay.AutoSize = true;
-      this.lblHyperionReconnectDelay.Location = new System.Drawing.Point(9, 85);
+      this.lblHyperionReconnectDelay.Location = new System.Drawing.Point(10, 75);
       this.lblHyperionReconnectDelay.Name = "lblHyperionReconnectDelay";
       this.lblHyperionReconnectDelay.Size = new System.Drawing.Size(113, 13);
       this.lblHyperionReconnectDelay.TabIndex = 6;
@@ -403,7 +428,7 @@
       // lblHyperionIP
       // 
       this.lblHyperionIP.AutoSize = true;
-      this.lblHyperionIP.Location = new System.Drawing.Point(9, 25);
+      this.lblHyperionIP.Location = new System.Drawing.Point(10, 25);
       this.lblHyperionIP.Name = "lblHyperionIP";
       this.lblHyperionIP.Size = new System.Drawing.Size(20, 13);
       this.lblHyperionIP.TabIndex = 3;
@@ -411,7 +436,7 @@
       // 
       // tbHyperionPort
       // 
-      this.tbHyperionPort.Location = new System.Drawing.Point(220, 52);
+      this.tbHyperionPort.Location = new System.Drawing.Point(220, 47);
       this.tbHyperionPort.Name = "tbHyperionPort";
       this.tbHyperionPort.Size = new System.Drawing.Size(93, 20);
       this.tbHyperionPort.TabIndex = 2;
@@ -420,7 +445,7 @@
       // lblHyperionPort
       // 
       this.lblHyperionPort.AutoSize = true;
-      this.lblHyperionPort.Location = new System.Drawing.Point(9, 55);
+      this.lblHyperionPort.Location = new System.Drawing.Point(10, 50);
       this.lblHyperionPort.Name = "lblHyperionPort";
       this.lblHyperionPort.Size = new System.Drawing.Size(29, 13);
       this.lblHyperionPort.TabIndex = 4;
@@ -433,7 +458,7 @@
       this.tabPageAtmowin.Location = new System.Drawing.Point(4, 22);
       this.tabPageAtmowin.Name = "tabPageAtmowin";
       this.tabPageAtmowin.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageAtmowin.Size = new System.Drawing.Size(841, 449);
+      this.tabPageAtmowin.Size = new System.Drawing.Size(842, 449);
       this.tabPageAtmowin.TabIndex = 1;
       this.tabPageAtmowin.Text = "Atmowin";
       // 
@@ -444,9 +469,9 @@
       this.grpAtmowinSettings.Controls.Add(this.edFileAtmoWin);
       this.grpAtmowinSettings.Controls.Add(this.ckExitAtmoWin);
       this.grpAtmowinSettings.Controls.Add(this.ckStartAtmoWin);
-      this.grpAtmowinSettings.Location = new System.Drawing.Point(6, 19);
+      this.grpAtmowinSettings.Location = new System.Drawing.Point(10, 10);
       this.grpAtmowinSettings.Name = "grpAtmowinSettings";
-      this.grpAtmowinSettings.Size = new System.Drawing.Size(822, 246);
+      this.grpAtmowinSettings.Size = new System.Drawing.Size(820, 125);
       this.grpAtmowinSettings.TabIndex = 26;
       this.grpAtmowinSettings.TabStop = false;
       this.grpAtmowinSettings.Text = "Settings";
@@ -454,7 +479,7 @@
       // lblPathInfoAtmoWin
       // 
       this.lblPathInfoAtmoWin.AutoSize = true;
-      this.lblPathInfoAtmoWin.Location = new System.Drawing.Point(6, 25);
+      this.lblPathInfoAtmoWin.Location = new System.Drawing.Point(10, 25);
       this.lblPathInfoAtmoWin.Name = "lblPathInfoAtmoWin";
       this.lblPathInfoAtmoWin.Size = new System.Drawing.Size(162, 13);
       this.lblPathInfoAtmoWin.TabIndex = 0;
@@ -463,9 +488,9 @@
       // btnSelectFileAtmoWin
       // 
       this.btnSelectFileAtmoWin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnSelectFileAtmoWin.Location = new System.Drawing.Point(713, 40);
+      this.btnSelectFileAtmoWin.Location = new System.Drawing.Point(725, 41);
       this.btnSelectFileAtmoWin.Name = "btnSelectFileAtmoWin";
-      this.btnSelectFileAtmoWin.Size = new System.Drawing.Size(92, 23);
+      this.btnSelectFileAtmoWin.Size = new System.Drawing.Size(85, 23);
       this.btnSelectFileAtmoWin.TabIndex = 2;
       this.btnSelectFileAtmoWin.Text = "...";
       this.btnSelectFileAtmoWin.UseVisualStyleBackColor = true;
@@ -477,9 +502,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.edFileAtmoWin.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
       this.edFileAtmoWin.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
-      this.edFileAtmoWin.Location = new System.Drawing.Point(9, 42);
+      this.edFileAtmoWin.Location = new System.Drawing.Point(12, 43);
       this.edFileAtmoWin.Name = "edFileAtmoWin";
-      this.edFileAtmoWin.Size = new System.Drawing.Size(698, 20);
+      this.edFileAtmoWin.Size = new System.Drawing.Size(700, 20);
       this.edFileAtmoWin.TabIndex = 1;
       this.edFileAtmoWin.Validating += new System.ComponentModel.CancelEventHandler(this.edFile_Validating);
       // 
@@ -488,7 +513,7 @@
       this.ckExitAtmoWin.AutoSize = true;
       this.ckExitAtmoWin.Checked = true;
       this.ckExitAtmoWin.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckExitAtmoWin.Location = new System.Drawing.Point(9, 112);
+      this.ckExitAtmoWin.Location = new System.Drawing.Point(12, 100);
       this.ckExitAtmoWin.Name = "ckExitAtmoWin";
       this.ckExitAtmoWin.Size = new System.Drawing.Size(173, 17);
       this.ckExitAtmoWin.TabIndex = 4;
@@ -500,7 +525,7 @@
       this.ckStartAtmoWin.AutoSize = true;
       this.ckStartAtmoWin.Checked = true;
       this.ckStartAtmoWin.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckStartAtmoWin.Location = new System.Drawing.Point(9, 89);
+      this.ckStartAtmoWin.Location = new System.Drawing.Point(12, 75);
       this.ckStartAtmoWin.Name = "ckStartAtmoWin";
       this.ckStartAtmoWin.Size = new System.Drawing.Size(175, 17);
       this.ckStartAtmoWin.TabIndex = 3;
@@ -516,28 +541,40 @@
       this.tabPageGeneric.Location = new System.Drawing.Point(4, 22);
       this.tabPageGeneric.Name = "tabPageGeneric";
       this.tabPageGeneric.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageGeneric.Size = new System.Drawing.Size(841, 449);
+      this.tabPageGeneric.Size = new System.Drawing.Size(842, 449);
       this.tabPageGeneric.TabIndex = 0;
       this.tabPageGeneric.Text = "Generic settings";
       // 
       // grpTargets
       // 
+      this.grpTargets.Controls.Add(this.ckAmbiBoxEnabled);
       this.grpTargets.Controls.Add(this.ckBoblightEnabled);
       this.grpTargets.Controls.Add(this.ckHueEnabled);
       this.grpTargets.Controls.Add(this.lblHintHardware);
       this.grpTargets.Controls.Add(this.ckAtmowinEnabled);
       this.grpTargets.Controls.Add(this.ckHyperionEnabled);
-      this.grpTargets.Location = new System.Drawing.Point(19, 18);
+      this.grpTargets.Location = new System.Drawing.Point(10, 10);
       this.grpTargets.Name = "grpTargets";
-      this.grpTargets.Size = new System.Drawing.Size(347, 139);
+      this.grpTargets.Size = new System.Drawing.Size(350, 150);
       this.grpTargets.TabIndex = 19;
       this.grpTargets.TabStop = false;
       this.grpTargets.Text = "Hardware selection";
       // 
+      // ckAmbiBoxEnabled
+      // 
+      this.ckAmbiBoxEnabled.AutoSize = true;
+      this.ckAmbiBoxEnabled.Location = new System.Drawing.Point(12, 25);
+      this.ckAmbiBoxEnabled.Name = "ckAmbiBoxEnabled";
+      this.ckAmbiBoxEnabled.Size = new System.Drawing.Size(67, 17);
+      this.ckAmbiBoxEnabled.TabIndex = 23;
+      this.ckAmbiBoxEnabled.Text = "AmbiBox";
+      this.ckAmbiBoxEnabled.UseVisualStyleBackColor = true;
+      this.ckAmbiBoxEnabled.CheckedChanged += new System.EventHandler(this.ckAmbiBoxEnabled_CheckedChanged);
+      // 
       // ckBoblightEnabled
       // 
       this.ckBoblightEnabled.AutoSize = true;
-      this.ckBoblightEnabled.Location = new System.Drawing.Point(13, 54);
+      this.ckBoblightEnabled.Location = new System.Drawing.Point(12, 71);
       this.ckBoblightEnabled.Name = "ckBoblightEnabled";
       this.ckBoblightEnabled.Size = new System.Drawing.Size(64, 17);
       this.ckBoblightEnabled.TabIndex = 22;
@@ -548,7 +585,7 @@
       // ckHueEnabled
       // 
       this.ckHueEnabled.AutoSize = true;
-      this.ckHueEnabled.Location = new System.Drawing.Point(13, 77);
+      this.ckHueEnabled.Location = new System.Drawing.Point(12, 94);
       this.ckHueEnabled.Name = "ckHueEnabled";
       this.ckHueEnabled.Size = new System.Drawing.Size(46, 17);
       this.ckHueEnabled.TabIndex = 21;
@@ -559,9 +596,9 @@
       // lblHintHardware
       // 
       this.lblHintHardware.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintHardware.Location = new System.Drawing.Point(169, 15);
+      this.lblHintHardware.Location = new System.Drawing.Point(170, 25);
       this.lblHintHardware.Name = "lblHintHardware";
-      this.lblHintHardware.Size = new System.Drawing.Size(170, 121);
+      this.lblHintHardware.Size = new System.Drawing.Size(170, 113);
       this.lblHintHardware.TabIndex = 20;
       this.lblHintHardware.Text = "Hint: Select the devices you want to use with AtmoLight and configure it on its d" +
     "esignated tab";
@@ -571,7 +608,7 @@
       this.ckAtmowinEnabled.AutoSize = true;
       this.ckAtmowinEnabled.Checked = true;
       this.ckAtmowinEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckAtmowinEnabled.Location = new System.Drawing.Point(13, 31);
+      this.ckAtmowinEnabled.Location = new System.Drawing.Point(12, 48);
       this.ckAtmowinEnabled.Name = "ckAtmowinEnabled";
       this.ckAtmowinEnabled.Size = new System.Drawing.Size(69, 17);
       this.ckAtmowinEnabled.TabIndex = 1;
@@ -582,7 +619,7 @@
       // ckHyperionEnabled
       // 
       this.ckHyperionEnabled.AutoSize = true;
-      this.ckHyperionEnabled.Location = new System.Drawing.Point(13, 100);
+      this.ckHyperionEnabled.Location = new System.Drawing.Point(12, 117);
       this.ckHyperionEnabled.Name = "ckHyperionEnabled";
       this.ckHyperionEnabled.Size = new System.Drawing.Size(68, 17);
       this.ckHyperionEnabled.TabIndex = 2;
@@ -604,9 +641,9 @@
       this.grpMode.Controls.Add(this.lblMusic);
       this.grpMode.Controls.Add(this.cbVideo);
       this.grpMode.Controls.Add(this.lblVidTvRec);
-      this.grpMode.Location = new System.Drawing.Point(19, 163);
+      this.grpMode.Location = new System.Drawing.Point(10, 165);
       this.grpMode.Name = "grpMode";
-      this.grpMode.Size = new System.Drawing.Size(347, 267);
+      this.grpMode.Size = new System.Drawing.Size(350, 275);
       this.grpMode.TabIndex = 7;
       this.grpMode.TabStop = false;
       this.grpMode.Text = "Effect Settings";
@@ -621,7 +658,7 @@
             "Colorchanger",
             "Colorchanger LR",
             "Static Color"});
-      this.cbMPExit.Location = new System.Drawing.Point(175, 131);
+      this.cbMPExit.Location = new System.Drawing.Point(175, 121);
       this.cbMPExit.Name = "cbMPExit";
       this.cbMPExit.Size = new System.Drawing.Size(160, 21);
       this.cbMPExit.TabIndex = 28;
@@ -630,7 +667,7 @@
       // lblMPExit
       // 
       this.lblMPExit.AutoSize = true;
-      this.lblMPExit.Location = new System.Drawing.Point(10, 134);
+      this.lblMPExit.Location = new System.Drawing.Point(10, 125);
       this.lblMPExit.Name = "lblMPExit";
       this.lblMPExit.Size = new System.Drawing.Size(86, 13);
       this.lblMPExit.TabIndex = 27;
@@ -640,16 +677,16 @@
       // 
       this.grpGIF.Controls.Add(this.btnSelectGIF);
       this.grpGIF.Controls.Add(this.tbGIF);
-      this.grpGIF.Location = new System.Drawing.Point(7, 213);
+      this.grpGIF.Location = new System.Drawing.Point(5, 215);
       this.grpGIF.Name = "grpGIF";
-      this.grpGIF.Size = new System.Drawing.Size(334, 48);
+      this.grpGIF.Size = new System.Drawing.Size(340, 50);
       this.grpGIF.TabIndex = 26;
       this.grpGIF.TabStop = false;
       this.grpGIF.Text = "GIF Reader";
       // 
       // btnSelectGIF
       // 
-      this.btnSelectGIF.Location = new System.Drawing.Point(278, 17);
+      this.btnSelectGIF.Location = new System.Drawing.Point(280, 17);
       this.btnSelectGIF.Name = "btnSelectGIF";
       this.btnSelectGIF.Size = new System.Drawing.Size(50, 23);
       this.btnSelectGIF.TabIndex = 24;
@@ -661,9 +698,9 @@
       // 
       this.tbGIF.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
       this.tbGIF.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
-      this.tbGIF.Location = new System.Drawing.Point(6, 19);
+      this.tbGIF.Location = new System.Drawing.Point(12, 19);
       this.tbGIF.Name = "tbGIF";
-      this.tbGIF.Size = new System.Drawing.Size(266, 20);
+      this.tbGIF.Size = new System.Drawing.Size(260, 20);
       this.tbGIF.TabIndex = 23;
       this.tbGIF.Validating += new System.ComponentModel.CancelEventHandler(this.tbGIF_Validating);
       // 
@@ -675,9 +712,9 @@
       this.grpStaticColor.Controls.Add(this.tbRed);
       this.grpStaticColor.Controls.Add(this.lblGreen);
       this.grpStaticColor.Controls.Add(this.lblBlue);
-      this.grpStaticColor.Location = new System.Drawing.Point(7, 158);
+      this.grpStaticColor.Location = new System.Drawing.Point(5, 160);
       this.grpStaticColor.Name = "grpStaticColor";
-      this.grpStaticColor.Size = new System.Drawing.Size(328, 49);
+      this.grpStaticColor.Size = new System.Drawing.Size(340, 50);
       this.grpStaticColor.TabIndex = 25;
       this.grpStaticColor.TabStop = false;
       this.grpStaticColor.Text = "Static Color";
@@ -685,7 +722,7 @@
       // lblRed
       // 
       this.lblRed.AutoSize = true;
-      this.lblRed.Location = new System.Drawing.Point(14, 22);
+      this.lblRed.Location = new System.Drawing.Point(10, 25);
       this.lblRed.Name = "lblRed";
       this.lblRed.Size = new System.Drawing.Size(30, 13);
       this.lblRed.TabIndex = 19;
@@ -693,7 +730,7 @@
       // 
       // tbGreen
       // 
-      this.tbGreen.Location = new System.Drawing.Point(171, 19);
+      this.tbGreen.Location = new System.Drawing.Point(171, 22);
       this.tbGreen.Name = "tbGreen";
       this.tbGreen.Size = new System.Drawing.Size(40, 20);
       this.tbGreen.TabIndex = 21;
@@ -702,7 +739,7 @@
       // 
       // tbBlue
       // 
-      this.tbBlue.Location = new System.Drawing.Point(282, 19);
+      this.tbBlue.Location = new System.Drawing.Point(282, 22);
       this.tbBlue.Name = "tbBlue";
       this.tbBlue.Size = new System.Drawing.Size(40, 20);
       this.tbBlue.TabIndex = 22;
@@ -711,7 +748,7 @@
       // 
       // tbRed
       // 
-      this.tbRed.Location = new System.Drawing.Point(55, 19);
+      this.tbRed.Location = new System.Drawing.Point(55, 22);
       this.tbRed.Name = "tbRed";
       this.tbRed.Size = new System.Drawing.Size(40, 20);
       this.tbRed.TabIndex = 20;
@@ -721,7 +758,7 @@
       // lblGreen
       // 
       this.lblGreen.AutoSize = true;
-      this.lblGreen.Location = new System.Drawing.Point(121, 22);
+      this.lblGreen.Location = new System.Drawing.Point(121, 25);
       this.lblGreen.Name = "lblGreen";
       this.lblGreen.Size = new System.Drawing.Size(39, 13);
       this.lblGreen.TabIndex = 20;
@@ -730,7 +767,7 @@
       // lblBlue
       // 
       this.lblBlue.AutoSize = true;
-      this.lblBlue.Location = new System.Drawing.Point(240, 22);
+      this.lblBlue.Location = new System.Drawing.Point(240, 25);
       this.lblBlue.Name = "lblBlue";
       this.lblBlue.Size = new System.Drawing.Size(31, 13);
       this.lblBlue.TabIndex = 21;
@@ -739,7 +776,7 @@
       // lblMenu
       // 
       this.lblMenu.AutoSize = true;
-      this.lblMenu.Location = new System.Drawing.Point(10, 107);
+      this.lblMenu.Location = new System.Drawing.Point(10, 100);
       this.lblMenu.Name = "lblMenu";
       this.lblMenu.Size = new System.Drawing.Size(61, 13);
       this.lblMenu.TabIndex = 18;
@@ -757,7 +794,7 @@
             "MediaPortal Live Mode",
             "Static Color",
             "GIF Reader"});
-      this.cbMenu.Location = new System.Drawing.Point(175, 104);
+      this.cbMenu.Location = new System.Drawing.Point(175, 96);
       this.cbMenu.Name = "cbMenu";
       this.cbMenu.Size = new System.Drawing.Size(160, 21);
       this.cbMenu.TabIndex = 19;
@@ -777,7 +814,7 @@
             "GIF Reader",
             "VU Meter",
             "VU Meter Rainbow"});
-      this.cbRadio.Location = new System.Drawing.Point(175, 77);
+      this.cbRadio.Location = new System.Drawing.Point(175, 71);
       this.cbRadio.Name = "cbRadio";
       this.cbRadio.Size = new System.Drawing.Size(160, 21);
       this.cbRadio.TabIndex = 18;
@@ -786,7 +823,7 @@
       // lblRadio
       // 
       this.lblRadio.AutoSize = true;
-      this.lblRadio.Location = new System.Drawing.Point(10, 80);
+      this.lblRadio.Location = new System.Drawing.Point(10, 75);
       this.lblRadio.Name = "lblRadio";
       this.lblRadio.Size = new System.Drawing.Size(38, 13);
       this.lblRadio.TabIndex = 4;
@@ -806,7 +843,7 @@
             "GIF Reader",
             "VU Meter",
             "VU Meter Rainbow"});
-      this.cbMusic.Location = new System.Drawing.Point(175, 50);
+      this.cbMusic.Location = new System.Drawing.Point(175, 46);
       this.cbMusic.Name = "cbMusic";
       this.cbMusic.Size = new System.Drawing.Size(160, 21);
       this.cbMusic.TabIndex = 17;
@@ -815,7 +852,7 @@
       // lblMusic
       // 
       this.lblMusic.AutoSize = true;
-      this.lblMusic.Location = new System.Drawing.Point(10, 53);
+      this.lblMusic.Location = new System.Drawing.Point(10, 50);
       this.lblMusic.Name = "lblMusic";
       this.lblMusic.Size = new System.Drawing.Size(38, 13);
       this.lblMusic.TabIndex = 2;
@@ -833,7 +870,7 @@
             "MediaPortal Live Mode",
             "Static Color",
             "GIF Reader"});
-      this.cbVideo.Location = new System.Drawing.Point(175, 23);
+      this.cbVideo.Location = new System.Drawing.Point(175, 21);
       this.cbVideo.Name = "cbVideo";
       this.cbVideo.Size = new System.Drawing.Size(160, 21);
       this.cbVideo.TabIndex = 16;
@@ -842,7 +879,7 @@
       // lblVidTvRec
       // 
       this.lblVidTvRec.AutoSize = true;
-      this.lblVidTvRec.Location = new System.Drawing.Point(10, 26);
+      this.lblVidTvRec.Location = new System.Drawing.Point(10, 25);
       this.lblVidTvRec.Name = "lblVidTvRec";
       this.lblVidTvRec.Size = new System.Drawing.Size(115, 13);
       this.lblVidTvRec.TabIndex = 0;
@@ -876,9 +913,9 @@
       this.grpPluginOption.Controls.Add(this.ckOnMediaStart);
       this.grpPluginOption.Controls.Add(this.comboBox1);
       this.grpPluginOption.Controls.Add(this.lblLedsOnOff);
-      this.grpPluginOption.Location = new System.Drawing.Point(372, 18);
+      this.grpPluginOption.Location = new System.Drawing.Point(370, 10);
       this.grpPluginOption.Name = "grpPluginOption";
-      this.grpPluginOption.Size = new System.Drawing.Size(456, 425);
+      this.grpPluginOption.Size = new System.Drawing.Size(460, 430);
       this.grpPluginOption.TabIndex = 11;
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
@@ -886,7 +923,7 @@
       // lblpowerModeChangedDelayMS
       // 
       this.lblpowerModeChangedDelayMS.AutoSize = true;
-      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(256, 216);
+      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(256, 225);
       this.lblpowerModeChangedDelayMS.Name = "lblpowerModeChangedDelayMS";
       this.lblpowerModeChangedDelayMS.Size = new System.Drawing.Size(20, 13);
       this.lblpowerModeChangedDelayMS.TabIndex = 35;
@@ -895,7 +932,7 @@
       // lblpowerModeChangedDelay
       // 
       this.lblpowerModeChangedDelay.AutoSize = true;
-      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(10, 216);
+      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(10, 225);
       this.lblpowerModeChangedDelay.Name = "lblpowerModeChangedDelay";
       this.lblpowerModeChangedDelay.Size = new System.Drawing.Size(101, 13);
       this.lblpowerModeChangedDelay.TabIndex = 34;
@@ -903,7 +940,7 @@
       // 
       // tbBlackbarDetectionThreshold
       // 
-      this.tbBlackbarDetectionThreshold.Location = new System.Drawing.Point(373, 167);
+      this.tbBlackbarDetectionThreshold.Location = new System.Drawing.Point(373, 172);
       this.tbBlackbarDetectionThreshold.Name = "tbBlackbarDetectionThreshold";
       this.tbBlackbarDetectionThreshold.Size = new System.Drawing.Size(41, 20);
       this.tbBlackbarDetectionThreshold.TabIndex = 33;
@@ -912,7 +949,7 @@
       // 
       // tbpowerModeChangedDelay
       // 
-      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(209, 213);
+      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(209, 222);
       this.tbpowerModeChangedDelay.Name = "tbpowerModeChangedDelay";
       this.tbpowerModeChangedDelay.Size = new System.Drawing.Size(41, 20);
       this.tbpowerModeChangedDelay.TabIndex = 33;
@@ -924,7 +961,7 @@
       this.ckRestartOnError.AutoSize = true;
       this.ckRestartOnError.Checked = true;
       this.ckRestartOnError.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckRestartOnError.Location = new System.Drawing.Point(13, 193);
+      this.ckRestartOnError.Location = new System.Drawing.Point(12, 200);
       this.ckRestartOnError.Name = "ckRestartOnError";
       this.ckRestartOnError.Size = new System.Drawing.Size(144, 17);
       this.ckRestartOnError.TabIndex = 32;
@@ -938,9 +975,9 @@
       this.grpCaptureDimensions.Controls.Add(this.lblCaptureWidth);
       this.grpCaptureDimensions.Controls.Add(this.tbCaptureWidth);
       this.grpCaptureDimensions.Controls.Add(this.tbCaptureHeight);
-      this.grpCaptureDimensions.Location = new System.Drawing.Point(6, 249);
+      this.grpCaptureDimensions.Location = new System.Drawing.Point(5, 255);
       this.grpCaptureDimensions.Name = "grpCaptureDimensions";
-      this.grpCaptureDimensions.Size = new System.Drawing.Size(444, 76);
+      this.grpCaptureDimensions.Size = new System.Drawing.Size(450, 80);
       this.grpCaptureDimensions.TabIndex = 31;
       this.grpCaptureDimensions.TabStop = false;
       this.grpCaptureDimensions.Text = "Capture dimensions";
@@ -948,16 +985,16 @@
       // lblHintCaptureDimensions
       // 
       this.lblHintCaptureDimensions.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintCaptureDimensions.Location = new System.Drawing.Point(188, 15);
+      this.lblHintCaptureDimensions.Location = new System.Drawing.Point(195, 25);
       this.lblHintCaptureDimensions.Name = "lblHintCaptureDimensions";
-      this.lblHintCaptureDimensions.Size = new System.Drawing.Size(248, 54);
+      this.lblHintCaptureDimensions.Size = new System.Drawing.Size(248, 38);
       this.lblHintCaptureDimensions.TabIndex = 32;
       this.lblHintCaptureDimensions.Text = "Hint: Only used when Atmowin is disabled";
       // 
       // lblCaptureHeight
       // 
       this.lblCaptureHeight.AutoSize = true;
-      this.lblCaptureHeight.Location = new System.Drawing.Point(7, 49);
+      this.lblCaptureHeight.Location = new System.Drawing.Point(10, 50);
       this.lblCaptureHeight.Name = "lblCaptureHeight";
       this.lblCaptureHeight.Size = new System.Drawing.Size(41, 13);
       this.lblCaptureHeight.TabIndex = 10;
@@ -966,7 +1003,7 @@
       // lblCaptureWidth
       // 
       this.lblCaptureWidth.AutoSize = true;
-      this.lblCaptureWidth.Location = new System.Drawing.Point(7, 26);
+      this.lblCaptureWidth.Location = new System.Drawing.Point(10, 25);
       this.lblCaptureWidth.Name = "lblCaptureWidth";
       this.lblCaptureWidth.Size = new System.Drawing.Size(38, 13);
       this.lblCaptureWidth.TabIndex = 9;
@@ -974,7 +1011,7 @@
       // 
       // tbCaptureWidth
       // 
-      this.tbCaptureWidth.Location = new System.Drawing.Point(75, 23);
+      this.tbCaptureWidth.Location = new System.Drawing.Point(75, 22);
       this.tbCaptureWidth.Name = "tbCaptureWidth";
       this.tbCaptureWidth.Size = new System.Drawing.Size(50, 20);
       this.tbCaptureWidth.TabIndex = 3;
@@ -983,7 +1020,7 @@
       // 
       // tbCaptureHeight
       // 
-      this.tbCaptureHeight.Location = new System.Drawing.Point(75, 49);
+      this.tbCaptureHeight.Location = new System.Drawing.Point(75, 47);
       this.tbCaptureHeight.Name = "tbCaptureHeight";
       this.tbCaptureHeight.Size = new System.Drawing.Size(50, 20);
       this.tbCaptureHeight.TabIndex = 4;
@@ -993,7 +1030,7 @@
       // lblBlackarDetectionMS
       // 
       this.lblBlackarDetectionMS.AutoSize = true;
-      this.lblBlackarDetectionMS.Location = new System.Drawing.Point(256, 170);
+      this.lblBlackarDetectionMS.Location = new System.Drawing.Point(256, 175);
       this.lblBlackarDetectionMS.Name = "lblBlackarDetectionMS";
       this.lblBlackarDetectionMS.Size = new System.Drawing.Size(95, 13);
       this.lblBlackarDetectionMS.TabIndex = 30;
@@ -1005,16 +1042,16 @@
       this.grpDeactivate.Controls.Add(this.lblEnd);
       this.grpDeactivate.Controls.Add(this.edExcludeStart);
       this.grpDeactivate.Controls.Add(this.lblStart);
-      this.grpDeactivate.Location = new System.Drawing.Point(6, 332);
+      this.grpDeactivate.Location = new System.Drawing.Point(5, 340);
       this.grpDeactivate.Name = "grpDeactivate";
-      this.grpDeactivate.Size = new System.Drawing.Size(444, 85);
+      this.grpDeactivate.Size = new System.Drawing.Size(450, 80);
       this.grpDeactivate.TabIndex = 8;
       this.grpDeactivate.TabStop = false;
       this.grpDeactivate.Text = "Disable LEDs between";
       // 
       // edExcludeEnd
       // 
-      this.edExcludeEnd.Location = new System.Drawing.Point(75, 49);
+      this.edExcludeEnd.Location = new System.Drawing.Point(75, 47);
       this.edExcludeEnd.Name = "edExcludeEnd";
       this.edExcludeEnd.Size = new System.Drawing.Size(50, 20);
       this.edExcludeEnd.TabIndex = 15;
@@ -1024,7 +1061,7 @@
       // lblEnd
       // 
       this.lblEnd.AutoSize = true;
-      this.lblEnd.Location = new System.Drawing.Point(7, 52);
+      this.lblEnd.Location = new System.Drawing.Point(10, 50);
       this.lblEnd.Name = "lblEnd";
       this.lblEnd.Size = new System.Drawing.Size(29, 13);
       this.lblEnd.TabIndex = 2;
@@ -1032,7 +1069,7 @@
       // 
       // edExcludeStart
       // 
-      this.edExcludeStart.Location = new System.Drawing.Point(75, 23);
+      this.edExcludeStart.Location = new System.Drawing.Point(75, 22);
       this.edExcludeStart.Name = "edExcludeStart";
       this.edExcludeStart.Size = new System.Drawing.Size(50, 20);
       this.edExcludeStart.TabIndex = 14;
@@ -1042,7 +1079,7 @@
       // lblStart
       // 
       this.lblStart.AutoSize = true;
-      this.lblStart.Location = new System.Drawing.Point(7, 26);
+      this.lblStart.Location = new System.Drawing.Point(10, 25);
       this.lblStart.Name = "lblStart";
       this.lblStart.Size = new System.Drawing.Size(32, 13);
       this.lblStart.TabIndex = 0;
@@ -1050,7 +1087,7 @@
       // 
       // tbBlackbarDetectionTime
       // 
-      this.tbBlackbarDetectionTime.Location = new System.Drawing.Point(209, 167);
+      this.tbBlackbarDetectionTime.Location = new System.Drawing.Point(209, 172);
       this.tbBlackbarDetectionTime.Name = "tbBlackbarDetectionTime";
       this.tbBlackbarDetectionTime.Size = new System.Drawing.Size(41, 20);
       this.tbBlackbarDetectionTime.TabIndex = 13;
@@ -1060,9 +1097,9 @@
       // lblHintMenuButtons
       // 
       this.lblHintMenuButtons.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintMenuButtons.Location = new System.Drawing.Point(294, 15);
+      this.lblHintMenuButtons.Location = new System.Drawing.Point(300, 25);
       this.lblHintMenuButtons.Name = "lblHintMenuButtons";
-      this.lblHintMenuButtons.Size = new System.Drawing.Size(153, 103);
+      this.lblHintMenuButtons.Size = new System.Drawing.Size(153, 92);
       this.lblHintMenuButtons.TabIndex = 18;
       this.lblHintMenuButtons.Text = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3" +
     "D-SBS mode.";
@@ -1070,7 +1107,7 @@
       // ckBlackbarDetection
       // 
       this.ckBlackbarDetection.AutoSize = true;
-      this.ckBlackbarDetection.Location = new System.Drawing.Point(13, 170);
+      this.ckBlackbarDetection.Location = new System.Drawing.Point(12, 175);
       this.ckBlackbarDetection.Name = "ckBlackbarDetection";
       this.ckBlackbarDetection.Size = new System.Drawing.Size(146, 17);
       this.ckBlackbarDetection.TabIndex = 12;
@@ -1080,7 +1117,7 @@
       // lblRefreshRate
       // 
       this.lblRefreshRate.AutoSize = true;
-      this.lblRefreshRate.Location = new System.Drawing.Point(415, 147);
+      this.lblRefreshRate.Location = new System.Drawing.Point(415, 150);
       this.lblRefreshRate.Name = "lblRefreshRate";
       this.lblRefreshRate.Size = new System.Drawing.Size(20, 13);
       this.lblRefreshRate.TabIndex = 27;
@@ -1088,7 +1125,7 @@
       // 
       // tbRefreshRate
       // 
-      this.tbRefreshRate.Location = new System.Drawing.Point(373, 144);
+      this.tbRefreshRate.Location = new System.Drawing.Point(373, 147);
       this.tbRefreshRate.Name = "tbRefreshRate";
       this.tbRefreshRate.Size = new System.Drawing.Size(41, 20);
       this.tbRefreshRate.TabIndex = 11;
@@ -1098,7 +1135,7 @@
       // lblDelay
       // 
       this.lblDelay.AutoSize = true;
-      this.lblDelay.Location = new System.Drawing.Point(256, 147);
+      this.lblDelay.Location = new System.Drawing.Point(256, 150);
       this.lblDelay.Name = "lblDelay";
       this.lblDelay.Size = new System.Drawing.Size(62, 13);
       this.lblDelay.TabIndex = 24;
@@ -1106,7 +1143,7 @@
       // 
       // tbDelay
       // 
-      this.tbDelay.Location = new System.Drawing.Point(209, 144);
+      this.tbDelay.Location = new System.Drawing.Point(209, 147);
       this.tbDelay.Name = "tbDelay";
       this.tbDelay.Size = new System.Drawing.Size(41, 20);
       this.tbDelay.TabIndex = 10;
@@ -1116,7 +1153,7 @@
       // ckDelay
       // 
       this.ckDelay.AutoSize = true;
-      this.ckDelay.Location = new System.Drawing.Point(13, 147);
+      this.ckDelay.Location = new System.Drawing.Point(12, 150);
       this.ckDelay.Name = "ckDelay";
       this.ckDelay.Size = new System.Drawing.Size(77, 17);
       this.ckDelay.TabIndex = 9;
@@ -1126,7 +1163,7 @@
       // lblMenuButton
       // 
       this.lblMenuButton.AutoSize = true;
-      this.lblMenuButton.Location = new System.Drawing.Point(10, 26);
+      this.lblMenuButton.Location = new System.Drawing.Point(10, 25);
       this.lblMenuButton.Name = "lblMenuButton";
       this.lblMenuButton.Size = new System.Drawing.Size(95, 13);
       this.lblMenuButton.TabIndex = 21;
@@ -1142,7 +1179,7 @@
             "Yellow",
             "Blue",
             "None"});
-      this.cbMenuButton.Location = new System.Drawing.Point(190, 23);
+      this.cbMenuButton.Location = new System.Drawing.Point(190, 21);
       this.cbMenuButton.Name = "cbMenuButton";
       this.cbMenuButton.Size = new System.Drawing.Size(96, 21);
       this.cbMenuButton.TabIndex = 3;
@@ -1151,7 +1188,7 @@
       // lblProfile
       // 
       this.lblProfile.AutoSize = true;
-      this.lblProfile.Location = new System.Drawing.Point(10, 76);
+      this.lblProfile.Location = new System.Drawing.Point(10, 75);
       this.lblProfile.Name = "lblProfile";
       this.lblProfile.Size = new System.Drawing.Size(97, 13);
       this.lblProfile.TabIndex = 17;
@@ -1167,7 +1204,7 @@
             "Yellow",
             "Blue",
             "None"});
-      this.comboBox2.Location = new System.Drawing.Point(190, 73);
+      this.comboBox2.Location = new System.Drawing.Point(190, 71);
       this.comboBox2.Name = "comboBox2";
       this.comboBox2.Size = new System.Drawing.Size(96, 21);
       this.comboBox2.TabIndex = 5;
@@ -1176,7 +1213,7 @@
       // lblFrames
       // 
       this.lblFrames.AutoSize = true;
-      this.lblFrames.Location = new System.Drawing.Point(256, 124);
+      this.lblFrames.Location = new System.Drawing.Point(256, 125);
       this.lblFrames.Name = "lblFrames";
       this.lblFrames.Size = new System.Drawing.Size(101, 13);
       this.lblFrames.TabIndex = 15;
@@ -1184,7 +1221,7 @@
       // 
       // lowCpuTime
       // 
-      this.lowCpuTime.Location = new System.Drawing.Point(209, 121);
+      this.lowCpuTime.Location = new System.Drawing.Point(209, 122);
       this.lowCpuTime.MaxLength = 4;
       this.lowCpuTime.Name = "lowCpuTime";
       this.lowCpuTime.Size = new System.Drawing.Size(41, 20);
@@ -1196,7 +1233,7 @@
       // ckLowCpu
       // 
       this.ckLowCpu.AutoSize = true;
-      this.ckLowCpu.Location = new System.Drawing.Point(13, 124);
+      this.ckLowCpu.Location = new System.Drawing.Point(12, 125);
       this.ckLowCpu.Name = "ckLowCpu";
       this.ckLowCpu.Size = new System.Drawing.Size(71, 17);
       this.ckLowCpu.TabIndex = 7;
@@ -1206,7 +1243,7 @@
       // ckOnMediaStart
       // 
       this.ckOnMediaStart.AutoSize = true;
-      this.ckOnMediaStart.Location = new System.Drawing.Point(13, 101);
+      this.ckOnMediaStart.Location = new System.Drawing.Point(12, 100);
       this.ckOnMediaStart.Name = "ckOnMediaStart";
       this.ckOnMediaStart.Size = new System.Drawing.Size(208, 17);
       this.ckOnMediaStart.TabIndex = 6;
@@ -1223,7 +1260,7 @@
             "Yellow",
             "Blue",
             "None"});
-      this.comboBox1.Location = new System.Drawing.Point(190, 48);
+      this.comboBox1.Location = new System.Drawing.Point(190, 46);
       this.comboBox1.Name = "comboBox1";
       this.comboBox1.Size = new System.Drawing.Size(96, 21);
       this.comboBox1.TabIndex = 4;
@@ -1232,7 +1269,7 @@
       // lblLedsOnOff
       // 
       this.lblLedsOnOff.AutoSize = true;
-      this.lblLedsOnOff.Location = new System.Drawing.Point(10, 51);
+      this.lblLedsOnOff.Location = new System.Drawing.Point(10, 50);
       this.lblLedsOnOff.Name = "lblLedsOnOff";
       this.lblLedsOnOff.Size = new System.Drawing.Size(125, 13);
       this.lblLedsOnOff.TabIndex = 8;
@@ -1241,6 +1278,7 @@
       // tabMenu
       // 
       this.tabMenu.Controls.Add(this.tabPageGeneric);
+      this.tabMenu.Controls.Add(this.tabPageAmbiBox);
       this.tabMenu.Controls.Add(this.tabPageAtmowin);
       this.tabMenu.Controls.Add(this.tabPageBoblight);
       this.tabMenu.Controls.Add(this.tabPageHue);
@@ -1248,8 +1286,202 @@
       this.tabMenu.Location = new System.Drawing.Point(12, 12);
       this.tabMenu.Name = "tabMenu";
       this.tabMenu.SelectedIndex = 0;
-      this.tabMenu.Size = new System.Drawing.Size(849, 475);
+      this.tabMenu.Size = new System.Drawing.Size(850, 475);
       this.tabMenu.TabIndex = 20;
+      // 
+      // tabPageAmbiBox
+      // 
+      this.tabPageAmbiBox.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageAmbiBox.Controls.Add(this.grpAmbiBoxNetwork);
+      this.tabPageAmbiBox.Controls.Add(this.grpAmbiBoxLocal);
+      this.tabPageAmbiBox.Location = new System.Drawing.Point(4, 22);
+      this.tabPageAmbiBox.Name = "tabPageAmbiBox";
+      this.tabPageAmbiBox.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPageAmbiBox.Size = new System.Drawing.Size(842, 449);
+      this.tabPageAmbiBox.TabIndex = 5;
+      this.tabPageAmbiBox.Text = "AmbiBox";
+      // 
+      // grpAmbiBoxNetwork
+      // 
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxExternalProfile);
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxMediaPortalProfile);
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxReconnectDelay);
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxMaxReconnectAttempts);
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxPort);
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxIP);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxExternalProfile);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxMediaPortalProfile);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxReconnectDelay);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxMaxReconnectAttempts);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxPort);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxIP);
+      this.grpAmbiBoxNetwork.Location = new System.Drawing.Point(10, 140);
+      this.grpAmbiBoxNetwork.Name = "grpAmbiBoxNetwork";
+      this.grpAmbiBoxNetwork.Size = new System.Drawing.Size(820, 205);
+      this.grpAmbiBoxNetwork.TabIndex = 1;
+      this.grpAmbiBoxNetwork.TabStop = false;
+      this.grpAmbiBoxNetwork.Text = "AmbiBox API";
+      // 
+      // tbAmbiBoxExternalProfile
+      // 
+      this.tbAmbiBoxExternalProfile.Location = new System.Drawing.Point(200, 147);
+      this.tbAmbiBoxExternalProfile.Name = "tbAmbiBoxExternalProfile";
+      this.tbAmbiBoxExternalProfile.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiBoxExternalProfile.TabIndex = 13;
+      // 
+      // tbAmbiBoxMediaPortalProfile
+      // 
+      this.tbAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(200, 122);
+      this.tbAmbiBoxMediaPortalProfile.Name = "tbAmbiBoxMediaPortalProfile";
+      this.tbAmbiBoxMediaPortalProfile.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiBoxMediaPortalProfile.TabIndex = 12;
+      // 
+      // tbAmbiBoxReconnectDelay
+      // 
+      this.tbAmbiBoxReconnectDelay.Location = new System.Drawing.Point(200, 97);
+      this.tbAmbiBoxReconnectDelay.Name = "tbAmbiBoxReconnectDelay";
+      this.tbAmbiBoxReconnectDelay.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiBoxReconnectDelay.TabIndex = 10;
+      this.tbAmbiBoxReconnectDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAmbiBoxReconnectDelay_Validating);
+      // 
+      // tbAmbiBoxMaxReconnectAttempts
+      // 
+      this.tbAmbiBoxMaxReconnectAttempts.Location = new System.Drawing.Point(200, 72);
+      this.tbAmbiBoxMaxReconnectAttempts.Name = "tbAmbiBoxMaxReconnectAttempts";
+      this.tbAmbiBoxMaxReconnectAttempts.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiBoxMaxReconnectAttempts.TabIndex = 9;
+      this.tbAmbiBoxMaxReconnectAttempts.Validating += new System.ComponentModel.CancelEventHandler(this.tbAmbiBoxMaxReconnectAttempts_Validating);
+      // 
+      // tbAmbiBoxPort
+      // 
+      this.tbAmbiBoxPort.Location = new System.Drawing.Point(200, 47);
+      this.tbAmbiBoxPort.Name = "tbAmbiBoxPort";
+      this.tbAmbiBoxPort.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiBoxPort.TabIndex = 8;
+      this.tbAmbiBoxPort.Validating += new System.ComponentModel.CancelEventHandler(this.tbAmbiBoxPort_Validating);
+      // 
+      // tbAmbiBoxIP
+      // 
+      this.tbAmbiBoxIP.Location = new System.Drawing.Point(200, 22);
+      this.tbAmbiBoxIP.Name = "tbAmbiBoxIP";
+      this.tbAmbiBoxIP.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiBoxIP.TabIndex = 7;
+      this.tbAmbiBoxIP.Validating += new System.ComponentModel.CancelEventHandler(this.tbAmbiBoxIP_Validating);
+      // 
+      // lblAmbiBoxExternalProfile
+      // 
+      this.lblAmbiBoxExternalProfile.AutoSize = true;
+      this.lblAmbiBoxExternalProfile.Location = new System.Drawing.Point(10, 150);
+      this.lblAmbiBoxExternalProfile.Name = "lblAmbiBoxExternalProfile";
+      this.lblAmbiBoxExternalProfile.Size = new System.Drawing.Size(118, 13);
+      this.lblAmbiBoxExternalProfile.TabIndex = 6;
+      this.lblAmbiBoxExternalProfile.Text = "External capture profile:";
+      // 
+      // lblAmbiBoxMediaPortalProfile
+      // 
+      this.lblAmbiBoxMediaPortalProfile.AutoSize = true;
+      this.lblAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(10, 125);
+      this.lblAmbiBoxMediaPortalProfile.Name = "lblAmbiBoxMediaPortalProfile";
+      this.lblAmbiBoxMediaPortalProfile.Size = new System.Drawing.Size(136, 13);
+      this.lblAmbiBoxMediaPortalProfile.TabIndex = 5;
+      this.lblAmbiBoxMediaPortalProfile.Text = "MediaPortal capture profile:";
+      // 
+      // lblAmbiBoxReconnectDelay
+      // 
+      this.lblAmbiBoxReconnectDelay.AutoSize = true;
+      this.lblAmbiBoxReconnectDelay.Location = new System.Drawing.Point(10, 100);
+      this.lblAmbiBoxReconnectDelay.Name = "lblAmbiBoxReconnectDelay";
+      this.lblAmbiBoxReconnectDelay.Size = new System.Drawing.Size(91, 13);
+      this.lblAmbiBoxReconnectDelay.TabIndex = 3;
+      this.lblAmbiBoxReconnectDelay.Text = "Reconnect delay:";
+      // 
+      // lblAmbiBoxMaxReconnectAttempts
+      // 
+      this.lblAmbiBoxMaxReconnectAttempts.AutoSize = true;
+      this.lblAmbiBoxMaxReconnectAttempts.Location = new System.Drawing.Point(10, 75);
+      this.lblAmbiBoxMaxReconnectAttempts.Name = "lblAmbiBoxMaxReconnectAttempts";
+      this.lblAmbiBoxMaxReconnectAttempts.Size = new System.Drawing.Size(106, 13);
+      this.lblAmbiBoxMaxReconnectAttempts.TabIndex = 2;
+      this.lblAmbiBoxMaxReconnectAttempts.Text = "Reconnect attempts:";
+      // 
+      // lblAmbiBoxPort
+      // 
+      this.lblAmbiBoxPort.AutoSize = true;
+      this.lblAmbiBoxPort.Location = new System.Drawing.Point(10, 50);
+      this.lblAmbiBoxPort.Name = "lblAmbiBoxPort";
+      this.lblAmbiBoxPort.Size = new System.Drawing.Size(29, 13);
+      this.lblAmbiBoxPort.TabIndex = 1;
+      this.lblAmbiBoxPort.Text = "Port:";
+      // 
+      // lblAmbiBoxIP
+      // 
+      this.lblAmbiBoxIP.AutoSize = true;
+      this.lblAmbiBoxIP.Location = new System.Drawing.Point(10, 25);
+      this.lblAmbiBoxIP.Name = "lblAmbiBoxIP";
+      this.lblAmbiBoxIP.Size = new System.Drawing.Size(20, 13);
+      this.lblAmbiBoxIP.TabIndex = 0;
+      this.lblAmbiBoxIP.Text = "IP:";
+      // 
+      // grpAmbiBoxLocal
+      // 
+      this.grpAmbiBoxLocal.Controls.Add(this.cbAmbiBoxAutoStop);
+      this.grpAmbiBoxLocal.Controls.Add(this.cbAmbiBoxAutoStart);
+      this.grpAmbiBoxLocal.Controls.Add(this.lblAmbiBoxPath);
+      this.grpAmbiBoxLocal.Controls.Add(this.tbAmbiBoxPath);
+      this.grpAmbiBoxLocal.Controls.Add(this.btnSelectFileAmbiBox);
+      this.grpAmbiBoxLocal.Location = new System.Drawing.Point(10, 10);
+      this.grpAmbiBoxLocal.Name = "grpAmbiBoxLocal";
+      this.grpAmbiBoxLocal.Size = new System.Drawing.Size(820, 125);
+      this.grpAmbiBoxLocal.TabIndex = 0;
+      this.grpAmbiBoxLocal.TabStop = false;
+      this.grpAmbiBoxLocal.Text = "AmbiBox.exe";
+      // 
+      // cbAmbiBoxAutoStop
+      // 
+      this.cbAmbiBoxAutoStop.AutoSize = true;
+      this.cbAmbiBoxAutoStop.Location = new System.Drawing.Point(12, 100);
+      this.cbAmbiBoxAutoStop.Name = "cbAmbiBoxAutoStop";
+      this.cbAmbiBoxAutoStop.Size = new System.Drawing.Size(173, 17);
+      this.cbAmbiBoxAutoStop.TabIndex = 7;
+      this.cbAmbiBoxAutoStop.Text = "Stop AmbiBox with MediaPortal";
+      this.cbAmbiBoxAutoStop.UseVisualStyleBackColor = true;
+      // 
+      // cbAmbiBoxAutoStart
+      // 
+      this.cbAmbiBoxAutoStart.AutoSize = true;
+      this.cbAmbiBoxAutoStart.Location = new System.Drawing.Point(12, 75);
+      this.cbAmbiBoxAutoStart.Name = "cbAmbiBoxAutoStart";
+      this.cbAmbiBoxAutoStart.Size = new System.Drawing.Size(173, 17);
+      this.cbAmbiBoxAutoStart.TabIndex = 6;
+      this.cbAmbiBoxAutoStart.Text = "Start AmbiBox with MediaPortal";
+      this.cbAmbiBoxAutoStart.UseVisualStyleBackColor = true;
+      // 
+      // lblAmbiBoxPath
+      // 
+      this.lblAmbiBoxPath.AutoSize = true;
+      this.lblAmbiBoxPath.Location = new System.Drawing.Point(10, 25);
+      this.lblAmbiBoxPath.Name = "lblAmbiBoxPath";
+      this.lblAmbiBoxPath.Size = new System.Drawing.Size(153, 13);
+      this.lblAmbiBoxPath.TabIndex = 5;
+      this.lblAmbiBoxPath.Text = "Path+Filename to AmbiBox.exe";
+      // 
+      // tbAmbiBoxPath
+      // 
+      this.tbAmbiBoxPath.Location = new System.Drawing.Point(12, 43);
+      this.tbAmbiBoxPath.Name = "tbAmbiBoxPath";
+      this.tbAmbiBoxPath.Size = new System.Drawing.Size(700, 20);
+      this.tbAmbiBoxPath.TabIndex = 4;
+      // 
+      // btnSelectFileAmbiBox
+      // 
+      this.btnSelectFileAmbiBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.btnSelectFileAmbiBox.Location = new System.Drawing.Point(725, 41);
+      this.btnSelectFileAmbiBox.Name = "btnSelectFileAmbiBox";
+      this.btnSelectFileAmbiBox.Size = new System.Drawing.Size(85, 23);
+      this.btnSelectFileAmbiBox.TabIndex = 3;
+      this.btnSelectFileAmbiBox.Text = "...";
+      this.btnSelectFileAmbiBox.UseVisualStyleBackColor = true;
+      this.btnSelectFileAmbiBox.Click += new System.EventHandler(this.btnSelectFileAmbiBox_Click);
       // 
       // tabPageBoblight
       // 
@@ -1259,7 +1491,7 @@
       this.tabPageBoblight.Location = new System.Drawing.Point(4, 22);
       this.tabPageBoblight.Name = "tabPageBoblight";
       this.tabPageBoblight.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageBoblight.Size = new System.Drawing.Size(841, 449);
+      this.tabPageBoblight.Size = new System.Drawing.Size(842, 449);
       this.tabPageBoblight.TabIndex = 4;
       this.tabPageBoblight.Text = "Boblight";
       // 
@@ -1284,9 +1516,9 @@
       this.grpBoblightSettings.Controls.Add(this.tbarBoblightSaturation);
       this.grpBoblightSettings.Controls.Add(this.tbarBoblightAutospeed);
       this.grpBoblightSettings.Controls.Add(this.tbarBoblightSpeed);
-      this.grpBoblightSettings.Location = new System.Drawing.Point(10, 192);
+      this.grpBoblightSettings.Location = new System.Drawing.Point(10, 165);
       this.grpBoblightSettings.Name = "grpBoblightSettings";
-      this.grpBoblightSettings.Size = new System.Drawing.Size(817, 243);
+      this.grpBoblightSettings.Size = new System.Drawing.Size(820, 245);
       this.grpBoblightSettings.TabIndex = 1;
       this.grpBoblightSettings.TabStop = false;
       this.grpBoblightSettings.Text = "Boblight settings";
@@ -1311,7 +1543,7 @@
       // lblBoblightGamma
       // 
       this.lblBoblightGamma.AutoSize = true;
-      this.lblBoblightGamma.Location = new System.Drawing.Point(6, 200);
+      this.lblBoblightGamma.Location = new System.Drawing.Point(10, 200);
       this.lblBoblightGamma.Name = "lblBoblightGamma";
       this.lblBoblightGamma.Size = new System.Drawing.Size(46, 13);
       this.lblBoblightGamma.TabIndex = 17;
@@ -1370,7 +1602,7 @@
       // lblBoblightThreshold
       // 
       this.lblBoblightThreshold.AutoSize = true;
-      this.lblBoblightThreshold.Location = new System.Drawing.Point(6, 165);
+      this.lblBoblightThreshold.Location = new System.Drawing.Point(10, 165);
       this.lblBoblightThreshold.Name = "lblBoblightThreshold";
       this.lblBoblightThreshold.Size = new System.Drawing.Size(57, 13);
       this.lblBoblightThreshold.TabIndex = 9;
@@ -1379,7 +1611,7 @@
       // lblBoblightValue
       // 
       this.lblBoblightValue.AutoSize = true;
-      this.lblBoblightValue.Location = new System.Drawing.Point(6, 130);
+      this.lblBoblightValue.Location = new System.Drawing.Point(10, 130);
       this.lblBoblightValue.Name = "lblBoblightValue";
       this.lblBoblightValue.Size = new System.Drawing.Size(37, 13);
       this.lblBoblightValue.TabIndex = 8;
@@ -1388,7 +1620,7 @@
       // lblBoblightSaturation
       // 
       this.lblBoblightSaturation.AutoSize = true;
-      this.lblBoblightSaturation.Location = new System.Drawing.Point(6, 95);
+      this.lblBoblightSaturation.Location = new System.Drawing.Point(10, 95);
       this.lblBoblightSaturation.Name = "lblBoblightSaturation";
       this.lblBoblightSaturation.Size = new System.Drawing.Size(58, 13);
       this.lblBoblightSaturation.TabIndex = 7;
@@ -1397,7 +1629,7 @@
       // lblBoblightAutospeed
       // 
       this.lblBoblightAutospeed.AutoSize = true;
-      this.lblBoblightAutospeed.Location = new System.Drawing.Point(6, 60);
+      this.lblBoblightAutospeed.Location = new System.Drawing.Point(10, 60);
       this.lblBoblightAutospeed.Name = "lblBoblightAutospeed";
       this.lblBoblightAutospeed.Size = new System.Drawing.Size(61, 13);
       this.lblBoblightAutospeed.TabIndex = 6;
@@ -1406,7 +1638,7 @@
       // lblBoblightSpeed
       // 
       this.lblBoblightSpeed.AutoSize = true;
-      this.lblBoblightSpeed.Location = new System.Drawing.Point(6, 25);
+      this.lblBoblightSpeed.Location = new System.Drawing.Point(10, 25);
       this.lblBoblightSpeed.Name = "lblBoblightSpeed";
       this.lblBoblightSpeed.Size = new System.Drawing.Size(41, 13);
       this.lblBoblightSpeed.TabIndex = 5;
@@ -1471,14 +1703,14 @@
       this.grpBoblightGeneral.Controls.Add(this.lblBoblightIP);
       this.grpBoblightGeneral.Location = new System.Drawing.Point(10, 10);
       this.grpBoblightGeneral.Name = "grpBoblightGeneral";
-      this.grpBoblightGeneral.Size = new System.Drawing.Size(817, 175);
+      this.grpBoblightGeneral.Size = new System.Drawing.Size(820, 150);
       this.grpBoblightGeneral.TabIndex = 0;
       this.grpBoblightGeneral.TabStop = false;
       this.grpBoblightGeneral.Text = "General settings";
       // 
       // tbBoblightMaxFPS
       // 
-      this.tbBoblightMaxFPS.Location = new System.Drawing.Point(200, 142);
+      this.tbBoblightMaxFPS.Location = new System.Drawing.Point(200, 122);
       this.tbBoblightMaxFPS.Name = "tbBoblightMaxFPS";
       this.tbBoblightMaxFPS.Size = new System.Drawing.Size(100, 20);
       this.tbBoblightMaxFPS.TabIndex = 9;
@@ -1486,7 +1718,7 @@
       // 
       // tbBoblightReconnectDelay
       // 
-      this.tbBoblightReconnectDelay.Location = new System.Drawing.Point(200, 112);
+      this.tbBoblightReconnectDelay.Location = new System.Drawing.Point(200, 97);
       this.tbBoblightReconnectDelay.Name = "tbBoblightReconnectDelay";
       this.tbBoblightReconnectDelay.Size = new System.Drawing.Size(100, 20);
       this.tbBoblightReconnectDelay.TabIndex = 8;
@@ -1494,7 +1726,7 @@
       // 
       // tbBoblightMaxReconnectAttempts
       // 
-      this.tbBoblightMaxReconnectAttempts.Location = new System.Drawing.Point(200, 82);
+      this.tbBoblightMaxReconnectAttempts.Location = new System.Drawing.Point(200, 72);
       this.tbBoblightMaxReconnectAttempts.Name = "tbBoblightMaxReconnectAttempts";
       this.tbBoblightMaxReconnectAttempts.Size = new System.Drawing.Size(100, 20);
       this.tbBoblightMaxReconnectAttempts.TabIndex = 7;
@@ -1502,7 +1734,7 @@
       // 
       // tbBoblightPort
       // 
-      this.tbBoblightPort.Location = new System.Drawing.Point(200, 52);
+      this.tbBoblightPort.Location = new System.Drawing.Point(200, 47);
       this.tbBoblightPort.Name = "tbBoblightPort";
       this.tbBoblightPort.Size = new System.Drawing.Size(100, 20);
       this.tbBoblightPort.TabIndex = 6;
@@ -1519,7 +1751,7 @@
       // lblBoblightMaxFPS
       // 
       this.lblBoblightMaxFPS.AutoSize = true;
-      this.lblBoblightMaxFPS.Location = new System.Drawing.Point(6, 145);
+      this.lblBoblightMaxFPS.Location = new System.Drawing.Point(10, 125);
       this.lblBoblightMaxFPS.Name = "lblBoblightMaxFPS";
       this.lblBoblightMaxFPS.Size = new System.Drawing.Size(105, 13);
       this.lblBoblightMaxFPS.TabIndex = 4;
@@ -1528,7 +1760,7 @@
       // lblBoblightReconnectDelay
       // 
       this.lblBoblightReconnectDelay.AutoSize = true;
-      this.lblBoblightReconnectDelay.Location = new System.Drawing.Point(6, 115);
+      this.lblBoblightReconnectDelay.Location = new System.Drawing.Point(10, 100);
       this.lblBoblightReconnectDelay.Name = "lblBoblightReconnectDelay";
       this.lblBoblightReconnectDelay.Size = new System.Drawing.Size(91, 13);
       this.lblBoblightReconnectDelay.TabIndex = 3;
@@ -1537,7 +1769,7 @@
       // lblBoblightMaxReconnectAttempts
       // 
       this.lblBoblightMaxReconnectAttempts.AutoSize = true;
-      this.lblBoblightMaxReconnectAttempts.Location = new System.Drawing.Point(6, 85);
+      this.lblBoblightMaxReconnectAttempts.Location = new System.Drawing.Point(10, 75);
       this.lblBoblightMaxReconnectAttempts.Name = "lblBoblightMaxReconnectAttempts";
       this.lblBoblightMaxReconnectAttempts.Size = new System.Drawing.Size(106, 13);
       this.lblBoblightMaxReconnectAttempts.TabIndex = 2;
@@ -1546,7 +1778,7 @@
       // lblBoblightPort
       // 
       this.lblBoblightPort.AutoSize = true;
-      this.lblBoblightPort.Location = new System.Drawing.Point(6, 55);
+      this.lblBoblightPort.Location = new System.Drawing.Point(10, 50);
       this.lblBoblightPort.Name = "lblBoblightPort";
       this.lblBoblightPort.Size = new System.Drawing.Size(29, 13);
       this.lblBoblightPort.TabIndex = 1;
@@ -1555,7 +1787,7 @@
       // lblBoblightIP
       // 
       this.lblBoblightIP.AutoSize = true;
-      this.lblBoblightIP.Location = new System.Drawing.Point(6, 25);
+      this.lblBoblightIP.Location = new System.Drawing.Point(10, 25);
       this.lblBoblightIP.Name = "lblBoblightIP";
       this.lblBoblightIP.Size = new System.Drawing.Size(20, 13);
       this.lblBoblightIP.TabIndex = 0;
@@ -1568,7 +1800,7 @@
       this.tabPageHue.Controls.Add(this.HueNetworkSettings);
       this.tabPageHue.Location = new System.Drawing.Point(4, 22);
       this.tabPageHue.Name = "tabPageHue";
-      this.tabPageHue.Size = new System.Drawing.Size(841, 449);
+      this.tabPageHue.Size = new System.Drawing.Size(842, 449);
       this.tabPageHue.TabIndex = 3;
       this.tabPageHue.Text = "Hue";
       // 
@@ -1581,9 +1813,9 @@
       this.groupBox1.Controls.Add(this.btnSelectFileHue);
       this.groupBox1.Controls.Add(this.edFileHue);
       this.groupBox1.Controls.Add(this.ckStartHue);
-      this.groupBox1.Location = new System.Drawing.Point(13, 17);
+      this.groupBox1.Location = new System.Drawing.Point(10, 10);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(822, 179);
+      this.groupBox1.Size = new System.Drawing.Size(820, 175);
       this.groupBox1.TabIndex = 27;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Settings";
@@ -1591,7 +1823,7 @@
       // ckHueBridgeDisableOnSuspend
       // 
       this.ckHueBridgeDisableOnSuspend.AutoSize = true;
-      this.ckHueBridgeDisableOnSuspend.Location = new System.Drawing.Point(7, 130);
+      this.ckHueBridgeDisableOnSuspend.Location = new System.Drawing.Point(12, 125);
       this.ckHueBridgeDisableOnSuspend.Name = "ckHueBridgeDisableOnSuspend";
       this.ckHueBridgeDisableOnSuspend.Size = new System.Drawing.Size(177, 17);
       this.ckHueBridgeDisableOnSuspend.TabIndex = 6;
@@ -1601,7 +1833,7 @@
       // ckHueBridgeEnableOnResume
       // 
       this.ckHueBridgeEnableOnResume.AutoSize = true;
-      this.ckHueBridgeEnableOnResume.Location = new System.Drawing.Point(7, 107);
+      this.ckHueBridgeEnableOnResume.Location = new System.Drawing.Point(12, 100);
       this.ckHueBridgeEnableOnResume.Name = "ckHueBridgeEnableOnResume";
       this.ckHueBridgeEnableOnResume.Size = new System.Drawing.Size(246, 17);
       this.ckHueBridgeEnableOnResume.TabIndex = 5;
@@ -1611,7 +1843,7 @@
       // ckhueIsRemoteMachine
       // 
       this.ckhueIsRemoteMachine.AutoSize = true;
-      this.ckhueIsRemoteMachine.Location = new System.Drawing.Point(7, 152);
+      this.ckhueIsRemoteMachine.Location = new System.Drawing.Point(12, 150);
       this.ckhueIsRemoteMachine.Name = "ckhueIsRemoteMachine";
       this.ckhueIsRemoteMachine.Size = new System.Drawing.Size(281, 17);
       this.ckhueIsRemoteMachine.TabIndex = 4;
@@ -1621,7 +1853,7 @@
       // lblPathInfoHue
       // 
       this.lblPathInfoHue.AutoSize = true;
-      this.lblPathInfoHue.Location = new System.Drawing.Point(6, 25);
+      this.lblPathInfoHue.Location = new System.Drawing.Point(10, 25);
       this.lblPathInfoHue.Name = "lblPathInfoHue";
       this.lblPathInfoHue.Size = new System.Drawing.Size(156, 13);
       this.lblPathInfoHue.TabIndex = 0;
@@ -1630,9 +1862,9 @@
       // btnSelectFileHue
       // 
       this.btnSelectFileHue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.btnSelectFileHue.Location = new System.Drawing.Point(714, 40);
+      this.btnSelectFileHue.Location = new System.Drawing.Point(723, 41);
       this.btnSelectFileHue.Name = "btnSelectFileHue";
-      this.btnSelectFileHue.Size = new System.Drawing.Size(92, 23);
+      this.btnSelectFileHue.Size = new System.Drawing.Size(85, 23);
       this.btnSelectFileHue.TabIndex = 2;
       this.btnSelectFileHue.Text = "...";
       this.btnSelectFileHue.UseVisualStyleBackColor = true;
@@ -1644,9 +1876,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.edFileHue.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
       this.edFileHue.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
-      this.edFileHue.Location = new System.Drawing.Point(9, 42);
+      this.edFileHue.Location = new System.Drawing.Point(12, 43);
       this.edFileHue.Name = "edFileHue";
-      this.edFileHue.Size = new System.Drawing.Size(699, 20);
+      this.edFileHue.Size = new System.Drawing.Size(698, 20);
       this.edFileHue.TabIndex = 1;
       // 
       // ckStartHue
@@ -1654,7 +1886,7 @@
       this.ckStartHue.AutoSize = true;
       this.ckStartHue.Checked = true;
       this.ckStartHue.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckStartHue.Location = new System.Drawing.Point(7, 84);
+      this.ckStartHue.Location = new System.Drawing.Point(12, 75);
       this.ckStartHue.Name = "ckStartHue";
       this.ckStartHue.Size = new System.Drawing.Size(176, 17);
       this.ckStartHue.TabIndex = 3;
@@ -1674,16 +1906,16 @@
       this.HueNetworkSettings.Controls.Add(this.lblHuePort);
       this.HueNetworkSettings.Controls.Add(this.tbHueIP);
       this.HueNetworkSettings.Controls.Add(this.lblHueIP);
-      this.HueNetworkSettings.Location = new System.Drawing.Point(416, 202);
+      this.HueNetworkSettings.Location = new System.Drawing.Point(10, 190);
       this.HueNetworkSettings.Name = "HueNetworkSettings";
-      this.HueNetworkSettings.Size = new System.Drawing.Size(419, 244);
+      this.HueNetworkSettings.Size = new System.Drawing.Size(820, 175);
       this.HueNetworkSettings.TabIndex = 0;
       this.HueNetworkSettings.TabStop = false;
       this.HueNetworkSettings.Text = "Network";
       // 
       // tbHueReconnectAttempts
       // 
-      this.tbHueReconnectAttempts.Location = new System.Drawing.Point(230, 127);
+      this.tbHueReconnectAttempts.Location = new System.Drawing.Point(230, 97);
       this.tbHueReconnectAttempts.Name = "tbHueReconnectAttempts";
       this.tbHueReconnectAttempts.Size = new System.Drawing.Size(93, 20);
       this.tbHueReconnectAttempts.TabIndex = 26;
@@ -1692,7 +1924,7 @@
       // lblHueReconnectAttempts
       // 
       this.lblHueReconnectAttempts.AutoSize = true;
-      this.lblHueReconnectAttempts.Location = new System.Drawing.Point(16, 130);
+      this.lblHueReconnectAttempts.Location = new System.Drawing.Point(10, 100);
       this.lblHueReconnectAttempts.Name = "lblHueReconnectAttempts";
       this.lblHueReconnectAttempts.Size = new System.Drawing.Size(106, 13);
       this.lblHueReconnectAttempts.TabIndex = 27;
@@ -1700,14 +1932,14 @@
       // 
       // tbHueMinimalColorDifference
       // 
-      this.tbHueMinimalColorDifference.Location = new System.Drawing.Point(230, 162);
+      this.tbHueMinimalColorDifference.Location = new System.Drawing.Point(230, 122);
       this.tbHueMinimalColorDifference.Name = "tbHueMinimalColorDifference";
       this.tbHueMinimalColorDifference.Size = new System.Drawing.Size(93, 20);
       this.tbHueMinimalColorDifference.TabIndex = 22;
       // 
       // tbHueReconnectDelay
       // 
-      this.tbHueReconnectDelay.Location = new System.Drawing.Point(230, 97);
+      this.tbHueReconnectDelay.Location = new System.Drawing.Point(230, 72);
       this.tbHueReconnectDelay.Name = "tbHueReconnectDelay";
       this.tbHueReconnectDelay.Size = new System.Drawing.Size(93, 20);
       this.tbHueReconnectDelay.TabIndex = 24;
@@ -1716,7 +1948,7 @@
       // lblHueMinimalColorDifference
       // 
       this.lblHueMinimalColorDifference.AutoSize = true;
-      this.lblHueMinimalColorDifference.Location = new System.Drawing.Point(16, 165);
+      this.lblHueMinimalColorDifference.Location = new System.Drawing.Point(10, 125);
       this.lblHueMinimalColorDifference.Name = "lblHueMinimalColorDifference";
       this.lblHueMinimalColorDifference.Size = new System.Drawing.Size(154, 13);
       this.lblHueMinimalColorDifference.TabIndex = 23;
@@ -1725,7 +1957,7 @@
       // lblHueReconnectDelay
       // 
       this.lblHueReconnectDelay.AutoSize = true;
-      this.lblHueReconnectDelay.Location = new System.Drawing.Point(16, 100);
+      this.lblHueReconnectDelay.Location = new System.Drawing.Point(10, 75);
       this.lblHueReconnectDelay.Name = "lblHueReconnectDelay";
       this.lblHueReconnectDelay.Size = new System.Drawing.Size(113, 13);
       this.lblHueReconnectDelay.TabIndex = 25;
@@ -1734,16 +1966,16 @@
       // lblHintHue
       // 
       this.lblHintHue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintHue.Location = new System.Drawing.Point(16, 201);
+      this.lblHintHue.Location = new System.Drawing.Point(10, 150);
       this.lblHintHue.Name = "lblHintHue";
-      this.lblHintHue.Size = new System.Drawing.Size(397, 46);
+      this.lblHintHue.Size = new System.Drawing.Size(796, 13);
       this.lblHintHue.TabIndex = 21;
       this.lblHintHue.Text = "Hint: requires AtmoHue to be running on the above IP and Port to function, do not" +
     " enter your Hue bridge information here\r\n";
       // 
       // tbHuePort
       // 
-      this.tbHuePort.Location = new System.Drawing.Point(230, 63);
+      this.tbHuePort.Location = new System.Drawing.Point(230, 47);
       this.tbHuePort.Name = "tbHuePort";
       this.tbHuePort.Size = new System.Drawing.Size(93, 20);
       this.tbHuePort.TabIndex = 6;
@@ -1752,7 +1984,7 @@
       // lblHuePort
       // 
       this.lblHuePort.AutoSize = true;
-      this.lblHuePort.Location = new System.Drawing.Point(16, 66);
+      this.lblHuePort.Location = new System.Drawing.Point(10, 50);
       this.lblHuePort.Name = "lblHuePort";
       this.lblHuePort.Size = new System.Drawing.Size(29, 13);
       this.lblHuePort.TabIndex = 7;
@@ -1760,7 +1992,7 @@
       // 
       // tbHueIP
       // 
-      this.tbHueIP.Location = new System.Drawing.Point(230, 27);
+      this.tbHueIP.Location = new System.Drawing.Point(230, 22);
       this.tbHueIP.Name = "tbHueIP";
       this.tbHueIP.Size = new System.Drawing.Size(93, 20);
       this.tbHueIP.TabIndex = 4;
@@ -1769,7 +2001,7 @@
       // lblHueIP
       // 
       this.lblHueIP.AutoSize = true;
-      this.lblHueIP.Location = new System.Drawing.Point(16, 30);
+      this.lblHueIP.Location = new System.Drawing.Point(10, 25);
       this.lblHueIP.Name = "lblHueIP";
       this.lblHueIP.Size = new System.Drawing.Size(20, 13);
       this.lblHueIP.TabIndex = 5;
@@ -1777,14 +2009,17 @@
       // 
       // openFileDialog4
       // 
-      this.openFileDialog4.FileName = "openFileDialog4";
       this.openFileDialog4.Filter = "AtmoHue.exe|*.exe";
+      // 
+      // openFileDialog5
+      // 
+      this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(884, 532);
+      this.ClientSize = new System.Drawing.Size(872, 527);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
@@ -1794,8 +2029,8 @@
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MaximizeBox = false;
-      this.MaximumSize = new System.Drawing.Size(900, 570);
-      this.MinimumSize = new System.Drawing.Size(900, 570);
+      this.MaximumSize = new System.Drawing.Size(888, 565);
+      this.MinimumSize = new System.Drawing.Size(888, 565);
       this.Name = "SetupForm";
       this.Text = "AtmoLight Setup";
       this.tabPageHyperion.ResumeLayout(false);
@@ -1822,6 +2057,11 @@
       this.grpDeactivate.ResumeLayout(false);
       this.grpDeactivate.PerformLayout();
       this.tabMenu.ResumeLayout(false);
+      this.tabPageAmbiBox.ResumeLayout(false);
+      this.grpAmbiBoxNetwork.ResumeLayout(false);
+      this.grpAmbiBoxNetwork.PerformLayout();
+      this.grpAmbiBoxLocal.ResumeLayout(false);
+      this.grpAmbiBoxLocal.PerformLayout();
       this.tabPageBoblight.ResumeLayout(false);
       this.grpBoblightSettings.ResumeLayout(false);
       this.grpBoblightSettings.PerformLayout();
@@ -1995,5 +2235,27 @@
     private System.Windows.Forms.Label lblpowerModeChangedDelayMS;
     private System.Windows.Forms.Label lblpowerModeChangedDelay;
     private System.Windows.Forms.TextBox tbpowerModeChangedDelay;
+    private System.Windows.Forms.CheckBox ckAmbiBoxEnabled;
+    private System.Windows.Forms.TabPage tabPageAmbiBox;
+    private System.Windows.Forms.GroupBox grpAmbiBoxNetwork;
+    private System.Windows.Forms.GroupBox grpAmbiBoxLocal;
+    private System.Windows.Forms.CheckBox cbAmbiBoxAutoStop;
+    private System.Windows.Forms.CheckBox cbAmbiBoxAutoStart;
+    private System.Windows.Forms.Label lblAmbiBoxPath;
+    private System.Windows.Forms.TextBox tbAmbiBoxPath;
+    private System.Windows.Forms.Button btnSelectFileAmbiBox;
+    private System.Windows.Forms.OpenFileDialog openFileDialog5;
+    private System.Windows.Forms.Label lblAmbiBoxReconnectDelay;
+    private System.Windows.Forms.Label lblAmbiBoxMaxReconnectAttempts;
+    private System.Windows.Forms.Label lblAmbiBoxPort;
+    private System.Windows.Forms.Label lblAmbiBoxIP;
+    private System.Windows.Forms.TextBox tbAmbiBoxExternalProfile;
+    private System.Windows.Forms.TextBox tbAmbiBoxMediaPortalProfile;
+    private System.Windows.Forms.TextBox tbAmbiBoxReconnectDelay;
+    private System.Windows.Forms.TextBox tbAmbiBoxMaxReconnectAttempts;
+    private System.Windows.Forms.TextBox tbAmbiBoxPort;
+    private System.Windows.Forms.TextBox tbAmbiBoxIP;
+    private System.Windows.Forms.Label lblAmbiBoxExternalProfile;
+    private System.Windows.Forms.Label lblAmbiBoxMediaPortalProfile;
   }
 }

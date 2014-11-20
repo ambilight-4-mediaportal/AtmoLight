@@ -90,4 +90,15 @@
   <string name="AtmoLight.BlackbarDetectionTime">Blackbar detection delay</string>
   <string name="AtmoLight.BlackbarDetectionThreshold">Blackbar detection threshold</string>
   <string name="AtmoLight.PowerModeChangedDelay">Delay after standby</string>
+  <string name="AtmoLight.AmbiBox">AmbiBox</string>
+  <string name="AtmoLight.AmbiBoxTarget">Use AmbiBox</string>
+  <string name="AtmoLight.AmbiBoxIP">IP address</string>
+  <string name="AtmoLight.AmbiBoxPort">Port number</string>
+  <string name="AtmoLight.AmbiBoxMaxReconnectAttempts">Reconnect attempts</string>
+  <string name="AtmoLight.AmbiBoxReconnectDelay">Reconnect delay</string>
+  <string name="AtmoLight.AmbiBoxMediaPortalProfile">MediaPortal capture profile</string>
+  <string name="AtmoLight.AmbiBoxExternalProfile">External capture profile</string>
+  <string name="AtmoLight.AmbiBoxPath">Path to AmbiBox.exe</string>
+  <string name="AtmoLight.AmbiBoxAutoStart">Start AmbiBox with MediaPortal</string>
+  <string name="AtmoLight.AmbiBoxAutoStop">Stop AmbiBox with MediaPortal</string>
 </resources>

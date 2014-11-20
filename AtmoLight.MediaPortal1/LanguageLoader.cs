@@ -376,6 +376,15 @@ namespace Language
     public String SetupForm_lblBoblightGamma;
     public String SetupForm_lblBlackbarDetectionThreshold;
     public String SetupForm_lblpowerModeChangedDelay;
+    public String SetupForm_lblAmbiBoxExternalProfile;
+    public String SetupForm_lblAmbiBoxIP;
+    public String SetupForm_lblAmbiBoxMaxReconnectAttempts;
+    public String SetupForm_lblAmbiBoxMediaPortalProfile;
+    public String SetupForm_lblAmbiBoxPath;
+    public String SetupForm_lblAmbiBoxPort;
+    public String SetupForm_lblAmbiBoxReconnectDelay;
+    public String SetupForm_cbAmbiBoxAutoStart;
+    public String SetupForm_cbAmbiBoxAutoStop;
 
 
     public String ContextMenu_SwitchLEDsON;

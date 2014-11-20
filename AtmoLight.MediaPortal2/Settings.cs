@@ -196,6 +196,36 @@ namespace AtmoLight
     [Setting(SettingScope.User, 5000)]
     public int PowerModeChangedDelay { get; set; }
 
+    [Setting(SettingScope.User, "127.0.0.1")]
+    public string AmbiBoxIP { get; set; }
+
+    [Setting(SettingScope.User, 3636)]
+    public int AmbiBoxPort { get; set; }
+
+    [Setting(SettingScope.User, 5)]
+    public int AmbiBoxMaxReconnectAttempts { get; set; }
+
+    [Setting(SettingScope.User, 5000)]
+    public int AmbiBoxReconnectDelay { get; set; }
+
+    [Setting(SettingScope.User, "")]
+    public string AmbiBoxMediaPortalProfile { get; set; }
+
+    [Setting(SettingScope.User, "")]
+    public string AmbiBoxExternalProfile { get; set; }
+
+    [Setting(SettingScope.User, "C:\\Program Files (x86)\\AmbiBox\\AmbiBox.exe")]
+    public string AmbiBoxPath { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool AmbiBoxAutoStart { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool AmbiBoxAutoStop { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool AmbiBoxTarget { get; set; }
+
 
     ISettingsManager settingsManager = ServiceRegistration.Get<ISettingsManager>();
     Settings settings;
@@ -264,6 +294,16 @@ namespace AtmoLight
       BlackbarDetectionTime = settings.BlackbarDetectionTime;
       BlackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
       PowerModeChangedDelay = settings.PowerModeChangedDelay;
+      AmbiBoxAutoStart = settings.AmbiBoxAutoStart;
+      AmbiBoxAutoStop = settings.AmbiBoxAutoStop;
+      AmbiBoxExternalProfile = settings.AmbiBoxExternalProfile;
+      AmbiBoxIP = settings.AmbiBoxIP;
+      AmbiBoxMaxReconnectAttempts = settings.AmbiBoxMaxReconnectAttempts;
+      AmbiBoxMediaPortalProfile = settings.AmbiBoxMediaPortalProfile;
+      AmbiBoxPath = settings.AmbiBoxPath;
+      AmbiBoxPort = settings.AmbiBoxPort;
+      AmbiBoxReconnectDelay = settings.AmbiBoxReconnectDelay;
+      AmbiBoxTarget = settings.AmbiBoxTarget;
       return true;
     }
 
@@ -330,6 +370,16 @@ namespace AtmoLight
       settings.BlackbarDetectionTime = BlackbarDetectionTime;
       settings.BlackbarDetectionThreshold = BlackbarDetectionThreshold;
       settings.PowerModeChangedDelay = PowerModeChangedDelay;
+      settings.AmbiBoxAutoStart = AmbiBoxAutoStart;
+      settings.AmbiBoxAutoStop = AmbiBoxAutoStop;
+      settings.AmbiBoxExternalProfile = AmbiBoxExternalProfile;
+      settings.AmbiBoxIP = AmbiBoxIP;
+      settings.AmbiBoxMaxReconnectAttempts = AmbiBoxMaxReconnectAttempts;
+      settings.AmbiBoxMediaPortalProfile = AmbiBoxMediaPortalProfile;
+      settings.AmbiBoxPath = AmbiBoxPath;
+      settings.AmbiBoxPort = AmbiBoxPort;
+      settings.AmbiBoxReconnectDelay = AmbiBoxReconnectDelay;
+      settings.AmbiBoxTarget = AmbiBoxTarget;
       settingsManager.Save(settings);
       return true;
     }

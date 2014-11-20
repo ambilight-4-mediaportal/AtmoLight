@@ -41,6 +41,10 @@
         Sort="100"
         Text="[AtmoLight.General]"/>
     <ConfigSection
+        Id="AmbiBox"
+        Sort="150"
+        Text="[AtmoLight.AmbiBox]"/>
+    <ConfigSection
         Id="AtmoWin"
         Sort="200"
         Text="[AtmoLight.AtmoWin]"/>
@@ -78,6 +82,10 @@
         Text="[AtmoLight.AtmoWinTarget]"
         ClassName="AtmoLight.Configuration.AtmoWinTarget"/>
     <ConfigSetting
+        Id="AmbiBoxTarget"
+        Text="[AtmoLight.AmbiBoxTarget]"
+        ClassName="AtmoLight.Configuration.AmbiBoxTarget"/>
+    <ConfigSetting
         Id="BoblightTarget"
         Text="[AtmoLight.BoblightTarget]"
         ClassName="AtmoLight.Configuration.BoblightTarget"/>
@@ -93,6 +101,46 @@
         Id="RestartAtmoWinOnError"
         Text="[AtmoLight.RestartAtmoWinOnError]"
         ClassName="AtmoLight.Configuration.RestartAtmoWinOnError"/>
+  </Register>
+  
+  <!-- AmbiBox -->
+  <Register Location="/Configuration/Settings/Plugins/AtmoLight/AmbiBox">
+    <ConfigSetting
+        Id="AmbiBoxPath"
+        Text="[AtmoLight.AmbiBoxPath]"
+        ClassName="AtmoLight.Configuration.AmbiBoxPath"/>
+    <ConfigSetting
+        Id="AmbiBoxAutoStart"
+        Text="[AtmoLight.AmbiBoxAutoStart]"
+        ClassName="AtmoLight.Configuration.AmbiBoxAutoStart"/>
+    <ConfigSetting
+        Id="AmbiBoxAutoStop"
+        Text="[AtmoLight.AmbiBoxAutoStop]"
+        ClassName="AtmoLight.Configuration.AmbiBoxAutoStop"/>
+    <ConfigSetting
+        Id="AmbiBoxIP"
+        Text="[AtmoLight.AmbiBoxIP]"
+        ClassName="AtmoLight.Configuration.AmbiBoxIP"/>
+    <ConfigSetting
+        Id="AmbiBoxPort"
+        Text="[AtmoLight.AmbiBoxPort]"
+        ClassName="AtmoLight.Configuration.AmbiBoxPort"/>
+    <ConfigSetting
+        Id="AmbiBoxMaxReconnectAttempts"
+        Text="[AtmoLight.AmbiBoxMaxReconnectAttempts]"
+        ClassName="AtmoLight.Configuration.AmbiBoxMaxReconnectAttempts"/>
+    <ConfigSetting
+        Id="AmbiBoxReconnectDelay"
+        Text="[AtmoLight.AmbiBoxReconnectDelay]"
+        ClassName="AtmoLight.Configuration.AmbiBoxReconnectDelay"/>
+    <ConfigSetting
+        Id="AmbiBoxMediaPortalProfile"
+        Text="[AtmoLight.AmbiBoxMediaPortalProfile]"
+        ClassName="AtmoLight.Configuration.AmbiBoxMediaPortalProfile"/>
+    <ConfigSetting
+        Id="AmbiBoxExternalProfile"
+        Text="[AtmoLight.AmbiBoxExternalProfile]"
+        ClassName="AtmoLight.Configuration.AmbiBoxExternalProfile"/>
   </Register>
              
   <!--- AtmoWin -->
