@@ -76,6 +76,7 @@ namespace AtmoLight.Targets
         }
         else
         {
+          ChangeEffect(coreObject.GetCurrentEffect());
           Log.Debug("HyperionHandler - Initialising locked.");
         }
       }
@@ -116,6 +117,11 @@ namespace AtmoLight.Targets
     }
     public bool IsConnected()
     {
+      if (initLock)
+      {
+        return false;
+      }
+
       return Socket.Connected;
     }
 
@@ -374,7 +380,9 @@ namespace AtmoLight.Targets
           Stream.Write(header, 0, headerSize);
           request.WriteTo(Stream);
           Stream.Flush();
-          HyperionReply reply = receiveReply();
+
+          // Enable reply message if needed (debugging only)
+          //HyperionReply reply = receiveReply();
         }
       }
       catch (Exception e)
