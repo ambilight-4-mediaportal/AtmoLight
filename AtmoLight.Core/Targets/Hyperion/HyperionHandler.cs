@@ -76,7 +76,6 @@ namespace AtmoLight.Targets
         }
         else
         {
-          ChangeEffect(coreObject.GetCurrentEffect());
           Log.Debug("HyperionHandler - Initialising locked.");
         }
       }
