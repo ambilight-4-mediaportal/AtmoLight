@@ -40,10 +40,12 @@
         Id="General"
         Sort="100"
         Text="[AtmoLight.General]"/>
+    <!--
     <ConfigSection
         Id="AmbiBox"
         Sort="150"
         Text="[AtmoLight.AmbiBox]"/>
+    -->
     <ConfigSection
         Id="AtmoWin"
         Sort="200"
@@ -81,10 +83,12 @@
         Id="AtmoWinTarget"
         Text="[AtmoLight.AtmoWinTarget]"
         ClassName="AtmoLight.Configuration.AtmoWinTarget"/>
+    <!--
     <ConfigSetting
         Id="AmbiBoxTarget"
         Text="[AtmoLight.AmbiBoxTarget]"
         ClassName="AtmoLight.Configuration.AmbiBoxTarget"/>
+    -->
     <ConfigSetting
         Id="BoblightTarget"
         Text="[AtmoLight.BoblightTarget]"
@@ -104,6 +108,7 @@
   </Register>
   
   <!-- AmbiBox -->
+  <!--
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/AmbiBox">
     <ConfigSetting
         Id="AmbiBoxPath"
@@ -142,6 +147,7 @@
         Text="[AtmoLight.AmbiBoxExternalProfile]"
         ClassName="AtmoLight.Configuration.AmbiBoxExternalProfile"/>
   </Register>
+  -->
              
   <!--- AtmoWin -->
   <Register Location="/Configuration/Settings/Plugins/AtmoLight/AtmoWin">
