@@ -185,6 +185,11 @@ namespace AtmoLight.Targets
 
     public bool IsConnected()
     {
+      if (initLock)
+      {
+        return false;
+      }
+
       return Socket.Connected;
     }
 
@@ -241,6 +246,9 @@ namespace AtmoLight.Targets
         }
       }
 
+      //Reset Init lock
+      initLock = false;
+
       //Reset counter when we have finished
       hueReconnectCounter = 0;
 
@@ -259,8 +267,6 @@ namespace AtmoLight.Targets
           Thread.Sleep(2000);
         }
       }
-
-
       //On first initialize set the effect after we are done trying to connect
       if (isInit && Socket.Connected)
       {
@@ -271,9 +277,6 @@ namespace AtmoLight.Targets
       {
         isInit = false;
       }
-
-      //Reset Init lock
-      initLock = false;
     }
     private void Disconnect()
     {

@@ -223,6 +223,9 @@ namespace AtmoLight.Targets
       //Reset Init lock
       initLock = false;
 
+      //Reset counter when we have finished
+      hyperionReconnectCounter = 0;
+
       //On first initialize set the effect after we are done trying to connect
       if (isInit && Socket.Connected)
       {
@@ -234,8 +237,6 @@ namespace AtmoLight.Targets
         isInit = false;
       }
 
-      //Reset counter when we have finished
-      hyperionReconnectCounter = 0;
     }
     private void Disconnect()
     {
