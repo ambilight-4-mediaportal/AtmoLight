@@ -1518,7 +1518,7 @@
       this.grpBoblightSettings.Controls.Add(this.tbarBoblightSpeed);
       this.grpBoblightSettings.Location = new System.Drawing.Point(10, 165);
       this.grpBoblightSettings.Name = "grpBoblightSettings";
-      this.grpBoblightSettings.Size = new System.Drawing.Size(820, 245);
+      this.grpBoblightSettings.Size = new System.Drawing.Size(820, 260);
       this.grpBoblightSettings.TabIndex = 1;
       this.grpBoblightSettings.TabStop = false;
       this.grpBoblightSettings.Text = "Boblight settings";
@@ -1592,7 +1592,7 @@
       // ckBoblightInterpolation
       // 
       this.ckBoblightInterpolation.AutoSize = true;
-      this.ckBoblightInterpolation.Location = new System.Drawing.Point(650, 25);
+      this.ckBoblightInterpolation.Location = new System.Drawing.Point(12, 235);
       this.ckBoblightInterpolation.Name = "ckBoblightInterpolation";
       this.ckBoblightInterpolation.Size = new System.Drawing.Size(84, 17);
       this.ckBoblightInterpolation.TabIndex = 10;
