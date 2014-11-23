@@ -5,7 +5,7 @@ namespace AtmoWinRemoteControl
     using System.Runtime.InteropServices;
 
     [ComImport, InterfaceType((short) 1), Guid("E01E2044-5BFC-11D4-8E80-00805F91CDD9"), TypeLibType((short) 0x100)]
-    public interface IAtmoRemoteControl2 : IAtmoRemoteControl
+    public interface IAtmoRemoteControl
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType=MethodCodeType.Runtime)]
         void setEffect([In] ComEffectMode dwEffect, out ComEffectMode dwOldEffect);

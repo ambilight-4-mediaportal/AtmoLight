@@ -119,7 +119,7 @@ namespace Language
       using (Settings reader = new Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
         LanguageLoader.strCurrentLanguageFile = reader.GetValueAsString("atmolight", "CurrentLanguageFile", "");
 
-      if ((strCurrentLanguageFile == null) || (strCurrentLanguageFile == ""))
+      if (string.IsNullOrEmpty(strCurrentLanguageFile))
       {
         string CommonAppDataDir = Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\Atmolight";
 
@@ -171,15 +171,80 @@ namespace Language
         strSection = strArray[0];
         strKey = strArray[1];
         strValue = iniAccess.ReadString(strSection, strKey, (String)(field.GetValue(obj)));
-        field.SetValue(obj, strValue);
+        if (string.IsNullOrEmpty(strValue))
+        {
+          int pos = strLanguageFile.LastIndexOf("\\") + 1;
+          AtmoLight.Log.Error("Missing translation for field {0} in {1}", field.Name, strLanguageFile.Substring(pos, strLanguageFile.Length - pos));
+          field.SetValue(obj, GetFallbackTranslation(field.Name));
+        }
+        else
+        {
+          field.SetValue(obj, strValue);
+        }
       }
-
-      // re-write the file in case there are new strings in the application 
-      // that are not yet in this language file
-      WriteLanguageFile(strLanguageFile);
-
       return true;
+    }
 
+    public static string GetFallbackTranslation(string fieldName)
+    {
+      INIReaderForCE iniAccess = new INIReaderForCE(Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\Atmolight\\EnglishUS.lng");
+
+      Object obj = appStrings;
+      Type t = appStrings.GetType();
+
+      FieldInfo[] fi = t.GetFields();
+      String[] strArray;
+      char[] strSeps = { '_' };
+      String strSection;
+      String strKey;
+      String strValue;
+      foreach (FieldInfo field in fi)
+      {
+        strArray = field.Name.Split(strSeps);
+        strSection = strArray[0];
+        strKey = strArray[1];
+        strValue = iniAccess.ReadString(strSection, strKey, (String)(field.GetValue(obj)));
+        if (field.Name == fieldName)
+        {
+          return strValue;
+        }
+      }
+      return "";
+    }
+
+    public static string GetTranslationFromFieldName(string fieldName)
+    {
+      Object obj = appStrings;
+      Type t = appStrings.GetType();
+
+      FieldInfo[] fi = t.GetFields();
+      foreach (FieldInfo field in fi)
+      {
+        if (field.Name == fieldName)
+        {
+          return (string)(field.GetValue(obj));
+        }
+      }
+      return "-1";
+    }
+
+    public static string GetFieldNameFromTranslation(string translation, string contains)
+    {
+      Object obj = appStrings;
+      Type t = appStrings.GetType();
+
+      FieldInfo[] fi = t.GetFields();
+      foreach (FieldInfo field in fi)
+      {
+        if ((string)(field.GetValue(obj)) == translation)
+        {
+          if (field.Name.Contains(contains))
+          {
+            return field.Name;
+          }
+        }
+      }
+      return "-1";
     }
 
     public static Boolean WriteLanguageFile(String strLanguageFile)
@@ -219,94 +284,152 @@ namespace Language
 
   public class ApplicationStrings
   {
-    public String SetupForm_lblPathInfoText = "Path+Filename of AtmoWinA.exe";
-    public String SetupForm_grpModeText = "Atmolight Mode per content type";
-    public String SetupForm_grpPluginOptionText = "Plugin options";
-    public String SetupForm_lblVidTvRecText = "Video/TV/Recordings:";
-    public String SetupForm_lblMusicText = "Music:";
-    public String SetupForm_lblRadioText = "Radio:";
-    public String SetupForm_lblLedsOnOffText = "LEDs OnOff Remote Button:";
-    public String SetupForm_lblProfileText = "Profile Remote Button:";
-    public String SetupForm_ckOnMediaStartText = "LEDs off on media start (manual mode)";
-    public String SetupForm_ckLowCpuText = "low CPU";
-    public String SetupForm_ckDelayText = "LED Delay";
-    public String SetupForm_ckStartAtmoWinText = "Start AtmoWin with MediaPortal";
-    public String SetupForm_ckExitAtmoWinText = "Exit AtmoWin with MediaPortal";
-    public String SetupForm_grpMPCloseText = "MP close...";
-    public String SetupForm_rbSwitchToLiveViewText = "Switch to AtmoWin's internal live view mode";
-    public String SetupForm_rbDisableLEDsText = "Switch all LEDs off";
-    public String SetupForm_btnSaveText = "Save";
-    public String SetupForm_btnCancelText = "Cancel";
-    public String SetupForm_btnLanguageText = "Load Language";
-    public String SetupForm_lblHintText = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3D-SBS mode.";
-    public String SetupForm_lblFramesText = "ms between Frames";
-    public String SetupForm_lblDelay = "ms Delay at";
-    public String SetupForm_lblStartText = "Start:";
-    public String SetupForm_lblEndText = "End:";
-    public String SetupForm_grpDeactivateText = "Deactive between...";
-    public String SetupForm_lblMenu = "Menu/GUI:";
-    public String SetupForm_grpStaticColor = "Static Color";
-    public String SetupForm_lblRed = "Red:";
-    public String SetupForm_lblGreen = "Green:";
-    public String SetupForm_lblBlue = "Blue:";
-    public String SetupForm_lblMenuButton = "Menu Remote Button:";
-    public String SetupForm_ckRestartOnError = "Restart AtmoWin and Connection on Error";
-    public String SetupForm_Error = "Error";
-    public String SetupForm_ErrorAtmoWinA = "Invalid Filename. Please choose path to AtmoWinA.exe.";
-    public String SetupForm_ErrorStartTime = "You have to enter a valid start time.";
-    public String SetupForm_ErrorEndTime = "You have to enter a valid end time.";
-    public String SetupForm_ErrorMiliseconds = "You have to enter a valid number of ms.";
-    public String SetupForm_ErrorRefreshRate = "You have to enter a valid refresh rate.";
-    public String SetupForm_ErrorRed = "Please enter a number between 0 and 255 for Red.";
-    public String SetupForm_ErrorGreen = "Please enter a number between 0 and 255 for Green.";
-    public String SetupForm_ErrorBlue = "Please enter a number between 0 and 255 for Blue.";
-    public String SetupForm_ErrorRemoteButtons = "You cant use the same remote key for more than one task.";
-    public String ContextMenu_SwitchLEDsON = "Switch LEDs on";
-    public String ContextMenu_SwitchLEDsOFF = "Switch LEDs off";
-    public String ContextMenu_ChangeEffect = "Change Effect";
-    public String ContextMenu_ChangeAWProfile = "Change AtmoWin Profile";
-    public String ContextMenu_Switch3DON = "Switch 3D SBS Mode on";
-    public String ContextMenu_Switch3DOFF = "Switch 3D SBS Mode off";
-    public String ContextMenu_ChangeStatic = "Change Static Color";
-    public String ContextMenu_LEDsDisabled = "LEDs disabled";
-    public String ContextMenu_MPLive = "MediaPortal Live Mode";
-    public String ContextMenu_AWLive = "AtmoWin Live Mode";
-    public String ContextMenu_Colorchanger = "Colorchanger";
-    public String ContextMenu_ColorchangerLR = "Colorchanger LR";
-    public String ContextMenu_StaticColor = "Static Color";
-    public String ContextMenu_Manual = "Manual";
-    public String ContextMenu_SaveColor = "Save current Color";
-    public String ContextMenu_LoadColor = "Load Color from Settings";
-    public String ContextMenu_White = "White";
-    public String ContextMenu_Red = "Red";
-    public String ContextMenu_Green = "Green";
-    public String ContextMenu_Blue = "Blue";
-    public String ContextMenu_Cyan = "Cyan";
-    public String ContextMenu_Magenta = "Magenta";
-    public String ContextMenu_Yellow = "Yellow";
-    public String ContextMenu_Error = "Error";
-    public String ContextMenu_RGBErrorLine1 = "The value has to be a number";
-    public String ContextMenu_RGBErrorLine2 = "and must be between 0 and 255.";
-    public String ContextMenu_AtmoWinConnectionLost = "Connection to AtmoWin lost!";
-    public String ContextMenu_ManualStaticColor = "Manual Static Color";
-    public String ContextMenu_Apply = "Apply";
-    public String ContextMenu_Cancel = "Cancel";
-    public String ContextMenu_NA = "N/A";
-    public String ContextMenu_DelayOFF = "Switch LED delay off";
-    public String ContextMenu_DelayON = "Swtich LED delay on";
-    public String ContextMenu_ChangeDelay = "Change LED delay";
-    public String ContextMenu_DelayTimeErrorLine1 = "The value has to be a number";
-    public String ContextMenu_DelayTimeErrorLine2 = "and must be between 0 and 1000.";
-    public String ContextMenu_ConnectLine1 = "Do you want to try to start";
-    public String ContextMenu_ConnectLine2 = "AtmoWin and reconnect to it?";
-    public String SetupForm_lblRefreshRate = "Hz";
-    public String SetupForm_ckBlackbarDetection = "Blackbar Detection every";
-    public String ContextMenu_SwitchBlackbarDetectionOFF = "Switch Blackbar Detection off";
-    public String ContextMenu_SwitchBlackbarDetectionON = "Switch Blackbar Detection on";
-    public String ContextMenu_GIFReader = "GIF Reader";
-    public String ContextMenu_VUMeter = "VU Meter";
-    public String ContextMenu_VUMeterRainbow = "VU Meter Rainbow";
-    public String SetupForm_grpGIF = "GIF Reader";
+    public String SetupForm_lblPathInfoAtmoWin;
+    public String SetupForm_grpModeText;
+    public String SetupForm_grpPluginOptionText;
+    public String SetupForm_lblVidTvRecText;
+    public String SetupForm_lblMusicText;
+    public String SetupForm_lblRadioText;
+    public String SetupForm_lblLedsOnOffText;
+    public String SetupForm_lblProfileText;
+    public String SetupForm_ckOnMediaStartText;
+    public String SetupForm_ckLowCpuText;
+    public String SetupForm_ckDelayText;
+    public String SetupForm_ckStartAtmoWinText;
+    public String SetupForm_ckExitAtmoWinText;
+    public String SetupForm_btnSaveText;
+    public String SetupForm_btnCancelText;
+    public String SetupForm_btnLanguageText;
+    public String SetupForm_lblHintText;
+    public String SetupForm_lblHintHardware;
+    public String SetupForm_lblHintCaptureDimensions;
+    public String SetupForm_lblHintHue;
+    public String SetupForm_lblFramesText;
+    public String SetupForm_lblDelay;
+    public String SetupForm_lblStartText;
+    public String SetupForm_lblEndText;   
+    public String SetupForm_grpDeactivateText;
+    public String SetupForm_lblMenu;
+    public String SetupForm_grpStaticColor;
+    public String SetupForm_lblRed;
+    public String SetupForm_lblGreen;
+    public String SetupForm_lblBlue;
+    public String SetupForm_lblMenuButton;
+    public String SetupForm_ckRestartOnError;
+    public String SetupForm_Error;
+    public String SetupForm_ErrorAtmoWinA;
+    public String SetupForm_ErrorHue;
+    public String SetupForm_ErrorStartTime;
+    public String SetupForm_ErrorEndTime;
+    public String SetupForm_ErrorMiliseconds;
+    public String SetupForm_ErrorRefreshRate;
+    public String SetupForm_ErrorRed;
+    public String SetupForm_ErrorGreen;
+    public String SetupForm_ErrorBlue;
+    public String SetupForm_ErrorRemoteButtons;
+    public String SetupForm_ErrorInvalidIP;
+    public String SetupForm_ErrorInvalidPath;
+    public String SetupForm_ErrorInvalidIntegerStarting;
+    public String SetupForm_ErrorInvalidIntegerBetween;
+    public String SetupForm_lblMPExit;
+    public String SetupForm_lblRefreshRate;
+    public String SetupForm_ckBlackbarDetection;
+    public String SetupForm_grpGIF;
+    public String SetupForm_grpCaptureDimensions;
+    public String SetupForm_lblHyperionIP;
+    public String SetupForm_lblHyperionPort;
+    public String SetupForm_lblHyperionPriorty;
+    public String SetupForm_lblHyperionReconnectDelay;
+    public String SetupForm_lblHyperionReconnectAttempts;
+    public String SetupForm_lblHyperionPriorityStaticColor;
+    public String SetupForm_ckHyperionLiveReconnect;
+    public String SetupForm_lblCaptureWidth;
+    public String SetupForm_lblCaptureHeight;
+    public String SetupForm_ckhueIsRemoteMachine;
+    public String SetupForm_ckStartHue;
+    public String SetupForm_lblPathInfoHue;
+    public String SetupForm_lblHueIP;
+    public String SetupForm_lblHuePort;
+    public String SetupForm_lblHueReconnectDelay;
+    public String SetupForm_lblHueReconnectAttempts;
+    public String SetupForm_lblHueMinimalColorDifference;
+    public String SetupForm_ckHueBridgeEnableOnResume;
+    public String SetupForm_ckHueBridgeDisableOnSuspend;
+    public String SetupForm_grpHyperionNetworkSettings;
+    public String SetupForm_grpHyperionPrioritySettings;
+    public String SetupForm_tabPageGeneric;
+    public String SetupForm_grpTargets;
+    public String SetupForm_grpAtmowinSettings;
+    public String SetupForm_lblBoblightIP;
+    public String SetupForm_lblBoblightPort;
+    public String SetupForm_lblBoblightMaxReconnectAttempts;
+    public String SetupForm_lblBoblightReconnectDelay;
+    public String SetupForm_lblBoblightMaxFPS;
+    public String SetupForm_lblBoblightSpeed;
+    public String SetupForm_lblBoblightAutospeed;
+    public String SetupForm_lblBoblightSaturation;
+    public String SetupForm_lblBoblightValue;
+    public String SetupForm_lblBoblightThreshold;
+    public String SetupForm_lblBoblightInterpolation;
+    public String SetupForm_grpBoblightGeneral;
+    public String SetupForm_grpBoblightSettings;
+    public String SetupForm_lblBoblightGamma;
+    public String SetupForm_lblBlackbarDetectionThreshold;
+    public String SetupForm_lblpowerModeChangedDelay;
+    public String SetupForm_lblAmbiBoxExternalProfile;
+    public String SetupForm_lblAmbiBoxIP;
+    public String SetupForm_lblAmbiBoxMaxReconnectAttempts;
+    public String SetupForm_lblAmbiBoxMediaPortalProfile;
+    public String SetupForm_lblAmbiBoxPath;
+    public String SetupForm_lblAmbiBoxPort;
+    public String SetupForm_lblAmbiBoxReconnectDelay;
+    public String SetupForm_cbAmbiBoxAutoStart;
+    public String SetupForm_cbAmbiBoxAutoStop;
+
+
+    public String ContextMenu_SwitchLEDsON;
+    public String ContextMenu_SwitchLEDsOFF;
+    public String ContextMenu_ChangeEffect;
+    public String ContextMenu_ChangeAWProfile;
+    public String ContextMenu_Switch3DON;
+    public String ContextMenu_Switch3DOFF;
+    public String ContextMenu_ChangeStatic;
+    public String ContextMenu_LEDsDisabled;
+    public String ContextMenu_MediaPortalLiveMode;
+    public String ContextMenu_ExternalLiveMode;
+    public String ContextMenu_AtmoWinColorchanger;
+    public String ContextMenu_AtmoWinColorchangerLR;
+    public String ContextMenu_StaticColor;
+    public String ContextMenu_Manual;
+    public String ContextMenu_SaveColor;
+    public String ContextMenu_LoadColor;
+    public String ContextMenu_White;
+    public String ContextMenu_Red;
+    public String ContextMenu_Green;
+    public String ContextMenu_Blue;
+    public String ContextMenu_Cyan;
+    public String ContextMenu_Magenta;
+    public String ContextMenu_Yellow;
+    public String ContextMenu_Error;
+    public String ContextMenu_RGBErrorLine1;
+    public String ContextMenu_RGBErrorLine2;
+    public String ContextMenu_ConnectionLost;
+    public String ContextMenu_ManualStaticColor;
+    public String ContextMenu_Apply;
+    public String ContextMenu_Cancel;
+    public String ContextMenu_NA;
+    public String ContextMenu_DelayOFF;
+    public String ContextMenu_DelayON;
+    public String ContextMenu_ChangeDelay;
+    public String ContextMenu_DelayTimeErrorLine1;
+    public String ContextMenu_DelayTimeErrorLine2;
+    public String ContextMenu_ConnectLine1;
+    public String ContextMenu_ConnectLine2;
+    public String ContextMenu_SwitchBlackbarDetectionOFF;
+    public String ContextMenu_SwitchBlackbarDetectionON;
+    public String ContextMenu_GIFReader;
+    public String ContextMenu_VUMeter;
+    public String ContextMenu_VUMeterRainbow;
+    public String ContextMenu_ReInitialise;
   }
 }
-

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.IO;
+using Microsoft.Win32;
 using MediaPortal.Common;
 using MediaPortal.UI.Presentation.Players;
 using MediaPortal.UI.Presentation.UiNotifications;
@@ -28,13 +29,10 @@ namespace AtmoLight
   {
     #region Fields
     protected AsynchronousMessageQueue messageQueue;
-    public static Core AtmoLightObject;
+    private Core coreObject;
 
     // Settings
-    AtmoLight.Settings settings;
-    private int[] staticColorTemp = { 0, 0, 0 };
-    private ContentEffect menuEffect = ContentEffect.Undefined;
-    private ContentEffect playbackEffect = ContentEffect.Undefined;
+    private AtmoLight.Settings settings;
 
     private Int64 lastFrame = 0;
 
@@ -43,7 +41,6 @@ namespace AtmoLight
     private SharpDX.Direct3D9.Surface surfaceDestination; // Destination Surface (resized)
 
     // Player helper
-    private IPlayerManager playerManager;
     private ISharpDXVideoPlayer player;
     #endregion
 
@@ -103,37 +100,117 @@ namespace AtmoLight
       settings = new AtmoLight.Settings();
       settings.LoadAll();
       settings.SaveAll();
-      staticColorTemp[0] = settings.StaticColorRed;
-      staticColorTemp[1] = settings.StaticColorGreen;
-      staticColorTemp[2] = settings.StaticColorBlue;
-      menuEffect = settings.MenuEffect;
 
       // AtmoLight object creation
       Log.Debug("Generating new AtmoLight.Core instance.");
-      AtmoLightObject = new Core(settings.AtmoWinExe, settings.RestartAtmoWinOnError, settings.StartAtmoWinOnStart, staticColorTemp, settings.Delay, settings.DelayTime);
-      AtmoLightObject.UpdateGIFPath(settings.GIFFile);
+      coreObject = Core.GetInstance();
 
-      // Handlers
-      Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
-      SkinContext.DeviceSceneEnd += UICapture;
-      RegisterKeyBindings();
+      // AmbiBox
+      if (settings.AmbiBoxTarget)
+      {
+        coreObject.AddTarget(Target.AmbiBox);
+      }
+      coreObject.ambiBoxAutoStart = settings.AmbiBoxAutoStart;
+      coreObject.ambiBoxAutoStop = settings.AmbiBoxAutoStop;
+      coreObject.ambiBoxExternalProfile = settings.AmbiBoxExternalProfile;
+      coreObject.ambiBoxIP = settings.AmbiBoxIP;
+      coreObject.ambiBoxMaxReconnectAttempts = settings.AmbiBoxMaxReconnectAttempts;
+      coreObject.ambiBoxMediaPortalProfile = settings.AmbiBoxMediaPortalProfile;
+      coreObject.ambiBoxPath = settings.AmbiBoxPath;
+      coreObject.ambiBoxPort = settings.AmbiBoxPort;
+      coreObject.ambiBoxReconnectDelay = settings.AmbiBoxReconnectDelay;
 
-      // AtmoLight initialisation
-      if (!AtmoLightObject.Initialise())
+      // AtmoWin
+      if (settings.AtmoWinTarget)
+      {
+        coreObject.AddTarget(Target.AtmoWin);
+      }
+      coreObject.atmoWinPath = settings.AtmoWinExe;
+      coreObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
+      coreObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
+
+      // Boblight
+      if (settings.BoblightTarget)
+      {
+        coreObject.AddTarget(Target.Boblight);
+      }
+      coreObject.boblightIP = settings.BoblightIP;
+      coreObject.boblightPort = settings.BoblightPort;
+      coreObject.boblightMaxFPS = settings.BoblightMaxFPS;
+      coreObject.boblightMaxReconnectAttempts = settings.BoblightMaxReconnectAttempts;
+      coreObject.boblightReconnectDelay = settings.BoblightReconnectDelay;
+      coreObject.boblightSpeed = settings.BoblightSpeed;
+      coreObject.boblightAutospeed = settings.BoblightAutospeed;
+      coreObject.boblightInterpolation = settings.BoblightInterpolation;
+      coreObject.boblightSaturation = settings.BoblightSaturation;
+      coreObject.boblightValue = settings.BoblightValue;
+      coreObject.boblightThreshold = settings.BoblightThreshold;
+      coreObject.boblightGamma = settings.BoblightGamma;
+
+      // Hyperion
+      if (settings.HyperionTarget)
+      {
+        coreObject.AddTarget(Target.Hyperion);
+      }
+      coreObject.hyperionIP = settings.HyperionIP;
+      coreObject.hyperionPort = settings.HyperionPort;
+      coreObject.hyperionPriority = settings.HyperionPriority;
+      coreObject.hyperionReconnectDelay = settings.HyperionReconnectDelay;
+      coreObject.hyperionReconnectAttempts = settings.HyperionReconnectAttempts;
+      coreObject.hyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
+      coreObject.hyperionLiveReconnect = settings.HyperionLiveReconnect;
+
+      //Hue
+      if (settings.HueTarget)
+      {
+        coreObject.AddTarget(Target.Hue);
+      }
+      coreObject.huePath = settings.hueExe;
+      coreObject.hueStart = settings.hueStart;
+      coreObject.hueIsRemoteMachine = settings.hueIsRemoteMachine;
+      coreObject.hueIP = settings.HueIP;
+      coreObject.huePort = settings.HuePort;
+      coreObject.hueReconnectDelay = settings.HueReconnectDelay;
+      coreObject.hueReconnectAttempts = settings.HueReconnectAttempts;
+      coreObject.hueMinimalColorDifference = settings.HueMinimalColorDifference;
+      coreObject.hueBridgeEnableOnResume = settings.HueBridgeEnableOnResume;
+      coreObject.hueBridgeDisableOnSuspend = settings.HueBridgeDisableOnSuspend;
+
+      // General settings
+      coreObject.SetDelay(settings.DelayTime);
+      coreObject.SetGIFPath(settings.GIFFile);
+      coreObject.SetReInitOnError(settings.RestartAtmoWinOnError);
+      coreObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, settings.StaticColorBlue);
+      coreObject.SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
+      coreObject.blackbarDetection = settings.BlackbarDetection;
+      coreObject.blackbarDetectionTime = settings.BlackbarDetectionTime;
+      coreObject.blackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
+      coreObject.powerModeChangedDelay = settings.PowerModeChangedDelay;
+
+      if (CheckForStartRequirements())
+      {
+        coreObject.SetInitialEffect(settings.MenuEffect);
+      }
+      else
+      {
+        coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+      }
+
+      if (!coreObject.Initialise())
       {
         Log.Error("Initialising failed.");
         return;
       }
 
-      if (CheckForStartRequirements())
-      {
-        AtmoLightObject.ChangeEffect(menuEffect);
-        CalculateDelay();
-      }
-      else
-      {
-        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
-      }
+      // Handlers
+      Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
+      Core.OnNewVUMeter += new Core.NewVUMeterHander(OnNewVUMeter);
+      AtmoLight.Configuration.OnOffButton.ButtonsChanged += new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      AtmoLight.Configuration.ProfileButton.ButtonsChanged += new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      SkinContext.DeviceSceneEnd += UICapture;
+      SystemEvents.PowerModeChanged += PowerModeChanged;
+      RegisterSettingsChangedHandler();
+      RegisterKeyBindings();
     }
 
     private void Dispose()
@@ -150,24 +227,19 @@ namespace AtmoLight
 
       messageQueue.MessageReceived -= OnMessageReceived;
 
-      // Disconnect from AtmoWin
-      if (settings.DisableLEDsOnExit)
-      {
-        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
-      }
-      else if (settings.EnableLiveviewOnExit)
-      {
-        AtmoLightObject.ChangeEffect(ContentEffect.AtmoWinLiveMode);
-      }
-      AtmoLightObject.Disconnect();
+      // Dispose of the AtmoLight Core
+      coreObject.ChangeEffect(settings.MPExitEffect);
 
-      if (settings.StopAtmoWinOnExit)
-      {
-        AtmoLightObject.StopAtmoWin();
-      }
+      coreObject.Dispose();
 
       // Unregister Log Handler
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
+      Core.OnNewConnectionLost -= new Core.NewConnectionLostHandler(OnNewConnectionLost);
+      Core.OnNewVUMeter -= new Core.NewVUMeterHander(OnNewVUMeter);
+      AtmoLight.Configuration.OnOffButton.ButtonsChanged -= new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      AtmoLight.Configuration.ProfileButton.ButtonsChanged -= new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      SystemEvents.PowerModeChanged -= PowerModeChanged;
+      UnregisterSettingsChangedHandler();
     }
     #endregion
 
@@ -178,10 +250,6 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     private bool CheckForStartRequirements()
     {
-      if (!AtmoLightObject.IsConnected())
-      {
-        return false;
-      }
       if (settings.ManualMode)
       {
         Log.Debug("LEDs should be deactivated. (Manual Mode)");
@@ -207,10 +275,10 @@ namespace AtmoLight
     /// </summary>
     private void CalculateDelay()
     {
-      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
+      if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && coreObject.IsDelayEnabled())
       {
         int refreshRate = SkinContext.Direct3D.GetAdapterDisplayModeEx(0).RefreshRate;
-        AtmoLightObject.ChangeDelay((int)(((float)settings.DelayRefreshRate / (float)refreshRate) * (float)settings.DelayTime));
+        coreObject.SetDelay((int)(((float)settings.DelayRefreshRate / (float)refreshRate) * (float)settings.DelayTime));
       }
     }
     #endregion
@@ -235,41 +303,65 @@ namespace AtmoLight
         PlayerManagerMessaging.MessageType messageType = (PlayerManagerMessaging.MessageType)message.MessageType;
         if (messageType == PlayerManagerMessaging.MessageType.PlayerStarted)
         {
+          Log.Info("Playback started.");
+          ContentEffect effect;
           // What kind of playback?
+          // Video gets highest priority in PiP.
           if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
           {
-            Log.Info("Video started.");
-            playbackEffect = settings.VideoEffect;
+            effect = settings.VideoEffect;
           }
           else if (ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
           {
-            Log.Info("Audio started.");
-            playbackEffect = settings.AudioEffect;
+            effect = settings.AudioEffect;
+          }
+          else
+          {
+            return;
           }
 
           // Start the right effect.
           if (CheckForStartRequirements())
           {
-            AtmoLightObject.ChangeEffect(playbackEffect);
+            coreObject.ChangeEffect(effect);
             CalculateDelay();
           }
           else
           {
-            AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+            coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
           }
         }
-        else if (messageType == PlayerManagerMessaging.MessageType.PlayerStopped)
+        else if (messageType == PlayerManagerMessaging.MessageType.PlayerStopped || messageType == PlayerManagerMessaging.MessageType.PlayerEnded)
         {
           Log.Info("Playback stopped.");
+          ContentEffect effect;
+          // Is there still something playing? (PiP)
+          // If yes, what?
+          if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
+          {
+            Log.Info("Another video player is still active (PiP).");
+            effect = settings.VideoEffect;
+          }
+          else if (ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
+          {
+            Log.Info("Another audio player is still active (PiP).");
+            effect = settings.AudioEffect;
+          }
+          else
+          {
+            effect = settings.MenuEffect;
+          }
+
           if (CheckForStartRequirements())
           {
-            AtmoLightObject.ChangeEffect(menuEffect);
+            coreObject.ChangeEffect(effect);
             CalculateDelay();
           }
           else
           {
-            AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+            coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
           }
+
         }
       }
     }
@@ -278,7 +370,7 @@ namespace AtmoLight
     #region UI Capture Event Handler
     public void UICapture(object sender, EventArgs args)
     {
-      if (!AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
+      if (!coreObject.IsConnected() || !coreObject.IsAtmoLightOn() || coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
       {
         return;
       }
@@ -297,29 +389,20 @@ namespace AtmoLight
         }
       }
 
-
-      Rectangle rectangleDestination = new Rectangle(0, 0, AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
+      Rectangle rectangleDestination = new Rectangle(0, 0, coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
       try
       {
         if (surfaceDestination == null)
         {
-          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device, AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight(), SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
+          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device, coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight(), SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
         }
 
         // Use the Player Surface if video is playing.
         // This results in lower time to calculate aswell as blackbar removal
         if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
         {
-          playerManager = ServiceRegistration.Get<IPlayerManager>();
-          playerManager.ForEach(psc =>
-          {
-            player = psc.CurrentPlayer as ISharpDXVideoPlayer;
-            if (player == null || player.Surface == null)
-            {
-              return;
-            }
-            surfaceSource = player.Surface;
-          });
+          player = ServiceRegistration.Get<IPlayerContextManager>().PrimaryPlayerContext.CurrentPlayer as ISharpDXVideoPlayer;
+          surfaceSource = player.Surface;
         }
         else
         {
@@ -329,7 +412,7 @@ namespace AtmoLight
         surfaceSource.Device.StretchRectangle(surfaceSource, null, surfaceDestination, rectangleDestination, SharpDX.Direct3D9.TextureFilter.None);
         DataStream stream = SharpDX.Direct3D9.Surface.ToStream(surfaceDestination, SharpDX.Direct3D9.ImageFileFormat.Bmp);
 
-        AtmoLightObject.CalculateBitmap(stream);
+        coreObject.CalculateBitmap(stream);
 
         stream.Close();
         stream.Dispose();
@@ -372,58 +455,49 @@ namespace AtmoLight
     #endregion
 
     #region Key Bindings
+    private void ReregisterKeyBindings()
+    {
+      UnregisterKeyBindings();
+      settings.LoadAll();
+      settings.SaveAll();
+      RegisterKeyBindings();
+    }
+
     private void RegisterKeyBindings()
     {
       IInputManager manager = ServiceRegistration.Get<IInputManager>(false);
       if (manager != null)
       {
-        if (settings.MenuButton == "Red")
-        {
-          manager.AddKeyBinding(Key.Red, new VoidKeyActionDlgt(ContextMenu));
-        }
-        else if (settings.MenuButton == "Green")
-        {
-          manager.AddKeyBinding(Key.Green, new VoidKeyActionDlgt(ContextMenu));
-        }
-        else if (settings.MenuButton == "Yellow")
-        {
-          manager.AddKeyBinding(Key.Yellow, new VoidKeyActionDlgt(ContextMenu));
-        }
-        else if (settings.MenuButton == "Blue")
-        {
-          manager.AddKeyBinding(Key.Blue, new VoidKeyActionDlgt(ContextMenu));
-        }
-
-        if (settings.OnOffButton == "Red")
+        if (settings.OnOffButton == 1)
         {
           manager.AddKeyBinding(Key.Red, new VoidKeyActionDlgt(ToggleEffectOnOff));
         }
-        else if (settings.OnOffButton == "Green")
+        else if (settings.OnOffButton == 2)
         {
           manager.AddKeyBinding(Key.Green, new VoidKeyActionDlgt(ToggleEffectOnOff));
         }
-        else if (settings.OnOffButton == "Yellow")
+        else if (settings.OnOffButton == 3)
         {
           manager.AddKeyBinding(Key.Yellow, new VoidKeyActionDlgt(ToggleEffectOnOff));
         }
-        else if (settings.OnOffButton == "Blue")
+        else if (settings.OnOffButton == 4)
         {
           manager.AddKeyBinding(Key.Blue, new VoidKeyActionDlgt(ToggleEffectOnOff));
         }
 
-        if (settings.ProfileButton == "Red")
+        if (settings.ProfileButton == 1)
         {
           manager.AddKeyBinding(Key.Red, new VoidKeyActionDlgt(ChangeAtmoWinProfile));
         }
-        else if (settings.ProfileButton == "Green")
+        else if (settings.ProfileButton == 2)
         {
           manager.AddKeyBinding(Key.Green, new VoidKeyActionDlgt(ChangeAtmoWinProfile));
         }
-        else if (settings.ProfileButton == "Yellow")
+        else if (settings.ProfileButton == 3)
         {
           manager.AddKeyBinding(Key.Yellow, new VoidKeyActionDlgt(ChangeAtmoWinProfile));
         }
-        else if (settings.ProfileButton == "Blue")
+        else if (settings.ProfileButton == 4)
         {
           manager.AddKeyBinding(Key.Blue, new VoidKeyActionDlgt(ChangeAtmoWinProfile));
         }
@@ -444,11 +518,11 @@ namespace AtmoLight
 
     private void ToggleEffectOnOff()
     {
-      if (AtmoLightObject.IsConnected())
+      if (coreObject.IsConnected())
       {
-        if (AtmoLightObject.IsAtmoLightOn())
+        if (coreObject.IsAtmoLightOn())
         {
-          AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
         }
         else
         {
@@ -465,31 +539,26 @@ namespace AtmoLight
           {
             temp = settings.MenuEffect;
           }
-          AtmoLightObject.ChangeEffect(temp);
+          coreObject.ChangeEffect(temp);
           CalculateDelay();
         }
       }
       else
       {
-        AtmoLightObject.ReinitialiseThreaded();
+        coreObject.ReInitialise();
       }
     }
 
     private void ChangeAtmoWinProfile()
     {
-      if (AtmoLightObject.IsConnected())
+      if (coreObject.IsConnected())
       {
-        AtmoLightObject.ChangeAtmoWinProfile();
+        coreObject.ChangeProfile();
       }
       else
       {
-        AtmoLightObject.ReinitialiseThreaded();
+        coreObject.ReInitialise();
       }
-    }
-
-    private void ContextMenu()
-    {
-
     }
     #endregion
 
@@ -498,9 +567,106 @@ namespace AtmoLight
     /// Connection lost event handler.
     /// This event gets called if connection to AtmoWin is lost and not recoverable.
     /// </summary>
-    private void OnNewConnectionLost()
+    private void OnNewConnectionLost(Target target)
     {
-      ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", "[AtmoLight.AtmoWinConnectionLost]", true);
+      ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", MediaPortal.Common.Localization.LocalizationHelper.Translate("[AtmoLight.AtmoWinConnectionLost]").Replace("[Target]", target.ToString()), true);
+    }
+    #endregion
+
+    #region Settings Lost Hander
+    private void RegisterSettingsChangedHandler()
+    {
+      AtmoLight.Configuration.VideoEffect.SettingsChanged += new Configuration.VideoEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.AudioEffect.SettingsChanged += new Configuration.AudioEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MenuEffect.SettingsChanged += new Configuration.MenuEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MPExitEffect.SettingsChanged += new Configuration.MPExitEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ManualMode.SettingsChanged += new Configuration.ManualMode.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.SBS3D.SettingsChanged += new Configuration.SBS3D.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.LowCPU.SettingsChanged += new Configuration.LowCPU.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.LowCPUTime.SettingsChanged += new Configuration.LowCPUTime.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.DelayTime.SettingsChanged += new Configuration.DelayTime.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.DelayRefreshRate.SettingsChanged += new Configuration.DelayRefreshRate.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeStartHour.SettingsChanged += new Configuration.ExcludeTimeStartHour.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeEndHour.SettingsChanged += new Configuration.ExcludeTimeEndHour.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeStartMinutes.SettingsChanged += new Configuration.ExcludeTimeStartMinutes.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeEndMinutes.SettingsChanged += new Configuration.ExcludeTimeEndMinutes.SettingsChangedHandler(ReloadSettings);
+    }
+
+    private void UnregisterSettingsChangedHandler()
+    {
+      AtmoLight.Configuration.VideoEffect.SettingsChanged -= new Configuration.VideoEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.AudioEffect.SettingsChanged -= new Configuration.AudioEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MenuEffect.SettingsChanged -= new Configuration.MenuEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MPExitEffect.SettingsChanged -= new Configuration.MPExitEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ManualMode.SettingsChanged -= new Configuration.ManualMode.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.SBS3D.SettingsChanged -= new Configuration.SBS3D.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.LowCPU.SettingsChanged -= new Configuration.LowCPU.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.LowCPUTime.SettingsChanged -= new Configuration.LowCPUTime.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.DelayTime.SettingsChanged -= new Configuration.DelayTime.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.DelayRefreshRate.SettingsChanged -= new Configuration.DelayRefreshRate.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeStartHour.SettingsChanged -= new Configuration.ExcludeTimeStartHour.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeEndHour.SettingsChanged -= new Configuration.ExcludeTimeEndHour.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeStartMinutes.SettingsChanged -= new Configuration.ExcludeTimeStartMinutes.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeEndMinutes.SettingsChanged -= new Configuration.ExcludeTimeEndMinutes.SettingsChangedHandler(ReloadSettings);
+    }
+
+    private void ReloadSettings()
+    {
+      settings.LoadAll();
+    }
+
+    #endregion
+
+    #region VU Meter Event Handler
+    private double[] OnNewVUMeter()
+    {
+      double[] dbLevel = new double[] { -200.0, -200.0 };
+
+      IPlayerContextManager playerContextManager = ServiceRegistration.Get<IPlayerContextManager>(false);
+      if (playerContextManager == null)
+      {
+        return dbLevel;
+      }
+
+      IPlayerContext playerContext = playerContextManager.GetPlayerContext(PlayerChoice.PrimaryPlayer);
+      if (playerContext == null)
+      {
+        return dbLevel;
+      }
+
+      IAudioPlayerAnalyze player = (playerContext.CurrentPlayer as IAudioPlayerAnalyze);
+      if (player == null)
+      {
+        return dbLevel;
+      }
+
+      double dbLevelL;
+      double dbLevelR;
+      if (player.GetChannelLevel(out dbLevelL, out dbLevelR))
+      {
+        dbLevel[0] = dbLevelL;
+        dbLevel[1] = dbLevelR;
+      }
+      return dbLevel;
+    }
+    #endregion
+
+    #region PowerModeChanged Event
+    private void PowerModeChanged(object sender, PowerModeChangedEventArgs powerMode)
+    {
+      if (powerMode.Mode == PowerModes.Resume)
+      {
+        if (CheckForStartRequirements())
+        {
+          coreObject.SetInitialEffect(settings.MenuEffect);
+        }
+        else
+        {
+          coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+        }
+      }
+
+      Task.Factory.StartNew(() => { coreObject.PowerModeChanged(powerMode.Mode); });
     }
     #endregion
   }

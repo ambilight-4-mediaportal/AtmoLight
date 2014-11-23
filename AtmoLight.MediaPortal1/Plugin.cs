@@ -11,15 +11,13 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
-//using AtmoWinRemoteControl;
-//using System.Drawing;
 using System.IO;
 using Microsoft.DirectX.Direct3D;
+using Microsoft.Win32;
 using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
 using Language;
 using ProcessPlugins.ViewModeSwitcher;
-
 
 namespace AtmoLight
 {
@@ -44,17 +42,11 @@ namespace AtmoLight
     private ContentEffect playbackEffect = ContentEffect.Undefined; // Effect for current placback
     private ContentEffect menuEffect = ContentEffect.Undefined; // Effect in GUI (no playback)
 
+    private List<ContentEffect> supportedEffects;
+
     // Frame Fields
     private Surface rgbSurface = null; // RGB Surface
     private Int64 lastFrame = 0; // Tick count of the last frame
-
-    // Blackbar detection
-    private object blackbarAnalyzerClass; // Helper for reflection
-    private Assembly blackbarAnalyzerAssembly; // Helper for reflection
-    private Type blackbarAnalyzerType; // Helper for reflection
-    private MethodInfo blackbarAnalyzerMethodInfo; // Helper for reflection
-    private Rectangle blackbarDetectionRect = new Rectangle(); // Rectangle with the dimensions of the picture (without blackbars)
-    private Int64 blackbarDetectionLastTime = 0; // Last time blackbar detection was run
 
     // Static Color
     private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
@@ -63,7 +55,7 @@ namespace AtmoLight
     // Delay Feature
     private int delayTimeHelper; // Helper var for delay time change
 
-    public Core AtmoLightObject;
+    public Core coreObject;
     #endregion
 
     #region Plugin Ctor/Start/Stop
@@ -91,6 +83,9 @@ namespace AtmoLight
 
       Log.Debug("Initialising event handler.");
 
+      // PowerModeChanged Handler
+      SystemEvents.PowerModeChanged += PowerModeChanged;
+
       // g_Player Handler
       g_Player.PlayBackStarted += new g_Player.StartedHandler(g_Player_PlayBackStarted);
       g_Player.PlayBackStopped += new g_Player.StoppedHandler(g_Player_PlayBackStopped);
@@ -108,38 +103,112 @@ namespace AtmoLight
       // VU Meter Handler
       Core.OnNewVUMeter += new Core.NewVUMeterHander(OnNewVUMeter);
 
-      // Frameanalyzer
-      // Reflection needed to access the FrameAnalyzer as it is an internal class
-      blackbarAnalyzerAssembly = Assembly.LoadFrom("plugins\\process\\ProcessPlugins.dll");
-      blackbarAnalyzerClass = blackbarAnalyzerAssembly.CreateInstance("ProcessPlugins.ViewModeSwitcher.FrameAnalyzer");
-      blackbarAnalyzerType = blackbarAnalyzerClass.GetType();
-      blackbarAnalyzerMethodInfo = blackbarAnalyzerType.GetMethod("FindBounds");
-
-
       staticColorTemp[0] = Settings.staticColorRed;
       staticColorTemp[1] = Settings.staticColorGreen;
       staticColorTemp[2] = Settings.staticColorBlue;
 
       Log.Debug("Generating new AtmoLight.Core instance.");
-      AtmoLightObject = new Core(Settings.atmowinExe, Settings.restartOnError, Settings.startAtmoWin, staticColorTemp, Settings.delay, Settings.delayReferenceTime);
-      AtmoLightObject.UpdateGIFPath(Settings.gifFile);
+      coreObject = Core.GetInstance();
 
-
-      if (!AtmoLightObject.Initialise())
+      // AmbiBox
+      if (Settings.ambiBoxTarget)
       {
-        Log.Error("Initialising failed.");
-        return;
+        coreObject.AddTarget(Target.AmbiBox);
       }
+      coreObject.ambiBoxIP = Settings.ambiBoxIP;
+      coreObject.ambiBoxPort = Settings.ambiBoxPort;
+      coreObject.ambiBoxMaxReconnectAttempts = Settings.ambiBoxMaxReconnectAttempts;
+      coreObject.ambiBoxReconnectDelay = Settings.ambiBoxReconnectDelay;
+      coreObject.ambiBoxMediaPortalProfile = Settings.ambiBoxMediaPortalProfile;
+      coreObject.ambiBoxExternalProfile = Settings.ambiBoxExternalProfile;
+      coreObject.ambiBoxPath = Settings.ambiBoxPath;
+      coreObject.ambiBoxAutoStart = Settings.ambiBoxAutoStart;
+      coreObject.ambiBoxAutoStop = Settings.ambiBoxAutoStop;
+
+      // AtmoWin
+      if (Settings.atmoWinTarget)
+      {
+        coreObject.AddTarget(Target.AtmoWin);
+      }
+      coreObject.atmoWinPath = Settings.atmowinExe;
+      coreObject.atmoWinAutoStart = Settings.startAtmoWin;
+      coreObject.atmoWinAutoStop = Settings.exitAtmoWin;
+
+      // Boblight
+      if (Settings.boblightTarget)
+      {
+        coreObject.AddTarget(Target.Boblight);
+      }
+      coreObject.boblightIP = Settings.boblightIP;
+      coreObject.boblightPort = Settings.boblightPort;
+      coreObject.boblightMaxFPS = Settings.boblightMaxFPS;
+      coreObject.boblightMaxReconnectAttempts = Settings.boblightMaxReconnectAttempts;
+      coreObject.boblightReconnectDelay = Settings.boblightReconnectDelay;
+      coreObject.boblightSpeed = Settings.boblightSpeed;
+      coreObject.boblightAutospeed = Settings.boblightAutospeed;
+      coreObject.boblightInterpolation = Settings.boblightInterpolation;
+      coreObject.boblightSaturation = Settings.boblightSaturation;
+      coreObject.boblightValue = Settings.boblightValue;
+      coreObject.boblightThreshold = Settings.boblightThreshold;
+      coreObject.boblightGamma = Settings.boblightGamma;
+
+      // Hyperion
+      if (Settings.hyperionTarget)
+      {
+        coreObject.AddTarget(Target.Hyperion);
+      }
+      coreObject.hyperionIP = Settings.hyperionIP;
+      coreObject.hyperionPort = Settings.hyperionPort;
+      coreObject.hyperionPriority = Settings.hyperionPriority;
+      coreObject.hyperionReconnectDelay = Settings.hyperionReconnectDelay;
+      coreObject.hyperionReconnectAttempts = Settings.hyperionReconnectAttempts;
+      coreObject.hyperionPriorityStaticColor = Settings.hyperionPriorityStaticColor;
+      coreObject.hyperionLiveReconnect = Settings.hyperionLiveReconnect;
+
+      // Hue
+      if (Settings.hueTarget)
+      {
+        coreObject.AddTarget(Target.Hue);
+      }
+      coreObject.huePath = Settings.hueExe;
+      coreObject.hueStart = Settings.hueStart;
+      coreObject.hueIsRemoteMachine = Settings.hueIsRemoteMachine;
+      coreObject.hueIP = Settings.hueIP;
+      coreObject.huePort = Settings.huePort;
+      coreObject.hueReconnectDelay = Settings.hueReconnectDelay;
+      coreObject.hueReconnectAttempts = Settings.hueReconnectAttempts;
+      coreObject.hueMinimalColorDifference = Settings.hueMinimalColorDifference;
+      coreObject.hueBridgeEnableOnResume = Settings.hueBridgeEnableOnResume;
+      coreObject.hueBridgeDisableOnSuspend = Settings.hueBridgeDisableOnSuspend;
+      
+      // General settings
+      coreObject.SetDelay(Settings.delayReferenceTime);
+      coreObject.SetGIFPath(Settings.gifFile);
+      coreObject.SetReInitOnError(Settings.restartOnError);
+      coreObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
+      coreObject.SetCaptureDimensions(Settings.captureWidth, Settings.captureHeight);
+      coreObject.blackbarDetection = Settings.blackbarDetection;
+      coreObject.blackbarDetectionTime = Settings.blackbarDetectionTime;
+      coreObject.blackbarDetectionThreshold = Settings.blackbarDetectionThreshold;
+      coreObject.powerModeChangedDelay = Settings.powerModeChangedDelay;
+
+      // Get the effects that are supported by at least one target
+      supportedEffects = coreObject.GetSupportedEffects();
 
       menuEffect = Settings.effectMenu;
       if (CheckForStartRequirements())
       {
-        AtmoLightObject.ChangeEffect(menuEffect);
-        CalculateDelay();
+        coreObject.SetInitialEffect(menuEffect);
       }
       else
       {
-        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+        coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+      }
+
+      if (!coreObject.Initialise())
+      {
+        Log.Error("Initialising failed.");
+        return;
       }
     }
 
@@ -150,29 +219,16 @@ namespace AtmoLight
     public void Stop()
     {
       MediaPortal.FrameGrabber.GetInstance().OnNewFrame -= new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
-
+      SystemEvents.PowerModeChanged -= PowerModeChanged;
       g_Player.PlayBackStarted -= new g_Player.StartedHandler(g_Player_PlayBackStarted);
       g_Player.PlayBackStopped -= new g_Player.StoppedHandler(g_Player_PlayBackStopped);
       g_Player.PlayBackEnded -= new g_Player.EndedHandler(g_Player_PlayBackEnded);
 
       GUIWindowManager.OnNewAction -= new OnActionHandler(OnNewAction);
 
-      if (Settings.disableOnShutdown)
-      {
-        AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
-      }
+      coreObject.ChangeEffect(Settings.effectMPExit);
 
-      if (Settings.enableInternalLiveView)
-      {
-        AtmoLightObject.ChangeEffect(ContentEffect.AtmoWinLiveMode);
-      }
-
-      AtmoLightObject.Disconnect();
-
-      if (Settings.exitAtmoWin)
-      {
-        AtmoLightObject.StopAtmoWin();
-      }
+      coreObject.Dispose();
 
       Log.Debug("Plugin Stopped.");
 
@@ -187,10 +243,6 @@ namespace AtmoLight
     /// <returns>true or false</returns>
     private bool CheckForStartRequirements()
     {
-      if (!AtmoLightObject.IsConnected())
-      {
-        return false;
-      }
       if (Settings.manualMode)
       {
         Log.Debug("LEDs should be deactivated. (Manual Mode)");
@@ -233,9 +285,9 @@ namespace AtmoLight
     /// </summary>
     private void CalculateDelay()
     {
-      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && AtmoLightObject.IsDelayEnabled())
+      if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && coreObject.IsDelayEnabled())
       {
-        AtmoLightObject.ChangeDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
+        coreObject.SetDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
       }
     }
     #endregion
@@ -288,9 +340,12 @@ namespace AtmoLight
     /// Connection lost event handler.
     /// This event gets called if connection to AtmoWin is lost and not recoverable.
     /// </summary>
-    private void OnNewConnectionLost()
+    private void OnNewConnectionLost(Target target)
     {
-      DialogError(LanguageLoader.appStrings.ContextMenu_AtmoWinConnectionLost);
+      if (GUIWindowManager.Initalized)
+      {
+        DialogError(LanguageLoader.appStrings.ContextMenu_ConnectionLost.Replace("[Target]", target.ToString()));
+      }
     }
     #endregion
 
@@ -323,12 +378,12 @@ namespace AtmoLight
 
         if (CheckForStartRequirements())
         {
-          AtmoLightObject.ChangeEffect(playbackEffect);
+          coreObject.ChangeEffect(playbackEffect);
           CalculateDelay();
         }
         else
         {
-          AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
         }
       }
       catch (Exception ex)
@@ -345,27 +400,27 @@ namespace AtmoLight
     /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
     {
-      if (!AtmoLightObject.IsConnected())
-      {
-        return;
-      }
-      try
-      {
-        if (CheckForStartRequirements())
+        if (!coreObject.IsConnected())
         {
-          AtmoLightObject.ChangeEffect(menuEffect);
-          CalculateDelay();
+            return;
         }
-        else
+        try
         {
-          AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+            if (CheckForStartRequirements())
+            {
+                coreObject.ChangeEffect(menuEffect);
+                CalculateDelay();
+            }
+            else
+            {
+                coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+            }
         }
-      }
-      catch (Exception ex)
-      {
-        Log.Error("g_Player_PlayBackEnded failed.");
-        Log.Error("Exception= {0}", ex.Message);
-      }
+        catch (Exception ex)
+        {
+            Log.Error("g_Player_PlayBackEnded failed.");
+            Log.Error("Exception= {0}", ex.Message);
+        }
     }
 
     /// <summary>
@@ -376,7 +431,7 @@ namespace AtmoLight
     /// <param name="filename">Media filename.</param>
     void g_Player_PlayBackStopped(g_Player.MediaType type, int stoptime, string filename)
     {
-      if (!AtmoLightObject.IsConnected())
+      if (!coreObject.IsConnected())
       {
         return;
       }
@@ -384,12 +439,12 @@ namespace AtmoLight
       {
         if (CheckForStartRequirements())
         {
-          AtmoLightObject.ChangeEffect(menuEffect);
+          coreObject.ChangeEffect(menuEffect);
           CalculateDelay();
         }
         else
         {
-          AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
         }
       }
       catch (Exception ex)
@@ -410,7 +465,7 @@ namespace AtmoLight
     /// <param name="pSurface">Surface.</param>
     private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
     {
-      if (AtmoLightObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !AtmoLightObject.IsConnected() || !AtmoLightObject.IsAtmoLightOn() || width == 0 || height == 0)
+      if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() || !coreObject.IsAtmoLightOn() || width == 0 || height == 0)
       {
         return;
       }
@@ -431,7 +486,7 @@ namespace AtmoLight
 
       if (rgbSurface == null)
       {
-        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight(), Format.A8R8G8B8,
+        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight(), Format.A8R8G8B8,
           MultiSampleType.None, 0, true);
       }
       unsafe
@@ -441,52 +496,17 @@ namespace AtmoLight
           if (Settings.sbs3dOn)
           {
             VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
+              coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
           }
           else
           {
             VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
+              coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
           }
 
           Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
 
-          if (Settings.blackbarDetection)
-          {
-            if (Win32API.GetTickCount() >= (blackbarDetectionLastTime + Settings.blackbarDetectionTime))
-            {
-              blackbarDetectionLastTime = Win32API.GetTickCount();
-
-              // Analyzing the frame for black bars.
-              // Has to be done in low res, as it would be to cpu heavy otherwise (0-2ms vs. 1000ms).
-              Bitmap streamBitmap = new Bitmap(stream);
-              object[] arguments = new Object[] { streamBitmap, null };
-
-              // Call FindBounds.
-              bool blackbarblackbarAnalyzerSuccess = (bool)blackbarAnalyzerMethodInfo.Invoke(blackbarAnalyzerClass, arguments);
-              streamBitmap.Dispose();
-
-              if (blackbarblackbarAnalyzerSuccess)
-              {
-                // Retrieving the bounds.
-                blackbarDetectionRect = (System.Drawing.Rectangle)arguments[1];
-              }
-            }
-
-            // New bitmap that has to have to dimensions AtmoWin expects.
-            Bitmap target = new Bitmap(AtmoLightObject.GetCaptureWidth(), AtmoLightObject.GetCaptureHeight());
-
-            using (Graphics g = Graphics.FromImage(target))
-            {
-              // Cropping and resizing the original bitmap
-              g.DrawImage(new Bitmap(stream), new Rectangle(0, 0, target.Width, target.Height), blackbarDetectionRect, GraphicsUnit.Pixel);
-            }
-
-            // Saving cropped and resized bitmap to stream
-            target.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
-            target.Dispose();
-          }
-          AtmoLightObject.CalculateBitmap(stream);
+          coreObject.CalculateBitmap(stream);
 
           stream.Close();
           stream.Dispose();
@@ -516,11 +536,11 @@ namespace AtmoLight
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.menuButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.menuButton == 3))
       {
-        if (!AtmoLightObject.IsConnected())
+        if (!coreObject.IsConnected())
         {
           if (DialogYesNo(LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2))
           {
-            AtmoLightObject.ReinitialiseThreaded(true);
+            coreObject.ReInitialise();
           }
         }
         else
@@ -530,7 +550,7 @@ namespace AtmoLight
       }
 
       // No connection
-      if (!AtmoLightObject.IsConnected())
+      if (!coreObject.IsConnected())
       {
         return;
       }
@@ -541,22 +561,22 @@ namespace AtmoLight
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.killButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.killButton == 3))
       {
-        if (!AtmoLightObject.IsAtmoLightOn())
+        if (!coreObject.IsAtmoLightOn())
         {
           if (g_Player.Playing)
           {
-            AtmoLightObject.ChangeEffect(playbackEffect);
+            coreObject.ChangeEffect(playbackEffect);
             CalculateDelay();
           }
           else
           {
-            AtmoLightObject.ChangeEffect(menuEffect);
+            coreObject.ChangeEffect(menuEffect);
             CalculateDelay();
           }
         }
         else
         {
-          AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
         }
       }
 
@@ -566,7 +586,7 @@ namespace AtmoLight
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.profileButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.profileButton == 3))
       {
-        AtmoLightObject.ChangeAtmoWinProfile();
+        coreObject.ChangeProfile();
       }
     }
     #endregion
@@ -602,14 +622,20 @@ namespace AtmoLight
     /// <param name="setLine2">Second line.</param>
     private void DialogError(string setLine1 = null, string setLine2 = null)
     {
-      GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
-      if (dlgError != null)
+      // Send Thread Callback to let this Dialog be shown by the main thread
+      // Will result in problems and error messages otherwise
+      GUIWindowManager.SendThreadCallback((p1, p2, o) =>
       {
-        dlgError.SetHeading(LanguageLoader.appStrings.ContextMenu_Error + "!");
-        dlgError.SetLine(1, setLine1);
-        dlgError.SetLine(2, setLine2);
-        dlgError.DoModal(GUIWindowManager.ActiveWindow);
-      }
+        GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
+        if (dlgError != null)
+        {
+          dlgError.SetHeading(LanguageLoader.appStrings.ContextMenu_Error + "!");
+          dlgError.SetLine(1, setLine1);
+          dlgError.SetLine(2, setLine2);
+          dlgError.DoModal(GUIWindowManager.ActiveWindow);
+        }
+        return 0;
+      }, 0, 0, null);
     }
 
     /// <summary>
@@ -617,9 +643,6 @@ namespace AtmoLight
     /// </summary>
     private void DialogContextMenu()
     {
-      int delayTogglePos = 5;
-      int delayChangePos = 6;
-      int staticColorPos = 5;
       Log.Info("Opening AtmoLight context menu.");
 
       // Showing context menu
@@ -628,7 +651,7 @@ namespace AtmoLight
       dlg.SetHeading("AtmoLight");
 
       // Toggle On/Off
-      if (!AtmoLightObject.IsAtmoLightOn())
+      if (!coreObject.IsAtmoLightOn())
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchLEDsON));
       }
@@ -640,7 +663,7 @@ namespace AtmoLight
       // Change Effect
       dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeEffect));
 
-      // Change AtmoWin Profile
+      // Change Profile
       dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeAWProfile));
 
       // Toggle 3D Mode
@@ -664,132 +687,108 @@ namespace AtmoLight
       }
 
       // Delay
-      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
       {
         // Toggle Delay and Change Delay
-        if (AtmoLightObject.IsDelayEnabled())
+        if (coreObject.IsDelayEnabled())
         {
           dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_DelayOFF));
-          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + AtmoLightObject.GetDelayTime() + "ms)"));
-          staticColorPos++;
+          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + coreObject.GetDelayTime() + "ms)"));
         }
         else
         {
           dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_DelayON));
-          delayChangePos = -1;
         }
-        staticColorPos++;
-      }
-      else
-      {
-        delayTogglePos = -1;
-        delayChangePos = -1;
       }
 
       // Change Static Color
-      if (AtmoLightObject.GetCurrentEffect() == ContentEffect.StaticColor)
+      if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
       {
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeStatic));
       }
-      else
+
+      // ReInit
+      if (!coreObject.AreAllConnected())
       {
-        staticColorPos = -1;
+        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ReInitialise));
       }
 
       dlg.SelectedLabel = 0;
       dlg.DoModal(GUIWindowManager.ActiveWindow);
 
       // Do stuff
-      if (dlg.SelectedLabel == 0)
+      // Toggle LEDs
+      if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchLEDsON || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchLEDsOFF)
       {
-        if (!AtmoLightObject.IsAtmoLightOn())
+        if (!coreObject.IsAtmoLightOn())
         {
           if (g_Player.Playing)
           {
-            AtmoLightObject.ChangeEffect(playbackEffect);
+            coreObject.ChangeEffect(playbackEffect);
             CalculateDelay();
           }
           else
           {
-            AtmoLightObject.ChangeEffect(menuEffect);
+            coreObject.ChangeEffect(menuEffect);
             CalculateDelay();
           }
         }
         else
         {
-          AtmoLightObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
         }
       }
-      else if (dlg.SelectedLabel == 1)
+      // Change Effect
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeEffect)
       {
         GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgEffect.Reset();
         dlgEffect.SetHeading(LanguageLoader.appStrings.ContextMenu_ChangeEffect);
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_LEDsDisabled));
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_MPLive));
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_AWLive));
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Colorchanger));
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ColorchangerLR));
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_StaticColor));
-        dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_GIFReader));
-        if (g_Player.Playing && (g_Player.currentMedia == g_Player.MediaType.Music || g_Player.currentMedia == g_Player.MediaType.Radio))
+
+        // Only show effects that are support by at least one target
+        foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
         {
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_VUMeter));
-          dlgEffect.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_VUMeterRainbow));
+          if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
+          {
+            if (effect == ContentEffect.VUMeter || effect == ContentEffect.VUMeterRainbow)
+            {
+              if (g_Player.Playing && (g_Player.currentMedia == g_Player.MediaType.Music || g_Player.currentMedia == g_Player.MediaType.Radio))
+              {
+                dlgEffect.Add(new GUIListItem(LanguageLoader.GetTranslationFromFieldName("ContextMenu_"+effect.ToString())));
+              }
+            }
+            else
+            {
+              dlgEffect.Add(new GUIListItem(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString())));
+            }
+          }
         }
         dlgEffect.SelectedLabel = 0;
         dlgEffect.DoModal(GUIWindowManager.ActiveWindow);
 
-        ContentEffect temp = ContentEffect.Undefined;
+        if (!String.IsNullOrEmpty(dlgEffect.SelectedLabelText))
+        {
+          ContentEffect temp = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(dlgEffect.SelectedLabelText, "ContextMenu_").Remove(0, 12));
 
-        switch (dlgEffect.SelectedLabel)
-        {
-          case -1:
-            return;
-          case 0:
-            temp = ContentEffect.LEDsDisabled;
-            break;
-          case 1:
-            temp = ContentEffect.MediaPortalLiveMode;
-            break;
-          case 2:
-            temp = ContentEffect.AtmoWinLiveMode;
-            break;
-          case 3:
-            temp = ContentEffect.Colorchanger;
-            break;
-          case 4:
-            temp = ContentEffect.ColorchangerLR;
-            break;
-          case 5:
-            temp = ContentEffect.StaticColor;
-            break;
-          case 6:
-            temp = ContentEffect.GIFReader;
-            break;
-          case 7:
-            temp = ContentEffect.VUMeter;
-            break;
-          case 8:
-            temp = ContentEffect.VUMeterRainbow;
-            break;
+          if (g_Player.Playing)
+          {
+            playbackEffect = temp;
+          }
+          else
+          {
+            menuEffect = temp;
+          }
+          coreObject.ChangeEffect(temp);
+          CalculateDelay();
         }
-        if (g_Player.Playing)
-        {
-          playbackEffect = temp;
-        }
-        else
-        {
-          menuEffect = temp;
-        }
-        AtmoLightObject.ChangeEffect(temp);
-        CalculateDelay();
       }
-      else if (dlg.SelectedLabel == 2)
+      // Change Profile
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeAWProfile)
       {
-        AtmoLightObject.ChangeAtmoWinProfile();
+        coreObject.ChangeProfile();
       }
-      else if (dlg.SelectedLabel == 3)
+      // Toggle 3D
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_Switch3DOFF || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_Switch3DON)
       {
         if (Settings.sbs3dOn)
         {
@@ -802,36 +801,41 @@ namespace AtmoLight
           Settings.sbs3dOn = true;
         }
       }
-      else if (dlg.SelectedLabel == 4)
+      // Blackbar detection
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchBlackbarDetectionOFF || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchBlackbarDetectionON)
       {
         if (Settings.blackbarDetection)
         {
           Log.Info("Switching blackbar detection off.");
           Settings.blackbarDetection = false;
+          coreObject.blackbarDetection = false;
         }
         else
         {
           Log.Info("Switching blackbar detection on.");
           Settings.blackbarDetection = true;
+          coreObject.blackbarDetection = true;
         }
       }
-      else if ((dlg.SelectedLabel == delayTogglePos) && (delayTogglePos != -1))
+      // Toggle Delay
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_DelayOFF || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_DelayON)
       {
-        if (AtmoLightObject.IsDelayEnabled())
+        if (coreObject.IsDelayEnabled())
         {
           Log.Info("Switching LED delay off.");
-          AtmoLightObject.DisableDelay();
+          coreObject.DisableDelay();
         }
         else
         {
-          AtmoLightObject.EnableDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
+          coreObject.EnableDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
         }
       }
-      else if ((dlg.SelectedLabel == delayChangePos) && (delayChangePos != -1))
+      // Change Delay
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + coreObject.GetDelayTime() + "ms)")
       {
         if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) && (delayTimeHelper <= 1000))
         {
-          AtmoLightObject.ChangeDelay(delayTimeHelper);
+          coreObject.SetDelay(delayTimeHelper);
           Settings.delayReferenceTime = (int)(((float)delayTimeHelper * (float)GetRefreshRate()) / Settings.delayReferenceRefreshRate);
         }
         else
@@ -839,7 +843,8 @@ namespace AtmoLight
           DialogError(LanguageLoader.appStrings.ContextMenu_DelayTimeErrorLine1, LanguageLoader.appStrings.ContextMenu_DelayTimeErrorLine2);
         }
       }
-      else if ((dlg.SelectedLabel == staticColorPos) && (staticColorPos != -1))
+      // Change Static Color
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeStatic)
       {
         GUIDialogMenu dlgStaticColor = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgStaticColor.Reset();
@@ -865,39 +870,43 @@ namespace AtmoLight
             DialogRGBManualStaticColorChanger();
             break;
           case 1:
-            Settings.SaveSpecificSetting("StaticColorRed", AtmoLightObject.GetStaticColor()[0].ToString());
-            Settings.staticColorRed = AtmoLightObject.GetStaticColor()[0];
-            Settings.SaveSpecificSetting("StaticColorGreen", AtmoLightObject.GetStaticColor()[1].ToString());
-            Settings.staticColorGreen = AtmoLightObject.GetStaticColor()[1];
-            Settings.SaveSpecificSetting("StaticColorBlue", AtmoLightObject.GetStaticColor()[2].ToString());
-            Settings.staticColorBlue = AtmoLightObject.GetStaticColor()[2];
+            Settings.SaveSpecificSetting("StaticColorRed", coreObject.GetStaticColor()[0].ToString());
+            Settings.staticColorRed = coreObject.GetStaticColor()[0];
+            Settings.SaveSpecificSetting("StaticColorGreen", coreObject.GetStaticColor()[1].ToString());
+            Settings.staticColorGreen = coreObject.GetStaticColor()[1];
+            Settings.SaveSpecificSetting("StaticColorBlue", coreObject.GetStaticColor()[2].ToString());
+            Settings.staticColorBlue = coreObject.GetStaticColor()[2];
             break;
           case 2:
-            AtmoLightObject.ChangeStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
+            coreObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
             break;
           case 3:
-            AtmoLightObject.ChangeStaticColor(255, 255, 255);
+            coreObject.SetStaticColor(255, 255, 255);
             break;
           case 4:
-            AtmoLightObject.ChangeStaticColor(255, 0, 0);
+            coreObject.SetStaticColor(255, 0, 0);
             break;
           case 5:
-            AtmoLightObject.ChangeStaticColor(0, 255, 0);
+            coreObject.SetStaticColor(0, 255, 0);
             break;
           case 6:
-            AtmoLightObject.ChangeStaticColor(0, 0, 255);
+            coreObject.SetStaticColor(0, 0, 255);
             break;
           case 7:
-            AtmoLightObject.ChangeStaticColor(0, 255, 255);
+            coreObject.SetStaticColor(0, 255, 255);
             break;
           case 8:
-            AtmoLightObject.ChangeStaticColor(255, 0, 255);
+            coreObject.SetStaticColor(255, 0, 255);
             break;
           case 9:
-            AtmoLightObject.ChangeStaticColor(255, 255, 0);
+            coreObject.SetStaticColor(255, 255, 0);
             break;
         }
-        AtmoLightObject.ChangeEffect(ContentEffect.StaticColor, true);
+        coreObject.ChangeEffect(ContentEffect.StaticColor, true);
+      }
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ReInitialise)
+      {
+        coreObject.ReInitialise();
       }
     }
 
@@ -971,7 +980,7 @@ namespace AtmoLight
           }
           else
           {
-            AtmoLightObject.ChangeStaticColor(staticColorTemp[0], staticColorTemp[1], staticColorTemp[2]);
+            coreObject.SetStaticColor(staticColorTemp[0], staticColorTemp[1], staticColorTemp[2]);
             return;
           }
         case 4:
@@ -982,6 +991,25 @@ namespace AtmoLight
     }
     #endregion
 
+    #region PowerModeChanged Event
+    private void PowerModeChanged(object sender, PowerModeChangedEventArgs powerMode)
+    {
+      if (powerMode.Mode == PowerModes.Resume)
+      {
+        if (CheckForStartRequirements())
+        {
+          coreObject.SetInitialEffect(menuEffect);
+        }
+        else
+        {
+          coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+        }
+      }
+
+      Task.Factory.StartNew(() => { coreObject.PowerModeChanged(powerMode.Mode); });
+    }
+    #endregion
+
     #region ISetupForm impementation
     /// <summary>
     ///  Returns authors name.
@@ -989,7 +1017,7 @@ namespace AtmoLight
     /// <returns>Authors name.</returns>
     public string Author()
     {
-      return "gemx, Angie05, RickDB, legnod, azzuro, BassFan, Lightning303, HomeY, Sebastiii";
+      return "gemx, Angie05, Rick164, legnod, azzuro, BassFan, Lightning303, HomeY, Sebastiii";
     }
 
     /// <summary>

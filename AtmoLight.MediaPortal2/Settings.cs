@@ -22,25 +22,19 @@ namespace AtmoLight
     [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
     public ContentEffect MenuEffect { get; set; }
 
-    [Setting(SettingScope.User, "Red")]
-    public string MenuButton { get; set; }
+    [Setting(SettingScope.User, ContentEffect.LEDsDisabled)]
+    public ContentEffect MPExitEffect { get; set; }
 
-    [Setting(SettingScope.User, "Green")]
-    public string OnOffButton { get; set; }
+    [Setting(SettingScope.User, 1)]
+    public int OnOffButton { get; set; }
 
-    [Setting(SettingScope.User, "Yellow")]
-    public string ProfileButton { get; set; }
+    [Setting(SettingScope.User, 2)]
+    public int ProfileButton { get; set; }
 
-    [Setting(SettingScope.User, true)]
-    public bool DisableLEDsOnExit { get; set; }
-
-    [Setting(SettingScope.User, false)]
-    public bool EnableLiveviewOnExit { get; set; }
-
-    [Setting(SettingScope.User, "08:00")]
+    [Setting(SettingScope.User, "00:00")]
     public string ExcludeTimeStart { get; set; }
 
-    [Setting(SettingScope.User, "21:00")]
+    [Setting(SettingScope.User, "00:00")]
     public string ExcludeTimeEnd { get; set; }
 
     [Setting(SettingScope.User, false)]
@@ -85,6 +79,154 @@ namespace AtmoLight
     [Setting(SettingScope.User, "")]
     public string GIFFile { get; set; }
 
+    [Setting(SettingScope.User, true)]
+    public bool AtmoWinTarget { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool HyperionTarget { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool HueTarget { get; set; }
+
+    [Setting(SettingScope.User, 64)]
+    public int CaptureWidth { get; set; }
+
+    [Setting(SettingScope.User, 64)]
+    public int CaptureHeight { get; set; }
+
+    [Setting(SettingScope.User, "127.0.0.1")]
+    public string HyperionIP { get; set; }
+
+    [Setting(SettingScope.User, 19445)]
+    public int HyperionPort { get; set; }
+
+    [Setting(SettingScope.User, 1)]
+    public int HyperionPriority { get; set; }
+
+    [Setting(SettingScope.User, 1)]
+    public int HyperionPriorityStaticColor { get; set; }
+
+    [Setting(SettingScope.User, 10000)]
+    public int HyperionReconnectDelay { get; set; }
+
+    [Setting(SettingScope.User, 5)]
+    public int HyperionReconnectAttempts { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool HyperionLiveReconnect { get; set; }
+
+    [Setting(SettingScope.User, "")]
+    public string hueExe { get; set; }
+
+    [Setting(SettingScope.User, true)]
+    public bool hueStart { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool hueIsRemoteMachine { get; set; }
+
+    [Setting(SettingScope.User, "127.0.0.1")]
+    public string HueIP { get; set; }
+
+    [Setting(SettingScope.User, 20123)]
+    public int HuePort { get; set; }
+
+    [Setting(SettingScope.User, 10000)]
+    public int HueReconnectDelay { get; set; }
+
+    [Setting(SettingScope.User, 5)]
+    public int HueReconnectAttempts { get; set; }
+
+    [Setting(SettingScope.User, 25)]
+    public int HueMinimalColorDifference { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool HueBridgeEnableOnResume { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool HueBridgeDisableOnSuspend { get; set; }
+    
+    [Setting(SettingScope.User, false)]
+    public bool BoblightTarget { get; set; }
+
+    [Setting(SettingScope.User, "127.0.0.1")]
+    public string BoblightIP { get; set; }
+
+    [Setting(SettingScope.User, 19333)]
+    public int BoblightPort { get; set; }
+
+    [Setting(SettingScope.User, 10)]
+    public int BoblightMaxFPS { get; set; }
+
+    [Setting(SettingScope.User, 5)]
+    public int BoblightMaxReconnectAttempts { get; set; }
+
+    [Setting(SettingScope.User, 5000)]
+    public int BoblightReconnectDelay { get; set; }
+
+    [Setting(SettingScope.User, 100)]
+    public int BoblightSpeed { get; set; }
+
+    [Setting(SettingScope.User, 0)]
+    public int BoblightAutospeed { get; set; }
+
+    [Setting(SettingScope.User, true)]
+    public bool BoblightInterpolation { get; set; }
+
+    [Setting(SettingScope.User, 1)]
+    public int BoblightSaturation { get; set; }
+
+    [Setting(SettingScope.User, 1)]
+    public int BoblightValue { get; set; }
+
+    [Setting(SettingScope.User, 20)]
+    public int BoblightThreshold { get; set; }
+
+    [Setting(SettingScope.User, 2.2)]
+    public double BoblightGamma { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool BlackbarDetection { get; set; }
+
+    [Setting(SettingScope.User, 1000)]
+    public int BlackbarDetectionTime { get; set; }
+
+    [Setting(SettingScope.User, 20)]
+    public int BlackbarDetectionThreshold { get; set; }
+
+    [Setting(SettingScope.User, 5000)]
+    public int PowerModeChangedDelay { get; set; }
+
+    [Setting(SettingScope.User, "127.0.0.1")]
+    public string AmbiBoxIP { get; set; }
+
+    [Setting(SettingScope.User, 3636)]
+    public int AmbiBoxPort { get; set; }
+
+    [Setting(SettingScope.User, 5)]
+    public int AmbiBoxMaxReconnectAttempts { get; set; }
+
+    [Setting(SettingScope.User, 5000)]
+    public int AmbiBoxReconnectDelay { get; set; }
+
+    [Setting(SettingScope.User, "")]
+    public string AmbiBoxMediaPortalProfile { get; set; }
+
+    [Setting(SettingScope.User, "")]
+    public string AmbiBoxExternalProfile { get; set; }
+
+    [Setting(SettingScope.User, "C:\\Program Files (x86)\\AmbiBox\\AmbiBox.exe")]
+    public string AmbiBoxPath { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool AmbiBoxAutoStart { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool AmbiBoxAutoStop { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool AmbiBoxTarget { get; set; }
+
+
     ISettingsManager settingsManager = ServiceRegistration.Get<ISettingsManager>();
     Settings settings;
 
@@ -95,11 +237,8 @@ namespace AtmoLight
       VideoEffect = settings.VideoEffect;
       AudioEffect = settings.AudioEffect;
       MenuEffect = settings.MenuEffect;
-      MenuButton = settings.MenuButton;
       OnOffButton = settings.OnOffButton;
       ProfileButton = settings.ProfileButton;
-      DisableLEDsOnExit = settings.DisableLEDsOnExit;
-      EnableLiveviewOnExit = settings.EnableLiveviewOnExit;
       ExcludeTimeStart = settings.ExcludeTimeStart;
       ExcludeTimeEnd = settings.ExcludeTimeEnd;
       ManualMode = settings.ManualMode;
@@ -116,6 +255,55 @@ namespace AtmoLight
       StaticColorGreen = settings.StaticColorGreen;
       StaticColorRed = settings.StaticColorRed;
       GIFFile = settings.GIFFile;
+      MPExitEffect = settings.MPExitEffect;
+      AtmoWinTarget = settings.AtmoWinTarget;
+      HyperionTarget = settings.HyperionTarget;
+      HueTarget = settings.HueTarget;
+      HyperionIP = settings.HyperionIP;
+      HyperionLiveReconnect = settings.HyperionLiveReconnect;
+      HyperionPort = settings.HyperionPort;
+      HyperionPriority = settings.HyperionPriority;
+      HyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
+      HyperionReconnectAttempts = settings.HyperionReconnectAttempts;
+      HyperionReconnectDelay = settings.HyperionReconnectDelay;
+      hueExe = settings.hueExe;
+      hueStart = settings.hueStart;
+      hueIsRemoteMachine = settings.hueIsRemoteMachine;
+      HueIP = settings.HueIP;
+      HuePort = settings.HuePort;
+      HueReconnectDelay = settings.HueReconnectDelay;
+      HueReconnectAttempts = settings.HueReconnectAttempts;
+      HueMinimalColorDifference = settings.HueMinimalColorDifference;
+      HueBridgeEnableOnResume = settings.HueBridgeEnableOnResume;
+      CaptureHeight = settings.CaptureHeight;
+      CaptureWidth = settings.CaptureWidth;
+      BoblightTarget = settings.BoblightTarget;
+      BoblightIP = settings.BoblightIP;
+      BoblightPort = settings.BoblightPort;
+      BoblightMaxFPS = settings.BoblightMaxFPS;
+      BoblightMaxReconnectAttempts = settings.BoblightMaxReconnectAttempts;
+      BoblightReconnectDelay = settings.BoblightReconnectDelay;
+      BoblightSpeed = settings.BoblightSpeed;
+      BoblightAutospeed = settings.BoblightAutospeed;
+      BoblightInterpolation = settings.BoblightInterpolation;
+      BoblightSaturation = settings.BoblightSaturation;
+      BoblightValue = settings.BoblightValue;
+      BoblightThreshold = settings.BoblightThreshold;
+      BoblightGamma = settings.BoblightGamma;
+      BlackbarDetection = settings.BlackbarDetection;
+      BlackbarDetectionTime = settings.BlackbarDetectionTime;
+      BlackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
+      PowerModeChangedDelay = settings.PowerModeChangedDelay;
+      AmbiBoxAutoStart = settings.AmbiBoxAutoStart;
+      AmbiBoxAutoStop = settings.AmbiBoxAutoStop;
+      AmbiBoxExternalProfile = settings.AmbiBoxExternalProfile;
+      AmbiBoxIP = settings.AmbiBoxIP;
+      AmbiBoxMaxReconnectAttempts = settings.AmbiBoxMaxReconnectAttempts;
+      AmbiBoxMediaPortalProfile = settings.AmbiBoxMediaPortalProfile;
+      AmbiBoxPath = settings.AmbiBoxPath;
+      AmbiBoxPort = settings.AmbiBoxPort;
+      AmbiBoxReconnectDelay = settings.AmbiBoxReconnectDelay;
+      AmbiBoxTarget = settings.AmbiBoxTarget;
       return true;
     }
 
@@ -125,11 +313,8 @@ namespace AtmoLight
       settings.VideoEffect = VideoEffect;
       settings.AudioEffect = AudioEffect;
       settings.MenuEffect = MenuEffect;
-      settings.MenuButton = MenuButton;
       settings.OnOffButton = OnOffButton;
       settings.ProfileButton = ProfileButton;
-      settings.DisableLEDsOnExit = DisableLEDsOnExit;
-      settings.EnableLiveviewOnExit = EnableLiveviewOnExit;
       settings.ExcludeTimeStart = ExcludeTimeStart;
       settings.ExcludeTimeEnd = ExcludeTimeEnd;
       settings.ManualMode = ManualMode;
@@ -146,6 +331,55 @@ namespace AtmoLight
       settings.StaticColorGreen = StaticColorGreen;
       settings.StaticColorRed = StaticColorRed;
       settings.GIFFile = GIFFile;
+      settings.MPExitEffect = MPExitEffect;
+      settings.AtmoWinTarget = AtmoWinTarget;
+      settings.HyperionTarget = HyperionTarget;
+      settings.HueTarget = HueTarget;
+      settings.HyperionIP = HyperionIP;
+      settings.HyperionLiveReconnect = HyperionLiveReconnect;
+      settings.HyperionPort = HyperionPort;
+      settings.HyperionPriority = HyperionPriority;
+      settings.HyperionPriorityStaticColor = HyperionPriorityStaticColor;
+      settings.HyperionReconnectAttempts = HyperionReconnectAttempts;
+      settings.HyperionReconnectDelay = HyperionReconnectDelay;
+      settings.hueExe = hueExe;
+      settings.hueStart = hueStart;
+      settings.hueIsRemoteMachine = hueIsRemoteMachine;
+      settings.HueIP = HueIP;
+      settings.HuePort = HuePort;
+      settings.HueReconnectDelay = HueReconnectDelay;
+      settings.HueReconnectAttempts = HueReconnectAttempts;
+      settings.HueMinimalColorDifference = HueMinimalColorDifference;
+      settings.HueBridgeEnableOnResume = HueBridgeEnableOnResume;
+      settings.CaptureWidth = CaptureWidth;
+      settings.CaptureHeight = CaptureHeight;
+      settings.BoblightTarget = BoblightTarget;
+      settings.BoblightIP = BoblightIP;
+      settings.BoblightPort = BoblightPort;
+      settings.BoblightMaxFPS = BoblightMaxFPS;
+      settings.BoblightMaxReconnectAttempts = BoblightMaxReconnectAttempts;
+      settings.BoblightReconnectDelay = BoblightReconnectDelay;
+      settings.BoblightSpeed = BoblightSpeed;
+      settings.BoblightAutospeed = BoblightAutospeed;
+      settings.BoblightInterpolation = BoblightInterpolation;
+      settings.BoblightSaturation = BoblightSaturation;
+      settings.BoblightValue = BoblightValue;
+      settings.BoblightThreshold = BoblightThreshold;
+      settings.BoblightGamma = BoblightGamma;
+      settings.BlackbarDetection = BlackbarDetection;
+      settings.BlackbarDetectionTime = BlackbarDetectionTime;
+      settings.BlackbarDetectionThreshold = BlackbarDetectionThreshold;
+      settings.PowerModeChangedDelay = PowerModeChangedDelay;
+      settings.AmbiBoxAutoStart = AmbiBoxAutoStart;
+      settings.AmbiBoxAutoStop = AmbiBoxAutoStop;
+      settings.AmbiBoxExternalProfile = AmbiBoxExternalProfile;
+      settings.AmbiBoxIP = AmbiBoxIP;
+      settings.AmbiBoxMaxReconnectAttempts = AmbiBoxMaxReconnectAttempts;
+      settings.AmbiBoxMediaPortalProfile = AmbiBoxMediaPortalProfile;
+      settings.AmbiBoxPath = AmbiBoxPath;
+      settings.AmbiBoxPort = AmbiBoxPort;
+      settings.AmbiBoxReconnectDelay = AmbiBoxReconnectDelay;
+      settings.AmbiBoxTarget = AmbiBoxTarget;
       settingsManager.Save(settings);
       return true;
     }

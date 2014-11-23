@@ -5,88 +5,154 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
-using AtmoWinRemoteControl;
 using System.Drawing;
 using System.IO;
 using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
+using System.Net.Sockets;
+using System.Linq;
+using Microsoft.Win32;
+using proto;
+using AtmoLight.Targets;
 
 namespace AtmoLight
 {
   public enum ContentEffect
   {
+     
     LEDsDisabled = 0,
-    AtmoWinLiveMode,
-    Colorchanger,
-    ColorchangerLR,
     MediaPortalLiveMode,
     StaticColor,
     GIFReader,
     VUMeter,
     VUMeterRainbow,
+    ExternalLiveMode,
+    AtmoWinColorchanger,
+    AtmoWinColorchangerLR,
     Undefined = -1
   }
+
+  public enum Target
+  {
+    AmbiBox,
+    AtmoWin,
+    Boblight,
+    Hue,
+    Hyperion
+  }
+
+  public enum TargetType
+  {
+    Local,
+    Network
+  }
+
   public class Core
   {
-
     #region Fields
+    // Core Instance
+    private static Core instance = null;
 
-    private string pathAtmoWin = "";
-    private bool delayEnabled = false;
-    private int delayTime = 0;    
-    private bool reinitialiseOnError = true;
-    private bool startAtmoWin = true;
-    private int[] staticColor = { 0, 0, 0 }; // RGB code for static color
-    private string gifPath = "";
-
+    // Threads
     private Thread setPixelDataThreadHelper;
-    private Thread getAtmoLiveViewSourceThreadHelper;
-    private Thread reinitialiseThreadHelper;
     private Thread gifReaderThreadHelper;
     private Thread vuMeterThreadHelper;
 
-    // Com  Objects
-    private IAtmoRemoteControl2 atmoRemoteControl = null; // Com Object to control AtmoWin
-    private IAtmoLiveViewControl atmoLiveViewControl = null; // Com Object to control AtmoWins liveview
-
     // States
-    private bool currentState = false; // State of the LEDs
-    private ContentEffect currentEffect = ContentEffect.Undefined; // Current aktive effect
-    private ContentEffect changeEffect = ContentEffect.Undefined; // Effect ChangeEffect() should change to (need for Reinitialise() if ChangeEffect() fails)
-    private ComLiveViewSource atmoLiveViewSource; // Current liveview source
-
-    // Timings
-    private const int timeoutComInterface = 5000; // Timeout for the COM interface
-    private const int delaySetStaticColor = 20; // SEDU workaround delay time
-    private const int delayAtmoWinConnect = 1000; // Delay between starting AtmoWin and connection to it
-    private const int delayGetAtmoLiveViewSource = 1000; // Delay between liveview source checks
+    private ContentEffect currentEffect = ContentEffect.Undefined; // Current active effect
 
     // Lists
+    private List<ITargets> targets = new List<ITargets>();
     private List<byte[]> pixelDataList = new List<byte[]>(); // List for pixelData (Delay)
     private List<byte[]> bmiInfoHeaderList = new List<byte[]>(); // List for bmiInfoHeader (Delay)
     private List<long> delayTimingList = new List<long>(); // List for timings (Delay)
 
     // Locks
     private readonly object listLock = new object(); // Lock object for the above lists
-    private volatile bool getAtmoLiveViewSourceLock = true; // Lock for liveview source checks
+    private readonly object targetsLock = new object(); // Lock object for the target list
     private volatile bool setPixelDataLock = true; // Lock for SetPixelData thread
-    private volatile bool reinitialiseLock = false;
     private volatile bool gifReaderLock = true;
     private volatile bool vuMeterLock = true;
 
     // VU Meter
     private int[] vuMeterThresholds = new int[] { -2, -5, -8, -10, -11, -12, -14, -18, -20, -22 };
-    private bool vuMeterRainbowColorScheme = false;
-    private List<SolidBrush> vuMeterBrushes = new List<SolidBrush>();
 
-    private int captureWidth = 0; // AtmoWins capture width
-    private int captureHeight = 0; // AtmoWins capture height
-
-    public delegate void NewConnectionLostHandler();
+    // Event Handler
+    public delegate void NewConnectionLostHandler(Target target);
     public static event NewConnectionLostHandler OnNewConnectionLost;
 
     public delegate double[] NewVUMeterHander();
     public static event NewVUMeterHander OnNewVUMeter;
+
+    // Stopwatches
+    private Stopwatch blackbarStopwatch = new Stopwatch();
+
+    // Generic Fields
+    private int captureWidth = 64; // Default fallback capture width
+    private int captureHeight = 48; // Default fallback capture height
+    private bool delayEnabled = false;
+    private int delayTime = 0;
+    private string gifPath = "";
+    private Rectangle blackbarDetectionRect;
+
+    // General settings for targets
+    public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
+    public bool reInitOnError;
+    public bool blackbarDetection;
+    public int blackbarDetectionTime;
+    public int blackbarDetectionThreshold;
+    public int powerModeChangedDelay;
+
+    // AmbiBox Settings Fields
+    public string ambiBoxIP;
+    public int ambiBoxPort;
+    public int ambiBoxMaxReconnectAttempts;
+    public int ambiBoxReconnectDelay;
+    public string ambiBoxMediaPortalProfile;
+    public string ambiBoxExternalProfile;
+    public string ambiBoxPath;
+    public bool ambiBoxAutoStart;
+    public bool ambiBoxAutoStop;
+
+    // AtmoWin Settings Fields
+    public bool atmoWinAutoStart;
+    public bool atmoWinAutoStop;
+    public string atmoWinPath;
+
+    // Boblight Settings Fields
+    public string boblightIP;
+    public int boblightPort;
+    public int boblightMaxFPS;
+    public int boblightMaxReconnectAttempts;
+    public int boblightReconnectDelay;
+    public int boblightSpeed;
+    public int boblightAutospeed;
+    public bool boblightInterpolation;
+    public int boblightSaturation;
+    public int boblightValue;
+    public int boblightThreshold;
+    public double boblightGamma;
+
+    // Hyperion Settings Fields
+    public string hyperionIP;
+    public int hyperionPort;
+    public int hyperionPriority;
+    public int hyperionReconnectDelay;
+    public int hyperionReconnectAttempts;
+    public int hyperionPriorityStaticColor;
+    public bool hyperionLiveReconnect;
+
+    // Hue Settings Fields
+    public string huePath;
+    public bool hueStart;
+    public bool hueIsRemoteMachine;
+    public string hueIP;
+    public int huePort;
+    public int hueReconnectDelay;
+    public int hueReconnectAttempts;
+    public int hueMinimalColorDifference;
+    public bool hueBridgeEnableOnResume;
+    public bool hueBridgeDisableOnSuspend;
 
     #endregion
 
@@ -209,247 +275,387 @@ namespace AtmoLight
     }
     #endregion
 
-    #region Constructor
-    public Core(string pathAtmoWin, bool reinitialiseOnError, bool startAtmoWin, int[] staticColor, bool delayEnabled, int delayTime)
+    #region Constructor/Deconstructor
+    /// <summary>
+    /// Core Constructor
+    /// </summary>
+    private Core()
     {
       var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
       DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
       Log.Debug("Core Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
-
-      this.pathAtmoWin = pathAtmoWin;
-      this.reinitialiseOnError = reinitialiseOnError;
-      this.startAtmoWin = startAtmoWin;
-      this.staticColor = staticColor;
-      this.delayEnabled = delayEnabled;
-      this.delayTime = delayTime;
-    }
-    #endregion
-
-    #region Connect
-    /// <summary>
-    /// Connect to AtmoWin.
-    /// </summary>
-    /// <returns>true or false</returns>
-    public bool Connect()
-    {
-      Log.Debug("Trying to connect to AtmoWin.");
-      if (!GetAtmoRemoteControl()) return false;
-      if (!SetAtmoEffect(ComEffectMode.cemLivePicture, true)) return false;
-      if (!GetAtmoLiveViewControl()) return false;
-      if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
-      if (!GetAtmoLiveViewRes()) return false;
-
-      Log.Debug("Successfully connected to AtmoWin.");
-      return true;
-    }
-
-    /// <summary>
-    /// Disconnect from AtmoWin.
-    /// </summary>
-    /// <returns>true or false</returns>
-    public bool Disconnect()
-    {
-      Log.Debug("Disconnecting from AtmoWin.");
-
-      StopAllThreads();
-
-      if (atmoRemoteControl != null)
-      {
-        Marshal.ReleaseComObject(atmoRemoteControl);
-        atmoRemoteControl = null;
-      }
-      if (atmoLiveViewControl != null)
-      {
-        Marshal.ReleaseComObject(atmoLiveViewControl);
-        atmoLiveViewControl = null;
-      }
-      return true;
-    }
-
-    /// <summary>
-    /// Reconnect to AtmoWin.
-    /// </summary>
-    /// <returns>true or false</returns>
-    public bool Reconnect()
-    {
-      Log.Debug("Trying to reconnect to AtmoWin.");
-      Disconnect();
-      Connect();
-      return true;
-    }
-
-    /// <summary>
-    /// Return if a connection to AtmoWin is established.
-    /// </summary>
-    /// <returns>true or false</returns>
-    public bool IsConnected()
-    {
-      if (atmoRemoteControl == null || atmoLiveViewControl == null)
-      {
-        return false;
-      }
-      return true;
-    }
-    #endregion
-
-    #region Initialise
-    /// <summary>
-    /// Start AtmoWin and connects to it.
-    /// </summary>
-    /// <returns>true or false</returns>
-    public bool Initialise(bool force = false)
-    {
-      Log.Debug("Initialising.");
-      if (!Win32API.IsProcessRunning("atmowina.exe"))
-      {
-        if (startAtmoWin || force)
-        {
-          if (!StartAtmoWin()) return false;
-          System.Threading.Thread.Sleep(delayAtmoWinConnect);
-        }
-        else
-        {
-          Log.Error("AtmoWin is not running.");
-          return false;
-        }
-      }
-
-      if (!Connect()) return false;
-
-      Log.Debug("Initialising successfull.");
-      return true;
-    }
-
-    /// <summary>
-    /// Restart AtmoWin and reconnects to it.
-    /// </summary>
-    /// <param name="force">Force the reinitialising and discard user settings.</param>
-    public void Reinitialise(bool force = false)
-    {
-      if (reinitialiseLock)
-      {
-        Log.Debug("Reinitialising locked.");
-        return;
-      }
-      if (!reinitialiseOnError && !force)
-      {
-        Disconnect();
-        OnNewConnectionLost();
-        return;
-      }
-
-      reinitialiseLock = true;
-      Log.Debug("Reinitialising.");
-
-      if (!Disconnect() || !StopAtmoWin() || !Initialise(force) || !ChangeEffect(changeEffect != ContentEffect.Undefined ? changeEffect : currentEffect, true))
-      {
-        Disconnect();
-        StopAtmoWin();
-        Log.Error("Reinitialising failed.");
-        reinitialiseLock = false;
-        OnNewConnectionLost();
-        return;
-      }
-
-      Log.Debug("Reinitialising successfull.");
-      reinitialiseLock = false;
       return;
     }
 
     /// <summary>
-    /// Start reinitialising in a new thread.
+    /// Disposes of all targets
     /// </summary>
-    /// <param name="force">Force the reinitialising and discard user settings.</param>
-    public void ReinitialiseThreaded(bool force = false)
+    public void Dispose()
     {
-      if (!reinitialiseLock)
+      foreach (var target in targets)
       {
-        reinitialiseThreadHelper = new Thread(() => Reinitialise(force));
-        reinitialiseThreadHelper.Name = "AtmoLight Reinitialise";
-        reinitialiseThreadHelper.Start();
-      }
-      else
-      {
-        Log.Debug("Reinitialising Thread already running.");
+        target.Dispose();
       }
     }
-
     #endregion
 
-    #region AtmoWin
+    #region Initialisation
     /// <summary>
-    /// Start AtmoWin.
+    /// Generate all targets and initialise them.
     /// </summary>
-    /// <returns>true or false</returns>
-    public bool StartAtmoWin()
+    /// <returns></returns>
+    public bool Initialise()
     {
-      Log.Debug("Trying to start AtmoWin.");
-      if (!System.IO.File.Exists(pathAtmoWin))
+      foreach (var target in targets)
       {
-        return false;
+        if (!target.IsConnected())
+        {
+          target.Initialise(false);
+        }
       }
-      Process AtmoWinA = new Process();
-      AtmoWinA.StartInfo.FileName = pathAtmoWin;
-      AtmoWinA.StartInfo.UseShellExecute = true;
-      AtmoWinA.StartInfo.Verb = "open";
-      try
-      {
-        AtmoWinA.Start();
-      }
-      catch (Exception)
-      {
-        Log.Error("Starting AtmoWin failed.");
-        return false;
-      }
-      Log.Info("AtmoWin successfully started.");
       return true;
     }
 
     /// <summary>
-    /// Stop AtmoWin.
+    /// Reinitialise all targets that are not connected.
     /// </summary>
-    /// <returns>true or false</returns>
-    public bool StopAtmoWin()
+    public void ReInitialise()
     {
-      Log.Info("Trying to stop AtmoWin.");
-      foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension("atmowina")))
+      foreach (var target in targets)
       {
-        try
+        if (!target.IsConnected())
         {
-          process.Kill();
-          // Wait if the kill succeeded, because sometimes it does not.
-          // If it does not, we stop the whole initialization.
-          if (!TimeoutHandler(() => process.WaitForExit()))
+          target.ReInitialise(true);
+        }
+      }
+    }
+    #endregion
+
+    #region Configuration Methods (set)
+    /// <summary>
+    /// Set capture dimensions that should be used by everbody.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    public void SetCaptureDimensions(int width, int height)
+    {
+      if (width >= 0 && height >= 0)
+      {
+        captureWidth = width;
+        captureHeight = height;
+      }
+    }
+
+    /// <summary>
+    /// Add a target to be used.
+    /// </summary>
+    /// <param name="target"></param>
+    public void AddTarget(Target target)
+    {
+      // Dont allow the same target to be added more than once.
+      lock (targetsLock)
+      {
+        foreach (var t in targets)
+        {
+          if (t.Name == target)
           {
-            Log.Error("Stopping AtmoWin failed.");
+            return;
+          }
+        }
+
+        if (target == Target.AtmoWin)
+        {
+          targets.Add(new AtmoWinHandler());
+        }
+        else if (target == Target.Hue)
+        {
+          targets.Add(new HueHandler());
+        }
+        else if (target == Target.Hyperion)
+        {
+          targets.Add(new HyperionHandler());
+        }
+        else if (target == Target.AmbiBox)
+        {
+          targets.Add(new AmbiBoxHandler());
+        }
+        else if (target == Target.Boblight)
+        {
+          targets.Add(new BoblightHandler());
+        }
+      }
+    }
+
+    /// <summary>
+    /// Removes a target.
+    /// </summary>
+    /// <param name="target"></param>
+    public void RemoveTarget(Target target)
+    {
+      lock (targetsLock)
+      {
+        foreach (var t in targets)
+        {
+          if (t.Name == target)
+          {
+            Log.Debug("Removing {0} as target.", target.ToString());
+            t.Dispose();
+            targets.Remove(t);
+            return;
+          }
+        }
+      }
+    }
+
+    /// <summary>
+    /// Set the effect that should be switched to after connection has be established.
+    /// </summary>
+    /// <param name="effect"></param>
+    /// <returns></returns>
+    public void SetInitialEffect(ContentEffect effect)
+    {
+      currentEffect = effect;
+    }
+
+    /// <summary>
+    /// Define if the handlers should try to reinitialise when the connection is lost
+    /// or and error occurs.
+    /// </summary>
+    /// <param name="reInit"></param>
+    public void SetReInitOnError(bool reInit)
+    {
+      reInitOnError = reInit;
+    }
+
+    /// <summary>
+    /// Set the path to the gif file that should be used by the GIFReader
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public bool SetGIFPath(string path)
+    {
+      if (path.Length > 4)
+      {
+        if (path.Substring(path.Length - 3, 3) == "gif")
+        {
+          gifPath = path;
+          return true;
+        }
+      }
+      return false;
+    }
+
+    /// <summary>
+    /// Changes the delay time.
+    /// </summary>
+    /// <param name="delay">Delay in ms.</param>
+    /// <returns>true or false</returns>
+    public bool SetDelay(int delay)
+    {
+      if (delay > 0)
+      {
+        Log.Debug("Changing delay to {0}ms.", delay);
+        delayTime = delay;
+        return true;
+      }
+      return false;
+    }
+
+    /// <summary>
+    /// Changes the static color.
+    /// </summary>
+    /// <param name="red">Red in RGB format.</param>
+    /// <param name="green">Green  in RGB format.</param>
+    /// <param name="blue">Blue  in RGB format.</param>
+    /// <returns>true or false</returns>
+    public bool SetStaticColor(int red, int green, int blue)
+    {
+      if ((red >= 0 && red <= 255) && (green >= 0 && green <= 255) && (blue >= 0 && blue <= 255))
+      {
+        staticColor[0] = red;
+        staticColor[1] = green;
+        staticColor[2] = blue;
+        return true;
+      }
+      return false;
+    }
+    #endregion
+
+    #region Information Methods (get)
+    /// <summary>
+    /// Returns the instance of the core.
+    /// </summary>
+    /// <returns></returns>
+    public static Core GetInstance()
+    {
+      if (instance == null)
+      {
+        instance = new Core();
+      }
+      return instance;
+    }
+
+    /// <summary>
+    /// Returns if there are targets that are connected.
+    /// </summary>
+    /// <returns></returns>
+    public bool IsConnected()
+    {
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          if (target.IsConnected())
+          {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    /// <summary>
+    /// Returns if all targets are connected.
+    /// </summary>
+    /// <returns></returns>
+    public bool AreAllConnected()
+    {
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          if (!target.IsConnected())
+          {
             return false;
           }
-          Win32API.RefreshTrayArea();
-        }
-        catch (Exception ex)
-        {
-          Log.Error("Stopping AtmoWin failed.");
-          Log.Error("Exception: {0}", ex.Message);
-          return false;
         }
       }
-      Log.Info("AtmoWin successfully stopped.");
       return true;
     }
 
     /// <summary>
-    /// Restart AtmoWin.
+    /// Returns if AtmoLight/LEDs are on.
     /// </summary>
-    public void RestartAtmoWin()
+    /// <returns>true or false</returns>
+    public bool IsAtmoLightOn()
     {
-      Log.Debug("Trying to restart AtmoWin.");
-      StopAtmoWin();
-      StartAtmoWin();
+      if (!IsConnected())
+      {
+        return false;
+      }
+      return GetCurrentEffect() == ContentEffect.LEDsDisabled || GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true;
     }
 
-    public void ChangeAtmoWinRestartOnError(bool restartOnError)
+    /// <summary>
+    /// Returns if the delay in enabled.
+    /// </summary>
+    /// <returns>true or false</returns>
+    public bool IsDelayEnabled()
     {
-      reinitialiseOnError = restartOnError;
+      return delayEnabled;
+    }
+
+    /// <summary>
+    /// Returns the delay time.
+    /// </summary>
+    /// <returns>Delay in ms.</returns>
+    public int GetDelayTime()
+    {
+      return delayTime;
+    }
+
+    /// <summary>
+    /// Returns the static color.
+    /// </summary>
+    /// <returns>Static Color as int array</returns>
+    public int[] GetStaticColor()
+    {
+      return staticColor;
+    }
+
+    /// <summary>
+    /// Returns the capture width
+    /// </summary>
+    /// <returns></returns>
+    public int GetCaptureWidth()
+    {
+      return captureWidth;
+    }
+
+    /// <summary>
+    /// Returns the capture height
+    /// </summary>
+    /// <returns></returns>
+    public int GetCaptureHeight()
+    {
+      return captureHeight;
+    }
+
+    /// <summary>
+    /// Returns the current effect.
+    /// </summary>
+    /// <returns>Current effect</returns>
+    public ContentEffect GetCurrentEffect()
+    {
+      return currentEffect;
+    }
+
+    /// <summary>
+    /// Returns the number of active targets.
+    /// </summary>
+    /// <returns></returns>
+    public int GetTargetCount()
+    {
+      return targets.Count();
+    }
+
+    public List<ContentEffect> GetSupportedEffects()
+    {
+      List<ContentEffect> tempList = new List<ContentEffect>();
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          for (int i = 0; i < target.SupportedEffects.Count; i++)
+          {
+            if (!tempList.Contains(target.SupportedEffects[i]))
+            {
+              tempList.Add(target.SupportedEffects[i]);
+            }
+          }
+        }
+      }
+      return tempList;
+    }
+
+    /// <summary>
+    /// Returns if at least one target allows the use of a delay
+    /// </summary>
+    /// <returns></returns>
+    public bool IsAllowDelayTargetPresent()
+    {
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          if (target.AllowDelay)
+          {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+    #endregion
+
+    #region Events
+    /// <summary>
+    /// Method to allow the handlers to raise the NewConnectionLost event.
+    /// </summary>
+    /// <param name="target"></param>
+    public void NewConnectionLost(Target target)
+    {
+      OnNewConnectionLost(target);
     }
     #endregion
 
@@ -459,7 +665,7 @@ namespace AtmoLight
     /// </summary>
     /// <param name="bmiInfoHeader">Info Header</param>
     /// <param name="pixelData">Pixel Data</param>
-    private void AddDelayListItem(byte[] bmiInfoHeader, byte[] pixelData)
+    private void AddDelayListItem(byte[] pixelData, byte[] bmiInfoHeader)
     {
       if (delayTimingList.Count <= 60)
       {
@@ -473,7 +679,6 @@ namespace AtmoLight
       else
       {
         Log.Error("Delay buffer overflow.");
-        ReinitialiseThreaded();
       }
     }
 
@@ -521,52 +726,20 @@ namespace AtmoLight
 
     #region Utilities
     /// <summary>
-    /// Check if a method times out and starts to reinitialise AtmoWin if needed.
+    /// Calculates the needed information from a bitmap stream and sends them to SendPixelData().
     /// </summary>
-    /// <param name="method">Method that needs checking for a timeout.</param>
-    /// <param name="timeout">Timeout in ms.</param>
-    /// <returns>true if not timed out and false if timed out.</returns>
-    private bool TimeoutHandler(System.Action method, int timeout = timeoutComInterface)
-    {
-      try
-      {
-#if DEBUG
-        method();
-        return true;
-#else
-        long timeoutStart = Win32API.GetTickCount();
-        var tokenSource = new CancellationTokenSource();
-        CancellationToken token = tokenSource.Token;
-        var task = Task.Factory.StartNew(() => method(), token);
-
-        if (!task.Wait(timeout, token))
-        {
-          // Stacktrace is needed so we can output the name of the method that timed out.
-          StackTrace trace = new StackTrace();
-          Log.Error("{0} timed out after {1}ms!", trace.GetFrame(1).GetMethod().Name, Win32API.GetTickCount() - timeoutStart);
-          ReinitialiseThreaded();
-          return false;
-        }
-        return true;
-#endif
-      }
-      catch (AggregateException ex)
-      {
-        StackTrace trace = new StackTrace();
-        Log.Error("Error with {0}!", trace.GetFrame(1).GetMethod().Name);
-        foreach (var innerEx in ex.InnerExceptions)
-        {
-          Log.Error("Exception: {0}", innerEx.Message);
-        }
-        ReinitialiseThreaded();
-        return false;
-      }
-    }
-
+    /// <param name="stream"></param>
     public void CalculateBitmap(Stream stream)
     {
       // Debug file output
       // new Bitmap(stream).Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
+      if (blackbarDetection && currentEffect == ContentEffect.MediaPortalLiveMode)
+      {
+        stream = BlackbarDetection(stream);
+      }
+      // Debug file output after blackbar detection
+      // new Bitmap(stream).Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
+
       BinaryReader reader = new BinaryReader(stream);
       stream.Position = 0; // ensure that what start at the beginning of the stream. 
       reader.ReadBytes(14); // skip bitmap file info header
@@ -579,7 +752,9 @@ namespace AtmoLight
 
       byte[] h1pixelData = new byte[GetCaptureWidth() * rgb];
       byte[] h2pixelData = new byte[GetCaptureWidth() * rgb];
-      //now flip horizontally, we do it always to prevent microstudder
+
+      // We need to flip the image horizontally.
+      // Because after reading the bytes into the bytearray with BinaryReader the image is upside down (bmp characteristic).
       int i;
       for (i = 0; i < ((GetCaptureHeight() / 2) - 1); i++)
       {
@@ -588,225 +763,156 @@ namespace AtmoLight
         Array.Copy(h1pixelData, 0, pixelData, (GetCaptureHeight() - i - 1) * GetCaptureWidth() * rgb, GetCaptureWidth() * rgb);
         Array.Copy(h2pixelData, 0, pixelData, i * GetCaptureWidth() * rgb, GetCaptureWidth() * rgb);
       }
-      //send scaled and fliped frame to atmowin
 
-      SetPixelData(bmiInfoHeader, pixelData);
+      SendPixelData(pixelData, bmiInfoHeader);
     }
 
-    public void UpdateGIFPath(string path)
+    /// <summary>
+    /// Sends picture information either to the delay thread or directly to the targets.
+    /// </summary>
+    /// <param name="pixelData"></param>
+    /// <param name="bmiInfoHeader"></param>
+    /// <param name="force"></param>
+    private void SendPixelData(byte[] pixelData, byte[] bmiInfoHeader, bool force = false)
     {
-      gifPath = path;
+      if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
+      {
+        AddDelayListItem(pixelData, bmiInfoHeader);
+        lock (targetsLock)
+        {
+          foreach (var target in targets)
+          {
+            if (!target.AllowDelay)
+            {
+              target.ChangeImage(pixelData, bmiInfoHeader);
+            }
+          }
+        }
+      }
+      else
+      {
+        lock (targetsLock)
+        {
+          foreach (var target in targets)
+          {
+            if (target.AllowDelay || !force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
+            {
+              target.ChangeImage(pixelData, bmiInfoHeader);
+            }
+          }
+        }
+      }
+    }
+
+    private Stream BlackbarDetection(Stream stream)
+    {
+      if (!blackbarStopwatch.IsRunning)
+      {
+        blackbarStopwatch.Start();
+      }
+      if (blackbarStopwatch.ElapsedMilliseconds >= blackbarDetectionTime)
+      {
+        Bitmap blackBarBitmap = new Bitmap(stream);
+        Color colorTemp;
+        int yTopBound = -1;
+        int yBottomBound = -1;
+        int xLeftBound = -1;
+        int xRightBound = -1;
+
+        // Horizontal Scan
+        for (int y = 0; y < (int)(blackBarBitmap.Height / 3); y++)
+        {
+          if (yTopBound != -1 && yBottomBound != -1)
+          {
+            break;
+          }
+          for (int x = (int)(blackBarBitmap.Width * 0.33); x < (int)(blackBarBitmap.Width * 0.66); x++)
+          {
+            if (yTopBound != -1 && yBottomBound != -1)
+            {
+              break;
+            }
+
+            if (yTopBound == -1)
+            {
+              colorTemp = blackBarBitmap.GetPixel(x, y);
+              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              {
+                yTopBound = y;
+              }
+            }
+
+            if (yBottomBound == -1)
+            {
+              colorTemp = blackBarBitmap.GetPixel(x, blackBarBitmap.Height - 1 - y);
+              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              {
+                yBottomBound = blackBarBitmap.Height - y;
+              }
+            }
+          }
+        }
+
+        // Vertical Scan
+        for (int x = 0; x < (int)(blackBarBitmap.Width / 3); x++)
+        {
+          if (xLeftBound != -1 && xRightBound != -1)
+          {
+            break;
+          }
+          for (int y = (int)(blackBarBitmap.Height * 0.33); y < (int)(blackBarBitmap.Height * 0.66); y++)
+          {
+            if (xLeftBound != -1 && xRightBound != -1)
+            {
+              break;
+            }
+
+            if (xLeftBound == -1)
+            {
+              colorTemp = blackBarBitmap.GetPixel(x, y);
+              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              {
+                xLeftBound = x;
+              }
+            }
+
+            if (xRightBound == -1)
+            {
+              colorTemp = blackBarBitmap.GetPixel(blackBarBitmap.Width - 1 - x, y);
+              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              {
+                xRightBound = blackBarBitmap.Width - x;
+              }
+            }
+          }
+        }
+        if (yTopBound != -1 && yBottomBound != -1 && xLeftBound != -1 && xRightBound != -1)
+        {
+          blackbarDetectionRect = new Rectangle(xLeftBound, yTopBound, xRightBound - xLeftBound, yBottomBound - yTopBound);
+        }
+        blackBarBitmap.Dispose();
+        blackbarStopwatch.Restart();
+      }
+
+      if (blackbarDetectionRect != new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight()) && blackbarDetectionRect != new Rectangle(0, 0, 0, 0))
+      {
+        Bitmap blackBarBitmapOutput = new Bitmap(GetCaptureWidth(), GetCaptureHeight());
+
+        using (Graphics g = Graphics.FromImage(blackBarBitmapOutput))
+        {
+          // Cropping and resizing the original bitmap
+          g.DrawImage(new Bitmap(stream), new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight()), blackbarDetectionRect, GraphicsUnit.Pixel);
+        }
+
+        // Saving cropped and resized bitmap to stream
+        blackBarBitmapOutput.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+        blackBarBitmapOutput.Dispose();
+      }
+      return stream;
     }
     #endregion
 
-    #region COM Interface
-
-    private bool GetAtmoRemoteControl()
-    {
-      Log.Debug("Getting AtmoWin Remote Control.");
-      if (TimeoutHandler(() => atmoRemoteControl = (IAtmoRemoteControl2)Marshal.GetActiveObject("AtmoRemoteControl.1")))
-      {
-        Log.Debug("Successfully got AtmoWin Remote Control.");
-        return true;
-      }
-      return false;
-    }
-
-    /// <summary>
-    /// Opens the COM interface to AtmoWin.
-    /// </summary>
-    /// <returns>true if successfull and false if not.</returns>
-    private bool GetAtmoLiveViewControl()
-    {
-      if (atmoRemoteControl == null)
-      {
-        return false;
-      }
-
-      Log.Debug("Getting AtmoWin Live View Control.");
-      if (TimeoutHandler(() => atmoLiveViewControl = (IAtmoLiveViewControl)Marshal.GetActiveObject("AtmoRemoteControl.1")))
-      {
-        Log.Debug("Successfully got AtmoWin Live View Control.");
-        return true;
-      }
-      return false;
-    }
-
-    /// <summary>
-    /// Gets the current AtmoWin liveview source.
-    /// </summary>
-    /// <returns>true if successfull and false if not.</returns>
-    private bool GetAtmoLiveViewSource()
-    {
-      if (!IsConnected())
-      {
-        return false;
-      }
-
-      if (TimeoutHandler(() => atmoLiveViewControl.getCurrentLiveViewSource(out atmoLiveViewSource)))
-      {
-        return true;
-      }
-      return false;
-    }
-
-    /// <summary>
-    /// Returns the capture width of AtmoWin
-    /// </summary>
-    /// <returns>Capture width of AtmoWin</returns>
-    public int GetCaptureWidth()
-    {
-      return captureWidth;
-    }
-
-    /// <summary>
-    /// Returns the capture height of AtmoWin
-    /// </summary>
-    /// <returns>Capture height of AtmoWin</returns>
-    public int GetCaptureHeight()
-    {
-      return captureHeight;
-    }
-
-    /// <summary>
-    /// Changes the AtmoWin profile.
-    /// </summary>
-    /// <returns>true if successfull and false if not.</returns>
-    private bool SetColorMode(ComEffectMode effect)
-    {
-      if (!IsConnected())
-      {
-        return false;
-      }
-
-      Log.Debug("Changing AtmoWin profile (SetColorMode).");
-      ComEffectMode oldEffect;
-      if (TimeoutHandler(() => atmoRemoteControl.setEffect(effect, out oldEffect)))
-      {
-        Log.Info("Successfully changed AtmoWin profile.");
-        return true;
-      }
-      return false;
-    }
-
-    /// <summary>
-    /// Changes the AtmoWin effect.
-    /// </summary>
-    /// <param name="effect">Effect to change to.</param>
-    /// <param name="force">Currently initialising.</param>
-    /// <returns>true if successfull and false if not.</returns>
-    private bool SetAtmoEffect(ComEffectMode effect, bool init = false)
-    {
-      if (!IsConnected() && !init)
-      {
-        return false;
-      }
-
-      Log.Debug("Changing AtmoWin effect to: {0}", effect.ToString());
-      ComEffectMode oldEffect;
-      if (TimeoutHandler(() => atmoRemoteControl.setEffect(effect, out oldEffect)))
-      {
-        Log.Info("Successfully changed AtmoWin effect to: {0}", effect.ToString());
-        return true;
-      }
-      return false;
-    }
-
-    /// <summary>
-    /// Changes the static color in AtmoWin.
-    /// </summary>
-    /// <param name="red">RGB value for red.</param>
-    /// <param name="green">RGB value for green.</param>
-    /// <param name="blue">RGB value for blue.</param>
-    /// <returns>true if successfull and false if not.</returns>
-    private bool SetAtmoColor(byte red, byte green, byte blue)
-    {
-      if (!IsConnected())
-      {
-        return false;
-      }
-
-      Log.Debug("Setting static color to R:{0} G:{1} B:{2}.", red, green, blue);
-      if (TimeoutHandler(() => atmoRemoteControl.setStaticColor(red, green, blue)))
-      {
-        Log.Info("Successfully set static color to R:{0} G:{1} B:{2}.", red, green, blue);
-        return true;
-      }
-      return false;
-    }
-
-    /// <summary>
-    /// Changes the AtmoWin liveview source.
-    /// </summary>
-    /// <param name="viewSource">The liveview source.</param>
-    /// <returns>true if successfull and false if not.</returns>
-    private bool SetAtmoLiveViewSource(ComLiveViewSource viewSource)
-    {
-      if (!IsConnected())
-      {
-        return false;
-      }
-
-      Log.Debug("Changing AtmoWin Liveview Source to: {0}", viewSource.ToString());
-      if (TimeoutHandler(() => atmoLiveViewControl.setLiveViewSource(viewSource)))
-      {
-        Log.Info("Successfully changed AtmoWin Liveview Source to: {0}", viewSource.ToString());
-        return true;
-      }
-      return false;
-    }
-
-
-
-    /// <summary>
-    /// Gets the current liveview resolution.
-    /// </summary>
-    /// <returns>true if successfull and false if not.</returns>
-    private bool GetAtmoLiveViewRes()
-    {
-      if (!IsConnected())
-      {
-        return false;
-      }
-
-      Log.Debug("Getting Liveview Resolution.");
-      if (TimeoutHandler(() => atmoRemoteControl.getLiveViewRes(out captureWidth, out captureHeight)))
-      {
-        Log.Debug("Liveview capture resolution is {0}x{1}. Screenshot will be resized to this dimensions.", captureWidth, captureHeight);
-        return true;
-      }
-      return false;
-    }
-
-    public void SetPixelData(byte[] bmiInfoHeader, byte[] pixelData, bool force = false)
-    {
-      if (!IsConnected())
-      {
-        return;
-      }
-      try
-      {
-        if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-        {
-          AddDelayListItem(bmiInfoHeader, pixelData);
-        }
-        else
-        {
-          atmoLiveViewControl.setPixelData(bmiInfoHeader, pixelData);
-        }
-      }
-      catch (Exception ex)
-      {
-        Log.Error("Error with SetPixelData.");
-        Log.Error("Exception: {0}", ex.Message);
-        ReinitialiseThreaded();
-      }
-    }
-
-
-    #endregion
-
-    #region Control LEDs
+    #region Control Methods
     /// <summary>
     /// Change effect.
     /// </summary>
@@ -825,124 +931,57 @@ namespace AtmoLight
         Log.Debug("Effect \"{0}\" is already active. Nothing to do.", effect);
         return false;
       }
-      currentEffect = ContentEffect.Undefined;
-      changeEffect = effect;
+      currentEffect = effect;
       Log.Info("Changing AtmoLight effect to: {0}", effect.ToString());
       StopAllThreads();
-      switch (effect)
-      {
-        case ContentEffect.AtmoWinLiveMode:
-          currentState = true;
-          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsGDI)) return false;
-          break;
-        case ContentEffect.Colorchanger:
-          currentState = true;
-          if (!SetAtmoEffect(ComEffectMode.cemColorChange)) return false;
-          break;
-        case ContentEffect.ColorchangerLR:
-          currentState = true;
-          if (!SetAtmoEffect(ComEffectMode.cemLrColorChange)) return false;
-          break;
-        case ContentEffect.LEDsDisabled:
-        case ContentEffect.Undefined:
-          currentState = false;
-          if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
-          // Workaround for SEDU.
-          // Without the sleep it would not change to color.
-          System.Threading.Thread.Sleep(delaySetStaticColor);
-          if (!SetAtmoColor(0, 0, 0)) return false;
-          break;
-        case ContentEffect.MediaPortalLiveMode:
-          currentState = true;
-          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
 
-          if (delayEnabled)
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          if (target.IsConnected())
           {
-            Log.Debug("Adding {0}ms delay to the LEDs.", delayTime);
-            StartSetPixelDataThread();
+            target.ChangeEffect(effect);
           }
-
-          StartGetAtmoLiveViewSourceThread();
-          break;
-        case ContentEffect.StaticColor:
-          currentState = true;
-          if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
-          if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
-          // Workaround for SEDU.
-          // Without the sleep it would not change to color.
-          System.Threading.Thread.Sleep(delaySetStaticColor);
-          if (!SetAtmoColor((byte)staticColor[0], (byte)staticColor[1], (byte)staticColor[2])) return false;
-          break;
-        case ContentEffect.GIFReader:
-          currentState = true;
-          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
-          StartGetAtmoLiveViewSourceThread();
-          StartGIFReaderThread();
-          break;
-        case ContentEffect.VUMeter:
-        case ContentEffect.VUMeterRainbow:
-          currentState = true;
-          vuMeterRainbowColorScheme = (effect == ContentEffect.VUMeterRainbow) ? true : false;
-          if (!SetAtmoEffect(ComEffectMode.cemLivePicture)) return false;
-          if (!SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal)) return false;
-          StartGetAtmoLiveViewSourceThread();
-          StartVUMeterThread();
-          break;
+        }
       }
-      currentEffect = changeEffect;
-      changeEffect = ContentEffect.Undefined;
-      return true;
-    }
 
-    /// <summary>
-    /// Returns the current effect.
-    /// </summary>
-    /// <returns>Current effect</returns>
-    public ContentEffect GetCurrentEffect()
-    {
-      return currentEffect;
-    }
-
-    /// <summary>
-    /// Returns if AtmoLight/LEDs are on.
-    /// </summary>
-    /// <returns>true or false</returns>
-    public bool IsAtmoLightOn()
-    {
-      return currentState;
-    }
- 
-    /// <summary>
-    /// Change to AtmoWin profile.
-    /// </summary>
-    /// <returns>true or false</returns>
-    public bool ChangeAtmoWinProfile()
-    {
-      if (!SetColorMode(ComEffectMode.cemColorMode)) return false;
-
-      // Change the effect to the desired effect.
-      // Needed for AtmoWin 1.0.0.5+
-      if (!ChangeEffect(currentEffect, true)) return false;
-      return true;
-    }
-
-    /// <summary>
-    /// Changes the delay time.
-    /// </summary>
-    /// <param name="delay">Delay in ms.</param>
-    /// <returns>true or false</returns>
-    public bool ChangeDelay(int delay)
-    {
-      if (delay > 0)
+      if (effect == ContentEffect.MediaPortalLiveMode)
       {
-        Log.Debug("Changing delay to {0}ms.", delay);
-        delayTime = delay;
-        return true;
+        blackbarDetectionRect = new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight());
+        if (delayEnabled)
+        {
+          Log.Debug("Adding {0}ms delay to the LEDs.", delayTime);
+          StartSetPixelDataThread();
+        }
       }
-      return false;
+      else if (effect == ContentEffect.GIFReader)
+      {
+        StartGIFReaderThread();
+      }
+      else if (effect == ContentEffect.VUMeter || effect == ContentEffect.VUMeterRainbow)
+      {
+        StartVUMeterThread();
+      }
+      return true;
+    }
+
+    /// <summary>
+    /// Change profile.
+    /// </summary>
+    /// <returns>true or false</returns>
+    public void ChangeProfile()
+    {
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          if (target.IsConnected())
+          {
+            target.ChangeProfile();
+          }
+        }
+      }
     }
 
     /// <summary>
@@ -972,50 +1011,19 @@ namespace AtmoLight
       StopSetPixelDataThread();
     }
 
-    /// <summary>
-    /// Returns if the delay in enabled.
-    /// </summary>
-    /// <returns>true or false</returns>
-    public bool IsDelayEnabled()
+    public void PowerModeChanged(PowerModes powerMode)
     {
-      return delayEnabled;
-    }
-
-    /// <summary>
-    /// Returns the delay time.
-    /// </summary>
-    /// <returns>Delay in ms.</returns>
-    public int GetDelayTime()
-    {
-      return delayTime;
-    }
-
-    /// <summary>
-    /// Changes the static color.
-    /// </summary>
-    /// <param name="red">Red in RGB format.</param>
-    /// <param name="green">Green  in RGB format.</param>
-    /// <param name="blue">Blue  in RGB format.</param>
-    /// <returns>true or false</returns>
-    public bool ChangeStaticColor(int red, int green, int blue)
-    {
-      if ((red >= 0 && red <= 255) && (green >= 0 && green <= 255) && (blue >= 0 && blue <= 255))
+      if (powerMode == PowerModes.Resume)
       {
-        staticColor[0] = red;
-        staticColor[1] = green;
-        staticColor[2] = blue;
-        return true;
+        System.Threading.Thread.Sleep(powerModeChangedDelay);
       }
-      return false;
-    }
-
-    /// <summary>
-    /// Returns the static color.
-    /// </summary>
-    /// <returns>Static Color as int array</returns>
-    public int[] GetStaticColor()
-    {
-      return staticColor;
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          target.PowerModeChanged(powerMode);
+        }
+      }
     }
     #endregion
 
@@ -1028,6 +1036,7 @@ namespace AtmoLight
       setPixelDataLock = false;
       setPixelDataThreadHelper = new Thread(() => SetPixelDataThread());
       setPixelDataThreadHelper.Name = "AtmoLight SetPixelData";
+      setPixelDataThreadHelper.IsBackground = true;
       setPixelDataThreadHelper.Start();
     }
 
@@ -1040,66 +1049,63 @@ namespace AtmoLight
     }
 
     /// <summary>
-    /// Start the GetAtmoLiveViewSource thread.
+    /// Start the GIFReader thread.
     /// </summary>
-    private void StartGetAtmoLiveViewSourceThread()
-    {
-      getAtmoLiveViewSourceLock = false;
-      getAtmoLiveViewSourceThreadHelper = new Thread(() => GetAtmoLiveViewSourceThread());
-      getAtmoLiveViewSourceThreadHelper.Name = "AtmoLight GetAtmoLiveViewSource";
-      getAtmoLiveViewSourceThreadHelper.Start();
-    }
-
-    /// <summary>
-    /// Stop the GetAtmoLiveViewSource thread.
-    /// </summary>
-    private void StopGetAtmoLiveViewSourceThread()
-    {
-      getAtmoLiveViewSourceLock = true;
-    }
-
     private void StartGIFReaderThread()
     {
       gifReaderLock = false;
       gifReaderThreadHelper = new Thread(() => GIFReaderThread());
       gifReaderThreadHelper.Name = "AtmoLight GIFReader";
+      gifReaderThreadHelper.IsBackground = true;
       gifReaderThreadHelper.Start();
     }
 
+    /// <summary>
+    /// Stop the GIFReader thread.
+    /// </summary>
     private void StopGIFReaderThread()
     {
       gifReaderLock = true;
     }
 
+    /// <summary>
+    /// Start the VUMeter thread.
+    /// </summary>
     private void StartVUMeterThread()
     {
       vuMeterLock = false;
       vuMeterThreadHelper = new Thread(() => VUMeterThread());
       vuMeterThreadHelper.Name = "AtmoLight VUMeter";
+      vuMeterThreadHelper.IsBackground = true;
       vuMeterThreadHelper.Start();
     }
 
+    /// <summary>
+    /// Stop the VUMeter thread.
+    /// </summary>
     private void StopVUMeterThread()
     {
       vuMeterLock = true;
     }
 
+    /// <summary>
+    /// Stop all core threads.
+    /// </summary>
     private void StopAllThreads()
     {
       StopSetPixelDataThread();
-      StopGetAtmoLiveViewSourceThread();
       StopGIFReaderThread();
       StopVUMeterThread();
     }
 
     /// <summary>
-    /// Send pixel data to AtmoWin when MediaPortal liveview is used (external liveview source).
+    /// Send pixel data to targets when MediaPortal liveview is used.
     /// Also add a delay specified in settings.
     /// This method is designed to run as its own thread.
     /// </summary>
     private void SetPixelDataThread()
     {
-      if (atmoRemoteControl == null)
+      if (!IsConnected())
       {
         return;
       }
@@ -1112,7 +1118,7 @@ namespace AtmoLight
           {
             if (Win32API.GetTickCount() >= (delayTimingList[0] + delayTime))
             {
-              SetPixelData(bmiInfoHeaderList[0], pixelDataList[0], true);
+              SendPixelData(pixelDataList[0], bmiInfoHeaderList[0], true);
               DeleteFirstDelayListsItems();
 
               // Trim the lists, to prevent a memory leak.
@@ -1126,7 +1132,7 @@ namespace AtmoLight
       }
       catch (Exception ex)
       {
-        Log.Error("Could not send data to AtmoWin.");
+        Log.Error("Could not send pixeldata to targets.");
         Log.Error("Exception: {0}", ex.Message);
 
         ClearDelayLists();
@@ -1134,32 +1140,8 @@ namespace AtmoLight
     }
 
     /// <summary>
-    /// Check if the AtmoWin liveview source is set to external when MediaPortal liveview is used.
-    /// Set liveview source back to external if needed.
-    /// This method is designed to run as its own thread.
+    /// Decode the gif file, transform it and send it to CalculateBitmap().
     /// </summary>
-    private void GetAtmoLiveViewSourceThread()
-    {
-      try
-      {
-        while (!getAtmoLiveViewSourceLock && IsConnected())
-        {
-          GetAtmoLiveViewSource();
-          if (atmoLiveViewSource != ComLiveViewSource.lvsExternal)
-          {
-            Log.Debug("AtmoWin Liveview Source is not lvsExternal");
-            SetAtmoLiveViewSource(ComLiveViewSource.lvsExternal);
-          }
-          System.Threading.Thread.Sleep(delayGetAtmoLiveViewSource);
-        }
-      }
-      catch (Exception ex)
-      {
-        Log.Error("Error in GetAtmoLiveViewSourceThread.");
-        Log.Error("Exception: {0}", ex.Message);
-      }
-    }
-
     private void GIFReaderThread()
     {
       try
@@ -1227,7 +1209,7 @@ namespace AtmoLight
             MemoryStream gifStream = new MemoryStream();
             gifBitmap.Save(gifStream, ImageFormat.Bmp);
 
-            // Calculations to prepare data for AtmoWin and then send data
+            // Calculations to prepare data and then send data
             CalculateBitmap(gifStream);
 
             // Cleanup
@@ -1249,13 +1231,17 @@ namespace AtmoLight
       }
     }
 
+    /// <summary>
+    /// Receives dblevel data from MediaPortal and generates bitmaps out of that.
+    /// Then sends these bitmaps to CalculateBitmap().
+    /// </summary>
     private void VUMeterThread()
     {
+      List<SolidBrush> vuMeterBrushes = new List<SolidBrush>();
       try
       {
-        if (vuMeterRainbowColorScheme)
+        if (currentEffect == ContentEffect.VUMeterRainbow)
         {
-          vuMeterBrushes.Clear();
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 0)));
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 77, 0)));
@@ -1270,7 +1256,6 @@ namespace AtmoLight
         }
         else
         {
-          vuMeterBrushes.Clear();
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 0)));
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
@@ -1317,6 +1302,7 @@ namespace AtmoLight
         }
         vuMeterBitmap.Dispose();
         vuMeterGFX.Dispose();
+        vuMeterBrushes.Clear();
       }
       catch (Exception ex)
       {

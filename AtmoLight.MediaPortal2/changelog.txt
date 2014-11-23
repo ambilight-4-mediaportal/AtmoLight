@@ -1,3 +1,17 @@
+Version 2.0.0.0
+- Added interface to support other targets (not just AtmoWin)
+- Added Hyperion as target software
+- Added Hue as target (AtmoHue needed)
+- Added Boblight as target software
+- Added possibility to use more then one target software (e.g. AtmoWin and Hyperion at the same time)
+- Added "MediaPortal exit" effect (effect that gets set when MediaPortal gets closed)
+- Added possibility to change every setting on the fly (no MediaPortal2 restart for specific settings required anymore)
+- Added VU Meter and VU Meter Rainbow effects
+- Added blackbar detection and removal
+- Fixed bug where AtmoLight would do nothing when a player ends
+- Added support for Picture-in-Picture mode
+- Various small bug fixes
+
 Version 2.0.0.0 Beta 2
 - Fixed bug where MediaPortal could crash to Desktop
 - Fixed issue where AtmoLight would always disable LEDs after reconnect
