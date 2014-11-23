@@ -14,7 +14,7 @@ AtmoLight is a plugin for MediaPortal1 and MediaPortal2 to add support for ambil
  * Use your __remote control__ to toggle leds, change the profile of your target software or open up the context menu (only MediaPortal1)
  * Setting to lower the capture frequency for lower end pcs
  * __Delay option__, that lets you add a delay before the current picture gets displayed on the leds
- * __Blackbar detection__ and __removal__ (only MediaPortal1)
+ * __Blackbar detection__ and __removal__
  * __GIF reader__ effect, where users can define a gif file which then gets played back on the leds
  * __VU meter effect__, watch a nice light show while listening to your music
  * Define a timeframe in which your ambilight should be deactivated
