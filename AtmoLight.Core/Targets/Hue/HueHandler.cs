@@ -12,11 +12,12 @@ using System.Drawing.Imaging;
 using System.Net;
 using System.Net.Sockets;
 using System.Linq;
+using System.Xml;
 using Microsoft.Win32;
 
 namespace AtmoLight.Targets
 {
-  class HueHandler : ITargets
+  public class HueHandler : ITargets
   {
     #region Fields
 
@@ -389,6 +390,82 @@ namespace AtmoLight.Targets
         Log.Error(string.Format("HueHandler - {0}", e.Message));
       }
     }
+    public void setActiveGroup(string groupName)
+    {
+      Log.Debug(APIcommandType.Group + " --> " + groupName);
+      string message = string.Format("{0},{1},{2},{3}", "ATMOLIGHT", APIcommandType.Group, "OnlyActivate", groupName);
+      sendAPIcommand(message);
+    }
+    public void setGroupStaticColor(string groupName, string colorName)
+    {
+      Log.Debug(APIcommandType.Group + " --> " + groupName);
+      string message = string.Format("{0},{1},{2},{3},{4}", "ATMOLIGHT", APIcommandType.Group, "SetStaticColor", groupName, colorName);
+      sendAPIcommand(message);
+    }
+    public List<string> Loadgroups()
+    {
+      List<string> groups = new List<string>();
+
+      try
+      {
+        string settingsLocation = Path.GetDirectoryName(coreObject.huePath) + "\\settings.xml";
+        if (File.Exists(settingsLocation))
+        {
+          using (XmlReader reader = XmlReader.Create(settingsLocation))
+          {
+            while (reader.Read())
+            {
+              // LED Locations
+
+              if ((reader.NodeType == XmlNodeType.Element) && (reader.Name == "LedLocation"))
+              {
+                reader.ReadToDescendant("Location");
+                groups.Add(reader.ReadString());
+              }
+
+            }
+          }
+        }
+      }
+      catch(Exception e)
+      {
+        Log.Error(string.Format("HueHandler - {0}", "Error during reading group config"));
+        Log.Error(string.Format("HueHandler - {0}", e.Message));
+      }
+      return groups;
+    }
+    public List<string> LoadStaticColors()
+    {
+      List<string> staticColors = new List<string>();
+
+      try
+      {
+        string settingsLocation = Path.GetDirectoryName(coreObject.huePath) + "\\settings.xml";
+        if (File.Exists(settingsLocation))
+        {
+          using (XmlReader reader = XmlReader.Create(settingsLocation))
+          {
+            while (reader.Read())
+            {
+              // LED Locations
+
+              if ((reader.NodeType == XmlNodeType.Element) && (reader.Name == "LedStaticColor"))
+              {
+                reader.ReadToDescendant("Name");
+                staticColors.Add(reader.ReadString());
+              }
+            }
+          }
+        }
+      }
+      catch (Exception e)
+      {
+        Log.Error(string.Format("HueHandler - {0}", "Error during reading static color config"));
+        Log.Error(string.Format("HueHandler - {0}", e.Message));
+      }
+      return staticColors;
+    }
+
     public void CalculateAverageColorAndSendToHue(Bitmap bm)
     {
       int width = bm.Width;
