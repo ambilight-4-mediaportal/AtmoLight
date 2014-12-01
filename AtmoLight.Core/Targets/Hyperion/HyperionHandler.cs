@@ -126,15 +126,31 @@ namespace AtmoLight.Targets
 
     private void Connect()
     {
-      Thread t = new Thread(ConnectThread);
-      t.IsBackground = true;
-      t.Start();
+      try
+      {
+        Thread t = new Thread(ConnectThread);
+        t.IsBackground = true;
+        t.Start();
+      }
+      catch (Exception e)
+      {
+        Log.Error("HyperionHandler - Error while starting connect thread");
+        Log.Error("HyperionHandler - Exception: {0}", e.Message);
+      }
     }
     private void liveReconnect()
     {
-      Thread t = new Thread(liveReconnectThread);
-      t.IsBackground = true;
-      t.Start();
+      try
+      {
+        Thread t = new Thread(liveReconnectThread);
+        t.IsBackground = true;
+        t.Start();
+      }
+      catch (Exception e)
+      {
+        Log.Error("HyperionHandler - Error while starting live reconnect thread");
+        Log.Error("HyperionHandler - Exception: {0}", e.Message);
+      }
     }
 
     private void liveReconnectThread()
@@ -156,87 +172,98 @@ namespace AtmoLight.Targets
 
     private void ConnectThread()
     {
-      while (hyperionReconnectCounter <= coreObject.hyperionReconnectAttempts)
+      try
       {
-        if (!Socket.Connected)
+        while (hyperionReconnectCounter <= coreObject.hyperionReconnectAttempts)
         {
-          try
+          if (!Socket.Connected)
           {
-            if (!coreObject.hyperionLiveReconnect)
+            try
             {
-              Log.Debug("HyperionHandler - Trying to connect");
+              if (!coreObject.hyperionLiveReconnect)
+              {
+                Log.Debug("HyperionHandler - Trying to connect");
+              }
+
+              //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
+              Disconnect();
+
+              Socket = new TcpClient();
+              Socket.SendTimeout = 5000;
+              Socket.ReceiveTimeout = 5000;
+              Socket.Connect(coreObject.hyperionIP, coreObject.hyperionPort);
+              Stream = Socket.GetStream();
+
+              if (!coreObject.hyperionLiveReconnect)
+              {
+                Log.Debug("HyperionHandler - Connected");
+              }
+            }
+            catch (Exception e)
+            {
+              if (!coreObject.hyperionLiveReconnect)
+              {
+                Log.Error("HyperionHandler - Error while connecting");
+                Log.Error("HyperionHandler - Exception: {0}", e.Message);
+              }
             }
 
-            //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
-            Disconnect();
-
-            Socket = new TcpClient();
-            Socket.SendTimeout = 5000;
-            Socket.ReceiveTimeout = 5000;
-            Socket.Connect(coreObject.hyperionIP, coreObject.hyperionPort);
-            Stream = Socket.GetStream();
-
-            if (!coreObject.hyperionLiveReconnect)
+            //if live connect enabled don't use this loop and let liveReconnectThread() fire up new connections
+            if (coreObject.hyperionLiveReconnect)
             {
-              Log.Debug("HyperionHandler - Connected");
+              break;
             }
-          }
-          catch (Exception e)
-          {
-            if (!coreObject.hyperionLiveReconnect)
+            else
             {
-              Log.Error("HyperionHandler - Error while connecting");
-              Log.Error("HyperionHandler - Exception: {0}", e.Message);
-            }
-          }
+              //Increment times tried
+              hyperionReconnectCounter++;
 
-          //if live connect enabled don't use this loop and let liveReconnectThread() fire up new connections
-          if (coreObject.hyperionLiveReconnect)
-          {
-            break;
+              //Show error if reconnect attempts exhausted
+              if (hyperionReconnectCounter > coreObject.hyperionReconnectAttempts && !Socket.Connected)
+              {
+                Log.Error("HyperionHandler - Error while connecting and connection attempts exhausted");
+                coreObject.NewConnectionLost(Name);
+                break;
+              }
+
+              //Sleep for specified time
+              Thread.Sleep(coreObject.hyperionReconnectDelay);
+            }
+            //Log.Error("HyperionHandler - retry attempt {0} of {1}",hyperionReconnectCounter,hyperionReconnectAttempts);
           }
           else
           {
-            //Increment times tried
-            hyperionReconnectCounter++;
-
-            //Show error if reconnect attempts exhausted
-            if (hyperionReconnectCounter > coreObject.hyperionReconnectAttempts && !Socket.Connected)
-            {
-              Log.Error("HyperionHandler - Error while connecting and connection attempts exhausted");
-              coreObject.NewConnectionLost(Name);
-              break;
-            }
-
-            //Sleep for specified time
-            Thread.Sleep(coreObject.hyperionReconnectDelay);
+            //Log.Debug("HyperionHandler - Connected after {0} attempts.", hyperionReconnectCounter);
+            break;
           }
-          //Log.Error("HyperionHandler - retry attempt {0} of {1}",hyperionReconnectCounter,hyperionReconnectAttempts);
         }
-        else
+
+        //Reset Init lock
+        initLock = false;
+
+        //Reset counter when we have finished
+        hyperionReconnectCounter = 0;
+
+        //On first initialize set the effect after we are done trying to connect
+        if (isInit && Socket.Connected)
         {
-          //Log.Debug("HyperionHandler - Connected after {0} attempts.", hyperionReconnectCounter);
-          break;
+          ChangeEffect(coreObject.GetCurrentEffect());
+          isInit = false;
+        }
+        else if (isInit)
+        {
+          isInit = false;
         }
       }
-
-      //Reset Init lock
-      initLock = false;
-
-      //Reset counter when we have finished
-      hyperionReconnectCounter = 0;
-
-      //On first initialize set the effect after we are done trying to connect
-      if (isInit && Socket.Connected)
+      catch (Exception e)
       {
-        ChangeEffect(coreObject.GetCurrentEffect());
+        Log.Error("HyperionHandler - Error during connect thread");
+        Log.Error("HyperionHandler - Exception: {0}", e.Message);
+
+        //Reset Init lock
+        initLock = false;
         isInit = false;
       }
-      else if (isInit)
-      {
-        isInit = false;
-      }
-
     }
     private void Disconnect()
     {
@@ -407,7 +434,7 @@ namespace AtmoLight.Targets
         HyperionReply reply = HyperionReply.ParseFrom(data);
         return reply;
       }
-      catch(Exception e)
+      catch (Exception e)
       {
         Log.Error("HyperionHandler - Error while receiving reply from proto request");
         Log.Error("HyperionHandler - Exception: {0}", e.Message);
