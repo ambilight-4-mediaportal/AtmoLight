@@ -136,6 +136,10 @@ namespace AtmoLight.Targets
       {
         Log.Error("HyperionHandler - Error while starting connect thread");
         Log.Error("HyperionHandler - Exception: {0}", e.Message);
+
+        //Reset Init lock
+        initLock = false;
+        isInit = false;
       }
     }
     private void liveReconnect()
@@ -150,6 +154,10 @@ namespace AtmoLight.Targets
       {
         Log.Error("HyperionHandler - Error while starting live reconnect thread");
         Log.Error("HyperionHandler - Exception: {0}", e.Message);
+
+        //Reset Init lock
+        initLock = false;
+        isInit = false;
       }
     }
 
