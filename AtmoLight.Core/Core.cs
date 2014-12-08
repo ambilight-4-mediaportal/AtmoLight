@@ -35,6 +35,7 @@ namespace AtmoLight
   public enum Target
   {
     AmbiBox,
+    AtmoOrb,
     AtmoWin,
     Boblight,
     Hue,
@@ -382,6 +383,10 @@ namespace AtmoLight
         else if (target == Target.Boblight)
         {
           targets.Add(new BoblightHandler());
+        }
+        else if (target == Target.AtmoOrb)
+        {
+          targets.Add(new AtmoOrbHandler());
         }
       }
     }

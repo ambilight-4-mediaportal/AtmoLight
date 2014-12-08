@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="ITargets.cs" />
     <Compile Include="Targets\AmbiBox\AmbiBoxHandler.cs" />
+    <Compile Include="Targets\AtmoOrb\AtmoOrbHandler.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\AtmoLiveViewControlClass.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\AtmoRemoteControlClass.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinHandler.cs" />
