@@ -105,6 +105,8 @@ namespace AtmoLight
       Log.Debug("Generating new AtmoLight.Core instance.");
       coreObject = Core.GetInstance();
 
+      coreObject.AddTarget(Target.AtmoOrb);
+
       // AmbiBox
       if (settings.AmbiBoxTarget)
       {

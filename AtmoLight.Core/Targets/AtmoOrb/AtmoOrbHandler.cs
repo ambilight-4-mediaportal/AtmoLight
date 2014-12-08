@@ -6,6 +6,7 @@ using Microsoft.Win32;
 using System.Threading;
 using System.Net.Sockets;
 using System.Net;
+using System.Diagnostics;
 
 namespace AtmoLight.Targets
 {
@@ -33,8 +34,9 @@ namespace AtmoLight.Targets
 
     private UdpClient udpServer;
     private UdpClient udpClient;
-    IPEndPoint udpClientEndpoint;
     private UdpClient udpClientBroadcast;
+
+    IPEndPoint udpClientEndpoint;
 
     int broadcastPort = 30003;
     String atmoOrbIP;
@@ -43,6 +45,8 @@ namespace AtmoLight.Targets
     bool isConnected;
     int ledCount;
     String ledArrangement;
+    int[] prevColor = new int[3];
+    int threshold = 1;
     #endregion
 
     #region Constructor
@@ -94,11 +98,13 @@ namespace AtmoLight.Targets
         case ContentEffect.VUMeterRainbow:
           return true;
         case ContentEffect.StaticColor:
+          System.Threading.Thread.Sleep(100);
           ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
           return true;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
         default:
+          System.Threading.Thread.Sleep(100);
           ChangeColor(0, 0, 0);
           return true;
       }
@@ -121,7 +127,15 @@ namespace AtmoLight.Targets
             pixel++;
           }
         }
-        ChangeColor(rgb[0] / pixel, rgb[1] / pixel, rgb[2] / pixel);
+        rgb[0] = rgb[0] / pixel;
+        rgb[1] = rgb[1] / pixel;
+        rgb[2] = rgb[2] / pixel;
+
+        if (Math.Abs(rgb[0] - prevColor[0]) >= threshold || Math.Abs(rgb[1] - prevColor[1]) >= threshold || Math.Abs(rgb[2] - prevColor[2]) >= threshold)
+        {
+          prevColor = rgb;
+          ChangeColor(rgb[0], rgb[1], rgb[2]);
+        }
       }
       else if (coreObject.GetCurrentEffect() == ContentEffect.VUMeter || coreObject.GetCurrentEffect() == ContentEffect.VUMeterRainbow)
       {
@@ -144,7 +158,7 @@ namespace AtmoLight.Targets
       }
       else if (coreObject.GetCurrentEffect() == ContentEffect.GIFReader)
       {
-
+        return;
       }
     }
 
@@ -185,9 +199,15 @@ namespace AtmoLight.Targets
         }
 
         udpClientBroadcast = new UdpClient();
-        IPEndPoint ip = new IPEndPoint(IPAddress.Broadcast, broadcastPort);
+        IPEndPoint udpClientBroadcastEndpoint = new IPEndPoint(IPAddress.Broadcast, broadcastPort);
         byte[] bytes = Encoding.ASCII.GetBytes("M-SEARCH");
-        udpClientBroadcast.Send(bytes, bytes.Length, ip);
+
+        while (!isConnected)
+        {
+          udpClientBroadcast.Send(bytes, bytes.Length, udpClientBroadcastEndpoint);
+          System.Threading.Thread.Sleep(10000);
+        }
+        
         udpClientBroadcast.Close();
         initLock = false;
       }
@@ -206,8 +226,8 @@ namespace AtmoLight.Targets
     {
       try
       {
-        IPEndPoint ip = new IPEndPoint(IPAddress.Any, broadcastPort);
-        byte[] bytes = udpServer.EndReceive(ar, ref ip);
+        IPEndPoint udpServerEndpoint = new IPEndPoint(IPAddress.Any, broadcastPort);
+        byte[] bytes = udpServer.EndReceive(ar, ref udpServerEndpoint);
         string message = Encoding.ASCII.GetString(bytes);
         string[] splitMessage = message.Split(':', ',', ';');
         if (splitMessage.Length >= 4)
@@ -291,8 +311,6 @@ namespace AtmoLight.Targets
       }
 
       byte[] bytes = Encoding.ASCII.GetBytes("setcolor:" + redHex + greenHex + blueHex + ";");
-
-      System.Threading.Thread.Sleep(100);
       udpClient.Send(bytes, bytes.Length, udpClientEndpoint);
     }
   }
