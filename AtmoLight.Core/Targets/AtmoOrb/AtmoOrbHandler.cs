@@ -43,10 +43,9 @@ namespace AtmoLight.Targets
     int atmoOrbPort;
     String atmoOrbID;
     bool isConnected;
-    int ledCount;
-    String ledArrangement;
     int[] prevColor = new int[3];
-    int threshold = 1;
+    int threshold = 0;
+    int minDiversion = 10;
     #endregion
 
     #region Constructor
@@ -112,32 +111,7 @@ namespace AtmoLight.Targets
 
     public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
-      if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-      {
-        int[] rgb = new int[] { 0, 0, 0 };
-        int pixel = 0;
-        for (int y = 0; y < coreObject.GetCaptureHeight(); y++)
-        {
-          int row = coreObject.GetCaptureWidth() * y * 4;
-          for (int x = 0; x < coreObject.GetCaptureWidth(); x++)
-          {
-            rgb[0] += pixeldata[row + x * 4 + 2];
-            rgb[1] += pixeldata[row + x * 4 + 1];
-            rgb[2] += pixeldata[row + x * 4];
-            pixel++;
-          }
-        }
-        rgb[0] = rgb[0] / pixel;
-        rgb[1] = rgb[1] / pixel;
-        rgb[2] = rgb[2] / pixel;
-
-        if (Math.Abs(rgb[0] - prevColor[0]) >= threshold || Math.Abs(rgb[1] - prevColor[1]) >= threshold || Math.Abs(rgb[2] - prevColor[2]) >= threshold)
-        {
-          prevColor = rgb;
-          ChangeColor(rgb[0], rgb[1], rgb[2]);
-        }
-      }
-      else if (coreObject.GetCurrentEffect() == ContentEffect.VUMeter || coreObject.GetCurrentEffect() == ContentEffect.VUMeterRainbow)
+      if (coreObject.GetCurrentEffect() == ContentEffect.VUMeter || coreObject.GetCurrentEffect() == ContentEffect.VUMeterRainbow)
       {
         for (int y = 0; y < coreObject.GetCaptureHeight(); y++)
         {
@@ -156,9 +130,33 @@ namespace AtmoLight.Targets
         }
         ChangeColor(0, 0, 0);
       }
-      else if (coreObject.GetCurrentEffect() == ContentEffect.GIFReader)
+      else
       {
-        return;
+        int[] rgb = new int[] { 0, 0, 0 };
+        int pixel = 0;
+        for (int y = 0; y < coreObject.GetCaptureHeight(); y++)
+        {
+          int row = coreObject.GetCaptureWidth() * y * 4;
+          for (int x = 0; x < coreObject.GetCaptureWidth(); x++)
+          {
+            if (Math.Abs(pixeldata[row + x * 4 + 2] - pixeldata[row + x * 4 + 1]) > minDiversion || Math.Abs(pixeldata[row + x * 4 + 2] - pixeldata[row + x * 4]) > minDiversion || Math.Abs(pixeldata[row + x * 4 + 1] - pixeldata[row + x * 4]) > minDiversion)
+            {
+              rgb[0] += pixeldata[row + x * 4 + 2];
+              rgb[1] += pixeldata[row + x * 4 + 1];
+              rgb[2] += pixeldata[row + x * 4];
+              pixel++;
+            }
+          }
+        }
+        rgb[0] = rgb[0] / pixel;
+        rgb[1] = rgb[1] / pixel;
+        rgb[2] = rgb[2] / pixel;
+
+        if (Math.Abs(rgb[0] - prevColor[0]) >= threshold || Math.Abs(rgb[1] - prevColor[1]) >= threshold || Math.Abs(rgb[2] - prevColor[2]) >= threshold)
+        {
+          prevColor = rgb;
+          ChangeColor(rgb[0], rgb[1], rgb[2]);
+        }
       }
     }
 
@@ -241,16 +239,7 @@ namespace AtmoLight.Targets
               atmoOrbPort = int.Parse(splitMessage[4]);
               Connect();
             }
-            else if (splitMessage[2] == "ledcount")
-            {
-              ledCount = int.Parse(splitMessage[3]);
-            }
-            else if (splitMessage[2] == "arrangement")
-            {
-              ledArrangement = splitMessage[3];
-            }
           }
-
         }
         UDPServerListen();
       }
