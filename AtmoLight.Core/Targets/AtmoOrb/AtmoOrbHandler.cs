@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace AtmoLight.Targets
 {
@@ -46,13 +47,16 @@ namespace AtmoLight.Targets
     bool isConnected;
     int[] prevColor = new int[3];
     int threshold = 0;
-    int minDiversion = 10;
-    double saturation = 0.5;
+    int minDiversion = 25;
+    double saturation = 0.4;
+    private double[] gammaCurve = new double[256];
+    double gamma = 1;
     #endregion
 
     #region Constructor
     public AtmoOrbHandler()
     {
+      CalcGammaCurve();
       Log.Debug("AtmoOrbHandler - AtmoOrb as target added.");
     }
     #endregion
@@ -99,13 +103,13 @@ namespace AtmoLight.Targets
         case ContentEffect.VUMeterRainbow:
           return true;
         case ContentEffect.StaticColor:
-          System.Threading.Thread.Sleep(100);
+          System.Threading.Thread.Sleep(250);
           ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
           return true;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
         default:
-          System.Threading.Thread.Sleep(100);
+          System.Threading.Thread.Sleep(250);
           ChangeColor(0, 0, 0);
           return true;
       }
@@ -135,6 +139,7 @@ namespace AtmoLight.Targets
       else
       {
         int[] rgb = new int[] { 0, 0, 0 };
+        int[] rgbBreightness = new int[] { 0, 0, 0 };
         int pixel = 0;
         for (int y = 0; y < coreObject.GetCaptureHeight(); y++)
         {
@@ -148,18 +153,33 @@ namespace AtmoLight.Targets
               rgb[2] += pixeldata[row + x * 4];
               pixel++;
             }
+            rgbBreightness[0] += pixeldata[row + x * 4 + 2];
+            rgbBreightness[1] += pixeldata[row + x * 4 + 1];
+            rgbBreightness[2] += pixeldata[row + x * 4];
           }
         }
-        rgb[0] = rgb[0] / pixel;
-        rgb[1] = rgb[1] / pixel;
-        rgb[2] = rgb[2] / pixel;
-
-        if (Math.Abs(rgb[0] - prevColor[0]) >= threshold || Math.Abs(rgb[1] - prevColor[1]) >= threshold || Math.Abs(rgb[2] - prevColor[2]) >= threshold)
+        if (pixel > 0)
         {
-          Color avgColor = Color.FromArgb(rgb[0], rgb[1], rgb[2]);
-          HsvToRgb(avgColor.GetHue(), Math.Min(avgColor.GetSaturation() + saturation, 1), avgColor.GetBrightness(), out rgb[0], out rgb[1], out rgb[2]);
-          prevColor = rgb;
-          ChangeColor(rgb[0], rgb[1], rgb[2]);
+          rgb[0] = rgb[0] / pixel;
+          rgb[1] = rgb[1] / pixel;
+          rgb[2] = rgb[2] / pixel;
+
+          rgbBreightness[0] = rgbBreightness[0] / (coreObject.GetCaptureHeight() * coreObject.GetCaptureWidth());
+          rgbBreightness[1] = rgbBreightness[1] / (coreObject.GetCaptureHeight() * coreObject.GetCaptureWidth());
+          rgbBreightness[2] = rgbBreightness[2] / (coreObject.GetCaptureHeight() * coreObject.GetCaptureWidth());
+
+          if (Math.Abs(rgb[0] - prevColor[0]) >= threshold || Math.Abs(rgb[1] - prevColor[1]) >= threshold || Math.Abs(rgb[2] - prevColor[2]) >= threshold)
+          {
+            Color avgColor = Color.FromArgb(rgb[0], rgb[1], rgb[2]);
+            Color avgColorBreightness = Color.FromArgb(rgbBreightness[0], rgbBreightness[1], rgbBreightness[2]);
+            HsvToRgb(avgColor.GetHue(), Math.Min(avgColor.GetSaturation() + saturation, 1), avgColorBreightness.GetBrightness(), out rgb[0], out rgb[1], out rgb[2]);
+            prevColor = rgb;
+            ChangeColor((int)gammaCurve[rgb[0]], (int)gammaCurve[rgb[1]], (int)gammaCurve[rgb[2]]);
+          }
+        }
+        else
+        {
+          ChangeColor(0, 0, 0);
         }
       }
     }
@@ -420,6 +440,14 @@ namespace AtmoLight.Targets
       if (i < 0) return 0;
       if (i > 255) return 255;
       return i;
+    }
+
+    private void CalcGammaCurve()
+    {
+      for (int i = 0; i < gammaCurve.Length; i++)
+      {
+        gammaCurve[i] = Math.Pow((double)i / ((double)gammaCurve.Length - 1.0f), gamma) * (gammaCurve.Length - 1.0f);
+      }
     }
   }
 }
