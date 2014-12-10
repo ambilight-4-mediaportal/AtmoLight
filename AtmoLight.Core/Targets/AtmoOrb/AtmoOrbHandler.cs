@@ -35,22 +35,21 @@ namespace AtmoLight.Targets
     private Thread initThreadHelper;
 
     private UdpClient udpServer;
-    private UdpClient udpClient;
     private UdpClient udpClientBroadcast;
 
-    IPEndPoint udpClientEndpoint;
 
     int broadcastPort = 30003;
-    String atmoOrbIP;
-    int atmoOrbPort;
-    String atmoOrbID;
-    bool isConnected;
     int[] prevColor = new int[3];
     int threshold = 0;
     int minDiversion = 25;
     double saturation = 0.4;
     private double[] gammaCurve = new double[256];
     double gamma = 1;
+
+    List<string> atmoOrbLamps = new List<string> { "1,UDP,0,100,0,100", "2,TCP,192.168.1.123,1234,0,100,0,100" };
+
+    List<ILamp> lamps = new List<ILamp>();
+
     #endregion
 
     #region Constructor
@@ -85,12 +84,23 @@ namespace AtmoLight.Targets
     public void Dispose()
     {
       Log.Debug("AtmoOrbHandler - Disposing AtmoOrb handler.");
-      Disconnect();
+      foreach (var lamp in lamps)
+      {
+        lamp.Disconnect();
+      }
+      lamps = null;
     }
 
     public bool IsConnected()
     {
-      return isConnected && !initLock;
+      foreach (var lamp in lamps)
+      {
+        if (lamp.IsConnected())
+        {
+          return true;
+        }
+      }
+      return false;
     }
 
     public bool ChangeEffect(ContentEffect effect)
@@ -197,7 +207,6 @@ namespace AtmoLight.Targets
     {
       if (powerMode == PowerModes.Resume)
       {
-        Disconnect();
         Initialise();
       }
       else if (powerMode == PowerModes.Suspend)
@@ -218,23 +227,39 @@ namespace AtmoLight.Targets
       initLock = true;
       try
       {
-        if (udpServer == null)
+        if (lamps.Count == 0)
         {
-          udpServer = new UdpClient(broadcastPort);
-          UDPServerListen();
+          for (int i = 0; i < atmoOrbLamps.Count; i++)
+          {
+            string[] settings = atmoOrbLamps[i].Split(',');
+            if (settings[1] == "UDP")
+            {
+              lamps.Add(new UDPLamp(settings[0], int.Parse(settings[2]), int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5])));
+            }
+            else if (settings[1] == "TCP")
+            {
+              // id, ip, port, hscanstart, hscanend, vscanstart, vscanend
+              // connects directly from ctor
+              lamps.Add(new TCPLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7])));
+            }
+          }
         }
 
-        udpClientBroadcast = new UdpClient();
-        IPEndPoint udpClientBroadcastEndpoint = new IPEndPoint(IPAddress.Broadcast, broadcastPort);
-        byte[] bytes = Encoding.ASCII.GetBytes("M-SEARCH");
-
-        while (!isConnected)
+        if (UDPLampPresent())
         {
+          if (udpServer == null)
+          {
+            udpServer = new UdpClient(broadcastPort);
+            UDPServerListen();
+          }
+
+          udpClientBroadcast = new UdpClient();
+          IPEndPoint udpClientBroadcastEndpoint = new IPEndPoint(IPAddress.Broadcast, broadcastPort);
+          byte[] bytes = Encoding.ASCII.GetBytes("M-SEARCH");
           udpClientBroadcast.Send(bytes, bytes.Length, udpClientBroadcastEndpoint);
-          System.Threading.Thread.Sleep(10000);
+
+          udpClientBroadcast.Close();
         }
-        
-        udpClientBroadcast.Close();
         initLock = false;
       }
       catch (Exception ex)
@@ -242,6 +267,18 @@ namespace AtmoLight.Targets
         Log.Error("AtmoOrbHandler - Error while initialising.");
         Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
       }
+    }
+
+    private bool UDPLampPresent()
+    {
+      foreach (var lamp in lamps)
+      {
+        if (lamp.Type == "UDP")
+        {
+          return true;
+        }
+      }
+      return false;
     }
 
     private void UDPServerListen()
@@ -260,12 +297,15 @@ namespace AtmoLight.Targets
         {
           if (splitMessage[0] == "AtmoOrb")
           {
-            atmoOrbID = splitMessage[1];
             if (splitMessage[2] == "address")
             {
-              atmoOrbIP = splitMessage[3];
-              atmoOrbPort = int.Parse(splitMessage[4]);
-              Connect();
+              foreach (var lamp in lamps)
+              {
+                if (lamp.ID == splitMessage[1])
+                {
+                  lamp.Connect(splitMessage[3], int.Parse(splitMessage[4]));
+                }
+              }
             }
           }
         }
@@ -274,37 +314,6 @@ namespace AtmoLight.Targets
       catch (Exception ex)
       {
         Log.Error("AtmoOrbHandler - Exception in UDPServerReceive.");
-        Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
-      }
-    }
-
-    private void Connect()
-    {
-      try
-      {
-        udpClient = new UdpClient();
-        udpClientEndpoint = new IPEndPoint(IPAddress.Parse(atmoOrbIP), atmoOrbPort);
-        isConnected = true;
-        Log.Debug("AtmoOrbHandler - Secussfully connected to {0}:{1}", atmoOrbIP, atmoOrbPort);
-        ChangeEffect(coreObject.GetCurrentEffect());
-      }
-      catch (Exception ex)
-      {
-        Log.Error("AtmoOrbHandler - Exception in Connect.");
-        Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
-      }
-    }
-
-    private void Disconnect()
-    {
-      try
-      {
-        udpClient.Close();
-        isConnected = false;
-      }
-      catch (Exception ex)
-      {
-        Log.Error("AtmoOrbHandler - Exception in Disconnect.");
         Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
       }
     }
@@ -327,9 +336,20 @@ namespace AtmoLight.Targets
         blueHex = "0" + blueHex;
       }
 
-      byte[] bytes = Encoding.ASCII.GetBytes("setcolor:" + redHex + greenHex + blueHex + ";");
-      udpClient.Send(bytes, bytes.Length, udpClientEndpoint);
+      foreach (var lamp in lamps)
+      {
+        lamp.ChangeColor(redHex + greenHex + blueHex);
+      }
     }
+
+    private void CalcGammaCurve()
+    {
+      for (int i = 0; i < gammaCurve.Length; i++)
+      {
+        gammaCurve[i] = Math.Pow((double)i / ((double)gammaCurve.Length - 1.0f), gamma) * (gammaCurve.Length - 1.0f);
+      }
+    }
+
 
     // http://www.splinter.com.au/converting-hsv-to-rgb-colour-using-c/
 
@@ -444,14 +464,6 @@ namespace AtmoLight.Targets
       if (i < 0) return 0;
       if (i > 255) return 255;
       return i;
-    }
-
-    private void CalcGammaCurve()
-    {
-      for (int i = 0; i < gammaCurve.Length; i++)
-      {
-        gammaCurve[i] = Math.Pow((double)i / ((double)gammaCurve.Length - 1.0f), gamma) * (gammaCurve.Length - 1.0f);
-      }
     }
   }
 }
