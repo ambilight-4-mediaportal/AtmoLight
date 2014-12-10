@@ -70,6 +70,7 @@
     <Compile Include="Targets\AmbiBox\AmbiBoxHandler.cs" />
     <Compile Include="Targets\AtmoOrb\AtmoOrbHandler.cs" />
     <Compile Include="Targets\AtmoOrb\ILamp.cs" />
+    <Compile Include="Targets\AtmoOrb\TCPLamp.cs" />
     <Compile Include="Targets\AtmoOrb\UDPLamp.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\AtmoLiveViewControlClass.cs" />
     <Compile Include="Targets\AtmoWin\AtmoWinRemoteControl\AtmoRemoteControlClass.cs" />
