@@ -782,7 +782,7 @@ namespace AtmoLight
         {
           foreach (var target in targets)
           {
-            if (!target.AllowDelay)
+            if (!target.AllowDelay && target.IsConnected())
             {
               target.ChangeImage(pixelData, bmiInfoHeader);
             }
@@ -795,7 +795,7 @@ namespace AtmoLight
         {
           foreach (var target in targets)
           {
-            if (target.AllowDelay || !force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
+            if (target.IsConnected() && (target.AllowDelay || !force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
             {
               target.ChangeImage(pixelData, bmiInfoHeader);
             }
