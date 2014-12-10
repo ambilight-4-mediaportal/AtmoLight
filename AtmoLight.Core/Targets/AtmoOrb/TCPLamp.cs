@@ -29,6 +29,8 @@ namespace AtmoLight.Targets
       this.hScanEnd = hScanEnd;
       this.vScanStart = vScanStart;
       this.vScanEnd = vScanEnd;
+
+      Connect(ip, port);
     }
 
     public string ID { get { return id; } }
