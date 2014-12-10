@@ -117,6 +117,10 @@ namespace AtmoLight.Targets
 
     public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
+      if (!IsConnected())
+      {
+        return;
+      }
       if (coreObject.GetCurrentEffect() == ContentEffect.VUMeter || coreObject.GetCurrentEffect() == ContentEffect.VUMeterRainbow)
       {
         for (int y = 0; y < coreObject.GetCaptureHeight(); y++)
