@@ -37,6 +37,22 @@ namespace AtmoLight.Targets
 
     public string Type { get { return "TCP"; } }
 
+    public int[] OverallAverageColor { get; set; }
+
+    public int[] AverageColor { get; set; }
+
+    public int[] PreviousColor { get; set; }
+
+    public int PixelCount { get; set; }
+
+    public int HScanStart { get { return hScanStart; } }
+
+    public int HScanEnd { get { return hScanEnd; } }
+
+    public int VScanStart { get { return vScanStart; } }
+
+    public int VScanEnd { get { return vScanEnd; } }
+
     public void Connect(string ip, int port)
     {
       this.ip = ip;
