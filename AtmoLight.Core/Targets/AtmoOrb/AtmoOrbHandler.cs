@@ -25,7 +25,8 @@ namespace AtmoLight.Targets
     public bool AllowDelay { get { return true; } }
     public List<ContentEffect> SupportedEffects
     {
-      get {
+      get
+      {
         return new List<ContentEffect> {  ContentEffect.GIFReader,
                                           ContentEffect.LEDsDisabled,
                                           ContentEffect.MediaPortalLiveMode,
@@ -202,12 +203,19 @@ namespace AtmoLight.Targets
 
                 if (Math.Abs(lamp.AverageColor[0] - lamp.PreviousColor[0]) >= coreObject.atmoOrbThreshold || Math.Abs(lamp.AverageColor[1] - lamp.PreviousColor[1]) >= coreObject.atmoOrbThreshold || Math.Abs(lamp.AverageColor[2] - lamp.PreviousColor[2]) >= coreObject.atmoOrbThreshold)
                 {
-                  // Convert to HSV colors
-                  Color avgColor = Color.FromArgb(lamp.AverageColor[0], lamp.AverageColor[1], lamp.AverageColor[2]);
-                  Color avgColorOverall = Color.FromArgb(lamp.OverallAverageColor[0], lamp.OverallAverageColor[1], lamp.OverallAverageColor[2]);
+                  double hue;
+                  double saturation;
+                  double lightness;
+                  double hueOverall;
+                  double saturationOverall;
+                  double lightnessOverall;
 
-                  // Adjust saturation and use brightness from OverallAverageColor
-                  HsvToRgb(avgColor.GetHue(), Math.Min(avgColor.GetSaturation() + coreObject.atmoOrbSaturation, 1), avgColorOverall.GetBrightness(), out lamp.AverageColor[0], out lamp.AverageColor[1], out lamp.AverageColor[2]);
+                  // Convert to hsl color model
+                  RGB2HSL(lamp.AverageColor[0], lamp.AverageColor[1], lamp.AverageColor[2], out hue, out saturation, out lightness);
+                  RGB2HSL(lamp.OverallAverageColor[0], lamp.OverallAverageColor[1], lamp.OverallAverageColor[2], out hueOverall, out saturationOverall, out lightnessOverall);
+
+                  // Convert back to rgb with adjusted saturation and lightness
+                  HSL2RGB(hue, Math.Min(saturation + coreObject.atmoOrbSaturation, 1), (coreObject.atmoOrbUseOverallLightness ? lightnessOverall : lightness), out lamp.AverageColor[0], out lamp.AverageColor[1], out lamp.AverageColor[2]);
 
                   // Save new color as previous color
                   lamp.PreviousColor = lamp.AverageColor;
@@ -403,120 +411,126 @@ namespace AtmoLight.Targets
       }
     }
 
+    // RGB2HSL and HSL2RGB
+    //
+    // http://www.geekymonkey.com/Programming/CSharp/RGB2HSL_HSL2RGB.htm
 
-    // http://www.splinter.com.au/converting-hsv-to-rgb-colour-using-c/
-
-    /// <summary>
-    /// Convert HSV to RGB
-    /// h is from 0-360
-    /// s,v values are 0-1
-    /// r,g,b values are 0-255
-    /// Based upon http://ilab.usc.edu/wiki/index.php/HSV_And_H2SV_Color_Space#HSV_Transformation_C_.2F_C.2B.2B_Code_2
-    /// </summary>
-    void HsvToRgb(double h, double S, double V, out int r, out int g, out int b)
+    // Given H,S,L in range of 0-1
+    // Returns a Color (RGB struct) in range of 0-255
+    public void HSL2RGB(double h, double sl, double l, out int red, out int green, out int blue)
     {
-      // ######################################################################
-      // T. Nathan Mundhenk
-      // mundhenk@usc.edu
-      // C/C++ Macro HSV to RGB
+      double v;
+      double r, g, b;
 
-      double H = h;
-      while (H < 0) { H += 360; };
-      while (H >= 360) { H -= 360; };
-      double R, G, B;
-      if (V <= 0)
-      { R = G = B = 0; }
-      else if (S <= 0)
+      r = l;   // default to gray
+      g = l;
+      b = l;
+      v = (l <= 0.5) ? (l * (1.0 + sl)) : (l + sl - l * sl);
+      if (v > 0)
       {
-        R = G = B = V;
-      }
-      else
-      {
-        double hf = H / 60.0;
-        int i = (int)Math.Floor(hf);
-        double f = hf - i;
-        double pv = V * (1 - S);
-        double qv = V * (1 - S * f);
-        double tv = V * (1 - S * (1 - f));
-        switch (i)
+        double m;
+        double sv;
+        int sextant;
+        double fract, vsf, mid1, mid2;
+
+        m = l + l - v;
+        sv = (v - m) / v;
+        h *= 6.0;
+        sextant = (int)h;
+        fract = h - sextant;
+        vsf = v * sv * fract;
+        mid1 = m + vsf;
+        mid2 = v - vsf;
+        switch (sextant)
         {
-
-          // Red is the dominant color
-
           case 0:
-            R = V;
-            G = tv;
-            B = pv;
+            r = v;
+            g = mid1;
+            b = m;
             break;
-
-          // Green is the dominant color
-
           case 1:
-            R = qv;
-            G = V;
-            B = pv;
+            r = mid2;
+            g = v;
+            b = m;
             break;
           case 2:
-            R = pv;
-            G = V;
-            B = tv;
+            r = m;
+            g = v;
+            b = mid1;
             break;
-
-          // Blue is the dominant color
-
           case 3:
-            R = pv;
-            G = qv;
-            B = V;
+            r = m;
+            g = mid2;
+            b = v;
             break;
           case 4:
-            R = tv;
-            G = pv;
-            B = V;
+            r = mid1;
+            g = m;
+            b = v;
             break;
-
-          // Red is the dominant color
-
           case 5:
-            R = V;
-            G = pv;
-            B = qv;
-            break;
-
-          // Just in case we overshoot on our math by a little, we put these here. Since its a switch it won't slow us down at all to put these here.
-
-          case 6:
-            R = V;
-            G = tv;
-            B = pv;
-            break;
-          case -1:
-            R = V;
-            G = pv;
-            B = qv;
-            break;
-
-          // The color is not defined, we should throw an error.
-
-          default:
-            //LFATAL("i Value error in Pixel conversion, Value is %d", i);
-            R = G = B = V; // Just pretend its black/white
+            r = v;
+            g = m;
+            b = mid2;
             break;
         }
       }
-      r = Clamp((int)(R * 255.0));
-      g = Clamp((int)(G * 255.0));
-      b = Clamp((int)(B * 255.0));
+      red = Convert.ToByte(r * 255.0f);
+      green = Convert.ToByte(g * 255.0f);
+      blue = Convert.ToByte(b * 255.0f);
     }
 
-    /// <summary>
-    /// Clamp a value to 0-255
-    /// </summary>
-    int Clamp(int i)
+
+    // Given a Color (RGB Struct) in range of 0-255
+    // Return H,S,L in range of 0-1
+    public void RGB2HSL(int red, int green, int blue, out double h, out double s, out double l)
     {
-      if (i < 0) return 0;
-      if (i > 255) return 255;
-      return i;
+      double r = red / 255.0;
+      double g = green / 255.0;
+      double b = blue / 255.0;
+      double v;
+      double m;
+      double vm;
+      double r2, g2, b2;
+
+      h = 0; // default to black
+      s = 0;
+      l = 0;
+      v = Math.Max(r, g);
+      v = Math.Max(v, b);
+      m = Math.Min(r, g);
+      m = Math.Min(m, b);
+      l = (m + v) / 2.0;
+      if (l <= 0.0)
+      {
+        return;
+      }
+      vm = v - m;
+      s = vm;
+      if (s > 0.0)
+      {
+        s /= (l <= 0.5) ? (v + m) : (2.0 - v - m);
+      }
+      else
+      {
+        return;
+      }
+      r2 = (v - r) / vm;
+      g2 = (v - g) / vm;
+      b2 = (v - b) / vm;
+      if (r == v)
+      {
+        h = (g == m ? 5.0 + b2 : 1.0 - g2);
+      }
+      else if (g == v)
+      {
+        h = (b == m ? 1.0 + r2 : 3.0 - b2);
+      }
+      else
+      {
+        h = (r == m ? 3.0 + g2 : 5.0 - r2);
+      }
+      h /= 6.0;
     }
   }
 }
