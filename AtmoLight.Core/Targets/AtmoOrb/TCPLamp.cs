@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace AtmoLight.Targets
 {
@@ -19,6 +20,8 @@ namespace AtmoLight.Targets
     private bool zoneInverted;
     private bool isConnected = false;
     private TcpClient tcpClient;
+    private volatile bool connectLock = false;
+    private Thread connectThreadHelper;
     private Core coreObject = Core.GetInstance();
 
     public TCPLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd, bool zoneInverted)
@@ -63,10 +66,27 @@ namespace AtmoLight.Targets
     {
       this.ip = ip;
       this.port = port;
+      if (!connectLock)
+      {
+        connectThreadHelper = new Thread(() => ConnectThreaded(ip, port));
+        connectThreadHelper.Name = "AtmoLight AtmoOrb Connect " + ID;
+        connectThreadHelper.IsBackground = true;
+        connectThreadHelper.Start();
+      }
+    }
+
+    private void ConnectThreaded(string ip, int port)
+    {
+      if (connectLock)
+      {
+        Log.Debug("AtmoOrbHandler - Connect locked for lamp {0}.", ID);
+        return;
+      }
+      connectLock = true;
       try
       {
         Disconnect();
-        tcpClient = new TcpClient(ip,port);
+        tcpClient = new TcpClient(ip, port);
         isConnected = true;
         Log.Debug("AtmoOrbHandler - Successfully connected to lamp {0} ({1}:{2})", id, ip, port);
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.Undefined)
@@ -93,6 +113,7 @@ namespace AtmoLight.Targets
           }
 
           ChangeColor(redHex + greenHex + blueHex);
+          connectLock = false;
         }
       }
       catch (Exception ex)
