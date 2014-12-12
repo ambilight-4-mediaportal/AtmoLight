@@ -12,6 +12,12 @@ using System.Drawing.Imaging;
 
 namespace AtmoLight.Targets
 {
+  public enum LampType
+  {
+    UDP,
+    TCP
+  }
+
   class AtmoOrbHandler : ITargets
   {
     #region Fields
@@ -163,7 +169,8 @@ namespace AtmoLight.Targets
               {
                 if (lamp.IsConnected())
                 {
-                  if (x >= lamp.HScanStart / 100 * coreObject.GetCaptureWidth() && x <= lamp.HScanEnd / 100 * coreObject.GetCaptureWidth() && y >= lamp.VScanStart / 100 * coreObject.GetCaptureHeight() && y <= lamp.VScanEnd / 100 * coreObject.GetCaptureHeight())
+                  if ((lamp.ZoneInverted == false && x >= lamp.HScanStart / 100 * coreObject.GetCaptureWidth() && x <= lamp.HScanEnd / 100 * coreObject.GetCaptureWidth() && y >= lamp.VScanStart / 100 * coreObject.GetCaptureHeight() && y <= lamp.VScanEnd / 100 * coreObject.GetCaptureHeight())
+                   || (lamp.ZoneInverted == true && (x <= lamp.HScanStart / 100 * coreObject.GetCaptureWidth() || x >= lamp.HScanEnd / 100 * coreObject.GetCaptureWidth()) && (y <= lamp.VScanStart / 100 * coreObject.GetCaptureHeight() || y >= lamp.VScanEnd / 100 * coreObject.GetCaptureHeight())))
                   {
                     lamp.OverallAverageColor[0] += pixeldata[row + x * 4 + 2];
                     lamp.OverallAverageColor[1] += pixeldata[row + x * 4 + 1];
@@ -213,8 +220,15 @@ namespace AtmoLight.Targets
               {
                 if (Math.Abs(lamp.OverallAverageColor[0] - lamp.PreviousColor[0]) >= coreObject.atmoOrbThreshold || Math.Abs(lamp.OverallAverageColor[1] - lamp.PreviousColor[1]) >= coreObject.atmoOrbThreshold || Math.Abs(lamp.OverallAverageColor[2] - lamp.PreviousColor[2]) >= coreObject.atmoOrbThreshold)
                 {
-                  // Adjust gamma level and send to lamp
-                  ChangeColor((int)gammaCurve[lamp.OverallAverageColor[0]], (int)gammaCurve[lamp.OverallAverageColor[1]], (int)gammaCurve[lamp.OverallAverageColor[2]]);
+                  if (lamp.OverallAverageColor[0] <= coreObject.atmoOrbBlackThreshold && lamp.OverallAverageColor[1] <= coreObject.atmoOrbBlackThreshold && lamp.OverallAverageColor[2] <= coreObject.atmoOrbBlackThreshold)
+                  {
+                    ChangeColor(0, 0, 0);
+                  }
+                  else
+                  {
+                    // Adjust gamma level and send to lamp
+                    ChangeColor((int)gammaCurve[lamp.OverallAverageColor[0]], (int)gammaCurve[lamp.OverallAverageColor[1]], (int)gammaCurve[lamp.OverallAverageColor[2]]);
+                  }
                 }
               }
             }
@@ -257,6 +271,7 @@ namespace AtmoLight.Targets
       initLock = true;
       try
       {
+        // Read lamp map and create lamp instances
         if (lamps.Count == 0)
         {
           for (int i = 0; i < coreObject.atmoOrbLamps.Count; i++)
@@ -264,17 +279,25 @@ namespace AtmoLight.Targets
             string[] settings = coreObject.atmoOrbLamps[i].Split(',');
             if (settings[1] == "UDP")
             {
-              lamps.Add(new UDPLamp(settings[0], int.Parse(settings[2]), int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5])));
+              lamps.Add(new UDPLamp(settings[0], int.Parse(settings[2]), int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5]), bool.Parse(settings[6])));
             }
             else if (settings[1] == "TCP")
             {
-              // id, ip, port, hscanstart, hscanend, vscanstart, vscanend
-              // connects directly from ctor
-              lamps.Add(new TCPLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7])));
+              lamps.Add(new TCPLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8])));
             }
           }
         }
 
+        // Connect tcp lamps
+        foreach (var lamp in lamps)
+        {
+          if (lamp.Type == LampType.TCP)
+          {
+            lamp.Connect(lamp.IP, lamp.Port);
+          }
+        }
+
+        // Start udp server if udp lamps are being used
         if (UDPLampPresent())
         {
           if (udpServer == null)
@@ -303,7 +326,7 @@ namespace AtmoLight.Targets
     {
       foreach (var lamp in lamps)
       {
-        if (lamp.Type == "UDP")
+        if (lamp.Type == LampType.UDP)
         {
           return true;
         }

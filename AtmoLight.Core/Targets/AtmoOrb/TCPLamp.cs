@@ -16,11 +16,12 @@ namespace AtmoLight.Targets
     private int hScanEnd;
     private int vScanStart;
     private int vScanEnd;
+    private bool zoneInverted;
     private bool isConnected = false;
     private TcpClient tcpClient;
     private Core coreObject = Core.GetInstance();
 
-    public TCPLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd)
+    public TCPLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd, bool zoneInverted)
     {
       this.id = id;
       this.ip = ip;
@@ -29,13 +30,12 @@ namespace AtmoLight.Targets
       this.hScanEnd = hScanEnd;
       this.vScanStart = vScanStart;
       this.vScanEnd = vScanEnd;
-
-      Connect(ip, port);
+      this.zoneInverted = zoneInverted;
     }
 
     public string ID { get { return id; } }
 
-    public string Type { get { return "TCP"; } }
+    public LampType Type { get { return LampType.TCP; } }
 
     public int[] OverallAverageColor { get; set; }
 
@@ -52,6 +52,12 @@ namespace AtmoLight.Targets
     public int VScanStart { get { return vScanStart; } }
 
     public int VScanEnd { get { return vScanEnd; } }
+
+    public bool ZoneInverted { get { return zoneInverted; } }
+
+    public string IP { get { return ip; } }
+
+    public int Port { get { return port; } }
 
     public void Connect(string ip, int port)
     {

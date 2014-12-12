@@ -16,23 +16,25 @@ namespace AtmoLight.Targets
     private int hScanEnd;
     private int vScanStart;
     private int vScanEnd;
+    private bool zoneInverted;
     private bool isConnected = false;
     private UdpClient udpClient;
     private IPEndPoint udpClientEndpoint;
     private Core coreObject = Core.GetInstance();
 
-    public UDPLamp(string id, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd)
+    public UDPLamp(string id, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd, bool zoneInverted)
     {
       this.id = id;
       this.hScanStart = hScanStart;
       this.hScanEnd = hScanEnd;
       this.vScanStart = vScanStart;
       this.vScanEnd = vScanEnd;
+      this.zoneInverted = zoneInverted;
     }
 
     public string ID { get { return id; } }
 
-    public string Type { get { return "UDP"; } }
+    public LampType Type { get { return LampType.UDP; } }
 
     public int[] OverallAverageColor { get; set; }
 
@@ -49,6 +51,12 @@ namespace AtmoLight.Targets
     public int VScanStart { get { return vScanStart; } }
 
     public int VScanEnd { get { return vScanEnd; } }
+
+    public bool ZoneInverted { get { return zoneInverted; } }
+
+    public string IP { get { return ip; } }
+
+    public int Port { get { return port; } }
 
     public void Connect(string ip, int port)
     {

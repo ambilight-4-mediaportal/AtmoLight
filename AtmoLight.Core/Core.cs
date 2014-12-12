@@ -19,7 +19,6 @@ namespace AtmoLight
 {
   public enum ContentEffect
   {
-     
     LEDsDisabled = 0,
     MediaPortalLiveMode,
     StaticColor,
@@ -119,9 +118,10 @@ namespace AtmoLight
     public int atmoOrbBroadcastPort = 49692;
     public int atmoOrbThreshold = 0;
     public int atmoOrbMinDiversion = 25;
-    public double atmoOrbSaturation = 0.4;
+    public double atmoOrbSaturation = 0.3;
     public double atmoOrbGamma = 1;
-    public List<string> atmoOrbLamps = new List<string> { "1,UDP,0,100,0,100", "2,TCP,192.168.1.123,1234,0,100,0,100" };
+    public int atmoOrbBlackThreshold = 20;
+    public List<string> atmoOrbLamps = new List<string> { "1,UDP,0,100,0,100,false", "2,TCP,192.168.1.123,1234,0,100,0,100,false" };
 
     // AtmoWin Settings Fields
     public bool atmoWinAutoStart;

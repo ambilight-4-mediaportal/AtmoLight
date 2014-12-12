@@ -8,7 +8,7 @@ namespace AtmoLight.Targets
   interface ILamp
   {
     string ID { get; }
-    string Type { get; }
+    LampType Type { get; }
     int[] OverallAverageColor { get; set; }
     int[] AverageColor { get; set; }
     int[] PreviousColor { get; set; } 
@@ -17,6 +17,9 @@ namespace AtmoLight.Targets
     int HScanEnd { get; }
     int VScanStart { get; }
     int VScanEnd { get; }
+    bool ZoneInverted { get; }
+    string IP { get; }
+    int Port { get; }
     void Connect(string ip, int port);
     void Disconnect();
     bool IsConnected();
