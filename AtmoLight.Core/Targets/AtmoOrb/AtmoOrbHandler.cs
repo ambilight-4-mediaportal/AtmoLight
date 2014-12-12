@@ -58,7 +58,6 @@ namespace AtmoLight.Targets
     #endregion
 
     #region ITargets Methods
-
     public void Initialise(bool force = false)
     {
       if (!initLock)
@@ -81,10 +80,7 @@ namespace AtmoLight.Targets
     public void Dispose()
     {
       Log.Debug("AtmoOrbHandler - Disposing AtmoOrb handler.");
-      foreach (var lamp in lamps)
-      {
-        lamp.Disconnect();
-      }
+      Disconnect();
       lamps = null;
     }
 
@@ -122,6 +118,98 @@ namespace AtmoLight.Targets
       }
     }
 
+
+    public void ChangeProfile()
+    {
+      return;
+    }
+
+    public void PowerModeChanged(PowerModes powerMode)
+    {
+      if (powerMode == PowerModes.Resume)
+      {
+        Disconnect();
+        Initialise();
+      }
+      else if (powerMode == PowerModes.Suspend)
+      {
+        ChangeEffect(ContentEffect.LEDsDisabled);
+      }
+    }
+    #endregion
+
+    #region Init and Disconnect
+    private void InitThreaded(bool force = false)
+    {
+      if (initLock)
+      {
+        Log.Debug("AtmoOrbHandler - Initialising locked.");
+        return;
+      }
+      initLock = true;
+      try
+      {
+        // Read lamp map and create lamp instances
+        if (lamps.Count == 0)
+        {
+          for (int i = 0; i < coreObject.atmoOrbLamps.Count; i++)
+          {
+            string[] settings = coreObject.atmoOrbLamps[i].Split(',');
+            if (settings[1] == "UDP")
+            {
+              lamps.Add(new UDPLamp(settings[0], int.Parse(settings[2]), int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5]), bool.Parse(settings[6])));
+            }
+            else if (settings[1] == "TCP")
+            {
+              lamps.Add(new TCPLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8])));
+            }
+          }
+        }
+
+        // Connect tcp lamps
+        foreach (var lamp in lamps)
+        {
+          if (lamp.Type == LampType.TCP)
+          {
+            lamp.Connect(lamp.IP, lamp.Port);
+          }
+        }
+
+        // Start udp server if udp lamps are being used
+        if (UDPLampPresent())
+        {
+          if (udpServer == null)
+          {
+            udpServer = new UdpClient(coreObject.atmoOrbBroadcastPort);
+            UDPServerListen();
+          }
+
+          udpClientBroadcast = new UdpClient();
+          IPEndPoint udpClientBroadcastEndpoint = new IPEndPoint(IPAddress.Broadcast, coreObject.atmoOrbBroadcastPort);
+          byte[] bytes = Encoding.ASCII.GetBytes("M-SEARCH");
+          udpClientBroadcast.Send(bytes, bytes.Length, udpClientBroadcastEndpoint);
+
+          udpClientBroadcast.Close();
+        }
+        initLock = false;
+      }
+      catch (Exception ex)
+      {
+        Log.Error("AtmoOrbHandler - Error while initialising.");
+        Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
+      }
+    }
+
+    private void Disconnect()
+    {
+      foreach (var lamp in lamps)
+      {
+        lamp.Disconnect();
+      }
+    }
+    #endregion
+
+    #region ChangeImage/Color
     public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
       if (!IsConnected())
@@ -250,86 +338,32 @@ namespace AtmoLight.Targets
       }
     }
 
-    public void ChangeProfile()
+    private void ChangeColor(int red, int green, int blue)
     {
-      return;
-    }
-
-    public void PowerModeChanged(PowerModes powerMode)
-    {
-      if (powerMode == PowerModes.Resume)
+      string redHex = red.ToString("X");
+      string greenHex = green.ToString("X");
+      string blueHex = blue.ToString("X");
+      if (redHex.Length == 1)
       {
-        Initialise();
+        redHex = "0" + redHex;
       }
-      else if (powerMode == PowerModes.Suspend)
+      if (greenHex.Length == 1)
       {
-        ChangeEffect(ContentEffect.LEDsDisabled);
+        greenHex = "0" + greenHex;
+      }
+      if (blueHex.Length == 1)
+      {
+        blueHex = "0" + blueHex;
+      }
+
+      foreach (var lamp in lamps)
+      {
+        lamp.ChangeColor(redHex + greenHex + blueHex);
       }
     }
     #endregion
 
-
-    private void InitThreaded(bool force = false)
-    {
-      if (initLock)
-      {
-        Log.Debug("AtmoOrbHandler - Initialising locked.");
-        return;
-      }
-      initLock = true;
-      try
-      {
-        // Read lamp map and create lamp instances
-        if (lamps.Count == 0)
-        {
-          for (int i = 0; i < coreObject.atmoOrbLamps.Count; i++)
-          {
-            string[] settings = coreObject.atmoOrbLamps[i].Split(',');
-            if (settings[1] == "UDP")
-            {
-              lamps.Add(new UDPLamp(settings[0], int.Parse(settings[2]), int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5]), bool.Parse(settings[6])));
-            }
-            else if (settings[1] == "TCP")
-            {
-              lamps.Add(new TCPLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8])));
-            }
-          }
-        }
-
-        // Connect tcp lamps
-        foreach (var lamp in lamps)
-        {
-          if (lamp.Type == LampType.TCP)
-          {
-            lamp.Connect(lamp.IP, lamp.Port);
-          }
-        }
-
-        // Start udp server if udp lamps are being used
-        if (UDPLampPresent())
-        {
-          if (udpServer == null)
-          {
-            udpServer = new UdpClient(coreObject.atmoOrbBroadcastPort);
-            UDPServerListen();
-          }
-
-          udpClientBroadcast = new UdpClient();
-          IPEndPoint udpClientBroadcastEndpoint = new IPEndPoint(IPAddress.Broadcast, coreObject.atmoOrbBroadcastPort);
-          byte[] bytes = Encoding.ASCII.GetBytes("M-SEARCH");
-          udpClientBroadcast.Send(bytes, bytes.Length, udpClientBroadcastEndpoint);
-
-          udpClientBroadcast.Close();
-        }
-        initLock = false;
-      }
-      catch (Exception ex)
-      {
-        Log.Error("AtmoOrbHandler - Error while initialising.");
-        Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
-      }
-    }
-
+    #region UDP Server
     private bool UDPLampPresent()
     {
       foreach (var lamp in lamps)
@@ -378,31 +412,9 @@ namespace AtmoLight.Targets
         Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
       }
     }
+    #endregion
 
-    private void ChangeColor(int red, int green, int blue)
-    {
-      string redHex = red.ToString("X");
-      string greenHex = green.ToString("X");
-      string blueHex = blue.ToString("X");
-      if (redHex.Length == 1)
-      {
-        redHex = "0" + redHex;
-      }
-      if (greenHex.Length == 1)
-      {
-        greenHex = "0" + greenHex;
-      }
-      if (blueHex.Length == 1)
-      {
-        blueHex = "0" + blueHex;
-      }
-
-      foreach (var lamp in lamps)
-      {
-        lamp.ChangeColor(redHex + greenHex + blueHex);
-      }
-    }
-
+    #region Utilities
     private void CalcGammaCurve()
     {
       for (int i = 0; i < gammaCurve.Length; i++)
@@ -532,5 +544,6 @@ namespace AtmoLight.Targets
       }
       h /= 6.0;
     }
+    #endregion
   }
 }
