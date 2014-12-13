@@ -74,8 +74,10 @@ namespace AtmoLight
     private volatile bool gifReaderLock = true;
     private volatile bool vuMeterLock = true;
 
-    // VU Meter
-    private int[] vuMeterThresholds = new int[] { -2, -5, -8, -10, -11, -12, -14, -18, -20, -22 };
+    // VUMeter
+    private int vuMeterMin = -48;
+    private double vuMeterMaxHue = 0.0 - (1.0 / 24.0); // red - 1/24
+    private double vuMeterMinHue = (2.0 / 3.0) + (1.0 / 12.0); // blue + 1/12
 
     // Event Handler
     public delegate void NewConnectionLostHandler(Target target);
@@ -1243,30 +1245,43 @@ namespace AtmoLight
         if (currentEffect == ContentEffect.VUMeterRainbow)
         {
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 77, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 128, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 204, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(230, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(102, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 153)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 230, 255)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 128, 255)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 255)));
+          for (int i = 0; i < GetCaptureHeight(); i++)
+          {
+            int r, g, b;
+            double h, s, l;
+            h = vuMeterMaxHue + ((i * vuMeterMinHue) / GetCaptureHeight());
+            if (h < 0)
+            {
+              h += 1;
+            }
+            else if (h > 1)
+            {
+              h -= 1;
+            }
+            s = 1;
+            l = 0.5;
+            HSL.HSL2RGB(h, s, l, out r, out g, out b);
+            vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(r, g, b)));
+          }
         }
         else
         {
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 128, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
+          for (int i = 0; i < GetCaptureHeight(); i++)
+          {
+            if ((double)i / GetCaptureHeight() <= 1.0 / 5.0)
+            {
+              vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
+            }
+            else if ((double)i / GetCaptureHeight() <= 2.0 / 5.0)
+            {
+              vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 255, 0)));
+            }
+            else
+            {
+              vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
+            }
+          }
         }
 
         Rectangle rectFull = new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight());
@@ -1283,11 +1298,11 @@ namespace AtmoLight
 
           for (int channel = 0; channel <= 1; channel++)
           {
-            for (int index = 0; index < vuMeterThresholds.Length; index++)
+            for (int i = 0; i < GetCaptureHeight(); i++)
             {
-              if (dbLevel[channel] >= vuMeterThresholds[index])
+              if (dbLevel[channel] >= ((double)i * vuMeterMin) / GetCaptureHeight())
               {
-                vuMeterGFX.FillRectangle(vuMeterBrushes[index + 1], (int)((double)channel * (double)vuMeterBitmap.Width / (double)4 * (double)3), (int)((double)index * (double)vuMeterBitmap.Height / (double)10), (int)((double)vuMeterBitmap.Width / (double)4), (int)(((double)vuMeterBitmap.Height / (double)10) + (double)1));
+                vuMeterGFX.FillRectangle(vuMeterBrushes[i + 1], (int)((double)channel * (double)vuMeterBitmap.Width / (double)4 * (double)3), i, (int)((double)vuMeterBitmap.Width / (double)4), 1);
               }
             }
           }
