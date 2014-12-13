@@ -45,6 +45,7 @@ namespace AtmoLight.Targets
     private UdpClient udpClientBroadcast;
 
     private double[] gammaCurve = new double[256];
+    private double vuMeterHue = 0.0;
 
     List<ILamp> lamps = new List<ILamp>();
     #endregion
@@ -224,14 +225,19 @@ namespace AtmoLight.Targets
           {
             int row = coreObject.GetCaptureWidth() * y * 4;
 
-            if (pixeldata[row] != 0 || pixeldata[row + 1] != 0 || pixeldata[row + 2] != 0)
+            if ((pixeldata[row] != 0 || pixeldata[row + 1] != 0 || pixeldata[row + 2] != 0) || (pixeldata[row + ((coreObject.GetCaptureWidth() - 1) * 4)] != 0 || pixeldata[row + ((coreObject.GetCaptureWidth() - 1) * 4) + 1] != 0 || pixeldata[row + ((coreObject.GetCaptureWidth() - 1) * 4) + 2] != 0))
             {
-              ChangeColor(pixeldata[row + 2], pixeldata[row + 1], pixeldata[row]);
-              return;
-            }
-            else if (pixeldata[row + ((coreObject.GetCaptureWidth() - 1) * 4)] != 0 || pixeldata[row + ((coreObject.GetCaptureWidth() - 1) * 4) + 1] != 0 || pixeldata[row + ((coreObject.GetCaptureWidth() - 1) * 4) + 2] != 0)
-            {
-              ChangeColor(pixeldata[row + ((coreObject.GetCaptureWidth() - 1) * 4) + 2], pixeldata[row + ((coreObject.GetCaptureWidth() - 1) * 4) + 1], pixeldata[row + ((coreObject.GetCaptureWidth() - 1) * 4)]);
+              int r, g, b;
+              double s, l;
+              vuMeterHue += 1.0 / 1200.0;
+              if (vuMeterHue > 1)
+              {
+                vuMeterHue -= 1;
+              }
+              s = 1;
+              l = 0.5 - (y / coreObject.GetCaptureHeight());
+              HSL.HSL2RGB(vuMeterHue, s, l, out r, out g, out b);
+              ChangeColor(r, g, b);
               return;
             }
           }

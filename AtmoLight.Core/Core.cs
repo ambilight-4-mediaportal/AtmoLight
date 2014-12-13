@@ -75,7 +75,7 @@ namespace AtmoLight
     private volatile bool vuMeterLock = true;
 
     // VUMeter
-    private int vuMeterMin = -48;
+    private int vuMeterMin = -24;
     private double vuMeterMaxHue = 0.0 - (1.0 / 24.0); // red - 1/24
     private double vuMeterMinHue = (2.0 / 3.0) + (1.0 / 12.0); // blue + 1/12
 
