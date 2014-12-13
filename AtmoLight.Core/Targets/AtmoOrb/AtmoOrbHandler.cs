@@ -235,7 +235,7 @@ namespace AtmoLight.Targets
                 vuMeterHue -= 1;
               }
               s = 1;
-              l = 0.5 - (y / coreObject.GetCaptureHeight());
+              l = 0.5 - ((double)y / coreObject.GetCaptureHeight() / 2);
               HSL.HSL2RGB(vuMeterHue, s, l, out r, out g, out b);
               ChangeColor(r, g, b);
               return;
