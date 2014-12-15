@@ -119,10 +119,10 @@ namespace AtmoLight
     // AtmoOrb
     public int atmoOrbBroadcastPort = 49692;
     public int atmoOrbThreshold = 0;
-    public int atmoOrbMinDiversion = 25;
+    public int atmoOrbMinDiversion = 16;
     public double atmoOrbSaturation = 0.2;
     public double atmoOrbGamma = 1;
-    public int atmoOrbBlackThreshold = 20;
+    public int atmoOrbBlackThreshold = 16;
     public bool atmoOrbUseOverallLightness = true;
     public List<string> atmoOrbLamps = new List<string> { "1,UDP,0,100,0,100,false", "2,TCP,192.168.1.123,1234,0,100,0,100,false" };
 

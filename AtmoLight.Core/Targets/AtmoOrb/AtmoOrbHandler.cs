@@ -304,6 +304,9 @@ namespace AtmoLight.Targets
                   double saturationOverall;
                   double lightnessOverall;
 
+                  // Save new color as previous color
+                  lamp.PreviousColor = lamp.AverageColor;
+
                   // Convert to hsl color model
                   HSL.RGB2HSL(lamp.AverageColor[0], lamp.AverageColor[1], lamp.AverageColor[2], out hue, out saturation, out lightness);
                   HSL.RGB2HSL(lamp.OverallAverageColor[0], lamp.OverallAverageColor[1], lamp.OverallAverageColor[2], out hueOverall, out saturationOverall, out lightnessOverall);
@@ -311,17 +314,25 @@ namespace AtmoLight.Targets
                   // Convert back to rgb with adjusted saturation and lightness
                   HSL.HSL2RGB(hue, Math.Min(saturation + coreObject.atmoOrbSaturation, 1), (coreObject.atmoOrbUseOverallLightness ? lightnessOverall : lightness), out lamp.AverageColor[0], out lamp.AverageColor[1], out lamp.AverageColor[2]);
 
-                  // Save new color as previous color
-                  lamp.PreviousColor = lamp.AverageColor;
-
                   // Adjust gamma level and send to lamp
-                  ChangeColor((int)gammaCurve[lamp.AverageColor[0]], (int)gammaCurve[lamp.AverageColor[1]], (int)gammaCurve[lamp.AverageColor[2]]);
+                  if (lamp.OverallAverageColor[0] <= coreObject.atmoOrbBlackThreshold && lamp.OverallAverageColor[1] <= coreObject.atmoOrbBlackThreshold && lamp.OverallAverageColor[2] <= coreObject.atmoOrbBlackThreshold)
+                  {
+                    ChangeColor(0, 0, 0);
+                  }
+                  else
+                  {
+                    // Adjust gamma level and send to lamp
+                    ChangeColor((int)gammaCurve[lamp.AverageColor[0]], (int)gammaCurve[lamp.AverageColor[1]], (int)gammaCurve[lamp.AverageColor[2]]);
+                  }
                 }
               }
               else
               {
                 if (Math.Abs(lamp.OverallAverageColor[0] - lamp.PreviousColor[0]) >= coreObject.atmoOrbThreshold || Math.Abs(lamp.OverallAverageColor[1] - lamp.PreviousColor[1]) >= coreObject.atmoOrbThreshold || Math.Abs(lamp.OverallAverageColor[2] - lamp.PreviousColor[2]) >= coreObject.atmoOrbThreshold)
                 {
+                  // Save new color as previous color
+                  lamp.PreviousColor = lamp.OverallAverageColor;
+
                   if (lamp.OverallAverageColor[0] <= coreObject.atmoOrbBlackThreshold && lamp.OverallAverageColor[1] <= coreObject.atmoOrbBlackThreshold && lamp.OverallAverageColor[2] <= coreObject.atmoOrbBlackThreshold)
                   {
                     ChangeColor(0, 0, 0);
