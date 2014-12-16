@@ -110,8 +110,6 @@ namespace AtmoLight
       Log.Debug("Generating new AtmoLight.Core instance.");
       coreObject = Core.GetInstance();
 
-      coreObject.AddTarget(Target.AtmoOrb);
-
       // AmbiBox
       if (Settings.ambiBoxTarget)
       {
@@ -126,6 +124,20 @@ namespace AtmoLight
       coreObject.ambiBoxPath = Settings.ambiBoxPath;
       coreObject.ambiBoxAutoStart = Settings.ambiBoxAutoStart;
       coreObject.ambiBoxAutoStop = Settings.ambiBoxAutoStop;
+
+      // AtmoOrb
+      if (Settings.atmoOrbTarget)
+      {
+        coreObject.AddTarget(Target.AtmoOrb);
+      }
+      coreObject.atmoOrbBlackThreshold = Settings.atmoOrbBlackThreshold;
+      coreObject.atmoOrbBroadcastPort = Settings.atmoOrbBroadcastPort;
+      coreObject.atmoOrbGamma = Settings.atmoOrbGamma;
+      coreObject.atmoOrbLamps = Settings.atmoOrbLamps;
+      coreObject.atmoOrbMinDiversion = Settings.atmoOrbMinDiversion;
+      coreObject.atmoOrbSaturation = Settings.atmoOrbSaturation;
+      coreObject.atmoOrbThreshold = Settings.atmoOrbThreshold;
+      coreObject.atmoOrbUseOverallLightness = Settings.atmoOrbUseOverallLightness;
 
       // AtmoWin
       if (Settings.atmoWinTarget)

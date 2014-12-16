@@ -2,6 +2,7 @@
 using MediaPortal.Profile;
 using Language;
 using System.Globalization;
+using System.Collections.Generic;
 
 
 namespace AtmoLight
@@ -95,6 +96,17 @@ namespace AtmoLight
     public static string ambiBoxPath;
     public static bool ambiBoxAutoStart;
     public static bool ambiBoxAutoStop;
+
+    // AtmoOrb
+    public static bool atmoOrbTarget;
+    public static int atmoOrbBroadcastPort;
+    public static int atmoOrbThreshold;
+    public static int atmoOrbMinDiversion;
+    public static double atmoOrbSaturation;
+    public static double atmoOrbGamma;
+    public static int atmoOrbBlackThreshold;
+    public static bool atmoOrbUseOverallLightness;
+    public static List<string> atmoOrbLamps = new List<string>();
 
 
     #endregion
@@ -242,6 +254,20 @@ namespace AtmoLight
         ambiBoxPath = reader.GetValueAsString("atmolight", "ambiBoxPath", "C:\\Program Files (x86)\\AmbiBox\\AmbiBox.exe");
         ambiBoxAutoStart = reader.GetValueAsBool("atmolight", "ambiBoxAutoStart", false);
         ambiBoxAutoStop = reader.GetValueAsBool("atmolight", "ambiBoxAutoStop", false);
+        atmoOrbTarget = reader.GetValueAsBool("atmolight", "atmoOrbTarget", false);
+        atmoOrbBlackThreshold = reader.GetValueAsInt("atmolight", "atmoOrbBlackThreshold", 16);
+        atmoOrbBroadcastPort = reader.GetValueAsInt("atmolight", "atmoOrbBroadcastPort", 49692);
+        atmoOrbGamma = Double.Parse(reader.GetValueAsString("atmolight", "atmoOrbGamma", "1").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+        atmoOrbMinDiversion = reader.GetValueAsInt("atmolight", "atmoOrbMinDiversion", 16);
+        atmoOrbSaturation = Double.Parse(reader.GetValueAsString("atmolight", "atmoOrbSaturation", "0.2").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+        atmoOrbThreshold = reader.GetValueAsInt("atmolight", "atmoOrbThreshold", 0);
+        atmoOrbUseOverallLightness = reader.GetValueAsBool("atmolight", "atmoOrbUseOverallLightness", true);
+        string atmoOrbLampTemp = reader.GetValueAsString("atmolight", "atmoOrbLamps", "");
+        string[] atmoOrbLampTempSplit = atmoOrbLampTemp.Split('|');
+        for (int i = 0; i < atmoOrbLampTempSplit.Length; i++)
+        {
+          atmoOrbLamps.Add(atmoOrbLampTempSplit[i]);
+        }
       }
     }
     public static void SaveSettings()
@@ -318,12 +344,29 @@ namespace AtmoLight
         reader.SetValue("atmolight", "ambiBoxPath", ambiBoxPath.ToString());
         reader.SetValueAsBool("atmolight", "ambiBoxAutoStart", ambiBoxAutoStart);
         reader.SetValueAsBool("atmolight", "ambiBoxAutoStop", ambiBoxAutoStop);
-
         reader.SetValueAsBool("atmolight", "atmoWinTarget", atmoWinTarget);
         reader.SetValueAsBool("atmolight", "boblightTarget", boblightTarget);
         reader.SetValueAsBool("atmolight", "hueTarget", hueTarget);
         reader.SetValueAsBool("atmolight", "hyperionTarget", hyperionTarget);
         reader.SetValueAsBool("atmolight", "ambiBoxTarget", ambiBoxTarget);
+        reader.SetValueAsBool("atmolight", "atmoOrbTarget", atmoOrbTarget);
+        reader.SetValue("atmolight", "atmoOrbBlackThreshold", atmoOrbBlackThreshold.ToString());
+        reader.SetValue("atmolight", "atmoOrbBroadcastPort", atmoOrbBroadcastPort.ToString());
+        reader.SetValue("atmolight", "atmoOrbGamma", atmoOrbGamma.ToString());
+        reader.SetValue("atmolight", "atmoOrbMinDiversion", atmoOrbMinDiversion.ToString());
+        reader.SetValue("atmolight", "atmoOrbSaturation", atmoOrbSaturation.ToString());
+        reader.SetValue("atmolight", "atmoOrbThreshold", atmoOrbThreshold.ToString());
+        reader.SetValueAsBool("atmolight", "atmoOrbUseOverallLightness", atmoOrbUseOverallLightness);
+        string atmoOrbLampsTemp = "";
+        for (int i = 0; i < atmoOrbLamps.Count; i++)
+        {
+          if (i > 0)
+          {
+            atmoOrbLampsTemp += "|";
+          }
+          atmoOrbLampsTemp += atmoOrbLamps[i];
+        }
+        reader.SetValue("atmolight", "atmoOrbLamps", atmoOrbLampsTemp);
       }
     }
 

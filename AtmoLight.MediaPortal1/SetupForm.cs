@@ -119,6 +119,13 @@ namespace AtmoLight
       tbAmbiBoxReconnectDelay.Text = Settings.ambiBoxReconnectDelay.ToString();
       tbAmbiBoxMediaPortalProfile.Text = Settings.ambiBoxMediaPortalProfile;
       tbAmbiBoxExternalProfile.Text = Settings.ambiBoxExternalProfile;
+      tbAtmoOrbBlackThreshold.Text = Settings.atmoOrbBlackThreshold.ToString();
+      tbAtmoOrbBroadcastPort.Text = Settings.atmoOrbBroadcastPort.ToString();
+      tbAtmoOrbGamma.Text = Settings.atmoOrbGamma.ToString();
+      tbAtmoOrbMinDiversion.Text = Settings.atmoOrbMinDiversion.ToString();
+      tbAtmoOrbSaturation.Text = Settings.atmoOrbSaturation.ToString();
+      tbAtmoOrbThreshold.Text = Settings.atmoOrbThreshold.ToString();
+      cbAtmoOrbUseOverallLightness.Checked = Settings.atmoOrbUseOverallLightness;
 
       // Temp disable for AmbiBox
       tabMenu.TabPages.Remove(tabPageAmbiBox);
@@ -655,6 +662,13 @@ namespace AtmoLight
       Settings.ambiBoxReconnectDelay = int.Parse(tbAmbiBoxReconnectDelay.Text);
       Settings.ambiBoxMediaPortalProfile = tbAmbiBoxMediaPortalProfile.Text;
       Settings.ambiBoxExternalProfile = tbAmbiBoxExternalProfile.Text;
+      Settings.atmoOrbBlackThreshold = int.Parse(tbAtmoOrbBlackThreshold.Text);
+      Settings.atmoOrbBroadcastPort = int.Parse(tbAtmoOrbBroadcastPort.Text);
+      Settings.atmoOrbGamma = double.Parse(tbAtmoOrbGamma.Text);
+      Settings.atmoOrbMinDiversion = int.Parse(tbAtmoOrbMinDiversion.Text);
+      Settings.atmoOrbSaturation = double.Parse(tbAtmoOrbSaturation.Text);
+      Settings.atmoOrbThreshold = int.Parse(tbAtmoOrbThreshold.Text);
+      Settings.atmoOrbUseOverallLightness = cbAtmoOrbUseOverallLightness.Checked;
 
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
       Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
