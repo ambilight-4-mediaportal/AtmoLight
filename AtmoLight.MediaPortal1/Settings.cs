@@ -266,7 +266,10 @@ namespace AtmoLight
         string[] atmoOrbLampTempSplit = atmoOrbLampTemp.Split('|');
         for (int i = 0; i < atmoOrbLampTempSplit.Length; i++)
         {
-          atmoOrbLamps.Add(atmoOrbLampTempSplit[i]);
+          if (!string.IsNullOrEmpty(atmoOrbLampTempSplit[i]))
+          {
+            atmoOrbLamps.Add(atmoOrbLampTempSplit[i]);
+          }
         }
       }
     }

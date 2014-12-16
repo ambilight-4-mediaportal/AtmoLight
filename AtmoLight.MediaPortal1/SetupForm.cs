@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Globalization;
 using Language;
 
 namespace AtmoLight
@@ -15,6 +16,7 @@ namespace AtmoLight
     {
       InitializeComponent();
       UpdateLanguageOnControls();
+      //Settings.LoadSettings();
 
       // AmbiBox
       if (Settings.ambiBoxTarget)
@@ -40,6 +42,11 @@ namespace AtmoLight
       if (Settings.hueTarget)
       {
         coreObject.AddTarget(Target.Hue);
+      }
+
+      if (Settings.atmoOrbTarget)
+      {
+        coreObject.AddTarget(Target.AtmoOrb);
       }
 
       UpdateComboBoxes();
@@ -125,7 +132,15 @@ namespace AtmoLight
       tbAtmoOrbMinDiversion.Text = Settings.atmoOrbMinDiversion.ToString();
       tbAtmoOrbSaturation.Text = Settings.atmoOrbSaturation.ToString();
       tbAtmoOrbThreshold.Text = Settings.atmoOrbThreshold.ToString();
+      ckAtmoOrbEnabled.Checked = Settings.atmoOrbTarget;
       cbAtmoOrbUseOverallLightness.Checked = Settings.atmoOrbUseOverallLightness;
+      for (int i = 0; i < Settings.atmoOrbLamps.Count; i++)
+      {
+        if (!string.IsNullOrEmpty(Settings.atmoOrbLamps[i].Split(',')[0]))
+        {
+          lbAtmoOrbLamps.Items.Add(Settings.atmoOrbLamps[i].Split(',')[0]);
+        }
+      }
 
       // Temp disable for AmbiBox
       tabMenu.TabPages.Remove(tabPageAmbiBox);
@@ -133,7 +148,8 @@ namespace AtmoLight
       ckHyperionEnabled.Location = ckHueEnabled.Location;
       ckHueEnabled.Location = ckBoblightEnabled.Location;
       ckBoblightEnabled.Location = ckAtmowinEnabled.Location;
-      ckAtmowinEnabled.Location = ckAmbiBoxEnabled.Location;
+      ckAtmowinEnabled.Location = ckAtmoOrbEnabled.Location;
+      ckAtmoOrbEnabled.Location = ckAmbiBoxEnabled.Location;
     }
 
     private void UpdateLanguageOnControls()
@@ -664,11 +680,12 @@ namespace AtmoLight
       Settings.ambiBoxExternalProfile = tbAmbiBoxExternalProfile.Text;
       Settings.atmoOrbBlackThreshold = int.Parse(tbAtmoOrbBlackThreshold.Text);
       Settings.atmoOrbBroadcastPort = int.Parse(tbAtmoOrbBroadcastPort.Text);
-      Settings.atmoOrbGamma = double.Parse(tbAtmoOrbGamma.Text);
+      Settings.atmoOrbGamma = Double.Parse(tbAtmoOrbGamma.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat); ;
       Settings.atmoOrbMinDiversion = int.Parse(tbAtmoOrbMinDiversion.Text);
-      Settings.atmoOrbSaturation = double.Parse(tbAtmoOrbSaturation.Text);
+      Settings.atmoOrbSaturation = Double.Parse(tbAtmoOrbSaturation.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat); ;
       Settings.atmoOrbThreshold = int.Parse(tbAtmoOrbThreshold.Text);
       Settings.atmoOrbUseOverallLightness = cbAtmoOrbUseOverallLightness.Checked;
+      Settings.atmoOrbTarget = ckAtmoOrbEnabled.Checked;
 
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
       Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
@@ -1343,6 +1360,115 @@ namespace AtmoLight
         }
       }
 
+    }
+
+    private void btnAtmoOrbAdd_Click(object sender, EventArgs e)
+    {
+      if (lbAtmoOrbLamps.Items.Contains(tbAtmoOrbID.Text))
+      {
+        btnAtmoOrbUpdate_Click(sender, e);
+        return;
+      }
+      string lampString = "";
+      lampString += tbAtmoOrbID.Text + ",";
+      if (rbAtmoOrbTCP.Checked)
+      {
+        lampString += "TCP," + tbAtmoOrbIP.Text + "," + tbAtmoOrbPort.Text + ",";
+      }
+      else if (rbAtmoOrbUDP.Checked)
+      {
+        lampString += "UDP,";
+      }
+      lampString += tbAtmoOrbHScanStart.Text + "," + tbAtmoOrbHScanEnd.Text + "," + tbAtmoOrbVScanStart.Text + "," + tbAtmoOrbVScanEnd.Text + ",";
+      lampString += cbAtmoOrbInvertZone.Checked;
+      Settings.atmoOrbLamps.Add(lampString);
+      lbAtmoOrbLamps.Items.Add(tbAtmoOrbID.Text);
+    }
+
+    private void btnAtmoOrbRemove_Click(object sender, EventArgs e)
+    {
+      if (lbAtmoOrbLamps.SelectedIndex >= 0)
+      {
+        Settings.atmoOrbLamps.RemoveAt(lbAtmoOrbLamps.Items.IndexOf(lbAtmoOrbLamps.SelectedItem.ToString()));
+        lbAtmoOrbLamps.Items.RemoveAt(lbAtmoOrbLamps.Items.IndexOf(lbAtmoOrbLamps.SelectedItem.ToString()));
+      }
+    }
+
+    private void btnAtmoOrbUpdate_Click(object sender, EventArgs e)
+    {
+      string lampString = "";
+      lampString += tbAtmoOrbID.Text + ",";
+      if (rbAtmoOrbTCP.Checked)
+      {
+        lampString += "TCP," + tbAtmoOrbIP.Text + "," + tbAtmoOrbPort.Text + ",";
+      }
+      else if (rbAtmoOrbUDP.Checked)
+      {
+        lampString += "UDP,";
+      }
+      lampString += tbAtmoOrbHScanStart.Text + "," + tbAtmoOrbHScanEnd.Text + "," + tbAtmoOrbVScanStart.Text + "," + tbAtmoOrbVScanEnd.Text + ",";
+      lampString += cbAtmoOrbInvertZone.Checked;
+      Settings.atmoOrbLamps[lbAtmoOrbLamps.Items.IndexOf(tbAtmoOrbID.Text)] = lampString;
+    }
+
+    private void lbAtmoOrbLamps_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      if (lbAtmoOrbLamps.SelectedIndex >= 0)
+      {
+        string[] lampSettings = Settings.atmoOrbLamps[lbAtmoOrbLamps.SelectedIndex].Split(',');
+        tbAtmoOrbID.Text = lampSettings[0];
+        if (lampSettings[1] == "UDP")
+        {
+          rbAtmoOrbUDP.Checked = true;
+          rbAtmoOrbTCP.Checked = false;
+          tbAtmoOrbIP.ReadOnly = true;
+          tbAtmoOrbPort.ReadOnly = true;
+          tbAtmoOrbIP.Text = "";
+          tbAtmoOrbPort.Text = "";
+          tbAtmoOrbHScanStart.Text = lampSettings[2];
+          tbAtmoOrbHScanEnd.Text = lampSettings[3];
+          tbAtmoOrbVScanStart.Text = lampSettings[4];
+          tbAtmoOrbVScanEnd.Text = lampSettings[5];
+          cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[6]);
+        }
+        else if (lampSettings[1] == "TCP")
+        {
+          rbAtmoOrbUDP.Checked = false;
+          rbAtmoOrbTCP.Checked = true;
+          tbAtmoOrbIP.ReadOnly = false;
+          tbAtmoOrbPort.ReadOnly = false;
+          tbAtmoOrbIP.Text = lampSettings[2];
+          tbAtmoOrbPort.Text = lampSettings[3];
+          tbAtmoOrbHScanStart.Text = lampSettings[4];
+          tbAtmoOrbHScanEnd.Text = lampSettings[5];
+          tbAtmoOrbVScanStart.Text = lampSettings[6];
+          tbAtmoOrbVScanEnd.Text = lampSettings[7];
+          cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[8]);
+        }
+      }
+    }
+
+    private void rbAtmoOrbUDPTCP_CheckedChanged(object sender, EventArgs e)
+    {
+      RadioButton rb = sender as RadioButton;
+      if (rb != null)
+      {
+        if (rb.Checked)
+        {
+          if (rb.Text == "TCP")
+          {
+            tbAtmoOrbIP.ReadOnly = false;
+            tbAtmoOrbPort.ReadOnly = false;
+          }
+          else if (rb.Text == "UDP")
+          {
+            tbAtmoOrbIP.ReadOnly = true;
+            tbAtmoOrbPort.ReadOnly = true;
+            tbAtmoOrbIP.Text = "";
+            tbAtmoOrbPort.Text = "";
+          }
+        }
+      }
     }
   }
 }
