@@ -1613,6 +1613,7 @@
       this.tbAtmoOrbVScanEnd.Name = "tbAtmoOrbVScanEnd";
       this.tbAtmoOrbVScanEnd.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbVScanEnd.TabIndex = 17;
+      this.tbAtmoOrbVScanEnd.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbVScanEnd_Validating);
       // 
       // tbAtmoOrbVScanStart
       // 
@@ -1620,6 +1621,7 @@
       this.tbAtmoOrbVScanStart.Name = "tbAtmoOrbVScanStart";
       this.tbAtmoOrbVScanStart.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbVScanStart.TabIndex = 16;
+      this.tbAtmoOrbVScanStart.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbVScanStart_Validating);
       // 
       // lblAtmoOrbVScan
       // 
@@ -1636,6 +1638,7 @@
       this.tbAtmoOrbHScanEnd.Name = "tbAtmoOrbHScanEnd";
       this.tbAtmoOrbHScanEnd.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbHScanEnd.TabIndex = 14;
+      this.tbAtmoOrbHScanEnd.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbHScanEnd_Validating);
       // 
       // tbAtmoOrbHScanStart
       // 
@@ -1643,6 +1646,7 @@
       this.tbAtmoOrbHScanStart.Name = "tbAtmoOrbHScanStart";
       this.tbAtmoOrbHScanStart.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbHScanStart.TabIndex = 13;
+      this.tbAtmoOrbHScanStart.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbHScanStart_Validating);
       // 
       // lblAtmoOrbHScan
       // 
@@ -1659,6 +1663,7 @@
       this.tbAtmoOrbPort.Name = "tbAtmoOrbPort";
       this.tbAtmoOrbPort.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbPort.TabIndex = 11;
+      this.tbAtmoOrbPort.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbPort_Validating);
       // 
       // lblAtmoOrbPort
       // 
@@ -1675,6 +1680,7 @@
       this.tbAtmoOrbIP.Name = "tbAtmoOrbIP";
       this.tbAtmoOrbIP.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbIP.TabIndex = 9;
+      this.tbAtmoOrbIP.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbIP_Validating);
       // 
       // lblAtmoOrbIP
       // 
@@ -1792,6 +1798,7 @@
       this.tbAtmoOrbGamma.Name = "tbAtmoOrbGamma";
       this.tbAtmoOrbGamma.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbGamma.TabIndex = 12;
+      this.tbAtmoOrbGamma.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbGamma_Validating);
       // 
       // tbAtmoOrbSaturation
       // 
@@ -1799,6 +1806,7 @@
       this.tbAtmoOrbSaturation.Name = "tbAtmoOrbSaturation";
       this.tbAtmoOrbSaturation.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbSaturation.TabIndex = 11;
+      this.tbAtmoOrbSaturation.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbSaturation_Validating);
       // 
       // lblAtmoOrbGamma
       // 
@@ -1860,6 +1868,7 @@
       this.tbAtmoOrbBlackThreshold.Name = "tbAtmoOrbBlackThreshold";
       this.tbAtmoOrbBlackThreshold.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbBlackThreshold.TabIndex = 4;
+      this.tbAtmoOrbBlackThreshold.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbBlackThreshold_Validating);
       // 
       // tbAtmoOrbThreshold
       // 
@@ -1867,6 +1876,7 @@
       this.tbAtmoOrbThreshold.Name = "tbAtmoOrbThreshold";
       this.tbAtmoOrbThreshold.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbThreshold.TabIndex = 3;
+      this.tbAtmoOrbThreshold.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbThreshold_Validating);
       // 
       // tbAtmoOrbMinDiversion
       // 
@@ -1874,6 +1884,7 @@
       this.tbAtmoOrbMinDiversion.Name = "tbAtmoOrbMinDiversion";
       this.tbAtmoOrbMinDiversion.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbMinDiversion.TabIndex = 2;
+      this.tbAtmoOrbMinDiversion.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbMinDiversion_Validating);
       // 
       // tbAtmoOrbBroadcastPort
       // 
@@ -1881,6 +1892,7 @@
       this.tbAtmoOrbBroadcastPort.Name = "tbAtmoOrbBroadcastPort";
       this.tbAtmoOrbBroadcastPort.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbBroadcastPort.TabIndex = 1;
+      this.tbAtmoOrbBroadcastPort.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbBroadcastPort_Validating);
       // 
       // cbAtmoOrbUseOverallLightness
       // 
@@ -2433,6 +2445,7 @@
       this.ckAtmoOrbEnabled.TabIndex = 24;
       this.ckAtmoOrbEnabled.Text = "AtmoOrb";
       this.ckAtmoOrbEnabled.UseVisualStyleBackColor = true;
+      this.ckAtmoOrbEnabled.CheckedChanged += new System.EventHandler(this.ckAtmoOrbEnabled_CheckedChanged);
       // 
       // SetupForm
       // 
