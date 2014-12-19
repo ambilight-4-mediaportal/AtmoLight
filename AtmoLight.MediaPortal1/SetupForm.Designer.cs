@@ -62,6 +62,7 @@
       this.ckStartAtmoWin = new System.Windows.Forms.CheckBox();
       this.tabPageGeneric = new System.Windows.Forms.TabPage();
       this.grpTargets = new System.Windows.Forms.GroupBox();
+      this.ckAtmoOrbEnabled = new System.Windows.Forms.CheckBox();
       this.ckAmbiBoxEnabled = new System.Windows.Forms.CheckBox();
       this.ckBoblightEnabled = new System.Windows.Forms.CheckBox();
       this.ckHueEnabled = new System.Windows.Forms.CheckBox();
@@ -147,7 +148,7 @@
       this.tbAmbiBoxPath = new System.Windows.Forms.TextBox();
       this.btnSelectFileAmbiBox = new System.Windows.Forms.Button();
       this.tabPageAtmoOrb = new System.Windows.Forms.TabPage();
-      this.groupBox3 = new System.Windows.Forms.GroupBox();
+      this.grpAtmoOrbLamps = new System.Windows.Forms.GroupBox();
       this.lblAtmoOrbVScanTo = new System.Windows.Forms.Label();
       this.lblAtmoOrbHScanTo = new System.Windows.Forms.Label();
       this.lblAtmoOrbConnection = new System.Windows.Forms.Label();
@@ -239,7 +240,6 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
-      this.ckAtmoOrbEnabled = new System.Windows.Forms.CheckBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -258,7 +258,7 @@
       this.grpAmbiBoxNetwork.SuspendLayout();
       this.grpAmbiBoxLocal.SuspendLayout();
       this.tabPageAtmoOrb.SuspendLayout();
-      this.groupBox3.SuspendLayout();
+      this.grpAtmoOrbLamps.SuspendLayout();
       this.grpAtmoOrbBasicSettings.SuspendLayout();
       this.tabPageBoblight.SuspendLayout();
       this.grpBoblightSettings.SuspendLayout();
@@ -602,6 +602,17 @@
       this.grpTargets.TabIndex = 19;
       this.grpTargets.TabStop = false;
       this.grpTargets.Text = "Hardware selection";
+      // 
+      // ckAtmoOrbEnabled
+      // 
+      this.ckAtmoOrbEnabled.AutoSize = true;
+      this.ckAtmoOrbEnabled.Location = new System.Drawing.Point(12, 50);
+      this.ckAtmoOrbEnabled.Name = "ckAtmoOrbEnabled";
+      this.ckAtmoOrbEnabled.Size = new System.Drawing.Size(67, 17);
+      this.ckAtmoOrbEnabled.TabIndex = 24;
+      this.ckAtmoOrbEnabled.Text = "AtmoOrb";
+      this.ckAtmoOrbEnabled.UseVisualStyleBackColor = true;
+      this.ckAtmoOrbEnabled.CheckedChanged += new System.EventHandler(this.ckAtmoOrbEnabled_CheckedChanged);
       // 
       // ckAmbiBoxEnabled
       // 
@@ -1530,7 +1541,7 @@
       // tabPageAtmoOrb
       // 
       this.tabPageAtmoOrb.BackColor = System.Drawing.SystemColors.Control;
-      this.tabPageAtmoOrb.Controls.Add(this.groupBox3);
+      this.tabPageAtmoOrb.Controls.Add(this.grpAtmoOrbLamps);
       this.tabPageAtmoOrb.Controls.Add(this.grpAtmoOrbBasicSettings);
       this.tabPageAtmoOrb.Location = new System.Drawing.Point(4, 22);
       this.tabPageAtmoOrb.Name = "tabPageAtmoOrb";
@@ -1539,36 +1550,36 @@
       this.tabPageAtmoOrb.TabIndex = 6;
       this.tabPageAtmoOrb.Text = "AtmoOrb";
       // 
-      // groupBox3
+      // grpAtmoOrbLamps
       // 
-      this.groupBox3.Controls.Add(this.lblAtmoOrbVScanTo);
-      this.groupBox3.Controls.Add(this.lblAtmoOrbHScanTo);
-      this.groupBox3.Controls.Add(this.lblAtmoOrbConnection);
-      this.groupBox3.Controls.Add(this.cbAtmoOrbInvertZone);
-      this.groupBox3.Controls.Add(this.tbAtmoOrbVScanEnd);
-      this.groupBox3.Controls.Add(this.tbAtmoOrbVScanStart);
-      this.groupBox3.Controls.Add(this.lblAtmoOrbVScan);
-      this.groupBox3.Controls.Add(this.tbAtmoOrbHScanEnd);
-      this.groupBox3.Controls.Add(this.tbAtmoOrbHScanStart);
-      this.groupBox3.Controls.Add(this.lblAtmoOrbHScan);
-      this.groupBox3.Controls.Add(this.tbAtmoOrbPort);
-      this.groupBox3.Controls.Add(this.lblAtmoOrbPort);
-      this.groupBox3.Controls.Add(this.tbAtmoOrbIP);
-      this.groupBox3.Controls.Add(this.lblAtmoOrbIP);
-      this.groupBox3.Controls.Add(this.rbAtmoOrbUDP);
-      this.groupBox3.Controls.Add(this.rbAtmoOrbTCP);
-      this.groupBox3.Controls.Add(this.tbAtmoOrbID);
-      this.groupBox3.Controls.Add(this.lblAtmoOrbID);
-      this.groupBox3.Controls.Add(this.btnAtmoOrbRemove);
-      this.groupBox3.Controls.Add(this.btnAtmoOrbUpdate);
-      this.groupBox3.Controls.Add(this.btnAtmoOrbAdd);
-      this.groupBox3.Controls.Add(this.lbAtmoOrbLamps);
-      this.groupBox3.Location = new System.Drawing.Point(10, 140);
-      this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(820, 230);
-      this.groupBox3.TabIndex = 1;
-      this.groupBox3.TabStop = false;
-      this.groupBox3.Text = "Lamp settings";
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbVScanTo);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbHScanTo);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbConnection);
+      this.grpAtmoOrbLamps.Controls.Add(this.cbAtmoOrbInvertZone);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbVScanEnd);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbVScanStart);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbVScan);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbHScanEnd);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbHScanStart);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbHScan);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbPort);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbPort);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbIP);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbIP);
+      this.grpAtmoOrbLamps.Controls.Add(this.rbAtmoOrbUDP);
+      this.grpAtmoOrbLamps.Controls.Add(this.rbAtmoOrbTCP);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbID);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbID);
+      this.grpAtmoOrbLamps.Controls.Add(this.btnAtmoOrbRemove);
+      this.grpAtmoOrbLamps.Controls.Add(this.btnAtmoOrbUpdate);
+      this.grpAtmoOrbLamps.Controls.Add(this.btnAtmoOrbAdd);
+      this.grpAtmoOrbLamps.Controls.Add(this.lbAtmoOrbLamps);
+      this.grpAtmoOrbLamps.Location = new System.Drawing.Point(10, 140);
+      this.grpAtmoOrbLamps.Name = "grpAtmoOrbLamps";
+      this.grpAtmoOrbLamps.Size = new System.Drawing.Size(820, 230);
+      this.grpAtmoOrbLamps.TabIndex = 1;
+      this.grpAtmoOrbLamps.TabStop = false;
+      this.grpAtmoOrbLamps.Text = "Lamp settings";
       // 
       // lblAtmoOrbVScanTo
       // 
@@ -2436,17 +2447,6 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
-      // ckAtmoOrbEnabled
-      // 
-      this.ckAtmoOrbEnabled.AutoSize = true;
-      this.ckAtmoOrbEnabled.Location = new System.Drawing.Point(12, 50);
-      this.ckAtmoOrbEnabled.Name = "ckAtmoOrbEnabled";
-      this.ckAtmoOrbEnabled.Size = new System.Drawing.Size(67, 17);
-      this.ckAtmoOrbEnabled.TabIndex = 24;
-      this.ckAtmoOrbEnabled.Text = "AtmoOrb";
-      this.ckAtmoOrbEnabled.UseVisualStyleBackColor = true;
-      this.ckAtmoOrbEnabled.CheckedChanged += new System.EventHandler(this.ckAtmoOrbEnabled_CheckedChanged);
-      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2495,8 +2495,8 @@
       this.grpAmbiBoxLocal.ResumeLayout(false);
       this.grpAmbiBoxLocal.PerformLayout();
       this.tabPageAtmoOrb.ResumeLayout(false);
-      this.groupBox3.ResumeLayout(false);
-      this.groupBox3.PerformLayout();
+      this.grpAtmoOrbLamps.ResumeLayout(false);
+      this.grpAtmoOrbLamps.PerformLayout();
       this.grpAtmoOrbBasicSettings.ResumeLayout(false);
       this.grpAtmoOrbBasicSettings.PerformLayout();
       this.tabPageBoblight.ResumeLayout(false);
@@ -2695,7 +2695,7 @@
     private System.Windows.Forms.Label lblAmbiBoxExternalProfile;
     private System.Windows.Forms.Label lblAmbiBoxMediaPortalProfile;
     private System.Windows.Forms.TabPage tabPageAtmoOrb;
-    private System.Windows.Forms.GroupBox groupBox3;
+    private System.Windows.Forms.GroupBox grpAtmoOrbLamps;
     private System.Windows.Forms.ListBox lbAtmoOrbLamps;
     private System.Windows.Forms.GroupBox grpAtmoOrbBasicSettings;
     private System.Windows.Forms.CheckBox cbAtmoOrbUseOverallLightness;

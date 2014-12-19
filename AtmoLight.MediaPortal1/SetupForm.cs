@@ -242,6 +242,31 @@ namespace AtmoLight
       lblAmbiBoxReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxReconnectDelay;
       cbAmbiBoxAutoStart.Text = LanguageLoader.appStrings.SetupForm_cbAmbiBoxAutoStart;
       cbAmbiBoxAutoStop.Text = LanguageLoader.appStrings.SetupForm_cbAmbiBoxAutoStop;
+      lblAtmoOrbBlackThreshold.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbBlackThreshold;
+      lblAtmoOrbBroadcastPort.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbBroadcastPort;
+      lblAtmoOrbConnection.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbConnection;
+      lblAtmoOrbGamma.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbGamma;
+      lblAtmoOrbHScan.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbHScan;
+      lblAtmoOrbHScanTo.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbHScanTo;
+      lblAtmoOrbID.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbID;
+      lblAtmoOrbIP.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbIP;
+      lblAtmoOrbMinDiversion.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbMinDiversion;
+      lblAtmoOrbPort.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbPort;
+      lblAtmoOrbSaturation.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbSaturation;
+      lblAtmoOrbThreshold.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbThreshold;
+      lblAtmoOrbVScan.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbVScan;
+      lblAtmoOrbVScanTo.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbVScanTo;
+      grpAtmoOrbBasicSettings.Text = LanguageLoader.appStrings.SetupForm_grpAtmoOrbBasicSettings;
+      grpAtmoOrbLamps.Text = LanguageLoader.appStrings.SetupForm_grpAtmoOrbLamps;
+      rbAtmoOrbTCP.Text = LanguageLoader.appStrings.SetupForm_rbAtmoOrbTCP;
+      rbAtmoOrbUDP.Text = LanguageLoader.appStrings.SetupForm_rbAtmoOrbUDP;
+      ckAtmoOrbEnabled.Text = LanguageLoader.appStrings.SetupForm_ckAtmoOrbEnabled;
+      cbAtmoOrbInvertZone.Text = LanguageLoader.appStrings.SetupForm_cbAtmoOrbInvertZone;
+      cbAtmoOrbUseOverallLightness.Text = LanguageLoader.appStrings.SetupForm_cbAtmoOrbUseOverallLightness;
+      btnAtmoOrbAdd.Text = LanguageLoader.appStrings.SetupForm_btnAtmoOrbAdd;
+      btnAtmoOrbRemove.Text = LanguageLoader.appStrings.SetupForm_btnAtmoOrbRemove;
+      btnAtmoOrbUpdate.Text = LanguageLoader.appStrings.SetupForm_btnAtmoOrbUpdate;
+
     }
     #endregion
 
