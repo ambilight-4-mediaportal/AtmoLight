@@ -74,11 +74,6 @@ namespace AtmoLight
     private volatile bool gifReaderLock = true;
     private volatile bool vuMeterLock = true;
 
-    // VUMeter
-    private int vuMeterMin = -24;
-    private double vuMeterMaxHue = 0.0 - (1.0 / 24.0); // red - 1/24
-    private double vuMeterMinHue = (2.0 / 3.0) + (1.0 / 12.0); // blue + 1/12
-
     // Event Handler
     public delegate void NewConnectionLostHandler(Target target);
     public static event NewConnectionLostHandler OnNewConnectionLost;
@@ -104,6 +99,9 @@ namespace AtmoLight
     public int blackbarDetectionTime;
     public int blackbarDetectionThreshold;
     public int powerModeChangedDelay;
+    public int vuMeterMindB;
+    public double vuMeterMaxHue;
+    public double vuMeterMinHue;
 
     // AmbiBox Settings Fields
     public string ambiBoxIP;
@@ -1300,7 +1298,7 @@ namespace AtmoLight
           {
             for (int i = 0; i < GetCaptureHeight(); i++)
             {
-              if (dbLevel[channel] >= ((double)i * vuMeterMin) / GetCaptureHeight())
+              if (dbLevel[channel] >= ((double)i * vuMeterMindB) / GetCaptureHeight())
               {
                 vuMeterGFX.FillRectangle(vuMeterBrushes[i + 1], (int)((double)channel * (double)vuMeterBitmap.Width / (double)4 * (double)3), i, (int)((double)vuMeterBitmap.Width / (double)4), 1);
               }

@@ -119,6 +119,9 @@ namespace AtmoLight
       tbAmbiBoxReconnectDelay.Text = Settings.ambiBoxReconnectDelay.ToString();
       tbAmbiBoxMediaPortalProfile.Text = Settings.ambiBoxMediaPortalProfile;
       tbAmbiBoxExternalProfile.Text = Settings.ambiBoxExternalProfile;
+      tbVUMeterMaxHue.Text = Settings.vuMeterMaxHue.ToString();
+      tbVUMeterMindB.Text = Settings.vuMeterMindB.ToString();
+      tbVUMeterMinHue.Text = Settings.vuMeterMinHue.ToString();
 
       // Temp disable for AmbiBox
       tabMenu.TabPages.Remove(tabPageAmbiBox);
@@ -1328,7 +1331,6 @@ namespace AtmoLight
           return;
         }
       }
-
     }
   }
 }
