@@ -108,11 +108,11 @@ namespace AtmoLight.Targets
           return true;
         case ContentEffect.StaticColor:
           // Send command 3 times to make sure it arrives
-          ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
+          ChangeColor((int)gammaCurve[coreObject.staticColor[0]], (int)gammaCurve[coreObject.staticColor[1]], (int)gammaCurve[coreObject.staticColor[2]]);
           System.Threading.Thread.Sleep(50);
-          ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
+          ChangeColor((int)gammaCurve[coreObject.staticColor[0]], (int)gammaCurve[coreObject.staticColor[1]], (int)gammaCurve[coreObject.staticColor[2]]);
           System.Threading.Thread.Sleep(50);
-          ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
+          ChangeColor((int)gammaCurve[coreObject.staticColor[0]], (int)gammaCurve[coreObject.staticColor[1]], (int)gammaCurve[coreObject.staticColor[2]]);
           return true;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
@@ -245,7 +245,7 @@ namespace AtmoLight.Targets
               s = 1;
               l = 0.5 - ((double)y / coreObject.GetCaptureHeight() / 2);
               HSL.HSL2RGB(vuMeterHue, s, l, out r, out g, out b);
-              ChangeColor(r, g, b);
+              ChangeColor((int)gammaCurve[r], (int)gammaCurve[g], (int)gammaCurve[b]);
               return;
             }
           }
