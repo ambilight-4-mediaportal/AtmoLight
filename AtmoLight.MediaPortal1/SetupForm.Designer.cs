@@ -71,6 +71,7 @@
       this.ckHyperionEnabled = new System.Windows.Forms.CheckBox();
       this.grpMode = new System.Windows.Forms.GroupBox();
       this.grpVUMeter = new System.Windows.Forms.GroupBox();
+      this.tbVUMeterMaxHue = new System.Windows.Forms.TextBox();
       this.lblVUMeterMaxHue = new System.Windows.Forms.Label();
       this.lblVUMeterMinHue = new System.Windows.Forms.Label();
       this.tbVUMeterMindB = new System.Windows.Forms.TextBox();
@@ -245,7 +246,6 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
-      this.tbVUMeterMaxHue = new System.Windows.Forms.TextBox();
       this.tbVUMeterMinHue = new System.Windows.Forms.TextBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
@@ -726,10 +726,18 @@
       this.grpVUMeter.TabStop = false;
       this.grpVUMeter.Text = "VUMeter";
       // 
+      // tbVUMeterMaxHue
+      // 
+      this.tbVUMeterMaxHue.Location = new System.Drawing.Point(277, 22);
+      this.tbVUMeterMaxHue.Name = "tbVUMeterMaxHue";
+      this.tbVUMeterMaxHue.Size = new System.Drawing.Size(45, 20);
+      this.tbVUMeterMaxHue.TabIndex = 4;
+      this.tbVUMeterMaxHue.Validating += new System.ComponentModel.CancelEventHandler(this.tbVUMeterMaxHue_Validating);
+      // 
       // lblVUMeterMaxHue
       // 
       this.lblVUMeterMaxHue.AutoSize = true;
-      this.lblVUMeterMaxHue.Location = new System.Drawing.Point(224, 25);
+      this.lblVUMeterMaxHue.Location = new System.Drawing.Point(219, 25);
       this.lblVUMeterMaxHue.Name = "lblVUMeterMaxHue";
       this.lblVUMeterMaxHue.Size = new System.Drawing.Size(53, 13);
       this.lblVUMeterMaxHue.TabIndex = 3;
@@ -738,7 +746,7 @@
       // lblVUMeterMinHue
       // 
       this.lblVUMeterMinHue.AutoSize = true;
-      this.lblVUMeterMinHue.Location = new System.Drawing.Point(114, 25);
+      this.lblVUMeterMinHue.Location = new System.Drawing.Point(104, 25);
       this.lblVUMeterMinHue.Name = "lblVUMeterMinHue";
       this.lblVUMeterMinHue.Size = new System.Drawing.Size(53, 13);
       this.lblVUMeterMinHue.TabIndex = 2;
@@ -748,8 +756,9 @@
       // 
       this.tbVUMeterMindB.Location = new System.Drawing.Point(61, 22);
       this.tbVUMeterMindB.Name = "tbVUMeterMindB";
-      this.tbVUMeterMindB.Size = new System.Drawing.Size(40, 20);
+      this.tbVUMeterMindB.Size = new System.Drawing.Size(30, 20);
       this.tbVUMeterMindB.TabIndex = 1;
+      this.tbVUMeterMindB.Validating += new System.ComponentModel.CancelEventHandler(this.tbVUMeterMindB_Validating);
       // 
       // lblVUMeterMindB
       // 
@@ -1604,7 +1613,7 @@
       this.tabPageAtmoOrb.Location = new System.Drawing.Point(4, 22);
       this.tabPageAtmoOrb.Name = "tabPageAtmoOrb";
       this.tabPageAtmoOrb.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageAtmoOrb.Size = new System.Drawing.Size(842, 449);
+      this.tabPageAtmoOrb.Size = new System.Drawing.Size(842, 504);
       this.tabPageAtmoOrb.TabIndex = 6;
       this.tabPageAtmoOrb.Text = "AtmoOrb";
       // 
@@ -2505,19 +2514,13 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
-      // tbVUMeterMaxHue
-      // 
-      this.tbVUMeterMaxHue.Location = new System.Drawing.Point(282, 22);
-      this.tbVUMeterMaxHue.Name = "tbVUMeterMaxHue";
-      this.tbVUMeterMaxHue.Size = new System.Drawing.Size(40, 20);
-      this.tbVUMeterMaxHue.TabIndex = 4;
-      // 
       // tbVUMeterMinHue
       // 
-      this.tbVUMeterMinHue.Location = new System.Drawing.Point(172, 22);
+      this.tbVUMeterMinHue.Location = new System.Drawing.Point(162, 22);
       this.tbVUMeterMinHue.Name = "tbVUMeterMinHue";
-      this.tbVUMeterMinHue.Size = new System.Drawing.Size(40, 20);
+      this.tbVUMeterMinHue.Size = new System.Drawing.Size(45, 20);
       this.tbVUMeterMinHue.TabIndex = 5;
+      this.tbVUMeterMinHue.Validating += new System.ComponentModel.CancelEventHandler(this.tbVUMeterMinHue_Validating);
       // 
       // SetupForm
       // 
@@ -2812,7 +2815,7 @@
     private System.Windows.Forms.Label lblVUMeterMinHue;
     private System.Windows.Forms.TextBox tbVUMeterMindB;
     private System.Windows.Forms.Label lblVUMeterMindB;
-    private System.Windows.Forms.TextBox tbVUMeterMinHue;
     private System.Windows.Forms.TextBox tbVUMeterMaxHue;
+    private System.Windows.Forms.TextBox tbVUMeterMinHue;
   }
 }

@@ -269,7 +269,10 @@ namespace AtmoLight
       btnAtmoOrbAdd.Text = LanguageLoader.appStrings.SetupForm_btnAtmoOrbAdd;
       btnAtmoOrbRemove.Text = LanguageLoader.appStrings.SetupForm_btnAtmoOrbRemove;
       btnAtmoOrbUpdate.Text = LanguageLoader.appStrings.SetupForm_btnAtmoOrbUpdate;
-
+      lblVUMeterMaxHue.Text = LanguageLoader.appStrings.SetupForm_lblVUMeterMaxHue;
+      lblVUMeterMindB.Text = LanguageLoader.appStrings.SetupForm_lblVUMeterMindB;
+      lblVUMeterMinHue.Text = LanguageLoader.appStrings.SetupForm_lblVUMeterMinHue;
+      grpVUMeter.Text = LanguageLoader.appStrings.SetupForm_grpVUMeter;
     }
     #endregion
 
@@ -676,6 +679,33 @@ namespace AtmoLight
         return;
       }
 
+      // VUMeter Min dB
+      minValue = -100;
+      maxValue = 0;
+      if (validatorInt(tbVUMeterMindB.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbVUMeterMindB.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // VUMeter Min Hue
+      doubleMinValue = 0.0;
+      doubleMaxValue = 1.0;
+      if (validatorDouble(tbVUMeterMinHue.Text, doubleMinValue, doubleMaxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + tbVUMeterMinHue.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // VUMeter Max Hue
+      doubleMinValue = 0.0;
+      doubleMaxValue = 1.0;
+      if (validatorDouble(tbVUMeterMaxHue.Text, doubleMinValue, doubleMaxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + tbVUMeterMaxHue.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       Settings.staticColorRed = int.Parse(tbRed.Text);
       Settings.staticColorGreen = int.Parse(tbGreen.Text);
       Settings.staticColorBlue = int.Parse(tbBlue.Text);
@@ -746,12 +776,15 @@ namespace AtmoLight
       Settings.ambiBoxExternalProfile = tbAmbiBoxExternalProfile.Text;
       Settings.atmoOrbBlackThreshold = int.Parse(tbAtmoOrbBlackThreshold.Text);
       Settings.atmoOrbBroadcastPort = int.Parse(tbAtmoOrbBroadcastPort.Text);
-      Settings.atmoOrbGamma = Double.Parse(tbAtmoOrbGamma.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat); ;
+      Settings.atmoOrbGamma = Double.Parse(tbAtmoOrbGamma.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
       Settings.atmoOrbMinDiversion = int.Parse(tbAtmoOrbMinDiversion.Text);
-      Settings.atmoOrbSaturation = Double.Parse(tbAtmoOrbSaturation.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat); ;
+      Settings.atmoOrbSaturation = Double.Parse(tbAtmoOrbSaturation.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
       Settings.atmoOrbThreshold = int.Parse(tbAtmoOrbThreshold.Text);
       Settings.atmoOrbUseOverallLightness = cbAtmoOrbUseOverallLightness.Checked;
       Settings.atmoOrbTarget = ckAtmoOrbEnabled.Checked;
+      Settings.vuMeterMaxHue = Double.Parse(tbVUMeterMaxHue.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+      Settings.vuMeterMindB = int.Parse(tbVUMeterMindB.Text);
+      Settings.vuMeterMinHue = Double.Parse(tbVUMeterMinHue.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
 
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
       Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
@@ -1411,6 +1444,36 @@ namespace AtmoLight
       int minValue = 1;
       int maxValue = 65535;
       if (validatorInt(tbAtmoOrbBroadcastPort.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbVUMeterMindB_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = -100;
+      int maxValue = 0;
+      if (validatorInt(tbVUMeterMindB.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbVUMeterMinHue_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      double minValue = 0;
+      double maxValue = 1.0;
+      if (validatorDouble(tbVUMeterMinHue.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbVUMeterMaxHue_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      double minValue = 0;
+      double maxValue = 1.0;
+      if (validatorDouble(tbVUMeterMaxHue.Text, minValue, maxValue, true) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }

@@ -125,6 +125,10 @@ cbAtmoOrbUseOverallLightness=Use overall lightness
 btnAtmoOrbAdd=Add
 btnAtmoOrbRemove=Remove
 btnAtmoOrbUpdate=Update
+lblVUMeterMaxHue=Max. Hue:
+lblVUMeterMindB=Min dB:
+lblVUMeterMinHue=Min Hue:
+grpVUMeter=VUMeter
 [ContextMenu]
 SwitchLEDsON=Switch LEDs on
 SwitchLEDsOFF=Switch LEDs off

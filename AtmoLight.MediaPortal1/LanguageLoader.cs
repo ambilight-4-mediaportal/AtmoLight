@@ -409,6 +409,10 @@ namespace Language
     public String SetupForm_btnAtmoOrbAdd;
     public String SetupForm_btnAtmoOrbRemove;
     public String SetupForm_btnAtmoOrbUpdate;
+    public String SetupForm_lblVUMeterMaxHue;
+    public String SetupForm_lblVUMeterMindB;
+    public String SetupForm_lblVUMeterMinHue;
+    public String SetupForm_grpVUMeter;
 
     public String ContextMenu_SwitchLEDsON;
     public String ContextMenu_SwitchLEDsOFF;
