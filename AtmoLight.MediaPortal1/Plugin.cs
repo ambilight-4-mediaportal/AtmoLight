@@ -209,6 +209,9 @@ namespace AtmoLight
       {
         coreObject.AddTarget(Target.Hue);
       }
+      coreObject.vuMeterMindB = Settings.vuMeterMindB;
+      coreObject.vuMeterMinHue = Settings.vuMeterMinHue;
+      coreObject.vuMeterMaxHue = Settings.vuMeterMaxHue;
 
       // Get the effects that are supported by at least one target
       supportedEffects = coreObject.GetSupportedEffects();
@@ -1114,10 +1117,12 @@ namespace AtmoLight
     /// </summary>
     public void ShowPlugin()
     {
+
       if (atmoLightSetupForm == null)
       {
         // Log Handler
         Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
+
 
         var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;

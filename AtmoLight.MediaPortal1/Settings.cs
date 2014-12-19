@@ -40,6 +40,9 @@ namespace AtmoLight
     public static int captureWidth = 0;
     public static int captureHeight = 0;
     public static int powerModeChangedDelay;
+    public static int vuMeterMindB;
+    public static double vuMeterMinHue;
+    public static double vuMeterMaxHue;
 
     // Atmowin
     public static bool atmoWinTarget;
@@ -271,6 +274,9 @@ namespace AtmoLight
             atmoOrbLamps.Add(atmoOrbLampTempSplit[i]);
           }
         }
+        vuMeterMindB = reader.GetValueAsInt("atmolight", "vuMeterMindB", -24);
+        vuMeterMinHue = Double.Parse(reader.GetValueAsString("atmolight", "vuMeterMinHue", "0,74999").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+        vuMeterMaxHue = Double.Parse(reader.GetValueAsString("atmolight", "vuMeterMaxHue", "0,95833").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
       }
     }
     public static void SaveSettings()
@@ -347,6 +353,9 @@ namespace AtmoLight
         reader.SetValue("atmolight", "ambiBoxPath", ambiBoxPath.ToString());
         reader.SetValueAsBool("atmolight", "ambiBoxAutoStart", ambiBoxAutoStart);
         reader.SetValueAsBool("atmolight", "ambiBoxAutoStop", ambiBoxAutoStop);
+        reader.SetValue("atmolight", "vuMeterMindB", vuMeterMindB.ToString());
+        reader.SetValue("atmolight", "vuMeterMinHue", vuMeterMinHue.ToString());
+        reader.SetValue("atmolight", "vuMeterMaxHue", vuMeterMaxHue.ToString());
         reader.SetValueAsBool("atmolight", "atmoWinTarget", atmoWinTarget);
         reader.SetValueAsBool("atmolight", "boblightTarget", boblightTarget);
         reader.SetValueAsBool("atmolight", "hueTarget", hueTarget);

@@ -142,6 +142,9 @@ namespace AtmoLight
           lbAtmoOrbLamps.Items.Add(Settings.atmoOrbLamps[i].Split(',')[0]);
         }
       }
+      tbVUMeterMaxHue.Text = Settings.vuMeterMaxHue.ToString();
+      tbVUMeterMindB.Text = Settings.vuMeterMindB.ToString();
+      tbVUMeterMinHue.Text = Settings.vuMeterMinHue.ToString();
 
       // Temp disable for AmbiBox
       tabMenu.TabPages.Remove(tabPageAmbiBox);
