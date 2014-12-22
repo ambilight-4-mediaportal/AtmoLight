@@ -272,8 +272,8 @@ namespace AtmoLight.Targets
               {
                 if (lamp.IsConnected())
                 {
-                  if ((lamp.ZoneInverted == false && x >= lamp.HScanStart / 100 * coreObject.GetCaptureWidth() && x <= lamp.HScanEnd / 100 * coreObject.GetCaptureWidth() && y >= lamp.VScanStart / 100 * coreObject.GetCaptureHeight() && y <= lamp.VScanEnd / 100 * coreObject.GetCaptureHeight())
-                   || (lamp.ZoneInverted == true && (x <= lamp.HScanStart / 100 * coreObject.GetCaptureWidth() || x >= lamp.HScanEnd / 100 * coreObject.GetCaptureWidth()) && (y <= lamp.VScanStart / 100 * coreObject.GetCaptureHeight() || y >= lamp.VScanEnd / 100 * coreObject.GetCaptureHeight())))
+                  if ((lamp.ZoneInverted == false && x >= lamp.HScanStart * coreObject.GetCaptureWidth() / 100 && x <= lamp.HScanEnd * coreObject.GetCaptureWidth() / 100 && y >= lamp.VScanStart * coreObject.GetCaptureHeight() / 100 && y <= lamp.VScanEnd * coreObject.GetCaptureHeight() / 100)
+                   || (lamp.ZoneInverted == true && (x <= lamp.HScanStart * coreObject.GetCaptureWidth() / 100 || x >= lamp.HScanEnd * coreObject.GetCaptureWidth() / 100) && (y <= lamp.VScanStart * coreObject.GetCaptureHeight() / 100 || y >= lamp.VScanEnd * coreObject.GetCaptureHeight() / 100)))
                   {
                     lamp.OverallAverageColor[0] += pixeldata[row + x * 4 + 2];
                     lamp.OverallAverageColor[1] += pixeldata[row + x * 4 + 1];
