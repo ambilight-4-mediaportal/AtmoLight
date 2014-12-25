@@ -304,7 +304,7 @@ namespace AtmoLight
     /// Generate all targets and initialise them.
     /// </summary>
     /// <returns></returns>
-    public bool Initialise()
+    public void Initialise()
     {
       foreach (var target in targets)
       {
@@ -313,7 +313,6 @@ namespace AtmoLight
           target.Initialise(false);
         }
       }
-      return true;
     }
 
     /// <summary>
@@ -337,20 +336,22 @@ namespace AtmoLight
     /// </summary>
     /// <param name="width"></param>
     /// <param name="height"></param>
-    public void SetCaptureDimensions(int width, int height)
+    public bool SetCaptureDimensions(int width, int height)
     {
       if (width >= 0 && height >= 0)
       {
         captureWidth = width;
         captureHeight = height;
+        return true;
       }
+      return false;
     }
 
     /// <summary>
     /// Add a target to be used.
     /// </summary>
     /// <param name="target"></param>
-    public void AddTarget(Target target)
+    public bool AddTarget(Target target)
     {
       // Dont allow the same target to be added more than once.
       lock (targetsLock)
@@ -359,38 +360,38 @@ namespace AtmoLight
         {
           if (t.Name == target)
           {
-            return;
+            return false;
           }
         }
-
-        if (target == Target.AtmoWin)
-        {
-          targets.Add(new AtmoWinHandler());
-        }
-        else if (target == Target.Hue)
-        {
-          targets.Add(new HueHandler());
-        }
-        else if (target == Target.Hyperion)
-        {
-          targets.Add(new HyperionHandler());
-        }
-        else if (target == Target.AmbiBox)
-        {
-          targets.Add(new AmbiBoxHandler());
-        }
-        else if (target == Target.Boblight)
-        {
-          targets.Add(new BoblightHandler());
-        }
       }
+      if (target == Target.AtmoWin)
+      {
+        targets.Add(new AtmoWinHandler());
+      }
+      else if (target == Target.Hue)
+      {
+        targets.Add(new HueHandler());
+      }
+      else if (target == Target.Hyperion)
+      {
+        targets.Add(new HyperionHandler());
+      }
+      else if (target == Target.AmbiBox)
+      {
+        targets.Add(new AmbiBoxHandler());
+      }
+      else if (target == Target.Boblight)
+      {
+        targets.Add(new BoblightHandler());
+      }
+      return true;
     }
 
     /// <summary>
     /// Removes a target.
     /// </summary>
     /// <param name="target"></param>
-    public void RemoveTarget(Target target)
+    public bool RemoveTarget(Target target)
     {
       lock (targetsLock)
       {
@@ -401,10 +402,11 @@ namespace AtmoLight
             Log.Debug("Removing {0} as target.", target.ToString());
             t.Dispose();
             targets.Remove(t);
-            return;
+            return true;
           }
         }
       }
+      return false;
     }
 
     /// <summary>

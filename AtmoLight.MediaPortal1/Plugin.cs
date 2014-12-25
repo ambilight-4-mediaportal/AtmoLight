@@ -205,11 +205,7 @@ namespace AtmoLight
         coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
       }
 
-      if (!coreObject.Initialise())
-      {
-        Log.Error("Initialising failed.");
-        return;
-      }
+      coreObject.Initialise();
     }
 
     /// <summary>
