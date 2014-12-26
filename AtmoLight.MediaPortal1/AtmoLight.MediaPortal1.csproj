@@ -44,9 +44,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Team MediaPortal\MediaPortal\plugins\Windows\Dialogs.dll</HintPath>
     </Reference>
-    <Reference Include="ProcessPlugins">
-      <HintPath>C:\Program Files (x86)\Team MediaPortal\MediaPortal\plugins\process\ProcessPlugins.dll</HintPath>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="Utils, Version=1.1.7.0, Culture=neutral, processorArchitecture=x86">

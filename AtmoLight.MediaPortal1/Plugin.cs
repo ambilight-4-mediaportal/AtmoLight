@@ -17,7 +17,6 @@ using Microsoft.Win32;
 using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
 using Language;
-using ProcessPlugins.ViewModeSwitcher;
 
 namespace AtmoLight
 {
