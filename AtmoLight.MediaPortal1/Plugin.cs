@@ -17,7 +17,6 @@ using Microsoft.Win32;
 using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
 using Language;
-using ProcessPlugins.ViewModeSwitcher;
 
 namespace AtmoLight
 {
@@ -205,11 +204,7 @@ namespace AtmoLight
         coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
       }
 
-      if (!coreObject.Initialise())
-      {
-        Log.Error("Initialising failed.");
-        return;
-      }
+      coreObject.Initialise();
     }
 
     /// <summary>
