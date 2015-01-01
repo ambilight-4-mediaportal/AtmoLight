@@ -62,6 +62,7 @@
       this.ckStartAtmoWin = new System.Windows.Forms.CheckBox();
       this.tabPageGeneric = new System.Windows.Forms.TabPage();
       this.grpTargets = new System.Windows.Forms.GroupBox();
+      this.ckAtmoOrbEnabled = new System.Windows.Forms.CheckBox();
       this.ckAmbiBoxEnabled = new System.Windows.Forms.CheckBox();
       this.ckBoblightEnabled = new System.Windows.Forms.CheckBox();
       this.ckHueEnabled = new System.Windows.Forms.CheckBox();
@@ -69,6 +70,12 @@
       this.ckAtmowinEnabled = new System.Windows.Forms.CheckBox();
       this.ckHyperionEnabled = new System.Windows.Forms.CheckBox();
       this.grpMode = new System.Windows.Forms.GroupBox();
+      this.grpVUMeter = new System.Windows.Forms.GroupBox();
+      this.tbVUMeterMaxHue = new System.Windows.Forms.TextBox();
+      this.lblVUMeterMaxHue = new System.Windows.Forms.Label();
+      this.lblVUMeterMinHue = new System.Windows.Forms.Label();
+      this.tbVUMeterMindB = new System.Windows.Forms.TextBox();
+      this.lblVUMeterMindB = new System.Windows.Forms.Label();
       this.cbMPExit = new System.Windows.Forms.ComboBox();
       this.lblMPExit = new System.Windows.Forms.Label();
       this.grpGIF = new System.Windows.Forms.GroupBox();
@@ -146,6 +153,44 @@
       this.lblAmbiBoxPath = new System.Windows.Forms.Label();
       this.tbAmbiBoxPath = new System.Windows.Forms.TextBox();
       this.btnSelectFileAmbiBox = new System.Windows.Forms.Button();
+      this.tabPageAtmoOrb = new System.Windows.Forms.TabPage();
+      this.grpAtmoOrbLamps = new System.Windows.Forms.GroupBox();
+      this.lblAtmoOrbVScanTo = new System.Windows.Forms.Label();
+      this.lblAtmoOrbHScanTo = new System.Windows.Forms.Label();
+      this.lblAtmoOrbConnection = new System.Windows.Forms.Label();
+      this.cbAtmoOrbInvertZone = new System.Windows.Forms.CheckBox();
+      this.tbAtmoOrbVScanEnd = new System.Windows.Forms.TextBox();
+      this.tbAtmoOrbVScanStart = new System.Windows.Forms.TextBox();
+      this.lblAtmoOrbVScan = new System.Windows.Forms.Label();
+      this.tbAtmoOrbHScanEnd = new System.Windows.Forms.TextBox();
+      this.tbAtmoOrbHScanStart = new System.Windows.Forms.TextBox();
+      this.lblAtmoOrbHScan = new System.Windows.Forms.Label();
+      this.tbAtmoOrbPort = new System.Windows.Forms.TextBox();
+      this.lblAtmoOrbPort = new System.Windows.Forms.Label();
+      this.tbAtmoOrbIP = new System.Windows.Forms.TextBox();
+      this.lblAtmoOrbIP = new System.Windows.Forms.Label();
+      this.rbAtmoOrbUDP = new System.Windows.Forms.RadioButton();
+      this.rbAtmoOrbTCP = new System.Windows.Forms.RadioButton();
+      this.tbAtmoOrbID = new System.Windows.Forms.TextBox();
+      this.lblAtmoOrbID = new System.Windows.Forms.Label();
+      this.btnAtmoOrbRemove = new System.Windows.Forms.Button();
+      this.btnAtmoOrbUpdate = new System.Windows.Forms.Button();
+      this.btnAtmoOrbAdd = new System.Windows.Forms.Button();
+      this.lbAtmoOrbLamps = new System.Windows.Forms.ListBox();
+      this.grpAtmoOrbBasicSettings = new System.Windows.Forms.GroupBox();
+      this.tbAtmoOrbGamma = new System.Windows.Forms.TextBox();
+      this.tbAtmoOrbSaturation = new System.Windows.Forms.TextBox();
+      this.lblAtmoOrbGamma = new System.Windows.Forms.Label();
+      this.lblAtmoOrbSaturation = new System.Windows.Forms.Label();
+      this.lblAtmoOrbBlackThreshold = new System.Windows.Forms.Label();
+      this.lblAtmoOrbThreshold = new System.Windows.Forms.Label();
+      this.lblAtmoOrbMinDiversion = new System.Windows.Forms.Label();
+      this.lblAtmoOrbBroadcastPort = new System.Windows.Forms.Label();
+      this.tbAtmoOrbBlackThreshold = new System.Windows.Forms.TextBox();
+      this.tbAtmoOrbThreshold = new System.Windows.Forms.TextBox();
+      this.tbAtmoOrbMinDiversion = new System.Windows.Forms.TextBox();
+      this.tbAtmoOrbBroadcastPort = new System.Windows.Forms.TextBox();
+      this.cbAtmoOrbUseOverallLightness = new System.Windows.Forms.CheckBox();
       this.tabPageBoblight = new System.Windows.Forms.TabPage();
       this.grpBoblightSettings = new System.Windows.Forms.GroupBox();
       this.tbBoblightGamma = new System.Windows.Forms.TextBox();
@@ -201,6 +246,7 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
+      this.tbVUMeterMinHue = new System.Windows.Forms.TextBox();
       this.lblAtmoWinConnectionDelay = new System.Windows.Forms.Label();
       this.tbAtmoWinConnectionDelay = new System.Windows.Forms.TextBox();
       this.tabPageHyperion.SuspendLayout();
@@ -211,6 +257,7 @@
       this.tabPageGeneric.SuspendLayout();
       this.grpTargets.SuspendLayout();
       this.grpMode.SuspendLayout();
+      this.grpVUMeter.SuspendLayout();
       this.grpGIF.SuspendLayout();
       this.grpStaticColor.SuspendLayout();
       this.grpPluginOption.SuspendLayout();
@@ -220,6 +267,9 @@
       this.tabPageAmbiBox.SuspendLayout();
       this.grpAmbiBoxNetwork.SuspendLayout();
       this.grpAmbiBoxLocal.SuspendLayout();
+      this.tabPageAtmoOrb.SuspendLayout();
+      this.grpAtmoOrbLamps.SuspendLayout();
+      this.grpAtmoOrbBasicSettings.SuspendLayout();
       this.tabPageBoblight.SuspendLayout();
       this.grpBoblightSettings.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightGamma)).BeginInit();
@@ -237,7 +287,8 @@
       // btnSave
       // 
       this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnSave.Location = new System.Drawing.Point(16, 495);
+
+      this.btnSave.Location = new System.Drawing.Point(16, 550);
       this.btnSave.Name = "btnSave";
       this.btnSave.Size = new System.Drawing.Size(105, 23);
       this.btnSave.TabIndex = 100;
@@ -248,7 +299,8 @@
       // btnCancel
       // 
       this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnCancel.Location = new System.Drawing.Point(141, 495);
+
+      this.btnCancel.Location = new System.Drawing.Point(141, 550);
       this.btnCancel.Name = "btnCancel";
       this.btnCancel.Size = new System.Drawing.Size(105, 23);
       this.btnCancel.TabIndex = 101;
@@ -264,7 +316,8 @@
       // lblVersion
       // 
       this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-      this.lblVersion.Location = new System.Drawing.Point(754, 494);
+
+      this.lblVersion.Location = new System.Drawing.Point(754, 549);
       this.lblVersion.Name = "lblVersion";
       this.lblVersion.Size = new System.Drawing.Size(95, 26);
       this.lblVersion.TabIndex = 13;
@@ -274,7 +327,8 @@
       // 
       this.lblVersionVal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.lblVersionVal.AutoSize = true;
-      this.lblVersionVal.Location = new System.Drawing.Point(799, 507);
+
+      this.lblVersionVal.Location = new System.Drawing.Point(799, 562);
       this.lblVersionVal.Name = "lblVersionVal";
       this.lblVersionVal.Size = new System.Drawing.Size(40, 13);
       this.lblVersionVal.TabIndex = 14;
@@ -283,7 +337,8 @@
       // btnLanguage
       // 
       this.btnLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnLanguage.Location = new System.Drawing.Point(266, 495);
+
+      this.btnLanguage.Location = new System.Drawing.Point(266, 550);
       this.btnLanguage.Name = "btnLanguage";
       this.btnLanguage.Size = new System.Drawing.Size(105, 23);
       this.btnLanguage.TabIndex = 102;
@@ -306,7 +361,8 @@
       this.tabPageHyperion.Controls.Add(this.grpHyperionNetworkSettings);
       this.tabPageHyperion.Location = new System.Drawing.Point(4, 22);
       this.tabPageHyperion.Name = "tabPageHyperion";
-      this.tabPageHyperion.Size = new System.Drawing.Size(842, 449);
+
+      this.tabPageHyperion.Size = new System.Drawing.Size(842, 504);
       this.tabPageHyperion.TabIndex = 2;
       this.tabPageHyperion.Text = "Hyperion";
       // 
@@ -460,7 +516,8 @@
       this.tabPageAtmowin.Location = new System.Drawing.Point(4, 22);
       this.tabPageAtmowin.Name = "tabPageAtmowin";
       this.tabPageAtmowin.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageAtmowin.Size = new System.Drawing.Size(842, 449);
+
+      this.tabPageAtmowin.Size = new System.Drawing.Size(842, 504);
       this.tabPageAtmowin.TabIndex = 1;
       this.tabPageAtmowin.Text = "Atmowin";
       // 
@@ -475,6 +532,7 @@
       this.grpAtmowinSettings.Controls.Add(this.ckStartAtmoWin);
       this.grpAtmowinSettings.Location = new System.Drawing.Point(10, 10);
       this.grpAtmowinSettings.Name = "grpAtmowinSettings";
+
       this.grpAtmowinSettings.Size = new System.Drawing.Size(820, 150);
       this.grpAtmowinSettings.TabIndex = 26;
       this.grpAtmowinSettings.TabStop = false;
@@ -545,12 +603,14 @@
       this.tabPageGeneric.Location = new System.Drawing.Point(4, 22);
       this.tabPageGeneric.Name = "tabPageGeneric";
       this.tabPageGeneric.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageGeneric.Size = new System.Drawing.Size(842, 449);
+
+      this.tabPageGeneric.Size = new System.Drawing.Size(842, 504);
       this.tabPageGeneric.TabIndex = 0;
       this.tabPageGeneric.Text = "Generic settings";
       // 
       // grpTargets
       // 
+      this.grpTargets.Controls.Add(this.ckAtmoOrbEnabled);
       this.grpTargets.Controls.Add(this.ckAmbiBoxEnabled);
       this.grpTargets.Controls.Add(this.ckBoblightEnabled);
       this.grpTargets.Controls.Add(this.ckHueEnabled);
@@ -563,6 +623,17 @@
       this.grpTargets.TabIndex = 19;
       this.grpTargets.TabStop = false;
       this.grpTargets.Text = "Hardware selection";
+      // 
+      // ckAtmoOrbEnabled
+      // 
+      this.ckAtmoOrbEnabled.AutoSize = true;
+      this.ckAtmoOrbEnabled.Location = new System.Drawing.Point(12, 50);
+      this.ckAtmoOrbEnabled.Name = "ckAtmoOrbEnabled";
+      this.ckAtmoOrbEnabled.Size = new System.Drawing.Size(67, 17);
+      this.ckAtmoOrbEnabled.TabIndex = 24;
+      this.ckAtmoOrbEnabled.Text = "AtmoOrb";
+      this.ckAtmoOrbEnabled.UseVisualStyleBackColor = true;
+      this.ckAtmoOrbEnabled.CheckedChanged += new System.EventHandler(this.ckAtmoOrbEnabled_CheckedChanged);
       // 
       // ckAmbiBoxEnabled
       // 
@@ -578,7 +649,8 @@
       // ckBoblightEnabled
       // 
       this.ckBoblightEnabled.AutoSize = true;
-      this.ckBoblightEnabled.Location = new System.Drawing.Point(12, 71);
+
+      this.ckBoblightEnabled.Location = new System.Drawing.Point(12, 98);
       this.ckBoblightEnabled.Name = "ckBoblightEnabled";
       this.ckBoblightEnabled.Size = new System.Drawing.Size(64, 17);
       this.ckBoblightEnabled.TabIndex = 22;
@@ -589,7 +661,8 @@
       // ckHueEnabled
       // 
       this.ckHueEnabled.AutoSize = true;
-      this.ckHueEnabled.Location = new System.Drawing.Point(12, 94);
+
+      this.ckHueEnabled.Location = new System.Drawing.Point(12, 121);
       this.ckHueEnabled.Name = "ckHueEnabled";
       this.ckHueEnabled.Size = new System.Drawing.Size(46, 17);
       this.ckHueEnabled.TabIndex = 21;
@@ -600,9 +673,11 @@
       // lblHintHardware
       // 
       this.lblHintHardware.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintHardware.Location = new System.Drawing.Point(170, 25);
+
+      this.lblHintHardware.Location = new System.Drawing.Point(176, 25);
       this.lblHintHardware.Name = "lblHintHardware";
-      this.lblHintHardware.Size = new System.Drawing.Size(170, 113);
+
+      this.lblHintHardware.Size = new System.Drawing.Size(164, 113);
       this.lblHintHardware.TabIndex = 20;
       this.lblHintHardware.Text = "Hint: Select the devices you want to use with AtmoLight and configure it on its d" +
     "esignated tab";
@@ -612,7 +687,8 @@
       this.ckAtmowinEnabled.AutoSize = true;
       this.ckAtmowinEnabled.Checked = true;
       this.ckAtmowinEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckAtmowinEnabled.Location = new System.Drawing.Point(12, 48);
+
+      this.ckAtmowinEnabled.Location = new System.Drawing.Point(12, 75);
       this.ckAtmowinEnabled.Name = "ckAtmowinEnabled";
       this.ckAtmowinEnabled.Size = new System.Drawing.Size(69, 17);
       this.ckAtmowinEnabled.TabIndex = 1;
@@ -623,7 +699,8 @@
       // ckHyperionEnabled
       // 
       this.ckHyperionEnabled.AutoSize = true;
-      this.ckHyperionEnabled.Location = new System.Drawing.Point(12, 117);
+
+      this.ckHyperionEnabled.Location = new System.Drawing.Point(100, 25);
       this.ckHyperionEnabled.Name = "ckHyperionEnabled";
       this.ckHyperionEnabled.Size = new System.Drawing.Size(68, 17);
       this.ckHyperionEnabled.TabIndex = 2;
@@ -633,6 +710,7 @@
       // 
       // grpMode
       // 
+      this.grpMode.Controls.Add(this.grpVUMeter);
       this.grpMode.Controls.Add(this.cbMPExit);
       this.grpMode.Controls.Add(this.lblMPExit);
       this.grpMode.Controls.Add(this.grpGIF);
@@ -647,10 +725,69 @@
       this.grpMode.Controls.Add(this.lblVidTvRec);
       this.grpMode.Location = new System.Drawing.Point(10, 165);
       this.grpMode.Name = "grpMode";
-      this.grpMode.Size = new System.Drawing.Size(350, 275);
+
+      this.grpMode.Size = new System.Drawing.Size(350, 330);
       this.grpMode.TabIndex = 7;
       this.grpMode.TabStop = false;
       this.grpMode.Text = "Effect Settings";
+      // 
+      // grpVUMeter
+      // 
+      this.grpVUMeter.Controls.Add(this.tbVUMeterMinHue);
+      this.grpVUMeter.Controls.Add(this.tbVUMeterMaxHue);
+      this.grpVUMeter.Controls.Add(this.lblVUMeterMaxHue);
+      this.grpVUMeter.Controls.Add(this.lblVUMeterMinHue);
+      this.grpVUMeter.Controls.Add(this.tbVUMeterMindB);
+      this.grpVUMeter.Controls.Add(this.lblVUMeterMindB);
+      this.grpVUMeter.Location = new System.Drawing.Point(5, 270);
+      this.grpVUMeter.Name = "grpVUMeter";
+      this.grpVUMeter.Size = new System.Drawing.Size(340, 50);
+      this.grpVUMeter.TabIndex = 29;
+      this.grpVUMeter.TabStop = false;
+      this.grpVUMeter.Text = "VUMeter";
+      // 
+      // tbVUMeterMaxHue
+      // 
+      this.tbVUMeterMaxHue.Location = new System.Drawing.Point(277, 22);
+      this.tbVUMeterMaxHue.Name = "tbVUMeterMaxHue";
+      this.tbVUMeterMaxHue.Size = new System.Drawing.Size(45, 20);
+      this.tbVUMeterMaxHue.TabIndex = 4;
+      this.tbVUMeterMaxHue.Validating += new System.ComponentModel.CancelEventHandler(this.tbVUMeterMaxHue_Validating);
+      // 
+      // lblVUMeterMaxHue
+      // 
+      this.lblVUMeterMaxHue.AutoSize = true;
+      this.lblVUMeterMaxHue.Location = new System.Drawing.Point(219, 25);
+      this.lblVUMeterMaxHue.Name = "lblVUMeterMaxHue";
+      this.lblVUMeterMaxHue.Size = new System.Drawing.Size(53, 13);
+      this.lblVUMeterMaxHue.TabIndex = 3;
+      this.lblVUMeterMaxHue.Text = "Max Hue:";
+      // 
+      // lblVUMeterMinHue
+      // 
+      this.lblVUMeterMinHue.AutoSize = true;
+      this.lblVUMeterMinHue.Location = new System.Drawing.Point(104, 25);
+      this.lblVUMeterMinHue.Name = "lblVUMeterMinHue";
+      this.lblVUMeterMinHue.Size = new System.Drawing.Size(53, 13);
+      this.lblVUMeterMinHue.TabIndex = 2;
+      this.lblVUMeterMinHue.Text = "Min. Hue:";
+      // 
+      // tbVUMeterMindB
+      // 
+      this.tbVUMeterMindB.Location = new System.Drawing.Point(61, 22);
+      this.tbVUMeterMindB.Name = "tbVUMeterMindB";
+      this.tbVUMeterMindB.Size = new System.Drawing.Size(30, 20);
+      this.tbVUMeterMindB.TabIndex = 1;
+      this.tbVUMeterMindB.Validating += new System.ComponentModel.CancelEventHandler(this.tbVUMeterMindB_Validating);
+      // 
+      // lblVUMeterMindB
+      // 
+      this.lblVUMeterMindB.AutoSize = true;
+      this.lblVUMeterMindB.Location = new System.Drawing.Point(10, 25);
+      this.lblVUMeterMindB.Name = "lblVUMeterMindB";
+      this.lblVUMeterMindB.Size = new System.Drawing.Size(46, 13);
+      this.lblVUMeterMindB.TabIndex = 0;
+      this.lblVUMeterMindB.Text = "Min. dB:";
       // 
       // cbMPExit
       // 
@@ -1283,6 +1420,7 @@
       // 
       this.tabMenu.Controls.Add(this.tabPageGeneric);
       this.tabMenu.Controls.Add(this.tabPageAmbiBox);
+      this.tabMenu.Controls.Add(this.tabPageAtmoOrb);
       this.tabMenu.Controls.Add(this.tabPageAtmowin);
       this.tabMenu.Controls.Add(this.tabPageBoblight);
       this.tabMenu.Controls.Add(this.tabPageHue);
@@ -1290,7 +1428,8 @@
       this.tabMenu.Location = new System.Drawing.Point(12, 12);
       this.tabMenu.Name = "tabMenu";
       this.tabMenu.SelectedIndex = 0;
-      this.tabMenu.Size = new System.Drawing.Size(850, 475);
+
+      this.tabMenu.Size = new System.Drawing.Size(850, 530);
       this.tabMenu.TabIndex = 20;
       // 
       // tabPageAmbiBox
@@ -1301,7 +1440,8 @@
       this.tabPageAmbiBox.Location = new System.Drawing.Point(4, 22);
       this.tabPageAmbiBox.Name = "tabPageAmbiBox";
       this.tabPageAmbiBox.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageAmbiBox.Size = new System.Drawing.Size(842, 449);
+
+      this.tabPageAmbiBox.Size = new System.Drawing.Size(842, 504);
       this.tabPageAmbiBox.TabIndex = 5;
       this.tabPageAmbiBox.Text = "AmbiBox";
       // 
@@ -1321,7 +1461,8 @@
       this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxIP);
       this.grpAmbiBoxNetwork.Location = new System.Drawing.Point(10, 140);
       this.grpAmbiBoxNetwork.Name = "grpAmbiBoxNetwork";
-      this.grpAmbiBoxNetwork.Size = new System.Drawing.Size(820, 205);
+
+      this.grpAmbiBoxNetwork.Size = new System.Drawing.Size(820, 175);
       this.grpAmbiBoxNetwork.TabIndex = 1;
       this.grpAmbiBoxNetwork.TabStop = false;
       this.grpAmbiBoxNetwork.Text = "AmbiBox API";
@@ -1487,6 +1628,383 @@
       this.btnSelectFileAmbiBox.UseVisualStyleBackColor = true;
       this.btnSelectFileAmbiBox.Click += new System.EventHandler(this.btnSelectFileAmbiBox_Click);
       // 
+      // tabPageAtmoOrb
+      // 
+      this.tabPageAtmoOrb.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageAtmoOrb.Controls.Add(this.grpAtmoOrbLamps);
+      this.tabPageAtmoOrb.Controls.Add(this.grpAtmoOrbBasicSettings);
+      this.tabPageAtmoOrb.Location = new System.Drawing.Point(4, 22);
+      this.tabPageAtmoOrb.Name = "tabPageAtmoOrb";
+      this.tabPageAtmoOrb.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPageAtmoOrb.Size = new System.Drawing.Size(842, 504);
+      this.tabPageAtmoOrb.TabIndex = 6;
+      this.tabPageAtmoOrb.Text = "AtmoOrb";
+      // 
+      // grpAtmoOrbLamps
+      // 
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbVScanTo);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbHScanTo);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbConnection);
+      this.grpAtmoOrbLamps.Controls.Add(this.cbAtmoOrbInvertZone);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbVScanEnd);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbVScanStart);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbVScan);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbHScanEnd);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbHScanStart);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbHScan);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbPort);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbPort);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbIP);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbIP);
+      this.grpAtmoOrbLamps.Controls.Add(this.rbAtmoOrbUDP);
+      this.grpAtmoOrbLamps.Controls.Add(this.rbAtmoOrbTCP);
+      this.grpAtmoOrbLamps.Controls.Add(this.tbAtmoOrbID);
+      this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbID);
+      this.grpAtmoOrbLamps.Controls.Add(this.btnAtmoOrbRemove);
+      this.grpAtmoOrbLamps.Controls.Add(this.btnAtmoOrbUpdate);
+      this.grpAtmoOrbLamps.Controls.Add(this.btnAtmoOrbAdd);
+      this.grpAtmoOrbLamps.Controls.Add(this.lbAtmoOrbLamps);
+      this.grpAtmoOrbLamps.Location = new System.Drawing.Point(10, 140);
+      this.grpAtmoOrbLamps.Name = "grpAtmoOrbLamps";
+      this.grpAtmoOrbLamps.Size = new System.Drawing.Size(820, 230);
+      this.grpAtmoOrbLamps.TabIndex = 1;
+      this.grpAtmoOrbLamps.TabStop = false;
+      this.grpAtmoOrbLamps.Text = "Lamp settings";
+      // 
+      // lblAtmoOrbVScanTo
+      // 
+      this.lblAtmoOrbVScanTo.AutoSize = true;
+      this.lblAtmoOrbVScanTo.Location = new System.Drawing.Point(600, 150);
+      this.lblAtmoOrbVScanTo.Name = "lblAtmoOrbVScanTo";
+      this.lblAtmoOrbVScanTo.Size = new System.Drawing.Size(16, 13);
+      this.lblAtmoOrbVScanTo.TabIndex = 21;
+      this.lblAtmoOrbVScanTo.Text = "to";
+      // 
+      // lblAtmoOrbHScanTo
+      // 
+      this.lblAtmoOrbHScanTo.AutoSize = true;
+      this.lblAtmoOrbHScanTo.Location = new System.Drawing.Point(600, 125);
+      this.lblAtmoOrbHScanTo.Name = "lblAtmoOrbHScanTo";
+      this.lblAtmoOrbHScanTo.Size = new System.Drawing.Size(16, 13);
+      this.lblAtmoOrbHScanTo.TabIndex = 20;
+      this.lblAtmoOrbHScanTo.Text = "to";
+      // 
+      // lblAtmoOrbConnection
+      // 
+      this.lblAtmoOrbConnection.AutoSize = true;
+      this.lblAtmoOrbConnection.Location = new System.Drawing.Point(350, 50);
+      this.lblAtmoOrbConnection.Name = "lblAtmoOrbConnection";
+      this.lblAtmoOrbConnection.Size = new System.Drawing.Size(87, 13);
+      this.lblAtmoOrbConnection.TabIndex = 19;
+      this.lblAtmoOrbConnection.Text = "Connection type:";
+      // 
+      // cbAtmoOrbInvertZone
+      // 
+      this.cbAtmoOrbInvertZone.AutoSize = true;
+      this.cbAtmoOrbInvertZone.Location = new System.Drawing.Point(352, 175);
+      this.cbAtmoOrbInvertZone.Name = "cbAtmoOrbInvertZone";
+      this.cbAtmoOrbInvertZone.Size = new System.Drawing.Size(81, 17);
+      this.cbAtmoOrbInvertZone.TabIndex = 18;
+      this.cbAtmoOrbInvertZone.Text = "Invert Zone";
+      this.cbAtmoOrbInvertZone.UseVisualStyleBackColor = true;
+      // 
+      // tbAtmoOrbVScanEnd
+      // 
+      this.tbAtmoOrbVScanEnd.Location = new System.Drawing.Point(640, 147);
+      this.tbAtmoOrbVScanEnd.Name = "tbAtmoOrbVScanEnd";
+      this.tbAtmoOrbVScanEnd.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbVScanEnd.TabIndex = 17;
+      this.tbAtmoOrbVScanEnd.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbVScanEnd_Validating);
+      // 
+      // tbAtmoOrbVScanStart
+      // 
+      this.tbAtmoOrbVScanStart.Location = new System.Drawing.Point(490, 147);
+      this.tbAtmoOrbVScanStart.Name = "tbAtmoOrbVScanStart";
+      this.tbAtmoOrbVScanStart.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbVScanStart.TabIndex = 16;
+      this.tbAtmoOrbVScanStart.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbVScanStart_Validating);
+      // 
+      // lblAtmoOrbVScan
+      // 
+      this.lblAtmoOrbVScan.AutoSize = true;
+      this.lblAtmoOrbVScan.Location = new System.Drawing.Point(350, 150);
+      this.lblAtmoOrbVScan.Name = "lblAtmoOrbVScan";
+      this.lblAtmoOrbVScan.Size = new System.Drawing.Size(62, 13);
+      this.lblAtmoOrbVScan.TabIndex = 15;
+      this.lblAtmoOrbVScan.Text = "VScan from";
+      // 
+      // tbAtmoOrbHScanEnd
+      // 
+      this.tbAtmoOrbHScanEnd.Location = new System.Drawing.Point(640, 122);
+      this.tbAtmoOrbHScanEnd.Name = "tbAtmoOrbHScanEnd";
+      this.tbAtmoOrbHScanEnd.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbHScanEnd.TabIndex = 14;
+      this.tbAtmoOrbHScanEnd.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbHScanEnd_Validating);
+      // 
+      // tbAtmoOrbHScanStart
+      // 
+      this.tbAtmoOrbHScanStart.Location = new System.Drawing.Point(490, 122);
+      this.tbAtmoOrbHScanStart.Name = "tbAtmoOrbHScanStart";
+      this.tbAtmoOrbHScanStart.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbHScanStart.TabIndex = 13;
+      this.tbAtmoOrbHScanStart.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbHScanStart_Validating);
+      // 
+      // lblAtmoOrbHScan
+      // 
+      this.lblAtmoOrbHScan.AutoSize = true;
+      this.lblAtmoOrbHScan.Location = new System.Drawing.Point(350, 125);
+      this.lblAtmoOrbHScan.Name = "lblAtmoOrbHScan";
+      this.lblAtmoOrbHScan.Size = new System.Drawing.Size(63, 13);
+      this.lblAtmoOrbHScan.TabIndex = 12;
+      this.lblAtmoOrbHScan.Text = "HScan from";
+      // 
+      // tbAtmoOrbPort
+      // 
+      this.tbAtmoOrbPort.Location = new System.Drawing.Point(490, 97);
+      this.tbAtmoOrbPort.Name = "tbAtmoOrbPort";
+      this.tbAtmoOrbPort.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbPort.TabIndex = 11;
+      this.tbAtmoOrbPort.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbPort_Validating);
+      // 
+      // lblAtmoOrbPort
+      // 
+      this.lblAtmoOrbPort.AutoSize = true;
+      this.lblAtmoOrbPort.Location = new System.Drawing.Point(350, 100);
+      this.lblAtmoOrbPort.Name = "lblAtmoOrbPort";
+      this.lblAtmoOrbPort.Size = new System.Drawing.Size(29, 13);
+      this.lblAtmoOrbPort.TabIndex = 10;
+      this.lblAtmoOrbPort.Text = "Port:";
+      // 
+      // tbAtmoOrbIP
+      // 
+      this.tbAtmoOrbIP.Location = new System.Drawing.Point(490, 72);
+      this.tbAtmoOrbIP.Name = "tbAtmoOrbIP";
+      this.tbAtmoOrbIP.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbIP.TabIndex = 9;
+      this.tbAtmoOrbIP.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbIP_Validating);
+      // 
+      // lblAtmoOrbIP
+      // 
+      this.lblAtmoOrbIP.AutoSize = true;
+      this.lblAtmoOrbIP.Location = new System.Drawing.Point(350, 75);
+      this.lblAtmoOrbIP.Name = "lblAtmoOrbIP";
+      this.lblAtmoOrbIP.Size = new System.Drawing.Size(20, 13);
+      this.lblAtmoOrbIP.TabIndex = 8;
+      this.lblAtmoOrbIP.Text = "IP:";
+      // 
+      // rbAtmoOrbUDP
+      // 
+      this.rbAtmoOrbUDP.AutoSize = true;
+      this.rbAtmoOrbUDP.Location = new System.Drawing.Point(565, 48);
+      this.rbAtmoOrbUDP.Name = "rbAtmoOrbUDP";
+      this.rbAtmoOrbUDP.Size = new System.Drawing.Size(48, 17);
+      this.rbAtmoOrbUDP.TabIndex = 7;
+      this.rbAtmoOrbUDP.TabStop = true;
+      this.rbAtmoOrbUDP.Text = "UDP";
+      this.rbAtmoOrbUDP.UseVisualStyleBackColor = true;
+      this.rbAtmoOrbUDP.CheckedChanged += new System.EventHandler(this.rbAtmoOrbUDPTCP_CheckedChanged);
+      // 
+      // rbAtmoOrbTCP
+      // 
+      this.rbAtmoOrbTCP.AutoSize = true;
+      this.rbAtmoOrbTCP.Location = new System.Drawing.Point(490, 48);
+      this.rbAtmoOrbTCP.Name = "rbAtmoOrbTCP";
+      this.rbAtmoOrbTCP.Size = new System.Drawing.Size(46, 17);
+      this.rbAtmoOrbTCP.TabIndex = 6;
+      this.rbAtmoOrbTCP.TabStop = true;
+      this.rbAtmoOrbTCP.Text = "TCP";
+      this.rbAtmoOrbTCP.UseVisualStyleBackColor = true;
+      this.rbAtmoOrbTCP.CheckedChanged += new System.EventHandler(this.rbAtmoOrbUDPTCP_CheckedChanged);
+      // 
+      // tbAtmoOrbID
+      // 
+      this.tbAtmoOrbID.Location = new System.Drawing.Point(490, 19);
+      this.tbAtmoOrbID.Name = "tbAtmoOrbID";
+      this.tbAtmoOrbID.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbID.TabIndex = 5;
+      // 
+      // lblAtmoOrbID
+      // 
+      this.lblAtmoOrbID.AutoSize = true;
+      this.lblAtmoOrbID.Location = new System.Drawing.Point(350, 25);
+      this.lblAtmoOrbID.Name = "lblAtmoOrbID";
+      this.lblAtmoOrbID.Size = new System.Drawing.Size(21, 13);
+      this.lblAtmoOrbID.TabIndex = 4;
+      this.lblAtmoOrbID.Text = "ID:";
+      // 
+      // btnAtmoOrbRemove
+      // 
+      this.btnAtmoOrbRemove.Location = new System.Drawing.Point(600, 200);
+      this.btnAtmoOrbRemove.Name = "btnAtmoOrbRemove";
+      this.btnAtmoOrbRemove.Size = new System.Drawing.Size(75, 23);
+      this.btnAtmoOrbRemove.TabIndex = 3;
+      this.btnAtmoOrbRemove.Text = "Remove";
+      this.btnAtmoOrbRemove.UseVisualStyleBackColor = true;
+      this.btnAtmoOrbRemove.Click += new System.EventHandler(this.btnAtmoOrbRemove_Click);
+      // 
+      // btnAtmoOrbUpdate
+      // 
+      this.btnAtmoOrbUpdate.Location = new System.Drawing.Point(475, 200);
+      this.btnAtmoOrbUpdate.Name = "btnAtmoOrbUpdate";
+      this.btnAtmoOrbUpdate.Size = new System.Drawing.Size(75, 23);
+      this.btnAtmoOrbUpdate.TabIndex = 2;
+      this.btnAtmoOrbUpdate.Text = "Update";
+      this.btnAtmoOrbUpdate.UseVisualStyleBackColor = true;
+      this.btnAtmoOrbUpdate.Click += new System.EventHandler(this.btnAtmoOrbUpdate_Click);
+      // 
+      // btnAtmoOrbAdd
+      // 
+      this.btnAtmoOrbAdd.Location = new System.Drawing.Point(350, 200);
+      this.btnAtmoOrbAdd.Name = "btnAtmoOrbAdd";
+      this.btnAtmoOrbAdd.Size = new System.Drawing.Size(75, 23);
+      this.btnAtmoOrbAdd.TabIndex = 1;
+      this.btnAtmoOrbAdd.Text = "Add";
+      this.btnAtmoOrbAdd.UseVisualStyleBackColor = true;
+      this.btnAtmoOrbAdd.Click += new System.EventHandler(this.btnAtmoOrbAdd_Click);
+      // 
+      // lbAtmoOrbLamps
+      // 
+      this.lbAtmoOrbLamps.FormattingEnabled = true;
+      this.lbAtmoOrbLamps.Location = new System.Drawing.Point(12, 25);
+      this.lbAtmoOrbLamps.Name = "lbAtmoOrbLamps";
+      this.lbAtmoOrbLamps.Size = new System.Drawing.Size(248, 186);
+      this.lbAtmoOrbLamps.TabIndex = 0;
+      this.lbAtmoOrbLamps.SelectedIndexChanged += new System.EventHandler(this.lbAtmoOrbLamps_SelectedIndexChanged);
+      // 
+      // grpAtmoOrbBasicSettings
+      // 
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbGamma);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbSaturation);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.lblAtmoOrbGamma);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.lblAtmoOrbSaturation);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.lblAtmoOrbBlackThreshold);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.lblAtmoOrbThreshold);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.lblAtmoOrbMinDiversion);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.lblAtmoOrbBroadcastPort);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbBlackThreshold);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbThreshold);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbMinDiversion);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbBroadcastPort);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.cbAtmoOrbUseOverallLightness);
+      this.grpAtmoOrbBasicSettings.Location = new System.Drawing.Point(10, 10);
+      this.grpAtmoOrbBasicSettings.Name = "grpAtmoOrbBasicSettings";
+      this.grpAtmoOrbBasicSettings.Size = new System.Drawing.Size(820, 125);
+      this.grpAtmoOrbBasicSettings.TabIndex = 0;
+      this.grpAtmoOrbBasicSettings.TabStop = false;
+      this.grpAtmoOrbBasicSettings.Text = "Basic settings";
+      // 
+      // tbAtmoOrbGamma
+      // 
+      this.tbAtmoOrbGamma.Location = new System.Drawing.Point(505, 47);
+      this.tbAtmoOrbGamma.Name = "tbAtmoOrbGamma";
+      this.tbAtmoOrbGamma.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbGamma.TabIndex = 12;
+      this.tbAtmoOrbGamma.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbGamma_Validating);
+      // 
+      // tbAtmoOrbSaturation
+      // 
+      this.tbAtmoOrbSaturation.Location = new System.Drawing.Point(505, 22);
+      this.tbAtmoOrbSaturation.Name = "tbAtmoOrbSaturation";
+      this.tbAtmoOrbSaturation.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbSaturation.TabIndex = 11;
+      this.tbAtmoOrbSaturation.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbSaturation_Validating);
+      // 
+      // lblAtmoOrbGamma
+      // 
+      this.lblAtmoOrbGamma.AutoSize = true;
+      this.lblAtmoOrbGamma.Location = new System.Drawing.Point(350, 50);
+      this.lblAtmoOrbGamma.Name = "lblAtmoOrbGamma";
+      this.lblAtmoOrbGamma.Size = new System.Drawing.Size(96, 13);
+      this.lblAtmoOrbGamma.TabIndex = 10;
+      this.lblAtmoOrbGamma.Text = "Gamma correction:";
+      // 
+      // lblAtmoOrbSaturation
+      // 
+      this.lblAtmoOrbSaturation.AutoSize = true;
+      this.lblAtmoOrbSaturation.Location = new System.Drawing.Point(350, 25);
+      this.lblAtmoOrbSaturation.Name = "lblAtmoOrbSaturation";
+      this.lblAtmoOrbSaturation.Size = new System.Drawing.Size(108, 13);
+      this.lblAtmoOrbSaturation.TabIndex = 9;
+      this.lblAtmoOrbSaturation.Text = "Saturation correction:";
+      // 
+      // lblAtmoOrbBlackThreshold
+      // 
+      this.lblAtmoOrbBlackThreshold.AutoSize = true;
+      this.lblAtmoOrbBlackThreshold.Location = new System.Drawing.Point(10, 100);
+      this.lblAtmoOrbBlackThreshold.Name = "lblAtmoOrbBlackThreshold";
+      this.lblAtmoOrbBlackThreshold.Size = new System.Drawing.Size(83, 13);
+      this.lblAtmoOrbBlackThreshold.TabIndex = 8;
+      this.lblAtmoOrbBlackThreshold.Text = "Black threshold:";
+      // 
+      // lblAtmoOrbThreshold
+      // 
+      this.lblAtmoOrbThreshold.AutoSize = true;
+      this.lblAtmoOrbThreshold.Location = new System.Drawing.Point(10, 75);
+      this.lblAtmoOrbThreshold.Name = "lblAtmoOrbThreshold";
+      this.lblAtmoOrbThreshold.Size = new System.Drawing.Size(54, 13);
+      this.lblAtmoOrbThreshold.TabIndex = 7;
+      this.lblAtmoOrbThreshold.Text = "Threshold";
+      // 
+      // lblAtmoOrbMinDiversion
+      // 
+      this.lblAtmoOrbMinDiversion.AutoSize = true;
+      this.lblAtmoOrbMinDiversion.Location = new System.Drawing.Point(10, 50);
+      this.lblAtmoOrbMinDiversion.Name = "lblAtmoOrbMinDiversion";
+      this.lblAtmoOrbMinDiversion.Size = new System.Drawing.Size(101, 13);
+      this.lblAtmoOrbMinDiversion.TabIndex = 6;
+      this.lblAtmoOrbMinDiversion.Text = "Min. color diversion:";
+      // 
+      // lblAtmoOrbBroadcastPort
+      // 
+      this.lblAtmoOrbBroadcastPort.AutoSize = true;
+      this.lblAtmoOrbBroadcastPort.Location = new System.Drawing.Point(10, 25);
+      this.lblAtmoOrbBroadcastPort.Name = "lblAtmoOrbBroadcastPort";
+      this.lblAtmoOrbBroadcastPort.Size = new System.Drawing.Size(79, 13);
+      this.lblAtmoOrbBroadcastPort.TabIndex = 5;
+      this.lblAtmoOrbBroadcastPort.Text = "Broadcast port:";
+      // 
+      // tbAtmoOrbBlackThreshold
+      // 
+      this.tbAtmoOrbBlackThreshold.Location = new System.Drawing.Point(160, 97);
+      this.tbAtmoOrbBlackThreshold.Name = "tbAtmoOrbBlackThreshold";
+      this.tbAtmoOrbBlackThreshold.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbBlackThreshold.TabIndex = 4;
+      this.tbAtmoOrbBlackThreshold.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbBlackThreshold_Validating);
+      // 
+      // tbAtmoOrbThreshold
+      // 
+      this.tbAtmoOrbThreshold.Location = new System.Drawing.Point(160, 72);
+      this.tbAtmoOrbThreshold.Name = "tbAtmoOrbThreshold";
+      this.tbAtmoOrbThreshold.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbThreshold.TabIndex = 3;
+      this.tbAtmoOrbThreshold.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbThreshold_Validating);
+      // 
+      // tbAtmoOrbMinDiversion
+      // 
+      this.tbAtmoOrbMinDiversion.Location = new System.Drawing.Point(160, 47);
+      this.tbAtmoOrbMinDiversion.Name = "tbAtmoOrbMinDiversion";
+      this.tbAtmoOrbMinDiversion.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbMinDiversion.TabIndex = 2;
+      this.tbAtmoOrbMinDiversion.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbMinDiversion_Validating);
+      // 
+      // tbAtmoOrbBroadcastPort
+      // 
+      this.tbAtmoOrbBroadcastPort.Location = new System.Drawing.Point(160, 22);
+      this.tbAtmoOrbBroadcastPort.Name = "tbAtmoOrbBroadcastPort";
+      this.tbAtmoOrbBroadcastPort.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbBroadcastPort.TabIndex = 1;
+      this.tbAtmoOrbBroadcastPort.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoOrbBroadcastPort_Validating);
+      // 
+      // cbAtmoOrbUseOverallLightness
+      // 
+      this.cbAtmoOrbUseOverallLightness.AutoSize = true;
+      this.cbAtmoOrbUseOverallLightness.Location = new System.Drawing.Point(352, 75);
+      this.cbAtmoOrbUseOverallLightness.Name = "cbAtmoOrbUseOverallLightness";
+      this.cbAtmoOrbUseOverallLightness.Size = new System.Drawing.Size(123, 17);
+      this.cbAtmoOrbUseOverallLightness.TabIndex = 0;
+      this.cbAtmoOrbUseOverallLightness.Text = "Use overall lightness";
+      this.cbAtmoOrbUseOverallLightness.UseVisualStyleBackColor = true;
+      // 
       // tabPageBoblight
       // 
       this.tabPageBoblight.BackColor = System.Drawing.SystemColors.Control;
@@ -1495,7 +2013,8 @@
       this.tabPageBoblight.Location = new System.Drawing.Point(4, 22);
       this.tabPageBoblight.Name = "tabPageBoblight";
       this.tabPageBoblight.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageBoblight.Size = new System.Drawing.Size(842, 449);
+
+      this.tabPageBoblight.Size = new System.Drawing.Size(842, 504);
       this.tabPageBoblight.TabIndex = 4;
       this.tabPageBoblight.Text = "Boblight";
       // 
@@ -1804,7 +2323,8 @@
       this.tabPageHue.Controls.Add(this.HueNetworkSettings);
       this.tabPageHue.Location = new System.Drawing.Point(4, 22);
       this.tabPageHue.Name = "tabPageHue";
-      this.tabPageHue.Size = new System.Drawing.Size(842, 449);
+
+      this.tabPageHue.Size = new System.Drawing.Size(842, 504);
       this.tabPageHue.TabIndex = 3;
       this.tabPageHue.Text = "Hue";
       // 
@@ -2019,6 +2539,14 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
+      // tbVUMeterMinHue
+      // 
+      this.tbVUMeterMinHue.Location = new System.Drawing.Point(162, 22);
+      this.tbVUMeterMinHue.Name = "tbVUMeterMinHue";
+      this.tbVUMeterMinHue.Size = new System.Drawing.Size(45, 20);
+      this.tbVUMeterMinHue.TabIndex = 5;
+      this.tbVUMeterMinHue.Validating += new System.ComponentModel.CancelEventHandler(this.tbVUMeterMinHue_Validating);
+      // 
       // lblAtmoWinConnectionDelay
       // 
       this.lblAtmoWinConnectionDelay.AutoSize = true;
@@ -2040,7 +2568,8 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(872, 527);
+
+      this.ClientSize = new System.Drawing.Size(872, 582);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
@@ -2050,8 +2579,8 @@
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MaximizeBox = false;
-      this.MaximumSize = new System.Drawing.Size(888, 565);
-      this.MinimumSize = new System.Drawing.Size(888, 565);
+      this.MaximumSize = new System.Drawing.Size(888, 620);
+      this.MinimumSize = new System.Drawing.Size(888, 620);
       this.Name = "SetupForm";
       this.Text = "AtmoLight Setup";
       this.tabPageHyperion.ResumeLayout(false);
@@ -2067,6 +2596,8 @@
       this.grpTargets.PerformLayout();
       this.grpMode.ResumeLayout(false);
       this.grpMode.PerformLayout();
+      this.grpVUMeter.ResumeLayout(false);
+      this.grpVUMeter.PerformLayout();
       this.grpGIF.ResumeLayout(false);
       this.grpGIF.PerformLayout();
       this.grpStaticColor.ResumeLayout(false);
@@ -2083,6 +2614,11 @@
       this.grpAmbiBoxNetwork.PerformLayout();
       this.grpAmbiBoxLocal.ResumeLayout(false);
       this.grpAmbiBoxLocal.PerformLayout();
+      this.tabPageAtmoOrb.ResumeLayout(false);
+      this.grpAtmoOrbLamps.ResumeLayout(false);
+      this.grpAtmoOrbLamps.PerformLayout();
+      this.grpAtmoOrbBasicSettings.ResumeLayout(false);
+      this.grpAtmoOrbBasicSettings.PerformLayout();
       this.tabPageBoblight.ResumeLayout(false);
       this.grpBoblightSettings.ResumeLayout(false);
       this.grpBoblightSettings.PerformLayout();
@@ -2278,6 +2814,52 @@
     private System.Windows.Forms.TextBox tbAmbiBoxIP;
     private System.Windows.Forms.Label lblAmbiBoxExternalProfile;
     private System.Windows.Forms.Label lblAmbiBoxMediaPortalProfile;
+    private System.Windows.Forms.TabPage tabPageAtmoOrb;
+    private System.Windows.Forms.GroupBox grpAtmoOrbLamps;
+    private System.Windows.Forms.ListBox lbAtmoOrbLamps;
+    private System.Windows.Forms.GroupBox grpAtmoOrbBasicSettings;
+    private System.Windows.Forms.CheckBox cbAtmoOrbUseOverallLightness;
+    private System.Windows.Forms.Label lblAtmoOrbBlackThreshold;
+    private System.Windows.Forms.Label lblAtmoOrbThreshold;
+    private System.Windows.Forms.Label lblAtmoOrbMinDiversion;
+    private System.Windows.Forms.Label lblAtmoOrbBroadcastPort;
+    private System.Windows.Forms.TextBox tbAtmoOrbBlackThreshold;
+    private System.Windows.Forms.TextBox tbAtmoOrbThreshold;
+    private System.Windows.Forms.TextBox tbAtmoOrbMinDiversion;
+    private System.Windows.Forms.TextBox tbAtmoOrbBroadcastPort;
+    private System.Windows.Forms.TextBox tbAtmoOrbGamma;
+    private System.Windows.Forms.TextBox tbAtmoOrbSaturation;
+    private System.Windows.Forms.Label lblAtmoOrbGamma;
+    private System.Windows.Forms.Label lblAtmoOrbSaturation;
+    private System.Windows.Forms.TextBox tbAtmoOrbID;
+    private System.Windows.Forms.Label lblAtmoOrbID;
+    private System.Windows.Forms.Button btnAtmoOrbRemove;
+    private System.Windows.Forms.Button btnAtmoOrbUpdate;
+    private System.Windows.Forms.Button btnAtmoOrbAdd;
+    private System.Windows.Forms.Label lblAtmoOrbVScanTo;
+    private System.Windows.Forms.Label lblAtmoOrbHScanTo;
+    private System.Windows.Forms.Label lblAtmoOrbConnection;
+    private System.Windows.Forms.CheckBox cbAtmoOrbInvertZone;
+    private System.Windows.Forms.TextBox tbAtmoOrbVScanEnd;
+    private System.Windows.Forms.TextBox tbAtmoOrbVScanStart;
+    private System.Windows.Forms.Label lblAtmoOrbVScan;
+    private System.Windows.Forms.TextBox tbAtmoOrbHScanEnd;
+    private System.Windows.Forms.TextBox tbAtmoOrbHScanStart;
+    private System.Windows.Forms.Label lblAtmoOrbHScan;
+    private System.Windows.Forms.TextBox tbAtmoOrbPort;
+    private System.Windows.Forms.Label lblAtmoOrbPort;
+    private System.Windows.Forms.TextBox tbAtmoOrbIP;
+    private System.Windows.Forms.Label lblAtmoOrbIP;
+    private System.Windows.Forms.RadioButton rbAtmoOrbUDP;
+    private System.Windows.Forms.RadioButton rbAtmoOrbTCP;
+    private System.Windows.Forms.CheckBox ckAtmoOrbEnabled;
+    private System.Windows.Forms.GroupBox grpVUMeter;
+    private System.Windows.Forms.Label lblVUMeterMaxHue;
+    private System.Windows.Forms.Label lblVUMeterMinHue;
+    private System.Windows.Forms.TextBox tbVUMeterMindB;
+    private System.Windows.Forms.Label lblVUMeterMindB;
+    private System.Windows.Forms.TextBox tbVUMeterMaxHue;
+    private System.Windows.Forms.TextBox tbVUMeterMinHue;
     private System.Windows.Forms.TextBox tbAtmoWinConnectionDelay;
     private System.Windows.Forms.Label lblAtmoWinConnectionDelay;
   }

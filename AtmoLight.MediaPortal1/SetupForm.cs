@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Globalization;
 using Language;
 
 namespace AtmoLight
@@ -11,10 +12,12 @@ namespace AtmoLight
   {
     private Core coreObject = Core.GetInstance();
 
+    #region Init
     public SetupForm()
     {
       InitializeComponent();
       UpdateLanguageOnControls();
+      //Settings.LoadSettings();
 
       // AmbiBox
       if (Settings.ambiBoxTarget)
@@ -40,6 +43,11 @@ namespace AtmoLight
       if (Settings.hueTarget)
       {
         coreObject.AddTarget(Target.Hue);
+      }
+
+      if (Settings.atmoOrbTarget)
+      {
+        coreObject.AddTarget(Target.AtmoOrb);
       }
 
       UpdateComboBoxes();
@@ -120,6 +128,24 @@ namespace AtmoLight
       tbAmbiBoxReconnectDelay.Text = Settings.ambiBoxReconnectDelay.ToString();
       tbAmbiBoxMediaPortalProfile.Text = Settings.ambiBoxMediaPortalProfile;
       tbAmbiBoxExternalProfile.Text = Settings.ambiBoxExternalProfile;
+      tbAtmoOrbBlackThreshold.Text = Settings.atmoOrbBlackThreshold.ToString();
+      tbAtmoOrbBroadcastPort.Text = Settings.atmoOrbBroadcastPort.ToString();
+      tbAtmoOrbGamma.Text = Settings.atmoOrbGamma.ToString();
+      tbAtmoOrbMinDiversion.Text = Settings.atmoOrbMinDiversion.ToString();
+      tbAtmoOrbSaturation.Text = Settings.atmoOrbSaturation.ToString();
+      tbAtmoOrbThreshold.Text = Settings.atmoOrbThreshold.ToString();
+      ckAtmoOrbEnabled.Checked = Settings.atmoOrbTarget;
+      cbAtmoOrbUseOverallLightness.Checked = Settings.atmoOrbUseOverallLightness;
+      for (int i = 0; i < Settings.atmoOrbLamps.Count; i++)
+      {
+        if (!string.IsNullOrEmpty(Settings.atmoOrbLamps[i].Split(',')[0]))
+        {
+          lbAtmoOrbLamps.Items.Add(Settings.atmoOrbLamps[i].Split(',')[0]);
+        }
+      }
+      tbVUMeterMaxHue.Text = Settings.vuMeterMaxHue.ToString();
+      tbVUMeterMindB.Text = Settings.vuMeterMindB.ToString();
+      tbVUMeterMinHue.Text = Settings.vuMeterMinHue.ToString();
 
       // Temp disable for AmbiBox
       tabMenu.TabPages.Remove(tabPageAmbiBox);
@@ -127,7 +153,8 @@ namespace AtmoLight
       ckHyperionEnabled.Location = ckHueEnabled.Location;
       ckHueEnabled.Location = ckBoblightEnabled.Location;
       ckBoblightEnabled.Location = ckAtmowinEnabled.Location;
-      ckAtmowinEnabled.Location = ckAmbiBoxEnabled.Location;
+      ckAtmowinEnabled.Location = ckAtmoOrbEnabled.Location;
+      ckAtmoOrbEnabled.Location = ckAmbiBoxEnabled.Location;
     }
 
     private void UpdateLanguageOnControls()
@@ -220,27 +247,38 @@ namespace AtmoLight
       lblAmbiBoxReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxReconnectDelay;
       cbAmbiBoxAutoStart.Text = LanguageLoader.appStrings.SetupForm_cbAmbiBoxAutoStart;
       cbAmbiBoxAutoStop.Text = LanguageLoader.appStrings.SetupForm_cbAmbiBoxAutoStop;
+      lblAtmoOrbBlackThreshold.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbBlackThreshold;
+      lblAtmoOrbBroadcastPort.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbBroadcastPort;
+      lblAtmoOrbConnection.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbConnection;
+      lblAtmoOrbGamma.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbGamma;
+      lblAtmoOrbHScan.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbHScan;
+      lblAtmoOrbHScanTo.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbHScanTo;
+      lblAtmoOrbID.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbID;
+      lblAtmoOrbIP.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbIP;
+      lblAtmoOrbMinDiversion.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbMinDiversion;
+      lblAtmoOrbPort.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbPort;
+      lblAtmoOrbSaturation.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbSaturation;
+      lblAtmoOrbThreshold.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbThreshold;
+      lblAtmoOrbVScan.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbVScan;
+      lblAtmoOrbVScanTo.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbVScanTo;
+      grpAtmoOrbBasicSettings.Text = LanguageLoader.appStrings.SetupForm_grpAtmoOrbBasicSettings;
+      grpAtmoOrbLamps.Text = LanguageLoader.appStrings.SetupForm_grpAtmoOrbLamps;
+      rbAtmoOrbTCP.Text = LanguageLoader.appStrings.SetupForm_rbAtmoOrbTCP;
+      rbAtmoOrbUDP.Text = LanguageLoader.appStrings.SetupForm_rbAtmoOrbUDP;
+      ckAtmoOrbEnabled.Text = LanguageLoader.appStrings.SetupForm_ckAtmoOrbEnabled;
+      cbAtmoOrbInvertZone.Text = LanguageLoader.appStrings.SetupForm_cbAtmoOrbInvertZone;
+      cbAtmoOrbUseOverallLightness.Text = LanguageLoader.appStrings.SetupForm_cbAtmoOrbUseOverallLightness;
+      btnAtmoOrbAdd.Text = LanguageLoader.appStrings.SetupForm_btnAtmoOrbAdd;
+      btnAtmoOrbRemove.Text = LanguageLoader.appStrings.SetupForm_btnAtmoOrbRemove;
+      btnAtmoOrbUpdate.Text = LanguageLoader.appStrings.SetupForm_btnAtmoOrbUpdate;
+      lblVUMeterMaxHue.Text = LanguageLoader.appStrings.SetupForm_lblVUMeterMaxHue;
+      lblVUMeterMindB.Text = LanguageLoader.appStrings.SetupForm_lblVUMeterMindB;
+      lblVUMeterMinHue.Text = LanguageLoader.appStrings.SetupForm_lblVUMeterMinHue;
+      grpVUMeter.Text = LanguageLoader.appStrings.SetupForm_grpVUMeter;
     }
+    #endregion
 
-    private void btnSelectFile_Click(object sender, EventArgs e)
-    {
-      if (openFileDialog1.ShowDialog() == DialogResult.OK)
-      {
-        string filenameNoExtension = Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
-        string filename = filenameNoExtension.ToLower();
-        if (filename == "atmowina")
-        {
-          edFileAtmoWin.Text = openFileDialog1.FileName;
-        }
-        else
-        {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorAtmoWinA, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-          edFileAtmoWin.Text = "";
-          return;
-        }
-      }
-    }
-
+    #region General Button events
     private void btnCancel_Click(object sender, EventArgs e)
     {
       this.DialogResult = DialogResult.Cancel;
@@ -598,6 +636,87 @@ namespace AtmoLight
         return;
       }
 
+      // AtmoOrb Broadcast Port
+      minValue = 1;
+      maxValue = 65535;
+      if (validatorInt(tbAtmoOrbBroadcastPort.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbBroadcastPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // AtmoOrb Min Diversion
+      minValue = 0;
+      maxValue = 255;
+      if (validatorInt(tbAtmoOrbMinDiversion.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbMinDiversion.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // AtmoOrb Threshold
+      minValue = 0;
+      maxValue = 255;
+      if (validatorInt(tbAtmoOrbThreshold.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbThreshold.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // AtmoOrb Black Threshold
+      minValue = 0;
+      maxValue = 255;
+      if (validatorInt(tbAtmoOrbBlackThreshold.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbBlackThreshold.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // AtmoOrb Saturation
+      double doubleMinValue = -1.0;
+      double doubleMaxValue = 1.0;
+      if (validatorDouble(tbAtmoOrbSaturation.Text, doubleMinValue, doubleMaxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + tbAtmoOrbSaturation.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // AtmoOrb Gamma
+      doubleMinValue = 0.0;
+      doubleMaxValue = 5.0;
+      if (validatorDouble(tbAtmoOrbGamma.Text, doubleMinValue, doubleMaxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + tbAtmoOrbGamma.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // VUMeter Min dB
+      minValue = -100;
+      maxValue = 0;
+      if (validatorInt(tbVUMeterMindB.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbVUMeterMindB.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // VUMeter Min Hue
+      doubleMinValue = 0.0;
+      doubleMaxValue = 1.0;
+      if (validatorDouble(tbVUMeterMinHue.Text, doubleMinValue, doubleMaxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + tbVUMeterMinHue.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      // VUMeter Max Hue
+      doubleMinValue = 0.0;
+      doubleMaxValue = 1.0;
+      if (validatorDouble(tbVUMeterMaxHue.Text, doubleMinValue, doubleMaxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + tbVUMeterMaxHue.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       Settings.staticColorRed = int.Parse(tbRed.Text);
       Settings.staticColorGreen = int.Parse(tbGreen.Text);
       Settings.staticColorBlue = int.Parse(tbBlue.Text);
@@ -667,6 +786,17 @@ namespace AtmoLight
       Settings.ambiBoxReconnectDelay = int.Parse(tbAmbiBoxReconnectDelay.Text);
       Settings.ambiBoxMediaPortalProfile = tbAmbiBoxMediaPortalProfile.Text;
       Settings.ambiBoxExternalProfile = tbAmbiBoxExternalProfile.Text;
+      Settings.atmoOrbBlackThreshold = int.Parse(tbAtmoOrbBlackThreshold.Text);
+      Settings.atmoOrbBroadcastPort = int.Parse(tbAtmoOrbBroadcastPort.Text);
+      Settings.atmoOrbGamma = Double.Parse(tbAtmoOrbGamma.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+      Settings.atmoOrbMinDiversion = int.Parse(tbAtmoOrbMinDiversion.Text);
+      Settings.atmoOrbSaturation = Double.Parse(tbAtmoOrbSaturation.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+      Settings.atmoOrbThreshold = int.Parse(tbAtmoOrbThreshold.Text);
+      Settings.atmoOrbUseOverallLightness = cbAtmoOrbUseOverallLightness.Checked;
+      Settings.atmoOrbTarget = ckAtmoOrbEnabled.Checked;
+      Settings.vuMeterMaxHue = Double.Parse(tbVUMeterMaxHue.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+      Settings.vuMeterMindB = int.Parse(tbVUMeterMindB.Text);
+      Settings.vuMeterMinHue = Double.Parse(tbVUMeterMinHue.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
 
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
       Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
@@ -698,16 +828,9 @@ namespace AtmoLight
         tbGIF.Text = openFileDialog3.FileName;
       }
     }
+    #endregion
 
-    private void btnSelectFileAmbiBox_Click(object sender, EventArgs e)
-    {
-      if (openFileDialog5.ShowDialog() == DialogResult.OK)
-      {
-        tbAmbiBoxPath.Text = openFileDialog5.FileName;
-      }
-    }
-
-    #region input validators
+    #region Input Validators
     private Boolean validatorInt(string input, int minValue, int maxValue, Boolean validateMaxValue)
     {
       Boolean IsValid = false;
@@ -732,6 +855,23 @@ namespace AtmoLight
       }
       return IsValid;
     }
+
+    private bool validatorDouble(string input, double minValue, double maxValue, bool validateMaxValue)
+    {
+      double value;
+
+      if (!double.TryParse(input, out value))
+      {
+        return false;
+      }
+
+      if ((value >= minValue && value <= maxValue && validateMaxValue) || (value >= minValue && !validateMaxValue))
+      {
+        return true;
+      }
+      return false;
+    }
+
     private Boolean validatorIPAdress(string input)
     {
       Boolean IsValid = false;
@@ -791,6 +931,7 @@ namespace AtmoLight
     }
     #endregion
 
+    #region Validation
     private void lowCpuTime_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
       int minValue = 1;
@@ -1203,7 +1344,165 @@ namespace AtmoLight
       }
     }
 
-    // Dynamic effect changes
+    // AtmoOrb
+    private void tbAtmoOrbVScanEnd_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 100;
+      if (validatorInt(tbAtmoOrbVScanEnd.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoOrbVScanStart_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 100;
+      if (validatorInt(tbAtmoOrbVScanStart.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoOrbHScanEnd_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 100;
+      if (validatorInt(tbAtmoOrbHScanEnd.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoOrbHScanStart_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 100;
+      if (validatorInt(tbAtmoOrbHScanStart.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoOrbPort_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (rbAtmoOrbUDP.Checked)
+      {
+        return;
+      }
+      int minValue = 1;
+      int maxValue = 65535;
+      if (validatorInt(tbAtmoOrbPort.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoOrbIP_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (rbAtmoOrbUDP.Checked)
+      {
+        return;
+      }
+      if (validatorIPAdress(tbAtmoOrbIP.Text) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoOrbGamma_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      double minValue = 0.0;
+      double maxValue = 5.0;
+      if (validatorDouble(tbAtmoOrbGamma.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoOrbSaturation_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      double minValue = -1.0;
+      double maxValue = 1.0;
+      if (validatorDouble(tbAtmoOrbSaturation.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoOrbBlackThreshold_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 255;
+      if (validatorInt(tbAtmoOrbBlackThreshold.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoOrbThreshold_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 255;
+      if (validatorInt(tbAtmoOrbThreshold.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoOrbMinDiversion_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 255;
+      if (validatorInt(tbAtmoOrbMinDiversion.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoOrbBroadcastPort_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 1;
+      int maxValue = 65535;
+      if (validatorInt(tbAtmoOrbBroadcastPort.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbVUMeterMindB_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = -100;
+      int maxValue = 0;
+      if (validatorInt(tbVUMeterMindB.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbVUMeterMinHue_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      double minValue = 0;
+      double maxValue = 1.0;
+      if (validatorDouble(tbVUMeterMinHue.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbVUMeterMaxHue_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      double minValue = 0;
+      double maxValue = 1.0;
+      if (validatorDouble(tbVUMeterMaxHue.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+    #endregion
+
+    #region Dynamic effect changes
     public void UpdateComboBoxes()
     {
       List<ContentEffect> supportedEffects = coreObject.GetSupportedEffects();
@@ -1309,6 +1608,21 @@ namespace AtmoLight
       UpdateComboBoxes();
     }
 
+    private void ckAtmoOrbEnabled_CheckedChanged(Object sender, EventArgs e)
+    {
+      if (ckAtmoOrbEnabled.Checked)
+      {
+        coreObject.AddTarget(Target.AtmoOrb);
+      }
+      else
+      {
+        coreObject.RemoveTarget(Target.AtmoOrb);
+      }
+      UpdateComboBoxes();
+    }
+    #endregion
+
+    #region Effect changing
     private void cbVideo_SelectedIndexChanged(object sender, EventArgs e)
     {
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
@@ -1333,6 +1647,40 @@ namespace AtmoLight
     {
       Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMPExit.Text, "ContextMenu_").Remove(0, 12));
     }
+    #endregion
+
+    #region AtmoWin Button event
+    private void btnSelectFile_Click(object sender, EventArgs e)
+    {
+      if (openFileDialog1.ShowDialog() == DialogResult.OK)
+      {
+        string filenameNoExtension = Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
+        string filename = filenameNoExtension.ToLower();
+        if (filename == "atmowina")
+        {
+          edFileAtmoWin.Text = openFileDialog1.FileName;
+        }
+        else
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorAtmoWinA, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          edFileAtmoWin.Text = "";
+          return;
+        }
+      }
+    }
+    #endregion
+
+    #region AmbiBox Button Event
+    private void btnSelectFileAmbiBox_Click(object sender, EventArgs e)
+    {
+      if (openFileDialog5.ShowDialog() == DialogResult.OK)
+      {
+        tbAmbiBoxPath.Text = openFileDialog5.FileName;
+      }
+    }
+    #endregion
+
+    #region Hue Button Event
     private void btnSelectFileHue_Click(object sender, EventArgs e)
     {
       if (openFileDialog4.ShowDialog() == DialogResult.OK)
@@ -1350,7 +1698,194 @@ namespace AtmoLight
           return;
         }
       }
-
     }
+    #endregion
+
+    #region AtmoOrb ListBox
+    private void btnAtmoOrbAdd_Click(object sender, EventArgs e)
+    {
+      if (lbAtmoOrbLamps.Items.Contains(tbAtmoOrbID.Text))
+      {
+        btnAtmoOrbUpdate_Click(sender, e);
+        return;
+      }
+      int minValue, maxValue;
+      string lampString = "";
+      lampString += tbAtmoOrbID.Text + ",";
+      if (rbAtmoOrbTCP.Checked)
+      {
+        if (validatorIPAdress(tbAtmoOrbIP.Text) == false)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + tbAtmoOrbIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+        minValue = 1;
+        maxValue = 65535;
+        if (validatorInt(tbAtmoOrbPort.Text, minValue, maxValue, true) == false)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+        lampString += "TCP," + tbAtmoOrbIP.Text + "," + tbAtmoOrbPort.Text + ",";
+      }
+      else if (rbAtmoOrbUDP.Checked)
+      {
+        lampString += "UDP,";
+      }
+      minValue = 0;
+      maxValue = 100;
+      if (validatorInt(tbAtmoOrbHScanStart.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanStart.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      if (validatorInt(tbAtmoOrbHScanEnd.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanEnd.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      if (validatorInt(tbAtmoOrbVScanStart.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanStart.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      if (validatorInt(tbAtmoOrbVScanEnd.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanEnd.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+      lampString += tbAtmoOrbHScanStart.Text + "," + tbAtmoOrbHScanEnd.Text + "," + tbAtmoOrbVScanStart.Text + "," + tbAtmoOrbVScanEnd.Text + ",";
+      lampString += cbAtmoOrbInvertZone.Checked;
+      Settings.atmoOrbLamps.Add(lampString);
+      lbAtmoOrbLamps.Items.Add(tbAtmoOrbID.Text);
+    }
+
+    private void btnAtmoOrbRemove_Click(object sender, EventArgs e)
+    {
+      if (lbAtmoOrbLamps.SelectedIndex >= 0)
+      {
+        Settings.atmoOrbLamps.RemoveAt(lbAtmoOrbLamps.Items.IndexOf(lbAtmoOrbLamps.SelectedItem.ToString()));
+        lbAtmoOrbLamps.Items.RemoveAt(lbAtmoOrbLamps.Items.IndexOf(lbAtmoOrbLamps.SelectedItem.ToString()));
+      }
+    }
+
+    private void btnAtmoOrbUpdate_Click(object sender, EventArgs e)
+    {
+      int minValue, maxValue;
+      string lampString = "";
+      lampString += tbAtmoOrbID.Text + ",";
+      if (rbAtmoOrbTCP.Checked)
+      {
+        if (validatorIPAdress(tbAtmoOrbIP.Text) == false)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + tbAtmoOrbIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+        minValue = 1;
+        maxValue = 65535;
+        if (validatorInt(tbAtmoOrbPort.Text, minValue, maxValue, true) == false)
+        {
+          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+        lampString += "TCP," + tbAtmoOrbIP.Text + "," + tbAtmoOrbPort.Text + ",";
+      }
+      else if (rbAtmoOrbUDP.Checked)
+      {
+        lampString += "UDP,";
+      }
+      minValue = 0;
+      maxValue = 100;
+      if (validatorInt(tbAtmoOrbHScanStart.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanStart.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      if (validatorInt(tbAtmoOrbHScanEnd.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanEnd.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      if (validatorInt(tbAtmoOrbVScanStart.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanStart.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      if (validatorInt(tbAtmoOrbVScanEnd.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanEnd.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+      lampString += tbAtmoOrbHScanStart.Text + "," + tbAtmoOrbHScanEnd.Text + "," + tbAtmoOrbVScanStart.Text + "," + tbAtmoOrbVScanEnd.Text + ",";
+      lampString += cbAtmoOrbInvertZone.Checked;
+      Settings.atmoOrbLamps[lbAtmoOrbLamps.Items.IndexOf(tbAtmoOrbID.Text)] = lampString;
+    }
+
+    private void lbAtmoOrbLamps_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      if (lbAtmoOrbLamps.SelectedIndex >= 0)
+      {
+        string[] lampSettings = Settings.atmoOrbLamps[lbAtmoOrbLamps.SelectedIndex].Split(',');
+        tbAtmoOrbID.Text = lampSettings[0];
+        if (lampSettings[1] == "UDP")
+        {
+          rbAtmoOrbUDP.Checked = true;
+          rbAtmoOrbTCP.Checked = false;
+          tbAtmoOrbIP.ReadOnly = true;
+          tbAtmoOrbPort.ReadOnly = true;
+          tbAtmoOrbIP.Text = "";
+          tbAtmoOrbPort.Text = "";
+          tbAtmoOrbHScanStart.Text = lampSettings[2];
+          tbAtmoOrbHScanEnd.Text = lampSettings[3];
+          tbAtmoOrbVScanStart.Text = lampSettings[4];
+          tbAtmoOrbVScanEnd.Text = lampSettings[5];
+          cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[6]);
+        }
+        else if (lampSettings[1] == "TCP")
+        {
+          rbAtmoOrbUDP.Checked = false;
+          rbAtmoOrbTCP.Checked = true;
+          tbAtmoOrbIP.ReadOnly = false;
+          tbAtmoOrbPort.ReadOnly = false;
+          tbAtmoOrbIP.Text = lampSettings[2];
+          tbAtmoOrbPort.Text = lampSettings[3];
+          tbAtmoOrbHScanStart.Text = lampSettings[4];
+          tbAtmoOrbHScanEnd.Text = lampSettings[5];
+          tbAtmoOrbVScanStart.Text = lampSettings[6];
+          tbAtmoOrbVScanEnd.Text = lampSettings[7];
+          cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[8]);
+        }
+      }
+    }
+
+    private void rbAtmoOrbUDPTCP_CheckedChanged(object sender, EventArgs e)
+    {
+      RadioButton rb = sender as RadioButton;
+      if (rb != null)
+      {
+        if (rb.Checked)
+        {
+          if (rb.Text == "TCP")
+          {
+            tbAtmoOrbIP.ReadOnly = false;
+            tbAtmoOrbPort.ReadOnly = false;
+          }
+          else if (rb.Text == "UDP")
+          {
+            tbAtmoOrbIP.ReadOnly = true;
+            tbAtmoOrbPort.ReadOnly = true;
+            tbAtmoOrbIP.Text = "";
+            tbAtmoOrbPort.Text = "";
+          }
+        }
+      }
+    }
+    #endregion
   }
 }

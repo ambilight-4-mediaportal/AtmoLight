@@ -19,7 +19,7 @@ namespace AtmoLight
 {
   public enum ContentEffect
   {
-     
+
     LEDsDisabled = 0,
     MediaPortalLiveMode,
     StaticColor,
@@ -35,6 +35,7 @@ namespace AtmoLight
   public enum Target
   {
     AmbiBox,
+    AtmoOrb,
     AtmoWin,
     Boblight,
     Hue,
@@ -74,8 +75,6 @@ namespace AtmoLight
     private volatile bool gifReaderLock = true;
     private volatile bool vuMeterLock = true;
 
-    // VU Meter
-    private int[] vuMeterThresholds = new int[] { -2, -5, -8, -10, -11, -12, -14, -18, -20, -22 };
 
     // Event Handler
     public delegate void NewConnectionLostHandler(Target target);
@@ -102,6 +101,9 @@ namespace AtmoLight
     public int blackbarDetectionTime;
     public int blackbarDetectionThreshold;
     public int powerModeChangedDelay;
+    public int vuMeterMindB;
+    public double vuMeterMaxHue;
+    public double vuMeterMinHue;
 
     // AmbiBox Settings Fields
     public string ambiBoxIP;
@@ -113,6 +115,16 @@ namespace AtmoLight
     public string ambiBoxPath;
     public bool ambiBoxAutoStart;
     public bool ambiBoxAutoStop;
+
+    // AtmoOrb
+    public int atmoOrbBroadcastPort;
+    public int atmoOrbThreshold;
+    public int atmoOrbMinDiversion;
+    public double atmoOrbSaturation;
+    public double atmoOrbGamma;
+    public int atmoOrbBlackThreshold;
+    public bool atmoOrbUseOverallLightness;
+    public List<string> atmoOrbLamps = new List<string>();
 
     // AtmoWin Settings Fields
     public bool atmoWinAutoStart;
@@ -305,6 +317,7 @@ namespace AtmoLight
     /// Generate all targets and initialise them.
     /// </summary>
     /// <returns></returns>
+
     public void Initialise()
     {
       foreach (var target in targets)
@@ -314,6 +327,7 @@ namespace AtmoLight
           target.Initialise(false);
         }
       }
+
     }
 
     /// <summary>
@@ -337,6 +351,7 @@ namespace AtmoLight
     /// </summary>
     /// <param name="width"></param>
     /// <param name="height"></param>
+
     public bool SetCaptureDimensions(int width, int height)
     {
       if (width >= 0 && height >= 0)
@@ -352,6 +367,7 @@ namespace AtmoLight
     /// Add a target to be used.
     /// </summary>
     /// <param name="target"></param>
+
     public bool AddTarget(Target target)
     {
       // Dont allow the same target to be added more than once.
@@ -361,29 +377,15 @@ namespace AtmoLight
         {
           if (t.Name == target)
           {
+
             return false;
           }
         }
-      }
-      if (target == Target.AtmoWin)
-      {
-        targets.Add(new AtmoWinHandler());
-      }
-      else if (target == Target.Hue)
-      {
-        targets.Add(new HueHandler());
-      }
-      else if (target == Target.Hyperion)
-      {
-        targets.Add(new HyperionHandler());
-      }
-      else if (target == Target.AmbiBox)
-      {
-        targets.Add(new AmbiBoxHandler());
-      }
-      else if (target == Target.Boblight)
-      {
-        targets.Add(new BoblightHandler());
+        if (target == Target.AtmoWin)
+        else if (target == Target.AtmoOrb)
+        {
+          targets.Add(new AtmoOrbHandler());
+        }
       }
       return true;
     }
@@ -392,6 +394,7 @@ namespace AtmoLight
     /// Removes a target.
     /// </summary>
     /// <param name="target"></param>
+
     public bool RemoveTarget(Target target)
     {
       lock (targetsLock)
@@ -403,6 +406,7 @@ namespace AtmoLight
             Log.Debug("Removing {0} as target.", target.ToString());
             t.Dispose();
             targets.Remove(t);
+
             return true;
           }
         }
@@ -439,6 +443,7 @@ namespace AtmoLight
     {
       if (path.Length > 4)
       {
+
         if (path.Substring(path.Length - 3, 3).ToLower() == "gif")
         {
           gifPath = path;
@@ -1260,30 +1265,43 @@ namespace AtmoLight
         if (currentEffect == ContentEffect.VUMeterRainbow)
         {
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 77, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 128, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 204, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(230, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(102, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 153)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 230, 255)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 128, 255)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 255)));
+          for (int i = 0; i < GetCaptureHeight(); i++)
+          {
+            int r, g, b;
+            double h, s, l;
+            h = vuMeterMaxHue + ((i * vuMeterMinHue) / GetCaptureHeight());
+            if (h < 0)
+            {
+              h += 1;
+            }
+            else if (h > 1)
+            {
+              h -= 1;
+            }
+            s = 1;
+            l = 0.5;
+            HSL.HSL2RGB(h, s, l, out r, out g, out b);
+            vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(r, g, b)));
+          }
         }
         else
         {
           vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 0, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 128, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
-          vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
+          for (int i = 0; i < GetCaptureHeight(); i++)
+          {
+            if ((double)i / GetCaptureHeight() <= 1.0 / 5.0)
+            {
+              vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 0, 0)));
+            }
+            else if ((double)i / GetCaptureHeight() <= 2.0 / 5.0)
+            {
+              vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(255, 255, 0)));
+            }
+            else
+            {
+              vuMeterBrushes.Add(new SolidBrush(Color.FromArgb(0, 255, 0)));
+            }
+          }
         }
 
         Rectangle rectFull = new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight());
@@ -1300,11 +1318,11 @@ namespace AtmoLight
 
           for (int channel = 0; channel <= 1; channel++)
           {
-            for (int index = 0; index < vuMeterThresholds.Length; index++)
+            for (int i = 0; i < GetCaptureHeight(); i++)
             {
-              if (dbLevel[channel] >= vuMeterThresholds[index])
+              if (dbLevel[channel] >= ((double)i * vuMeterMindB) / GetCaptureHeight())
               {
-                vuMeterGFX.FillRectangle(vuMeterBrushes[index + 1], (int)((double)channel * (double)vuMeterBitmap.Width / (double)4 * (double)3), (int)((double)index * (double)vuMeterBitmap.Height / (double)10), (int)((double)vuMeterBitmap.Width / (double)4), (int)(((double)vuMeterBitmap.Height / (double)10) + (double)1));
+                vuMeterGFX.FillRectangle(vuMeterBrushes[i + 1], (int)((double)channel * (double)vuMeterBitmap.Width / (double)4 * (double)3), i, (int)((double)vuMeterBitmap.Width / (double)4), 1);
               }
             }
           }

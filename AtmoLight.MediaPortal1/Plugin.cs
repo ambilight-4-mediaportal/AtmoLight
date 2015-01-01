@@ -54,7 +54,11 @@ namespace AtmoLight
     // Delay Feature
     private int delayTimeHelper; // Helper var for delay time change
 
-    public Core coreObject;
+    // SetupForm
+    private SetupForm atmoLightSetupForm;
+
+    // Core object
+    private Core coreObject;
     #endregion
 
     #region Plugin Ctor/Start/Stop
@@ -109,11 +113,18 @@ namespace AtmoLight
       Log.Debug("Generating new AtmoLight.Core instance.");
       coreObject = Core.GetInstance();
 
+      // General settings
+      coreObject.SetDelay(Settings.delayReferenceTime);
+      coreObject.SetGIFPath(Settings.gifFile);
+      coreObject.SetReInitOnError(Settings.restartOnError);
+      coreObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
+      coreObject.SetCaptureDimensions(Settings.captureWidth, Settings.captureHeight);
+      coreObject.blackbarDetection = Settings.blackbarDetection;
+      coreObject.blackbarDetectionTime = Settings.blackbarDetectionTime;
+      coreObject.blackbarDetectionThreshold = Settings.blackbarDetectionThreshold;
+      coreObject.powerModeChangedDelay = Settings.powerModeChangedDelay;
+
       // AmbiBox
-      if (Settings.ambiBoxTarget)
-      {
-        coreObject.AddTarget(Target.AmbiBox);
-      }
       coreObject.ambiBoxIP = Settings.ambiBoxIP;
       coreObject.ambiBoxPort = Settings.ambiBoxPort;
       coreObject.ambiBoxMaxReconnectAttempts = Settings.ambiBoxMaxReconnectAttempts;
@@ -123,22 +134,36 @@ namespace AtmoLight
       coreObject.ambiBoxPath = Settings.ambiBoxPath;
       coreObject.ambiBoxAutoStart = Settings.ambiBoxAutoStart;
       coreObject.ambiBoxAutoStop = Settings.ambiBoxAutoStop;
+      if (Settings.ambiBoxTarget)
+      {
+        coreObject.AddTarget(Target.AmbiBox);
+      }
+
+      // AtmoOrb
+      coreObject.atmoOrbBlackThreshold = Settings.atmoOrbBlackThreshold;
+      coreObject.atmoOrbBroadcastPort = Settings.atmoOrbBroadcastPort;
+      coreObject.atmoOrbGamma = Settings.atmoOrbGamma;
+      coreObject.atmoOrbLamps = Settings.atmoOrbLamps;
+      coreObject.atmoOrbMinDiversion = Settings.atmoOrbMinDiversion;
+      coreObject.atmoOrbSaturation = Settings.atmoOrbSaturation;
+      coreObject.atmoOrbThreshold = Settings.atmoOrbThreshold;
+      coreObject.atmoOrbUseOverallLightness = Settings.atmoOrbUseOverallLightness;
+      if (Settings.atmoOrbTarget)
+      {
+        coreObject.AddTarget(Target.AtmoOrb);
+      }
 
       // AtmoWin
+      coreObject.atmoWinPath = Settings.atmowinExe;
+      coreObject.atmoWinAutoStart = Settings.startAtmoWin;
+      coreObject.atmoWinAutoStop = Settings.exitAtmoWin;
       if (Settings.atmoWinTarget)
       {
         coreObject.AddTarget(Target.AtmoWin);
       }
-      coreObject.atmoWinPath = Settings.atmowinExe;
-      coreObject.atmoWinAutoStart = Settings.startAtmoWin;
-      coreObject.atmoWinAutoStop = Settings.exitAtmoWin;
       coreObject.atmoWinConnectionDelay = Settings.atmoWinConnectionDelay;
 
       // Boblight
-      if (Settings.boblightTarget)
-      {
-        coreObject.AddTarget(Target.Boblight);
-      }
       coreObject.boblightIP = Settings.boblightIP;
       coreObject.boblightPort = Settings.boblightPort;
       coreObject.boblightMaxFPS = Settings.boblightMaxFPS;
@@ -151,12 +176,12 @@ namespace AtmoLight
       coreObject.boblightValue = Settings.boblightValue;
       coreObject.boblightThreshold = Settings.boblightThreshold;
       coreObject.boblightGamma = Settings.boblightGamma;
+      if (Settings.boblightTarget)
+      {
+        coreObject.AddTarget(Target.Boblight);
+      }
 
       // Hyperion
-      if (Settings.hyperionTarget)
-      {
-        coreObject.AddTarget(Target.Hyperion);
-      }
       coreObject.hyperionIP = Settings.hyperionIP;
       coreObject.hyperionPort = Settings.hyperionPort;
       coreObject.hyperionPriority = Settings.hyperionPriority;
@@ -164,12 +189,12 @@ namespace AtmoLight
       coreObject.hyperionReconnectAttempts = Settings.hyperionReconnectAttempts;
       coreObject.hyperionPriorityStaticColor = Settings.hyperionPriorityStaticColor;
       coreObject.hyperionLiveReconnect = Settings.hyperionLiveReconnect;
+      if (Settings.hyperionTarget)
+      {
+        coreObject.AddTarget(Target.Hyperion);
+      }
 
       // Hue
-      if (Settings.hueTarget)
-      {
-        coreObject.AddTarget(Target.Hue);
-      }
       coreObject.huePath = Settings.hueExe;
       coreObject.hueStart = Settings.hueStart;
       coreObject.hueIsRemoteMachine = Settings.hueIsRemoteMachine;
@@ -180,17 +205,13 @@ namespace AtmoLight
       coreObject.hueMinimalColorDifference = Settings.hueMinimalColorDifference;
       coreObject.hueBridgeEnableOnResume = Settings.hueBridgeEnableOnResume;
       coreObject.hueBridgeDisableOnSuspend = Settings.hueBridgeDisableOnSuspend;
-      
-      // General settings
-      coreObject.SetDelay(Settings.delayReferenceTime);
-      coreObject.SetGIFPath(Settings.gifFile);
-      coreObject.SetReInitOnError(Settings.restartOnError);
-      coreObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
-      coreObject.SetCaptureDimensions(Settings.captureWidth, Settings.captureHeight);
-      coreObject.blackbarDetection = Settings.blackbarDetection;
-      coreObject.blackbarDetectionTime = Settings.blackbarDetectionTime;
-      coreObject.blackbarDetectionThreshold = Settings.blackbarDetectionThreshold;
-      coreObject.powerModeChangedDelay = Settings.powerModeChangedDelay;
+      if (Settings.hueTarget)
+      {
+        coreObject.AddTarget(Target.Hue);
+      }
+      coreObject.vuMeterMindB = Settings.vuMeterMindB;
+      coreObject.vuMeterMinHue = Settings.vuMeterMinHue;
+      coreObject.vuMeterMaxHue = Settings.vuMeterMaxHue;
 
       // Get the effects that are supported by at least one target
       supportedEffects = coreObject.GetSupportedEffects();
@@ -1183,16 +1204,19 @@ namespace AtmoLight
     /// </summary>
     public void ShowPlugin()
     {
-      // Log Handler
-      Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
+      if (atmoLightSetupForm == null)
+      {
+        // Log Handler
+        Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
 
-      var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-      DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
-      Log.Info("Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
-      Log.Debug("Loading settings.");
-      Settings.LoadSettings();
-
-      new SetupForm().ShowDialog();
+        var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
+        Log.Info("Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
+        Log.Debug("Loading settings.");
+        Settings.LoadSettings();
+        atmoLightSetupForm = new SetupForm();
+      }
+      atmoLightSetupForm.ShowDialog();
     }
 
     /// <summary>

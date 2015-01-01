@@ -386,7 +386,34 @@ namespace Language
     public String SetupForm_lblAmbiBoxReconnectDelay;
     public String SetupForm_cbAmbiBoxAutoStart;
     public String SetupForm_cbAmbiBoxAutoStop;
-
+    public String SetupForm_lblAtmoOrbBlackThreshold;
+    public String SetupForm_lblAtmoOrbBroadcastPort;
+    public String SetupForm_lblAtmoOrbConnection;
+    public String SetupForm_lblAtmoOrbGamma;
+    public String SetupForm_lblAtmoOrbHScan;
+    public String SetupForm_lblAtmoOrbHScanTo;
+    public String SetupForm_lblAtmoOrbID;
+    public String SetupForm_lblAtmoOrbIP;
+    public String SetupForm_lblAtmoOrbMinDiversion;
+    public String SetupForm_lblAtmoOrbPort;
+    public String SetupForm_lblAtmoOrbSaturation;
+    public String SetupForm_lblAtmoOrbThreshold;
+    public String SetupForm_lblAtmoOrbVScan;
+    public String SetupForm_lblAtmoOrbVScanTo;
+    public String SetupForm_grpAtmoOrbBasicSettings;
+    public String SetupForm_grpAtmoOrbLamps;
+    public String SetupForm_rbAtmoOrbTCP;
+    public String SetupForm_rbAtmoOrbUDP;
+    public String SetupForm_ckAtmoOrbEnabled;
+    public String SetupForm_cbAtmoOrbInvertZone;
+    public String SetupForm_cbAtmoOrbUseOverallLightness;
+    public String SetupForm_btnAtmoOrbAdd;
+    public String SetupForm_btnAtmoOrbRemove;
+    public String SetupForm_btnAtmoOrbUpdate;
+    public String SetupForm_lblVUMeterMaxHue;
+    public String SetupForm_lblVUMeterMindB;
+    public String SetupForm_lblVUMeterMinHue;
+    public String SetupForm_grpVUMeter;
 
     public String ContextMenu_SwitchLEDsON;
     public String ContextMenu_SwitchLEDsOFF;
