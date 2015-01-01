@@ -166,6 +166,9 @@ namespace AtmoLight
     public int hueMinimalColorDifference;
     public bool hueBridgeEnableOnResume;
     public bool hueBridgeDisableOnSuspend;
+    public int hueBlackThreshold = 16;
+    public int hueThreshold = 0;
+    public int hueMinDiversion = 16;
 
     #endregion
 

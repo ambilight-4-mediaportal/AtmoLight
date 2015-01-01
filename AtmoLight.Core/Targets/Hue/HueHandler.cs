@@ -51,9 +51,6 @@ namespace AtmoLight.Targets
     private Stream Stream;
 
     // Color checks
-    private int avgR_previousLive = 0;
-    private int avgG_previousLive = 0;
-    private int avgB_previousLive = 0;
     private int avgR_previousVU = 0;
     private int avgG_previousVU = 0;
     private int avgB_previousVU = 0;
@@ -360,31 +357,105 @@ namespace AtmoLight.Targets
       {
         return;
       }
-
-      //Convert pixeldata to bitmap and calculate average color afterwards
       try
       {
-        unsafe
+        if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode || coreObject.GetCurrentEffect() == ContentEffect.GIFReader)
         {
-          fixed (byte* ptr = pixeldata)
-          {
+          int[] overallAverageColor = new int[3];
+          int[] averageColor = new int[3];
+          int[] previousColor = new int[3];
+          int pixelCount = 0;
 
-            using (Bitmap image = new Bitmap(coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight(), coreObject.GetCaptureWidth() * 4,
-                        PixelFormat.Format32bppRgb, new IntPtr(ptr)))
+          for (int y = 0; y < coreObject.GetCaptureHeight(); y++)
+          {
+            int row = coreObject.GetCaptureWidth() * y * 4;
+            for (int x = 0; x < coreObject.GetCaptureWidth(); x++)
             {
-              if (coreObject.GetCurrentEffect() == ContentEffect.VUMeter || coreObject.GetCurrentEffect() == ContentEffect.VUMeterRainbow)
+              overallAverageColor[0] += pixeldata[row + x * 4 + 2];
+              overallAverageColor[1] += pixeldata[row + x * 4 + 1];
+              overallAverageColor[2] += pixeldata[row + x * 4];
+              if (Math.Abs(pixeldata[row + x * 4 + 2] - pixeldata[row + x * 4 + 1]) > coreObject.hueMinDiversion || Math.Abs(pixeldata[row + x * 4 + 2] - pixeldata[row + x * 4]) > coreObject.hueMinDiversion || Math.Abs(pixeldata[row + x * 4 + 1] - pixeldata[row + x * 4]) > coreObject.hueMinDiversion)
               {
-                CalculateVUMeterColorAndSendToHue(image);
+                averageColor[0] += pixeldata[row + x * 4 + 2];
+                averageColor[1] += pixeldata[row + x * 4 + 1];
+                averageColor[2] += pixeldata[row + x * 4];
+                pixelCount++;
+              }
+            }
+          }
+          overallAverageColor[0] /= (coreObject.GetCaptureHeight() * coreObject.GetCaptureWidth());
+          overallAverageColor[1] /= (coreObject.GetCaptureHeight() * coreObject.GetCaptureWidth());
+          overallAverageColor[2] /= (coreObject.GetCaptureHeight() * coreObject.GetCaptureWidth());
+          if (pixelCount > 0)
+          {
+            averageColor[0] /= pixelCount;
+            averageColor[1] /= pixelCount;
+            averageColor[2] /= pixelCount;
+
+            if (Math.Abs(averageColor[0] - previousColor[0]) >= coreObject.hueMinimalColorDifference || Math.Abs(averageColor[1] - previousColor[1]) >= coreObject.hueMinimalColorDifference || Math.Abs(averageColor[2] - previousColor[2]) >= coreObject.hueMinimalColorDifference)
+            {
+              double hue;
+              double saturation;
+              double lightness;
+              double hueOverall;
+              double saturationOverall;
+              double lightnessOverall;
+
+              // Save new color as previous color
+              previousColor = averageColor;
+
+              // Convert to hsl color model
+              HSL.RGB2HSL(averageColor[0], averageColor[1], averageColor[2], out hue, out saturation, out lightness);
+              HSL.RGB2HSL(overallAverageColor[0], overallAverageColor[1], overallAverageColor[2], out hueOverall, out saturationOverall, out lightnessOverall);
+
+              // Convert back to rgb with adjusted saturation and lightness
+              HSL.HSL2RGB(hue, Math.Min(saturation + 0.2, 1), lightnessOverall, out averageColor[0], out averageColor[1], out averageColor[2]);
+
+              // Send to lamp
+              ChangeColor(averageColor[0], averageColor[1], averageColor[2], 200, (int)(Math.Min(lightnessOverall, 0.5) * 510));
+            }
+          }
+          else
+          {
+            if (Math.Abs(overallAverageColor[0] - previousColor[0]) >= coreObject.hueThreshold || Math.Abs(overallAverageColor[1] - previousColor[1]) >= coreObject.hueThreshold || Math.Abs(overallAverageColor[2] - previousColor[2]) >= coreObject.hueThreshold)
+            {
+              // Save new color as previous color
+              previousColor = overallAverageColor;
+
+              if (overallAverageColor[0] <= coreObject.hueBlackThreshold && overallAverageColor[1] <= coreObject.hueBlackThreshold && overallAverageColor[2] <= coreObject.hueBlackThreshold)
+              {
+                ChangeColor(0, 0, 0, 200, 0);
               }
               else
               {
-                CalculateAverageColorAndSendToHue(image);
+                double hueOverall;
+                double saturationOverall;
+                double lightnessOverall;
+                HSL.RGB2HSL(overallAverageColor[0], overallAverageColor[1], overallAverageColor[2], out hueOverall, out saturationOverall, out lightnessOverall);
+                // Adjust gamma level and send to lamp
+                ChangeColor(overallAverageColor[0], overallAverageColor[1], overallAverageColor[2], 200, (int)(Math.Min(lightnessOverall, 0.5) * 510));
+              }
+            }
+          }
+        }
+        // VUMeter
+        else
+        {
+          unsafe
+          {
+            fixed (byte* ptr = pixeldata)
+            {
+
+              using (Bitmap image = new Bitmap(coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight(), coreObject.GetCaptureWidth() * 4,
+                          PixelFormat.Format32bppRgb, new IntPtr(ptr)))
+              {
+                CalculateVUMeterColorAndSendToHue(image);
               }
             }
           }
         }
       }
-      catch(Exception e)
+      catch (Exception e)
       {
         Log.Error(string.Format("HueHandler - {0}", "Error during average color calculations"));
         Log.Error(string.Format("HueHandler - {0}", e.Message));
@@ -464,111 +535,6 @@ namespace AtmoLight.Targets
         Log.Error(string.Format("HueHandler - {0}", e.Message));
       }
       return staticColors;
-    }
-
-    public void CalculateAverageColorAndSendToHue(Bitmap bm)
-    {
-      int width = bm.Width;
-      int height = bm.Height;
-      int red = 0;
-      int green = 0;
-      int blue = 0;
-      int minDiversion = 15; // drop pixels that do not differ by at least minDiversion between color values (white, gray or black)
-      int dropped = 0; // keep track of dropped pixels
-      long[] totals = new long[] { 0, 0, 0 };
-      int bppModifier = bm.PixelFormat == System.Drawing.Imaging.PixelFormat.Format24bppRgb ? 3 : 4; // cutting corners, will fail on anything else but 32 and 24 bit images
-
-      BitmapData srcData = bm.LockBits(new System.Drawing.Rectangle(0, 0, bm.Width, bm.Height), ImageLockMode.ReadOnly, bm.PixelFormat);
-      int stride = srcData.Stride;
-      IntPtr Scan0 = srcData.Scan0;
-
-      unsafe
-      {
-        byte* p = (byte*)(void*)Scan0;
-
-        for (int y = 0; y < height; y++)
-        {
-          for (int x = 0; x < width; x++)
-          {
-            int idx = (y * stride) + x * bppModifier;
-            red = p[idx + 2];
-            green = p[idx + 1];
-            blue = p[idx];
-            if (Math.Abs(red - green) > minDiversion || Math.Abs(red - blue) > minDiversion || Math.Abs(green - blue) > minDiversion)
-            {
-              totals[2] += red;
-              totals[1] += green;
-              totals[0] += blue;
-            }
-            else
-            {
-              dropped++;
-            }
-          }
-        }
-      }
-
-      int count = width * height - dropped;
-
-      int minDifferencePreviousColors = coreObject.hueMinimalColorDifference;
-
-
-      int avgR = 0;
-      int avgG = 0;
-      int avgB = 0;
-      bool invalidColorValue = false;
-
-      // Doesn't work all the time, will return divide by zero errors sometimes due to invalid values.
-      // If we get an invalid value we return 0 and skip that image
-      try
-      {
-        avgR = (int)(totals[2] / count);
-      }
-      catch
-      {
-        invalidColorValue = true;
-      }
-
-      try
-      {
-        avgG = (int)(totals[1] / count);
-      }
-      catch
-      {
-        invalidColorValue = true;
-      }
-
-      try
-      {
-        avgB = (int)(totals[0] / count);
-      }
-      catch
-      {
-        invalidColorValue = true;
-      }
-
-      //If users sets minimal difference to 0 disable the average color check
-      if (minDifferencePreviousColors == 0 && invalidColorValue == false)
-      {
-        //Send average colors to Bridge
-        ChangeColor(avgR, avgG, avgB, 200, 0);
-      }
-      else
-      {
-        //Minimal differcence new compared to previous colors
-        if (Math.Abs(avgR_previousLive - avgR) > minDifferencePreviousColors || Math.Abs(avgG_previousLive - avgG) > minDifferencePreviousColors || Math.Abs(avgB_previousLive - avgB) > minDifferencePreviousColors)
-        {
-          avgR_previousLive = avgR;
-          avgG_previousLive = avgG;
-          avgB_previousLive = avgB;
-
-          //Send average colors to Bridge
-          if (invalidColorValue == false)
-          {
-            ChangeColor(avgR, avgG, avgB, 200, 0);
-          }
-        }
-      }
     }
 
     private void CalculateVUMeterColorAndSendToHue(Bitmap vuMeterBitmap)
