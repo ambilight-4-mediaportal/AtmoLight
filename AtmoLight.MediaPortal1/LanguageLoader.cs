@@ -285,6 +285,7 @@ namespace Language
   public class ApplicationStrings
   {
     public String SetupForm_lblPathInfoAtmoWin;
+    public String SetupForm_lblAtmoWinConnectionDelay;
     public String SetupForm_grpModeText;
     public String SetupForm_grpPluginOptionText;
     public String SetupForm_lblVidTvRecText;

@@ -201,6 +201,8 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
+      this.lblAtmoWinConnectionDelay = new System.Windows.Forms.Label();
+      this.tbAtmoWinConnectionDelay = new System.Windows.Forms.TextBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -464,6 +466,8 @@
       // 
       // grpAtmowinSettings
       // 
+      this.grpAtmowinSettings.Controls.Add(this.tbAtmoWinConnectionDelay);
+      this.grpAtmowinSettings.Controls.Add(this.lblAtmoWinConnectionDelay);
       this.grpAtmowinSettings.Controls.Add(this.lblPathInfoAtmoWin);
       this.grpAtmowinSettings.Controls.Add(this.btnSelectFileAtmoWin);
       this.grpAtmowinSettings.Controls.Add(this.edFileAtmoWin);
@@ -471,7 +475,7 @@
       this.grpAtmowinSettings.Controls.Add(this.ckStartAtmoWin);
       this.grpAtmowinSettings.Location = new System.Drawing.Point(10, 10);
       this.grpAtmowinSettings.Name = "grpAtmowinSettings";
-      this.grpAtmowinSettings.Size = new System.Drawing.Size(820, 125);
+      this.grpAtmowinSettings.Size = new System.Drawing.Size(820, 150);
       this.grpAtmowinSettings.TabIndex = 26;
       this.grpAtmowinSettings.TabStop = false;
       this.grpAtmowinSettings.Text = "Settings";
@@ -2015,6 +2019,23 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
+      // lblAtmoWinConnectionDelay
+      // 
+      this.lblAtmoWinConnectionDelay.AutoSize = true;
+      this.lblAtmoWinConnectionDelay.Location = new System.Drawing.Point(10, 125);
+      this.lblAtmoWinConnectionDelay.Name = "lblAtmoWinConnectionDelay";
+      this.lblAtmoWinConnectionDelay.Size = new System.Drawing.Size(92, 13);
+      this.lblAtmoWinConnectionDelay.TabIndex = 5;
+      this.lblAtmoWinConnectionDelay.Text = "Connection delay:";
+      // 
+      // tbAtmoWinConnectionDelay
+      // 
+      this.tbAtmoWinConnectionDelay.Location = new System.Drawing.Point(200, 122);
+      this.tbAtmoWinConnectionDelay.Name = "tbAtmoWinConnectionDelay";
+      this.tbAtmoWinConnectionDelay.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoWinConnectionDelay.TabIndex = 6;
+      this.tbAtmoWinConnectionDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWinConnectionDelay_Validating);
+      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2257,5 +2278,7 @@
     private System.Windows.Forms.TextBox tbAmbiBoxIP;
     private System.Windows.Forms.Label lblAmbiBoxExternalProfile;
     private System.Windows.Forms.Label lblAmbiBoxMediaPortalProfile;
+    private System.Windows.Forms.TextBox tbAtmoWinConnectionDelay;
+    private System.Windows.Forms.Label lblAtmoWinConnectionDelay;
   }
 }

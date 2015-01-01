@@ -57,7 +57,6 @@ namespace AtmoLight
     // Timings
     private const int timeoutComInterface = 5000; // Timeout for the COM interface
     private const int delaySetStaticColor = 20; // SEDU workaround delay time
-    private const int delayAtmoWinConnect = 1000; // Delay between starting AtmoWin and connection to it
     private const int delayGetAtmoLiveViewSource = 1000; // Delay between liveview source checks
 
     // Core Object
@@ -274,7 +273,7 @@ namespace AtmoLight
             initialiseLock = false;
             return false;
           }
-          System.Threading.Thread.Sleep(delayAtmoWinConnect);
+          System.Threading.Thread.Sleep(coreObject.atmoWinConnectionDelay);
         }
         else
         {

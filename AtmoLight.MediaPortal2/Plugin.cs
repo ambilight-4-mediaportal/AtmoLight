@@ -128,6 +128,7 @@ namespace AtmoLight
       coreObject.atmoWinPath = settings.AtmoWinExe;
       coreObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
       coreObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
+      coreObject.atmoWinConnectionDelay = settings.AtmoWinConnectionDelay;
 
       // Boblight
       if (settings.BoblightTarget)
@@ -569,7 +570,7 @@ namespace AtmoLight
     }
     #endregion
 
-    #region Settings Lost Hander
+    #region Settings Changed Hander
     private void RegisterSettingsChangedHandler()
     {
       AtmoLight.Configuration.VideoEffect.SettingsChanged += new Configuration.VideoEffect.SettingsChangedHandler(ReloadSettings);
@@ -586,6 +587,7 @@ namespace AtmoLight
       AtmoLight.Configuration.ExcludeTimeEndHour.SettingsChanged += new Configuration.ExcludeTimeEndHour.SettingsChangedHandler(ReloadSettings);
       AtmoLight.Configuration.ExcludeTimeStartMinutes.SettingsChanged += new Configuration.ExcludeTimeStartMinutes.SettingsChangedHandler(ReloadSettings);
       AtmoLight.Configuration.ExcludeTimeEndMinutes.SettingsChanged += new Configuration.ExcludeTimeEndMinutes.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.AtmoWinConnectionDelay.SettingsChanged += new Configuration.AtmoWinConnectionDelay.SettingsChangedHandler(ReloadSettings);
     }
 
     private void UnregisterSettingsChangedHandler()
@@ -604,6 +606,7 @@ namespace AtmoLight
       AtmoLight.Configuration.ExcludeTimeEndHour.SettingsChanged -= new Configuration.ExcludeTimeEndHour.SettingsChangedHandler(ReloadSettings);
       AtmoLight.Configuration.ExcludeTimeStartMinutes.SettingsChanged -= new Configuration.ExcludeTimeStartMinutes.SettingsChangedHandler(ReloadSettings);
       AtmoLight.Configuration.ExcludeTimeEndMinutes.SettingsChanged -= new Configuration.ExcludeTimeEndMinutes.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.AtmoWinConnectionDelay.SettingsChanged -= new Configuration.AtmoWinConnectionDelay.SettingsChangedHandler(ReloadSettings);
     }
 
     private void ReloadSettings()

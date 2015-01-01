@@ -163,6 +163,10 @@
         Id="StopAtmoWinOnExit"
         Text="[AtmoLight.StopAtmoWinOnExit]"
         ClassName="AtmoLight.Configuration.StopAtmoWinOnExit"/>
+    <ConfigSetting
+        Id="AtmoWinConnectionDelay"
+        Text="[AtmoLight.AtmoWinConnectionDelay]"
+        ClassName="AtmoLight.Configuration.AtmoWinConnectionDelay"/>
   </Register>
   
   <!-- Boblight -->
