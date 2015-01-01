@@ -431,5 +431,11 @@ namespace Language
     public String ContextMenu_VUMeter;
     public String ContextMenu_VUMeterRainbow;
     public String ContextMenu_ReInitialise;
+    public String ContextMenu_HueSetGroupAll;
+    public String ContextMenu_HueSetGroupOff;
+    public String ContextMenu_HueSetLiveViewGroup;
+    public String ContextMenu_HueDisableAllGroups;
+    public String ContextMenu_HueSetStaticColorGroup;
+    public String ContextMenu_HueSelectStaticColorGroup;
   }
 }

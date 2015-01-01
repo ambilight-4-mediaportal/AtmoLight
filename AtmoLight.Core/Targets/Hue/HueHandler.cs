@@ -12,11 +12,12 @@ using System.Drawing.Imaging;
 using System.Net;
 using System.Net.Sockets;
 using System.Linq;
+using System.Xml;
 using Microsoft.Win32;
 
 namespace AtmoLight.Targets
 {
-  class HueHandler : ITargets
+  public class HueHandler : ITargets
   {
     #region Fields
 
@@ -309,18 +310,18 @@ namespace AtmoLight.Targets
       }
     }
 
-    public void ChangeColor(int red, int green, int blue, int priority)
+    public void ChangeColor(int red, int green, int blue, int priority, int brightness)
     {
-      Thread t = new Thread(() => ChangeColorThread(red,green,blue, priority));
+      Thread t = new Thread(() => ChangeColorThread(red,green,blue,priority,brightness));
       t.IsBackground = true;
       t.Start();
 
     }
-    public void ChangeColorThread(int red, int green, int blue, int priority)
+    public void ChangeColorThread(int red, int green, int blue, int priority, int brightness)
     {
       try
       {
-        string message = string.Format("{0},{1},{2},{3},{4},{5}", "ATMOLIGHT", APIcommandType.Color, red.ToString(), green.ToString(), blue.ToString(), priority.ToString());
+        string message = string.Format("{0},{1},{2},{3},{4},{5},{6}", "ATMOLIGHT", APIcommandType.Color, red.ToString(), green.ToString(), blue.ToString(), priority.ToString(), brightness.ToString());
         sendAPIcommand(message);
       }
       catch (Exception e)
@@ -339,12 +340,12 @@ namespace AtmoLight.Targets
       switch (effect)
       {
         case ContentEffect.StaticColor:
-          ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2], 10);
+          ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2], 10, 0);
           break;
         case ContentEffect.LEDsDisabled:
         case ContentEffect.Undefined:
         default:
-          ChangeColor(0, 0, 0, 1);
+          ChangeColor(0, 0, 0, 1, 0);
           break;
       }
       return true;
@@ -389,6 +390,82 @@ namespace AtmoLight.Targets
         Log.Error(string.Format("HueHandler - {0}", e.Message));
       }
     }
+    public void setActiveGroup(string groupName)
+    {
+      Log.Debug(APIcommandType.Group + " --> " + groupName);
+      string message = string.Format("{0},{1},{2},{3}", "ATMOLIGHT", APIcommandType.Group, "OnlyActivate", groupName);
+      sendAPIcommand(message);
+    }
+    public void setGroupStaticColor(string groupName, string colorName)
+    {
+      Log.Debug(APIcommandType.Group + " --> " + groupName);
+      string message = string.Format("{0},{1},{2},{3},{4}", "ATMOLIGHT", APIcommandType.Group, "SetStaticColor", groupName, colorName);
+      sendAPIcommand(message);
+    }
+    public List<string> Loadgroups()
+    {
+      List<string> groups = new List<string>();
+
+      try
+      {
+        string settingsLocation = Path.GetDirectoryName(coreObject.huePath) + "\\settings.xml";
+        if (File.Exists(settingsLocation))
+        {
+          using (XmlReader reader = XmlReader.Create(settingsLocation))
+          {
+            while (reader.Read())
+            {
+              // LED Locations
+
+              if ((reader.NodeType == XmlNodeType.Element) && (reader.Name == "LedLocation"))
+              {
+                reader.ReadToDescendant("Location");
+                groups.Add(reader.ReadString());
+              }
+
+            }
+          }
+        }
+      }
+      catch(Exception e)
+      {
+        Log.Error(string.Format("HueHandler - {0}", "Error during reading group config"));
+        Log.Error(string.Format("HueHandler - {0}", e.Message));
+      }
+      return groups;
+    }
+    public List<string> LoadStaticColors()
+    {
+      List<string> staticColors = new List<string>();
+
+      try
+      {
+        string settingsLocation = Path.GetDirectoryName(coreObject.huePath) + "\\settings.xml";
+        if (File.Exists(settingsLocation))
+        {
+          using (XmlReader reader = XmlReader.Create(settingsLocation))
+          {
+            while (reader.Read())
+            {
+              // LED Locations
+
+              if ((reader.NodeType == XmlNodeType.Element) && (reader.Name == "LedStaticColor"))
+              {
+                reader.ReadToDescendant("Name");
+                staticColors.Add(reader.ReadString());
+              }
+            }
+          }
+        }
+      }
+      catch (Exception e)
+      {
+        Log.Error(string.Format("HueHandler - {0}", "Error during reading static color config"));
+        Log.Error(string.Format("HueHandler - {0}", e.Message));
+      }
+      return staticColors;
+    }
+
     public void CalculateAverageColorAndSendToHue(Bitmap bm)
     {
       int width = bm.Width;
@@ -474,7 +551,7 @@ namespace AtmoLight.Targets
       if (minDifferencePreviousColors == 0 && invalidColorValue == false)
       {
         //Send average colors to Bridge
-        ChangeColor(avgR, avgG, avgB, 200);
+        ChangeColor(avgR, avgG, avgB, 200, 0);
       }
       else
       {
@@ -488,7 +565,7 @@ namespace AtmoLight.Targets
           //Send average colors to Bridge
           if (invalidColorValue == false)
           {
-            ChangeColor(avgR, avgG, avgB, 200);
+            ChangeColor(avgR, avgG, avgB, 200, 0);
           }
         }
       }
@@ -511,7 +588,7 @@ namespace AtmoLight.Targets
             avgR_previousVU = red;
             avgG_previousVU = green;
             avgB_previousVU = blue;
-            ChangeColor(red, green, blue, 200);
+            ChangeColor(red, green, blue, 200, 0);
           }
           return;
         }
@@ -526,12 +603,12 @@ namespace AtmoLight.Targets
             avgR_previousVU = red;
             avgG_previousVU = green;
             avgB_previousVU = blue;
-            ChangeColor(red, green, blue, 200);
+            ChangeColor(red, green, blue, 200, 0);
           }
           return;
         }
       }
-      ChangeColor(0, 0, 0,200);
+      ChangeColor(0, 0, 0,200, 0);
     }
 
     private void HueBridgePower(string powerCommand)

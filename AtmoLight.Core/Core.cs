@@ -646,6 +646,20 @@ namespace AtmoLight
       }
       return false;
     }
+    public ITargets GetTarget(Target target)
+    {
+      lock (targetsLock)
+      {
+        foreach (var t in targets)
+        {
+          if (t.Name == target)
+          {
+            return t;
+          }
+        }
+      }
+      return null;
+    }
     #endregion
 
     #region Events

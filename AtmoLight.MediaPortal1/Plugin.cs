@@ -713,8 +713,21 @@ namespace AtmoLight
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ReInitialise));
       }
 
+      // Hue set active liveview group
+      if (coreObject.GetTarget(Target.Hue) != null)
+      {
+        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_HueSetLiveViewGroup));
+      }
+
+      // Hue set active liveview group
+      if (coreObject.GetTarget(Target.Hue) != null)
+      {
+        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_HueSetStaticColorGroup));
+      }
+
       dlg.SelectedLabel = 0;
       dlg.DoModal(GUIWindowManager.ActiveWindow);
+
 
       // Do stuff
       // Toggle LEDs
@@ -908,6 +921,84 @@ namespace AtmoLight
       {
         coreObject.ReInitialise();
       }
+
+      // Hue set active liveview group
+      if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_HueSetLiveViewGroup)
+      {
+        GUIDialogMenu dlgHueSetActiveGroup = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+        dlgHueSetActiveGroup.Reset();
+        dlgHueSetActiveGroup.SetHeading(LanguageLoader.appStrings.ContextMenu_HueSetLiveViewGroup);
+        dlgHueSetActiveGroup.Add(LanguageLoader.appStrings.ContextMenu_HueSetGroupAll);
+        var hueTarget = coreObject.GetTarget(Target.Hue) as AtmoLight.Targets.HueHandler;
+
+        List<string> groups = hueTarget.Loadgroups();
+
+        foreach (string group in groups)
+        {
+          dlgHueSetActiveGroup.Add(new GUIListItem(group));
+        }
+
+        dlgHueSetActiveGroup.Add(LanguageLoader.appStrings.ContextMenu_HueDisableAllGroups);
+
+        dlgHueSetActiveGroup.SelectedLabel = 0;
+        dlgHueSetActiveGroup.DoModal(GUIWindowManager.ActiveWindow);
+
+        if (dlgHueSetActiveGroup.SelectedLabel == 0)
+        {
+          hueTarget.setActiveGroup(LanguageLoader.appStrings.ContextMenu_HueSetGroupAll);
+        }
+        else if (dlgHueSetActiveGroup.SelectedLabel > 0)
+        {
+          hueTarget.setActiveGroup(dlgHueSetActiveGroup.SelectedLabelText);
+        }
+      }
+      
+      // Hue set static color for group
+      if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_HueSetStaticColorGroup)
+      {
+        GUIDialogMenu dlgHueSetActiveGroup = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+        dlgHueSetActiveGroup.Reset();
+        dlgHueSetActiveGroup.SetHeading(LanguageLoader.appStrings.ContextMenu_HueSetStaticColorGroup);
+        dlgHueSetActiveGroup.Add(LanguageLoader.appStrings.ContextMenu_HueSetGroupAll);
+        var hueTarget = coreObject.GetTarget(Target.Hue) as AtmoLight.Targets.HueHandler;
+
+        List<string> groups = hueTarget.Loadgroups();
+
+        foreach (string group in groups)
+        {
+          dlgHueSetActiveGroup.Add(new GUIListItem(group));
+        }
+
+        dlgHueSetActiveGroup.SelectedLabel = 0;
+        dlgHueSetActiveGroup.DoModal(GUIWindowManager.ActiveWindow);
+
+        if (dlgHueSetActiveGroup.SelectedLabel >= 0)
+        {
+          string groupName = dlgHueSetActiveGroup.SelectedLabelText;
+          GUIDialogMenu dlgHueSetStaticColorGroup = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+          dlgHueSetStaticColorGroup.Reset();
+          dlgHueSetStaticColorGroup.SetHeading(LanguageLoader.appStrings.ContextMenu_HueSelectStaticColorGroup);
+          dlgHueSetStaticColorGroup.Add(LanguageLoader.appStrings.ContextMenu_HueSetGroupOff);
+
+          List<string> staticColors = hueTarget.LoadStaticColors();
+
+          foreach (string staticColor in staticColors)
+          {
+            dlgHueSetStaticColorGroup.Add(new GUIListItem(staticColor));
+          }
+
+          dlgHueSetStaticColorGroup.SelectedLabel = 0;
+          dlgHueSetStaticColorGroup.DoModal(GUIWindowManager.ActiveWindow);
+
+          if (dlgHueSetStaticColorGroup.SelectedLabel >= 0)
+          {
+            string colorName = dlgHueSetStaticColorGroup.SelectedLabelText;
+            hueTarget.setGroupStaticColor(groupName, colorName);
+          }
+        }
+      }
+
+      
     }
 
     /// <summary>
