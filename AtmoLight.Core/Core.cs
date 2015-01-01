@@ -368,7 +368,7 @@ namespace AtmoLight
     /// </summary>
     /// <param name="target"></param>
 
-    public bool AddTarget(Target target)
+    public void AddTarget(Target target)
     {
       // Dont allow the same target to be added more than once.
       lock (targetsLock)
@@ -377,17 +377,35 @@ namespace AtmoLight
         {
           if (t.Name == target)
           {
-
-            return false;
+            return;
           }
         }
+
         if (target == Target.AtmoWin)
+        {
+          targets.Add(new AtmoWinHandler());
+        }
+        else if (target == Target.Hue)
+        {
+          targets.Add(new HueHandler());
+        }
+        else if (target == Target.Hyperion)
+        {
+          targets.Add(new HyperionHandler());
+        }
+        else if (target == Target.AmbiBox)
+        {
+          targets.Add(new AmbiBoxHandler());
+        }
+        else if (target == Target.Boblight)
+        {
+          targets.Add(new BoblightHandler());
+        }
         else if (target == Target.AtmoOrb)
         {
           targets.Add(new AtmoOrbHandler());
         }
       }
-      return true;
     }
 
     /// <summary>

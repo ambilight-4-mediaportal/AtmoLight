@@ -123,6 +123,9 @@ namespace AtmoLight
       coreObject.blackbarDetectionTime = Settings.blackbarDetectionTime;
       coreObject.blackbarDetectionThreshold = Settings.blackbarDetectionThreshold;
       coreObject.powerModeChangedDelay = Settings.powerModeChangedDelay;
+      coreObject.vuMeterMindB = Settings.vuMeterMindB;
+      coreObject.vuMeterMinHue = Settings.vuMeterMinHue;
+      coreObject.vuMeterMaxHue = Settings.vuMeterMaxHue;
 
       // AmbiBox
       coreObject.ambiBoxIP = Settings.ambiBoxIP;
@@ -157,12 +160,12 @@ namespace AtmoLight
       coreObject.atmoWinPath = Settings.atmowinExe;
       coreObject.atmoWinAutoStart = Settings.startAtmoWin;
       coreObject.atmoWinAutoStop = Settings.exitAtmoWin;
+      coreObject.atmoWinConnectionDelay = Settings.atmoWinConnectionDelay;
       if (Settings.atmoWinTarget)
       {
         coreObject.AddTarget(Target.AtmoWin);
       }
-      coreObject.atmoWinConnectionDelay = Settings.atmoWinConnectionDelay;
-
+      
       // Boblight
       coreObject.boblightIP = Settings.boblightIP;
       coreObject.boblightPort = Settings.boblightPort;
@@ -209,9 +212,6 @@ namespace AtmoLight
       {
         coreObject.AddTarget(Target.Hue);
       }
-      coreObject.vuMeterMindB = Settings.vuMeterMindB;
-      coreObject.vuMeterMinHue = Settings.vuMeterMinHue;
-      coreObject.vuMeterMaxHue = Settings.vuMeterMaxHue;
 
       // Get the effects that are supported by at least one target
       supportedEffects = coreObject.GetSupportedEffects();
