@@ -46,6 +46,7 @@ namespace AtmoLight
 
       lblVersionVal.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
       edFileAtmoWin.Text = Settings.atmowinExe;
+      tbAtmoWinConnectionDelay.Text = Settings.atmoWinConnectionDelay.ToString();
       comboBox1.SelectedIndex = (int)Settings.killButton;
       comboBox2.SelectedIndex = (int)Settings.profileButton;
       cbMenuButton.SelectedIndex = (int)Settings.menuButton;
@@ -133,6 +134,7 @@ namespace AtmoLight
     {
       // this function places language specific text on all "skin-able" text items.
       lblPathInfoAtmoWin.Text = LanguageLoader.appStrings.SetupForm_lblPathInfoAtmoWin;
+      lblAtmoWinConnectionDelay.Text = LanguageLoader.appStrings.SetupForm_lblAtmoWinConnectionDelay;
       grpMode.Text = LanguageLoader.appStrings.SetupForm_grpModeText;
       grpPluginOption.Text = LanguageLoader.appStrings.SetupForm_grpPluginOptionText;
       lblVidTvRec.Text = LanguageLoader.appStrings.SetupForm_lblVidTvRecText;
@@ -410,6 +412,15 @@ namespace AtmoLight
         return;
       }
 
+      // AtmoWin Connection Delay
+      minValue = 0;
+      maxValue = 10000;
+      if (validatorInt(tbAtmoWinConnectionDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - [" + lblAtmoWinConnectionDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       //Hyperion port
       minValue = 1;
       maxValue = 65535;
@@ -591,6 +602,7 @@ namespace AtmoLight
       Settings.staticColorGreen = int.Parse(tbGreen.Text);
       Settings.staticColorBlue = int.Parse(tbBlue.Text);
       Settings.atmowinExe = edFileAtmoWin.Text;
+      Settings.atmoWinConnectionDelay = int.Parse(tbAtmoWinConnectionDelay.Text);
       Settings.excludeTimeStart = DateTime.Parse(edExcludeStart.Text);
       Settings.excludeTimeEnd = DateTime.Parse(edExcludeEnd.Text);
       Settings.killButton = comboBox1.SelectedIndex;
@@ -845,6 +857,16 @@ namespace AtmoLight
       int minValue = 1;
       int maxValue = 0;
       if (validatorInt(tbCaptureHeight.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoWinConnectionDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 10000;
+      if (validatorInt(tbAtmoWinConnectionDelay.Text, minValue, maxValue, true) == false)
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }

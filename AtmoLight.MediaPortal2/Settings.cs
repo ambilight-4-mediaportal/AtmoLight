@@ -13,6 +13,9 @@ namespace AtmoLight
     [Setting(SettingScope.User, "C:\\ProgramData\\Team MediaPortal\\MediaPortal\\AtmoWin\\AtmoWinA.exe")]
     public string AtmoWinExe { get; set; }
 
+    [Setting(SettingScope.User, 1000)]
+    public int AtmoWinConnectionDelay { get; set; }
+
     [Setting(SettingScope.User, ContentEffect.MediaPortalLiveMode)]
     public ContentEffect VideoEffect { get; set; }
 
@@ -234,6 +237,7 @@ namespace AtmoLight
     {
       settings = settingsManager.Load<Settings>();
       AtmoWinExe = settings.AtmoWinExe;
+      AtmoWinConnectionDelay = settings.AtmoWinConnectionDelay;
       VideoEffect = settings.VideoEffect;
       AudioEffect = settings.AudioEffect;
       MenuEffect = settings.MenuEffect;
@@ -310,6 +314,7 @@ namespace AtmoLight
     public bool SaveAll()
     {
       settings.AtmoWinExe = AtmoWinExe;
+      settings.AtmoWinConnectionDelay = AtmoWinConnectionDelay;
       settings.VideoEffect = VideoEffect;
       settings.AudioEffect = AudioEffect;
       settings.MenuEffect = MenuEffect;

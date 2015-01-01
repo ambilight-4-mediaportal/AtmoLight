@@ -118,6 +118,7 @@ namespace AtmoLight
     public bool atmoWinAutoStart;
     public bool atmoWinAutoStop;
     public string atmoWinPath;
+    public int atmoWinConnectionDelay;
 
     // Boblight Settings Fields
     public string boblightIP;

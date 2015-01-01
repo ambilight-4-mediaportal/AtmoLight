@@ -45,6 +45,7 @@ namespace AtmoLight
     public static string atmowinExe = "";
     public static bool startAtmoWin = true;
     public static bool exitAtmoWin = true;
+    public static int atmoWinConnectionDelay;
 
     // Boblight
     public static bool boblightTarget;
@@ -174,6 +175,7 @@ namespace AtmoLight
         
         // Normal settings loading
         atmowinExe = reader.GetValueAsString("atmolight", "atmowinexe", "");
+        atmoWinConnectionDelay = reader.GetValueAsInt("atmolight", "atmoWinConnectionDelay", 1000);
         killButton = reader.GetValueAsInt("atmolight", "killbutton", 4);
         profileButton = reader.GetValueAsInt("atmolight", "cmbutton", 4);
         menuButton = reader.GetValueAsInt("atmolight", "menubutton", 4);
@@ -249,6 +251,7 @@ namespace AtmoLight
       using (MediaPortal.Profile.Settings reader = new MediaPortal.Profile.Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
       {
         reader.SetValue("atmolight", "atmowinexe", atmowinExe);
+        reader.SetValue("atmolight", "atmoWinConnectionDelay", atmoWinConnectionDelay);
         reader.SetValue("atmolight", "effectVideo", effectVideo.ToString());
         reader.SetValue("atmolight", "effectMusic", effectMusic.ToString());
         reader.SetValue("atmolight", "effectRadio", effectRadio.ToString());

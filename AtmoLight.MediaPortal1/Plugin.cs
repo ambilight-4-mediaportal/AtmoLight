@@ -133,6 +133,7 @@ namespace AtmoLight
       coreObject.atmoWinPath = Settings.atmowinExe;
       coreObject.atmoWinAutoStart = Settings.startAtmoWin;
       coreObject.atmoWinAutoStop = Settings.exitAtmoWin;
+      coreObject.atmoWinConnectionDelay = Settings.atmoWinConnectionDelay;
 
       // Boblight
       if (Settings.boblightTarget)
