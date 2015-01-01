@@ -438,7 +438,7 @@ namespace AtmoLight
     {
       if (path.Length > 4)
       {
-        if (path.Substring(path.Length - 3, 3) == "gif")
+        if (path.Substring(path.Length - 3, 3).ToLower() == "gif")
         {
           gifPath = path;
           return true;
