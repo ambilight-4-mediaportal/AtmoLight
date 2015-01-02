@@ -343,6 +343,7 @@ namespace AtmoLight
       {
         captureWidth = width;
         captureHeight = height;
+        blackbarDetectionRect = new Rectangle(0, 0, width, height);
       }
     }
 
@@ -405,16 +406,6 @@ namespace AtmoLight
           }
         }
       }
-    }
-
-    /// <summary>
-    /// Set the effect that should be switched to after connection has be established.
-    /// </summary>
-    /// <param name="effect"></param>
-    /// <returns></returns>
-    public void SetInitialEffect(ContentEffect effect)
-    {
-      currentEffect = effect;
     }
 
     /// <summary>
@@ -921,7 +912,7 @@ namespace AtmoLight
     /// <returns></returns>
     public bool ChangeEffect(ContentEffect effect, bool force = false)
     {
-      if (!IsConnected())
+      if (!IsConnected() && !force)
       {
         return false;
       }

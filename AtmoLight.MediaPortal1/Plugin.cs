@@ -198,11 +198,11 @@ namespace AtmoLight
       menuEffect = Settings.effectMenu;
       if (CheckForStartRequirements())
       {
-        coreObject.SetInitialEffect(menuEffect);
+        coreObject.ChangeEffect(menuEffect, true);
       }
       else
       {
-        coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+        coreObject.ChangeEffect(ContentEffect.LEDsDisabled, true);
       }
 
       if (!coreObject.Initialise())
@@ -998,11 +998,11 @@ namespace AtmoLight
       {
         if (CheckForStartRequirements())
         {
-          coreObject.SetInitialEffect(menuEffect);
+          coreObject.ChangeEffect(menuEffect, true);
         }
         else
         {
-          coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled, true);
         }
       }
 

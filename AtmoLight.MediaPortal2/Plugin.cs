@@ -189,11 +189,11 @@ namespace AtmoLight
 
       if (CheckForStartRequirements())
       {
-        coreObject.SetInitialEffect(settings.MenuEffect);
+        coreObject.ChangeEffect(settings.MenuEffect, true);
       }
       else
       {
-        coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+        coreObject.ChangeEffect(ContentEffect.LEDsDisabled, true);
       }
 
       if (!coreObject.Initialise())
@@ -658,11 +658,11 @@ namespace AtmoLight
       {
         if (CheckForStartRequirements())
         {
-          coreObject.SetInitialEffect(settings.MenuEffect);
+          coreObject.ChangeEffect(settings.MenuEffect, true);
         }
         else
         {
-          coreObject.SetInitialEffect(ContentEffect.LEDsDisabled);
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled, true);
         }
       }
 
