@@ -19,7 +19,6 @@ namespace AtmoLight
 {
   public enum ContentEffect
   {
-
     LEDsDisabled = 0,
     MediaPortalLiveMode,
     StaticColor,
@@ -74,7 +73,6 @@ namespace AtmoLight
     private volatile bool setPixelDataLock = true; // Lock for SetPixelData thread
     private volatile bool gifReaderLock = true;
     private volatile bool vuMeterLock = true;
-
 
     // Event Handler
     public delegate void NewConnectionLostHandler(Target target);
@@ -361,6 +359,7 @@ namespace AtmoLight
       {
         captureWidth = width;
         captureHeight = height;
+        blackbarDetectionRect = new Rectangle(0, 0, width, height);
         return true;
       }
       return false;
@@ -433,16 +432,6 @@ namespace AtmoLight
         }
       }
       return false;
-    }
-
-    /// <summary>
-    /// Set the effect that should be switched to after connection has be established.
-    /// </summary>
-    /// <param name="effect"></param>
-    /// <returns></returns>
-    public void SetInitialEffect(ContentEffect effect)
-    {
-      currentEffect = effect;
     }
 
     /// <summary>
@@ -964,7 +953,7 @@ namespace AtmoLight
     /// <returns></returns>
     public bool ChangeEffect(ContentEffect effect, bool force = false)
     {
-      if (!IsConnected())
+      if (!IsConnected() && !force)
       {
         return false;
       }
