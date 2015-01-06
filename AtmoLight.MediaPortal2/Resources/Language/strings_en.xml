@@ -101,5 +101,4 @@
   <string name="AtmoLight.AmbiBoxPath">Path to AmbiBox.exe</string>
   <string name="AtmoLight.AmbiBoxAutoStart">Start AmbiBox with MediaPortal</string>
   <string name="AtmoLight.AmbiBoxAutoStop">Stop AmbiBox with MediaPortal</string>
-  <string name="AtmoLight.AtmoWinConnectionDelay">Connection delay</string>
 </resources>
