@@ -1,3 +1,11 @@
+Version 2.1.0.0
+- Fixed bug where data would be send to target handler even if handler is disconnected from target
+- Improved average color calculation for Hue handler
+- Improved VUMeter and VUMeter Rainbow effects
+- Fixed bug where GIFReader was case sensitive for the file extensions
+- Added setting for the delay between starting and connecting to AtmoWin
+- Fixed bug where some effects would not be set properly on MediaPortal2 start up
+
 Version 2.0.0.0
 - Added interface to support other targets (not just AtmoWin)
 - Added Hyperion as target software
