@@ -359,10 +359,14 @@ namespace AtmoLight
     /// </summary>
     private void OnNewConnectionLost(Target target)
     {
-      if (GUIWindowManager.Initalized)
+      // Wait until MediaPortal is ready to display a dialog
+      Process mediaPortalProcess = Process.GetCurrentProcess();
+      while (mediaPortalProcess.MainWindowHandle == IntPtr.Zero)
       {
-        DialogError(LanguageLoader.appStrings.ContextMenu_ConnectionLost.Replace("[Target]", target.ToString()));
+        Thread.Sleep(100);
+        mediaPortalProcess.Refresh();
       }
+      DialogError(LanguageLoader.appStrings.ContextMenu_ConnectionLost.Replace("[Target]", target.ToString()));
     }
     #endregion
 
