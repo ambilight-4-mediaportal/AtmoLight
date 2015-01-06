@@ -7,6 +7,7 @@ Version 1.15.0.0
 - Fixed bug where GIFReader was case sensitive for the file extensions
 - Added setting for the delay between starting and connecting to AtmoWin
 - Fixed bug where some effects would not be set properly on MediaPortal start up
+- Fixed bug where MediaPortal could halt/freeze on start up
 
 
 Version 1.14.0.0
