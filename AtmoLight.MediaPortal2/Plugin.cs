@@ -105,13 +105,18 @@ namespace AtmoLight
       Log.Debug("Generating new AtmoLight.Core instance.");
       coreObject = Core.GetInstance();
 
-      coreObject.AddTarget(Target.AtmoOrb);
+      // General settings
+      coreObject.SetDelay(settings.DelayTime);
+      coreObject.SetGIFPath(settings.GIFFile);
+      coreObject.SetReInitOnError(settings.RestartAtmoWinOnError);
+      coreObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, settings.StaticColorBlue);
+      coreObject.SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
+      coreObject.blackbarDetection = settings.BlackbarDetection;
+      coreObject.blackbarDetectionTime = settings.BlackbarDetectionTime;
+      coreObject.blackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
+      coreObject.powerModeChangedDelay = settings.PowerModeChangedDelay;
 
       // AmbiBox
-      if (settings.AmbiBoxTarget)
-      {
-        coreObject.AddTarget(Target.AmbiBox);
-      }
       coreObject.ambiBoxAutoStart = settings.AmbiBoxAutoStart;
       coreObject.ambiBoxAutoStop = settings.AmbiBoxAutoStop;
       coreObject.ambiBoxExternalProfile = settings.AmbiBoxExternalProfile;
@@ -121,22 +126,22 @@ namespace AtmoLight
       coreObject.ambiBoxPath = settings.AmbiBoxPath;
       coreObject.ambiBoxPort = settings.AmbiBoxPort;
       coreObject.ambiBoxReconnectDelay = settings.AmbiBoxReconnectDelay;
+      if (settings.AmbiBoxTarget)
+      {
+        coreObject.AddTarget(Target.AmbiBox);
+      }
 
       // AtmoWin
-      if (settings.AtmoWinTarget)
-      {
-        coreObject.AddTarget(Target.AtmoWin);
-      }
       coreObject.atmoWinPath = settings.AtmoWinExe;
       coreObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
       coreObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
       coreObject.atmoWinConnectionDelay = settings.AtmoWinConnectionDelay;
+      if (settings.AtmoWinTarget)
+      {
+        coreObject.AddTarget(Target.AtmoWin);
+      }
 
       // Boblight
-      if (settings.BoblightTarget)
-      {
-        coreObject.AddTarget(Target.Boblight);
-      }
       coreObject.boblightIP = settings.BoblightIP;
       coreObject.boblightPort = settings.BoblightPort;
       coreObject.boblightMaxFPS = settings.BoblightMaxFPS;
@@ -149,12 +154,12 @@ namespace AtmoLight
       coreObject.boblightValue = settings.BoblightValue;
       coreObject.boblightThreshold = settings.BoblightThreshold;
       coreObject.boblightGamma = settings.BoblightGamma;
+      if (settings.BoblightTarget)
+      {
+        coreObject.AddTarget(Target.Boblight);
+      }
 
       // Hyperion
-      if (settings.HyperionTarget)
-      {
-        coreObject.AddTarget(Target.Hyperion);
-      }
       coreObject.hyperionIP = settings.HyperionIP;
       coreObject.hyperionPort = settings.HyperionPort;
       coreObject.hyperionPriority = settings.HyperionPriority;
@@ -162,12 +167,12 @@ namespace AtmoLight
       coreObject.hyperionReconnectAttempts = settings.HyperionReconnectAttempts;
       coreObject.hyperionPriorityStaticColor = settings.HyperionPriorityStaticColor;
       coreObject.hyperionLiveReconnect = settings.HyperionLiveReconnect;
+      if (settings.HyperionTarget)
+      {
+        coreObject.AddTarget(Target.Hyperion);
+      }
 
       //Hue
-      if (settings.HueTarget)
-      {
-        coreObject.AddTarget(Target.Hue);
-      }
       coreObject.huePath = settings.hueExe;
       coreObject.hueStart = settings.hueStart;
       coreObject.hueIsRemoteMachine = settings.hueIsRemoteMachine;
@@ -178,17 +183,10 @@ namespace AtmoLight
       coreObject.hueMinimalColorDifference = settings.HueMinimalColorDifference;
       coreObject.hueBridgeEnableOnResume = settings.HueBridgeEnableOnResume;
       coreObject.hueBridgeDisableOnSuspend = settings.HueBridgeDisableOnSuspend;
-
-      // General settings
-      coreObject.SetDelay(settings.DelayTime);
-      coreObject.SetGIFPath(settings.GIFFile);
-      coreObject.SetReInitOnError(settings.RestartAtmoWinOnError);
-      coreObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, settings.StaticColorBlue);
-      coreObject.SetCaptureDimensions(settings.CaptureWidth, settings.CaptureHeight);
-      coreObject.blackbarDetection = settings.BlackbarDetection;
-      coreObject.blackbarDetectionTime = settings.BlackbarDetectionTime;
-      coreObject.blackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
-      coreObject.powerModeChangedDelay = settings.PowerModeChangedDelay;
+      if (settings.HueTarget)
+      {
+        coreObject.AddTarget(Target.Hue);
+      }
 
       if (CheckForStartRequirements())
       {
