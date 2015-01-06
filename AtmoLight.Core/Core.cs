@@ -561,7 +561,7 @@ namespace AtmoLight
       {
         return false;
       }
-      return GetCurrentEffect() == ContentEffect.LEDsDisabled || GetCurrentEffect() == ContentEffect.LEDsDisabled ? false : true;
+      return !(GetCurrentEffect() == ContentEffect.LEDsDisabled || GetCurrentEffect() == ContentEffect.Undefined);
     }
 
     /// <summary>
