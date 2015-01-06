@@ -1,6 +1,5 @@
 [SetupForm]
 lblPathInfoAtmoWin=Path+Filename of AtmoWinA.exe
-lblAtmoWinConnectionDelay=Connection delay:
 grpModeText=Effect Settings
 grpPluginOptionText=Plugin options
 lblVidTvRecText=Video/TV/Recordings:

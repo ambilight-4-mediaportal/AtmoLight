@@ -160,7 +160,6 @@ namespace AtmoLight
       coreObject.atmoWinPath = Settings.atmowinExe;
       coreObject.atmoWinAutoStart = Settings.startAtmoWin;
       coreObject.atmoWinAutoStop = Settings.exitAtmoWin;
-      coreObject.atmoWinConnectionDelay = Settings.atmoWinConnectionDelay;
       if (Settings.atmoWinTarget)
       {
         coreObject.AddTarget(Target.AtmoWin);
