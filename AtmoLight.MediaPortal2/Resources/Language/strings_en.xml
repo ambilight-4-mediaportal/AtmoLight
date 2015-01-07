@@ -67,7 +67,6 @@
   <string name="AtmoLight.HuePort">Port number</string>
   <string name="AtmoLight.HueReconnectDelay">Reconnect delay</string>
   <string name="AtmoLight.HueReconnectAttempts">Reconnect attempts</string>
-  <string name="AtmoLight.HueMinimalColorDifference">Minimal color difference (0-255)</string>
   <string name="AtmoLight.HueBridgeEnableOnResume">Turn on Hue Bridge upon resume from standby</string>
   <string name="AtmoLight.HueBridgeDisableOnSuspend">Turn off Hue Bridge on suspend</string>
   <string name="AtmoLight.CaptureWidth">Capture width (Will only be used if AtmoWin is disabled!)</string>
@@ -102,4 +101,9 @@
   <string name="AtmoLight.AmbiBoxAutoStart">Start AmbiBox with MediaPortal</string>
   <string name="AtmoLight.AmbiBoxAutoStop">Stop AmbiBox with MediaPortal</string>
   <string name="AtmoLight.AtmoWinConnectionDelay">Connection delay</string>
+  <string name="AtmoLight.HueThreshold">Threshold</string>
+  <string name="AtmoLight.HueBlackThreshold">BlackThreshold</string>
+  <string name="AtmoLight.HueMinDiversion">Min. color diversion</string>
+  <string name="AtmoLight.HueSaturation">Saturation correction</string>
+  <string name="AtmoLight.HueUseOverallLightness">Use overall lightness</string>
 </resources>
