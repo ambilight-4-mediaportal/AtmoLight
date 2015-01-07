@@ -353,7 +353,6 @@ namespace Language
     public String SetupForm_lblHuePort;
     public String SetupForm_lblHueReconnectDelay;
     public String SetupForm_lblHueReconnectAttempts;
-    public String SetupForm_lblHueMinimalColorDifference;
     public String SetupForm_ckHueBridgeEnableOnResume;
     public String SetupForm_ckHueBridgeDisableOnSuspend;
     public String SetupForm_grpHyperionNetworkSettings;
@@ -414,6 +413,12 @@ namespace Language
     public String SetupForm_lblVUMeterMindB;
     public String SetupForm_lblVUMeterMinHue;
     public String SetupForm_grpVUMeter;
+    public String SetupForm_lblHueMinDiversion;
+    public String SetupForm_lblHueThreshold;
+    public String SetupForm_lblHueBlackThreshold;
+    public String SetupForm_lblHueSaturation;
+    public String SetupForm_cbHueOverallLightness;
+    public String SetupForm_grpHueAverageColor;
 
     public String ContextMenu_SwitchLEDsON;
     public String ContextMenu_SwitchLEDsOFF;
