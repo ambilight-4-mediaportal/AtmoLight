@@ -136,14 +136,26 @@ namespace AtmoLight
     [Setting(SettingScope.User, 5)]
     public int HueReconnectAttempts { get; set; }
 
-    [Setting(SettingScope.User, 25)]
-    public int HueMinimalColorDifference { get; set; }
-
     [Setting(SettingScope.User, false)]
     public bool HueBridgeEnableOnResume { get; set; }
 
     [Setting(SettingScope.User, false)]
     public bool HueBridgeDisableOnSuspend { get; set; }
+
+    [Setting(SettingScope.User, 16)]
+    public int HueThreshold { get; set; }
+
+    [Setting(SettingScope.User, 16)]
+    public int HueBlackThreshold { get; set; }
+
+    [Setting(SettingScope.User, 16)]
+    public int HueMinDiversion { get; set; }
+
+    [Setting(SettingScope.User, 0.2)]
+    public double HueSaturation { get; set; }
+
+    [Setting(SettingScope.User, true)]
+    public bool HueUseOverallLightness { get; set; }
     
     [Setting(SettingScope.User, false)]
     public bool BoblightTarget { get; set; }
@@ -273,7 +285,6 @@ namespace AtmoLight
       HuePort = settings.HuePort;
       HueReconnectDelay = settings.HueReconnectDelay;
       HueReconnectAttempts = settings.HueReconnectAttempts;
-      HueMinimalColorDifference = settings.HueMinimalColorDifference;
       HueBridgeEnableOnResume = settings.HueBridgeEnableOnResume;
       CaptureHeight = settings.CaptureHeight;
       CaptureWidth = settings.CaptureWidth;
@@ -304,6 +315,11 @@ namespace AtmoLight
       AmbiBoxPort = settings.AmbiBoxPort;
       AmbiBoxReconnectDelay = settings.AmbiBoxReconnectDelay;
       AmbiBoxTarget = settings.AmbiBoxTarget;
+      HueThreshold = settings.HueThreshold;
+      HueBlackThreshold = settings.HueBlackThreshold;
+      HueMinDiversion = settings.HueMinDiversion;
+      HueSaturation = settings.HueSaturation;
+      HueUseOverallLightness = settings.HueUseOverallLightness;
       return true;
     }
 
@@ -349,7 +365,6 @@ namespace AtmoLight
       settings.HuePort = HuePort;
       settings.HueReconnectDelay = HueReconnectDelay;
       settings.HueReconnectAttempts = HueReconnectAttempts;
-      settings.HueMinimalColorDifference = HueMinimalColorDifference;
       settings.HueBridgeEnableOnResume = HueBridgeEnableOnResume;
       settings.CaptureWidth = CaptureWidth;
       settings.CaptureHeight = CaptureHeight;
@@ -380,6 +395,11 @@ namespace AtmoLight
       settings.AmbiBoxPort = AmbiBoxPort;
       settings.AmbiBoxReconnectDelay = AmbiBoxReconnectDelay;
       settings.AmbiBoxTarget = AmbiBoxTarget;
+      settings.HueThreshold = HueThreshold;
+      settings.HueBlackThreshold = HueBlackThreshold;
+      settings.HueMinDiversion = HueMinDiversion;
+      settings.HueSaturation = HueSaturation;
+      settings.HueUseOverallLightness = HueUseOverallLightness;
       settingsManager.Save(settings);
       return true;
     }

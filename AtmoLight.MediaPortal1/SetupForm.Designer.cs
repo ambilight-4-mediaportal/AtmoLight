@@ -225,6 +225,16 @@
       this.lblBoblightPort = new System.Windows.Forms.Label();
       this.lblBoblightIP = new System.Windows.Forms.Label();
       this.tabPageHue = new System.Windows.Forms.TabPage();
+      this.grpHueAverageColor = new System.Windows.Forms.GroupBox();
+      this.cbHueOverallLightness = new System.Windows.Forms.CheckBox();
+      this.tbHueSaturation = new System.Windows.Forms.TextBox();
+      this.lblHueSaturation = new System.Windows.Forms.Label();
+      this.lblHueBlackThreshold = new System.Windows.Forms.Label();
+      this.lblHueThreshold = new System.Windows.Forms.Label();
+      this.lblHueMinDiversion = new System.Windows.Forms.Label();
+      this.tbHueBlackThreshold = new System.Windows.Forms.TextBox();
+      this.tbHueThreshold = new System.Windows.Forms.TextBox();
+      this.tbHueMinDiversion = new System.Windows.Forms.TextBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
       this.ckHueBridgeDisableOnSuspend = new System.Windows.Forms.CheckBox();
       this.ckHueBridgeEnableOnResume = new System.Windows.Forms.CheckBox();
@@ -236,9 +246,7 @@
       this.HueNetworkSettings = new System.Windows.Forms.GroupBox();
       this.tbHueReconnectAttempts = new System.Windows.Forms.TextBox();
       this.lblHueReconnectAttempts = new System.Windows.Forms.Label();
-      this.tbHueMinimalColorDifference = new System.Windows.Forms.TextBox();
       this.tbHueReconnectDelay = new System.Windows.Forms.TextBox();
-      this.lblHueMinimalColorDifference = new System.Windows.Forms.Label();
       this.lblHueReconnectDelay = new System.Windows.Forms.Label();
       this.lblHintHue = new System.Windows.Forms.Label();
       this.tbHuePort = new System.Windows.Forms.TextBox();
@@ -278,6 +286,7 @@
       ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightSpeed)).BeginInit();
       this.grpBoblightGeneral.SuspendLayout();
       this.tabPageHue.SuspendLayout();
+      this.grpHueAverageColor.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.HueNetworkSettings.SuspendLayout();
       this.SuspendLayout();
@@ -2303,6 +2312,7 @@
       // tabPageHue
       // 
       this.tabPageHue.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageHue.Controls.Add(this.grpHueAverageColor);
       this.tabPageHue.Controls.Add(this.groupBox1);
       this.tabPageHue.Controls.Add(this.HueNetworkSettings);
       this.tabPageHue.Location = new System.Drawing.Point(4, 22);
@@ -2310,6 +2320,102 @@
       this.tabPageHue.Size = new System.Drawing.Size(842, 504);
       this.tabPageHue.TabIndex = 3;
       this.tabPageHue.Text = "Hue";
+      // 
+      // grpHueAverageColor
+      // 
+      this.grpHueAverageColor.Controls.Add(this.cbHueOverallLightness);
+      this.grpHueAverageColor.Controls.Add(this.tbHueSaturation);
+      this.grpHueAverageColor.Controls.Add(this.lblHueSaturation);
+      this.grpHueAverageColor.Controls.Add(this.lblHueBlackThreshold);
+      this.grpHueAverageColor.Controls.Add(this.lblHueThreshold);
+      this.grpHueAverageColor.Controls.Add(this.lblHueMinDiversion);
+      this.grpHueAverageColor.Controls.Add(this.tbHueBlackThreshold);
+      this.grpHueAverageColor.Controls.Add(this.tbHueThreshold);
+      this.grpHueAverageColor.Controls.Add(this.tbHueMinDiversion);
+      this.grpHueAverageColor.Location = new System.Drawing.Point(10, 345);
+      this.grpHueAverageColor.Name = "grpHueAverageColor";
+      this.grpHueAverageColor.Size = new System.Drawing.Size(820, 100);
+      this.grpHueAverageColor.TabIndex = 28;
+      this.grpHueAverageColor.TabStop = false;
+      this.grpHueAverageColor.Text = "Average color settings";
+      // 
+      // cbHueOverallLightness
+      // 
+      this.cbHueOverallLightness.AutoSize = true;
+      this.cbHueOverallLightness.Location = new System.Drawing.Point(352, 50);
+      this.cbHueOverallLightness.Name = "cbHueOverallLightness";
+      this.cbHueOverallLightness.Size = new System.Drawing.Size(123, 17);
+      this.cbHueOverallLightness.TabIndex = 17;
+      this.cbHueOverallLightness.Text = "Use overall lightness";
+      this.cbHueOverallLightness.UseVisualStyleBackColor = true;
+      // 
+      // tbHueSaturation
+      // 
+      this.tbHueSaturation.Location = new System.Drawing.Point(505, 22);
+      this.tbHueSaturation.Name = "tbHueSaturation";
+      this.tbHueSaturation.Size = new System.Drawing.Size(100, 20);
+      this.tbHueSaturation.TabIndex = 16;
+      this.tbHueSaturation.Validating += new System.ComponentModel.CancelEventHandler(this.tbHueSaturation_Validating);
+      // 
+      // lblHueSaturation
+      // 
+      this.lblHueSaturation.AutoSize = true;
+      this.lblHueSaturation.Location = new System.Drawing.Point(350, 25);
+      this.lblHueSaturation.Name = "lblHueSaturation";
+      this.lblHueSaturation.Size = new System.Drawing.Size(108, 13);
+      this.lblHueSaturation.TabIndex = 15;
+      this.lblHueSaturation.Text = "Saturation correction:";
+      // 
+      // lblHueBlackThreshold
+      // 
+      this.lblHueBlackThreshold.AutoSize = true;
+      this.lblHueBlackThreshold.Location = new System.Drawing.Point(10, 75);
+      this.lblHueBlackThreshold.Name = "lblHueBlackThreshold";
+      this.lblHueBlackThreshold.Size = new System.Drawing.Size(83, 13);
+      this.lblHueBlackThreshold.TabIndex = 14;
+      this.lblHueBlackThreshold.Text = "Black threshold:";
+      // 
+      // lblHueThreshold
+      // 
+      this.lblHueThreshold.AutoSize = true;
+      this.lblHueThreshold.Location = new System.Drawing.Point(10, 50);
+      this.lblHueThreshold.Name = "lblHueThreshold";
+      this.lblHueThreshold.Size = new System.Drawing.Size(54, 13);
+      this.lblHueThreshold.TabIndex = 13;
+      this.lblHueThreshold.Text = "Threshold";
+      // 
+      // lblHueMinDiversion
+      // 
+      this.lblHueMinDiversion.AutoSize = true;
+      this.lblHueMinDiversion.Location = new System.Drawing.Point(10, 25);
+      this.lblHueMinDiversion.Name = "lblHueMinDiversion";
+      this.lblHueMinDiversion.Size = new System.Drawing.Size(101, 13);
+      this.lblHueMinDiversion.TabIndex = 12;
+      this.lblHueMinDiversion.Text = "Min. color diversion:";
+      // 
+      // tbHueBlackThreshold
+      // 
+      this.tbHueBlackThreshold.Location = new System.Drawing.Point(160, 72);
+      this.tbHueBlackThreshold.Name = "tbHueBlackThreshold";
+      this.tbHueBlackThreshold.Size = new System.Drawing.Size(100, 20);
+      this.tbHueBlackThreshold.TabIndex = 11;
+      this.tbHueBlackThreshold.Validating += new System.ComponentModel.CancelEventHandler(this.tbHueBlackThreshold_Validating);
+      // 
+      // tbHueThreshold
+      // 
+      this.tbHueThreshold.Location = new System.Drawing.Point(160, 47);
+      this.tbHueThreshold.Name = "tbHueThreshold";
+      this.tbHueThreshold.Size = new System.Drawing.Size(100, 20);
+      this.tbHueThreshold.TabIndex = 10;
+      this.tbHueThreshold.Validating += new System.ComponentModel.CancelEventHandler(this.tbHueThreshold_Validating);
+      // 
+      // tbHueMinDiversion
+      // 
+      this.tbHueMinDiversion.Location = new System.Drawing.Point(160, 22);
+      this.tbHueMinDiversion.Name = "tbHueMinDiversion";
+      this.tbHueMinDiversion.Size = new System.Drawing.Size(100, 20);
+      this.tbHueMinDiversion.TabIndex = 9;
+      this.tbHueMinDiversion.Validating += new System.ComponentModel.CancelEventHandler(this.tbHueMinDiversion_Validating);
       // 
       // groupBox1
       // 
@@ -2404,9 +2510,7 @@
       // 
       this.HueNetworkSettings.Controls.Add(this.tbHueReconnectAttempts);
       this.HueNetworkSettings.Controls.Add(this.lblHueReconnectAttempts);
-      this.HueNetworkSettings.Controls.Add(this.tbHueMinimalColorDifference);
       this.HueNetworkSettings.Controls.Add(this.tbHueReconnectDelay);
-      this.HueNetworkSettings.Controls.Add(this.lblHueMinimalColorDifference);
       this.HueNetworkSettings.Controls.Add(this.lblHueReconnectDelay);
       this.HueNetworkSettings.Controls.Add(this.lblHintHue);
       this.HueNetworkSettings.Controls.Add(this.tbHuePort);
@@ -2415,7 +2519,7 @@
       this.HueNetworkSettings.Controls.Add(this.lblHueIP);
       this.HueNetworkSettings.Location = new System.Drawing.Point(10, 190);
       this.HueNetworkSettings.Name = "HueNetworkSettings";
-      this.HueNetworkSettings.Size = new System.Drawing.Size(820, 175);
+      this.HueNetworkSettings.Size = new System.Drawing.Size(820, 150);
       this.HueNetworkSettings.TabIndex = 0;
       this.HueNetworkSettings.TabStop = false;
       this.HueNetworkSettings.Text = "Network";
@@ -2437,13 +2541,6 @@
       this.lblHueReconnectAttempts.TabIndex = 27;
       this.lblHueReconnectAttempts.Text = "Reconnect attempts:";
       // 
-      // tbHueMinimalColorDifference
-      // 
-      this.tbHueMinimalColorDifference.Location = new System.Drawing.Point(230, 122);
-      this.tbHueMinimalColorDifference.Name = "tbHueMinimalColorDifference";
-      this.tbHueMinimalColorDifference.Size = new System.Drawing.Size(93, 20);
-      this.tbHueMinimalColorDifference.TabIndex = 22;
-      // 
       // tbHueReconnectDelay
       // 
       this.tbHueReconnectDelay.Location = new System.Drawing.Point(230, 72);
@@ -2451,15 +2548,6 @@
       this.tbHueReconnectDelay.Size = new System.Drawing.Size(93, 20);
       this.tbHueReconnectDelay.TabIndex = 24;
       this.tbHueReconnectDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbHueReconnectDelay_Validating);
-      // 
-      // lblHueMinimalColorDifference
-      // 
-      this.lblHueMinimalColorDifference.AutoSize = true;
-      this.lblHueMinimalColorDifference.Location = new System.Drawing.Point(10, 125);
-      this.lblHueMinimalColorDifference.Name = "lblHueMinimalColorDifference";
-      this.lblHueMinimalColorDifference.Size = new System.Drawing.Size(154, 13);
-      this.lblHueMinimalColorDifference.TabIndex = 23;
-      this.lblHueMinimalColorDifference.Text = "Minimal color difference (0-255)";
       // 
       // lblHueReconnectDelay
       // 
@@ -2473,7 +2561,7 @@
       // lblHintHue
       // 
       this.lblHintHue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintHue.Location = new System.Drawing.Point(10, 150);
+      this.lblHintHue.Location = new System.Drawing.Point(10, 125);
       this.lblHintHue.Name = "lblHintHue";
       this.lblHintHue.Size = new System.Drawing.Size(796, 13);
       this.lblHintHue.TabIndex = 21;
@@ -2588,6 +2676,8 @@
       this.grpBoblightGeneral.ResumeLayout(false);
       this.grpBoblightGeneral.PerformLayout();
       this.tabPageHue.ResumeLayout(false);
+      this.grpHueAverageColor.ResumeLayout(false);
+      this.grpHueAverageColor.PerformLayout();
       this.groupBox1.ResumeLayout(false);
       this.groupBox1.PerformLayout();
       this.HueNetworkSettings.ResumeLayout(false);
@@ -2697,8 +2787,6 @@
     private System.Windows.Forms.TextBox tbHuePort;
     private System.Windows.Forms.Label lblHuePort;
     private System.Windows.Forms.Label lblHintHue;
-    private System.Windows.Forms.TextBox tbHueMinimalColorDifference;
-    private System.Windows.Forms.Label lblHueMinimalColorDifference;
     private System.Windows.Forms.TabPage tabPageBoblight;
     private System.Windows.Forms.CheckBox ckBoblightEnabled;
     private System.Windows.Forms.GroupBox grpBoblightGeneral;
@@ -2817,5 +2905,15 @@
     private System.Windows.Forms.Label lblVUMeterMindB;
     private System.Windows.Forms.TextBox tbVUMeterMaxHue;
     private System.Windows.Forms.TextBox tbVUMeterMinHue;
+    private System.Windows.Forms.GroupBox grpHueAverageColor;
+    private System.Windows.Forms.Label lblHueBlackThreshold;
+    private System.Windows.Forms.Label lblHueThreshold;
+    private System.Windows.Forms.Label lblHueMinDiversion;
+    private System.Windows.Forms.TextBox tbHueBlackThreshold;
+    private System.Windows.Forms.TextBox tbHueThreshold;
+    private System.Windows.Forms.TextBox tbHueMinDiversion;
+    private System.Windows.Forms.CheckBox cbHueOverallLightness;
+    private System.Windows.Forms.TextBox tbHueSaturation;
+    private System.Windows.Forms.Label lblHueSaturation;
   }
 }

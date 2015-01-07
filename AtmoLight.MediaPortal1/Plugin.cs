@@ -204,9 +204,13 @@ namespace AtmoLight
       coreObject.huePort = Settings.huePort;
       coreObject.hueReconnectDelay = Settings.hueReconnectDelay;
       coreObject.hueReconnectAttempts = Settings.hueReconnectAttempts;
-      coreObject.hueMinimalColorDifference = Settings.hueMinimalColorDifference;
       coreObject.hueBridgeEnableOnResume = Settings.hueBridgeEnableOnResume;
       coreObject.hueBridgeDisableOnSuspend = Settings.hueBridgeDisableOnSuspend;
+      coreObject.hueMinDiversion = Settings.hueMinDiversion;
+      coreObject.hueThreshold = Settings.hueThreshold;
+      coreObject.hueBlackThreshold = Settings.hueBlackThreshold;
+      coreObject.hueSaturation = Settings.hueSaturation;
+      coreObject.hueUseOverallLightness = Settings.hueUseOverallLightness;
       if (Settings.hueTarget)
       {
         coreObject.AddTarget(Target.Hue);

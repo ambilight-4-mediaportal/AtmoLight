@@ -1113,28 +1113,6 @@ namespace AtmoLight.Configuration
     }
   }
 
-  public class HueMinimalColorDifference : LimitedNumberSelect
-  {
-    public override void Load()
-    {
-      _type = NumberType.Integer;
-      _step = 1;
-      _lowerLimit = 0;
-      _upperLimit = 255;
-      _value = SettingsManager.Load<Settings>().HueMinimalColorDifference;
-    }
-
-    public override void Save()
-    {
-      base.Save();
-      Settings settings = SettingsManager.Load<Settings>();
-      settings.HueMinimalColorDifference = (int)_value;
-      SettingsManager.Save(settings);
-
-      Core.GetInstance().hueMinimalColorDifference = (int)_value;
-    }
-  }
-
   public class HueBridgeEnableOnResume : YesNo
   {
     public override void Load()
@@ -1168,6 +1146,112 @@ namespace AtmoLight.Configuration
       SettingsManager.Save(settings);
 
       Core.GetInstance().hueBridgeDisableOnSuspend = _yes;
+    }
+  }
+
+  public class HueThreshold : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 255;
+      _value = SettingsManager.Load<Settings>().HueThreshold;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueThreshold = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueThreshold = (int)_value;
+    }
+  }
+
+  public class HueBlackThreshold : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 255;
+      _value = SettingsManager.Load<Settings>().HueBlackThreshold;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueBlackThreshold = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueBlackThreshold = (int)_value;
+    }
+  }
+
+  public class HueMinDiversion : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 255;
+      _value = SettingsManager.Load<Settings>().HueMinDiversion;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueMinDiversion = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueMinDiversion = (int)_value;
+    }
+  }
+
+  public class HueSaturation : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.FloatingPoint;
+      _step = 0.1;
+      _lowerLimit = -1.0;
+      _upperLimit = 1.0;
+      _value = SettingsManager.Load<Settings>().HueSaturation;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueSaturation = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueSaturation = (int)_value;
+    }
+  }
+
+  public class HueUseOverallLightness : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().HueUseOverallLightness;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueUseOverallLightness = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueUseOverallLightness = _yes;
     }
   }
 

@@ -84,9 +84,13 @@ namespace AtmoLight
     public static int huePort = 0;
     public static int hueReconnectDelay = 0;
     public static int hueReconnectAttempts = 0;
-    public static int hueMinimalColorDifference;
     public static bool hueBridgeEnableOnResume;
     public static bool hueBridgeDisableOnSuspend;
+    public static int hueMinDiversion;
+    public static int hueThreshold;
+    public static int hueBlackThreshold;
+    public static double hueSaturation;
+    public static bool hueUseOverallLightness;
 
     // AmbiBox
     public static bool ambiBoxTarget;
@@ -226,7 +230,6 @@ namespace AtmoLight
         huePort = reader.GetValueAsInt("atmolight", "huePort", 20123);
         hueReconnectDelay = reader.GetValueAsInt("atmolight", "hueReconnectDelay", 10000);
         hueReconnectAttempts = reader.GetValueAsInt("atmolight", "hueReconnectAttempts", 5);
-        hueMinimalColorDifference = reader.GetValueAsInt("atmolight", "hueMinimalColorDifference", 25);
         hueBridgeEnableOnResume = reader.GetValueAsBool("atmolight", "hueBridgeEnableOnResume", false);
         hueBridgeDisableOnSuspend = reader.GetValueAsBool("atmolight", "hueBridgeDisableOnSuspend", false);
         boblightIP = reader.GetValueAsString("atmolight", "boblightIP", "127.0.0.1");
@@ -277,6 +280,12 @@ namespace AtmoLight
         vuMeterMindB = reader.GetValueAsInt("atmolight", "vuMeterMindB", -24);
         vuMeterMinHue = Double.Parse(reader.GetValueAsString("atmolight", "vuMeterMinHue", "0,74999").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
         vuMeterMaxHue = Double.Parse(reader.GetValueAsString("atmolight", "vuMeterMaxHue", "0,95833").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+        hueThreshold = reader.GetValueAsInt("atmolight", "hueThreshold", 16);
+        hueBlackThreshold = reader.GetValueAsInt("atmolight", "hueBlackThreshold", 16);
+        hueMinDiversion = reader.GetValueAsInt("atmolight", "hueMinDiversion", 16);
+        hueSaturation = Double.Parse(reader.GetValueAsString("atmolight", "hueSaturation", "0.2").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+        hueUseOverallLightness = reader.GetValueAsBool("atmolight", "hueUseOverallLightness", true);
+
       }
     }
     public static void SaveSettings()
@@ -327,7 +336,6 @@ namespace AtmoLight
         reader.SetValue("atmolight", "huePort", (int)huePort);
         reader.SetValue("atmolight", "hueReconnectDelay", (int)hueReconnectDelay);
         reader.SetValue("atmolight", "hueReconnectAttempts", (int)hueReconnectAttempts);
-        reader.SetValue("atmolight", "hueMinimalColorDifference", (int)hueMinimalColorDifference);
         reader.SetValueAsBool("atmolight", "hueBridgeEnableOnResume", hueBridgeEnableOnResume);
         reader.SetValueAsBool("atmolight", "hueBridgeDisableOnSuspend", hueBridgeDisableOnSuspend);
         reader.SetValue("atmolight", "boblightIP", boblightIP);
@@ -379,6 +387,11 @@ namespace AtmoLight
           atmoOrbLampsTemp += atmoOrbLamps[i];
         }
         reader.SetValue("atmolight", "atmoOrbLamps", atmoOrbLampsTemp);
+        reader.SetValue("atmolight", "hueMinDiversion", hueMinDiversion.ToString());
+        reader.SetValue("atmolight", "hueThreshold", hueThreshold.ToString());
+        reader.SetValue("atmolight", "hueBlackThreshold", hueBlackThreshold.ToString());
+        reader.SetValue("atmolight", "hueSaturation", hueSaturation.ToString());
+        reader.SetValueAsBool("atmolight", "hueUseOverallLightness", hueUseOverallLightness);
       }
     }
 

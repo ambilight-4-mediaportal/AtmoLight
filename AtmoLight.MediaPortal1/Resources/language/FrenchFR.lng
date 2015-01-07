@@ -72,7 +72,6 @@ lblHueIP=IP:
 lblHuePort=Port:
 lblHueReconnectDelay=Délais de reconnections (ms):
 lblHueReconnectAttempts=Tentatives de reconnections:
-lblHueMinimalColorDifference=Minimal color difference (0-255)
 ckHueBridgeEnableOnResume=Démarrer le Pont Hue à la sortie de veille
 ckHueBridgeDisableOnSuspend=Eteindre le pont Hue à la mise en veille
 lblHintHue=Hint: Besoin d'avoir AtmoHue démarré sur l'IP & Port du dessus, ne pas indiquer vos infos. Hue Bridge

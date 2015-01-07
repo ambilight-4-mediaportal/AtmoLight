@@ -160,12 +160,13 @@ namespace AtmoLight
     public int huePort;
     public int hueReconnectDelay;
     public int hueReconnectAttempts;
-    public int hueMinimalColorDifference;
     public bool hueBridgeEnableOnResume;
     public bool hueBridgeDisableOnSuspend;
-    public int hueBlackThreshold = 16;
-    public int hueThreshold = 0;
-    public int hueMinDiversion = 16;
+    public int hueBlackThreshold;
+    public int hueThreshold;
+    public int hueMinDiversion;
+    public bool hueUseOverallLightness;
+    public double hueSaturation;
     #endregion
 
     #region class Win32API

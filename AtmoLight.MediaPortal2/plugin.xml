@@ -280,17 +280,33 @@
         Text="[AtmoLight.HueReconnectAttempts]"
         ClassName="AtmoLight.Configuration.HueReconnectAttempts"/>
     <ConfigSetting
-        Id="HueMinimalColorDifference"
-        Text="[AtmoLight.HueMinimalColorDifference]"
-        ClassName="AtmoLight.Configuration.HueMinimalColorDifference"/>
-    <ConfigSetting
         Id="HueBridgeEnableOnResume"
         Text="[AtmoLight.HueBridgeEnableOnResume]"
         ClassName="AtmoLight.Configuration.HueBridgeEnableOnResume"/>
     <ConfigSetting
         Id="HueBridgeDisableOnSuspend"
         Text="[AtmoLight.HueBridgeDisableOnSuspend]"
-        ClassName="AtmoLight.Configuration.HueBridgeDisableOnSuspend"/>    
+        ClassName="AtmoLight.Configuration.HueBridgeDisableOnSuspend"/>
+    <ConfigSetting
+        Id="HueMinDiversion"
+        Text="[AtmoLight.HueMinDiversion]"
+        ClassName="AtmoLight.Configuration.HueMinDiversion"/>
+    <ConfigSetting
+        Id="HueThreshold"
+        Text="[AtmoLight.HueThreshold]"
+        ClassName="AtmoLight.Configuration.HueThreshold"/>
+    <ConfigSetting
+        Id="HueBlackThreshold"
+        Text="[AtmoLight.HueBlackThreshold]"
+        ClassName="AtmoLight.Configuration.HueBlackThreshold"/>
+    <ConfigSetting
+        Id="HueSaturation"
+        Text="[AtmoLight.HueSaturation]"
+        ClassName="AtmoLight.Configuration.HueSaturation"/>
+    <ConfigSetting
+        Id="HueUseOverallLightness"
+        Text="[AtmoLight.HueUseOverallLightness]"
+        ClassName="AtmoLight.Configuration.HueUseOverallLightness"/>
   </Register>
 
 

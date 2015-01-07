@@ -392,7 +392,7 @@ namespace AtmoLight.Targets
             averageColor[1] /= pixelCount;
             averageColor[2] /= pixelCount;
 
-            if (Math.Abs(averageColor[0] - previousColor[0]) >= coreObject.hueMinimalColorDifference || Math.Abs(averageColor[1] - previousColor[1]) >= coreObject.hueMinimalColorDifference || Math.Abs(averageColor[2] - previousColor[2]) >= coreObject.hueMinimalColorDifference)
+            if (Math.Abs(averageColor[0] - previousColor[0]) >= coreObject.hueThreshold || Math.Abs(averageColor[1] - previousColor[1]) >= coreObject.hueThreshold || Math.Abs(averageColor[2] - previousColor[2]) >= coreObject.hueThreshold)
             {
               double hue;
               double saturation;
@@ -409,7 +409,7 @@ namespace AtmoLight.Targets
               HSL.RGB2HSL(overallAverageColor[0], overallAverageColor[1], overallAverageColor[2], out hueOverall, out saturationOverall, out lightnessOverall);
 
               // Convert back to rgb with adjusted saturation and lightness
-              HSL.HSL2RGB(hue, Math.Min(saturation + 0.2, 1), lightnessOverall, out averageColor[0], out averageColor[1], out averageColor[2]);
+              HSL.HSL2RGB(hue, Math.Min(saturation + coreObject.hueSaturation, 1), (coreObject.hueUseOverallLightness ? lightnessOverall : lightness), out averageColor[0], out averageColor[1], out averageColor[2]);
 
               // Send to lamp
               ChangeColor(averageColor[0], averageColor[1], averageColor[2], 200, (int)(Math.Min(lightnessOverall, 0.5) * 510));
@@ -539,7 +539,7 @@ namespace AtmoLight.Targets
 
     private void CalculateVUMeterColorAndSendToHue(Bitmap vuMeterBitmap)
     {
-      int minDifferencePreviousColors = coreObject.hueMinimalColorDifference;
+      int minDifferencePreviousColors = coreObject.hueThreshold;
 
       for (int i = 0; i < vuMeterBitmap.Height; i++)
       {
