@@ -8,6 +8,7 @@ Version 1.15.0.0
 - Fixed a bug where connecting to AtmoWin would fail
 - Fixed bug where some effects would not be set properly on MediaPortal start up
 - Fixed bug where MediaPortal could halt/freeze on start up
+- Added possibility to deactivate AtmoLight through context menu
 
 
 Version 1.14.0.0
