@@ -791,7 +791,7 @@ namespace AtmoLight.Configuration
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
       IPAddress ip;
-      if (IPAddress.TryParse(_value, out ip))
+      if (!string.IsNullOrEmpty(_value))
       {
         settings.HyperionIP = _value;
         SettingsManager.Save(settings);
