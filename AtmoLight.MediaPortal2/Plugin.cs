@@ -587,7 +587,6 @@ namespace AtmoLight
       AtmoLight.Configuration.ExcludeTimeEndHour.SettingsChanged += new Configuration.ExcludeTimeEndHour.SettingsChangedHandler(ReloadSettings);
       AtmoLight.Configuration.ExcludeTimeStartMinutes.SettingsChanged += new Configuration.ExcludeTimeStartMinutes.SettingsChangedHandler(ReloadSettings);
       AtmoLight.Configuration.ExcludeTimeEndMinutes.SettingsChanged += new Configuration.ExcludeTimeEndMinutes.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.AtmoWinConnectionDelay.SettingsChanged += new Configuration.AtmoWinConnectionDelay.SettingsChangedHandler(ReloadSettings);
     }
 
     private void UnregisterSettingsChangedHandler()
@@ -606,7 +605,6 @@ namespace AtmoLight
       AtmoLight.Configuration.ExcludeTimeEndHour.SettingsChanged -= new Configuration.ExcludeTimeEndHour.SettingsChangedHandler(ReloadSettings);
       AtmoLight.Configuration.ExcludeTimeStartMinutes.SettingsChanged -= new Configuration.ExcludeTimeStartMinutes.SettingsChangedHandler(ReloadSettings);
       AtmoLight.Configuration.ExcludeTimeEndMinutes.SettingsChanged -= new Configuration.ExcludeTimeEndMinutes.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.AtmoWinConnectionDelay.SettingsChanged -= new Configuration.AtmoWinConnectionDelay.SettingsChangedHandler(ReloadSettings);
     }
 
     private void ReloadSettings()

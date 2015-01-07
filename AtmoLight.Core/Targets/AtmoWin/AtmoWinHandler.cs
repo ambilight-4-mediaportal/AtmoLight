@@ -273,7 +273,6 @@ namespace AtmoLight
             initialiseLock = false;
             return false;
           }
-          System.Threading.Thread.Sleep(coreObject.atmoWinConnectionDelay);
         }
         else
         {
@@ -411,6 +410,7 @@ namespace AtmoLight
       try
       {
         AtmoWinA.Start();
+        AtmoWinA.WaitForInputIdle();
       }
       catch (Exception)
       {

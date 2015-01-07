@@ -128,7 +128,6 @@ namespace AtmoLight
     public bool atmoWinAutoStart;
     public bool atmoWinAutoStop;
     public string atmoWinPath;
-    public int atmoWinConnectionDelay;
 
     // Boblight Settings Fields
     public string boblightIP;
@@ -167,7 +166,6 @@ namespace AtmoLight
     public int hueBlackThreshold = 16;
     public int hueThreshold = 0;
     public int hueMinDiversion = 16;
-
     #endregion
 
     #region class Win32API

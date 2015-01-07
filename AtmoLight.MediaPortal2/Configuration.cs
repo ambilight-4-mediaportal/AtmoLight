@@ -36,29 +36,6 @@ namespace AtmoLight.Configuration
     }
   }
 
-  public class AtmoWinConnectionDelay : LimitedNumberSelect
-  {
-    public delegate void SettingsChangedHandler();
-    public static event SettingsChangedHandler SettingsChanged;
-    public override void Load()
-    {
-      _type = NumberType.Integer;
-      _step = 1;
-      _lowerLimit = 0;
-      _upperLimit = 10000;
-      _value = SettingsManager.Load<Settings>().AtmoWinConnectionDelay;
-    }
-
-    public override void Save()
-    {
-      base.Save();
-      Settings settings = SettingsManager.Load<Settings>();
-      settings.AtmoWinConnectionDelay = (int)_value;
-      SettingsManager.Save(settings);
-      SettingsChanged();
-    }
-  }
-
   public class GIFFile : PathEntry
   {
     public override void Load()

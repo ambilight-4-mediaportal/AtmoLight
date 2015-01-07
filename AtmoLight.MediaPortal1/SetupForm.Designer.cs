@@ -71,6 +71,7 @@
       this.ckHyperionEnabled = new System.Windows.Forms.CheckBox();
       this.grpMode = new System.Windows.Forms.GroupBox();
       this.grpVUMeter = new System.Windows.Forms.GroupBox();
+      this.tbVUMeterMinHue = new System.Windows.Forms.TextBox();
       this.tbVUMeterMaxHue = new System.Windows.Forms.TextBox();
       this.lblVUMeterMaxHue = new System.Windows.Forms.Label();
       this.lblVUMeterMinHue = new System.Windows.Forms.Label();
@@ -246,9 +247,6 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
-      this.tbVUMeterMinHue = new System.Windows.Forms.TextBox();
-      this.lblAtmoWinConnectionDelay = new System.Windows.Forms.Label();
-      this.tbAtmoWinConnectionDelay = new System.Windows.Forms.TextBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -287,7 +285,6 @@
       // btnSave
       // 
       this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-
       this.btnSave.Location = new System.Drawing.Point(16, 550);
       this.btnSave.Name = "btnSave";
       this.btnSave.Size = new System.Drawing.Size(105, 23);
@@ -299,7 +296,6 @@
       // btnCancel
       // 
       this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-
       this.btnCancel.Location = new System.Drawing.Point(141, 550);
       this.btnCancel.Name = "btnCancel";
       this.btnCancel.Size = new System.Drawing.Size(105, 23);
@@ -316,7 +312,6 @@
       // lblVersion
       // 
       this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-
       this.lblVersion.Location = new System.Drawing.Point(754, 549);
       this.lblVersion.Name = "lblVersion";
       this.lblVersion.Size = new System.Drawing.Size(95, 26);
@@ -327,7 +322,6 @@
       // 
       this.lblVersionVal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.lblVersionVal.AutoSize = true;
-
       this.lblVersionVal.Location = new System.Drawing.Point(799, 562);
       this.lblVersionVal.Name = "lblVersionVal";
       this.lblVersionVal.Size = new System.Drawing.Size(40, 13);
@@ -337,7 +331,6 @@
       // btnLanguage
       // 
       this.btnLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-
       this.btnLanguage.Location = new System.Drawing.Point(266, 550);
       this.btnLanguage.Name = "btnLanguage";
       this.btnLanguage.Size = new System.Drawing.Size(105, 23);
@@ -361,7 +354,6 @@
       this.tabPageHyperion.Controls.Add(this.grpHyperionNetworkSettings);
       this.tabPageHyperion.Location = new System.Drawing.Point(4, 22);
       this.tabPageHyperion.Name = "tabPageHyperion";
-
       this.tabPageHyperion.Size = new System.Drawing.Size(842, 504);
       this.tabPageHyperion.TabIndex = 2;
       this.tabPageHyperion.Text = "Hyperion";
@@ -516,15 +508,12 @@
       this.tabPageAtmowin.Location = new System.Drawing.Point(4, 22);
       this.tabPageAtmowin.Name = "tabPageAtmowin";
       this.tabPageAtmowin.Padding = new System.Windows.Forms.Padding(3);
-
       this.tabPageAtmowin.Size = new System.Drawing.Size(842, 504);
       this.tabPageAtmowin.TabIndex = 1;
       this.tabPageAtmowin.Text = "Atmowin";
       // 
       // grpAtmowinSettings
       // 
-      this.grpAtmowinSettings.Controls.Add(this.tbAtmoWinConnectionDelay);
-      this.grpAtmowinSettings.Controls.Add(this.lblAtmoWinConnectionDelay);
       this.grpAtmowinSettings.Controls.Add(this.lblPathInfoAtmoWin);
       this.grpAtmowinSettings.Controls.Add(this.btnSelectFileAtmoWin);
       this.grpAtmowinSettings.Controls.Add(this.edFileAtmoWin);
@@ -532,8 +521,7 @@
       this.grpAtmowinSettings.Controls.Add(this.ckStartAtmoWin);
       this.grpAtmowinSettings.Location = new System.Drawing.Point(10, 10);
       this.grpAtmowinSettings.Name = "grpAtmowinSettings";
-
-      this.grpAtmowinSettings.Size = new System.Drawing.Size(820, 150);
+      this.grpAtmowinSettings.Size = new System.Drawing.Size(820, 125);
       this.grpAtmowinSettings.TabIndex = 26;
       this.grpAtmowinSettings.TabStop = false;
       this.grpAtmowinSettings.Text = "Settings";
@@ -603,7 +591,6 @@
       this.tabPageGeneric.Location = new System.Drawing.Point(4, 22);
       this.tabPageGeneric.Name = "tabPageGeneric";
       this.tabPageGeneric.Padding = new System.Windows.Forms.Padding(3);
-
       this.tabPageGeneric.Size = new System.Drawing.Size(842, 504);
       this.tabPageGeneric.TabIndex = 0;
       this.tabPageGeneric.Text = "Generic settings";
@@ -649,7 +636,6 @@
       // ckBoblightEnabled
       // 
       this.ckBoblightEnabled.AutoSize = true;
-
       this.ckBoblightEnabled.Location = new System.Drawing.Point(12, 98);
       this.ckBoblightEnabled.Name = "ckBoblightEnabled";
       this.ckBoblightEnabled.Size = new System.Drawing.Size(64, 17);
@@ -661,7 +647,6 @@
       // ckHueEnabled
       // 
       this.ckHueEnabled.AutoSize = true;
-
       this.ckHueEnabled.Location = new System.Drawing.Point(12, 121);
       this.ckHueEnabled.Name = "ckHueEnabled";
       this.ckHueEnabled.Size = new System.Drawing.Size(46, 17);
@@ -673,10 +658,8 @@
       // lblHintHardware
       // 
       this.lblHintHardware.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-
       this.lblHintHardware.Location = new System.Drawing.Point(176, 25);
       this.lblHintHardware.Name = "lblHintHardware";
-
       this.lblHintHardware.Size = new System.Drawing.Size(164, 113);
       this.lblHintHardware.TabIndex = 20;
       this.lblHintHardware.Text = "Hint: Select the devices you want to use with AtmoLight and configure it on its d" +
@@ -687,7 +670,6 @@
       this.ckAtmowinEnabled.AutoSize = true;
       this.ckAtmowinEnabled.Checked = true;
       this.ckAtmowinEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-
       this.ckAtmowinEnabled.Location = new System.Drawing.Point(12, 75);
       this.ckAtmowinEnabled.Name = "ckAtmowinEnabled";
       this.ckAtmowinEnabled.Size = new System.Drawing.Size(69, 17);
@@ -699,7 +681,6 @@
       // ckHyperionEnabled
       // 
       this.ckHyperionEnabled.AutoSize = true;
-
       this.ckHyperionEnabled.Location = new System.Drawing.Point(100, 25);
       this.ckHyperionEnabled.Name = "ckHyperionEnabled";
       this.ckHyperionEnabled.Size = new System.Drawing.Size(68, 17);
@@ -725,7 +706,6 @@
       this.grpMode.Controls.Add(this.lblVidTvRec);
       this.grpMode.Location = new System.Drawing.Point(10, 165);
       this.grpMode.Name = "grpMode";
-
       this.grpMode.Size = new System.Drawing.Size(350, 330);
       this.grpMode.TabIndex = 7;
       this.grpMode.TabStop = false;
@@ -745,6 +725,14 @@
       this.grpVUMeter.TabIndex = 29;
       this.grpVUMeter.TabStop = false;
       this.grpVUMeter.Text = "VUMeter";
+      // 
+      // tbVUMeterMinHue
+      // 
+      this.tbVUMeterMinHue.Location = new System.Drawing.Point(162, 22);
+      this.tbVUMeterMinHue.Name = "tbVUMeterMinHue";
+      this.tbVUMeterMinHue.Size = new System.Drawing.Size(45, 20);
+      this.tbVUMeterMinHue.TabIndex = 5;
+      this.tbVUMeterMinHue.Validating += new System.ComponentModel.CancelEventHandler(this.tbVUMeterMinHue_Validating);
       // 
       // tbVUMeterMaxHue
       // 
@@ -1428,7 +1416,6 @@
       this.tabMenu.Location = new System.Drawing.Point(12, 12);
       this.tabMenu.Name = "tabMenu";
       this.tabMenu.SelectedIndex = 0;
-
       this.tabMenu.Size = new System.Drawing.Size(850, 530);
       this.tabMenu.TabIndex = 20;
       // 
@@ -1440,7 +1427,6 @@
       this.tabPageAmbiBox.Location = new System.Drawing.Point(4, 22);
       this.tabPageAmbiBox.Name = "tabPageAmbiBox";
       this.tabPageAmbiBox.Padding = new System.Windows.Forms.Padding(3);
-
       this.tabPageAmbiBox.Size = new System.Drawing.Size(842, 504);
       this.tabPageAmbiBox.TabIndex = 5;
       this.tabPageAmbiBox.Text = "AmbiBox";
@@ -1461,7 +1447,6 @@
       this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxIP);
       this.grpAmbiBoxNetwork.Location = new System.Drawing.Point(10, 140);
       this.grpAmbiBoxNetwork.Name = "grpAmbiBoxNetwork";
-
       this.grpAmbiBoxNetwork.Size = new System.Drawing.Size(820, 175);
       this.grpAmbiBoxNetwork.TabIndex = 1;
       this.grpAmbiBoxNetwork.TabStop = false;
@@ -2013,7 +1998,6 @@
       this.tabPageBoblight.Location = new System.Drawing.Point(4, 22);
       this.tabPageBoblight.Name = "tabPageBoblight";
       this.tabPageBoblight.Padding = new System.Windows.Forms.Padding(3);
-
       this.tabPageBoblight.Size = new System.Drawing.Size(842, 504);
       this.tabPageBoblight.TabIndex = 4;
       this.tabPageBoblight.Text = "Boblight";
@@ -2323,7 +2307,6 @@
       this.tabPageHue.Controls.Add(this.HueNetworkSettings);
       this.tabPageHue.Location = new System.Drawing.Point(4, 22);
       this.tabPageHue.Name = "tabPageHue";
-
       this.tabPageHue.Size = new System.Drawing.Size(842, 504);
       this.tabPageHue.TabIndex = 3;
       this.tabPageHue.Text = "Hue";
@@ -2539,36 +2522,10 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
-      // tbVUMeterMinHue
-      // 
-      this.tbVUMeterMinHue.Location = new System.Drawing.Point(162, 22);
-      this.tbVUMeterMinHue.Name = "tbVUMeterMinHue";
-      this.tbVUMeterMinHue.Size = new System.Drawing.Size(45, 20);
-      this.tbVUMeterMinHue.TabIndex = 5;
-      this.tbVUMeterMinHue.Validating += new System.ComponentModel.CancelEventHandler(this.tbVUMeterMinHue_Validating);
-      // 
-      // lblAtmoWinConnectionDelay
-      // 
-      this.lblAtmoWinConnectionDelay.AutoSize = true;
-      this.lblAtmoWinConnectionDelay.Location = new System.Drawing.Point(10, 125);
-      this.lblAtmoWinConnectionDelay.Name = "lblAtmoWinConnectionDelay";
-      this.lblAtmoWinConnectionDelay.Size = new System.Drawing.Size(92, 13);
-      this.lblAtmoWinConnectionDelay.TabIndex = 5;
-      this.lblAtmoWinConnectionDelay.Text = "Connection delay:";
-      // 
-      // tbAtmoWinConnectionDelay
-      // 
-      this.tbAtmoWinConnectionDelay.Location = new System.Drawing.Point(200, 122);
-      this.tbAtmoWinConnectionDelay.Name = "tbAtmoWinConnectionDelay";
-      this.tbAtmoWinConnectionDelay.Size = new System.Drawing.Size(100, 20);
-      this.tbAtmoWinConnectionDelay.TabIndex = 6;
-      this.tbAtmoWinConnectionDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWinConnectionDelay_Validating);
-      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-
       this.ClientSize = new System.Drawing.Size(872, 582);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
@@ -2860,7 +2817,5 @@
     private System.Windows.Forms.Label lblVUMeterMindB;
     private System.Windows.Forms.TextBox tbVUMeterMaxHue;
     private System.Windows.Forms.TextBox tbVUMeterMinHue;
-    private System.Windows.Forms.TextBox tbAtmoWinConnectionDelay;
-    private System.Windows.Forms.Label lblAtmoWinConnectionDelay;
   }
 }
