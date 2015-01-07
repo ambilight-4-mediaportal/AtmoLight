@@ -172,11 +172,7 @@
 		<setting entryname="atmolight" name="huePort" type="int" defaultvalue="20123" minvalue="1" maxvalue="65535"
 		displayname="Port:"    
 		description="Please enter the Port to AtmoHue."/>
-		
-		<setting entryname="atmolight" name="hueMinimalColorDifference" type="int" defaultvalue="25" minvalue="0" maxvalue="255"
-		displayname="Minimal color difference:"    
-		description="Please enter minimal color difference."/>
-		
+				
 		<setting entryname="atmolight" name="hueBridgeEnableOnResume" type="string" defaultvalue="no" listvalues="Yes|No"
 		displayname="Turn on Hue Bridge upon resume from standby"    
 		description="Enable if you want to start reconnection to the Hue bridge upon resume"
@@ -186,7 +182,28 @@
 		displayname="Turn off Hue Bridge on suspend"    
 		description="Enable if you want to turn off the Hue Bridge on suspend"
 		displaylistvalues="Yes|No"/>
-
+		
+		<setting entryname="atmolight" name="hueMinDiversion" type="int" defaultvalue="16" minvalue="0" maxvalue="255"
+		displayname="Min. color diversion:"    
+		description="Please enter the minimum color diversion."/>
+		
+		<setting entryname="atmolight" name="hueThreshold" type="int" defaultvalue="16" minvalue="0" maxvalue="255"
+		displayname="Threshold:"    
+		description="Please enter the color threshold."/>
+		
+		<setting entryname="atmolight" name="hueBlackThreshold" type="int" defaultvalue="16" minvalue="0" maxvalue="255"
+		displayname="Black Threshold:"    
+		description="Please enter the black threshold."/>
+		
+		<setting entryname="atmolight" name="hueSaturation" type="string" defaultvalue="0.2" listvalues="-1|-0.9|-0.8|-0.7|-0.6|-0.5|-0.4|-0.3|-0.2|-0.1|0|0.1|0.2|0.3|0.4|0.5|0.6|0.7|0.8|0.9|1"
+		displayname="Saturation correction:"    
+		description="Please enter the value for the saturation correction."
+		displaylistvalues="-1|-0.9|-0.8|-0.7|-0.6|-0.5|-0.4|-0.3|-0.2|-0.1|0|0.1|0.2|0.3|0.4|0.5|0.6|0.7|0.8|0.9|1"/>
+		
+		<setting entryname="atmolight" name="hueUseOverallLightness" type="string" defaultvalue="yes" listvalues="Yes|No"
+		displayname="Use overall lightness:"    
+		description="Choose if you want to use the overall lightness."
+		displaylistvalues="Yes|No"/>
 	</settings>
 	
 	<settings section="Hyperion">
@@ -258,6 +275,20 @@
 		displayname="GIF file path:"
 		description="Please select the path to a GIF file!"
 		displaylistvalues=""/>
+		
+		<setting entryname="atmolight" name="vuMeterMindB" type="int" defaultvalue="-24" minvalue="-100" maxvalue="0"
+		displayname="VUMeter min. dB:"    
+		description="Enter the min dB value for the VUMeter."/>
+		
+		<setting entryname="atmolight" name="vuMeterMinHue" type="string" defaultvalue="0.7" listvalues="0|0.1|0.2|0.3|0.4|0.5|0.6|0.7|0.8|0.9|1"
+		displayname="VUMeter min hue:"    
+		description="Choose the VUMeter min hue."
+		displaylistvalues="0|0.1|0.2|0.3|0.4|0.5|0.6|0.7|0.8|0.9|1"/>
+		
+		<setting entryname="atmolight" name="vuMeterMaxHue" type="string" defaultvalue="0.1" listvalues="0|0.1|0.2|0.3|0.4|0.5|0.6|0.7|0.8|0.9|1"
+		displayname="VUMeter max hue:"    
+		description="Choose the VUMeter max hue."
+		displaylistvalues="0|0.1|0.2|0.3|0.4|0.5|0.6|0.7|0.8|0.9|1"/>
 		
 		<setting entryname="atmolight" name="OffOnStart" type="string" defaultvalue="no" listvalues="yes|no"
 		displayname="Use manual mode:"    

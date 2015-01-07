@@ -754,7 +754,7 @@ namespace AtmoLight
       }
 
       //Hue Saturation
-      doubleMinValue = 0.0;
+      doubleMinValue = -1.0;
       doubleMaxValue = 1.0;
       if (validatorDouble(tbHueSaturation.Text, doubleMinValue, doubleMaxValue, true) == false)
       {
@@ -1552,7 +1552,7 @@ namespace AtmoLight
 
     private void tbHueSaturation_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      double minValue = 0;
+      double minValue = -1.0;
       double maxValue = 1.0;
       if (validatorDouble(tbHueSaturation.Text, minValue, maxValue, true) == false)
       {

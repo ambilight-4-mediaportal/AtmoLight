@@ -1244,7 +1244,7 @@ namespace AtmoLight.Configuration
     {
       _type = NumberType.FloatingPoint;
       _step = 0.1;
-      _lowerLimit = 0;
+      _lowerLimit = -1.0;
       _upperLimit = 1.0;
       _value = SettingsManager.Load<Settings>().HueSaturation;
     }
