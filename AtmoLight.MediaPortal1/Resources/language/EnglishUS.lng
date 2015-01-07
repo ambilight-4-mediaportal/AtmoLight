@@ -137,6 +137,8 @@ grpHueAverageColor=Average color settings
 [ContextMenu]
 SwitchLEDsON=Switch LEDs on
 SwitchLEDsOFF=Switch LEDs off
+AtmoLightToggleON=Enable AtmoLight
+AtmoLightToggleOFF=Disable AtmoLight
 ChangeEffect=Change Effect
 ChangeAWProfile=Change Profile
 Switch3DON=Switch 3D SBS Mode on

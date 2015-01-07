@@ -421,6 +421,8 @@ namespace Language
 
     public String ContextMenu_SwitchLEDsON;
     public String ContextMenu_SwitchLEDsOFF;
+    public String ContextMenu_AtmoLightToggleON;
+    public String ContextMenu_AtmoLightToggleOFF;
     public String ContextMenu_ChangeEffect;
     public String ContextMenu_ChangeAWProfile;
     public String ContextMenu_Switch3DON;

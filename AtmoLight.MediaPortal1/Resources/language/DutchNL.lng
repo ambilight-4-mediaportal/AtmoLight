@@ -103,6 +103,8 @@ cbAmbiBoxAutoStop=Sluit AmbiBox met MediaPortal
 [ContextMenu]
 SwitchLEDsON=Schakel LEDs aan
 SwitchLEDsOFF=Schakel LEDs uit
+AtmoLightToggleON=AtmoLight inschakelen
+AtmoLightToggleOFF=AtmoLight uitschakelen
 ChangeEffect=Verander Effect
 ChangeAWProfile=Verander Profiel
 Switch3DON=Schakel 3D SBS Modus aan

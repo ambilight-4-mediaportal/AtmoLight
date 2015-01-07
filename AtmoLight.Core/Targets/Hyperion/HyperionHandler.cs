@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Drawing.Imaging;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
 using System.Drawing;
 using System.IO;
-using System.Windows.Media.Imaging;
-using System.Drawing.Imaging;
+using System.Net;
 using System.Net.Sockets;
 using System.Linq;
-using proto;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
+
 using Microsoft.Win32;
+using proto;
 
 namespace AtmoLight.Targets
 {
@@ -42,6 +44,9 @@ namespace AtmoLight.Targets
     private bool isInit = false;
     private volatile bool initLock = false;
     private int hyperionReconnectCounter = 0;
+    private bool invalidConnectIP = false;
+    private string hyperionpreviousHostname = "";
+
     private Stopwatch liveReconnectSW = new Stopwatch();
 
     private Core coreObject;
@@ -64,6 +69,9 @@ namespace AtmoLight.Targets
           hyperionReconnectCounter = 0;
           initLock = true;
           isInit = true;
+
+          // Check if Hyperion is IP or hostname and resolve
+          HyperionHostnameCheckResolve();
 
           if (coreObject.hyperionLiveReconnect)
           {
@@ -88,7 +96,17 @@ namespace AtmoLight.Targets
 
     public void ReInitialise(bool force = false)
     {
+      Thread t = new Thread(() => ReInitialiseThreaded(force));
+      t.IsBackground = true;
+      t.Start();
+    }
+    public void ReInitialiseThreaded(bool force = false)
+    {
       Log.Debug("HyperionHandler - Reinitialising");
+
+      // Check if IP is hostname and if previously resolved IP is still valid
+      HyperionHostnameCheckResolve();
+
       if (coreObject.reInitOnError || force)
       {
         Initialise(force);
@@ -102,8 +120,7 @@ namespace AtmoLight.Targets
       {
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
-          ClearPriority(coreObject.hyperionPriority);
-          ClearPriority(coreObject.hyperionPriorityStaticColor);
+          ClearPrioritiesAtmoLight(50);
         }
         Disconnect();
       }
@@ -161,23 +178,6 @@ namespace AtmoLight.Targets
       }
     }
 
-    private void liveReconnectThread()
-    {
-      liveReconnectSW.Start();
-
-      //Start live reconnect with set delay in config
-      while (coreObject.hyperionLiveReconnect)
-      {
-        if (liveReconnectSW.ElapsedMilliseconds >= coreObject.hyperionReconnectDelay && Socket.Connected == false)
-        {
-          Connect();
-          liveReconnectSW.Restart();
-        }
-      }
-
-      liveReconnectSW.Stop();
-    }
-
     private void ConnectThread()
     {
       try
@@ -213,6 +213,9 @@ namespace AtmoLight.Targets
               {
                 Log.Error("HyperionHandler - Error while connecting");
                 Log.Error("HyperionHandler - Exception: {0}", e.Message);
+
+                // Check if IP is hostname and if previously resolved IP is still valid
+                HyperionHostnameCheckResolve();
               }
             }
 
@@ -273,6 +276,22 @@ namespace AtmoLight.Targets
         isInit = false;
       }
     }
+    private void liveReconnectThread()
+    {
+      liveReconnectSW.Start();
+
+      //Start live reconnect with set delay in config
+      while (coreObject.hyperionLiveReconnect)
+      {
+        if (liveReconnectSW.ElapsedMilliseconds >= coreObject.hyperionReconnectDelay && Socket.Connected == false)
+        {
+          Connect();
+          liveReconnectSW.Restart();
+        }
+      }
+
+      liveReconnectSW.Stop();
+    }
     private void Disconnect()
     {
       try
@@ -308,20 +327,28 @@ namespace AtmoLight.Targets
     }
     public void ClearPriority(int priority)
     {
-      if (!IsConnected())
+      try
       {
-        return;
+        if (!IsConnected())
+        {
+          return;
+        }
+        ClearRequest clearRequest = ClearRequest.CreateBuilder()
+        .SetPriority(priority)
+        .Build();
+
+        HyperionRequest request = HyperionRequest.CreateBuilder()
+        .SetCommand(HyperionRequest.Types.Command.CLEAR)
+        .SetExtension(ClearRequest.ClearRequest_, clearRequest)
+        .Build();
+
+        SendRequest(request);
       }
-      ClearRequest clearRequest = ClearRequest.CreateBuilder()
-      .SetPriority(priority)
-      .Build();
-
-      HyperionRequest request = HyperionRequest.CreateBuilder()
-      .SetCommand(HyperionRequest.Types.Command.CLEAR)
-      .SetExtension(ClearRequest.ClearRequest_, clearRequest)
-      .Build();
-
-      SendRequest(request);
+      catch (Exception e)
+      {
+        Log.Error(string.Format("HyperionHandler - {0}", "Error clearing priority"));
+        Log.Error(string.Format("HyperionHandler - {0}", e.Message));
+      }
     }
     public void ClearAll()
     {
@@ -335,6 +362,12 @@ namespace AtmoLight.Targets
 
       SendRequest(request);
     }
+    public void ClearPrioritiesAtmoLight(int delay)
+    {
+      ClearPriority(coreObject.hyperionPriority);
+      Thread.Sleep(delay);
+      ClearPriority(coreObject.hyperionPriorityStaticColor);
+    }
     public bool ChangeEffect(ContentEffect effect)
     {
       if (!IsConnected())
@@ -347,10 +380,12 @@ namespace AtmoLight.Targets
           ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
           break;
         case ContentEffect.LEDsDisabled:
+          ClearPrioritiesAtmoLight(250);
+
+          break;
         case ContentEffect.Undefined:
         default:
-          ClearPriority(coreObject.hyperionPriority);
-          ClearPriority(coreObject.hyperionPriorityStaticColor);
+          ClearPrioritiesAtmoLight(250);
           break;
       }
       return true;
@@ -440,6 +475,7 @@ namespace AtmoLight.Targets
         byte[] data = new byte[size];
         input.Read(data, 0, size);
         HyperionReply reply = HyperionReply.ParseFrom(data);
+        Log.Error(reply.ToString());
         return reply;
       }
       catch (Exception e)
@@ -469,13 +505,78 @@ namespace AtmoLight.Targets
 
           break;
         case PowerModes.Suspend:
-
-          ClearPriority(coreObject.hyperionPriorityStaticColor);
-          ClearPriority(coreObject.hyperionPriority);
-
+          ClearPrioritiesAtmoLight(50);
           break;
       }
     }
+    #endregion
+
+    #region Hyperion IP / hostname check and resolve
+    public void HyperionHostnameCheckResolve()
+    {
+      try
+      {
+        string ipOrHostname = "";
+        //Log.Error("HyperionHandler - checking and resolving hostname to IP");
+
+        if (hyperionpreviousHostname == "")
+        {
+          ipOrHostname = coreObject.hyperionIP;
+        }
+        else
+        {
+          ipOrHostname = hyperionpreviousHostname;
+        }
+
+        IPHostEntry hostEntry = Dns.GetHostEntry(ipOrHostname);
+
+        // IP address
+        if (hostEntry.AddressList[0].ToString() == ipOrHostname)
+        {
+          if (!coreObject.hyperionLiveReconnect)
+          {
+            Log.Debug("HyperionHandler - connection method is IP");
+          }
+        }
+        // HOSTNAME 
+        else
+        {
+          string resolvedIP = hostEntry.AddressList[0].ToString();
+
+          if (string.IsNullOrEmpty(resolvedIP) == false)
+          {
+            if (!coreObject.hyperionLiveReconnect)
+            {
+              Log.Debug("HyperionHandler - connection method is HOSTNAME and IP is resolved to: " + resolvedIP);
+            }
+
+            // Store current hostname in case we need it later to lookup on reInit (i.e. IP changed)
+            hyperionpreviousHostname = coreObject.hyperionIP;
+
+            // Replace hostname with IP address
+            coreObject.hyperionIP = resolvedIP;
+          }
+          else
+          {
+            invalidConnectIP = true;
+            if (!coreObject.hyperionLiveReconnect)
+            {
+              Log.Debug("HyperionHandler - Error while resolving to Hostname to IP addres, returned: " + resolvedIP);
+            }
+          }
+        }
+      }
+      catch (Exception e)
+      {
+        if (!coreObject.hyperionLiveReconnect)
+        {
+          invalidConnectIP = true;
+          Log.Error("HyperionHandler - Error while checking IP for hostname string");
+          Log.Error("HyperionHandler - Exception: {0}", e.Message);
+        }
+      }
+    }
+
     #endregion
   }
 }

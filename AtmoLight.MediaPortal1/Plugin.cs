@@ -40,6 +40,7 @@ namespace AtmoLight
     // States
     private ContentEffect playbackEffect = ContentEffect.Undefined; // Effect for current placback
     private ContentEffect menuEffect = ContentEffect.Undefined; // Effect in GUI (no playback)
+    private bool AtmoLightDisabledByUser = false; // Toggle AtmoLight on/off
 
     private List<ContentEffect> supportedEffects;
 
@@ -266,6 +267,11 @@ namespace AtmoLight
       if (Settings.manualMode)
       {
         Log.Debug("LEDs should be deactivated. (Manual Mode)");
+        return false;
+      }
+      if (AtmoLightDisabledByUser)
+      {
+        Log.Debug("LEDs should be deactivated. (permanently toggled off by user)");
         return false;
       }
       // If starttime is bigger than endtime, then now has to be smaller than both or bigger than both to deactive the leds 
@@ -749,6 +755,20 @@ namespace AtmoLight
         dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_HueSetStaticColorGroup));
       }
 
+      // Toggle On/Off AtmoLight
+      if (AtmoLightDisabledByUser)
+      {
+        // Clear all other items if AtmoLight leds is manually disabled by yser
+        dlg.Reset();
+        dlg.SetHeading("AtmoLight [DISABLED]");
+
+        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_AtmoLightToggleON));
+      }
+      else if (!AtmoLightDisabledByUser)
+      {
+        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_AtmoLightToggleOFF));
+      }
+
       dlg.SelectedLabel = 0;
       dlg.DoModal(GUIWindowManager.ActiveWindow);
 
@@ -774,6 +794,28 @@ namespace AtmoLight
         {
           coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
         }
+      }
+      // Toggle LEDs for duration of Mediaportal runtime
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_AtmoLightToggleON)
+      {
+        AtmoLightDisabledByUser = false;
+
+        if (g_Player.Playing)
+        {
+          coreObject.ChangeEffect(playbackEffect);
+          CalculateDelay();
+        }
+        else
+        {
+          coreObject.ChangeEffect(menuEffect);
+          CalculateDelay();
+        }
+      }
+      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_AtmoLightToggleOFF)
+      {
+        AtmoLightDisabledByUser = true;
+        coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+        CalculateDelay();
       }
       // Change Effect
       else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeEffect)
