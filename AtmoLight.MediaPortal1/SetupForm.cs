@@ -149,15 +149,6 @@ namespace AtmoLight
       tbHueBlackThreshold.Text = Settings.hueBlackThreshold.ToString();
       tbHueSaturation.Text = Settings.hueSaturation.ToString();
       cbHueOverallLightness.Checked = Settings.hueUseOverallLightness;
-
-      // Temp disable for AmbiBox
-      tabMenu.TabPages.Remove(tabPageAmbiBox);
-      ckAmbiBoxEnabled.Visible = false;
-      ckHyperionEnabled.Location = ckHueEnabled.Location;
-      ckHueEnabled.Location = ckBoblightEnabled.Location;
-      ckBoblightEnabled.Location = ckAtmowinEnabled.Location;
-      ckAtmowinEnabled.Location = ckAtmoOrbEnabled.Location;
-      ckAtmoOrbEnabled.Location = ckAmbiBoxEnabled.Location;
     }
 
     private void UpdateLanguageOnControls()

@@ -10,6 +10,7 @@ Version 1.15.0.0
 - Fixed bug where MediaPortal could halt/freeze on start up
 - Added possibility to deactivate AtmoLight through context menu
 - Added possibility to use hostnames/multicast dns with Hyperion
+- Added AmbiBox handler
 
 
 Version 1.14.0.0

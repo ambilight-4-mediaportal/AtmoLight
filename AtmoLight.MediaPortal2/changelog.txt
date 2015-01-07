@@ -6,6 +6,7 @@ Version 2.1.0.0
 - Fixed a bug where connecting to AtmoWin would fail
 - Fixed bug where some effects would not be set properly on MediaPortal2 start up
 - Added possibility to use hostnames/multicast dns with Hyperion
+- Added AmbiBox handler
 
 Version 2.0.0.0
 - Added interface to support other targets (not just AtmoWin)
