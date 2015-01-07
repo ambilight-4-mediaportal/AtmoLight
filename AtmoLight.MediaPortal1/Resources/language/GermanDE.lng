@@ -100,6 +100,16 @@ lblAmbiBoxPort=Port:
 lblAmbiBoxReconnectDelay=Wiederverbindungs Verzögerung:
 cbAmbiBoxAutoStart=Starte AmbiBox mit MediaPortal
 cbAmbiBoxAutoStop=Stoppe AmbiBox mit MediaPortal
+lblVUMeterMaxHue=Max. Hue:
+lblVUMeterMindB=Min dB:
+lblVUMeterMinHue=Min. Hue:
+grpVUMeter=VUMeter
+lblHueMinDiversion=Min. Farbunterschied:
+lblHueThreshold:Schwelle:
+lblHueBlackThreshold=Schwarz Schwelle:
+lblHueSaturation=Sättigungs Korrektur:
+cbHueOverallLightness=Vollständige Helligkeit benutzten
+grpHueAverageColor=Durchschnittliche Farben Einstellungen
 [ContextMenu]
 SwitchLEDsON=Schalte LEDs an
 SwitchLEDsOFF=Schalte LEDs aus
