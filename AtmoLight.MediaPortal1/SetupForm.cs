@@ -419,7 +419,7 @@ namespace AtmoLight
       }
 
       //Hyperion IP
-      if (validatorIPAdress(tbHyperionIP.Text) == false)
+      if (string.IsNullOrEmpty(tbHyperionIP.Text))
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + lblHyperionIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
@@ -1139,7 +1139,7 @@ namespace AtmoLight
 
     private void tbHyperionIP_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (validatorIPAdress(tbHyperionIP.Text) == false)
+      if (string.IsNullOrEmpty(tbHyperionIP.Text))
       {
         MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
