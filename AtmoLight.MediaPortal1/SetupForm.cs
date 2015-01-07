@@ -146,15 +146,6 @@ namespace AtmoLight
       tbVUMeterMaxHue.Text = Settings.vuMeterMaxHue.ToString();
       tbVUMeterMindB.Text = Settings.vuMeterMindB.ToString();
       tbVUMeterMinHue.Text = Settings.vuMeterMinHue.ToString();
-
-      // Temp disable for AmbiBox
-      tabMenu.TabPages.Remove(tabPageAmbiBox);
-      ckAmbiBoxEnabled.Visible = false;
-      ckHyperionEnabled.Location = ckHueEnabled.Location;
-      ckHueEnabled.Location = ckBoblightEnabled.Location;
-      ckBoblightEnabled.Location = ckAtmowinEnabled.Location;
-      ckAtmowinEnabled.Location = ckAtmoOrbEnabled.Location;
-      ckAtmoOrbEnabled.Location = ckAmbiBoxEnabled.Location;
     }
 
     private void UpdateLanguageOnControls()
