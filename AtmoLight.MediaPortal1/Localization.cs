@@ -27,7 +27,7 @@ namespace AtmoLight
         }
       }
 
-      XmlNode xmlNode = xmlFile.DocumentElement.SelectSingleNode("/" + node);
+      XmlNode xmlNode = xmlFile.DocumentElement.SelectSingleNode("/ressources/" + node);
       if (xmlNode == null)
       {
         // Try using english translation if node was not found
