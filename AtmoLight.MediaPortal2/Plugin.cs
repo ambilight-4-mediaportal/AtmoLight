@@ -135,7 +135,6 @@ namespace AtmoLight
       coreObject.atmoWinPath = settings.AtmoWinExe;
       coreObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
       coreObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
-      coreObject.atmoWinConnectionDelay = settings.AtmoWinConnectionDelay;
       if (settings.AtmoWinTarget)
       {
         coreObject.AddTarget(Target.AtmoWin);
