@@ -43,6 +43,7 @@ namespace AtmoLight
     public static int vuMeterMindB;
     public static double vuMeterMinHue;
     public static double vuMeterMaxHue;
+    public static string currentLanguageFile;
 
     // Atmowin
     public static bool atmoWinTarget;
@@ -192,6 +193,7 @@ namespace AtmoLight
         }
         
         // Normal settings loading
+        currentLanguageFile = reader.GetValueAsString("atmolight", "CurrentLanguageFile", Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\Atmolight\\en.xml");
         atmowinExe = reader.GetValueAsString("atmolight", "atmowinexe", "");
         killButton = reader.GetValueAsInt("atmolight", "killbutton", 4);
         profileButton = reader.GetValueAsInt("atmolight", "cmbutton", 4);
@@ -311,7 +313,7 @@ namespace AtmoLight
         reader.SetValueAsBool("atmolight", "StartAtmoWin", startAtmoWin);
         reader.SetValue("atmolight", "excludeTimeStart", excludeTimeStart.ToString("HH:mm"));
         reader.SetValue("atmolight", "excludeTimeEnd", excludeTimeEnd.ToString("HH:mm"));
-        reader.SetValue("atmolight", "CurrentLanguageFile", LanguageLoader.strCurrentLanguageFile);
+        reader.SetValue("atmolight", "CurrentLanguageFile", currentLanguageFile);
         reader.SetValue("atmolight", "StaticColorRed", staticColorRed);
         reader.SetValue("atmolight", "StaticColorGreen", staticColorGreen);
         reader.SetValue("atmolight", "StaticColorBlue", staticColorBlue);
