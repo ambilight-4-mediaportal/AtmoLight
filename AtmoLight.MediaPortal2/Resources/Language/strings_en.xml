@@ -53,7 +53,7 @@
   <string name="AtmoLight.AtmoWinTarget">Use AtmoWin</string>
   <string name="AtmoLight.HyperionTarget">Use Hyperion</string>
   <string name="AtmoLight.HueTarget">Use Hue</string>
-  <string name="AtmoLight.HyperionIP">IP address</string>
+  <string name="AtmoLight.HyperionIP">IP or hostname</string>
   <string name="AtmoLight.HyperionPort">Port number</string>
   <string name="AtmoLight.HyperionPriority">Effect priority</string>
   <string name="AtmoLight.HyperionPriorityStaticColor">Static color priority</string>
