@@ -88,7 +88,7 @@ namespace AtmoLight
         }
       }
 
-      Log.Warn("Could not find translation for {0} in {1}", translation, xmlFile.BaseURI);
+      Log.Warn("Could not reverse translate {0} in {1}", translation, xmlFile.BaseURI);
       return null;
     }
   }
