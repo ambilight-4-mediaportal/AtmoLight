@@ -107,8 +107,8 @@
     <string name="RGBError2">and must be between 0 and 255.</string>
     <string name="ConnectionLost">Connection to [Target] lost!</string>
     <string name="ManualStaticColor">Manual Static Color</string>
-    <string name="DelayOff">Switch LED delay off</string>
     <string name="DelayOn">Swtich LED delay on</string>
+    <string name="DelayOff">Switch LED delay off</string>
     <string name="ChangeDelay">Change LED delay</string>
     <string name="DelayError1">The value has to be a number</string>
     <string name="DelayError2">and must be between 0 and 1000.</string>

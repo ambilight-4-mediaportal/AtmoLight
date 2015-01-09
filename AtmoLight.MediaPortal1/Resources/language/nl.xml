@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?ytu
+<ressources>
+  <ContentEffect>
+    <string name="LEDsDisabled">LEDs uitschakeld</string>
+    <string name="MediaPortalLiveMode">MediaPortal Live Modus</string>
+    <string name="ExternalLiveMode">Externe Live Modus</string>
+    <string name="StaticColor">Statische Kleur</string>
+    <string name="GIFReader">GIF Lezer</string>
+    <string name="VUMeter">VU Meter</string>
+    <string name="VUMeterRainbow">VU Meter Regenboog</string>
+    <string name="AtmoWinColorchanger">AtmoWin Kleurwisselaar</string>
+    <string name="AtmoWinColorchangerLR">AtmoWin Kleurwisselaar LR</string>
+  </ContentEffect>
+  <Common>
+    <string name="IP">IP adres:</string>
+    <string name="Port">Poort nummer:</string>
+    <string name="ReconnectAttempts">Herverbindings pogingen:</string>
+    <string name="ReconnectDelay">Herverbinden vertraging:</string>
+    <string name="Threshold">Beperking:</string>
+    <string name="BlackThreshold">Zwart beperking:</string>
+    <string name="Saturation">Saturatie correctie:</string>
+    <string name="GeneralSettings">Algemene instellingen</string>
+    <string name="Gamma">Gamme correctie:</string>
+    <string name="Path">Pad en Bestandsnaam naar [Filename]</string>
+    <string name="StartTargetWithMP">Start [Target] met MediaPortal</string>
+    <string name="StopTargetWithMP">Stop [Target] met MediaPortal</string>
+    <string name="ID">ID:</string>
+    <string name="MinDiversion">Min. kleur verschil</string>
+    <string name="OverallLightness">Gebruik algemene helderheid</string>
+    <string name="Add">Toevoegen</string>
+    <string name="Remove">Verwijderen</string>
+    <string name="Update">Update</string>
+    <string name="Save">Opslaan</string>
+    <string name="Cancel">Annuleer</string>
+    <string name="Apply">Pas toe</string>
+    <string name="NA">Niet beschikbaar</string>
+    <string name="Error">Fout</string>
+    <string name="ErrorFile">Ongeldige Bestandsnaam. Kies aub een pad naar [Filename].</string>
+    <string name="ErrorColor">Voor aub een nummer tussen tussen 0 en 255 voor [Color].</string>
+    <string name="ErrorInvalidNumber">Een geldig nummer is verplicht en moet binnen beginnen op [minInteger].</string>
+    <string name="ErrorInvalidNumberRange">Een geldig nummer tussen [minInteger] en [maxInteger] is verplicht.</string>
+    <string name="ErrorRemoteButton">Je kan deze afstansbediening knop niet aan meer dan 1 taak toewijzen.</string>
+    <string name="ErrorIP">Er is een ongeldig IP adres ingevuld.</string>
+    <string name="ErrorFileGeneric">Er is een ongeldige bestand/pad ingevuld.</string>
+    <string name="ErrorStartTime">Er is een ongeldige start tijd ingevuld.</string>
+    <string name="ErrorEndTime">Er is een ongeldige stop tijd ingevuld.</string>
+    <string name="ErrorMiliseconds">Er is een ongeldige ms nummer ingevuld.</string>
+    <string name="ErrorRefreshRate">Er is een ongeldige verversingsfrequentie ingevuld.</string>
+    <string name="Red">Rood</string>
+    <string name="Green">Groen</string>
+    <string name="Blue">Blauw</string>
+  </Common>
+  <SetupForm>
+    <string name="EffectSettings">Effect instellingen</string>
+    <string name="PluginSettings">Plugin instellingen</string>
+    <string name="VideoTVRec">Video/TV/Opnames:</string>
+    <string name="Menu">Menu/GUI:</string>
+    <string name="Music">Muziek:</string>
+    <string name="Radio">Radio:</string>
+    <string name="MediaPortalExit">MediaPortal Afsluiten:</string>
+    <string name="ToggleRemoteButton">Schakel LEDs afstandsbediening knop:</string>
+    <string name="ProfileRemoteButton">Profiel afstandsbediening knop:</string>
+    <string name="MenuRemoteButton">Menu afstandsbediening knop:</string>
+    <string name="ManualMode">LEDs uit bij media start (handmatige modus)</string>
+    <string name="LowCPU">Lage CPU</string>
+    <string name="FramesBetween">ms tussen Frames</string>
+    <string name="Start">Start:</string>
+    <string name="End">Einde:</string>
+    <string name="DisableBetween">Schakel leds uit tussen</string>
+    <string name="Delay">LED Vertraging</string>
+    <string name="DelayAt">ms vertraging op</string>
+    <string name="RestartOnError">Automatisch herverbinden bij foutmelding</string>
+    <string name="RefreshRate">Hz</string>
+    <string name="BlackbarDetection">Zwarte balk detectie elke</string>
+    <string name="BlackbarDetectionThreshold">ms, met Beperking</string>
+    <string name="CaptureDimension">Opname formaat</string>
+    <string name="Width">Breedte:</string>
+    <string name="Height">Hoogte:</string>
+    <string name="SelectTargets">Selecteer ondersteunde hardware</string>
+    <string name="ResumeDelay">Vertraging na standby:</string>
+    <string name="VUMeterMaxHue">Max. hue:</string>
+    <string name="VUMeterMinHue">Min. hue:</string>
+    <string name="VUMeterMindB">Min. dB:</string>
+    <string name="LoadLanguage">Laad Taal</string>
+    <string name="MenuHint">Gebruik het context menu om tussen effecten te wisselen, schakel de leds in/uit of wissel tussen 3D-SBS modus.</string>
+    <string name="TargetHing">Hint: Selecteer de apparaten welke je bij AtmoLight wilt gebruiken en stel deze in op het daarvoor bedoelde tabblad</string>
+    <string name="CaptureDimensionHint">Hint: Wordt alleen gebruikt wanneer Atmowin niet ingeschakeld is</string>
+  </SetupForm>
+  <ContextMenu>
+    <string name="LEDsOn">Schakel LEDs in</string>
+    <string name="LEDsOff">Schakel LEDs uit</string>
+    <string name="AtmoLightOn">Schakel AtmoLight in</string>
+    <string name="AtmoLightOff">Schakel AtmoLight uit</string>
+    <string name="ChangeEffect">Verander Effect</string>
+    <string name="ChangeProfile">Verander Profile</string>
+    <string name="3DOn">Schakel 3D SBS Mode in</string>
+    <string name="3DOff">Schakel 3D SBS Mode uit</string>
+    <string name="ChangeStaticColor">Wijzig Statische Kleur</string>
+    <string name="Manual">Handmatig</string>
+    <string name="SaveColor">Sla huidige Kleur op</string>
+    <string name="LoadColor">Laad Kleur van Instellingen</string>
+    <string name="White">Wit</string>
+    <string name="Cyan">Cyan</string>
+    <string name="Magenta">Magenta</string>
+    <string name="Yellow">Geel</string>
+    <string name="RGBError1">De waarde moet een nummer zijn</string>
+    <string name="RGBError2">en tussen de 0 en 255.</string>
+    <string name="ConnectionLost">Connectie met [Target] verloren!</string>
+    <string name="ManualStaticColor">Handmatige Statische Kleur</string>
+    <string name="DelayOn">Schakel LED vertraging in</string>
+    <string name="DelayOff">Schakel LED vertraging uit</string>
+    <string name="ChangeDelay">Verander LED vertraging</string>
+    <string name="DelayError1">De waarde moet een nummer zijn</string>
+    <string name="DelayError2">en tussen de 0 en 1000.</string>
+    <string name="Connect1">Connectie met doelwilt verloren.</string>
+    <string name="Connect2">Wil je opnieuw verbinden?</string>
+    <string name="BlackbarDetectionOn">Schakel zwarte balk detectie in</string>
+    <string name="BlackbarDetectionOff">Schakel zwarte balk detectie uit</string>
+    <string name="Reinitialise">Opnieuw verbinden met alle doelwitten</string>
+  </ContextMenu>
+  <AmbiBox>
+    <string name="AmbiBox">AmbiBox</string>
+    <string name="ExternalProfile">Extern opname profiel:</string>
+    <string name="MediaPortalProfile">MediaPortal opname profiel:</string>
+  </AmbiBox>
+  <AtmoOrb>
+    <string name="AtmoOrb">AtmoOrb</string>
+    <string name="BroadcastPort">Uitzendings port:</string>
+    <string name="ConnectionType">Connectie type</string>
+    <string name="HScan">Hscan van</string>
+    <string name="VScan">Vscan van</string>
+    <string name="ScanTo">tot</string>
+    <string name="LampSettings">Lamp instellingen</string>
+    <string name="TCP">TCP</string>
+    <string name="UDP">UDP</string>
+    <string name="InvertZone">Zone omkeren</string>
+  </AtmoOrb>
+  <AtmoWin>
+    <string name="AtmoWin">AtmoWin</string>
+  </AtmoWin>
+  <Boblight>
+    <string name="Boblight">Boblight</string>
+    <string name="MaxFPS">Limiteer FPS tot:</string>
+    <string name="Speed">Snelheid:</string>
+    <string name="Autospeed">Automatische snelheid:</string>
+    <string name="Value">Waarde correctie:</string>
+    <string name="Interpolation">Interpolatie:</string>
+    <string name="BoblightSettings">Boblight instellingen</string>
+  </Boblight>
+  <Hue>
+    <string name="Hue">Hue</string>
+    <string name="RemoteMachine">AtmoHue is op externe machine (schakelt bestand/pad controle uit)</string>
+    <string name="EnableBridgeOnResume">Zet Hue Bridge aan wanneer de machine hervat uit standby</string>
+    <string name="DisableBridgeonSuspend">Zet Hue Bridge uit tijdens standby</string>
+    <string name="AverageColor">Gemiddelde kleur instellingen</string>
+    <string name="All">Allemaal</string>
+    <string name="Off">Uit</string>
+    <string name="LiveviewGroup">Hue - stel actieve live view groep in</string>
+    <string name="DisableAllGroups">Schakel uit voor alle groepen</string>
+    <string name="StaticColorGroup">Hue - stel statische kleur in voor groep</string>
+    <string name="SelectStaticColorGroup">Hue - selecteer statische kleur voor groep</string>
+    <string name="Hint">Hint: vereist dat AtmoHue draait op bovenstaande IP en port, vul hier niet je Hue Bridge informatie in</string>
+  </Hue>
+  <Hyperion>
+    <string name="Hyperion">Hyperion</string>
+    <string name="IPHostname">IP/Hostnaam:</string>
+    <string name="Priority">Prioriteit</string>
+    <string name="PriorityLive">Prioriteit live:</string>
+    <string name="PriorityStaticColor">Prioriteit statische color:</string>
+    <string name="LiveReconnect">Live opnieuw verbinden (NIET aanbevolen) - blijft proberen opnieuw te verbinden en heeft alleen nut voor het live testen van Hyperion configuratie aanpassingen.</string>
+    <string name="NetworkSettings">Netwerk</string>
+  </Hyperion>
+</ressources>
