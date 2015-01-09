@@ -27,7 +27,7 @@ namespace AtmoLight
         }
       }
 
-      XmlNode xmlNode = xmlFile.DocumentElement.SelectSingleNode("/ressources/" + node);
+      XmlNode xmlNode = xmlFile.DocumentElement.SelectSingleNode("/resources/" + node);
       if (xmlNode == null)
       {
         Log.Warn("Could not find node {0} in {1}", node, xmlFile.BaseURI);
@@ -70,7 +70,7 @@ namespace AtmoLight
           xmlFile.Load(Settings.currentLanguageFile);
       }
 
-      XmlNode xmlNode = xmlFile.DocumentElement.SelectSingleNode("/ressources/" + node);
+      XmlNode xmlNode = xmlFile.DocumentElement.SelectSingleNode("/resources/" + node);
       if (xmlNode == null)
       {
         Log.Warn("Could not find node {0} in {1}", node, xmlFile.BaseURI);
