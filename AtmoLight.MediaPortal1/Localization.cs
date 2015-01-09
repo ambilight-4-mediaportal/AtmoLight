@@ -44,7 +44,10 @@ namespace AtmoLight
       {
         if (childNodes.Attributes[0].Value == name)
         {
-          return childNodes.InnerText;
+          if (!string.IsNullOrEmpty(childNodes.InnerText))
+          {
+            return childNodes.InnerText;
+          }
         }
       }
 
