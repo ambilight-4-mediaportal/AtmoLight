@@ -30,6 +30,8 @@ namespace AtmoLight
       XmlNode xmlNode = xmlFile.DocumentElement.SelectSingleNode("/ressources/" + node);
       if (xmlNode == null)
       {
+        Log.Warn("Could not find node {0} in {1}", node, xmlFile.BaseURI);
+
         // Try using english translation if node was not found
         if (Settings.currentLanguageFile != Settings.currentLanguageFile.Substring(0, Settings.currentLanguageFile.LastIndexOf("\\")) + "en.xml")
         {
@@ -45,6 +47,8 @@ namespace AtmoLight
           return childNodes.InnerText;
         }
       }
+
+      Log.Warn("Could not find translation for {0} in {1}", name, xmlFile.BaseURI);
 
       // Try using english translation if this translation was not found
       if (Settings.currentLanguageFile != Settings.currentLanguageFile.Substring(0, Settings.currentLanguageFile.LastIndexOf("\\")) + "en.xml")

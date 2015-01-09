@@ -12,7 +12,7 @@
     <string name="AtmoWinColorchangerLR">AtmoWin Colorchanger LR</string>
   </ContentEffect>
   <Common>
-    <string name="IP">IP adress:</string>
+    <string name="IP">IP address:</string>
     <string name="Port">Port number:</string>
     <string name="ReconnectAttempts">Reconnect attempts:</string>
     <string name="ReconnectDelay">Reconnect delay:</string>
@@ -21,50 +21,153 @@
     <string name="Saturation">Saturation correction:</string>
     <string name="GeneralSettings">General settings</string>
     <string name="Gamma">Gamme correction:</string>
-    <string name=""></string>
+    <string name="Path">Path and Filename to [Filename]</string>
+    <string name="StartTargetWithMP">Start [Target] with MediaPortal</string>
+    <string name="StopTargetWithMP">Stop [Target] with MediaPortal</string>
+    <string name="ID">ID:</string>
+    <string name="MinDiversion">Min. color diversion</string>
+    <string name="OverallLightness">Use overall lightness</string>
+    <string name="Add">Add</string>
+    <string name="Remove">Remove</string>
+    <string name="Update">Update</string>
+    <string name="Save">Save</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Apply">Apply</string>
+    <string name="N/A">N/A</string>
+    <string name="Error">Error</string>
+    <string name="ErrorFile">Invalid Filename. Please choose path to [Filename].</string>
+    <string name="ErrorColor">Please enter a number between 0 and 255 for [Color].</string>
+    <string name="ErrorInvalidNumber">You have to enter a valid number starting at [minInteger]</string>
+    <string name="ErrorInvalidNumberRange">You have to enter a valid number between [minInteger] and [maxInteger]</string>
+    <string name="ErrorRemoteButton">You cant use the same remote key for more than one task.</string>
+    <string name="ErrorIP">You have entered an invalid IP address</string>
+    <string name="ErrorFileGeneric">You have selected an invalid file/path</string>
+    <string name="ErrorStartTime">You have to enter a valid start time.</string>
+    <string name="ErrorEndTime">You have to enter a valid end time.</string>
+    <string name="ErrorMiliseconds">You have to enter a valid number of ms.</string>
+    <string name="ErrorRefreshRate">You have to enter a valid refresh rate.</string>
   </Common>
+  <SetupForm>
+    <string name="EffectSettings">Effect settings</string>
+    <string name="PluginSettings">Plugin settings</string>
+    <string name="VideoTVRec">Video/TV/Recordings:</string>
+    <string name="Menu">Menu/GUI:</string>
+    <string name="Music">Music:</string>
+    <string name="Radio">Radio:</string>
+    <string name="MediaPortalExit">MediaPortal Exit:</string>
+    <string name="ToggleRemoteButton">Toggle LEDs remote button:</string>
+    <string name="ProfileRemoteButton">Profile remote button:</string>
+    <string name="MenuRemoteButton">Menu remote button:</string>
+    <string name="ManualMode">LEDs off on media start (manual mode)</string>
+    <string name="LowCPU">Low CPU</string>
+    <string name="FramesBetween">ms between Frames</string>
+    <string name="Start">Start:</string>
+    <string name="End">End:</string>
+    <string name="DisableBetween">Disable LEDs between</string>
+    <string name="Delay">LED Delay</string>
+    <string name="DelayAt">ms delay at</string>
+    <string name="RestartOnError">Auto-Reconnect on Error</string>
+    <string name="RefreshRate">Hz</string>
+    <string name="BlackbarDetection">Blackbar detection every</string>
+    <string name="BlackbarDetectionThreshold">ms, with Threshold</string>
+    <string name="CaptureDimension">Capture dimension</string>
+    <string name="Width">Width:</string>
+    <string name="Height">Height:</string>
+    <string name="SelectTargets">Select supported hardware</string>
+    <string name="ResumeDelay">Delay after standby:</string>
+    <string name="VUMeterMaxHue">Max. hue:</string>
+    <string name="VUMeterMinHue">Min. hue:</string>
+    <string name="VUMeterMindB">Min. dB:</string>
+    <string name="LoadLanguage">Load Language</string>
+    <string name="MenuHint">Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3D-SBS mode.</string>
+    <string name="TargetHing">Hint: Select the devices you want to use with AtmoLight and configure it on its designated tab</string>
+    <string name="CaptureDimensionHint">Hint: Only used when Atmowin is not enabled</string>
+  </SetupForm>
+  <ContextMenu>
+    <string name="LEDsOn">Switch LEDs on</string>
+    <string name="LEDsOff">Switch LEDs off</string>
+    <string name="AtmoLightOn">Enable AtmoLight</string>
+    <string name="AtmoLightOff">Disable AtmoLight</string>
+    <string name="ChangeEffect">Change Effect</string>
+    <string name="ChangeProfile">Change Profile</string>
+    <string name="3DOn">Switch 3D SBS Mode on</string>
+    <string name="3DOff">Switch 3D SBS Mode off</string>
+    <string name="ChangeStaticColor">Change Static Color</string>
+    <string name="Manual">Manual</string>
+    <string name="SaveColor">Save current Color</string>
+    <string name="LoadColor">Load Color from Settings</string>
+    <string name="White">White</string>
+    <string name="Red">Red</string>
+    <string name="Green">Green</string>
+    <string name="Blue">Blue</string>
+    <string name="Cyan">Cyan</string>
+    <string name="Magenta">Magenta</string>
+    <string name="Yellow">Yellow</string>
+    <string name="RGBError1">The value has to be a number</string>
+    <string name="RGBError2">and must be between 0 and 255.</string>
+    <string name="ConnectionLost">Connection to [Target] lost!</string>
+    <string name="ManualStaticColor">Manual Static Color</string>
+    <string name="DelayOff">Switch LED delay off</string>
+    <string name="DelayOn">Swtich LED delay on</string>
+    <string name="ChangeDelay">Change LED delay</string>
+    <string name="DelayError1">The value has to be a number</string>
+    <string name="DelayError2">and must be between 0 and 1000.</string>
+    <string name="Connect1">Connection to target lost.</string>
+    <string name="Connect2">Do you want to re establish it?</string>
+    <string name="BlackbarDetectionOn">Switch Blackbar Detection on</string>
+    <string name="BlackbarDetectionOff">Switch Blackbar Detection off</string>
+    <string name="Reinitialise">Reconnect to lost targets</string>
+  </ContextMenu>
   <AmbiBox>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
+    <string name="AmbiBox">AmbiBox</string>
+    <string name="ExternalProfile">External capture profile:</string>
+    <string name="MediaPortalProfile">MediaPortal capture profile:</string>
   </AmbiBox>
   <AtmoOrb>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
+    <string name="AtmoOrb">AtmoOrb</string>
+    <string name="BroadcastPort">Broadcast port:</string>
+    <string name="ConnectionType">Connection type</string>
+    <string name="HScan">Hscan from</string>
+    <string name="VScan">Vscan from</string>
+    <string name="ScanTo">to</string>
+    <string name="LampSettings">Lamp settings</string>
+    <string name="TCP">TCP</string>
+    <string name="UDP">UDP</string>
+    <string name="InvertZone">Invert zone</string>
   </AtmoOrb>
   <AtmoWin>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
+    <string name="AtmoWin">AtmoWin</string>
   </AtmoWin>
   <Boblight>
+    <string name="Boblight">Boblight</string>
     <string name="MaxFPS">Limit capture FPS to:</string>
     <string name="Speed">Speed:</string>
     <string name="Autospeed">Autospeed:</string>
     <string name="Value">Value correction:</string>
     <string name="Interpolation">Interpolation:</string>
     <string name="BoblightSettings">Boblight settings</string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
   </Boblight>
   <Hue>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
+    <string name="Hue">Hue</string>
+    <string name="RemoteMachine">AtmoHue is on remote machine (skips file/path check)</string>
+    <string name="EnableBridgeOnResume">Turn on Hue Bridge upon resume from standby</string>
+    <string name="DisableBridgeonSuspend">Turn off Hue Bridge on suspend</string>
+    <string name="AverageColor">Average color settings</string>
+    <string name="All">All</string>
+    <string name="Off">Off</string>
+    <string name="LiveviewGroup">Hue - set active liveview group</string>
+    <string name="DisableAllGroups">Disable for all groups</string>
+    <string name="StaticColorGroup">Hue - set static color for group</string>
+    <string name="SelectStaticColorGroup">Hue - select static color for group</string>
+    <string name="Hint">Hint: requires AtmoHue to be running on the above IP and Port to function, do not enter your Hue bridge information here</string>
   </Hue>
   <Hyperion>
+    <string name="Hyperion">Hyperion</string>
     <string name="IPHostname">IP/Hostname:</string>
-    <string name="Priority">Priority live:</string>
+    <string name="Priority">Priority</string>
+    <string name="PriorityLive">Priority live:</string>
     <string name="PriorityStaticColor">Priority static color:</string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
+    <string name="LiveReconnect">Live reconnect (NOT recommended) - will keep reconnecting until device is reachable and only useful for live testing Hyperion config changes.</string>
+    <string name="NetworkSettings">Network</string>
   </Hyperion>
 </ressources>
