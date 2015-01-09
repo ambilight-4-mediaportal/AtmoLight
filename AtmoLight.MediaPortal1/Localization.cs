@@ -60,5 +60,36 @@ namespace AtmoLight
       }
       return null;
     }
+
+    public static string ReverseTranslate(string node, string translation)
+    {
+      if (xmlFile == null)
+      {
+        Settings.LoadSettings();
+        xmlFile = new XmlDocument();
+          xmlFile.Load(Settings.currentLanguageFile);
+      }
+
+      XmlNode xmlNode = xmlFile.DocumentElement.SelectSingleNode("/ressources/" + node);
+      if (xmlNode == null)
+      {
+        Log.Warn("Could not find node {0} in {1}", node, xmlFile.BaseURI);
+        return null;
+      }
+
+      foreach (XmlNode childNodes in xmlNode.ChildNodes)
+      {
+        if (childNodes.InnerText == translation)
+        {
+          if (!string.IsNullOrEmpty(childNodes.Attributes[0].Value))
+          {
+            return childNodes.Attributes[0].Value;
+          }
+        }
+      }
+
+      Log.Warn("Could not find translation for {0} in {1}", translation, xmlFile.BaseURI);
+      return null;
+    }
   }
 }

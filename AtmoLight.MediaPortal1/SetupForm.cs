@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Globalization;
-using Language;
 
 namespace AtmoLight
 {
@@ -154,6 +153,7 @@ namespace AtmoLight
     private void UpdateLanguageOnControls()
     {
       // this function places language specific text on all "skin-able" text items.
+      /*
       lblPathInfoAtmoWin.Text = LanguageLoader.appStrings.SetupForm_lblPathInfoAtmoWin;
       grpMode.Text = LanguageLoader.appStrings.SetupForm_grpModeText;
       grpPluginOption.Text = LanguageLoader.appStrings.SetupForm_grpPluginOptionText;
@@ -273,6 +273,7 @@ namespace AtmoLight
       lblHueSaturation.Text = LanguageLoader.appStrings.SetupForm_lblHueSaturation;
       cbHueOverallLightness.Text = LanguageLoader.appStrings.SetupForm_cbHueOverallLightness;
       grpHueAverageColor.Text = LanguageLoader.appStrings.SetupForm_grpHueAverageColor;
+       */
     }
     #endregion
 
@@ -290,14 +291,14 @@ namespace AtmoLight
       //Time excluded Start
       if (validatorDateTime(edExcludeStart.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorStartTime + " - ["+lblStart.Text+"]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorStartTime")  + " - ["+lblStart.Text+"]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       //Time excluded Stop
       if (validatorDateTime(edExcludeEnd.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorEndTime + " - [" + lblEnd.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorEndTime")  + " - [" + lblEnd.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -306,7 +307,7 @@ namespace AtmoLight
       {
         if (ckLowCpu.Checked)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckLowCpu.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds") + " - [" + ckLowCpu.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
         else
@@ -322,7 +323,7 @@ namespace AtmoLight
       {
         if (ckDelay.Checked)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds") + " - [" + ckDelay.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
         else
@@ -337,7 +338,7 @@ namespace AtmoLight
       {
         if (ckDelay.Checked)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + lblRefreshRate.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds") + " - [" + lblRefreshRate.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
         else
@@ -352,7 +353,7 @@ namespace AtmoLight
       {
         if (ckBlackbarDetection.Checked)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds + " - [" + ckBlackbarDetection.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds")  + " - [" + ckBlackbarDetection.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
         else
@@ -365,21 +366,21 @@ namespace AtmoLight
       //Static color RED
       if (validatorInt(tbRed.Text, 0, 255, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRed + " - [" + lblRed.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorColor").Replace("[Color]", Localization.Translate("Common", "Red")) + " - [" + lblRed.Text + "]", Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       //Static color GREEN
       if (validatorInt(tbGreen.Text, 0, 255, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorGreen + " - [" + lblGreen.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorColor").Replace("[Color]", Localization.Translate("Common", "Green")) + " - [" + lblGreen.Text + "]", Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       //Static color BLUE
       if (validatorInt(tbBlue.Text, 0, 255, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorBlue + " - [" + lblBlue.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorColor").Replace("[Color]", Localization.Translate("Common", "Blue")) + " - [" + lblBlue.Text + "]", Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -388,14 +389,14 @@ namespace AtmoLight
           (cbMenuButton.SelectedIndex == comboBox2.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
           (comboBox1.SelectedIndex == comboBox2.SelectedIndex) && (comboBox1.SelectedIndex != 4))
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRemoteButtons, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorRemoteButton") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       //GIF path
       if (validatorPath(tbGIF.Text) == false && string.IsNullOrEmpty(tbGIF.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + grpGIF.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorFileGeneric")  + " - [" + grpGIF.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -404,7 +405,7 @@ namespace AtmoLight
       {
         if (ckAtmowinEnabled.Checked)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + lblPathInfoAtmoWin.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorFileGeneric")  + " - [" + lblPathInfoAtmoWin.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
       }
@@ -412,13 +413,13 @@ namespace AtmoLight
       //Hyperion IP
       if (string.IsNullOrEmpty(tbHyperionIP.Text))
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + lblHyperionIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorIP")  + " - [" + lblHyperionIP.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
       //Hue IP
       if (validatorIPAdress(tbHueIP.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + lblHueIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorIP")  + " - [" + lblHueIP.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -435,7 +436,7 @@ namespace AtmoLight
       maxValue = 0;
       if (validatorInt(tbCaptureWidth.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - [" + lblCaptureWidth.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumber") .Replace("[minInteger]", minValue.ToString()) + " - [" + lblCaptureWidth.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -444,7 +445,7 @@ namespace AtmoLight
       maxValue = 0;
       if (validatorInt(tbCaptureHeight.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - [" + lblCaptureHeight.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumber") .Replace("[minInteger]", minValue.ToString()) + " - [" + lblCaptureHeight.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -453,7 +454,7 @@ namespace AtmoLight
       maxValue = 65535;
       if (validatorInt(tbHyperionPort.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHyperionPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHyperionPort.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -462,7 +463,7 @@ namespace AtmoLight
       maxValue = 0;
       if (validatorInt(tbHyperionReconnectAttempts.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - ["+ lblHyperionReconnectAttempts.Text +"]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumber") .Replace("[minInteger]", minValue.ToString()) + " - ["+ lblHyperionReconnectAttempts.Text +"]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -471,7 +472,7 @@ namespace AtmoLight
       maxValue = 999999;
       if (validatorInt(tbHyperionReconnectDelay.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHyperionReconnectDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHyperionReconnectDelay.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -480,7 +481,7 @@ namespace AtmoLight
       maxValue = 0;
       if (validatorInt(tbHyperionPriority.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - ["+ lblHyperionPriority.Text +"]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumber") .Replace("[minInteger]", minValue.ToString()) + " - ["+ lblHyperionPriority.Text +"]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -489,7 +490,7 @@ namespace AtmoLight
       maxValue = 0;
       if (validatorInt(tbHyperionPriorityStaticColor.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - ["+ lblHyperionPriorityStaticColor.Text +"]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumber") .Replace("[minInteger]", minValue.ToString()) + " - ["+ lblHyperionPriorityStaticColor.Text +"]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -498,7 +499,7 @@ namespace AtmoLight
       {
         if (ckHueEnabled.Checked)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath + " - [" + lblPathInfoHue.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorFileGeneric")  + " - [" + lblPathInfoHue.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
       }
@@ -508,7 +509,7 @@ namespace AtmoLight
       maxValue = 65535;
       if (validatorInt(tbHuePort.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHueIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHueIP.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -517,7 +518,7 @@ namespace AtmoLight
       maxValue = 0;
       if (validatorInt(tbHueReconnectAttempts.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()) + " - ["+ lblHueReconnectAttempts.Text +"]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumber") .Replace("[minInteger]", minValue.ToString()) + " - ["+ lblHueReconnectAttempts.Text +"]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -526,14 +527,14 @@ namespace AtmoLight
       maxValue = 999999;
       if (validatorInt(tbHueReconnectDelay.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHueReconnectDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHueReconnectDelay.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       // Boblight IP
       if (validatorIPAdress(tbBoblightIP.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + tbBoblightIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorIP")  + " - [" + tbBoblightIP.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -542,7 +543,7 @@ namespace AtmoLight
       maxValue = 65535;
       if (validatorInt(tbBoblightPort.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightPort.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -551,7 +552,7 @@ namespace AtmoLight
       maxValue = 9999;
       if (validatorInt(tbBoblightMaxReconnectAttempts.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightMaxReconnectAttempts.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightMaxReconnectAttempts.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -560,7 +561,7 @@ namespace AtmoLight
       maxValue = 999999;
       if (validatorInt(tbBoblightReconnectDelay.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightSaturation.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightSaturation.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -569,7 +570,7 @@ namespace AtmoLight
       maxValue = 144;
       if (validatorInt(tbBoblightMaxFPS.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightMaxFPS.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblBoblightMaxFPS.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -578,7 +579,7 @@ namespace AtmoLight
       maxValue = 255;
       if (validatorInt(tbBlackbarDetectionThreshold.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + ckBlackbarDetection.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + ckBlackbarDetection.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -587,14 +588,14 @@ namespace AtmoLight
       maxValue = 999999;
       if (validatorInt(tbpowerModeChangedDelay.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblpowerModeChangedDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblpowerModeChangedDelay.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       // AmbiBox IP
       if (validatorIPAdress(tbAmbiBoxIP.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + tbAmbiBoxIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorIP")  + " - [" + tbAmbiBoxIP.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -603,7 +604,7 @@ namespace AtmoLight
       maxValue = 65535;
       if (validatorInt(tbAmbiBoxPort.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAmbiBoxPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAmbiBoxPort.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -612,7 +613,7 @@ namespace AtmoLight
       maxValue = 9999;
       if (validatorInt(tbAmbiBoxMaxReconnectAttempts.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAmbiBoxMaxReconnectAttempts.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAmbiBoxMaxReconnectAttempts.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -621,7 +622,7 @@ namespace AtmoLight
       maxValue = 99999;
       if (validatorInt(tbAmbiBoxReconnectDelay.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAmbiBoxReconnectDelay.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAmbiBoxReconnectDelay.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -630,7 +631,7 @@ namespace AtmoLight
       maxValue = 65535;
       if (validatorInt(tbAtmoOrbBroadcastPort.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbBroadcastPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbBroadcastPort.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -639,7 +640,7 @@ namespace AtmoLight
       maxValue = 255;
       if (validatorInt(tbAtmoOrbMinDiversion.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbMinDiversion.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbMinDiversion.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -648,7 +649,7 @@ namespace AtmoLight
       maxValue = 255;
       if (validatorInt(tbAtmoOrbThreshold.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbThreshold.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbThreshold.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -657,7 +658,7 @@ namespace AtmoLight
       maxValue = 255;
       if (validatorInt(tbAtmoOrbBlackThreshold.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbBlackThreshold.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbBlackThreshold.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -666,7 +667,7 @@ namespace AtmoLight
       double doubleMaxValue = 1.0;
       if (validatorDouble(tbAtmoOrbSaturation.Text, doubleMinValue, doubleMaxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + lblAtmoOrbSaturation.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + lblAtmoOrbSaturation.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -675,7 +676,7 @@ namespace AtmoLight
       doubleMaxValue = 5.0;
       if (validatorDouble(tbAtmoOrbGamma.Text, doubleMinValue, doubleMaxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + lblAtmoOrbGamma.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + lblAtmoOrbGamma.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -684,7 +685,7 @@ namespace AtmoLight
       maxValue = 0;
       if (validatorInt(tbVUMeterMindB.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblVUMeterMindB.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblVUMeterMindB.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -693,7 +694,7 @@ namespace AtmoLight
       doubleMaxValue = 1.0;
       if (validatorDouble(tbVUMeterMinHue.Text, doubleMinValue, doubleMaxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + lblVUMeterMinHue.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + lblVUMeterMinHue.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -702,7 +703,7 @@ namespace AtmoLight
       doubleMaxValue = 1.0;
       if (validatorDouble(tbVUMeterMaxHue.Text, doubleMinValue, doubleMaxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + lblVUMeterMaxHue.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + lblVUMeterMaxHue.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -711,7 +712,7 @@ namespace AtmoLight
       maxValue = 255;
       if (validatorInt(tbHueMinDiversion.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHueMinDiversion.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHueMinDiversion.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -720,7 +721,7 @@ namespace AtmoLight
       maxValue = 255;
       if (validatorInt(tbHueThreshold.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHueThreshold.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHueThreshold.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -729,7 +730,7 @@ namespace AtmoLight
       maxValue = 255;
       if (validatorInt(tbHueBlackThreshold.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHueBlackThreshold.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHueBlackThreshold.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -738,7 +739,7 @@ namespace AtmoLight
       doubleMaxValue = 1.0;
       if (validatorDouble(tbHueSaturation.Text, doubleMinValue, doubleMaxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + lblHueSaturation.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", doubleMinValue.ToString()).Replace("[maxInteger]", doubleMaxValue.ToString()) + " - [" + lblHueSaturation.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
@@ -826,11 +827,11 @@ namespace AtmoLight
       Settings.hueSaturation = Double.Parse(tbHueSaturation.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
       Settings.hueUseOverallLightness = cbHueOverallLightness.Checked;
 
-      Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
-      Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
-      Settings.effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbRadio.Text, "ContextMenu_").Remove(0, 12));
-      Settings.effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMenu.Text, "ContextMenu_").Remove(0, 12));
-      Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMPExit.Text, "ContextMenu_").Remove(0, 12));
+      Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbVideo.Text));
+      Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbMusic.Text));
+      Settings.effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbRadio.Text));
+      Settings.effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbMenu.Text));
+      Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbMPExit.Text));
 
       Settings.SaveSettings();
       this.DialogResult = DialogResult.OK;
@@ -838,11 +839,10 @@ namespace AtmoLight
 
     private void btnLanguage_Click(object sender, EventArgs e)
     {
-      openFileDialog2.InitialDirectory = Path.GetDirectoryName(LanguageLoader.strCurrentLanguageFile);
+      openFileDialog2.InitialDirectory = Path.GetDirectoryName(Settings.currentLanguageFile);
       if (openFileDialog2.ShowDialog() == DialogResult.OK)
       {
-        LanguageLoader.LoadLanguageFile(openFileDialog2.FileName);
-        LanguageLoader.strCurrentLanguageFile = openFileDialog2.FileName;
+        Settings.currentLanguageFile = openFileDialog2.FileName;
         UpdateLanguageOnControls();
         UpdateComboBoxes();
         openFileDialog2.FileName = "";
@@ -968,7 +968,7 @@ namespace AtmoLight
       {
         if (ckLowCpu.Checked)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds"), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
       }
     }
@@ -980,7 +980,7 @@ namespace AtmoLight
       {
         if (ckDelay.Checked)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds"), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
       }
     }
@@ -993,7 +993,7 @@ namespace AtmoLight
       {
         if (ckDelay.Checked)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRefreshRate, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorRefreshRate") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
       }
     }
@@ -1006,7 +1006,7 @@ namespace AtmoLight
       {
         if (ckBlackbarDetection.Checked)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorMiliseconds, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds"), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
       }
     }
@@ -1017,7 +1017,7 @@ namespace AtmoLight
       int maxValue = 0;
       if (validatorInt(tbCaptureWidth.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumber") .Replace("[minInteger]", minValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1027,7 +1027,7 @@ namespace AtmoLight
       int maxValue = 0;
       if (validatorInt(tbCaptureHeight.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumber") .Replace("[minInteger]", minValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1035,7 +1035,7 @@ namespace AtmoLight
     {
       if (validatorDateTime(edExcludeStart.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorStartTime, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorStartTime") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
 
     }
@@ -1044,7 +1044,7 @@ namespace AtmoLight
     {
       if (validatorDateTime(edExcludeEnd.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorEndTime, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorEndTime") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1055,7 +1055,7 @@ namespace AtmoLight
       int maxValue = 255;
       if (validatorInt(tbRed.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRed, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorColor").Replace("[Color]", Localization.Translate("Common", "Red")), Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
 
     }
@@ -1066,7 +1066,7 @@ namespace AtmoLight
       int maxValue = 255;
       if (validatorInt(tbGreen.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorGreen, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorColor").Replace("[Color]", Localization.Translate("Common", "Green")), Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1076,7 +1076,7 @@ namespace AtmoLight
       int maxValue = 255;
       if (validatorInt(tbBlue.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorBlue, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorColor").Replace("[Color]", Localization.Translate("Common", "Blue")), Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1084,7 +1084,7 @@ namespace AtmoLight
     {
       if (validatorPath(tbGIF.Text) == false && string.IsNullOrEmpty(tbGIF.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorFileGeneric") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
     private void cbMenuButton_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -1093,7 +1093,7 @@ namespace AtmoLight
     (cbMenuButton.SelectedIndex == comboBox2.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
     (comboBox1.SelectedIndex == comboBox2.SelectedIndex) && (comboBox1.SelectedIndex != 4))
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRemoteButtons, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorRemoteButton") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
 
     }
@@ -1104,7 +1104,7 @@ namespace AtmoLight
     (cbMenuButton.SelectedIndex == comboBox2.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
     (comboBox1.SelectedIndex == comboBox2.SelectedIndex) && (comboBox1.SelectedIndex != 4))
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRemoteButtons, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorRemoteButton") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
 
     }
@@ -1115,7 +1115,7 @@ namespace AtmoLight
     (cbMenuButton.SelectedIndex == comboBox2.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
     (comboBox1.SelectedIndex == comboBox2.SelectedIndex) && (comboBox1.SelectedIndex != 4))
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorRemoteButtons, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorRemoteButton") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
 
     }
@@ -1124,7 +1124,7 @@ namespace AtmoLight
     {
       if (validatorPath(edFileAtmoWin.Text) == false && string.IsNullOrEmpty(edFileAtmoWin.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidPath, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorFileGeneric") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1132,7 +1132,7 @@ namespace AtmoLight
     {
       if (string.IsNullOrEmpty(tbHyperionIP.Text))
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorIP") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1142,7 +1142,7 @@ namespace AtmoLight
       int maxValue = 65535;
       if (validatorInt(tbHyperionPort.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]",minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]",minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1152,7 +1152,7 @@ namespace AtmoLight
       int maxValue = 999999;
       if (validatorInt(tbHyperionReconnectDelay.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]",minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumber") .Replace("[minInteger]",minValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
 
     }
@@ -1163,7 +1163,7 @@ namespace AtmoLight
       int maxValue = 0;
       if (validatorInt(tbHyperionReconnectAttempts.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumber") .Replace("[minInteger]", minValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1173,7 +1173,7 @@ namespace AtmoLight
       int maxValue = 0;
       if (validatorInt(tbHyperionPriority.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumber") .Replace("[minInteger]", minValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1183,7 +1183,7 @@ namespace AtmoLight
       int maxValue = 0;
       if (validatorInt(tbHyperionPriorityStaticColor.Text, minValue, maxValue, false) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerStarting.Replace("[minInteger]", minValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumber") .Replace("[minInteger]", minValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1191,7 +1191,7 @@ namespace AtmoLight
     {
       if (validatorIPAdress(tbHueIP.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorIP") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1201,7 +1201,7 @@ namespace AtmoLight
       int maxValue = 65535;
       if (validatorInt(tbHuePort.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
     private void tbHueReconnectDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -1210,7 +1210,7 @@ namespace AtmoLight
       int maxValue = 999999;
       if (validatorInt(tbHueReconnectDelay.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1220,7 +1220,7 @@ namespace AtmoLight
       int maxValue = 9999;
       if (validatorInt(tbHueReconnectAttempts.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1229,7 +1229,7 @@ namespace AtmoLight
     {
       if (validatorIPAdress(tbBoblightIP.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorIP") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1239,7 +1239,7 @@ namespace AtmoLight
       int maxValue = 65535;
       if (validatorInt(tbBoblightPort.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1249,7 +1249,7 @@ namespace AtmoLight
       int maxValue = 9999;
       if (validatorInt(tbBoblightMaxReconnectAttempts.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1259,7 +1259,7 @@ namespace AtmoLight
       int maxValue = 999999;
       if (validatorInt(tbBoblightReconnectDelay.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1269,7 +1269,7 @@ namespace AtmoLight
       int maxValue = 144;
       if (validatorInt(tbBoblightMaxFPS.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1279,7 +1279,7 @@ namespace AtmoLight
       int maxValue = 255;
       if (validatorInt(tbBlackbarDetectionThreshold.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1289,7 +1289,7 @@ namespace AtmoLight
       int maxValue = 999999;
       if (validatorInt(tbpowerModeChangedDelay.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1328,7 +1328,7 @@ namespace AtmoLight
     {
       if (validatorIPAdress(tbAmbiBoxIP.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorIP") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1338,7 +1338,7 @@ namespace AtmoLight
       int maxValue = 65535;
       if (validatorInt(tbAmbiBoxPort.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1348,7 +1348,7 @@ namespace AtmoLight
       int maxValue = 9999;
       if (validatorInt(tbAmbiBoxMaxReconnectAttempts.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1358,7 +1358,7 @@ namespace AtmoLight
       int maxValue = 99999;
       if (validatorInt(tbAmbiBoxReconnectDelay.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1369,7 +1369,7 @@ namespace AtmoLight
       int maxValue = 100;
       if (validatorInt(tbAtmoOrbVScanEnd.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1379,7 +1379,7 @@ namespace AtmoLight
       int maxValue = 100;
       if (validatorInt(tbAtmoOrbVScanStart.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1389,7 +1389,7 @@ namespace AtmoLight
       int maxValue = 100;
       if (validatorInt(tbAtmoOrbHScanEnd.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1399,7 +1399,7 @@ namespace AtmoLight
       int maxValue = 100;
       if (validatorInt(tbAtmoOrbHScanStart.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1413,7 +1413,7 @@ namespace AtmoLight
       int maxValue = 65535;
       if (validatorInt(tbAtmoOrbPort.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1425,7 +1425,7 @@ namespace AtmoLight
       }
       if (validatorIPAdress(tbAtmoOrbIP.Text) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorIP") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1435,7 +1435,7 @@ namespace AtmoLight
       double maxValue = 5.0;
       if (validatorDouble(tbAtmoOrbGamma.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1445,7 +1445,7 @@ namespace AtmoLight
       double maxValue = 1.0;
       if (validatorDouble(tbAtmoOrbSaturation.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1455,7 +1455,7 @@ namespace AtmoLight
       int maxValue = 255;
       if (validatorInt(tbAtmoOrbBlackThreshold.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1465,7 +1465,7 @@ namespace AtmoLight
       int maxValue = 255;
       if (validatorInt(tbAtmoOrbThreshold.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1475,7 +1475,7 @@ namespace AtmoLight
       int maxValue = 255;
       if (validatorInt(tbAtmoOrbMinDiversion.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1485,7 +1485,7 @@ namespace AtmoLight
       int maxValue = 65535;
       if (validatorInt(tbAtmoOrbBroadcastPort.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1495,7 +1495,7 @@ namespace AtmoLight
       int maxValue = 0;
       if (validatorInt(tbVUMeterMindB.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1505,7 +1505,7 @@ namespace AtmoLight
       double maxValue = 1.0;
       if (validatorDouble(tbVUMeterMinHue.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1515,7 +1515,7 @@ namespace AtmoLight
       double maxValue = 1.0;
       if (validatorDouble(tbVUMeterMaxHue.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1525,7 +1525,7 @@ namespace AtmoLight
       double maxValue = 1.0;
       if (validatorDouble(tbHueSaturation.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1535,7 +1535,7 @@ namespace AtmoLight
       int maxValue = 255;
       if (validatorDouble(tbHueMinDiversion.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1545,7 +1545,7 @@ namespace AtmoLight
       int maxValue = 255;
       if (validatorDouble(tbHueThreshold.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -1555,7 +1555,7 @@ namespace AtmoLight
       int maxValue = 255;
       if (validatorDouble(tbHueBlackThreshold.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
     #endregion
@@ -1576,29 +1576,29 @@ namespace AtmoLight
         if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
         {
           // Cases in which all effects are possible
-          cbMusic.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
-          cbRadio.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+          cbMusic.Items.Add(Localization.Translate("ContentEffect", effect.ToString()));
+          cbRadio.Items.Add(Localization.Translate("ContentEffect", effect.ToString()));
 
           // Cases in which VU Meter is not possible
           if (effect != ContentEffect.VUMeter && effect != ContentEffect.VUMeterRainbow)
           {
-            cbVideo.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
-            cbMenu.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+            cbVideo.Items.Add(Localization.Translate("ContentEffect", effect.ToString()));
+            cbMenu.Items.Add(Localization.Translate("ContentEffect", effect.ToString()));
 
             // Cases in which Vu Meter, MPLiveView and GifReader are not possible
             if (effect != ContentEffect.MediaPortalLiveMode && effect != ContentEffect.GIFReader)
             {
-              cbMPExit.Items.Add(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString()));
+              cbMPExit.Items.Add(Localization.Translate("ContentEffect", effect.ToString()));
             }
           }
         }
       }
 
-      cbVideo.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectVideo.ToString());
-      cbMusic.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectMusic.ToString());
-      cbRadio.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectRadio.ToString());
-      cbMenu.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectMenu.ToString());
-      cbMPExit.Text = LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + Settings.effectMPExit.ToString());
+      cbVideo.Text = Localization.Translate("ContentEffect", Settings.effectVideo.ToString());
+      cbMusic.Text = Localization.Translate("ContentEffect", Settings.effectMusic.ToString());
+      cbRadio.Text = Localization.Translate("ContentEffect", Settings.effectRadio.ToString());
+      cbMenu.Text = Localization.Translate("ContentEffect", Settings.effectMenu.ToString());
+      cbMPExit.Text = Localization.Translate("ContentEffect", Settings.effectMPExit.ToString());
     }
 
     private void ckAtmowinEnabled_CheckedChanged(Object sender, EventArgs e)
@@ -1683,27 +1683,27 @@ namespace AtmoLight
     #region Effect changing
     private void cbVideo_SelectedIndexChanged(object sender, EventArgs e)
     {
-      Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbVideo.Text, "ContextMenu_").Remove(0, 12));
+      Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbVideo.Text));
     }
 
     private void cbMusic_SelectedIndexChanged(object sender, EventArgs e)
     {
-      Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMusic.Text, "ContextMenu_").Remove(0, 12));
+      Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbMusic.Text));
     }
 
     private void cbRadio_SelectedIndexChanged(object sender, EventArgs e)
     {
-      Settings.effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbRadio.Text, "ContextMenu_").Remove(0, 12));
+      Settings.effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbRadio.Text));
     }
 
     private void cbMenu_SelectedIndexChanged(object sender, EventArgs e)
     {
-      Settings.effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMenu.Text, "ContextMenu_").Remove(0, 12));
+      Settings.effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbMenu.Text));
     }
 
     private void cbMPExit_SelectedIndexChanged(object sender, EventArgs e)
     {
-      Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(cbMPExit.Text, "ContextMenu_").Remove(0, 12));
+      Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbMPExit.Text));
     }
     #endregion
 
@@ -1720,7 +1720,7 @@ namespace AtmoLight
         }
         else
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorAtmoWinA, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorFile").Replace("[Filename]", "AtmoWinA.exe"), Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
           edFileAtmoWin.Text = "";
           return;
         }
@@ -1751,7 +1751,7 @@ namespace AtmoLight
         }
         else
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorHue, LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorFile").Replace("[Filename]", "AtmoHue.exe"), Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
           edFileHue.Text = "";
           return;
         }
@@ -1774,14 +1774,14 @@ namespace AtmoLight
       {
         if (validatorIPAdress(tbAtmoOrbIP.Text) == false)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + tbAtmoOrbIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorIP")  + " - [" + tbAtmoOrbIP.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
         minValue = 1;
         maxValue = 65535;
         if (validatorInt(tbAtmoOrbPort.Text, minValue, maxValue, true) == false)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbPort.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
         lampString += "TCP," + tbAtmoOrbIP.Text + "," + tbAtmoOrbPort.Text + ",";
@@ -1794,25 +1794,25 @@ namespace AtmoLight
       maxValue = 100;
       if (validatorInt(tbAtmoOrbHScanStart.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanStart.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanStart.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       if (validatorInt(tbAtmoOrbHScanEnd.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanEnd.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanEnd.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       if (validatorInt(tbAtmoOrbVScanStart.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanStart.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanStart.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       if (validatorInt(tbAtmoOrbVScanEnd.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanEnd.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanEnd.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
       lampString += tbAtmoOrbHScanStart.Text + "," + tbAtmoOrbHScanEnd.Text + "," + tbAtmoOrbVScanStart.Text + "," + tbAtmoOrbVScanEnd.Text + ",";
@@ -1839,14 +1839,14 @@ namespace AtmoLight
       {
         if (validatorIPAdress(tbAtmoOrbIP.Text) == false)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIP + " - [" + tbAtmoOrbIP.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorIP")  + " - [" + tbAtmoOrbIP.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
         minValue = 1;
         maxValue = 65535;
         if (validatorInt(tbAtmoOrbPort.Text, minValue, maxValue, true) == false)
         {
-          MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbPort.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbPort.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
         lampString += "TCP," + tbAtmoOrbIP.Text + "," + tbAtmoOrbPort.Text + ",";
@@ -1859,25 +1859,25 @@ namespace AtmoLight
       maxValue = 100;
       if (validatorInt(tbAtmoOrbHScanStart.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanStart.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanStart.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       if (validatorInt(tbAtmoOrbHScanEnd.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanEnd.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanEnd.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       if (validatorInt(tbAtmoOrbVScanStart.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanStart.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanStart.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
 
       if (validatorInt(tbAtmoOrbVScanEnd.Text, minValue, maxValue, true) == false)
       {
-        MessageBox.Show(LanguageLoader.appStrings.SetupForm_ErrorInvalidIntegerBetween.Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanEnd.Text + "]", LanguageLoader.appStrings.SetupForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange") .Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanEnd.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
       lampString += tbAtmoOrbHScanStart.Text + "," + tbAtmoOrbHScanEnd.Text + "," + tbAtmoOrbVScanStart.Text + "," + tbAtmoOrbVScanEnd.Text + ",";

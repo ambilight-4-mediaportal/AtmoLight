@@ -16,7 +16,6 @@ using Microsoft.DirectX.Direct3D;
 using Microsoft.Win32;
 using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
-using Language;
 
 namespace AtmoLight
 {
@@ -375,7 +374,7 @@ namespace AtmoLight
         Thread.Sleep(100);
         mediaPortalProcess.Refresh();
       }
-      DialogError(LanguageLoader.appStrings.ContextMenu_ConnectionLost.Replace("[Target]", target.ToString()));
+      DialogError(Localization.Translate("ContextMenu", "ConnectionLost").Replace("[Target]", target.ToString()));
     }
     #endregion
 
@@ -568,7 +567,7 @@ namespace AtmoLight
       {
         if (!coreObject.IsConnected())
         {
-          if (DialogYesNo(LanguageLoader.appStrings.ContextMenu_ConnectLine1, LanguageLoader.appStrings.ContextMenu_ConnectLine2))
+          if (DialogYesNo(Localization.Translate("ContextMenu", "Connect1"), Localization.Translate("ContextMenu", "Connect2")))
           {
             coreObject.ReInitialise();
           }
@@ -659,7 +658,7 @@ namespace AtmoLight
         GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
         if (dlgError != null)
         {
-          dlgError.SetHeading(LanguageLoader.appStrings.ContextMenu_Error + "!");
+          dlgError.SetHeading(Localization.Translate("Common", "Error") + "!");
           dlgError.SetLine(1, setLine1);
           dlgError.SetLine(2, setLine2);
           dlgError.DoModal(GUIWindowManager.ActiveWindow);
@@ -683,37 +682,37 @@ namespace AtmoLight
       // Toggle On/Off
       if (!coreObject.IsAtmoLightOn())
       {
-        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchLEDsON));
+        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "LEDsOn")));
       }
       else
       {
-        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchLEDsOFF));
+        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "LEDsOff")));
       }
 
       // Change Effect
-      dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeEffect));
+      dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeEffect")));
 
       // Change Profile
-      dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeAWProfile));
+      dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeProfile")));
 
       // Toggle 3D Mode
       if (Settings.sbs3dOn)
       {
-        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Switch3DOFF));
+        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "3DOff")));
       }
       else
       {
-        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Switch3DON));
+        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "3DOn")));
       }
 
       // Toggle Blackbar Detection
       if (Settings.blackbarDetection)
       {
-        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchBlackbarDetectionOFF));
+        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetectionOff")));
       }
       else
       {
-        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SwitchBlackbarDetectionON));
+        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetectionOn")));
       }
 
       // Delay
@@ -722,37 +721,37 @@ namespace AtmoLight
         // Toggle Delay and Change Delay
         if (coreObject.IsDelayEnabled())
         {
-          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_DelayOFF));
-          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + coreObject.GetDelayTime() + "ms)"));
+          dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "DelayOff")));
+          dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() + "ms)"));
         }
         else
         {
-          dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_DelayON));
+          dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "DelayOn")));
         }
       }
 
       // Change Static Color
       if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
       {
-        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ChangeStatic));
+        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeStaticColor")));
       }
 
       // ReInit
       if (!coreObject.AreAllConnected())
       {
-        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_ReInitialise));
+        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "Reinitialise")));
       }
 
       // Hue set active liveview group
       if (coreObject.GetTarget(Target.Hue) != null)
       {
-        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_HueSetLiveViewGroup));
+        dlg.Add(new GUIListItem(Localization.Translate("Hue", "LiveviewGroup")));
       }
 
       // Hue set active liveview group
       if (coreObject.GetTarget(Target.Hue) != null)
       {
-        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_HueSetStaticColorGroup));
+        dlg.Add(new GUIListItem(Localization.Translate("Hue", "StaticColorGroup")));
       }
 
       // Toggle On/Off AtmoLight
@@ -762,11 +761,11 @@ namespace AtmoLight
         dlg.Reset();
         dlg.SetHeading("AtmoLight [DISABLED]");
 
-        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_AtmoLightToggleON));
+        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "AtmoLightOn")));
       }
       else if (!AtmoLightDisabledByUser)
       {
-        dlg.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_AtmoLightToggleOFF));
+        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "AtmoLightOff")));
       }
 
       dlg.SelectedLabel = 0;
@@ -775,7 +774,7 @@ namespace AtmoLight
 
       // Do stuff
       // Toggle LEDs
-      if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchLEDsON || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchLEDsOFF)
+      if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "LEDsOn") || dlg.SelectedLabelText == Localization.Translate("ContextMenu", "LEDsOff"))
       {
         if (!coreObject.IsAtmoLightOn())
         {
@@ -796,33 +795,31 @@ namespace AtmoLight
         }
       }
       // Toggle LEDs for duration of Mediaportal runtime
-      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_AtmoLightToggleON)
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "AtmoLightOn"))
       {
         AtmoLightDisabledByUser = false;
 
         if (g_Player.Playing)
         {
           coreObject.ChangeEffect(playbackEffect);
-          CalculateDelay();
         }
         else
         {
           coreObject.ChangeEffect(menuEffect);
-          CalculateDelay();
         }
+        CalculateDelay();
       }
-      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_AtmoLightToggleOFF)
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "AtmoLightOff"))
       {
         AtmoLightDisabledByUser = true;
         coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
-        CalculateDelay();
       }
       // Change Effect
-      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeEffect)
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeEffect"))
       {
         GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgEffect.Reset();
-        dlgEffect.SetHeading(LanguageLoader.appStrings.ContextMenu_ChangeEffect);
+        dlgEffect.SetHeading(Localization.Translate("ContextMenu", "ChangeEffect"));
 
         // Only show effects that are support by at least one target
         foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
@@ -833,12 +830,12 @@ namespace AtmoLight
             {
               if (g_Player.Playing && (g_Player.currentMedia == g_Player.MediaType.Music || g_Player.currentMedia == g_Player.MediaType.Radio))
               {
-                dlgEffect.Add(new GUIListItem(LanguageLoader.GetTranslationFromFieldName("ContextMenu_"+effect.ToString())));
+                dlgEffect.Add(new GUIListItem(Localization.Translate("ContentEffect", effect.ToString())));
               }
             }
             else
             {
-              dlgEffect.Add(new GUIListItem(LanguageLoader.GetTranslationFromFieldName("ContextMenu_" + effect.ToString())));
+              dlgEffect.Add(new GUIListItem(Localization.Translate("ContentEffect", effect.ToString())));
             }
           }
         }
@@ -847,7 +844,7 @@ namespace AtmoLight
 
         if (!String.IsNullOrEmpty(dlgEffect.SelectedLabelText))
         {
-          ContentEffect temp = (ContentEffect)Enum.Parse(typeof(ContentEffect), LanguageLoader.GetFieldNameFromTranslation(dlgEffect.SelectedLabelText, "ContextMenu_").Remove(0, 12));
+          ContentEffect temp = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", dlgEffect.SelectedLabelText));
 
           if (g_Player.Playing)
           {
@@ -862,12 +859,12 @@ namespace AtmoLight
         }
       }
       // Change Profile
-      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeAWProfile)
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeProfile"))
       {
         coreObject.ChangeProfile();
       }
       // Toggle 3D
-      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_Switch3DOFF || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_Switch3DON)
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "3DOn") || dlg.SelectedLabelText == Localization.Translate("ContextMenu", "3DOff"))
       {
         if (Settings.sbs3dOn)
         {
@@ -881,7 +878,7 @@ namespace AtmoLight
         }
       }
       // Blackbar detection
-      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchBlackbarDetectionOFF || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_SwitchBlackbarDetectionON)
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionOn") || dlg.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionOff"))
       {
         if (Settings.blackbarDetection)
         {
@@ -897,7 +894,7 @@ namespace AtmoLight
         }
       }
       // Toggle Delay
-      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_DelayOFF || dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_DelayON)
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "DelayOn") || dlg.SelectedLabelText == Localization.Translate("ContextMenu", "DelayOff"))
       {
         if (coreObject.IsDelayEnabled())
         {
@@ -910,7 +907,7 @@ namespace AtmoLight
         }
       }
       // Change Delay
-      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeDelay + " (" + coreObject.GetDelayTime() + "ms)")
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() + "ms)")
       {
         if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) && (delayTimeHelper <= 1000))
         {
@@ -919,25 +916,25 @@ namespace AtmoLight
         }
         else
         {
-          DialogError(LanguageLoader.appStrings.ContextMenu_DelayTimeErrorLine1, LanguageLoader.appStrings.ContextMenu_DelayTimeErrorLine2);
+          DialogError(Localization.Translate("ContextMenu", "DelayError1"), Localization.Translate("ContextMenu", "DelayError2"));
         }
       }
       // Change Static Color
-      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ChangeStatic)
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeStaticColor"))
       {
         GUIDialogMenu dlgStaticColor = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgStaticColor.Reset();
-        dlgStaticColor.SetHeading(LanguageLoader.appStrings.ContextMenu_ChangeStatic);
-        dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Manual));
-        dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_SaveColor));
-        dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_LoadColor));
-        dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_White));
-        dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Red));
-        dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Green));
-        dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Blue));
-        dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Cyan));
-        dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Magenta));
-        dlgStaticColor.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Yellow));
+        dlgStaticColor.SetHeading(Localization.Translate("ContextMenu", "ChangeStaticColor"));
+        dlgStaticColor.Add(new GUIListItem(Localization.Translate("ContextMenu", "Manual")));
+        dlgStaticColor.Add(new GUIListItem(Localization.Translate("ContextMenu", "SaveColor")));
+        dlgStaticColor.Add(new GUIListItem(Localization.Translate("ContextMenu", "LoadColor")));
+        dlgStaticColor.Add(new GUIListItem(Localization.Translate("ContextMenu", "White")));
+        dlgStaticColor.Add(new GUIListItem(Localization.Translate("Common", "Red")));
+        dlgStaticColor.Add(new GUIListItem(Localization.Translate("Common", "Green")));
+        dlgStaticColor.Add(new GUIListItem(Localization.Translate("Common", "Blue")));
+        dlgStaticColor.Add(new GUIListItem(Localization.Translate("ContextMenu", "Cyan")));
+        dlgStaticColor.Add(new GUIListItem(Localization.Translate("ContextMenu", "Magenta")));
+        dlgStaticColor.Add(new GUIListItem(Localization.Translate("ContextMenu", "Yellow")));
         dlgStaticColor.SelectedLabel = 0;
         dlgStaticColor.DoModal(GUIWindowManager.ActiveWindow);
 
@@ -983,18 +980,18 @@ namespace AtmoLight
         }
         coreObject.ChangeEffect(ContentEffect.StaticColor, true);
       }
-      else if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_ReInitialise)
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "Reinitialise"))
       {
         coreObject.ReInitialise();
       }
 
       // Hue set active liveview group
-      if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_HueSetLiveViewGroup)
+      if (dlg.SelectedLabelText == Localization.Translate("Hue", "LiveviewGroup"))
       {
         GUIDialogMenu dlgHueSetActiveGroup = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgHueSetActiveGroup.Reset();
-        dlgHueSetActiveGroup.SetHeading(LanguageLoader.appStrings.ContextMenu_HueSetLiveViewGroup);
-        dlgHueSetActiveGroup.Add(LanguageLoader.appStrings.ContextMenu_HueSetGroupAll);
+        dlgHueSetActiveGroup.SetHeading(Localization.Translate("Hue", "LiveviewGroup"));
+        dlgHueSetActiveGroup.Add(Localization.Translate("Hue", "All"));
         var hueTarget = coreObject.GetTarget(Target.Hue) as AtmoLight.Targets.HueHandler;
 
         List<string> groups = hueTarget.Loadgroups();
@@ -1004,14 +1001,14 @@ namespace AtmoLight
           dlgHueSetActiveGroup.Add(new GUIListItem(group));
         }
 
-        dlgHueSetActiveGroup.Add(LanguageLoader.appStrings.ContextMenu_HueDisableAllGroups);
+        dlgHueSetActiveGroup.Add(Localization.Translate("Hue", "DisableAllGroups"));
 
         dlgHueSetActiveGroup.SelectedLabel = 0;
         dlgHueSetActiveGroup.DoModal(GUIWindowManager.ActiveWindow);
 
         if (dlgHueSetActiveGroup.SelectedLabel == 0)
         {
-          hueTarget.setActiveGroup(LanguageLoader.appStrings.ContextMenu_HueSetGroupAll);
+          hueTarget.setActiveGroup(Localization.Translate("Hue", "All"));
         }
         else if (dlgHueSetActiveGroup.SelectedLabel > 0)
         {
@@ -1020,12 +1017,12 @@ namespace AtmoLight
       }
       
       // Hue set static color for group
-      if (dlg.SelectedLabelText == LanguageLoader.appStrings.ContextMenu_HueSetStaticColorGroup)
+      if (dlg.SelectedLabelText == Localization.Translate("Hue", "StaticColorGroup"))
       {
         GUIDialogMenu dlgHueSetActiveGroup = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgHueSetActiveGroup.Reset();
-        dlgHueSetActiveGroup.SetHeading(LanguageLoader.appStrings.ContextMenu_HueSetStaticColorGroup);
-        dlgHueSetActiveGroup.Add(LanguageLoader.appStrings.ContextMenu_HueSetGroupAll);
+        dlgHueSetActiveGroup.SetHeading(Localization.Translate("Hue", "StaticColorGroup"));
+        dlgHueSetActiveGroup.Add(Localization.Translate("Hue", "All"));
         var hueTarget = coreObject.GetTarget(Target.Hue) as AtmoLight.Targets.HueHandler;
 
         List<string> groups = hueTarget.Loadgroups();
@@ -1043,8 +1040,8 @@ namespace AtmoLight
           string groupName = dlgHueSetActiveGroup.SelectedLabelText;
           GUIDialogMenu dlgHueSetStaticColorGroup = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
           dlgHueSetStaticColorGroup.Reset();
-          dlgHueSetStaticColorGroup.SetHeading(LanguageLoader.appStrings.ContextMenu_HueSelectStaticColorGroup);
-          dlgHueSetStaticColorGroup.Add(LanguageLoader.appStrings.ContextMenu_HueSetGroupOff);
+          dlgHueSetStaticColorGroup.SetHeading(Localization.Translate("Hue", "SelectStaticColorGroup"));
+          dlgHueSetStaticColorGroup.Add(Localization.Translate("Hue", "Off"));
 
           List<string> staticColors = hueTarget.LoadStaticColors();
 
@@ -1105,12 +1102,12 @@ namespace AtmoLight
       }
       GUIDialogMenu dlgRGB = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
       dlgRGB.Reset();
-      dlgRGB.SetHeading(LanguageLoader.appStrings.ContextMenu_ManualStaticColor);
-      dlgRGB.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Red + ": " + (staticColorTemp[0] == -1 ? LanguageLoader.appStrings.ContextMenu_NA : staticColorTemp[0].ToString())));
-      dlgRGB.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Green + ": " + (staticColorTemp[1] == -1 ? LanguageLoader.appStrings.ContextMenu_NA : staticColorTemp[1].ToString())));
-      dlgRGB.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Blue + ": " + (staticColorTemp[2] == -1 ? LanguageLoader.appStrings.ContextMenu_NA : staticColorTemp[2].ToString())));
-      dlgRGB.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Apply));
-      dlgRGB.Add(new GUIListItem(LanguageLoader.appStrings.ContextMenu_Cancel));
+      dlgRGB.SetHeading(Localization.Translate("ContextMenu", "ManualStaticColor"));
+      dlgRGB.Add(new GUIListItem(Localization.Translate("Common", "Red") + ": " + (staticColorTemp[0] == -1 ? Localization.Translate("Common", "NA") : staticColorTemp[0].ToString())));
+      dlgRGB.Add(new GUIListItem(Localization.Translate("Common", "Green") + ": " + (staticColorTemp[1] == -1 ? Localization.Translate("Common", "NA") : staticColorTemp[1].ToString())));
+      dlgRGB.Add(new GUIListItem(Localization.Translate("Common", "Blue") + ": " + (staticColorTemp[2] == -1 ? Localization.Translate("Common", "NA") : staticColorTemp[2].ToString())));
+      dlgRGB.Add(new GUIListItem(Localization.Translate("Common", "Apply")));
+      dlgRGB.Add(new GUIListItem(Localization.Translate("Common", "Cancel")));
       dlgRGB.SelectedLabel = StartPosition;
       dlgRGB.DoModal(GUIWindowManager.ActiveWindow);
       switch (dlgRGB.SelectedLabel)
@@ -1126,13 +1123,13 @@ namespace AtmoLight
           }
           else
           {
-            DialogError(LanguageLoader.appStrings.ContextMenu_RGBErrorLine1, LanguageLoader.appStrings.ContextMenu_RGBErrorLine2);
+            DialogError(Localization.Translate("ContextMenu", "RGBError1"), Localization.Translate("ContextMenu", "RGBError2"));
           }
           break;
         case 3:
           if (staticColorTemp[0] == -1 || staticColorTemp[1] == -1 || staticColorTemp[2] == -1)
           {
-            DialogError(LanguageLoader.appStrings.ContextMenu_RGBErrorLine1, LanguageLoader.appStrings.ContextMenu_RGBErrorLine2);
+            DialogError(Localization.Translate("ContextMenu", "RGBError1"), Localization.Translate("ContextMenu", "RGBError2"));
             break;
           }
           else

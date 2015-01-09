@@ -71,8 +71,6 @@
     <Compile Include="SetupForm.Designer.cs">
       <DependentUpon>SetupForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IniAccess.cs" />
-    <Compile Include="LanguageLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -93,7 +91,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\language\DutchNL.lng" />
-    <None Include="Resources\language\EnglishUS.lng" />
     <None Include="Resources\language\FrenchFR.lng" />
     <None Include="Resources\language\GermanDE.lng" />
   </ItemGroup>

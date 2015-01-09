@@ -33,7 +33,7 @@
     <string name="Save">Save</string>
     <string name="Cancel">Cancel</string>
     <string name="Apply">Apply</string>
-    <string name="N/A">N/A</string>
+    <string name="NA">N/A</string>
     <string name="Error">Error</string>
     <string name="ErrorFile">Invalid Filename. Please choose path to [Filename].</string>
     <string name="ErrorColor">Please enter a number between 0 and 255 for [Color].</string>
@@ -46,6 +46,9 @@
     <string name="ErrorEndTime">You have to enter a valid end time.</string>
     <string name="ErrorMiliseconds">You have to enter a valid number of ms.</string>
     <string name="ErrorRefreshRate">You have to enter a valid refresh rate.</string>
+    <string name="Red">Red</string>
+    <string name="Green">Green</string>
+    <string name="Blue">Blue</string>
   </Common>
   <SetupForm>
     <string name="EffectSettings">Effect settings</string>
@@ -97,9 +100,6 @@
     <string name="SaveColor">Save current Color</string>
     <string name="LoadColor">Load Color from Settings</string>
     <string name="White">White</string>
-    <string name="Red">Red</string>
-    <string name="Green">Green</string>
-    <string name="Blue">Blue</string>
     <string name="Cyan">Cyan</string>
     <string name="Magenta">Magenta</string>
     <string name="Yellow">Yellow</string>

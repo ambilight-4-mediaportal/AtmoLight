@@ -350,7 +350,7 @@
       // 
       // openFileDialog2
       // 
-      this.openFileDialog2.Filter = "files|*.lng";
+      this.openFileDialog2.Filter = "files|*.xml";
       // 
       // openFileDialog3
       // 
