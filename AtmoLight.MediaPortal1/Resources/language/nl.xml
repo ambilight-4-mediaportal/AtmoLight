@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?ytu
 <ressources>
   <ContentEffect>
-    <string name="LEDsDisabled">LEDs uitschakeld</string>
+    <string name="LEDsDisabled">LEDs uitgeschakeld</string>
     <string name="MediaPortalLiveMode">MediaPortal Live Modus</string>
     <string name="ExternalLiveMode">Externe Live Modus</string>
     <string name="StaticColor">Statische Kleur</string>
@@ -29,7 +29,7 @@
     <string name="OverallLightness">Gebruik algemene helderheid</string>
     <string name="Add">Toevoegen</string>
     <string name="Remove">Verwijderen</string>
-    <string name="Update">Update</string>
+    <string name="Update">Bijwerken</string>
     <string name="Save">Opslaan</string>
     <string name="Cancel">Annuleer</string>
     <string name="Apply">Pas toe</string>
@@ -153,7 +153,7 @@
     <string name="EnableBridgeOnResume">Zet Hue Bridge aan wanneer de machine hervat uit standby</string>
     <string name="DisableBridgeonSuspend">Zet Hue Bridge uit tijdens standby</string>
     <string name="AverageColor">Gemiddelde kleur instellingen</string>
-    <string name="All">Allemaal</string>
+    <string name="All">Alle</string>
     <string name="Off">Uit</string>
     <string name="LiveviewGroup">Hue - stel actieve live view groep in</string>
     <string name="DisableAllGroups">Schakel uit voor alle groepen</string>
