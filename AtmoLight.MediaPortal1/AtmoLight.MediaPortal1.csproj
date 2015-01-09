@@ -95,7 +95,18 @@
     <None Include="Resources\language\GermanDE.lng" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\language\en.xml" />
+    <Content Include="Resources\language\de.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Resources\language\fr.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Resources\language\nl.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Resources\language\en.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

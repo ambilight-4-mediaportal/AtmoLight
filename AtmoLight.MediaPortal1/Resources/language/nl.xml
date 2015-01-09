@@ -15,12 +15,12 @@
     <string name="IP">IP adres:</string>
     <string name="Port">Poort nummer:</string>
     <string name="ReconnectAttempts">Herverbindings pogingen:</string>
-    <string name="ReconnectDelay">Herverbinden vertraging:</string>
+    <string name="ReconnectDelay">Herverbinden vertraging (ms):</string>
     <string name="Threshold">Beperking:</string>
     <string name="BlackThreshold">Zwart beperking:</string>
     <string name="Saturation">Saturatie correctie:</string>
     <string name="GeneralSettings">Algemene instellingen</string>
-    <string name="Gamma">Gamme correctie:</string>
+    <string name="Gamma">Gamma correctie:</string>
     <string name="Path">Pad en Bestandsnaam naar [Filename]</string>
     <string name="StartTargetWithMP">Start [Target] met MediaPortal</string>
     <string name="StopTargetWithMP">Stop [Target] met MediaPortal</string>
@@ -163,7 +163,7 @@
   </Hue>
   <Hyperion>
     <string name="Hyperion">Hyperion</string>
-    <string name="IPHostname">IP/Hostnaam:</string>
+    <string name="IPHostname">IP / Hostnaam:</string>
     <string name="Priority">Prioriteit</string>
     <string name="PriorityLive">Prioriteit live:</string>
     <string name="PriorityStaticColor">Prioriteit statische color:</string>

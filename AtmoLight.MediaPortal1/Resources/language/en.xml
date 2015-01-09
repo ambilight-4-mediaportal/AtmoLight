@@ -15,12 +15,12 @@
     <string name="IP">IP address:</string>
     <string name="Port">Port number:</string>
     <string name="ReconnectAttempts">Reconnect attempts:</string>
-    <string name="ReconnectDelay">Reconnect delay:</string>
+    <string name="ReconnectDelay">Reconnect delay (ms):</string>
     <string name="Threshold">Threshold:</string>
     <string name="BlackThreshold">Black threshold:</string>
     <string name="Saturation">Saturation correction:</string>
     <string name="GeneralSettings">General settings</string>
-    <string name="Gamma">Gamme correction:</string>
+    <string name="Gamma">Gamma correction:</string>
     <string name="Path">Path and Filename to [Filename]</string>
     <string name="StartTargetWithMP">Start [Target] with MediaPortal</string>
     <string name="StopTargetWithMP">Stop [Target] with MediaPortal</string>
@@ -163,7 +163,7 @@
   </Hue>
   <Hyperion>
     <string name="Hyperion">Hyperion</string>
-    <string name="IPHostname">IP/Hostname:</string>
+    <string name="IPHostname">IP / Hostname:</string>
     <string name="Priority">Priority</string>
     <string name="PriorityLive">Priority live:</string>
     <string name="PriorityStaticColor">Priority static color:</string>
