@@ -44,7 +44,6 @@ namespace AtmoLight.Targets
     private bool isInit = false;
     private volatile bool initLock = false;
     private int hyperionReconnectCounter = 0;
-    private bool invalidConnectIP = false;
     private string hyperionpreviousHostname = "";
 
     private Stopwatch liveReconnectSW = new Stopwatch();
@@ -558,7 +557,6 @@ namespace AtmoLight.Targets
           }
           else
           {
-            invalidConnectIP = true;
             if (!coreObject.hyperionLiveReconnect)
             {
               Log.Debug("HyperionHandler - Error while resolving to Hostname to IP addres, returned: " + resolvedIP);
@@ -570,7 +568,6 @@ namespace AtmoLight.Targets
       {
         if (!coreObject.hyperionLiveReconnect)
         {
-          invalidConnectIP = true;
           Log.Error("HyperionHandler - Error while checking IP for hostname string");
           Log.Error("HyperionHandler - Exception: {0}", e.Message);
         }
