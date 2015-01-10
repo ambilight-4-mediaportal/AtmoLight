@@ -68,30 +68,30 @@
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>AlwaysOverwrite</UpdateOption>
-              <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\DutchNL.lng</LocalFileName>
-              <ZipFileName>Installer{CopyFile}\{f46daaa7-c40e-4682-81dc-7bad08072764}-DutchNL.lng</ZipFileName>
-              <DestinationFilename>%Language%\Atmolight\DutchNL.lng</DestinationFilename>
+              <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\nl.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{f46daaa7-c40e-4682-81dc-7bad08072764}-nl.xml</ZipFileName>
+              <DestinationFilename>%Language%\Atmolight\nl.xml</DestinationFilename>
             </FileItem>
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>AlwaysOverwrite</UpdateOption>
-              <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\EnglishUS.lng</LocalFileName>
-              <ZipFileName>Installer{CopyFile}\{1ffea1f5-268c-4f70-a762-595146636eaf}-EnglishUS.lng</ZipFileName>
-              <DestinationFilename>%Language%\Atmolight\EnglishUS.lng</DestinationFilename>
+              <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\en.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{1ffea1f5-268c-4f70-a762-595146636eaf}-en.xml</ZipFileName>
+              <DestinationFilename>%Language%\Atmolight\en.xml</DestinationFilename>
             </FileItem>
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>AlwaysOverwrite</UpdateOption>
-              <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\FrenchFR.lng</LocalFileName>
-              <ZipFileName>Installer{CopyFile}\{664fd53b-edd7-442c-8ecf-09d9bec83b6d}-FrenchFR.lng</ZipFileName>
-              <DestinationFilename>%Language%\Atmolight\FrenchFR.lng</DestinationFilename>
+              <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\fr.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{664fd53b-edd7-442c-8ecf-09d9bec83b6d}-fr.xml</ZipFileName>
+              <DestinationFilename>%Language%\Atmolight\fr.xml</DestinationFilename>
             </FileItem>
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>AlwaysOverwrite</UpdateOption>
-              <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\GermanDE.lng</LocalFileName>
-              <ZipFileName>Installer{CopyFile}\{b29cd1d7-9ab7-46f5-85c0-596eab1d48a0}-GermanDE.lng</ZipFileName>
-              <DestinationFilename>%Language%\Atmolight\GermanDE.lng</DestinationFilename>
+              <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\de.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{b29cd1d7-9ab7-46f5-85c0-596eab1d48a0}-de.xml</ZipFileName>
+              <DestinationFilename>%Language%\Atmolight\de.xml</DestinationFilename>
             </FileItem>
           </Items>
         </Files>
@@ -417,30 +417,30 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>AlwaysOverwrite</UpdateOption>
-        <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\DutchNL.lng</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{f46daaa7-c40e-4682-81dc-7bad08072764}-DutchNL.lng</ZipFileName>
-        <DestinationFilename>%Language%\Atmolight\DutchNL.lng</DestinationFilename>
+        <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\nl.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{f46daaa7-c40e-4682-81dc-7bad08072764}-nl.xml</ZipFileName>
+        <DestinationFilename>%Language%\Atmolight\nl.xml</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>AlwaysOverwrite</UpdateOption>
-        <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\EnglishUS.lng</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{1ffea1f5-268c-4f70-a762-595146636eaf}-EnglishUS.lng</ZipFileName>
-        <DestinationFilename>%Language%\Atmolight\EnglishUS.lng</DestinationFilename>
+        <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\en.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{1ffea1f5-268c-4f70-a762-595146636eaf}-en.xml</ZipFileName>
+        <DestinationFilename>%Language%\Atmolight\en.xml</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>AlwaysOverwrite</UpdateOption>
-        <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\FrenchFR.lng</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{664fd53b-edd7-442c-8ecf-09d9bec83b6d}-FrenchFR.lng</ZipFileName>
-        <DestinationFilename>%Language%\Atmolight\FrenchFR.lng</DestinationFilename>
+        <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\fr.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{664fd53b-edd7-442c-8ecf-09d9bec83b6d}-fr.xml</ZipFileName>
+        <DestinationFilename>%Language%\Atmolight\fr.xml</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>AlwaysOverwrite</UpdateOption>
-        <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\GermanDE.lng</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{b29cd1d7-9ab7-46f5-85c0-596eab1d48a0}-GermanDE.lng</ZipFileName>
-        <DestinationFilename>%Language%\Atmolight\GermanDE.lng</DestinationFilename>
+        <LocalFileName>..\AtmoLight.MediaPortal1\Resources\language\de.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{b29cd1d7-9ab7-46f5-85c0-596eab1d48a0}-de.xml</ZipFileName>
+        <DestinationFilename>%Language%\Atmolight\de.xml</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="true" Modified="true">
         <Param1 />
