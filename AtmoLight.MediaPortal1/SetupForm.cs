@@ -152,84 +152,76 @@ namespace AtmoLight
 
     private void UpdateLanguageOnControls()
     {
-      // this function places language specific text on all "skin-able" text items.
-      /*
-      lblPathInfoAtmoWin.Text = LanguageLoader.appStrings.SetupForm_lblPathInfoAtmoWin;
-      grpMode.Text = LanguageLoader.appStrings.SetupForm_grpModeText;
-      grpPluginOption.Text = LanguageLoader.appStrings.SetupForm_grpPluginOptionText;
-      lblVidTvRec.Text = LanguageLoader.appStrings.SetupForm_lblVidTvRecText;
-      lblMusic.Text = LanguageLoader.appStrings.SetupForm_lblMusicText;
-      lblRadio.Text = LanguageLoader.appStrings.SetupForm_lblRadioText;
-      lblLedsOnOff.Text = LanguageLoader.appStrings.SetupForm_lblLedsOnOffText;
-      lblProfile.Text = LanguageLoader.appStrings.SetupForm_lblProfileText;
-      ckOnMediaStart.Text = LanguageLoader.appStrings.SetupForm_ckOnMediaStartText;
-      ckLowCpu.Text = LanguageLoader.appStrings.SetupForm_ckLowCpuText;
-      ckDelay.Text = LanguageLoader.appStrings.SetupForm_ckDelayText;
-      ckStartAtmoWin.Text = LanguageLoader.appStrings.SetupForm_ckStartAtmoWinText;
-      ckExitAtmoWin.Text = LanguageLoader.appStrings.SetupForm_ckExitAtmoWinText;
-      btnSave.Text = LanguageLoader.appStrings.SetupForm_btnSaveText;
-      btnCancel.Text = LanguageLoader.appStrings.SetupForm_btnCancelText;
-      btnLanguage.Text = LanguageLoader.appStrings.SetupForm_btnLanguageText;
-      lblHintMenuButtons.Text = LanguageLoader.appStrings.SetupForm_lblHintText;
-      lblHintHardware.Text = LanguageLoader.appStrings.SetupForm_lblHintHardware;
-      lblHintCaptureDimensions.Text = LanguageLoader.appStrings.SetupForm_lblHintCaptureDimensions;
-      lblHintHue.Text = LanguageLoader.appStrings.SetupForm_lblHintHue;
-      lblFrames.Text = LanguageLoader.appStrings.SetupForm_lblFramesText;
-      lblDelay.Text = LanguageLoader.appStrings.SetupForm_lblDelay;
-      lblStart.Text = LanguageLoader.appStrings.SetupForm_lblStartText;
-      lblEnd.Text = LanguageLoader.appStrings.SetupForm_lblEndText;
-      grpDeactivate.Text = LanguageLoader.appStrings.SetupForm_grpDeactivateText;
-      lblMenu.Text = LanguageLoader.appStrings.SetupForm_lblMenu;
+      // Tabs
+      tabPageGeneric.Text = Localization.Translate("Common", "GeneralSettings");
+      tabPageAmbiBox.Text = Localization.Translate("AmbiBox", "AmbiBox");
+      tabPageAtmoOrb.Text = Localization.Translate("AtmoOrb", "AtmoOrb");
+      tabPageAtmowin.Text = Localization.Translate("AtmoWin", "AtmoWin");
+      tabPageBoblight.Text = Localization.Translate("Boblight", "Boblight");
+      tabPageHue.Text = Localization.Translate("Hue", "Hue");
+      tabPageHyperion.Text = Localization.Translate("Hyperion", "Hyperion");
+
+      // Buttons
+      btnSave.Text = Localization.Translate("Common", "Save");
+      btnCancel.Text = Localization.Translate("Common", "Cancel");
+      btnLanguage.Text = Localization.Translate("SetupForm", "LoadLanguage");
+
+      // Targets
+      grpTargets.Text = LanguageLoader.appStrings.SetupForm_grpTargets;
+      ckAmbiBoxEnabled.Text = Localization.Translate("AmbiBox", "AmbiBox");
+      ckAtmoOrbEnabled.Text = Localization.Translate("AtmoOrb", "AtmoOrb");
+      ckAtmowinEnabled.Text = Localization.Translate("AtmoWin", "AtmoWin");
+      ckBoblightEnabled.Text = Localization.Translate("Boblight", "Boblight");
+      ckHueEnabled.Text = Localization.Translate("Hue", "Hue");
+      ckHyperionEnabled.Text = Localization.Translate("Hyperion", "Hyperion");
+
+      // Effects
+      grpMode.Text = Localization.Translate("SetupForm", "EffectSettings");
+      lblVidTvRec.Text = Localization.Translate("SetupForm", "VideoTVRec");
+      lblMusic.Text = Localization.Translate("SetupForm", "Music");
+      lblRadio.Text = Localization.Translate("SetupForm", "Radio");
+      lblMenu.Text = Localization.Translate("SetupForm", "Menu");
+      lblMPExit.Text = Localization.Translate("SetupForm", "MediaPortalExit");
+      grpGIF.Text = LanguageLoader.appStrings.SetupForm_grpGIF;
       grpStaticColor.Text = LanguageLoader.appStrings.SetupForm_grpStaticColor;
-      lblRed.Text = LanguageLoader.appStrings.SetupForm_lblRed;
-      lblGreen.Text = LanguageLoader.appStrings.SetupForm_lblGreen;
-      lblBlue.Text = LanguageLoader.appStrings.SetupForm_lblBlue;
+      lblRed.Text = Localization.Translate("Common", "Red") + ":";
+      lblGreen.Text = Localization.Translate("Common", "Green") + ":";
+      lblBlue.Text = Localization.Translate("Common", "Blue") + ":";
+      grpVUMeter.Text = LanguageLoader.appStrings.SetupForm_grpVUMeter;
+      lblVUMeterMaxHue.Text = LanguageLoader.appStrings.SetupForm_lblVUMeterMaxHue;
+      lblVUMeterMindB.Text = LanguageLoader.appStrings.SetupForm_lblVUMeterMindB;
+      lblVUMeterMinHue.Text = LanguageLoader.appStrings.SetupForm_lblVUMeterMinHue;
+
+      // Plugin options
+      grpPluginOption.Text = Localization.Translate("SetupForm", "PluginSettings");
+      lblLedsOnOff.Text = Localization.Translate("SetupForm", "ToggleRemoteButton");
+      lblProfile.Text = Localization.Translate("SetupForm", "ProfileRemoteButton");
       lblMenuButton.Text = LanguageLoader.appStrings.SetupForm_lblMenuButton;
+      ckOnMediaStart.Text = Localization.Translate("SetupForm", "ManualMode");
+      ckLowCpu.Text = Localization.Translate("SetupForm", "LowCPU");
+      ckDelay.Text = Localization.Translate("SetupForm", "Delay");
       ckRestartOnError.Text = LanguageLoader.appStrings.SetupForm_ckRestartOnError;
       lblRefreshRate.Text = LanguageLoader.appStrings.SetupForm_lblRefreshRate;
       ckBlackbarDetection.Text = LanguageLoader.appStrings.SetupForm_ckBlackbarDetection;
       lblBlackarDetectionMS.Text = LanguageLoader.appStrings.SetupForm_lblBlackbarDetectionThreshold;
       lblpowerModeChangedDelay.Text = LanguageLoader.appStrings.SetupForm_lblpowerModeChangedDelay;
-      grpGIF.Text = LanguageLoader.appStrings.SetupForm_grpGIF;
-      lblHyperionIP.Text = LanguageLoader.appStrings.SetupForm_lblHyperionIP;
-      lblHyperionPort.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPort;
-      lblHyperionPriority.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPriorty;
-      lblHyperionReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblHyperionReconnectDelay;
-      lblHyperionReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblHyperionReconnectAttempts;
-      lblHyperionPriorityStaticColor.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPriorityStaticColor;
-      ckHyperionLiveReconnect.Text = LanguageLoader.appStrings.SetupForm_ckHyperionLiveReconnect;
-      lblCaptureWidth.Text = LanguageLoader.appStrings.SetupForm_lblCaptureWidth;
-      lblCaptureHeight.Text = LanguageLoader.appStrings.SetupForm_lblCaptureHeight;
-      tabPageGeneric.Text = LanguageLoader.appStrings.SetupForm_tabPageGeneric;
-      grpTargets.Text = LanguageLoader.appStrings.SetupForm_grpTargets;
-      grpAtmowinSettings.Text = LanguageLoader.appStrings.SetupForm_grpAtmowinSettings;
-      grpHyperionNetworkSettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionNetworkSettings;
-      grpHyperionPrioritySettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionPrioritySettings;
+
+      // Capture dimension
       grpCaptureDimensions.Text = LanguageLoader.appStrings.SetupForm_grpCaptureDimensions;
-      lblPathInfoHue.Text = LanguageLoader.appStrings.SetupForm_lblPathInfoHue;
-      ckStartHue.Text = LanguageLoader.appStrings.SetupForm_ckStartHue;
-      ckhueIsRemoteMachine.Text = LanguageLoader.appStrings.SetupForm_ckhueIsRemoteMachine;
-      lblHueIP.Text = LanguageLoader.appStrings.SetupForm_lblHueIP;
-      lblHuePort.Text = LanguageLoader.appStrings.SetupForm_lblHuePort;
-      lblHueReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblHueReconnectDelay;
-      lblHueReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblHueReconnectAttempts;
-      ckHueBridgeEnableOnResume.Text = LanguageLoader.appStrings.SetupForm_ckHueBridgeEnableOnResume;
-      ckHueBridgeDisableOnSuspend.Text = LanguageLoader.appStrings.SetupForm_ckHueBridgeDisableOnSuspend;
-      lblMPExit.Text = LanguageLoader.appStrings.SetupForm_lblMPExit;
-      lblBoblightIP.Text = LanguageLoader.appStrings.SetupForm_lblBoblightIP;
-      lblBoblightPort.Text = LanguageLoader.appStrings.SetupForm_lblBoblightPort;
-      lblBoblightMaxReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblBoblightMaxReconnectAttempts;
-      lblBoblightReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblBoblightReconnectDelay;
-      lblBoblightMaxFPS.Text = LanguageLoader.appStrings.SetupForm_lblBoblightMaxFPS;
-      lblBoblightSpeed.Text = LanguageLoader.appStrings.SetupForm_lblBoblightSpeed;
-      lblBoblightAutospeed.Text = LanguageLoader.appStrings.SetupForm_lblBoblightAutospeed;
-      lblBoblightSaturation.Text = LanguageLoader.appStrings.SetupForm_lblBoblightSaturation;
-      lblBoblightValue.Text = LanguageLoader.appStrings.SetupForm_lblBoblightValue;
-      lblBoblightThreshold.Text = LanguageLoader.appStrings.SetupForm_lblBoblightThreshold;
-      ckBoblightInterpolation.Text = LanguageLoader.appStrings.SetupForm_lblBoblightInterpolation;
-      grpBoblightGeneral.Text = LanguageLoader.appStrings.SetupForm_grpBoblightGeneral;
-      grpBoblightSettings.Text = LanguageLoader.appStrings.SetupForm_grpBoblightSettings;
-      lblBoblightGamma.Text = LanguageLoader.appStrings.SetupForm_lblBoblightGamma;
+      lblCaptureWidth.Text = Localization.Translate("SetupForm", "Width");
+      lblCaptureHeight.Text = Localization.Translate("SetupForm", "Height");
+
+      // Deactivate time
+      lblStart.Text = LanguageLoader.appStrings.SetupForm_lblStartText;
+      lblEnd.Text = LanguageLoader.appStrings.SetupForm_lblEndText;
+      grpDeactivate.Text = LanguageLoader.appStrings.SetupForm_grpDeactivateText;
+
+      // Hints
+      lblHintMenuButtons.Text = Localization.Translate("SetupForm", "MenuHint");
+      lblHintHardware.Text = Localization.Translate("SetupForm", "TargetHint");
+      lblHintCaptureDimensions.Text = Localization.Translate("SetupForm", "CaptureDimensionHint");
+
+      // AmbiBox
       lblAmbiBoxExternalProfile.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxExternalProfile;
       lblAmbiBoxIP.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxIP;
       lblAmbiBoxMaxReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxMaxReconnectAttempts;
@@ -239,6 +231,8 @@ namespace AtmoLight
       lblAmbiBoxReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblAmbiBoxReconnectDelay;
       cbAmbiBoxAutoStart.Text = LanguageLoader.appStrings.SetupForm_cbAmbiBoxAutoStart;
       cbAmbiBoxAutoStop.Text = LanguageLoader.appStrings.SetupForm_cbAmbiBoxAutoStop;
+
+      // AtmoOrb
       lblAtmoOrbBlackThreshold.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbBlackThreshold;
       lblAtmoOrbBroadcastPort.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbBroadcastPort;
       lblAtmoOrbConnection.Text = LanguageLoader.appStrings.SetupForm_lblAtmoOrbConnection;
@@ -263,17 +257,56 @@ namespace AtmoLight
       btnAtmoOrbAdd.Text = LanguageLoader.appStrings.SetupForm_btnAtmoOrbAdd;
       btnAtmoOrbRemove.Text = LanguageLoader.appStrings.SetupForm_btnAtmoOrbRemove;
       btnAtmoOrbUpdate.Text = LanguageLoader.appStrings.SetupForm_btnAtmoOrbUpdate;
-      lblVUMeterMaxHue.Text = LanguageLoader.appStrings.SetupForm_lblVUMeterMaxHue;
-      lblVUMeterMindB.Text = LanguageLoader.appStrings.SetupForm_lblVUMeterMindB;
-      lblVUMeterMinHue.Text = LanguageLoader.appStrings.SetupForm_lblVUMeterMinHue;
-      grpVUMeter.Text = LanguageLoader.appStrings.SetupForm_grpVUMeter;
+
+      // AtmoWin
+      lblPathInfoAtmoWin.Text = Localization.Translate("Common", "Path").Replace("[Filename]", "AtmoWinA.exe");
+      grpAtmowinSettings.Text = Localization.Translate("Common", "GeneralSettings");
+      ckStartAtmoWin.Text = Localization.Translate("Common", "StartTargetWithMP").Replace("[Target]", Localization.Translate("AtmoWin", "AtmoWin"));
+      ckExitAtmoWin.Text = Localization.Translate("Common", "StopTargetWithMP").Replace("[Target]", Localization.Translate("AtmoWin", "AtmoWin"));
+
+      // Boblight
+      lblBoblightIP.Text = LanguageLoader.appStrings.SetupForm_lblBoblightIP;
+      lblBoblightPort.Text = LanguageLoader.appStrings.SetupForm_lblBoblightPort;
+      lblBoblightMaxReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblBoblightMaxReconnectAttempts;
+      lblBoblightReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblBoblightReconnectDelay;
+      lblBoblightMaxFPS.Text = LanguageLoader.appStrings.SetupForm_lblBoblightMaxFPS;
+      lblBoblightSpeed.Text = LanguageLoader.appStrings.SetupForm_lblBoblightSpeed;
+      lblBoblightAutospeed.Text = LanguageLoader.appStrings.SetupForm_lblBoblightAutospeed;
+      lblBoblightSaturation.Text = LanguageLoader.appStrings.SetupForm_lblBoblightSaturation;
+      lblBoblightValue.Text = LanguageLoader.appStrings.SetupForm_lblBoblightValue;
+      lblBoblightThreshold.Text = LanguageLoader.appStrings.SetupForm_lblBoblightThreshold;
+      ckBoblightInterpolation.Text = LanguageLoader.appStrings.SetupForm_lblBoblightInterpolation;
+      grpBoblightGeneral.Text = LanguageLoader.appStrings.SetupForm_grpBoblightGeneral;
+      grpBoblightSettings.Text = LanguageLoader.appStrings.SetupForm_grpBoblightSettings;
+      lblBoblightGamma.Text = LanguageLoader.appStrings.SetupForm_lblBoblightGamma;
+
+      // Hue
+      lblPathInfoHue.Text = LanguageLoader.appStrings.SetupForm_lblPathInfoHue;
+      ckStartHue.Text = LanguageLoader.appStrings.SetupForm_ckStartHue;
+      ckhueIsRemoteMachine.Text = LanguageLoader.appStrings.SetupForm_ckhueIsRemoteMachine;
+      lblHueIP.Text = LanguageLoader.appStrings.SetupForm_lblHueIP;
+      lblHuePort.Text = LanguageLoader.appStrings.SetupForm_lblHuePort;
+      lblHueReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblHueReconnectDelay;
+      lblHueReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblHueReconnectAttempts;
+      ckHueBridgeEnableOnResume.Text = LanguageLoader.appStrings.SetupForm_ckHueBridgeEnableOnResume;
+      ckHueBridgeDisableOnSuspend.Text = LanguageLoader.appStrings.SetupForm_ckHueBridgeDisableOnSuspend;
       lblHueMinDiversion.Text = LanguageLoader.appStrings.SetupForm_lblHueMinDiversion;
       lblHueThreshold.Text = LanguageLoader.appStrings.SetupForm_lblHueThreshold;
       lblHueBlackThreshold.Text = LanguageLoader.appStrings.SetupForm_lblHueBlackThreshold;
       lblHueSaturation.Text = LanguageLoader.appStrings.SetupForm_lblHueSaturation;
       cbHueOverallLightness.Text = LanguageLoader.appStrings.SetupForm_cbHueOverallLightness;
       grpHueAverageColor.Text = LanguageLoader.appStrings.SetupForm_grpHueAverageColor;
-       */
+
+      // Hyperion
+      lblHyperionIP.Text = LanguageLoader.appStrings.SetupForm_lblHyperionIP;
+      lblHyperionPort.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPort;
+      lblHyperionPriority.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPriorty;
+      lblHyperionReconnectDelay.Text = LanguageLoader.appStrings.SetupForm_lblHyperionReconnectDelay;
+      lblHyperionReconnectAttempts.Text = LanguageLoader.appStrings.SetupForm_lblHyperionReconnectAttempts;
+      lblHyperionPriorityStaticColor.Text = LanguageLoader.appStrings.SetupForm_lblHyperionPriorityStaticColor;
+      ckHyperionLiveReconnect.Text = LanguageLoader.appStrings.SetupForm_ckHyperionLiveReconnect;
+      grpHyperionNetworkSettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionNetworkSettings;
+      grpHyperionPrioritySettings.Text = LanguageLoader.appStrings.SetupForm_grpHyperionPrioritySettings;
     }
     #endregion
 

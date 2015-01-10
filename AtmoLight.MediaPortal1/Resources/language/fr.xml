@@ -83,7 +83,7 @@
     <string name="VUMeterMindB">Min. dB:</string>
     <string name="LoadLanguage">Chang. Langage</string>
     <string name="MenuHint">Hint:Utiliser le menu pour changer d'effet, activer/désactiver les LEDs ou basculer sur 3D-SBS.</string>
-    <string name="TargetHing">Hint: Sélectionner l'équipement avec lequel vous souhaiter utiliser Atmolight, et configurer le dans son propre onglet</string>
+    <string name="TargetHint">Hint: Sélectionner l'équipement avec lequel vous souhaiter utiliser Atmolight, et configurer le dans son propre onglet</string>
     <string name="CaptureDimensionHint">Hint: Seulement utilisé quand Atmowin désactivé</string>
   </SetupForm>
   <ContextMenu>

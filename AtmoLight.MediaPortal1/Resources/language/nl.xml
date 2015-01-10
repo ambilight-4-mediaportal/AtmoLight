@@ -83,7 +83,7 @@
     <string name="VUMeterMindB">Min. dB:</string>
     <string name="LoadLanguage">Laad Taal</string>
     <string name="MenuHint">Gebruik het context menu om tussen effecten te wisselen, schakel de leds in/uit of wissel tussen 3D-SBS modus.</string>
-    <string name="TargetHing">Hint: Selecteer de apparaten welke je bij AtmoLight wilt gebruiken en stel deze in op het daarvoor bedoelde tabblad</string>
+    <string name="TargetHint">Hint: Selecteer de apparaten welke je bij AtmoLight wilt gebruiken en stel deze in op het daarvoor bedoelde tabblad</string>
     <string name="CaptureDimensionHint">Hint: Wordt alleen gebruikt wanneer Atmowin niet ingeschakeld is</string>
   </SetupForm>
   <ContextMenu>
