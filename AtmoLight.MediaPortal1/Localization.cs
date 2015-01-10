@@ -19,7 +19,7 @@ namespace AtmoLight
         xmlFile = new XmlDocument();
         if (fallback)
         {
-          xmlFile.Load(Settings.currentLanguageFile.Substring(0, Settings.currentLanguageFile.LastIndexOf("\\")) + "en.xml");
+          xmlFile.Load(Settings.currentLanguageFile.Substring(0, Settings.currentLanguageFile.LastIndexOf("\\") + 1) + "en.xml");
         }
         else
         {
@@ -33,7 +33,7 @@ namespace AtmoLight
         Log.Warn("Could not find node {0} in {1}", node, xmlFile.BaseURI);
 
         // Try using english translation if node was not found
-        if (Settings.currentLanguageFile != Settings.currentLanguageFile.Substring(0, Settings.currentLanguageFile.LastIndexOf("\\")) + "en.xml")
+        if (Settings.currentLanguageFile != Settings.currentLanguageFile.Substring(0, Settings.currentLanguageFile.LastIndexOf("\\") + 1) + "en.xml")
         {
           return Translate(node, name, true);
         }
@@ -54,7 +54,7 @@ namespace AtmoLight
       Log.Warn("Could not find translation for {0} in {1}", name, xmlFile.BaseURI);
 
       // Try using english translation if this translation was not found
-      if (Settings.currentLanguageFile != Settings.currentLanguageFile.Substring(0, Settings.currentLanguageFile.LastIndexOf("\\")) + "en.xml")
+      if (Settings.currentLanguageFile != Settings.currentLanguageFile.Substring(0, Settings.currentLanguageFile.LastIndexOf("\\") + 1) + "en.xml")
       {
         return Translate(node, name, true);
       }
@@ -67,7 +67,7 @@ namespace AtmoLight
       {
         Settings.LoadSettings();
         xmlFile = new XmlDocument();
-          xmlFile.Load(Settings.currentLanguageFile);
+        xmlFile.Load(Settings.currentLanguageFile);
       }
 
       XmlNode xmlNode = xmlFile.DocumentElement.SelectSingleNode("/resources/" + node);

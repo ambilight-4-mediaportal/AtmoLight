@@ -278,9 +278,32 @@ namespace AtmoLight
         {
           effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMPExit", "LEDsDisabled"));
         }
+
+        currentLanguageFile = reader.GetValueAsString("atmolight", "CurrentLanguageFile", Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\Atmolight\\en.xml");
+
+        if (currentLanguageFile.Substring(currentLanguageFile.Length - 3, 3).ToLower() == "lng")
+        {
+          int lastBackslash = currentLanguageFile.LastIndexOf("\\") + 1;
+          int lastDot = currentLanguageFile.LastIndexOf(".");
+          switch (currentLanguageFile.Substring(lastBackslash, lastDot - lastBackslash))
+          {
+            case "GermanDE":
+              currentLanguageFile = currentLanguageFile.Substring(0, lastBackslash) + "de.xml";
+              break;
+            case "DutchNL":
+              currentLanguageFile = currentLanguageFile.Substring(0, lastBackslash) + "nl.xml";
+              break;
+            case "FrenchFR":
+              currentLanguageFile = currentLanguageFile.Substring(0, lastBackslash) + "fr.xml";
+              break;
+            default:
+            case "EnglishUS":
+              currentLanguageFile = currentLanguageFile.Substring(0, lastBackslash) + "en.xml";
+              break;
+          }
+        }
         
         // Normal settings loading
-        currentLanguageFile = reader.GetValueAsString("atmolight", "CurrentLanguageFile", Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\Atmolight\\en.xml");
         atmowinExe = reader.GetValueAsString("atmolight", "atmowinexe", "");
         killButton = reader.GetValueAsInt("atmolight", "killbutton", 4);
         profileButton = reader.GetValueAsInt("atmolight", "cmbutton", 4);
