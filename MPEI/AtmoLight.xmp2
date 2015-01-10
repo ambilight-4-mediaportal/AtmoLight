@@ -302,7 +302,7 @@ public static void Main(PackageClass packageClass, ActionItem actionItem)
     <UpdateUrl>https://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/Atmolight_update.xml</UpdateUrl>
     <Version>
       <Major>1</Major>
-      <Minor>14</Minor>
+      <Minor>15</Minor>
       <Build>0</Build>
       <Revision>0</Revision>
     </Version>
@@ -327,21 +327,22 @@ For this plugin to work you will also need AtmoWin. It will be installed automat
 
 
 MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed. </ExtensionDescription>
-    <VersionDescription>Version 1.14.0.0
-
-- Added interface to support other targets (not just AtmoWin)
-- Added Hyperion as target software
-- Added Hue as target (AtmoHue needed)
-- Added Boblight as target software
-- Added possibility to use more then one target software (e.g. AtmoWin and Hyperion at the same time)
-- Added "MediaPortal exit" effect (effect that gets set when MediaPortal gets closed)
-- Fixed dialog shown by wrong thread (LoadSkin: Running in wrong thread)
-- Removed AtmoWin from AtmoLight installer
-- Updated Extensions plugin settings
-- Various small bug fixes</VersionDescription>
+    <VersionDescription>Version 1.15.0.0
+- Fixed bug where data would be send to target handler even if handler is disconnected from target
+- Added context menu entries for Hue automation
+- Improved average color calculation for Hue handler
+- Improved VUMeter and VUMeter Rainbow effects
+- Added AtmoOrb handler
+- Fixed bug where GIFReader was case sensitive for the file extensions
+- Fixed a bug where connecting to AtmoWin would fail
+- Fixed bug where some effects would not be set properly on MediaPortal start up
+- Fixed bug where MediaPortal could halt/freeze on start up
+- Added possibility to deactivate AtmoLight through context menu
+- Added possibility to use hostnames/multicast dns with Hyperion
+- Added AmbiBox handler</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
-    <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.14.0.0.mpe1</OnlineLocation>
-    <ReleaseDate>2014-11-23T10:45:58</ReleaseDate>
+    <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.15.0.0.mpe1</OnlineLocation>
+    <ReleaseDate>2015-01-10T10:45:58</ReleaseDate>
     <Tags>atmowin, boblight, hue, hyperion, ambilight, leds, arduino, atmoduino, raspberry pi, sedu-board, teensy 2, ws2801, ws2811, ws2812, ws2812b, neopixels</Tags>
     <Location>..\Release\MP1\[Name]_[Version].mpe1</Location>
     <Params>
@@ -445,7 +446,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>image\atmolight.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{6bfe2b7b-5697-4035-a4d4-3a850299f7ab}-atmolight.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{ae7b300a-3431-46a7-8c08-de9657521599}-atmolight.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
