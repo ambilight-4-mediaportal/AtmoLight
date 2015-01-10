@@ -843,6 +843,9 @@ namespace AtmoLight
       if (openFileDialog2.ShowDialog() == DialogResult.OK)
       {
         Settings.currentLanguageFile = openFileDialog2.FileName;
+
+        Localization.Load(Settings.currentLanguageFile);
+
         UpdateLanguageOnControls();
         UpdateComboBoxes();
         openFileDialog2.FileName = "";

@@ -9,31 +9,23 @@ namespace AtmoLight
   public static class Localization
   {
     private static XmlDocument xmlFile;
+    private static XmlDocument xmlFileFallback;
 
 
     public static string Translate(string node, string name, bool fallback = false)
     {
-      if (xmlFile == null || fallback)
+      if (xmlFile == null || xmlFileFallback == null)
       {
-        Settings.LoadSettings();
-        xmlFile = new XmlDocument();
-        if (fallback)
-        {
-          xmlFile.Load(Settings.currentLanguageFile.Substring(0, Settings.currentLanguageFile.LastIndexOf("\\") + 1) + "en.xml");
-        }
-        else
-        {
-          xmlFile.Load(Settings.currentLanguageFile);
-        }
+        Init();
       }
 
-      XmlNode xmlNode = xmlFile.DocumentElement.SelectSingleNode("/resources/" + node);
+      XmlNode xmlNode = fallback ? xmlFileFallback.DocumentElement.SelectSingleNode("/resources/" + node) : xmlFile.DocumentElement.SelectSingleNode("/resources/" + node);
       if (xmlNode == null)
       {
         Log.Warn("Could not find node {0} in {1}", node, xmlFile.BaseURI);
 
         // Try using english translation if node was not found
-        if (Settings.currentLanguageFile != Settings.currentLanguageFile.Substring(0, Settings.currentLanguageFile.LastIndexOf("\\") + 1) + "en.xml")
+        if (xmlFile.BaseURI != xmlFileFallback.BaseURI)
         {
           return Translate(node, name, true);
         }
@@ -54,26 +46,30 @@ namespace AtmoLight
       Log.Warn("Could not find translation for {0} in {1}", name, xmlFile.BaseURI);
 
       // Try using english translation if this translation was not found
-      if (Settings.currentLanguageFile != Settings.currentLanguageFile.Substring(0, Settings.currentLanguageFile.LastIndexOf("\\") + 1) + "en.xml")
+      if (xmlFile.BaseURI != xmlFileFallback.BaseURI)
       {
         return Translate(node, name, true);
       }
       return null;
     }
 
-    public static string ReverseTranslate(string node, string translation)
+    public static string ReverseTranslate(string node, string translation, bool fallback = false)
     {
-      if (xmlFile == null)
+      if (xmlFile == null || xmlFileFallback == null)
       {
-        Settings.LoadSettings();
-        xmlFile = new XmlDocument();
-        xmlFile.Load(Settings.currentLanguageFile);
+        Init();
       }
 
-      XmlNode xmlNode = xmlFile.DocumentElement.SelectSingleNode("/resources/" + node);
+      XmlNode xmlNode = fallback ? xmlFileFallback.DocumentElement.SelectSingleNode("/resources/" + node) : xmlFile.DocumentElement.SelectSingleNode("/resources/" + node);
       if (xmlNode == null)
       {
         Log.Warn("Could not find node {0} in {1}", node, xmlFile.BaseURI);
+
+        // Try using english reverse translation if node was not found
+        if (xmlFile.BaseURI != xmlFileFallback.BaseURI)
+        {
+          return ReverseTranslate(node, translation, true);
+        }
         return null;
       }
 
@@ -89,7 +85,37 @@ namespace AtmoLight
       }
 
       Log.Warn("Could not reverse translate {0} in {1}", translation, xmlFile.BaseURI);
+
+      // Try using english reverse translation if this translation was not found
+      if (xmlFile.BaseURI != xmlFileFallback.BaseURI)
+      {
+        return ReverseTranslate(node, translation, true);
+      }
       return null;
+    }
+
+    public static void Load(string languageFile)
+    {
+      if (xmlFile == null || xmlFileFallback == null)
+      {
+        Init();
+      }
+
+      xmlFile.Load(languageFile);
+    }
+
+    private static void Init()
+    {
+      if (string.IsNullOrEmpty(Settings.currentLanguageFile))
+      {
+        Settings.LoadSettings();
+      }
+
+      xmlFile = new XmlDocument();
+      xmlFileFallback = new XmlDocument();
+
+      xmlFile.Load(Settings.currentLanguageFile);
+      xmlFileFallback.Load(Settings.currentLanguageFile.Substring(0, Settings.currentLanguageFile.LastIndexOf("\\") + 1) + "en.xml");
     }
   }
 }
