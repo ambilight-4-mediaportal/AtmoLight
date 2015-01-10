@@ -18,7 +18,7 @@
     <string name="ReconnectDelay">Wiederverbindungs Verzögerungs (ms):</string>
     <string name="Threshold">Schwelle:</string>
     <string name="BlackThreshold">Schwarz Schwelle:</string>
-    <string name="Saturation">Sättigung (HSV Korrektur):</string>
+    <string name="Saturation">Sättigung Korrektur:</string>
     <string name="GeneralSettings">Allgemeine Einstellungen</string>
     <string name="Gamma">Gamma Korrektur:</string>
     <string name="Path">Pfad+Dateiname zu [Filename]</string>
@@ -29,7 +29,7 @@
     <string name="OverallLightness">Vollständige Helligkeit benutzten</string>
     <string name="Add">Hinzufügen</string>
     <string name="Remove">Entfernen</string>
-    <string name="Update">Aktualisierung</string>
+    <string name="Update">Aktualisieren</string>
     <string name="Save">Speichern</string>
     <string name="Cancel">Abbrechen</string>
     <string name="Apply">Übernehmen</string>
@@ -120,20 +120,20 @@
   </ContextMenu>
   <AmbiBox>
     <string name="AmbiBox">AmbiBox</string>
-    <string name="ExternalProfile">External capture profile:</string>
-    <string name="MediaPortalProfile">MediaPortal capture profile:</string>
+    <string name="ExternalProfile">Externes Aufanhme Profil:</string>
+    <string name="MediaPortalProfile">MediaPortal Aufnahme Profil:</string>
   </AmbiBox>
   <AtmoOrb>
     <string name="AtmoOrb">AtmoOrb</string>
-    <string name="BroadcastPort">Broadcast port:</string>
-    <string name="ConnectionType">Connection type</string>
-    <string name="HScan">Hscan from</string>
-    <string name="VScan">Vscan from</string>
-    <string name="ScanTo">to</string>
-    <string name="LampSettings">Lamp settings</string>
+    <string name="BroadcastPort">Broadcast Port:</string>
+    <string name="ConnectionType">Verbindungs Typ</string>
+    <string name="HScan">HScan ab</string>
+    <string name="VScan">VScan ab</string>
+    <string name="ScanTo">bis</string>
+    <string name="LampSettings">Lampen Einstellungen</string>
     <string name="TCP">TCP</string>
     <string name="UDP">UDP</string>
-    <string name="InvertZone">Invert zone</string>
+    <string name="InvertZone">Zonen umkehren</string>
   </AtmoOrb>
   <AtmoWin>
     <string name="AtmoWin">AtmoWin</string>
@@ -143,7 +143,7 @@
     <string name="MaxFPS">Limitiere Aufnahme FPS auf:</string>
     <string name="Speed">Geschwindigkeit:</string>
     <string name="Autospeed">Auto. Geschwindigkeit:</string>
-    <string name="Value">Wert (HSV Korrektur):</string>
+    <string name="Value">Wert Korrektur:</string>
     <string name="Interpolation">Interpolation:</string>
     <string name="BoblightSettings">Boblight Einstellungen</string>
   </Boblight>
