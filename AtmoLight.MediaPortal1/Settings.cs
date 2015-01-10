@@ -279,26 +279,29 @@ namespace AtmoLight
           effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMPExit", "LEDsDisabled"));
         }
 
-        currentLanguageFile = reader.GetValueAsString("atmolight", "CurrentLanguageFile", Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\Atmolight\\en.xml");
+        currentLanguageFile = reader.GetValueAsString("atmolight", "CurrentLanguageFile", Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\AtmoLight\\en.xml");
 
         if (currentLanguageFile.Substring(currentLanguageFile.Length - 3, 3).ToLower() == "lng")
         {
           int lastBackslash = currentLanguageFile.LastIndexOf("\\") + 1;
           int lastDot = currentLanguageFile.LastIndexOf(".");
+
+          currentLanguageFile = Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\AtmoLight\\";
+
           switch (currentLanguageFile.Substring(lastBackslash, lastDot - lastBackslash))
           {
             case "GermanDE":
-              currentLanguageFile = currentLanguageFile.Substring(0, lastBackslash) + "de.xml";
+              currentLanguageFile += "de.xml";
               break;
             case "DutchNL":
-              currentLanguageFile = currentLanguageFile.Substring(0, lastBackslash) + "nl.xml";
+              currentLanguageFile += "nl.xml";
               break;
             case "FrenchFR":
-              currentLanguageFile = currentLanguageFile.Substring(0, lastBackslash) + "fr.xml";
+              currentLanguageFile += "fr.xml";
               break;
             default:
             case "EnglishUS":
-              currentLanguageFile = currentLanguageFile.Substring(0, lastBackslash) + "en.xml";
+              currentLanguageFile += "en.xml";
               break;
           }
         }
