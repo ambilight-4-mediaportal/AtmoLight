@@ -29,7 +29,7 @@ namespace AtmoLight
         {
           return Translate(node, name, true);
         }
-        return null;
+        return "";
       }
 
       foreach (XmlNode childNodes in xmlNode.ChildNodes)
@@ -50,7 +50,7 @@ namespace AtmoLight
       {
         return Translate(node, name, true);
       }
-      return null;
+      return "";
     }
 
     public static string ReverseTranslate(string node, string translation, bool fallback = false)
@@ -70,7 +70,7 @@ namespace AtmoLight
         {
           return ReverseTranslate(node, translation, true);
         }
-        return null;
+        return "";
       }
 
       foreach (XmlNode childNodes in xmlNode.ChildNodes)
@@ -91,7 +91,7 @@ namespace AtmoLight
       {
         return ReverseTranslate(node, translation, true);
       }
-      return null;
+      return "";
     }
 
     public static void Load(string languageFile)
