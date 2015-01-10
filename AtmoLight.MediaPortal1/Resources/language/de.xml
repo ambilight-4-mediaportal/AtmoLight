@@ -46,9 +46,11 @@
     <string name="ErrorEndTime">Bitte geben Sie eine zulässige Endzeit an.</string>
     <string name="ErrorMiliseconds">Bitte geben Sie eine zulässige Millisekunden Zahl an.</string>
     <string name="ErrorRefreshRate">Bitte geben Sie eine zulässige Bildwiederholungsfrequenz an.</string>
-    <string name="Red">Rot:</string>
-    <string name="Green">Grün:</string>
-    <string name="Blue">Blau:</string>
+    <string name="Red">Rot</string>
+    <string name="Green">Grün</string>
+    <string name="Blue">Blau</string>
+    <string name="MS">ms</string>
+    <string name="NetworkSettings">Netzwerk</string>
   </Common>
   <SetupForm>
     <string name="EffectSettings">Effekt Einstellungen</string>
@@ -168,6 +170,5 @@
     <string name="PriorityLive">Priorität live:</string>
     <string name="PriorityStaticColor">Priorität für statische Farbe:</string>
     <string name="LiveReconnect">Live Wiederverbindung (NICHT empfohlen) - Versucht Verbindung wiederherzustellen bis es erfolgreicht ist. Nur nützlich zum testen.</string>
-    <string name="NetworkSettings">Netzwerk</string>
   </Hyperion>
 </resources>

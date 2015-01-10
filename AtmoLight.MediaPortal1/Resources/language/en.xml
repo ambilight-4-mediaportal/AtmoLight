@@ -49,6 +49,8 @@
     <string name="Red">Red</string>
     <string name="Green">Green</string>
     <string name="Blue">Blue</string>
+    <string name="MS">ms</string>
+    <string name="NetworkSettings">Network</string>
   </Common>
   <SetupForm>
     <string name="EffectSettings">Effect settings</string>
@@ -168,6 +170,5 @@
     <string name="PriorityLive">Priority live:</string>
     <string name="PriorityStaticColor">Priority static color:</string>
     <string name="LiveReconnect">Live reconnect (NOT recommended) - will keep reconnecting until device is reachable and only useful for live testing Hyperion config changes.</string>
-    <string name="NetworkSettings">Network</string>
   </Hyperion>
 </resources>

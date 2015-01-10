@@ -235,7 +235,7 @@
       this.tbHueBlackThreshold = new System.Windows.Forms.TextBox();
       this.tbHueThreshold = new System.Windows.Forms.TextBox();
       this.tbHueMinDiversion = new System.Windows.Forms.TextBox();
-      this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.grpHueGeneralSettings = new System.Windows.Forms.GroupBox();
       this.ckHueBridgeDisableOnSuspend = new System.Windows.Forms.CheckBox();
       this.ckHueBridgeEnableOnResume = new System.Windows.Forms.CheckBox();
       this.ckhueIsRemoteMachine = new System.Windows.Forms.CheckBox();
@@ -243,7 +243,7 @@
       this.btnSelectFileHue = new System.Windows.Forms.Button();
       this.edFileHue = new System.Windows.Forms.TextBox();
       this.ckStartHue = new System.Windows.Forms.CheckBox();
-      this.HueNetworkSettings = new System.Windows.Forms.GroupBox();
+      this.grpHueNetworkSettings = new System.Windows.Forms.GroupBox();
       this.tbHueReconnectAttempts = new System.Windows.Forms.TextBox();
       this.lblHueReconnectAttempts = new System.Windows.Forms.Label();
       this.tbHueReconnectDelay = new System.Windows.Forms.TextBox();
@@ -287,8 +287,8 @@
       this.grpBoblightGeneral.SuspendLayout();
       this.tabPageHue.SuspendLayout();
       this.grpHueAverageColor.SuspendLayout();
-      this.groupBox1.SuspendLayout();
-      this.HueNetworkSettings.SuspendLayout();
+      this.grpHueGeneralSettings.SuspendLayout();
+      this.grpHueNetworkSettings.SuspendLayout();
       this.SuspendLayout();
       // 
       // btnSave
@@ -2313,8 +2313,8 @@
       // 
       this.tabPageHue.BackColor = System.Drawing.SystemColors.Control;
       this.tabPageHue.Controls.Add(this.grpHueAverageColor);
-      this.tabPageHue.Controls.Add(this.groupBox1);
-      this.tabPageHue.Controls.Add(this.HueNetworkSettings);
+      this.tabPageHue.Controls.Add(this.grpHueGeneralSettings);
+      this.tabPageHue.Controls.Add(this.grpHueNetworkSettings);
       this.tabPageHue.Location = new System.Drawing.Point(4, 22);
       this.tabPageHue.Name = "tabPageHue";
       this.tabPageHue.Size = new System.Drawing.Size(842, 504);
@@ -2417,21 +2417,21 @@
       this.tbHueMinDiversion.TabIndex = 9;
       this.tbHueMinDiversion.Validating += new System.ComponentModel.CancelEventHandler(this.tbHueMinDiversion_Validating);
       // 
-      // groupBox1
+      // grpHueGeneralSettings
       // 
-      this.groupBox1.Controls.Add(this.ckHueBridgeDisableOnSuspend);
-      this.groupBox1.Controls.Add(this.ckHueBridgeEnableOnResume);
-      this.groupBox1.Controls.Add(this.ckhueIsRemoteMachine);
-      this.groupBox1.Controls.Add(this.lblPathInfoHue);
-      this.groupBox1.Controls.Add(this.btnSelectFileHue);
-      this.groupBox1.Controls.Add(this.edFileHue);
-      this.groupBox1.Controls.Add(this.ckStartHue);
-      this.groupBox1.Location = new System.Drawing.Point(10, 10);
-      this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(820, 175);
-      this.groupBox1.TabIndex = 27;
-      this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Settings";
+      this.grpHueGeneralSettings.Controls.Add(this.ckHueBridgeDisableOnSuspend);
+      this.grpHueGeneralSettings.Controls.Add(this.ckHueBridgeEnableOnResume);
+      this.grpHueGeneralSettings.Controls.Add(this.ckhueIsRemoteMachine);
+      this.grpHueGeneralSettings.Controls.Add(this.lblPathInfoHue);
+      this.grpHueGeneralSettings.Controls.Add(this.btnSelectFileHue);
+      this.grpHueGeneralSettings.Controls.Add(this.edFileHue);
+      this.grpHueGeneralSettings.Controls.Add(this.ckStartHue);
+      this.grpHueGeneralSettings.Location = new System.Drawing.Point(10, 10);
+      this.grpHueGeneralSettings.Name = "grpHueGeneralSettings";
+      this.grpHueGeneralSettings.Size = new System.Drawing.Size(820, 175);
+      this.grpHueGeneralSettings.TabIndex = 27;
+      this.grpHueGeneralSettings.TabStop = false;
+      this.grpHueGeneralSettings.Text = "Settings";
       // 
       // ckHueBridgeDisableOnSuspend
       // 
@@ -2506,23 +2506,23 @@
       this.ckStartHue.Text = "Start AtmoHue with MediaPortal";
       this.ckStartHue.UseVisualStyleBackColor = true;
       // 
-      // HueNetworkSettings
+      // grpHueNetworkSettings
       // 
-      this.HueNetworkSettings.Controls.Add(this.tbHueReconnectAttempts);
-      this.HueNetworkSettings.Controls.Add(this.lblHueReconnectAttempts);
-      this.HueNetworkSettings.Controls.Add(this.tbHueReconnectDelay);
-      this.HueNetworkSettings.Controls.Add(this.lblHueReconnectDelay);
-      this.HueNetworkSettings.Controls.Add(this.lblHintHue);
-      this.HueNetworkSettings.Controls.Add(this.tbHuePort);
-      this.HueNetworkSettings.Controls.Add(this.lblHuePort);
-      this.HueNetworkSettings.Controls.Add(this.tbHueIP);
-      this.HueNetworkSettings.Controls.Add(this.lblHueIP);
-      this.HueNetworkSettings.Location = new System.Drawing.Point(10, 190);
-      this.HueNetworkSettings.Name = "HueNetworkSettings";
-      this.HueNetworkSettings.Size = new System.Drawing.Size(820, 150);
-      this.HueNetworkSettings.TabIndex = 0;
-      this.HueNetworkSettings.TabStop = false;
-      this.HueNetworkSettings.Text = "Network";
+      this.grpHueNetworkSettings.Controls.Add(this.tbHueReconnectAttempts);
+      this.grpHueNetworkSettings.Controls.Add(this.lblHueReconnectAttempts);
+      this.grpHueNetworkSettings.Controls.Add(this.tbHueReconnectDelay);
+      this.grpHueNetworkSettings.Controls.Add(this.lblHueReconnectDelay);
+      this.grpHueNetworkSettings.Controls.Add(this.lblHintHue);
+      this.grpHueNetworkSettings.Controls.Add(this.tbHuePort);
+      this.grpHueNetworkSettings.Controls.Add(this.lblHuePort);
+      this.grpHueNetworkSettings.Controls.Add(this.tbHueIP);
+      this.grpHueNetworkSettings.Controls.Add(this.lblHueIP);
+      this.grpHueNetworkSettings.Location = new System.Drawing.Point(10, 190);
+      this.grpHueNetworkSettings.Name = "grpHueNetworkSettings";
+      this.grpHueNetworkSettings.Size = new System.Drawing.Size(820, 150);
+      this.grpHueNetworkSettings.TabIndex = 0;
+      this.grpHueNetworkSettings.TabStop = false;
+      this.grpHueNetworkSettings.Text = "Network";
       // 
       // tbHueReconnectAttempts
       // 
@@ -2678,10 +2678,10 @@
       this.tabPageHue.ResumeLayout(false);
       this.grpHueAverageColor.ResumeLayout(false);
       this.grpHueAverageColor.PerformLayout();
-      this.groupBox1.ResumeLayout(false);
-      this.groupBox1.PerformLayout();
-      this.HueNetworkSettings.ResumeLayout(false);
-      this.HueNetworkSettings.PerformLayout();
+      this.grpHueGeneralSettings.ResumeLayout(false);
+      this.grpHueGeneralSettings.PerformLayout();
+      this.grpHueNetworkSettings.ResumeLayout(false);
+      this.grpHueNetworkSettings.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -2781,7 +2781,7 @@
     private System.Windows.Forms.Label lblLedsOnOff;
     private System.Windows.Forms.TabControl tabMenu;
     private System.Windows.Forms.TabPage tabPageHue;
-    private System.Windows.Forms.GroupBox HueNetworkSettings;
+    private System.Windows.Forms.GroupBox grpHueNetworkSettings;
     private System.Windows.Forms.TextBox tbHueIP;
     private System.Windows.Forms.Label lblHueIP;
     private System.Windows.Forms.TextBox tbHuePort;
@@ -2800,7 +2800,7 @@
     private System.Windows.Forms.Label lblBoblightMaxReconnectAttempts;
     private System.Windows.Forms.Label lblBoblightPort;
     private System.Windows.Forms.Label lblBoblightIP;
-    private System.Windows.Forms.GroupBox groupBox1;
+    private System.Windows.Forms.GroupBox grpHueGeneralSettings;
     private System.Windows.Forms.Label lblPathInfoHue;
     private System.Windows.Forms.Button btnSelectFileHue;
     private System.Windows.Forms.TextBox edFileHue;

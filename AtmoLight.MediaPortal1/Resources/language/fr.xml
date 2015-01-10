@@ -49,6 +49,8 @@
     <string name="Red">Rouge</string>
     <string name="Green">Vert</string>
     <string name="Blue">Bleu</string>
+    <string name="MS">ms</string>
+    <string name="NetworkSettings">Réseau</string>
   </Common>
   <SetupForm>
     <string name="EffectSettings">Effect settings</string>
@@ -168,6 +170,5 @@
     <string name="PriorityLive">Priorité du Live:</string>
     <string name="PriorityStaticColor">Priorité de Couleur Statique:</string>
     <string name="LiveReconnect">Reconnections en temps réel (non recommandé) - maintiendra la reconnections au périphérique des qu'il est accessible, et seulement utile pour tester en direct les changements de configuration Hyperion..</string>
-    <string name="NetworkSettings">Réseau</string>
   </Hyperion>
 </resources>

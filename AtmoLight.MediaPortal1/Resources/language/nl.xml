@@ -49,6 +49,8 @@
     <string name="Red">Rood</string>
     <string name="Green">Groen</string>
     <string name="Blue">Blauw</string>
+    <string name="MS">ms</string>
+    <string name="NetworkSettings">Netwerk</string>
   </Common>
   <SetupForm>
     <string name="EffectSettings">Effect instellingen</string>
@@ -168,6 +170,5 @@
     <string name="PriorityLive">Prioriteit live:</string>
     <string name="PriorityStaticColor">Prioriteit statische color:</string>
     <string name="LiveReconnect">Live opnieuw verbinden (NIET aanbevolen) - blijft proberen opnieuw te verbinden en heeft alleen nut voor het live testen van Hyperion configuratie aanpassingen.</string>
-    <string name="NetworkSettings">Netwerk</string>
   </Hyperion>
 </resources>

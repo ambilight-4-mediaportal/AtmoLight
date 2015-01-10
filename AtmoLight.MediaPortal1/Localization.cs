@@ -22,10 +22,10 @@ namespace AtmoLight
       XmlNode xmlNode = fallback ? xmlFileFallback.DocumentElement.SelectSingleNode("/resources/" + node) : xmlFile.DocumentElement.SelectSingleNode("/resources/" + node);
       if (xmlNode == null)
       {
-        Log.Warn("Could not find node {0} in {1}", node, xmlFile.BaseURI);
+        Log.Warn("Could not find node {0} in {1}", node, fallback ? xmlFileFallback.BaseURI : xmlFile.BaseURI);
 
         // Try using english translation if node was not found
-        if (xmlFile.BaseURI != xmlFileFallback.BaseURI)
+        if (xmlFile.BaseURI != xmlFileFallback.BaseURI && !fallback)
         {
           return Translate(node, name, true);
         }
@@ -43,10 +43,10 @@ namespace AtmoLight
         }
       }
 
-      Log.Warn("Could not find translation for {0} in {1}", name, xmlFile.BaseURI);
+      Log.Warn("Could not find translation for {0} in {1}", name, fallback ? xmlFileFallback.BaseURI : xmlFile.BaseURI);
 
       // Try using english translation if this translation was not found
-      if (xmlFile.BaseURI != xmlFileFallback.BaseURI)
+      if (xmlFile.BaseURI != xmlFileFallback.BaseURI && !fallback)
       {
         return Translate(node, name, true);
       }
@@ -63,10 +63,10 @@ namespace AtmoLight
       XmlNode xmlNode = fallback ? xmlFileFallback.DocumentElement.SelectSingleNode("/resources/" + node) : xmlFile.DocumentElement.SelectSingleNode("/resources/" + node);
       if (xmlNode == null)
       {
-        Log.Warn("Could not find node {0} in {1}", node, xmlFile.BaseURI);
+        Log.Warn("Could not find node {0} in {1}", node, fallback ? xmlFileFallback.BaseURI : xmlFile.BaseURI);
 
         // Try using english reverse translation if node was not found
-        if (xmlFile.BaseURI != xmlFileFallback.BaseURI)
+        if (xmlFile.BaseURI != xmlFileFallback.BaseURI && !fallback)
         {
           return ReverseTranslate(node, translation, true);
         }
@@ -84,10 +84,10 @@ namespace AtmoLight
         }
       }
 
-      Log.Warn("Could not reverse translate {0} in {1}", translation, xmlFile.BaseURI);
+      Log.Warn("Could not reverse translate {0} in {1}", translation, fallback ? xmlFileFallback.BaseURI : xmlFile.BaseURI);
 
       // Try using english reverse translation if this translation was not found
-      if (xmlFile.BaseURI != xmlFileFallback.BaseURI)
+      if (xmlFile.BaseURI != xmlFileFallback.BaseURI && !fallback)
       {
         return ReverseTranslate(node, translation, true);
       }

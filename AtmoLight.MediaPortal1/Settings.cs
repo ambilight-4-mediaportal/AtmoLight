@@ -280,28 +280,25 @@ namespace AtmoLight
         }
 
         currentLanguageFile = reader.GetValueAsString("atmolight", "CurrentLanguageFile", Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\AtmoLight\\en.xml");
-
         if (currentLanguageFile.Substring(currentLanguageFile.Length - 3, 3).ToLower() == "lng")
         {
           int lastBackslash = currentLanguageFile.LastIndexOf("\\") + 1;
           int lastDot = currentLanguageFile.LastIndexOf(".");
 
-          currentLanguageFile = Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\AtmoLight\\";
-
           switch (currentLanguageFile.Substring(lastBackslash, lastDot - lastBackslash))
           {
             case "GermanDE":
-              currentLanguageFile += "de.xml";
+              currentLanguageFile = Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\AtmoLight\\de.xml";
               break;
             case "DutchNL":
-              currentLanguageFile += "nl.xml";
+              currentLanguageFile = Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\AtmoLight\\nl.xml";
               break;
             case "FrenchFR":
-              currentLanguageFile += "fr.xml";
+              currentLanguageFile = Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\AtmoLight\\fr.xml";
               break;
             default:
             case "EnglishUS":
-              currentLanguageFile += "en.xml";
+              currentLanguageFile = Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\AtmoLight\\en.xml";
               break;
           }
         }
