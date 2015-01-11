@@ -651,7 +651,9 @@ namespace AtmoLight.Targets
           {
             Log.Error("HueHandler - Error in ChangeColorThread");
             Log.Error(string.Format("HueHandler - Exception: {0}", e.Message));
+            StopChangeColorThread();
             ReInitialise(false);
+            continue;
           }
         }
         System.Threading.Thread.Sleep(5);
