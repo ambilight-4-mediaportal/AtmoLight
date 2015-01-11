@@ -217,7 +217,7 @@ namespace AtmoLight.Targets
             Socket.ReceiveTimeout = 5000;
             Socket.Connect(coreObject.hueIP, coreObject.huePort);
             Stream = Socket.GetStream();
-            StartChangeColorThread();
+            
             Log.Debug("HueHandler - Connected to AtmoHue");
           }
           catch (Exception e)
@@ -249,6 +249,11 @@ namespace AtmoLight.Targets
 
       //Reset Init lock
       initLock = false;
+
+      if (IsConnected())
+      {
+        StartChangeColorThread();
+      }
 
       //Reset counter when we have finished
       hueReconnectCounter = 0;
@@ -643,8 +648,8 @@ namespace AtmoLight.Targets
           {
             if (changeColorBuffer != changeColorPrevColor)
             {
-              changeColorPrevColor = changeColorBuffer;
               sendAPIcommand(string.Format("{0},{1},{2},{3},{4},{5},{6}", "ATMOLIGHT", APIcommandType.Color, changeColorBuffer[0].ToString(), changeColorBuffer[1].ToString(), changeColorBuffer[2].ToString(), changeColorBuffer[3].ToString(), changeColorBuffer[4].ToString()));
+              Array.Copy(changeColorBuffer, changeColorPrevColor, 5);
             }
           }
           catch (Exception e)
