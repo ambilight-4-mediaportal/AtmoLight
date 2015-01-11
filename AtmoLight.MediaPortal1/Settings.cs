@@ -4,41 +4,39 @@ using Language;
 using System.Globalization;
 using System.Collections.Generic;
 
-
 namespace AtmoLight
 {
   public class Settings
   {
-    #region Config variables
-
+    #region Fields
     // Generic
     public static ContentEffect effectVideo;
     public static ContentEffect effectMusic;
     public static ContentEffect effectRadio;
     public static ContentEffect effectMenu;
     public static ContentEffect effectMPExit;
-    public static int killButton = 0;
-    public static int profileButton = 0;
-    public static int menuButton = 0;
-    public static bool sbs3dOn = false;
-    public static bool manualMode = false;
-    public static bool lowCPU = false;
-    public static int lowCPUTime = 0;
-    public static bool delay = false;
-    public static int delayReferenceTime = 0;
-    public static int delayReferenceRefreshRate = 0;
+    public static int killButton;
+    public static int profileButton;
+    public static int menuButton;
+    public static bool sbs3dOn;
+    public static bool manualMode;
+    public static bool lowCPU;
+    public static int lowCPUTime;
+    public static bool delay;
+    public static int delayReferenceTime;
+    public static int delayReferenceRefreshRate;
     public static DateTime excludeTimeStart;
     public static DateTime excludeTimeEnd;
-    public static int staticColorRed = 0;
-    public static int staticColorGreen = 0;
-    public static int staticColorBlue = 0;
-    public static bool restartOnError = true;
-    public static bool blackbarDetection = false;
-    public static int blackbarDetectionTime = 0;
+    public static int staticColorRed;
+    public static int staticColorGreen;
+    public static int staticColorBlue;
+    public static bool restartOnError;
+    public static bool blackbarDetection;
+    public static int blackbarDetectionTime;
     public static int blackbarDetectionThreshold;
-    public static string gifFile = "";
-    public static int captureWidth = 0;
-    public static int captureHeight = 0;
+    public static string gifFile;
+    public static int captureWidth;
+    public static int captureHeight;
     public static int powerModeChangedDelay;
     public static int vuMeterMindB;
     public static double vuMeterMinHue;
@@ -46,9 +44,9 @@ namespace AtmoLight
 
     // Atmowin
     public static bool atmoWinTarget;
-    public static string atmowinExe = "";
-    public static bool startAtmoWin = true;
-    public static bool exitAtmoWin = true;
+    public static string atmowinExe;
+    public static bool startAtmoWin;
+    public static bool exitAtmoWin;
 
     // Boblight
     public static bool boblightTarget;
@@ -67,23 +65,23 @@ namespace AtmoLight
 
     // Hyperion
     public static bool hyperionTarget;
-    public static string hyperionIP = "";
-    public static int hyperionPort = 0;
-    public static int hyperionPriority = 0;
-    public static int hyperionReconnectDelay = 0;
-    public static int hyperionReconnectAttempts = 0;
-    public static int hyperionPriorityStaticColor = 0;
+    public static string hyperionIP;
+    public static int hyperionPort;
+    public static int hyperionPriority;
+    public static int hyperionReconnectDelay;
+    public static int hyperionReconnectAttempts;
+    public static int hyperionPriorityStaticColor;
     public static bool hyperionLiveReconnect;
 
     // Hue
     public static bool hueTarget;
-    public static string hueExe = "";
+    public static string hueExe;
     public static bool hueStart;
     public static bool hueIsRemoteMachine;
-    public static string hueIP = "";
-    public static int huePort = 0;
-    public static int hueReconnectDelay = 0;
-    public static int hueReconnectAttempts = 0;
+    public static string hueIP;
+    public static int huePort;
+    public static int hueReconnectDelay;
+    public static int hueReconnectAttempts;
     public static bool hueBridgeEnableOnResume;
     public static bool hueBridgeDisableOnSuspend;
     public static int hueMinDiversion;
@@ -114,16 +112,17 @@ namespace AtmoLight
     public static int atmoOrbBlackThreshold;
     public static bool atmoOrbUseOverallLightness;
     public static List<string> atmoOrbLamps = new List<string>();
-
-
     #endregion
 
+    #region Methods
     public static DateTime LoadTimeSetting(MediaPortal.Profile.Settings reader, string name, string defaultTime)
     {
       string s = reader.GetValueAsString("atmolight", name, defaultTime);
       DateTime dt;
       if (!DateTime.TryParse(s, out dt))
+      {
         dt = DateTime.Parse(defaultTime);
+      }
       return dt;
     }
 
@@ -436,5 +435,6 @@ namespace AtmoLight
           return ContentEffect.LEDsDisabled;
       }
     }
+    #endregion
   }
 }
