@@ -12,6 +12,7 @@
     <string name="AtmoWinColorchangerLR">AtmoWin Farbenwechsler LR</string>
   </ContentEffect>
   <Common>
+    <string name="AtmoLight">AtmoLight</string>
     <string name="IP">IP:</string>
     <string name="Port">Port:</string>
     <string name="ReconnectAttempts">Wiederverbindungs Versuche:</string>
@@ -119,6 +120,7 @@
     <string name="BlackbarDetectionOn">Schalte schwarze Balken Erkennung an</string>
     <string name="BlackbarDetectionOff">Schalte schwarze Balken Erkennung aus</string>
     <string name="Reinitialise">Wiederverbinden zu verlorenen Zielen</string>
+    <string name="AtmoLightDisabled">AtmoLight ausgeschaltet</string>
   </ContextMenu>
   <AmbiBox>
     <string name="AmbiBox">AmbiBox</string>

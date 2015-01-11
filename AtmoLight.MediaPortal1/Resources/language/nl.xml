@@ -12,6 +12,7 @@
     <string name="AtmoWinColorchangerLR">AtmoWin Kleurwisselaar LR</string>
   </ContentEffect>
   <Common>
+    <string name="AtmoLight">AtmoLight</string>
     <string name="IP">IP adres:</string>
     <string name="Port">Poort nummer:</string>
     <string name="ReconnectAttempts">Herverbindings pogingen:</string>

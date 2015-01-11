@@ -12,6 +12,7 @@
     <string name="AtmoWinColorchangerLR">AtmoWin Changement de couleur LR</string>
   </ContentEffect>
   <Common>
+    <string name="AtmoLight">AtmoLight</string>
     <string name="IP">IP:</string>
     <string name="Port">Port:</string>
     <string name="ReconnectAttempts">Tentatives de reconnections:</string>

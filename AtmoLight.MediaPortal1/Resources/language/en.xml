@@ -12,6 +12,7 @@
     <string name="AtmoWinColorchangerLR">AtmoWin Colorchanger LR</string>
   </ContentEffect>
   <Common>
+    <string name="AtmoLight">AtmoLight</string>
     <string name="IP">IP address:</string>
     <string name="Port">Port number:</string>
     <string name="ReconnectAttempts">Reconnect attempts:</string>
@@ -119,6 +120,7 @@
     <string name="BlackbarDetectionOn">Switch Blackbar Detection on</string>
     <string name="BlackbarDetectionOff">Switch Blackbar Detection off</string>
     <string name="Reinitialise">Reconnect to lost targets</string>
+    <string name="AtmoLightDisabled">AtmoLight disabled</string>
   </ContextMenu>
   <AmbiBox>
     <string name="AmbiBox">AmbiBox</string>

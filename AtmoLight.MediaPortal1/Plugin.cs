@@ -677,7 +677,7 @@ namespace AtmoLight
       // Showing context menu
       GUIDialogMenu dlg = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
       dlg.Reset();
-      dlg.SetHeading("AtmoLight");
+      dlg.SetHeading(Localization.Translate("Common", "AtmoLight"));
 
       // Toggle On/Off
       if (!coreObject.IsAtmoLightOn())
@@ -722,7 +722,7 @@ namespace AtmoLight
         if (coreObject.IsDelayEnabled())
         {
           dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "DelayOff")));
-          dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() + "ms)"));
+          dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() + Localization.Translate("Common", "MS") + ")"));
         }
         else
         {
@@ -759,7 +759,7 @@ namespace AtmoLight
       {
         // Clear all other items if AtmoLight leds is manually disabled by yser
         dlg.Reset();
-        dlg.SetHeading("AtmoLight [DISABLED]");
+        dlg.SetHeading(Localization.Translate("ContextMenu", "AtmoLightDisabled"));
 
         dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "AtmoLightOn")));
       }
@@ -907,7 +907,7 @@ namespace AtmoLight
         }
       }
       // Change Delay
-      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() + "ms)")
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() + Localization.Translate("Common", "MS") + ")")
       {
         if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) && (delayTimeHelper <= 1000))
         {
@@ -1079,7 +1079,7 @@ namespace AtmoLight
       if (dlgYesNo != null)
       {
         dlgYesNo.Reset();
-        dlgYesNo.SetHeading("AtmoLight");
+        dlgYesNo.SetHeading(Localization.Translate("Common", "AtmoLight"));
         dlgYesNo.SetLine(1, setLine1);
         dlgYesNo.SetLine(2, setLine2);
         dlgYesNo.SetDefaultToYes(true);
