@@ -45,6 +45,8 @@ namespace AtmoLight.Targets
     private int hueDelayAtmoHue = 5000; 
     private int hueReconnectCounter = 0;
     private Boolean HueBridgeStartOnResume = false;
+    private Thread changeColorThreadHelper;
+    private volatile int[] changeColorBuffer = new int[5];
 
     // TCP
     private static TcpClient Socket = new TcpClient();
@@ -58,7 +60,9 @@ namespace AtmoLight.Targets
     // Locks
     private bool isInit = false;
     private volatile bool initLock = false;
+    private volatile bool changeColorThreadLock = true;
     private bool isAtmoHueRunning = false;
+    private readonly object changeColorBufferLock = new object();
 
     private enum APIcommandType
     {
@@ -138,9 +142,7 @@ namespace AtmoLight.Targets
     {
       if (coreObject.reInitOnError || force)
       {
-        Thread t = new Thread(() => Initialise(force));
-        t.IsBackground = true;
-        t.Start();
+        Initialise(force);
       }
     }
 
@@ -215,6 +217,7 @@ namespace AtmoLight.Targets
             Socket.ReceiveTimeout = 5000;
             Socket.Connect(coreObject.hueIP, coreObject.huePort);
             Stream = Socket.GetStream();
+            StartChangeColorThread();
             Log.Debug("HueHandler - Connected to AtmoHue");
           }
           catch (Exception e)
@@ -280,6 +283,7 @@ namespace AtmoLight.Targets
     {
       try
       {
+        StopChangeColorThread();
         Socket.Close();
       }
       catch (Exception e)
@@ -309,25 +313,16 @@ namespace AtmoLight.Targets
 
     public void ChangeColor(int red, int green, int blue, int priority, int brightness)
     {
-      Thread t = new Thread(() => ChangeColorThread(red,green,blue,priority,brightness));
-      t.IsBackground = true;
-      t.Start();
+      lock (changeColorBufferLock)
+      {
+        changeColorBuffer[0] = red;
+        changeColorBuffer[1] = green;
+        changeColorBuffer[2] = blue;
+        changeColorBuffer[3] = priority;
+        changeColorBuffer[4] = brightness;
+      }
+    }
 
-    }
-    public void ChangeColorThread(int red, int green, int blue, int priority, int brightness)
-    {
-      try
-      {
-        string message = string.Format("{0},{1},{2},{3},{4},{5},{6}", "ATMOLIGHT", APIcommandType.Color, red.ToString(), green.ToString(), blue.ToString(), priority.ToString(), brightness.ToString());
-        sendAPIcommand(message);
-      }
-      catch (Exception e)
-      {
-        Log.Error("HueHandler - error during sending color");
-        Log.Error(string.Format("HueHandler - {0}", e.Message));
-        ReInitialise(false);
-      }
-    }
     public bool ChangeEffect(ContentEffect effect)
     {
       if (!IsConnected())
@@ -618,6 +613,48 @@ namespace AtmoLight.Targets
             }
           }
           break;
+      }
+    }
+    #endregion
+
+    #region Change Color Thread
+    private void StartChangeColorThread()
+    {
+      changeColorThreadLock = false;
+      changeColorThreadHelper = new Thread(() => ChangeColorThread());
+      changeColorThreadHelper.Name = "AtmoLight Hue ChangeColor";
+      changeColorThreadHelper.IsBackground = true;
+      changeColorThreadHelper.Start();
+    }
+
+    private void StopChangeColorThread()
+    {
+      changeColorThreadLock = true;
+    }
+
+    private void ChangeColorThread()
+    {
+      int[] changeColorPrevColor = new int[5];
+      while (!changeColorThreadLock && IsConnected())
+      {
+        lock (changeColorBufferLock)
+        {
+          try
+          {
+            if (changeColorBuffer != changeColorPrevColor)
+            {
+              changeColorPrevColor = changeColorBuffer;
+              sendAPIcommand(string.Format("{0},{1},{2},{3},{4},{5},{6}", "ATMOLIGHT", APIcommandType.Color, changeColorBuffer[0].ToString(), changeColorBuffer[1].ToString(), changeColorBuffer[2].ToString(), changeColorBuffer[3].ToString(), changeColorBuffer[4].ToString()));
+            }
+          }
+          catch (Exception e)
+          {
+            Log.Error("HueHandler - Error in ChangeColorThread");
+            Log.Error(string.Format("HueHandler - Exception: {0}", e.Message));
+            ReInitialise(false);
+          }
+        }
+        System.Threading.Thread.Sleep(5);
       }
     }
     #endregion
