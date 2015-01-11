@@ -187,7 +187,7 @@ namespace AtmoLight
       lblRed.Text = Localization.Translate("Common", "Red") + ":";
       lblGreen.Text = Localization.Translate("Common", "Green") + ":";
       lblBlue.Text = Localization.Translate("Common", "Blue") + ":";
-      grpVUMeter.Text = Localization.Translate("ContentEffect", "VUMeter");
+      grpVUMeter.Text = Localization.Translate("ContentEffect", "VUMeter") + " / " + Localization.Translate("ContentEffect", "VUMeterRainbow");
       lblVUMeterMaxHue.Text = Localization.Translate("SetupForm", "VUMeterMaxHue");
       lblVUMeterMindB.Text = Localization.Translate("SetupForm", "VUMeterMindB");
       lblVUMeterMinHue.Text = Localization.Translate("SetupForm", "VUMeterMinHue");
