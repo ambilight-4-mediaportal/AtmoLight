@@ -79,7 +79,7 @@
     <string name="CaptureDimension">Format de Capture</string>
     <string name="Width">Largeur:</string>
     <string name="Height">Hauteur:</string>
-    <string name="SelectTargets">Sélection Équipement</string>
+    <string name="SelectTargets">Sélection logiciel cible</string>
     <string name="ResumeDelay">Delais après standby:</string>
     <string name="VUMeterMaxHue">Max. hue:</string>
     <string name="VUMeterMinHue">Min. hue:</string>

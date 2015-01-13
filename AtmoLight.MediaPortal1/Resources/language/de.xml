@@ -79,7 +79,7 @@
     <string name="CaptureDimension">Aufnahme Auflösung</string>
     <string name="Width">Breite:</string>
     <string name="Height">Höhe:</string>
-    <string name="SelectTargets">Wähle unterstützte Hardware</string>
+    <string name="SelectTargets">Wähle Ziel Software</string>
     <string name="ResumeDelay">Verzögerung nach Standby:</string>
     <string name="VUMeterMaxHue">Max. hue:</string>
     <string name="VUMeterMinHue">Min. hue:</string>

@@ -79,7 +79,7 @@
     <string name="CaptureDimension">Opname formaat</string>
     <string name="Width">Breedte:</string>
     <string name="Height">Hoogte:</string>
-    <string name="SelectTargets">Selecteer ondersteunde hardware</string>
+    <string name="SelectTargets">Selecteer doelwit software</string>
     <string name="ResumeDelay">Vertraging na standby:</string>
     <string name="VUMeterMaxHue">Max. hue:</string>
     <string name="VUMeterMinHue">Min. hue:</string>

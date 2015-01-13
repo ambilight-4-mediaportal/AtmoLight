@@ -79,7 +79,7 @@
     <string name="CaptureDimension">Capture dimension</string>
     <string name="Width">Width:</string>
     <string name="Height">Height:</string>
-    <string name="SelectTargets">Select supported hardware</string>
+    <string name="SelectTargets">Select target software</string>
     <string name="ResumeDelay">Delay after standby:</string>
     <string name="VUMeterMaxHue">Max. hue:</string>
     <string name="VUMeterMinHue">Min. hue:</string>
