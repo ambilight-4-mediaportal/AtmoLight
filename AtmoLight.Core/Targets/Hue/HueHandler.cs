@@ -42,7 +42,6 @@ namespace AtmoLight.Targets
     private Core coreObject;
 
     // HUE
-    private int hueDelayAtmoHue = 5000; 
     private int hueReconnectCounter = 0;
     private Boolean HueBridgeStartOnResume = false;
 
@@ -102,7 +101,6 @@ namespace AtmoLight.Targets
         if (coreObject.hueStart)
         {
           isAtmoHueRunning = StartHue();
-          System.Threading.Thread.Sleep(hueDelayAtmoHue);
           if (isAtmoHueRunning)
           {
             Connect();
@@ -169,6 +167,7 @@ namespace AtmoLight.Targets
       try
       {
         Hue.Start();
+        Hue.WaitForInputIdle();
       }
       catch (Exception)
       {
