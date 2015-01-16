@@ -50,6 +50,7 @@
     <string name="Red">Rood</string>
     <string name="Green">Groen</string>
     <string name="Blue">Blauw</string>
+    <string name="Yellow">Geel</string>
     <string name="MS">ms</string>
     <string name="NetworkSettings">Netwerk</string>
   </Common>
@@ -105,7 +106,6 @@
     <string name="White">Wit</string>
     <string name="Cyan">Cyan</string>
     <string name="Magenta">Magenta</string>
-    <string name="Yellow">Geel</string>
     <string name="RGBError1">De waarde moet een nummer zijn</string>
     <string name="RGBError2">en tussen de 0 en 255.</string>
     <string name="ConnectionLost">Connectie met [Target] verloren!</string>

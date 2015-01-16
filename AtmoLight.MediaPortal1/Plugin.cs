@@ -934,7 +934,7 @@ namespace AtmoLight
         dlgStaticColor.Add(new GUIListItem(Localization.Translate("Common", "Blue")));
         dlgStaticColor.Add(new GUIListItem(Localization.Translate("ContextMenu", "Cyan")));
         dlgStaticColor.Add(new GUIListItem(Localization.Translate("ContextMenu", "Magenta")));
-        dlgStaticColor.Add(new GUIListItem(Localization.Translate("ContextMenu", "Yellow")));
+        dlgStaticColor.Add(new GUIListItem(Localization.Translate("Common", "Yellow")));
         dlgStaticColor.SelectedLabel = 0;
         dlgStaticColor.DoModal(GUIWindowManager.ActiveWindow);
 

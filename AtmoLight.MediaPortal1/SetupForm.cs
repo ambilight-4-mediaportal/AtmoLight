@@ -49,7 +49,8 @@ namespace AtmoLight
         coreObject.AddTarget(Target.AtmoOrb);
       }
 
-      UpdateComboBoxes();
+      UpdateEffectComboBoxes();
+      UpdateRemoteButtonComboBoxes();
 
       lblVersionVal.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
       edFileAtmoWin.Text = Settings.atmowinExe;
@@ -317,7 +318,7 @@ namespace AtmoLight
     }
     #endregion
 
-    #region General Button events
+    #region General Button Events
     private void btnCancel_Click(object sender, EventArgs e)
     {
       this.DialogResult = DialogResult.Cancel;
@@ -887,7 +888,8 @@ namespace AtmoLight
         Localization.Load(Settings.currentLanguageFile);
 
         UpdateLanguageOnControls();
-        UpdateComboBoxes();
+        UpdateEffectComboBoxes();
+        UpdateRemoteButtonComboBoxes();
         openFileDialog2.FileName = "";
       }
     }
@@ -1002,7 +1004,7 @@ namespace AtmoLight
     }
     #endregion
 
-    #region Validation
+    #region Validation Events
     private void lowCpuTime_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
       int minValue = 1;
@@ -1603,8 +1605,8 @@ namespace AtmoLight
     }
     #endregion
 
-    #region Dynamic effect changes
-    public void UpdateComboBoxes()
+    #region Dynamic Effect ComboBoxes
+    public void UpdateEffectComboBoxes()
     {
       List<ContentEffect> supportedEffects = coreObject.GetSupportedEffects();
 
@@ -1654,7 +1656,7 @@ namespace AtmoLight
       {
         coreObject.RemoveTarget(Target.AtmoWin);
       }
-      UpdateComboBoxes();
+      UpdateEffectComboBoxes();
     }
 
     private void ckBoblightEnabled_CheckedChanged(Object sender, EventArgs e)
@@ -1667,7 +1669,7 @@ namespace AtmoLight
       {
         coreObject.RemoveTarget(Target.Boblight);
       }
-      UpdateComboBoxes();
+      UpdateEffectComboBoxes();
     }
 
     private void ckHyperionEnabled_CheckedChanged(Object sender, EventArgs e)
@@ -1680,7 +1682,7 @@ namespace AtmoLight
       {
         coreObject.RemoveTarget(Target.Hyperion);
       }
-      UpdateComboBoxes();
+      UpdateEffectComboBoxes();
     }
 
     private void ckHueEnabled_CheckedChanged(Object sender, EventArgs e)
@@ -1693,7 +1695,7 @@ namespace AtmoLight
       {
         coreObject.RemoveTarget(Target.Hue);
       }
-      UpdateComboBoxes();
+      UpdateEffectComboBoxes();
     }
 
     private void ckAmbiBoxEnabled_CheckedChanged(Object sender, EventArgs e)
@@ -1706,7 +1708,7 @@ namespace AtmoLight
       {
         coreObject.RemoveTarget(Target.AmbiBox);
       }
-      UpdateComboBoxes();
+      UpdateEffectComboBoxes();
     }
 
     private void ckAtmoOrbEnabled_CheckedChanged(Object sender, EventArgs e)
@@ -1719,11 +1721,44 @@ namespace AtmoLight
       {
         coreObject.RemoveTarget(Target.AtmoOrb);
       }
-      UpdateComboBoxes();
+      UpdateEffectComboBoxes();
     }
     #endregion
 
-    #region Effect changing
+    #region Remote Button ComboBoxes
+    public void UpdateRemoteButtonComboBoxes()
+    {
+      comboBox1.Items.Clear();
+      comboBox2.Items.Clear();
+      cbMenuButton.Items.Clear();
+
+      comboBox1.Items.Add(Localization.Translate("Common", "Red"));
+      comboBox2.Items.Add(Localization.Translate("Common", "Red"));
+      cbMenuButton.Items.Add(Localization.Translate("Common", "Red"));
+
+      comboBox1.Items.Add(Localization.Translate("Common", "Green"));
+      comboBox2.Items.Add(Localization.Translate("Common", "Green"));
+      cbMenuButton.Items.Add(Localization.Translate("Common", "Green"));
+
+      comboBox1.Items.Add(Localization.Translate("Common", "Yellow"));
+      comboBox2.Items.Add(Localization.Translate("Common", "Yellow"));
+      cbMenuButton.Items.Add(Localization.Translate("Common", "Yellow"));
+
+      comboBox1.Items.Add(Localization.Translate("Common", "Blue"));
+      comboBox2.Items.Add(Localization.Translate("Common", "Blue"));
+      cbMenuButton.Items.Add(Localization.Translate("Common", "Blue"));
+
+      comboBox1.Items.Add(Localization.Translate("Common", "None"));
+      comboBox2.Items.Add(Localization.Translate("Common", "None"));
+      cbMenuButton.Items.Add(Localization.Translate("Common", "None"));
+
+      comboBox1.SelectedIndex = Settings.killButton;
+      comboBox2.SelectedIndex = Settings.profileButton;
+      cbMenuButton.SelectedIndex = Settings.menuButton;
+    }
+    #endregion
+
+    #region Effect Changing Events
     private void cbVideo_SelectedIndexChanged(object sender, EventArgs e)
     {
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbVideo.Text));
@@ -1750,7 +1785,7 @@ namespace AtmoLight
     }
     #endregion
 
-    #region AtmoWin Button event
+    #region AtmoWin Button Event
     private void btnSelectFile_Click(object sender, EventArgs e)
     {
       if (openFileDialog1.ShowDialog() == DialogResult.OK)

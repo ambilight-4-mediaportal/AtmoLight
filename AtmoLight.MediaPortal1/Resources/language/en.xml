@@ -50,8 +50,10 @@
     <string name="Red">Red</string>
     <string name="Green">Green</string>
     <string name="Blue">Blue</string>
+    <string name="Yellow">Yellow</string>
     <string name="MS">ms</string>
     <string name="NetworkSettings">Network</string>
+    <string name="None">None</string>
   </Common>
   <SetupForm>
     <string name="EffectSettings">Effect settings</string>
@@ -105,7 +107,6 @@
     <string name="White">White</string>
     <string name="Cyan">Cyan</string>
     <string name="Magenta">Magenta</string>
-    <string name="Yellow">Yellow</string>
     <string name="RGBError1">The value has to be a number</string>
     <string name="RGBError2">and must be between 0 and 255.</string>
     <string name="ConnectionLost">Connection to [Target] lost!</string>
