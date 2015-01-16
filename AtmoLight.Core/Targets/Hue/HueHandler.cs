@@ -646,7 +646,7 @@ namespace AtmoLight.Targets
         {
           try
           {
-            if (changeColorBuffer != changeColorPrevColor)
+            if (!changeColorBuffer.SequenceEqual(changeColorPrevColor))
             {
               sendAPIcommand(string.Format("{0},{1},{2},{3},{4},{5},{6}", "ATMOLIGHT", APIcommandType.Color, changeColorBuffer[0].ToString(), changeColorBuffer[1].ToString(), changeColorBuffer[2].ToString(), changeColorBuffer[3].ToString(), changeColorBuffer[4].ToString()));
               Array.Copy(changeColorBuffer, changeColorPrevColor, 5);
