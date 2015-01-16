@@ -1235,9 +1235,9 @@
       // lblHintMenuButtons
       // 
       this.lblHintMenuButtons.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintMenuButtons.Location = new System.Drawing.Point(300, 25);
+      this.lblHintMenuButtons.Location = new System.Drawing.Point(312, 25);
       this.lblHintMenuButtons.Name = "lblHintMenuButtons";
-      this.lblHintMenuButtons.Size = new System.Drawing.Size(153, 92);
+      this.lblHintMenuButtons.Size = new System.Drawing.Size(141, 92);
       this.lblHintMenuButtons.TabIndex = 18;
       this.lblHintMenuButtons.Text = "Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3" +
     "D-SBS mode.";
@@ -1317,7 +1317,7 @@
             "Yellow",
             "Blue",
             "None"});
-      this.cbMenuButton.Location = new System.Drawing.Point(190, 21);
+      this.cbMenuButton.Location = new System.Drawing.Point(210, 21);
       this.cbMenuButton.Name = "cbMenuButton";
       this.cbMenuButton.Size = new System.Drawing.Size(96, 21);
       this.cbMenuButton.TabIndex = 3;
@@ -1342,7 +1342,7 @@
             "Yellow",
             "Blue",
             "None"});
-      this.comboBox2.Location = new System.Drawing.Point(190, 71);
+      this.comboBox2.Location = new System.Drawing.Point(210, 71);
       this.comboBox2.Name = "comboBox2";
       this.comboBox2.Size = new System.Drawing.Size(96, 21);
       this.comboBox2.TabIndex = 5;
@@ -1398,7 +1398,7 @@
             "Yellow",
             "Blue",
             "None"});
-      this.comboBox1.Location = new System.Drawing.Point(190, 46);
+      this.comboBox1.Location = new System.Drawing.Point(210, 46);
       this.comboBox1.Name = "comboBox1";
       this.comboBox1.Size = new System.Drawing.Size(96, 21);
       this.comboBox1.TabIndex = 4;
@@ -1463,21 +1463,21 @@
       // 
       // tbAmbiBoxExternalProfile
       // 
-      this.tbAmbiBoxExternalProfile.Location = new System.Drawing.Point(200, 147);
+      this.tbAmbiBoxExternalProfile.Location = new System.Drawing.Point(230, 147);
       this.tbAmbiBoxExternalProfile.Name = "tbAmbiBoxExternalProfile";
       this.tbAmbiBoxExternalProfile.Size = new System.Drawing.Size(100, 20);
       this.tbAmbiBoxExternalProfile.TabIndex = 13;
       // 
       // tbAmbiBoxMediaPortalProfile
       // 
-      this.tbAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(200, 122);
+      this.tbAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(230, 122);
       this.tbAmbiBoxMediaPortalProfile.Name = "tbAmbiBoxMediaPortalProfile";
       this.tbAmbiBoxMediaPortalProfile.Size = new System.Drawing.Size(100, 20);
       this.tbAmbiBoxMediaPortalProfile.TabIndex = 12;
       // 
       // tbAmbiBoxReconnectDelay
       // 
-      this.tbAmbiBoxReconnectDelay.Location = new System.Drawing.Point(200, 97);
+      this.tbAmbiBoxReconnectDelay.Location = new System.Drawing.Point(230, 97);
       this.tbAmbiBoxReconnectDelay.Name = "tbAmbiBoxReconnectDelay";
       this.tbAmbiBoxReconnectDelay.Size = new System.Drawing.Size(100, 20);
       this.tbAmbiBoxReconnectDelay.TabIndex = 10;
@@ -1485,7 +1485,7 @@
       // 
       // tbAmbiBoxMaxReconnectAttempts
       // 
-      this.tbAmbiBoxMaxReconnectAttempts.Location = new System.Drawing.Point(200, 72);
+      this.tbAmbiBoxMaxReconnectAttempts.Location = new System.Drawing.Point(230, 72);
       this.tbAmbiBoxMaxReconnectAttempts.Name = "tbAmbiBoxMaxReconnectAttempts";
       this.tbAmbiBoxMaxReconnectAttempts.Size = new System.Drawing.Size(100, 20);
       this.tbAmbiBoxMaxReconnectAttempts.TabIndex = 9;
@@ -1493,7 +1493,7 @@
       // 
       // tbAmbiBoxPort
       // 
-      this.tbAmbiBoxPort.Location = new System.Drawing.Point(200, 47);
+      this.tbAmbiBoxPort.Location = new System.Drawing.Point(230, 47);
       this.tbAmbiBoxPort.Name = "tbAmbiBoxPort";
       this.tbAmbiBoxPort.Size = new System.Drawing.Size(100, 20);
       this.tbAmbiBoxPort.TabIndex = 8;
@@ -1501,7 +1501,7 @@
       // 
       // tbAmbiBoxIP
       // 
-      this.tbAmbiBoxIP.Location = new System.Drawing.Point(200, 22);
+      this.tbAmbiBoxIP.Location = new System.Drawing.Point(230, 22);
       this.tbAmbiBoxIP.Name = "tbAmbiBoxIP";
       this.tbAmbiBoxIP.Size = new System.Drawing.Size(100, 20);
       this.tbAmbiBoxIP.TabIndex = 7;
@@ -2226,7 +2226,7 @@
       // 
       // tbBoblightMaxFPS
       // 
-      this.tbBoblightMaxFPS.Location = new System.Drawing.Point(200, 122);
+      this.tbBoblightMaxFPS.Location = new System.Drawing.Point(230, 122);
       this.tbBoblightMaxFPS.Name = "tbBoblightMaxFPS";
       this.tbBoblightMaxFPS.Size = new System.Drawing.Size(100, 20);
       this.tbBoblightMaxFPS.TabIndex = 9;
@@ -2234,7 +2234,7 @@
       // 
       // tbBoblightReconnectDelay
       // 
-      this.tbBoblightReconnectDelay.Location = new System.Drawing.Point(200, 97);
+      this.tbBoblightReconnectDelay.Location = new System.Drawing.Point(230, 97);
       this.tbBoblightReconnectDelay.Name = "tbBoblightReconnectDelay";
       this.tbBoblightReconnectDelay.Size = new System.Drawing.Size(100, 20);
       this.tbBoblightReconnectDelay.TabIndex = 8;
@@ -2242,7 +2242,7 @@
       // 
       // tbBoblightMaxReconnectAttempts
       // 
-      this.tbBoblightMaxReconnectAttempts.Location = new System.Drawing.Point(200, 72);
+      this.tbBoblightMaxReconnectAttempts.Location = new System.Drawing.Point(230, 72);
       this.tbBoblightMaxReconnectAttempts.Name = "tbBoblightMaxReconnectAttempts";
       this.tbBoblightMaxReconnectAttempts.Size = new System.Drawing.Size(100, 20);
       this.tbBoblightMaxReconnectAttempts.TabIndex = 7;
@@ -2250,7 +2250,7 @@
       // 
       // tbBoblightPort
       // 
-      this.tbBoblightPort.Location = new System.Drawing.Point(200, 47);
+      this.tbBoblightPort.Location = new System.Drawing.Point(230, 47);
       this.tbBoblightPort.Name = "tbBoblightPort";
       this.tbBoblightPort.Size = new System.Drawing.Size(100, 20);
       this.tbBoblightPort.TabIndex = 6;
@@ -2258,7 +2258,7 @@
       // 
       // tbBoblightIP
       // 
-      this.tbBoblightIP.Location = new System.Drawing.Point(200, 22);
+      this.tbBoblightIP.Location = new System.Drawing.Point(230, 22);
       this.tbBoblightIP.Name = "tbBoblightIP";
       this.tbBoblightIP.Size = new System.Drawing.Size(100, 20);
       this.tbBoblightIP.TabIndex = 5;
