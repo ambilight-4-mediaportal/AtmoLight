@@ -790,7 +790,6 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      IPAddress ip;
       if (!string.IsNullOrEmpty(_value))
       {
         settings.HyperionIP = _value;
