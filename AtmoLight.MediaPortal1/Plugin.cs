@@ -22,14 +22,6 @@ namespace AtmoLight
   [PluginIcons("AtmoLight.Resources.Enabled.png", "AtmoLight.Resources.Disabled.png")]
   public class Plugin : ISetupForm, IPlugin
   {
-    #region class Win32API
-    public sealed class Win32API
-    {
-      [DllImport("kernel32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-      public static extern Int64 GetTickCount();
-    }
-    #endregion
-
     #region AtmoDXUtil Import
     [DllImport("AtmoDXUtil.dll", PreserveSig = false, CharSet = CharSet.Auto)]
     private static extern void VideoSurfaceToRGBSurfaceExt(IntPtr src, int srcWidth, int srcHeight, IntPtr dst, int dstWidth, int dstHeight);

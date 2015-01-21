@@ -44,14 +44,6 @@ namespace AtmoLight
     private ISharpDXVideoPlayer player;
     #endregion
 
-    #region Win32API
-    public sealed class Win32API
-    {
-      [DllImport("kernel32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-      public static extern Int64 GetTickCount();
-    }
-    #endregion
-
     #region IPluginStateTracker implementation
     public void Activated(PluginRuntime pluginRuntime)
     {
