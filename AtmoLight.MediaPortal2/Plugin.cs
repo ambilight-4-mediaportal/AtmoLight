@@ -409,6 +409,11 @@ namespace AtmoLight
           surfaceSource = SkinContext.Device.GetRenderTarget(0);
         }
 
+        if (surfaceSource == null)
+        {
+          return;
+        }
+
         surfaceSource.Device.StretchRectangle(surfaceSource, null, surfaceDestination, rectangleDestination, SharpDX.Direct3D9.TextureFilter.None);
         DataStream stream = SharpDX.Direct3D9.Surface.ToStream(surfaceDestination, SharpDX.Direct3D9.ImageFileFormat.Bmp);
 
@@ -421,6 +426,7 @@ namespace AtmoLight
       {
         surfaceDestination.Dispose();
         surfaceDestination = null;
+        Log.Error("Error in UICapture.");
         Log.Error("Exception: {0}", ex.Message);
       }
     }
