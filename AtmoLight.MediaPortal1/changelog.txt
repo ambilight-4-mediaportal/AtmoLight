@@ -1,3 +1,6 @@
+Version 1.15.1.0
+- Fixed bug where loading German language file would fail
+
 Version 1.15.0.0
 - Fixed bug where data would be send to target handler even if handler is disconnected from target
 - Added context menu entries for Hue automation
