@@ -6,7 +6,7 @@
     Author="Lightning303, Rick164"
     Copyright="GPL"
     Description="AtmoLight Plugin"
-    PluginVersion="2.0">
+    PluginVersion="2.1">
     
   <DependsOn>
     <PluginReference PluginId="{D87D92F0-5E71-470a-A2A4-430F90A28BF3}"/> <!-- SkinEngine -->
