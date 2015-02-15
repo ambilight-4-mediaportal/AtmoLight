@@ -149,6 +149,7 @@ namespace AtmoLight
       tbHueBlackThreshold.Text = Settings.hueBlackThreshold.ToString();
       tbHueSaturation.Text = Settings.hueSaturation.ToString();
       cbHueOverallLightness.Checked = Settings.hueUseOverallLightness;
+      ckMonitorScreensaverState.Checked = Settings.monitorScreensaverState;
     }
 
     private void UpdateLanguageOnControls()
@@ -209,6 +210,7 @@ namespace AtmoLight
       lblFrames.Text = Localization.Translate("SetupForm", "FramesBetween");
       lblDelay.Text = Localization.Translate("SetupForm", "DelayAt");
       lblpowerModeChangedDelayMS.Text = Localization.Translate("Common", "MS");
+      ckMonitorScreensaverState.Text = Localization.Translate("SetupForm", "MonitorScreensaverState");
 
       // Capture dimension
       grpCaptureDimensions.Text = Localization.Translate("SetupForm", "CaptureDimension");
@@ -867,6 +869,7 @@ namespace AtmoLight
       Settings.hueBlackThreshold = int.Parse(tbHueBlackThreshold.Text);
       Settings.hueSaturation = Double.Parse(tbHueSaturation.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
       Settings.hueUseOverallLightness = cbHueOverallLightness.Checked;
+      Settings.monitorScreensaverState = ckMonitorScreensaverState.Checked;
 
       Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbVideo.Text));
       Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbMusic.Text));

@@ -422,6 +422,10 @@
         Id="CaptureHeight"
         Text="[AtmoLight.CaptureHeight]"
         ClassName="AtmoLight.Configuration.CaptureHeight"/>
+    <ConfigSetting
+        Id="MonitorScreensaverState"
+        Text="[AtmoLight.MonitorScreensaverState]"
+        ClassName="AtmoLight.Configuration.MonitorScreensaverState"/>
   </Register>
 
 </Plugin>

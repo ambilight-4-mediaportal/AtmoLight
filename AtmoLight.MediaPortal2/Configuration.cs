@@ -1305,6 +1305,25 @@ namespace AtmoLight.Configuration
       }
     }
   }
+	public class MonitorScreensaverState : YesNo
+	{
+		public delegate void SettingsChangedHandler();
+		public static event SettingsChangedHandler SettingsChanged;
+
+		public override void Load()
+		{
+			_yes = SettingsManager.Load<Settings>().MonitorScreensaverState;
+		}
+
+		public override void Save()
+		{
+			base.Save();
+			Settings settings = SettingsManager.Load<Settings>();
+			settings.MonitorScreensaverState = _yes;
+			SettingsManager.Save(settings);
+			SettingsChanged();
+		}
+	}
 
   public class BoblightTarget : YesNo
   {

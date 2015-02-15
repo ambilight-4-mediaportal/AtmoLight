@@ -94,6 +94,9 @@ namespace AtmoLight
     [Setting(SettingScope.User, 64)]
     public int CaptureHeight { get; set; }
 
+    [Setting(SettingScope.User, true)]
+    public bool MonitorScreensaverState { get; set; }
+
     [Setting(SettingScope.User, "127.0.0.1")]
     public string HyperionIP { get; set; }
 
@@ -263,6 +266,7 @@ namespace AtmoLight
       StopAtmoWinOnExit = settings.StopAtmoWinOnExit;
       StartAtmoWinOnStart = settings.StartAtmoWinOnStart;
       RestartAtmoWinOnError = settings.RestartAtmoWinOnError;
+      MonitorScreensaverState = settings.MonitorScreensaverState;
       StaticColorBlue = settings.StaticColorBlue;
       StaticColorGreen = settings.StaticColorGreen;
       StaticColorRed = settings.StaticColorRed;
@@ -343,6 +347,7 @@ namespace AtmoLight
       settings.StopAtmoWinOnExit = StopAtmoWinOnExit;
       settings.StartAtmoWinOnStart = StartAtmoWinOnStart;
       settings.RestartAtmoWinOnError = RestartAtmoWinOnError;
+      settings.MonitorScreensaverState = MonitorScreensaverState;
       settings.StaticColorBlue = StaticColorBlue;
       settings.StaticColorGreen = StaticColorGreen;
       settings.StaticColorRed = StaticColorRed;

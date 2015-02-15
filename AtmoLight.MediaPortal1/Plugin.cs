@@ -23,11 +23,15 @@ namespace AtmoLight
   public class Plugin : ISetupForm, IPlugin
   {
     #region AtmoDXUtil Import
+
     [DllImport("AtmoDXUtil.dll", PreserveSig = false, CharSet = CharSet.Auto)]
-    private static extern void VideoSurfaceToRGBSurfaceExt(IntPtr src, int srcWidth, int srcHeight, IntPtr dst, int dstWidth, int dstHeight);
+    private static extern void VideoSurfaceToRGBSurfaceExt(IntPtr src, int srcWidth, int srcHeight, IntPtr dst,
+      int dstWidth, int dstHeight);
+
     #endregion
 
     #region Variables
+
     // States
     private ContentEffect playbackEffect = ContentEffect.Undefined; // Effect for current placback
     private ContentEffect menuEffect = ContentEffect.Undefined; // Effect in GUI (no playback)
@@ -40,7 +44,7 @@ namespace AtmoLight
     private Int64 lastFrame = 0; // Tick count of the last frame
 
     // Static Color
-    private int[] staticColorTemp = { 0, 0, 0 }; // Temp array to change static color
+    private int[] staticColorTemp = {0, 0, 0}; // Temp array to change static color
     private int staticColorHelper; // Helper var for static color change
 
     // Delay Feature
@@ -51,9 +55,11 @@ namespace AtmoLight
 
     // Core object
     private Core coreObject;
+
     #endregion
 
     #region Plugin Ctor/Start/Stop
+
     /// <summary>
     /// AtmoLight constructor.
     /// </summary>
@@ -72,7 +78,8 @@ namespace AtmoLight
 
       var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
       DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
-      Log.Info("Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
+      Log.Info("Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build,
+        version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
       Log.Debug("Loading settings.");
       Settings.LoadSettings();
 
@@ -81,13 +88,22 @@ namespace AtmoLight
       // PowerModeChanged Handler
       SystemEvents.PowerModeChanged += PowerModeChanged;
 
+      // Screensaver Handler
+      if (Settings.monitorScreensaverState)
+      {
+        Thread screensaverMonitorThread = new Thread(monitorScreensaverState);
+        screensaverMonitorThread.IsBackground = true;
+        screensaverMonitorThread.Start();
+      }
+
       // g_Player Handler
       g_Player.PlayBackStarted += new g_Player.StartedHandler(g_Player_PlayBackStarted);
       g_Player.PlayBackStopped += new g_Player.StoppedHandler(g_Player_PlayBackStopped);
       g_Player.PlayBackEnded += new g_Player.EndedHandler(g_Player_PlayBackEnded);
 
       // FrameGrabber Handler
-      MediaPortal.FrameGrabber.GetInstance().OnNewFrame += new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+      MediaPortal.FrameGrabber.GetInstance().OnNewFrame +=
+        new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
 
       // Button Handler
       GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
@@ -156,7 +172,7 @@ namespace AtmoLight
       {
         coreObject.AddTarget(Target.AtmoWin);
       }
-      
+
       // Boblight
       coreObject.boblightIP = Settings.boblightIP;
       coreObject.boblightPort = Settings.boblightPort;
@@ -230,8 +246,15 @@ namespace AtmoLight
     /// </summary>
     public void Stop()
     {
-      MediaPortal.FrameGrabber.GetInstance().OnNewFrame -= new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+      MediaPortal.FrameGrabber.GetInstance().OnNewFrame -=
+        new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
       SystemEvents.PowerModeChanged -= PowerModeChanged;
+
+      if (Settings.monitorScreensaverState)
+      {
+        Settings.monitorScreensaverState = false;
+      }
+
       g_Player.PlayBackStarted -= new g_Player.StartedHandler(g_Player_PlayBackStarted);
       g_Player.PlayBackStopped -= new g_Player.StoppedHandler(g_Player_PlayBackStopped);
       g_Player.PlayBackEnded -= new g_Player.EndedHandler(g_Player_PlayBackEnded);
@@ -246,9 +269,11 @@ namespace AtmoLight
 
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
     }
+
     #endregion
 
     #region Utilities
+
     /// <summary>
     /// Check if LEDs should be activated.
     /// </summary>
@@ -266,10 +291,13 @@ namespace AtmoLight
         return false;
       }
       // If starttime is bigger than endtime, then now has to be smaller than both or bigger than both to deactive the leds 
-      else if ((DateTime.Now.TimeOfDay >= Settings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= Settings.excludeTimeEnd.TimeOfDay) ||
-              ((Settings.excludeTimeStart.TimeOfDay > Settings.excludeTimeEnd.TimeOfDay) &&
-              ((DateTime.Now.TimeOfDay <= Settings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay <= Settings.excludeTimeEnd.TimeOfDay) ||
-              (DateTime.Now.TimeOfDay >= Settings.excludeTimeStart.TimeOfDay && DateTime.Now.TimeOfDay >= Settings.excludeTimeEnd.TimeOfDay))))
+      else if ((DateTime.Now.TimeOfDay >= Settings.excludeTimeStart.TimeOfDay &&
+                DateTime.Now.TimeOfDay <= Settings.excludeTimeEnd.TimeOfDay) ||
+               ((Settings.excludeTimeStart.TimeOfDay > Settings.excludeTimeEnd.TimeOfDay) &&
+                ((DateTime.Now.TimeOfDay <= Settings.excludeTimeStart.TimeOfDay &&
+                  DateTime.Now.TimeOfDay <= Settings.excludeTimeEnd.TimeOfDay) ||
+                 (DateTime.Now.TimeOfDay >= Settings.excludeTimeStart.TimeOfDay &&
+                  DateTime.Now.TimeOfDay >= Settings.excludeTimeEnd.TimeOfDay))))
       {
         Log.Debug("LEDs should be deactivated. (Timeframe)");
         return false;
@@ -304,12 +332,16 @@ namespace AtmoLight
     {
       if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && coreObject.IsDelayEnabled())
       {
-        coreObject.SetDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
+        coreObject.SetDelay(
+          (int)
+            (((float) Settings.delayReferenceRefreshRate/(float) GetRefreshRate())*(float) Settings.delayReferenceTime));
       }
     }
+
     #endregion
 
     #region Log Event Handler
+
     /// <summary>
     /// Event Handler for logging.
     /// This event gets called if logging is done from Core or from Plugin.
@@ -335,12 +367,14 @@ namespace AtmoLight
           break;
       }
     }
+
     #endregion
 
     #region VU Meter Event Handler
+
     private double[] OnNewVUMeter()
     {
-      double[] dbLevel = new double[] { -100.0, -100.0 };
+      double[] dbLevel = new double[] {-100.0, -100.0};
       if (BassMusicPlayer.Initialized)
       {
         if (BassMusicPlayer.Player.Playing)
@@ -350,9 +384,11 @@ namespace AtmoLight
       }
       return dbLevel;
     }
+
     #endregion
 
     #region Connection Lost Handler
+
     /// <summary>
     /// Connection lost event handler.
     /// This event gets called if connection to AtmoWin is lost and not recoverable.
@@ -368,20 +404,23 @@ namespace AtmoLight
       }
       DialogError(Localization.Translate("ContextMenu", "ConnectionLost").Replace("[Target]", target.ToString()));
     }
+
     #endregion
 
     #region g_Player Event Handler
+
     /// <summary>
     /// Playback started event handler.
     /// This event handler gets called when playback starts.
     /// </summary>
     /// <param name="type">Media type</param>
     /// <param name="filename">Media filename</param>
-    void g_Player_PlayBackStarted(g_Player.MediaType type, string filename)
+    private void g_Player_PlayBackStarted(g_Player.MediaType type, string filename)
     {
       try
       {
-        if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording || type == g_Player.MediaType.Unknown || (type == g_Player.MediaType.Music && filename.Contains(".mkv")))
+        if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording ||
+            type == g_Player.MediaType.Unknown || (type == g_Player.MediaType.Music && filename.Contains(".mkv")))
         {
           Log.Debug("Video detected.");
           playbackEffect = Settings.effectVideo;
@@ -419,29 +458,29 @@ namespace AtmoLight
     /// </summary>
     /// <param name="type">Media type.</param>
     /// <param name="filename">Media filename.</param>
-    void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
+    private void g_Player_PlayBackEnded(g_Player.MediaType type, string filename)
     {
-        if (!coreObject.IsConnected())
+      if (!coreObject.IsConnected())
+      {
+        return;
+      }
+      try
+      {
+        if (CheckForStartRequirements())
         {
-            return;
+          coreObject.ChangeEffect(menuEffect);
+          CalculateDelay();
         }
-        try
+        else
         {
-            if (CheckForStartRequirements())
-            {
-                coreObject.ChangeEffect(menuEffect);
-                CalculateDelay();
-            }
-            else
-            {
-                coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
-            }
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
         }
-        catch (Exception ex)
-        {
-            Log.Error("g_Player_PlayBackEnded failed.");
-            Log.Error("Exception= {0}", ex.Message);
-        }
+      }
+      catch (Exception ex)
+      {
+        Log.Error("g_Player_PlayBackEnded failed.");
+        Log.Error("Exception= {0}", ex.Message);
+      }
     }
 
     /// <summary>
@@ -450,7 +489,7 @@ namespace AtmoLight
     /// <param name="type">Media type.</param>
     /// <param name="stoptime">Media stoptime.</param>
     /// <param name="filename">Media filename.</param>
-    void g_Player_PlayBackStopped(g_Player.MediaType type, int stoptime, string filename)
+    private void g_Player_PlayBackStopped(g_Player.MediaType type, int stoptime, string filename)
     {
       if (!coreObject.IsConnected())
       {
@@ -486,7 +525,8 @@ namespace AtmoLight
     /// <param name="pSurface">Surface.</param>
     private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
     {
-      if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() || !coreObject.IsAtmoLightOn() || width == 0 || height == 0)
+      if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() ||
+          !coreObject.IsAtmoLightOn() || width == 0 || height == 0)
       {
         return;
       }
@@ -507,7 +547,8 @@ namespace AtmoLight
 
       if (rgbSurface == null)
       {
-        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight(), Format.A8R8G8B8,
+        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(coreObject.GetCaptureWidth(),
+          coreObject.GetCaptureHeight(), Format.A8R8G8B8,
           MultiSampleType.None, 0, true);
       }
       unsafe
@@ -516,12 +557,12 @@ namespace AtmoLight
         {
           if (Settings.sbs3dOn)
           {
-            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer,
+            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width/2, height, (IntPtr) rgbSurface.UnmanagedComPointer,
               coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
           }
           else
           {
-            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer,
+            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr) rgbSurface.UnmanagedComPointer,
               coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
           }
 
@@ -542,9 +583,11 @@ namespace AtmoLight
         }
       }
     }
+
     #endregion
 
     #region Button Event Handler
+
     /// <summary>
     /// Event handler for remote button presses.
     /// </summary>
@@ -552,14 +595,17 @@ namespace AtmoLight
     public void OnNewAction(MediaPortal.GUI.Library.Action action)
     {
       // Remote Key to open Menu
-      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && Settings.menuButton == 2) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && Settings.menuButton == 1) ||
+      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON &&
+           Settings.menuButton == 2) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON &&
+           Settings.menuButton == 1) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.menuButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.menuButton == 3))
       {
         if (!coreObject.IsConnected())
         {
-          if (DialogYesNo(Localization.Translate("ContextMenu", "Connect1"), Localization.Translate("ContextMenu", "Connect2")))
+          if (DialogYesNo(Localization.Translate("ContextMenu", "Connect1"),
+            Localization.Translate("ContextMenu", "Connect2")))
           {
             coreObject.ReInitialise();
           }
@@ -577,8 +623,10 @@ namespace AtmoLight
       }
 
       // Remote Key to toggle On/Off
-      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && Settings.killButton == 2) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && Settings.killButton == 1) ||
+      if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON &&
+           Settings.killButton == 2) ||
+          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON &&
+           Settings.killButton == 1) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.killButton == 0) ||
           (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.killButton == 3))
       {
@@ -602,17 +650,23 @@ namespace AtmoLight
       }
 
       // Remote Key to change Profiles
-      else if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON && Settings.profileButton == 2) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON && Settings.profileButton == 1) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON && Settings.profileButton == 0) ||
-          (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON && Settings.profileButton == 3))
+      else if ((action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_YELLOW_BUTTON &&
+                Settings.profileButton == 2) ||
+               (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_GREEN_BUTTON &&
+                Settings.profileButton == 1) ||
+               (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_RED_BUTTON &&
+                Settings.profileButton == 0) ||
+               (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON &&
+                Settings.profileButton == 3))
       {
         coreObject.ChangeProfile();
       }
     }
+
     #endregion
 
     #region Context Menu
+
     /// <summary>
     /// Prompts the user with an on screen keyboard.
     /// </summary>
@@ -620,7 +674,8 @@ namespace AtmoLight
     /// <returns>String entered by the user.</returns>
     private string GetKeyboardString(string keyboardString)
     {
-      VirtualKeyboard Keyboard = (VirtualKeyboard)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
+      VirtualKeyboard Keyboard =
+        (VirtualKeyboard) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
       if (Keyboard == null)
       {
         return null;
@@ -647,7 +702,7 @@ namespace AtmoLight
       // Will result in problems and error messages otherwise
       GUIWindowManager.SendThreadCallback((p1, p2, o) =>
       {
-        GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
+        GUIDialogOK dlgError = (GUIDialogOK) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_OK);
         if (dlgError != null)
         {
           dlgError.SetHeading(Localization.Translate("Common", "Error") + "!");
@@ -667,7 +722,7 @@ namespace AtmoLight
       Log.Info("Opening AtmoLight context menu.");
 
       // Showing context menu
-      GUIDialogMenu dlg = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+      GUIDialogMenu dlg = (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
       dlg.Reset();
       dlg.SetHeading(Localization.Translate("Common", "AtmoLight"));
 
@@ -714,7 +769,9 @@ namespace AtmoLight
         if (coreObject.IsDelayEnabled())
         {
           dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "DelayOff")));
-          dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() + Localization.Translate("Common", "MS") + ")"));
+          dlg.Add(
+            new GUIListItem(Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() +
+                            Localization.Translate("Common", "MS") + ")"));
         }
         else
         {
@@ -766,7 +823,8 @@ namespace AtmoLight
 
       // Do stuff
       // Toggle LEDs
-      if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "LEDsOn") || dlg.SelectedLabelText == Localization.Translate("ContextMenu", "LEDsOff"))
+      if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "LEDsOn") ||
+          dlg.SelectedLabelText == Localization.Translate("ContextMenu", "LEDsOff"))
       {
         if (!coreObject.IsAtmoLightOn())
         {
@@ -809,18 +867,20 @@ namespace AtmoLight
       // Change Effect
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeEffect"))
       {
-        GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+        GUIDialogMenu dlgEffect = (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgEffect.Reset();
         dlgEffect.SetHeading(Localization.Translate("ContextMenu", "ChangeEffect"));
 
         // Only show effects that are support by at least one target
-        foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
+        foreach (ContentEffect effect in Enum.GetValues(typeof (ContentEffect)))
         {
           if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
           {
             if (effect == ContentEffect.VUMeter || effect == ContentEffect.VUMeterRainbow)
             {
-              if (g_Player.Playing && (g_Player.currentMedia == g_Player.MediaType.Music || g_Player.currentMedia == g_Player.MediaType.Radio))
+              if (g_Player.Playing &&
+                  (g_Player.currentMedia == g_Player.MediaType.Music ||
+                   g_Player.currentMedia == g_Player.MediaType.Radio))
               {
                 dlgEffect.Add(new GUIListItem(Localization.Translate("ContentEffect", effect.ToString())));
               }
@@ -836,7 +896,10 @@ namespace AtmoLight
 
         if (!String.IsNullOrEmpty(dlgEffect.SelectedLabelText))
         {
-          ContentEffect temp = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", dlgEffect.SelectedLabelText));
+          ContentEffect temp =
+            (ContentEffect)
+              Enum.Parse(typeof (ContentEffect),
+                Localization.ReverseTranslate("ContentEffect", dlgEffect.SelectedLabelText));
 
           if (g_Player.Playing)
           {
@@ -856,7 +919,8 @@ namespace AtmoLight
         coreObject.ChangeProfile();
       }
       // Toggle 3D
-      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "3DOn") || dlg.SelectedLabelText == Localization.Translate("ContextMenu", "3DOff"))
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "3DOn") ||
+               dlg.SelectedLabelText == Localization.Translate("ContextMenu", "3DOff"))
       {
         if (Settings.sbs3dOn)
         {
@@ -870,7 +934,8 @@ namespace AtmoLight
         }
       }
       // Blackbar detection
-      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionOn") || dlg.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionOff"))
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionOn") ||
+               dlg.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionOff"))
       {
         if (Settings.blackbarDetection)
         {
@@ -886,7 +951,8 @@ namespace AtmoLight
         }
       }
       // Toggle Delay
-      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "DelayOn") || dlg.SelectedLabelText == Localization.Translate("ContextMenu", "DelayOff"))
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "DelayOn") ||
+               dlg.SelectedLabelText == Localization.Translate("ContextMenu", "DelayOff"))
       {
         if (coreObject.IsDelayEnabled())
         {
@@ -895,26 +961,35 @@ namespace AtmoLight
         }
         else
         {
-          coreObject.EnableDelay((int)(((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
+          coreObject.EnableDelay(
+            (int)
+              (((float) Settings.delayReferenceRefreshRate/(float) GetRefreshRate())*
+               (float) Settings.delayReferenceTime));
         }
       }
       // Change Delay
-      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() + Localization.Translate("Common", "MS") + ")")
+      else if (dlg.SelectedLabelText ==
+               Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() +
+               Localization.Translate("Common", "MS") + ")")
       {
-        if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) && (delayTimeHelper <= 1000))
+        if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) &&
+            (delayTimeHelper <= 1000))
         {
           coreObject.SetDelay(delayTimeHelper);
-          Settings.delayReferenceTime = (int)(((float)delayTimeHelper * (float)GetRefreshRate()) / Settings.delayReferenceRefreshRate);
+          Settings.delayReferenceTime =
+            (int) (((float) delayTimeHelper*(float) GetRefreshRate())/Settings.delayReferenceRefreshRate);
         }
         else
         {
-          DialogError(Localization.Translate("ContextMenu", "DelayError1"), Localization.Translate("ContextMenu", "DelayError2"));
+          DialogError(Localization.Translate("ContextMenu", "DelayError1"),
+            Localization.Translate("ContextMenu", "DelayError2"));
         }
       }
       // Change Static Color
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeStaticColor"))
       {
-        GUIDialogMenu dlgStaticColor = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+        GUIDialogMenu dlgStaticColor =
+          (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgStaticColor.Reset();
         dlgStaticColor.SetHeading(Localization.Translate("ContextMenu", "ChangeStaticColor"));
         dlgStaticColor.Add(new GUIListItem(Localization.Translate("ContextMenu", "Manual")));
@@ -946,7 +1021,8 @@ namespace AtmoLight
             Settings.staticColorBlue = coreObject.GetStaticColor()[2];
             break;
           case 2:
-            coreObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
+            coreObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen,
+              Settings.staticColorBlue);
             break;
           case 3:
             coreObject.SetStaticColor(255, 255, 255);
@@ -980,7 +1056,8 @@ namespace AtmoLight
       // Hue set active liveview group
       if (dlg.SelectedLabelText == Localization.Translate("Hue", "LiveviewGroup"))
       {
-        GUIDialogMenu dlgHueSetActiveGroup = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+        GUIDialogMenu dlgHueSetActiveGroup =
+          (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgHueSetActiveGroup.Reset();
         dlgHueSetActiveGroup.SetHeading(Localization.Translate("Hue", "LiveviewGroup"));
         dlgHueSetActiveGroup.Add(Localization.Translate("Hue", "All"));
@@ -1007,11 +1084,12 @@ namespace AtmoLight
           hueTarget.setActiveGroup(dlgHueSetActiveGroup.SelectedLabelText);
         }
       }
-      
+
       // Hue set static color for group
       if (dlg.SelectedLabelText == Localization.Translate("Hue", "StaticColorGroup"))
       {
-        GUIDialogMenu dlgHueSetActiveGroup = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+        GUIDialogMenu dlgHueSetActiveGroup =
+          (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgHueSetActiveGroup.Reset();
         dlgHueSetActiveGroup.SetHeading(Localization.Translate("Hue", "StaticColorGroup"));
         dlgHueSetActiveGroup.Add(Localization.Translate("Hue", "All"));
@@ -1030,7 +1108,8 @@ namespace AtmoLight
         if (dlgHueSetActiveGroup.SelectedLabel >= 0)
         {
           string groupName = dlgHueSetActiveGroup.SelectedLabelText;
-          GUIDialogMenu dlgHueSetStaticColorGroup = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+          GUIDialogMenu dlgHueSetStaticColorGroup =
+            (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
           dlgHueSetStaticColorGroup.Reset();
           dlgHueSetStaticColorGroup.SetHeading(Localization.Translate("Hue", "SelectStaticColorGroup"));
           dlgHueSetStaticColorGroup.Add(Localization.Translate("Hue", "Off"));
@@ -1053,7 +1132,7 @@ namespace AtmoLight
         }
       }
 
-      
+
     }
 
     /// <summary>
@@ -1067,7 +1146,7 @@ namespace AtmoLight
       Log.Info("Opening AtmoLight Yes/No dialog.");
 
       // Showing Yes/No dialog
-      GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
+      GUIDialogYesNo dlgYesNo = (GUIDialogYesNo) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_YES_NO);
       if (dlgYesNo != null)
       {
         dlgYesNo.Reset();
@@ -1090,14 +1169,26 @@ namespace AtmoLight
     {
       if (Reset)
       {
-        staticColorTemp = new int[] { -1, -1, -1 };
+        staticColorTemp = new int[] {-1, -1, -1};
       }
-      GUIDialogMenu dlgRGB = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+      GUIDialogMenu dlgRGB = (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
       dlgRGB.Reset();
       dlgRGB.SetHeading(Localization.Translate("ContextMenu", "ManualStaticColor"));
-      dlgRGB.Add(new GUIListItem(Localization.Translate("Common", "Red") + ": " + (staticColorTemp[0] == -1 ? Localization.Translate("Common", "NA") : staticColorTemp[0].ToString())));
-      dlgRGB.Add(new GUIListItem(Localization.Translate("Common", "Green") + ": " + (staticColorTemp[1] == -1 ? Localization.Translate("Common", "NA") : staticColorTemp[1].ToString())));
-      dlgRGB.Add(new GUIListItem(Localization.Translate("Common", "Blue") + ": " + (staticColorTemp[2] == -1 ? Localization.Translate("Common", "NA") : staticColorTemp[2].ToString())));
+      dlgRGB.Add(
+        new GUIListItem(Localization.Translate("Common", "Red") + ": " +
+                        (staticColorTemp[0] == -1
+                          ? Localization.Translate("Common", "NA")
+                          : staticColorTemp[0].ToString())));
+      dlgRGB.Add(
+        new GUIListItem(Localization.Translate("Common", "Green") + ": " +
+                        (staticColorTemp[1] == -1
+                          ? Localization.Translate("Common", "NA")
+                          : staticColorTemp[1].ToString())));
+      dlgRGB.Add(
+        new GUIListItem(Localization.Translate("Common", "Blue") + ": " +
+                        (staticColorTemp[2] == -1
+                          ? Localization.Translate("Common", "NA")
+                          : staticColorTemp[2].ToString())));
       dlgRGB.Add(new GUIListItem(Localization.Translate("Common", "Apply")));
       dlgRGB.Add(new GUIListItem(Localization.Translate("Common", "Cancel")));
       dlgRGB.SelectedLabel = StartPosition;
@@ -1109,19 +1200,26 @@ namespace AtmoLight
         case 0:
         case 1:
         case 2:
-          if ((int.TryParse(GetKeyboardString((staticColorTemp[dlgRGB.SelectedLabel] == -1 ? "" : staticColorTemp[dlgRGB.SelectedLabel].ToString())), out staticColorHelper)) && (staticColorHelper >= 0) && (staticColorHelper <= 255))
+          if (
+            (int.TryParse(
+              GetKeyboardString((staticColorTemp[dlgRGB.SelectedLabel] == -1
+                ? ""
+                : staticColorTemp[dlgRGB.SelectedLabel].ToString())), out staticColorHelper)) &&
+            (staticColorHelper >= 0) && (staticColorHelper <= 255))
           {
             staticColorTemp[dlgRGB.SelectedLabel] = staticColorHelper;
           }
           else
           {
-            DialogError(Localization.Translate("ContextMenu", "RGBError1"), Localization.Translate("ContextMenu", "RGBError2"));
+            DialogError(Localization.Translate("ContextMenu", "RGBError1"),
+              Localization.Translate("ContextMenu", "RGBError2"));
           }
           break;
         case 3:
           if (staticColorTemp[0] == -1 || staticColorTemp[1] == -1 || staticColorTemp[2] == -1)
           {
-            DialogError(Localization.Translate("ContextMenu", "RGBError1"), Localization.Translate("ContextMenu", "RGBError2"));
+            DialogError(Localization.Translate("ContextMenu", "RGBError1"),
+              Localization.Translate("ContextMenu", "RGBError2"));
             break;
           }
           else
@@ -1135,9 +1233,11 @@ namespace AtmoLight
       // Start the dialog again (without reset) so we can enter the other colors.
       DialogRGBManualStaticColorChanger(false, dlgRGB.SelectedLabel);
     }
+
     #endregion
 
     #region PowerModeChanged Event
+
     private void PowerModeChanged(object sender, PowerModeChangedEventArgs powerMode)
     {
       if (powerMode.Mode == PowerModes.Resume)
@@ -1154,9 +1254,74 @@ namespace AtmoLight
 
       Task.Factory.StartNew(() => { coreObject.PowerModeChanged(powerMode.Mode); });
     }
+
+    #endregion
+
+    #region Monitor screensaver state
+
+    private void monitorScreensaverState()
+    {
+      Boolean LEDsDisabledByScreensaver = false;
+
+      while (Settings.monitorScreensaverState)
+      {
+        try
+        {
+          // Check for screensaver window, blank screen only for now.
+          if (GUIGraphicsContext.BlankScreen)
+          {
+            ContentEffect currenContentEffect = coreObject.GetCurrentEffect();
+
+            if (currenContentEffect == ContentEffect.MediaPortalLiveMode ||
+                currenContentEffect == ContentEffect.ExternalLiveMode || currenContentEffect == ContentEffect.Undefined)
+            {
+              coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+              LEDsDisabledByScreensaver = true;
+              Log.Debug("LEDs should be deactivated. (Screensaver detected)");
+            }
+          }
+          // Restore last known effect when coming back from screensaver
+          else if (LEDsDisabledByScreensaver)
+          {
+            LEDsDisabledByScreensaver = false;
+
+            if (g_Player.Playing)
+            {
+              coreObject.ChangeEffect(playbackEffect);
+              CalculateDelay();
+            }
+            else
+            {
+              coreObject.ChangeEffect(menuEffect);
+              CalculateDelay();
+            }
+
+            Log.Debug("LEDs should be activated again. (Screensaver no longer active)");
+          }
+
+          // Sleep for 5 seconds
+          int sleepTime = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
+          Thread.Sleep(sleepTime);
+        }
+        catch (Exception ex)
+        {
+
+          // No logging as it could spam the logs
+
+          //Log.Error("Error in AtmolightPlugin_monitorScreensaverState.");
+          //Log.Error("Exception: {0}", ex.Message);
+
+          // Sleep for 5 seconds
+          int sleepTime = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
+          Thread.Sleep(sleepTime);
+        }
+      }
+    }
+
     #endregion
 
     #region ISetupForm impementation
+
     /// <summary>
     ///  Returns authors name.
     /// </summary>
@@ -1201,7 +1366,8 @@ namespace AtmoLight
     /// <param name="strButtonImageFocus"></param>
     /// <param name="strPictureImage"></param>
     /// <returns>false</returns>
-    public bool GetHome(out string strButtonText, out string strButtonImage, out string strButtonImageFocus, out string strPictureImage)
+    public bool GetHome(out string strButtonText, out string strButtonImage, out string strButtonImageFocus,
+      out string strPictureImage)
     {
       strButtonText = null;
       strButtonImage = null;
@@ -1249,7 +1415,8 @@ namespace AtmoLight
 
         var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
-        Log.Info("Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
+        Log.Info("Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build,
+          version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
         Log.Debug("Loading settings.");
         Settings.LoadSettings();
         atmoLightSetupForm = new SetupForm();
@@ -1265,6 +1432,7 @@ namespace AtmoLight
     {
       return false;
     }
+
     #endregion
   }
 }

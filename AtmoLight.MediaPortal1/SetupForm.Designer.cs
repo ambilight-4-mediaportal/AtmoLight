@@ -255,6 +255,7 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
+      this.ckMonitorScreensaverState = new System.Windows.Forms.CheckBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -1025,6 +1026,7 @@
       // 
       // grpPluginOption
       // 
+      this.grpPluginOption.Controls.Add(this.ckMonitorScreensaverState);
       this.grpPluginOption.Controls.Add(this.lblpowerModeChangedDelayMS);
       this.grpPluginOption.Controls.Add(this.lblpowerModeChangedDelay);
       this.grpPluginOption.Controls.Add(this.tbBlackbarDetectionThreshold);
@@ -1053,7 +1055,7 @@
       this.grpPluginOption.Controls.Add(this.lblLedsOnOff);
       this.grpPluginOption.Location = new System.Drawing.Point(370, 10);
       this.grpPluginOption.Name = "grpPluginOption";
-      this.grpPluginOption.Size = new System.Drawing.Size(460, 430);
+      this.grpPluginOption.Size = new System.Drawing.Size(460, 485);
       this.grpPluginOption.TabIndex = 11;
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
@@ -1061,7 +1063,7 @@
       // lblpowerModeChangedDelayMS
       // 
       this.lblpowerModeChangedDelayMS.AutoSize = true;
-      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(256, 225);
+      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(255, 253);
       this.lblpowerModeChangedDelayMS.Name = "lblpowerModeChangedDelayMS";
       this.lblpowerModeChangedDelayMS.Size = new System.Drawing.Size(20, 13);
       this.lblpowerModeChangedDelayMS.TabIndex = 35;
@@ -1070,7 +1072,7 @@
       // lblpowerModeChangedDelay
       // 
       this.lblpowerModeChangedDelay.AutoSize = true;
-      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(10, 225);
+      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(9, 250);
       this.lblpowerModeChangedDelay.Name = "lblpowerModeChangedDelay";
       this.lblpowerModeChangedDelay.Size = new System.Drawing.Size(101, 13);
       this.lblpowerModeChangedDelay.TabIndex = 34;
@@ -1087,7 +1089,7 @@
       // 
       // tbpowerModeChangedDelay
       // 
-      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(209, 222);
+      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(208, 250);
       this.tbpowerModeChangedDelay.Name = "tbpowerModeChangedDelay";
       this.tbpowerModeChangedDelay.Size = new System.Drawing.Size(41, 20);
       this.tbpowerModeChangedDelay.TabIndex = 33;
@@ -1113,7 +1115,7 @@
       this.grpCaptureDimensions.Controls.Add(this.lblCaptureWidth);
       this.grpCaptureDimensions.Controls.Add(this.tbCaptureWidth);
       this.grpCaptureDimensions.Controls.Add(this.tbCaptureHeight);
-      this.grpCaptureDimensions.Location = new System.Drawing.Point(5, 255);
+      this.grpCaptureDimensions.Location = new System.Drawing.Point(5, 300);
       this.grpCaptureDimensions.Name = "grpCaptureDimensions";
       this.grpCaptureDimensions.Size = new System.Drawing.Size(450, 80);
       this.grpCaptureDimensions.TabIndex = 31;
@@ -1180,7 +1182,7 @@
       this.grpDeactivate.Controls.Add(this.lblEnd);
       this.grpDeactivate.Controls.Add(this.edExcludeStart);
       this.grpDeactivate.Controls.Add(this.lblStart);
-      this.grpDeactivate.Location = new System.Drawing.Point(5, 340);
+      this.grpDeactivate.Location = new System.Drawing.Point(5, 400);
       this.grpDeactivate.Name = "grpDeactivate";
       this.grpDeactivate.Size = new System.Drawing.Size(450, 80);
       this.grpDeactivate.TabIndex = 8;
@@ -2610,11 +2612,21 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
+      // ckMonitorScreensaverState
+      // 
+      this.ckMonitorScreensaverState.AutoSize = true;
+      this.ckMonitorScreensaverState.Location = new System.Drawing.Point(12, 225);
+      this.ckMonitorScreensaverState.Name = "ckMonitorScreensaverState";
+      this.ckMonitorScreensaverState.Size = new System.Drawing.Size(273, 17);
+      this.ckMonitorScreensaverState.TabIndex = 38;
+      this.ckMonitorScreensaverState.Text = "Turn off leds while Mediaportal screensaver is active";
+      this.ckMonitorScreensaverState.UseVisualStyleBackColor = true;
+      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(872, 582);
+      this.ClientSize = new System.Drawing.Size(872, 581);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
@@ -2915,5 +2927,6 @@
     private System.Windows.Forms.CheckBox cbHueOverallLightness;
     private System.Windows.Forms.TextBox tbHueSaturation;
     private System.Windows.Forms.Label lblHueSaturation;
+		private System.Windows.Forms.CheckBox ckMonitorScreensaverState;
   }
 }

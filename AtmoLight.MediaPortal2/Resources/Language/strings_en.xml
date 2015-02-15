@@ -71,6 +71,7 @@
   <string name="AtmoLight.HueBridgeDisableOnSuspend">Turn off Hue Bridge on suspend</string>
   <string name="AtmoLight.CaptureWidth">Capture width (Will only be used if AtmoWin is disabled!)</string>
   <string name="AtmoLight.CaptureHeight">Capture height (Will only be used if AtmoWin is disabled!)</string>
+  <string name="AtmoLight.MonitorScreensaverState">Turn off leds while Mediaportal screensaver is active</string>
   <string name="AtmoLight.Boblight">Boblight</string>
   <string name="AtmoLight.BoblightTarget">Use Boblight</string>
   <string name="AtmoLight.BoblightIP">IP address</string>
