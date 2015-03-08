@@ -106,6 +106,10 @@ namespace AtmoLight
 
       // General settings
       coreObject.SetDelay(settings.DelayTime);
+      if (settings.Delay)
+      {
+        coreObject.EnableDelay();
+      }
       coreObject.SetGIFPath(settings.GIFFile);
       coreObject.SetReInitOnError(settings.RestartAtmoWinOnError);
       coreObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, settings.StaticColorBlue);
@@ -195,6 +199,7 @@ namespace AtmoLight
       if (CheckForStartRequirements())
       {
         coreObject.ChangeEffect(settings.MenuEffect, true);
+        CalculateDelay();
       }
       else
       {

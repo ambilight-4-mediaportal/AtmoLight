@@ -900,17 +900,18 @@ namespace AtmoLight
     /// Enables the delay.
     /// </summary>
     /// <param name="delay">Delay in ms.</param>
-    /// <returns>true or false</returns>
-    public bool EnableDelay(int delay = -1)
+    public void EnableDelay(int delay = -1)
     {
       if (delay > 0)
       {
         delayTime = delay;
       }
-      Log.Info("Adding {0}ms delay to LEDs.", delayTime);
       delayEnabled = true;
-      StartSetPixelDataThread();
-      return false;
+      if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      {
+        Log.Info("Adding {0}ms delay to LEDs.", delayTime);
+        StartSetPixelDataThread();
+      }
     }
 
     /// <summary>
@@ -918,9 +919,12 @@ namespace AtmoLight
     /// </summary>
     public void DisableDelay()
     {
-      Log.Info("Removing delay.");
       delayEnabled = false;
-      StopSetPixelDataThread();
+      if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      {
+        Log.Info("Removing delay.");
+        StopSetPixelDataThread();
+      }
     }
 
     public void PowerModeChanged(PowerModes powerMode)
