@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
+using MediaPortal;
 using MediaPortal.GUI.Library;
 using MediaPortal.Profile;
 using MediaPortal.Player;
@@ -523,13 +524,34 @@ namespace AtmoLight
     /// <param name="arWidth">Aspect ratio width.</param>
     /// <param name="arHeight">Aspect ratio height.</param>
     /// <param name="pSurface">Surface.</param>
-    private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface)
+    /// <param name="FrameSource">Source of frame, see enums FrameGrabber.FrameSource</param>/// 
+    private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface, FrameGrabber.FrameSource FrameSource)
     {
       if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() ||
           !coreObject.IsAtmoLightOn() || width == 0 || height == 0)
       {
         return;
       }
+	  
+      //Drop any frames?
+      if (Settings.trueGrabbing)
+      {
+          //GUI grabbing while video is minimized activated 
+          if (g_Player.Playing && (!GUIGraphicsContext.IsFullScreenVideo) && (FrameSource == FrameGrabber.FrameSource.Video))
+          {
+            //Drop Video frames when user has set TrueGrabbing & video is playing minimized -> just GUI frames will pass
+            return;
+          }
+      }
+      else
+      {
+          //GUI grabbing while video is minimized deactivated 
+          if((g_Player.Playing) && (FrameSource == FrameGrabber.FrameSource.GUI))
+          {
+              //Drop GUI frames when user has NOT set TrueGrabbing & video is playing -> just video frames will pass
+            return;
+          }
+      }	  
 
       // Low CPU setting.
       // Skip frame if LowCPUTime has not yet passed since last frame.

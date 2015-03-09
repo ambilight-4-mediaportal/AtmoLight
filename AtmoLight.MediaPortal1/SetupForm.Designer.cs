@@ -103,6 +103,7 @@
       this.tbBlackbarDetectionThreshold = new System.Windows.Forms.TextBox();
       this.tbpowerModeChangedDelay = new System.Windows.Forms.TextBox();
       this.ckRestartOnError = new System.Windows.Forms.CheckBox();
+      this.ckTrueGrabbing = new System.Windows.Forms.CheckBox();
       this.grpCaptureDimensions = new System.Windows.Forms.GroupBox();
       this.lblHintCaptureDimensions = new System.Windows.Forms.Label();
       this.lblCaptureHeight = new System.Windows.Forms.Label();
@@ -256,6 +257,7 @@
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
       this.ckMonitorScreensaverState = new System.Windows.Forms.CheckBox();
+      this.ckTrueGrabbing = new System.Windows.Forms.CheckBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -616,7 +618,7 @@
       this.grpTargets.Controls.Add(this.ckHyperionEnabled);
       this.grpTargets.Location = new System.Drawing.Point(10, 10);
       this.grpTargets.Name = "grpTargets";
-      this.grpTargets.Size = new System.Drawing.Size(350, 150);
+      this.grpTargets.Size = new System.Drawing.Size(350, 103);
       this.grpTargets.TabIndex = 19;
       this.grpTargets.TabStop = false;
       this.grpTargets.Text = "Hardware selection";
@@ -646,7 +648,7 @@
       // ckBoblightEnabled
       // 
       this.ckBoblightEnabled.AutoSize = true;
-      this.ckBoblightEnabled.Location = new System.Drawing.Point(12, 98);
+      this.ckBoblightEnabled.Location = new System.Drawing.Point(94, 25);
       this.ckBoblightEnabled.Name = "ckBoblightEnabled";
       this.ckBoblightEnabled.Size = new System.Drawing.Size(64, 17);
       this.ckBoblightEnabled.TabIndex = 22;
@@ -657,7 +659,7 @@
       // ckHueEnabled
       // 
       this.ckHueEnabled.AutoSize = true;
-      this.ckHueEnabled.Location = new System.Drawing.Point(12, 121);
+      this.ckHueEnabled.Location = new System.Drawing.Point(94, 50);
       this.ckHueEnabled.Name = "ckHueEnabled";
       this.ckHueEnabled.Size = new System.Drawing.Size(46, 17);
       this.ckHueEnabled.TabIndex = 21;
@@ -691,7 +693,7 @@
       // ckHyperionEnabled
       // 
       this.ckHyperionEnabled.AutoSize = true;
-      this.ckHyperionEnabled.Location = new System.Drawing.Point(100, 25);
+      this.ckHyperionEnabled.Location = new System.Drawing.Point(94, 75);
       this.ckHyperionEnabled.Name = "ckHyperionEnabled";
       this.ckHyperionEnabled.Size = new System.Drawing.Size(68, 17);
       this.ckHyperionEnabled.TabIndex = 2;
@@ -701,6 +703,7 @@
       // 
       // grpMode
       // 
+      this.grpMode.Controls.Add(this.ckTrueGrabbing);
       this.grpMode.Controls.Add(this.grpVUMeter);
       this.grpMode.Controls.Add(this.cbMPExit);
       this.grpMode.Controls.Add(this.lblMPExit);
@@ -714,9 +717,9 @@
       this.grpMode.Controls.Add(this.lblMusic);
       this.grpMode.Controls.Add(this.cbVideo);
       this.grpMode.Controls.Add(this.lblVidTvRec);
-      this.grpMode.Location = new System.Drawing.Point(10, 165);
+      this.grpMode.Location = new System.Drawing.Point(10, 119);
       this.grpMode.Name = "grpMode";
-      this.grpMode.Size = new System.Drawing.Size(350, 330);
+      this.grpMode.Size = new System.Drawing.Size(350, 376);
       this.grpMode.TabIndex = 7;
       this.grpMode.TabStop = false;
       this.grpMode.Text = "Effect Settings";
@@ -729,7 +732,7 @@
       this.grpVUMeter.Controls.Add(this.lblVUMeterMinHue);
       this.grpVUMeter.Controls.Add(this.tbVUMeterMindB);
       this.grpVUMeter.Controls.Add(this.lblVUMeterMindB);
-      this.grpVUMeter.Location = new System.Drawing.Point(5, 270);
+      this.grpVUMeter.Location = new System.Drawing.Point(4, 318);
       this.grpVUMeter.Name = "grpVUMeter";
       this.grpVUMeter.Size = new System.Drawing.Size(340, 50);
       this.grpVUMeter.TabIndex = 29;
@@ -816,7 +819,7 @@
       // 
       this.grpGIF.Controls.Add(this.btnSelectGIF);
       this.grpGIF.Controls.Add(this.tbGIF);
-      this.grpGIF.Location = new System.Drawing.Point(5, 215);
+      this.grpGIF.Location = new System.Drawing.Point(4, 263);
       this.grpGIF.Name = "grpGIF";
       this.grpGIF.Size = new System.Drawing.Size(340, 50);
       this.grpGIF.TabIndex = 26;
@@ -851,7 +854,7 @@
       this.grpStaticColor.Controls.Add(this.tbRed);
       this.grpStaticColor.Controls.Add(this.lblGreen);
       this.grpStaticColor.Controls.Add(this.lblBlue);
-      this.grpStaticColor.Location = new System.Drawing.Point(5, 160);
+      this.grpStaticColor.Location = new System.Drawing.Point(4, 208);
       this.grpStaticColor.Name = "grpStaticColor";
       this.grpStaticColor.Size = new System.Drawing.Size(340, 50);
       this.grpStaticColor.TabIndex = 25;
@@ -1059,6 +1062,17 @@
       this.grpPluginOption.TabIndex = 11;
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
+      // 
+      // ckTrueGrabbing
+      //
+      this.ckTrueGrabbing.Checked = true;
+      this.ckTrueGrabbing.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.ckTrueGrabbing.Location = new System.Drawing.Point(13, 161);
+      this.ckTrueGrabbing.Name = "ckTrueGrabbing";
+      this.ckTrueGrabbing.Size = new System.Drawing.Size(329, 40);
+      this.ckTrueGrabbing.TabIndex = 33;
+      this.ckTrueGrabbing.Text = "Use GUI and video framedata in MPLiveMode (MP 1.12 and up)";
+      this.ckTrueGrabbing.UseVisualStyleBackColor = true;	  	  
       // 
       // lblpowerModeChangedDelayMS
       // 
@@ -2761,6 +2775,7 @@
     private System.Windows.Forms.Label lblVidTvRec;
     private System.Windows.Forms.GroupBox grpPluginOption;
     private System.Windows.Forms.CheckBox ckRestartOnError;
+    private System.Windows.Forms.CheckBox ckTrueGrabbing;
     private System.Windows.Forms.GroupBox grpCaptureDimensions;
     private System.Windows.Forms.Label lblHintCaptureDimensions;
     private System.Windows.Forms.Label lblCaptureHeight;

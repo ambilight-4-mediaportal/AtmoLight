@@ -31,6 +31,7 @@ namespace AtmoLight
     public static int staticColorGreen;
     public static int staticColorBlue;
     public static bool restartOnError;
+    public static bool trueGrabbing;
     public static bool blackbarDetection;
     public static int blackbarDetectionTime;
     public static int blackbarDetectionThreshold;
@@ -235,6 +236,7 @@ namespace AtmoLight
         staticColorGreen = reader.GetValueAsInt("atmolight", "StaticColorGreen", 0);
         staticColorBlue = reader.GetValueAsInt("atmolight", "StaticColorBlue", 0);
         restartOnError = reader.GetValueAsBool("atmolight", "RestartOnError", true);
+        trueGrabbing = reader.GetValueAsBool("atmolight", "TrueGrabbing", true);
         delayReferenceRefreshRate = reader.GetValueAsInt("atmolight", "DelayRefreshRate", 50);
         blackbarDetection = reader.GetValueAsBool("atmolight", "BlackbarDetection", false);
         blackbarDetectionTime = reader.GetValueAsInt("atmolight", "BlackbarDetectionTime", 1000);
@@ -342,6 +344,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "StaticColorGreen", staticColorGreen);
         reader.SetValue("atmolight", "StaticColorBlue", staticColorBlue);
         reader.SetValueAsBool("atmolight", "RestartOnError", restartOnError);
+        reader.SetValueAsBool("atmolight", "TrueGrabbing", trueGrabbing);
         reader.SetValue("atmolight", "DelayRefreshRate", delayReferenceRefreshRate);
         reader.SetValueAsBool("atmolight", "BlackbarDetection", blackbarDetection);
         reader.SetValue("atmolight", "BlackbarDetectionTime", blackbarDetectionTime);

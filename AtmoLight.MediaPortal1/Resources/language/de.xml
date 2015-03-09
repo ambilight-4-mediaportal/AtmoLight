@@ -75,6 +75,7 @@
     <string name="Delay">LED Verzögerung</string>
     <string name="DelayAt">ms Verzögerung bei</string>
     <string name="RestartOnError">Auto. wiederverbingung bei Fehler</string>
+	<string name="TrueGrabbing">Verwende Nutzeroberflächen Daten in MediaPortal Live Modus wenn Video minimiert ist</string>	
     <string name="RefreshRate">Hz</string>
     <string name="BlackbarDetection">Schw. Balken Erkennung alle</string>
     <string name="BlackbarDetectionThreshold">ms, mit Schwelle</string>

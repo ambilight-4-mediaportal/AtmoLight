@@ -75,6 +75,7 @@
     <string name="Delay">LED Delay</string>
     <string name="DelayAt">ms delay at</string>
     <string name="RestartOnError">Auto-Reconnect on Error</string>
+    <string name="TrueGrabbing">Use GUI data when video is minimized in MediaPortal Live Mode</string>        
     <string name="RefreshRate">Hz</string>
     <string name="BlackbarDetection">Blackbar detection every</string>
     <string name="BlackbarDetectionThreshold">ms, with Threshold</string>
