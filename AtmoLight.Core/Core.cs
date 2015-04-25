@@ -98,6 +98,9 @@ namespace AtmoLight
     public bool blackbarDetection;
     public int blackbarDetectionTime;
     public int blackbarDetectionThreshold;
+    public bool blackbarDetectionHorizontal;
+    public bool blackbarDetectionVertical;
+    public bool blackbarDetectionLinkAreas;
     public int powerModeChangedDelay;
     public int vuMeterMindB;
     public double vuMeterMaxHue;
@@ -732,73 +735,108 @@ namespace AtmoLight
         int xRightBound = -1;
 
         // Horizontal Scan
-        for (int y = 0; y < (int)(blackBarBitmap.Height / 3); y++)
+        if (blackbarDetectionHorizontal)
         {
-          if (yTopBound != -1 && yBottomBound != -1)
-          {
-            break;
-          }
-          for (int x = (int)(blackBarBitmap.Width * 0.33); x < (int)(blackBarBitmap.Width * 0.66); x++)
+          for (int y = 0; y < (int) (blackBarBitmap.Height/3); y++)
           {
             if (yTopBound != -1 && yBottomBound != -1)
             {
               break;
             }
-
-            if (yTopBound == -1)
+            for (int x = (int) (blackBarBitmap.Width*0.33); x < (int) (blackBarBitmap.Width*0.66); x++)
             {
-              colorTemp = blackBarBitmap.GetPixel(x, y);
-              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              if (yTopBound != -1 && yBottomBound != -1)
               {
-                yTopBound = y;
+                break;
               }
-            }
 
-            if (yBottomBound == -1)
-            {
-              colorTemp = blackBarBitmap.GetPixel(x, blackBarBitmap.Height - 1 - y);
-              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              if (yTopBound == -1)
               {
-                yBottomBound = blackBarBitmap.Height - y;
+                colorTemp = blackBarBitmap.GetPixel(x, y);
+                if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold ||
+                    colorTemp.B > blackbarDetectionThreshold)
+                {
+                  yTopBound = y;
+                  if (blackbarDetectionLinkAreas)
+                  {
+                    yBottomBound = blackBarBitmap.Height - y;
+                    break;
+                  }
+                }
+              }
+
+              if (yBottomBound == -1)
+              {
+                colorTemp = blackBarBitmap.GetPixel(x, blackBarBitmap.Height - 1 - y);
+                if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold ||
+                    colorTemp.B > blackbarDetectionThreshold)
+                {
+                  yBottomBound = blackBarBitmap.Height - y;
+                  if (blackbarDetectionLinkAreas)
+                  {
+                    yTopBound = y;
+                    break;
+                  }
+                }
               }
             }
           }
         }
 
         // Vertical Scan
-        for (int x = 0; x < (int)(blackBarBitmap.Width / 3); x++)
+        if (blackbarDetectionVertical)
         {
-          if (xLeftBound != -1 && xRightBound != -1)
-          {
-            break;
-          }
-          for (int y = (int)(blackBarBitmap.Height * 0.33); y < (int)(blackBarBitmap.Height * 0.66); y++)
+          for (int x = 0; x < (int) (blackBarBitmap.Width/3); x++)
           {
             if (xLeftBound != -1 && xRightBound != -1)
             {
               break;
             }
-
-            if (xLeftBound == -1)
+            for (int y = (int) (blackBarBitmap.Height*0.33); y < (int) (blackBarBitmap.Height*0.66); y++)
             {
-              colorTemp = blackBarBitmap.GetPixel(x, y);
-              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              if (xLeftBound != -1 && xRightBound != -1)
               {
-                xLeftBound = x;
+                break;
               }
-            }
 
-            if (xRightBound == -1)
-            {
-              colorTemp = blackBarBitmap.GetPixel(blackBarBitmap.Width - 1 - x, y);
-              if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold || colorTemp.B > blackbarDetectionThreshold)
+              if (xLeftBound == -1)
               {
-                xRightBound = blackBarBitmap.Width - x;
+                colorTemp = blackBarBitmap.GetPixel(x, y);
+                if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold ||
+                    colorTemp.B > blackbarDetectionThreshold)
+                {
+                  xLeftBound = x;
+                  if (blackbarDetectionLinkAreas)
+                  {
+                    xRightBound = blackBarBitmap.Width - x;
+                    break;
+                  }
+                }
+              }
+
+              if (xRightBound == -1)
+              {
+                colorTemp = blackBarBitmap.GetPixel(blackBarBitmap.Width - 1 - x, y);
+                if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold ||
+                    colorTemp.B > blackbarDetectionThreshold)
+                {
+                  xRightBound = blackBarBitmap.Width - x;
+                  if (blackbarDetectionLinkAreas)
+                  {
+                    xLeftBound = x;
+                    break;
+                  }
+                }
               }
             }
           }
         }
-        if (yTopBound != -1 && yBottomBound != -1 && xLeftBound != -1 && xRightBound != -1)
+        yTopBound = yTopBound == -1 ? 0 : yTopBound;
+        yBottomBound = yBottomBound == -1 ? blackBarBitmap.Height : yBottomBound;
+        xLeftBound = xLeftBound == -1 ? 0 : xLeftBound;
+        xRightBound = xRightBound == -1 ? blackBarBitmap.Width : xRightBound;
+
+        if (yTopBound != 0 || yBottomBound != blackBarBitmap.Height || xLeftBound != 0 || xRightBound != blackBarBitmap.Width)
         {
           blackbarDetectionRect = new Rectangle(xLeftBound, yTopBound, xRightBound - xLeftBound, yBottomBound - yTopBound);
         }

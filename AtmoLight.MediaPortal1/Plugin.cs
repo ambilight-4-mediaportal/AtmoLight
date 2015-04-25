@@ -82,6 +82,7 @@ namespace AtmoLight
         version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
       Log.Debug("Loading settings.");
       Settings.LoadSettings();
+      Settings.SaveSettings();
 
       Log.Debug("Initialising event handler.");
 
@@ -134,6 +135,9 @@ namespace AtmoLight
       coreObject.vuMeterMindB = Settings.vuMeterMindB;
       coreObject.vuMeterMinHue = Settings.vuMeterMinHue;
       coreObject.vuMeterMaxHue = Settings.vuMeterMaxHue;
+      coreObject.blackbarDetectionHorizontal = Settings.blackbarDetectionHorizontal;
+      coreObject.blackbarDetectionVertical = Settings.blackbarDetectionVertical;
+      coreObject.blackbarDetectionLinkAreas = Settings.blackbarDetectionLinkAreas;
 
       // AmbiBox
       coreObject.ambiBoxIP = Settings.ambiBoxIP;
