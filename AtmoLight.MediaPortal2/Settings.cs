@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -241,6 +242,15 @@ namespace AtmoLight
     [Setting(SettingScope.User, false)]
     public bool AmbiBoxTarget { get; set; }
 
+    [Setting(SettingScope.User, true)]
+    public bool BlackbarDetectionLinkAreas { get; set; }
+
+    [Setting(SettingScope.User, true)]
+    public bool BlackbarDetectionHorizontal { get; set; }
+
+    [Setting(SettingScope.User, true)]
+    public bool BlackbarDetectionVertical { get; set; }
+
 
     ISettingsManager settingsManager = ServiceRegistration.Get<ISettingsManager>();
     Settings settings;
@@ -324,6 +334,9 @@ namespace AtmoLight
       HueMinDiversion = settings.HueMinDiversion;
       HueSaturation = settings.HueSaturation;
       HueUseOverallLightness = settings.HueUseOverallLightness;
+      BlackbarDetectionLinkAreas = settings.BlackbarDetectionLinkAreas;
+      BlackbarDetectionHorizontal = settings.BlackbarDetectionHorizontal;
+      BlackbarDetectionVertical = settings.BlackbarDetectionVertical;
       return true;
     }
 
@@ -405,6 +418,9 @@ namespace AtmoLight
       settings.HueMinDiversion = HueMinDiversion;
       settings.HueSaturation = HueSaturation;
       settings.HueUseOverallLightness = HueUseOverallLightness;
+      settings.BlackbarDetectionLinkAreas = BlackbarDetectionLinkAreas;
+      settings.BlackbarDetectionHorizontal = BlackbarDetectionHorizontal;
+      settings.BlackbarDetectionVertical = BlackbarDetectionVertical;
       settingsManager.Save(settings);
       return true;
     }

@@ -316,7 +316,7 @@ namespace AtmoLight
         hueUseOverallLightness = reader.GetValueAsBool("atmolight", "hueUseOverallLightness", true);
         blackbarDetectionHorizontal = reader.GetValueAsBool("atmolight", "blackbarDetectionHorizontal", true);
         blackbarDetectionVertical = reader.GetValueAsBool("atmolight", "blackbarDetectionVertical", true);
-        blackbarDetectionLinkAreas = reader.GetValueAsBool("atmolight", "blackbarDetectionLinkAreas", false);
+        blackbarDetectionLinkAreas = reader.GetValueAsBool("atmolight", "blackbarDetectionLinkAreas", true);
       }
     }
     public static void SaveSettings()

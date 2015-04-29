@@ -1924,4 +1924,58 @@ namespace AtmoLight.Configuration
       Core.GetInstance().ambiBoxAutoStop = _yes;
     }
   }
+
+  public class BlackbarDetectionLinkAreas : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().BlackbarDetectionLinkAreas;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BlackbarDetectionLinkAreas = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().blackbarDetectionLinkAreas = _yes;
+    }
+  }
+
+  public class BlackbarDetectionHorizontal : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().BlackbarDetectionHorizontal;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BlackbarDetectionHorizontal = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().blackbarDetectionHorizontal = _yes;
+    }
+  }
+
+  public class BlackbarDetectionVertical : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().BlackbarDetectionVertical;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BlackbarDetectionVertical = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().blackbarDetectionVertical = _yes;
+    }
+  }
 }

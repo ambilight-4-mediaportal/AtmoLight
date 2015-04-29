@@ -91,6 +91,9 @@
     <string name="MenuHint">Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3D-SBS mode.</string>
     <string name="TargetHint">Hint: Select the devices you want to use with AtmoLight and configure it on its designated tab</string>
     <string name="CaptureDimensionHint">Hint: Only used when Atmowin is not enabled</string>
+    <string name="BlackbarDetectionLinkAreas">Blackbar Detection link areas (top to bottom and left to right)</string>
+    <string name="BlackbarDetectionHorizontal">Blackbar Detection horizontal scan</string>
+    <string name="BlackbarDetectionVertical">Blackbar Detection vertical scan</string>
   </SetupForm>
   <ContextMenu>
     <string name="LEDsOn">Switch LEDs on</string>

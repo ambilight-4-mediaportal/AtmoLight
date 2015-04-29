@@ -91,6 +91,9 @@
     <string name="MenuHint">Tipp: Sie können das Kontext Menü benutzten um den Effekt zu ändern, die LEDs an- bzw. auszuschalten und den 3D-SBS Modus zu ändern.</string>
     <string name="TargetHint">Tipp: Wählen Sie die Hardware aus die Sie mit AtmoLight verwenden möchten und konfigurieren Sie diese in deren Tabs.</string>
     <string name="CaptureDimensionHint">Tipp: Wird nur verwendet ohne AtmoWin.</string>
+    <string name="BlackbarDetectionLinkAreas">Schw. Balken Erkennung Zonen verknüpfen (Oben und Unten, sowie Links und Rechts)</string>
+    <string name="BlackbarDetectionHorizontal">Schw. Balken Erkennung Horizontaler Scan</string>
+    <string name="BlackbarDetectionVertical">Schw. Balken Erkennung Vertikaler Scan</string>
   </SetupForm>
   <ContextMenu>
     <string name="LEDsOn">Schalte LEDs an</string>
