@@ -124,6 +124,12 @@
     <string name="Connect2">Do you want to re establish it?</string>
     <string name="BlackbarDetectionOn">Switch Blackbar Detection on</string>
     <string name="BlackbarDetectionOff">Switch Blackbar Detection off</string>
+    <string name="BlackbarDetection">Blackbar Detection</string>
+    <string name="BlackbarDetectionDisableManual">Enable automatic detection</string>
+    <string name="BlackbarDetection1.33:1">Manual 1.33:1 (4x3)</string>
+    <string name="BlackbarDetection1.78:1">Manual 1.78:1 (16x9)</string>
+    <string name="BlackbarDetection1.85:1">Manual 1.85:1</string>
+    <string name="BlackbarDetection2.35:1">Manual 2.35:1 (21x9)</string>
     <string name="Reinitialise">Reconnect to lost targets</string>
     <string name="AtmoLightDisabled">AtmoLight disabled</string>
   </ContextMenu>

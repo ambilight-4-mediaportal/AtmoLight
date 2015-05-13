@@ -47,6 +47,14 @@ namespace AtmoLight
     Network
   }
 
+  public enum BlackbarDetectionAR
+  {
+    _1_33x1,
+    _1_78x1,
+    _1_85x1,
+    _2_35x1
+  }
+
   public class Core
   {
     #region Fields
@@ -101,6 +109,9 @@ namespace AtmoLight
     public bool blackbarDetectionHorizontal;
     public bool blackbarDetectionVertical;
     public bool blackbarDetectionLinkAreas;
+    public bool blackbarDetectionManual = false;
+    public BlackbarDetectionAR blackbarDetectionAR;
+
     public int powerModeChangedDelay;
     public int vuMeterMindB;
     public double vuMeterMaxHue;
@@ -653,7 +664,7 @@ namespace AtmoLight
         stream = BlackbarDetection(stream);
       }
       // Debug file output after blackbar detection
-      // new Bitmap(stream).Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + ".bmp");
+      // new Bitmap(stream).Save("C:\\ProgramData\\Team MediaPortal\\MediaPortal\\" + Win32API.GetTickCount() + "_.bmp");
 
       BinaryReader reader = new BinaryReader(stream);
       stream.Position = 0; // ensure that what start at the beginning of the stream. 
@@ -725,7 +736,7 @@ namespace AtmoLight
       {
         blackbarStopwatch.Start();
       }
-      if (blackbarStopwatch.ElapsedMilliseconds >= blackbarDetectionTime)
+      if (!blackbarDetectionManual && (blackbarStopwatch.ElapsedMilliseconds >= blackbarDetectionTime))
       {
         Bitmap blackBarBitmap = new Bitmap(stream);
         Color colorTemp;
@@ -842,6 +853,42 @@ namespace AtmoLight
         }
         blackBarBitmap.Dispose();
         blackbarStopwatch.Restart();
+      }
+      else if (blackbarDetectionManual)
+      {
+        if (blackbarDetectionRect == null)
+        {
+          blackbarDetectionRect = new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight());
+        }
+
+        if (blackbarDetectionAR == BlackbarDetectionAR._1_33x1)
+        {
+          blackbarDetectionRect.X = (int)(0.125 * GetCaptureWidth());
+          blackbarDetectionRect.Y = 0;
+          blackbarDetectionRect.Width = (int)(0.75 * GetCaptureWidth());
+          blackbarDetectionRect.Height = GetCaptureHeight();
+        }
+        else if (blackbarDetectionAR == BlackbarDetectionAR._1_78x1)
+        {
+          blackbarDetectionRect.X = 0;
+          blackbarDetectionRect.Y = 0;
+          blackbarDetectionRect.Width = GetCaptureWidth();
+          blackbarDetectionRect.Height = GetCaptureHeight();
+        }
+        else if (blackbarDetectionAR == BlackbarDetectionAR._1_85x1)
+        {
+          blackbarDetectionRect.X = 0;
+          blackbarDetectionRect.Y = (int)(0.02 * GetCaptureHeight());
+          blackbarDetectionRect.Width = GetCaptureWidth();
+          blackbarDetectionRect.Height = (int)(0.96 * GetCaptureHeight());
+        }
+        else if (blackbarDetectionAR == BlackbarDetectionAR._2_35x1)
+        {
+          blackbarDetectionRect.X = 0;
+          blackbarDetectionRect.Y = (int)(0.12 * GetCaptureHeight());
+          blackbarDetectionRect.Width = GetCaptureWidth();
+          blackbarDetectionRect.Height = (int)(0.76 * GetCaptureHeight());
+        }
       }
 
       if (blackbarDetectionRect != new Rectangle(0, 0, GetCaptureWidth(), GetCaptureHeight()) && blackbarDetectionRect != new Rectangle(0, 0, 0, 0))
