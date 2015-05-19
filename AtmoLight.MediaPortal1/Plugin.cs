@@ -82,6 +82,7 @@ namespace AtmoLight
         version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
       Log.Debug("Loading settings.");
       Settings.LoadSettings();
+      Settings.SaveSettings();
 
       Log.Debug("Initialising event handler.");
 
@@ -138,6 +139,9 @@ namespace AtmoLight
       coreObject.vuMeterMindB = Settings.vuMeterMindB;
       coreObject.vuMeterMinHue = Settings.vuMeterMinHue;
       coreObject.vuMeterMaxHue = Settings.vuMeterMaxHue;
+      coreObject.blackbarDetectionHorizontal = Settings.blackbarDetectionHorizontal;
+      coreObject.blackbarDetectionVertical = Settings.blackbarDetectionVertical;
+      coreObject.blackbarDetectionLinkAreas = Settings.blackbarDetectionLinkAreas;
 
       // AmbiBox
       coreObject.ambiBoxIP = Settings.ambiBoxIP;
@@ -758,14 +762,7 @@ namespace AtmoLight
       }
 
       // Toggle Blackbar Detection
-      if (Settings.blackbarDetection)
-      {
-        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetectionOff")));
-      }
-      else
-      {
-        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetectionOn")));
-      }
+      dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetection")));
 
       // Delay
       if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
@@ -939,22 +936,75 @@ namespace AtmoLight
         }
       }
       // Blackbar detection
-      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionOn") ||
-               dlg.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionOff"))
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetection"))
       {
+        GUIDialogMenu dlgBlackbarDetection = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+        dlgBlackbarDetection.Reset();
+        dlgBlackbarDetection.SetHeading(Localization.Translate("ContextMenu", "BlackbarDetection"));
+
         if (Settings.blackbarDetection)
         {
-          Log.Info("Switching blackbar detection off.");
-          Settings.blackbarDetection = false;
-          coreObject.blackbarDetection = false;
+          dlgBlackbarDetection.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetectionOff")));
         }
         else
         {
-          Log.Info("Switching blackbar detection on.");
-          Settings.blackbarDetection = true;
-          coreObject.blackbarDetection = true;
+          dlgBlackbarDetection.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetectionOn")));
+        }
+
+        if (coreObject.blackbarDetectionManual)
+        {
+          dlgBlackbarDetection.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetectionDisableManual")));
+        }
+
+        dlgBlackbarDetection.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetection1.33:1")));
+        dlgBlackbarDetection.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetection1.78:1")));
+        dlgBlackbarDetection.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetection1.85:1")));
+        dlgBlackbarDetection.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetection2.35:1")));
+        dlgBlackbarDetection.SelectedLabel = 0;
+        dlgBlackbarDetection.DoModal(GUIWindowManager.ActiveWindow);
+
+        if (dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionOn") ||
+             dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionOff"))
+        {
+          if (Settings.blackbarDetection)
+          {
+            Log.Info("Switching blackbar detection off.");
+            Settings.blackbarDetection = false;
+            coreObject.blackbarDetection = false;
+          }
+          else
+          {
+            Log.Info("Switching blackbar detection on.");
+            Settings.blackbarDetection = true;
+            coreObject.blackbarDetection = true;
+          }
+        }
+        else if (dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionDisableManual"))
+        {
+          coreObject.blackbarDetectionManual = false;
+        }
+        else if (dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetection1.33:1"))
+        {
+          coreObject.blackbarDetectionManual = true;
+          coreObject.blackbarDetectionAR = BlackbarDetectionAR._1_33x1;
+        }
+        else if (dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetection1.78:1"))
+        {
+          coreObject.blackbarDetectionManual = true;
+          coreObject.blackbarDetectionAR = BlackbarDetectionAR._1_78x1;
+        }
+        else if (dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetection1.85:1"))
+        {
+          coreObject.blackbarDetectionManual = true;
+          coreObject.blackbarDetectionAR = BlackbarDetectionAR._1_85x1;
+        }
+        else if (dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetection2.35:1"))
+        {
+          coreObject.blackbarDetectionManual = true;
+          coreObject.blackbarDetectionAR = BlackbarDetectionAR._2_35x1;
         }
       }
+
       // Toggle Delay
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "DelayOn") ||
                dlg.SelectedLabelText == Localization.Translate("ContextMenu", "DelayOff"))
@@ -968,8 +1018,8 @@ namespace AtmoLight
         {
           coreObject.EnableDelay(
             (int)
-              (((float) Settings.delayReferenceRefreshRate/(float) GetRefreshRate())*
-               (float) Settings.delayReferenceTime));
+              (((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) *
+               (float)Settings.delayReferenceTime));
         }
       }
       // Change Delay
@@ -982,7 +1032,7 @@ namespace AtmoLight
         {
           coreObject.SetDelay(delayTimeHelper);
           Settings.delayReferenceTime =
-            (int) (((float) delayTimeHelper*(float) GetRefreshRate())/Settings.delayReferenceRefreshRate);
+            (int)(((float)delayTimeHelper * (float)GetRefreshRate()) / Settings.delayReferenceRefreshRate);
         }
         else
         {
@@ -994,7 +1044,7 @@ namespace AtmoLight
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeStaticColor"))
       {
         GUIDialogMenu dlgStaticColor =
-          (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
+          (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgStaticColor.Reset();
         dlgStaticColor.SetHeading(Localization.Translate("ContextMenu", "ChangeStaticColor"));
         dlgStaticColor.Add(new GUIListItem(Localization.Translate("ContextMenu", "Manual")));

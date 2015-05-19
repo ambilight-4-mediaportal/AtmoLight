@@ -98,6 +98,7 @@
       this.cbVideo = new System.Windows.Forms.ComboBox();
       this.lblVidTvRec = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
+      this.ckMonitorScreensaverState = new System.Windows.Forms.CheckBox();
       this.lblpowerModeChangedDelayMS = new System.Windows.Forms.Label();
       this.lblpowerModeChangedDelay = new System.Windows.Forms.Label();
       this.tbBlackbarDetectionThreshold = new System.Windows.Forms.TextBox();
@@ -255,7 +256,9 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
-      this.ckMonitorScreensaverState = new System.Windows.Forms.CheckBox();
+      this.cbBlackbarDetectionLinkAreas = new System.Windows.Forms.CheckBox();
+      this.cbBlackbarDetectionHorizontal = new System.Windows.Forms.CheckBox();
+      this.cbBlackbarDetectionVertical = new System.Windows.Forms.CheckBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -295,7 +298,7 @@
       // btnSave
       // 
       this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnSave.Location = new System.Drawing.Point(16, 550);
+      this.btnSave.Location = new System.Drawing.Point(16, 630);
       this.btnSave.Name = "btnSave";
       this.btnSave.Size = new System.Drawing.Size(105, 23);
       this.btnSave.TabIndex = 100;
@@ -306,7 +309,7 @@
       // btnCancel
       // 
       this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnCancel.Location = new System.Drawing.Point(141, 550);
+      this.btnCancel.Location = new System.Drawing.Point(141, 630);
       this.btnCancel.Name = "btnCancel";
       this.btnCancel.Size = new System.Drawing.Size(105, 23);
       this.btnCancel.TabIndex = 101;
@@ -322,7 +325,7 @@
       // lblVersion
       // 
       this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-      this.lblVersion.Location = new System.Drawing.Point(754, 549);
+      this.lblVersion.Location = new System.Drawing.Point(754, 629);
       this.lblVersion.Name = "lblVersion";
       this.lblVersion.Size = new System.Drawing.Size(95, 26);
       this.lblVersion.TabIndex = 13;
@@ -332,7 +335,7 @@
       // 
       this.lblVersionVal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.lblVersionVal.AutoSize = true;
-      this.lblVersionVal.Location = new System.Drawing.Point(799, 562);
+      this.lblVersionVal.Location = new System.Drawing.Point(799, 642);
       this.lblVersionVal.Name = "lblVersionVal";
       this.lblVersionVal.Size = new System.Drawing.Size(40, 13);
       this.lblVersionVal.TabIndex = 14;
@@ -341,7 +344,7 @@
       // btnLanguage
       // 
       this.btnLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnLanguage.Location = new System.Drawing.Point(266, 550);
+      this.btnLanguage.Location = new System.Drawing.Point(266, 630);
       this.btnLanguage.Name = "btnLanguage";
       this.btnLanguage.Size = new System.Drawing.Size(105, 23);
       this.btnLanguage.TabIndex = 102;
@@ -601,7 +604,7 @@
       this.tabPageGeneric.Location = new System.Drawing.Point(4, 22);
       this.tabPageGeneric.Name = "tabPageGeneric";
       this.tabPageGeneric.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageGeneric.Size = new System.Drawing.Size(842, 504);
+      this.tabPageGeneric.Size = new System.Drawing.Size(842, 584);
       this.tabPageGeneric.TabIndex = 0;
       this.tabPageGeneric.Text = "Generic settings";
       // 
@@ -716,7 +719,7 @@
       this.grpMode.Controls.Add(this.lblVidTvRec);
       this.grpMode.Location = new System.Drawing.Point(10, 165);
       this.grpMode.Name = "grpMode";
-      this.grpMode.Size = new System.Drawing.Size(350, 330);
+      this.grpMode.Size = new System.Drawing.Size(350, 410);
       this.grpMode.TabIndex = 7;
       this.grpMode.TabStop = false;
       this.grpMode.Text = "Effect Settings";
@@ -1026,6 +1029,9 @@
       // 
       // grpPluginOption
       // 
+      this.grpPluginOption.Controls.Add(this.cbBlackbarDetectionVertical);
+      this.grpPluginOption.Controls.Add(this.cbBlackbarDetectionHorizontal);
+      this.grpPluginOption.Controls.Add(this.cbBlackbarDetectionLinkAreas);
       this.grpPluginOption.Controls.Add(this.ckMonitorScreensaverState);
       this.grpPluginOption.Controls.Add(this.lblpowerModeChangedDelayMS);
       this.grpPluginOption.Controls.Add(this.lblpowerModeChangedDelay);
@@ -1055,15 +1061,25 @@
       this.grpPluginOption.Controls.Add(this.lblLedsOnOff);
       this.grpPluginOption.Location = new System.Drawing.Point(370, 10);
       this.grpPluginOption.Name = "grpPluginOption";
-      this.grpPluginOption.Size = new System.Drawing.Size(460, 485);
+      this.grpPluginOption.Size = new System.Drawing.Size(460, 565);
       this.grpPluginOption.TabIndex = 11;
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
       // 
+      // ckMonitorScreensaverState
+      // 
+      this.ckMonitorScreensaverState.AutoSize = true;
+      this.ckMonitorScreensaverState.Location = new System.Drawing.Point(12, 300);
+      this.ckMonitorScreensaverState.Name = "ckMonitorScreensaverState";
+      this.ckMonitorScreensaverState.Size = new System.Drawing.Size(273, 17);
+      this.ckMonitorScreensaverState.TabIndex = 38;
+      this.ckMonitorScreensaverState.Text = "Turn off leds while Mediaportal screensaver is active";
+      this.ckMonitorScreensaverState.UseVisualStyleBackColor = true;
+      // 
       // lblpowerModeChangedDelayMS
       // 
       this.lblpowerModeChangedDelayMS.AutoSize = true;
-      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(255, 253);
+      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(255, 328);
       this.lblpowerModeChangedDelayMS.Name = "lblpowerModeChangedDelayMS";
       this.lblpowerModeChangedDelayMS.Size = new System.Drawing.Size(20, 13);
       this.lblpowerModeChangedDelayMS.TabIndex = 35;
@@ -1072,7 +1088,7 @@
       // lblpowerModeChangedDelay
       // 
       this.lblpowerModeChangedDelay.AutoSize = true;
-      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(9, 250);
+      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(9, 325);
       this.lblpowerModeChangedDelay.Name = "lblpowerModeChangedDelay";
       this.lblpowerModeChangedDelay.Size = new System.Drawing.Size(101, 13);
       this.lblpowerModeChangedDelay.TabIndex = 34;
@@ -1089,7 +1105,7 @@
       // 
       // tbpowerModeChangedDelay
       // 
-      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(208, 250);
+      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(208, 325);
       this.tbpowerModeChangedDelay.Name = "tbpowerModeChangedDelay";
       this.tbpowerModeChangedDelay.Size = new System.Drawing.Size(41, 20);
       this.tbpowerModeChangedDelay.TabIndex = 33;
@@ -1101,7 +1117,7 @@
       this.ckRestartOnError.AutoSize = true;
       this.ckRestartOnError.Checked = true;
       this.ckRestartOnError.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckRestartOnError.Location = new System.Drawing.Point(12, 200);
+      this.ckRestartOnError.Location = new System.Drawing.Point(12, 275);
       this.ckRestartOnError.Name = "ckRestartOnError";
       this.ckRestartOnError.Size = new System.Drawing.Size(144, 17);
       this.ckRestartOnError.TabIndex = 32;
@@ -1115,7 +1131,7 @@
       this.grpCaptureDimensions.Controls.Add(this.lblCaptureWidth);
       this.grpCaptureDimensions.Controls.Add(this.tbCaptureWidth);
       this.grpCaptureDimensions.Controls.Add(this.tbCaptureHeight);
-      this.grpCaptureDimensions.Location = new System.Drawing.Point(5, 300);
+      this.grpCaptureDimensions.Location = new System.Drawing.Point(5, 380);
       this.grpCaptureDimensions.Name = "grpCaptureDimensions";
       this.grpCaptureDimensions.Size = new System.Drawing.Size(450, 80);
       this.grpCaptureDimensions.TabIndex = 31;
@@ -1182,7 +1198,7 @@
       this.grpDeactivate.Controls.Add(this.lblEnd);
       this.grpDeactivate.Controls.Add(this.edExcludeStart);
       this.grpDeactivate.Controls.Add(this.lblStart);
-      this.grpDeactivate.Location = new System.Drawing.Point(5, 400);
+      this.grpDeactivate.Location = new System.Drawing.Point(5, 480);
       this.grpDeactivate.Name = "grpDeactivate";
       this.grpDeactivate.Size = new System.Drawing.Size(450, 80);
       this.grpDeactivate.TabIndex = 8;
@@ -1427,7 +1443,7 @@
       this.tabMenu.Location = new System.Drawing.Point(12, 12);
       this.tabMenu.Name = "tabMenu";
       this.tabMenu.SelectedIndex = 0;
-      this.tabMenu.Size = new System.Drawing.Size(850, 530);
+      this.tabMenu.Size = new System.Drawing.Size(850, 610);
       this.tabMenu.TabIndex = 20;
       // 
       // tabPageAmbiBox
@@ -2612,21 +2628,41 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
-      // ckMonitorScreensaverState
+      // cbBlackbarDetectionLinkAreas
       // 
-      this.ckMonitorScreensaverState.AutoSize = true;
-      this.ckMonitorScreensaverState.Location = new System.Drawing.Point(12, 225);
-      this.ckMonitorScreensaverState.Name = "ckMonitorScreensaverState";
-      this.ckMonitorScreensaverState.Size = new System.Drawing.Size(273, 17);
-      this.ckMonitorScreensaverState.TabIndex = 38;
-      this.ckMonitorScreensaverState.Text = "Turn off leds while Mediaportal screensaver is active";
-      this.ckMonitorScreensaverState.UseVisualStyleBackColor = true;
+      this.cbBlackbarDetectionLinkAreas.AutoSize = true;
+      this.cbBlackbarDetectionLinkAreas.Location = new System.Drawing.Point(12, 200);
+      this.cbBlackbarDetectionLinkAreas.Name = "cbBlackbarDetectionLinkAreas";
+      this.cbBlackbarDetectionLinkAreas.Size = new System.Drawing.Size(309, 17);
+      this.cbBlackbarDetectionLinkAreas.TabIndex = 39;
+      this.cbBlackbarDetectionLinkAreas.Text = "Blackbar Detection link areas (top to bottom and left to right)";
+      this.cbBlackbarDetectionLinkAreas.UseVisualStyleBackColor = true;
+      // 
+      // cbBlackbarDetectionHorizontal
+      // 
+      this.cbBlackbarDetectionHorizontal.AutoSize = true;
+      this.cbBlackbarDetectionHorizontal.Location = new System.Drawing.Point(12, 225);
+      this.cbBlackbarDetectionHorizontal.Name = "cbBlackbarDetectionHorizontal";
+      this.cbBlackbarDetectionHorizontal.Size = new System.Drawing.Size(191, 17);
+      this.cbBlackbarDetectionHorizontal.TabIndex = 40;
+      this.cbBlackbarDetectionHorizontal.Text = "Blackbar Detection horizontal scan";
+      this.cbBlackbarDetectionHorizontal.UseVisualStyleBackColor = true;
+      // 
+      // cbBlackbarDetectionVertical
+      // 
+      this.cbBlackbarDetectionVertical.AutoSize = true;
+      this.cbBlackbarDetectionVertical.Location = new System.Drawing.Point(12, 250);
+      this.cbBlackbarDetectionVertical.Name = "cbBlackbarDetectionVertical";
+      this.cbBlackbarDetectionVertical.Size = new System.Drawing.Size(180, 17);
+      this.cbBlackbarDetectionVertical.TabIndex = 41;
+      this.cbBlackbarDetectionVertical.Text = "Blackbar Detection vertical scan";
+      this.cbBlackbarDetectionVertical.UseVisualStyleBackColor = true;
       // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(872, 581);
+      this.ClientSize = new System.Drawing.Size(872, 662);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
@@ -2636,8 +2672,8 @@
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MaximizeBox = false;
-      this.MaximumSize = new System.Drawing.Size(888, 620);
-      this.MinimumSize = new System.Drawing.Size(888, 620);
+      this.MaximumSize = new System.Drawing.Size(888, 700);
+      this.MinimumSize = new System.Drawing.Size(888, 700);
       this.Name = "SetupForm";
       this.Text = "AtmoLight Setup";
       this.tabPageHyperion.ResumeLayout(false);
@@ -2928,5 +2964,8 @@
     private System.Windows.Forms.TextBox tbHueSaturation;
     private System.Windows.Forms.Label lblHueSaturation;
 		private System.Windows.Forms.CheckBox ckMonitorScreensaverState;
+    private System.Windows.Forms.CheckBox cbBlackbarDetectionVertical;
+    private System.Windows.Forms.CheckBox cbBlackbarDetectionHorizontal;
+    private System.Windows.Forms.CheckBox cbBlackbarDetectionLinkAreas;
   }
 }

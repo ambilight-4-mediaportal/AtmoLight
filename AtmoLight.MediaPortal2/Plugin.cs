@@ -118,8 +118,9 @@ namespace AtmoLight
       coreObject.blackbarDetectionTime = settings.BlackbarDetectionTime;
       coreObject.blackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
       coreObject.powerModeChangedDelay = settings.PowerModeChangedDelay;
-
-
+      coreObject.blackbarDetectionLinkAreas = settings.BlackbarDetectionLinkAreas;
+      coreObject.blackbarDetectionHorizontal = settings.BlackbarDetectionHorizontal;
+      coreObject.blackbarDetectionVertical = settings.BlackbarDetectionVertical;
 
       // AmbiBox
       coreObject.ambiBoxAutoStart = settings.AmbiBoxAutoStart;

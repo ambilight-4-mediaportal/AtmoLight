@@ -43,6 +43,9 @@ namespace AtmoLight
     public static double vuMeterMinHue;
     public static double vuMeterMaxHue;
     public static string currentLanguageFile;
+    public static bool blackbarDetectionHorizontal;
+    public static bool blackbarDetectionVertical;
+    public static bool blackbarDetectionLinkAreas;
 
     // Atmowin
     public static bool atmoWinTarget;
@@ -311,7 +314,9 @@ namespace AtmoLight
         hueMinDiversion = reader.GetValueAsInt("atmolight", "hueMinDiversion", 16);
         hueSaturation = Double.Parse(reader.GetValueAsString("atmolight", "hueSaturation", "0.2").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
         hueUseOverallLightness = reader.GetValueAsBool("atmolight", "hueUseOverallLightness", true);
-
+        blackbarDetectionHorizontal = reader.GetValueAsBool("atmolight", "blackbarDetectionHorizontal", true);
+        blackbarDetectionVertical = reader.GetValueAsBool("atmolight", "blackbarDetectionVertical", true);
+        blackbarDetectionLinkAreas = reader.GetValueAsBool("atmolight", "blackbarDetectionLinkAreas", true);
       }
     }
     public static void SaveSettings()
@@ -419,6 +424,9 @@ namespace AtmoLight
         reader.SetValue("atmolight", "hueBlackThreshold", hueBlackThreshold.ToString());
         reader.SetValue("atmolight", "hueSaturation", hueSaturation.ToString());
         reader.SetValueAsBool("atmolight", "hueUseOverallLightness", hueUseOverallLightness);
+        reader.SetValueAsBool("atmolight", "blackbarDetectionHorizontal", blackbarDetectionHorizontal);
+        reader.SetValueAsBool("atmolight", "blackbarDetectionVertical", blackbarDetectionVertical);
+        reader.SetValueAsBool("atmolight", "blackbarDetectionLinkAreas", blackbarDetectionLinkAreas);
       }
     }
 
