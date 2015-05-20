@@ -1,3 +1,10 @@
+Version 2.2.0.0
+- Added support to disable leds when MediaPortal uses its screen saver
+- Improved connection to AtmoHue
+- Improved communication to AtmoHue while in MediaPortal Live Mode
+- Improved blackbar detection
+- Fixed delay feature (delay was not starting properly in all cases)
+
 Version 2.1.0.0
 - Fixed bug where data would be send to target handler even if handler is disconnected from target
 - Improved average color calculation for Hue handler

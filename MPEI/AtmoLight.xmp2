@@ -302,8 +302,8 @@ public static void Main(PackageClass packageClass, ActionItem actionItem)
     <UpdateUrl>https://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/Atmolight_update.xml</UpdateUrl>
     <Version>
       <Major>1</Major>
-      <Minor>15</Minor>
-      <Build>1</Build>
+      <Minor>16</Minor>
+      <Build>0</Build>
       <Revision>0</Revision>
     </Version>
     <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
@@ -327,11 +327,17 @@ For this plugin to work you will also need AtmoWin. It will be installed automat
 
 
 MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed. </ExtensionDescription>
-    <VersionDescription>Version 1.15.1.0
-- Fixed bug where loading German language file would fail</VersionDescription>
+    <VersionDescription>Version 1.16.0.0
+- Added support to disable leds when MediaPortal uses its screen saver
+- Improved connection to AtmoHue
+- Improved communication to AtmoHue while in MediaPortal Live Mode
+- Improved blackbar detection
+- Added manual blackbar removal (user can choose manually the videos aspect ratio from the context menu)
+- Fixed delay feature (delay was not starting properly in all cases)
+- Switched to a new and better localization system</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
-    <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.15.1.0.mpe1</OnlineLocation>
-    <ReleaseDate>2015-01-12T10:45:58</ReleaseDate>
+    <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.16.0.0.mpe1</OnlineLocation>
+    <ReleaseDate>2015-05-20T10:45:58</ReleaseDate>
     <Tags>atmowin, boblight, hue, hyperion, ambilight, leds, arduino, atmoduino, raspberry pi, sedu-board, teensy 2, ws2801, ws2811, ws2812, ws2812b, neopixels</Tags>
     <Location>..\Release\MP1\[Name]_[Version].mpe1</Location>
     <Params>
