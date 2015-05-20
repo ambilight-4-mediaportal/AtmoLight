@@ -70,6 +70,7 @@
       this.ckAtmowinEnabled = new System.Windows.Forms.CheckBox();
       this.ckHyperionEnabled = new System.Windows.Forms.CheckBox();
       this.grpMode = new System.Windows.Forms.GroupBox();
+      this.ckTrueGrabbing = new System.Windows.Forms.CheckBox();
       this.grpVUMeter = new System.Windows.Forms.GroupBox();
       this.tbVUMeterMinHue = new System.Windows.Forms.TextBox();
       this.tbVUMeterMaxHue = new System.Windows.Forms.TextBox();
@@ -98,6 +99,9 @@
       this.cbVideo = new System.Windows.Forms.ComboBox();
       this.lblVidTvRec = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
+      this.cbBlackbarDetectionVertical = new System.Windows.Forms.CheckBox();
+      this.cbBlackbarDetectionHorizontal = new System.Windows.Forms.CheckBox();
+      this.cbBlackbarDetectionLinkAreas = new System.Windows.Forms.CheckBox();
       this.ckMonitorScreensaverState = new System.Windows.Forms.CheckBox();
       this.lblpowerModeChangedDelayMS = new System.Windows.Forms.Label();
       this.lblpowerModeChangedDelay = new System.Windows.Forms.Label();
@@ -256,9 +260,6 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
-      this.cbBlackbarDetectionLinkAreas = new System.Windows.Forms.CheckBox();
-      this.cbBlackbarDetectionHorizontal = new System.Windows.Forms.CheckBox();
-      this.cbBlackbarDetectionVertical = new System.Windows.Forms.CheckBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -367,7 +368,7 @@
       this.tabPageHyperion.Controls.Add(this.grpHyperionNetworkSettings);
       this.tabPageHyperion.Location = new System.Drawing.Point(4, 22);
       this.tabPageHyperion.Name = "tabPageHyperion";
-      this.tabPageHyperion.Size = new System.Drawing.Size(842, 504);
+      this.tabPageHyperion.Size = new System.Drawing.Size(842, 584);
       this.tabPageHyperion.TabIndex = 2;
       this.tabPageHyperion.Text = "Hyperion";
       // 
@@ -521,7 +522,7 @@
       this.tabPageAtmowin.Location = new System.Drawing.Point(4, 22);
       this.tabPageAtmowin.Name = "tabPageAtmowin";
       this.tabPageAtmowin.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageAtmowin.Size = new System.Drawing.Size(842, 504);
+      this.tabPageAtmowin.Size = new System.Drawing.Size(842, 584);
       this.tabPageAtmowin.TabIndex = 1;
       this.tabPageAtmowin.Text = "Atmowin";
       // 
@@ -619,7 +620,7 @@
       this.grpTargets.Controls.Add(this.ckHyperionEnabled);
       this.grpTargets.Location = new System.Drawing.Point(10, 10);
       this.grpTargets.Name = "grpTargets";
-      this.grpTargets.Size = new System.Drawing.Size(350, 150);
+      this.grpTargets.Size = new System.Drawing.Size(350, 103);
       this.grpTargets.TabIndex = 19;
       this.grpTargets.TabStop = false;
       this.grpTargets.Text = "Hardware selection";
@@ -649,7 +650,7 @@
       // ckBoblightEnabled
       // 
       this.ckBoblightEnabled.AutoSize = true;
-      this.ckBoblightEnabled.Location = new System.Drawing.Point(12, 98);
+      this.ckBoblightEnabled.Location = new System.Drawing.Point(94, 25);
       this.ckBoblightEnabled.Name = "ckBoblightEnabled";
       this.ckBoblightEnabled.Size = new System.Drawing.Size(64, 17);
       this.ckBoblightEnabled.TabIndex = 22;
@@ -660,7 +661,7 @@
       // ckHueEnabled
       // 
       this.ckHueEnabled.AutoSize = true;
-      this.ckHueEnabled.Location = new System.Drawing.Point(12, 121);
+      this.ckHueEnabled.Location = new System.Drawing.Point(94, 50);
       this.ckHueEnabled.Name = "ckHueEnabled";
       this.ckHueEnabled.Size = new System.Drawing.Size(46, 17);
       this.ckHueEnabled.TabIndex = 21;
@@ -673,7 +674,7 @@
       this.lblHintHardware.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.lblHintHardware.Location = new System.Drawing.Point(176, 25);
       this.lblHintHardware.Name = "lblHintHardware";
-      this.lblHintHardware.Size = new System.Drawing.Size(164, 113);
+      this.lblHintHardware.Size = new System.Drawing.Size(164, 67);
       this.lblHintHardware.TabIndex = 20;
       this.lblHintHardware.Text = "Hint: Select the devices you want to use with AtmoLight and configure it on its d" +
     "esignated tab";
@@ -694,7 +695,7 @@
       // ckHyperionEnabled
       // 
       this.ckHyperionEnabled.AutoSize = true;
-      this.ckHyperionEnabled.Location = new System.Drawing.Point(100, 25);
+      this.ckHyperionEnabled.Location = new System.Drawing.Point(94, 75);
       this.ckHyperionEnabled.Name = "ckHyperionEnabled";
       this.ckHyperionEnabled.Size = new System.Drawing.Size(68, 17);
       this.ckHyperionEnabled.TabIndex = 2;
@@ -704,6 +705,7 @@
       // 
       // grpMode
       // 
+      this.grpMode.Controls.Add(this.ckTrueGrabbing);
       this.grpMode.Controls.Add(this.grpVUMeter);
       this.grpMode.Controls.Add(this.cbMPExit);
       this.grpMode.Controls.Add(this.lblMPExit);
@@ -717,12 +719,23 @@
       this.grpMode.Controls.Add(this.lblMusic);
       this.grpMode.Controls.Add(this.cbVideo);
       this.grpMode.Controls.Add(this.lblVidTvRec);
-      this.grpMode.Location = new System.Drawing.Point(10, 165);
+      this.grpMode.Location = new System.Drawing.Point(10, 119);
       this.grpMode.Name = "grpMode";
-      this.grpMode.Size = new System.Drawing.Size(350, 410);
+      this.grpMode.Size = new System.Drawing.Size(350, 456);
       this.grpMode.TabIndex = 7;
       this.grpMode.TabStop = false;
       this.grpMode.Text = "Effect Settings";
+      // 
+      // ckTrueGrabbing
+      // 
+      this.ckTrueGrabbing.Checked = true;
+      this.ckTrueGrabbing.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.ckTrueGrabbing.Location = new System.Drawing.Point(12, 150);
+      this.ckTrueGrabbing.Name = "ckTrueGrabbing";
+      this.ckTrueGrabbing.Size = new System.Drawing.Size(329, 17);
+      this.ckTrueGrabbing.TabIndex = 33;
+      this.ckTrueGrabbing.Text = "Use GUI data when video is minimized in MediaPortal Live Mode";
+      this.ckTrueGrabbing.UseVisualStyleBackColor = true;
       // 
       // grpVUMeter
       // 
@@ -732,7 +745,7 @@
       this.grpVUMeter.Controls.Add(this.lblVUMeterMinHue);
       this.grpVUMeter.Controls.Add(this.tbVUMeterMindB);
       this.grpVUMeter.Controls.Add(this.lblVUMeterMindB);
-      this.grpVUMeter.Location = new System.Drawing.Point(5, 270);
+      this.grpVUMeter.Location = new System.Drawing.Point(4, 295);
       this.grpVUMeter.Name = "grpVUMeter";
       this.grpVUMeter.Size = new System.Drawing.Size(340, 50);
       this.grpVUMeter.TabIndex = 29;
@@ -819,7 +832,7 @@
       // 
       this.grpGIF.Controls.Add(this.btnSelectGIF);
       this.grpGIF.Controls.Add(this.tbGIF);
-      this.grpGIF.Location = new System.Drawing.Point(5, 215);
+      this.grpGIF.Location = new System.Drawing.Point(4, 240);
       this.grpGIF.Name = "grpGIF";
       this.grpGIF.Size = new System.Drawing.Size(340, 50);
       this.grpGIF.TabIndex = 26;
@@ -854,7 +867,7 @@
       this.grpStaticColor.Controls.Add(this.tbRed);
       this.grpStaticColor.Controls.Add(this.lblGreen);
       this.grpStaticColor.Controls.Add(this.lblBlue);
-      this.grpStaticColor.Location = new System.Drawing.Point(5, 160);
+      this.grpStaticColor.Location = new System.Drawing.Point(4, 185);
       this.grpStaticColor.Name = "grpStaticColor";
       this.grpStaticColor.Size = new System.Drawing.Size(340, 50);
       this.grpStaticColor.TabIndex = 25;
@@ -1065,6 +1078,36 @@
       this.grpPluginOption.TabIndex = 11;
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
+      // 
+      // cbBlackbarDetectionVertical
+      // 
+      this.cbBlackbarDetectionVertical.AutoSize = true;
+      this.cbBlackbarDetectionVertical.Location = new System.Drawing.Point(12, 250);
+      this.cbBlackbarDetectionVertical.Name = "cbBlackbarDetectionVertical";
+      this.cbBlackbarDetectionVertical.Size = new System.Drawing.Size(180, 17);
+      this.cbBlackbarDetectionVertical.TabIndex = 41;
+      this.cbBlackbarDetectionVertical.Text = "Blackbar Detection vertical scan";
+      this.cbBlackbarDetectionVertical.UseVisualStyleBackColor = true;
+      // 
+      // cbBlackbarDetectionHorizontal
+      // 
+      this.cbBlackbarDetectionHorizontal.AutoSize = true;
+      this.cbBlackbarDetectionHorizontal.Location = new System.Drawing.Point(12, 225);
+      this.cbBlackbarDetectionHorizontal.Name = "cbBlackbarDetectionHorizontal";
+      this.cbBlackbarDetectionHorizontal.Size = new System.Drawing.Size(191, 17);
+      this.cbBlackbarDetectionHorizontal.TabIndex = 40;
+      this.cbBlackbarDetectionHorizontal.Text = "Blackbar Detection horizontal scan";
+      this.cbBlackbarDetectionHorizontal.UseVisualStyleBackColor = true;
+      // 
+      // cbBlackbarDetectionLinkAreas
+      // 
+      this.cbBlackbarDetectionLinkAreas.AutoSize = true;
+      this.cbBlackbarDetectionLinkAreas.Location = new System.Drawing.Point(12, 200);
+      this.cbBlackbarDetectionLinkAreas.Name = "cbBlackbarDetectionLinkAreas";
+      this.cbBlackbarDetectionLinkAreas.Size = new System.Drawing.Size(309, 17);
+      this.cbBlackbarDetectionLinkAreas.TabIndex = 39;
+      this.cbBlackbarDetectionLinkAreas.Text = "Blackbar Detection link areas (top to bottom and left to right)";
+      this.cbBlackbarDetectionLinkAreas.UseVisualStyleBackColor = true;
       // 
       // ckMonitorScreensaverState
       // 
@@ -1454,7 +1497,7 @@
       this.tabPageAmbiBox.Location = new System.Drawing.Point(4, 22);
       this.tabPageAmbiBox.Name = "tabPageAmbiBox";
       this.tabPageAmbiBox.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageAmbiBox.Size = new System.Drawing.Size(842, 504);
+      this.tabPageAmbiBox.Size = new System.Drawing.Size(842, 584);
       this.tabPageAmbiBox.TabIndex = 5;
       this.tabPageAmbiBox.Text = "AmbiBox";
       // 
@@ -1648,7 +1691,7 @@
       this.tabPageAtmoOrb.Location = new System.Drawing.Point(4, 22);
       this.tabPageAtmoOrb.Name = "tabPageAtmoOrb";
       this.tabPageAtmoOrb.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageAtmoOrb.Size = new System.Drawing.Size(842, 504);
+      this.tabPageAtmoOrb.Size = new System.Drawing.Size(842, 584);
       this.tabPageAtmoOrb.TabIndex = 6;
       this.tabPageAtmoOrb.Text = "AtmoOrb";
       // 
@@ -2025,7 +2068,7 @@
       this.tabPageBoblight.Location = new System.Drawing.Point(4, 22);
       this.tabPageBoblight.Name = "tabPageBoblight";
       this.tabPageBoblight.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageBoblight.Size = new System.Drawing.Size(842, 504);
+      this.tabPageBoblight.Size = new System.Drawing.Size(842, 584);
       this.tabPageBoblight.TabIndex = 4;
       this.tabPageBoblight.Text = "Boblight";
       // 
@@ -2335,7 +2378,7 @@
       this.tabPageHue.Controls.Add(this.grpHueNetworkSettings);
       this.tabPageHue.Location = new System.Drawing.Point(4, 22);
       this.tabPageHue.Name = "tabPageHue";
-      this.tabPageHue.Size = new System.Drawing.Size(842, 504);
+      this.tabPageHue.Size = new System.Drawing.Size(842, 584);
       this.tabPageHue.TabIndex = 3;
       this.tabPageHue.Text = "Hue";
       // 
@@ -2628,36 +2671,6 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
-      // cbBlackbarDetectionLinkAreas
-      // 
-      this.cbBlackbarDetectionLinkAreas.AutoSize = true;
-      this.cbBlackbarDetectionLinkAreas.Location = new System.Drawing.Point(12, 200);
-      this.cbBlackbarDetectionLinkAreas.Name = "cbBlackbarDetectionLinkAreas";
-      this.cbBlackbarDetectionLinkAreas.Size = new System.Drawing.Size(309, 17);
-      this.cbBlackbarDetectionLinkAreas.TabIndex = 39;
-      this.cbBlackbarDetectionLinkAreas.Text = "Blackbar Detection link areas (top to bottom and left to right)";
-      this.cbBlackbarDetectionLinkAreas.UseVisualStyleBackColor = true;
-      // 
-      // cbBlackbarDetectionHorizontal
-      // 
-      this.cbBlackbarDetectionHorizontal.AutoSize = true;
-      this.cbBlackbarDetectionHorizontal.Location = new System.Drawing.Point(12, 225);
-      this.cbBlackbarDetectionHorizontal.Name = "cbBlackbarDetectionHorizontal";
-      this.cbBlackbarDetectionHorizontal.Size = new System.Drawing.Size(191, 17);
-      this.cbBlackbarDetectionHorizontal.TabIndex = 40;
-      this.cbBlackbarDetectionHorizontal.Text = "Blackbar Detection horizontal scan";
-      this.cbBlackbarDetectionHorizontal.UseVisualStyleBackColor = true;
-      // 
-      // cbBlackbarDetectionVertical
-      // 
-      this.cbBlackbarDetectionVertical.AutoSize = true;
-      this.cbBlackbarDetectionVertical.Location = new System.Drawing.Point(12, 250);
-      this.cbBlackbarDetectionVertical.Name = "cbBlackbarDetectionVertical";
-      this.cbBlackbarDetectionVertical.Size = new System.Drawing.Size(180, 17);
-      this.cbBlackbarDetectionVertical.TabIndex = 41;
-      this.cbBlackbarDetectionVertical.Text = "Blackbar Detection vertical scan";
-      this.cbBlackbarDetectionVertical.UseVisualStyleBackColor = true;
-      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2797,6 +2810,7 @@
     private System.Windows.Forms.Label lblVidTvRec;
     private System.Windows.Forms.GroupBox grpPluginOption;
     private System.Windows.Forms.CheckBox ckRestartOnError;
+    private System.Windows.Forms.CheckBox ckTrueGrabbing;
     private System.Windows.Forms.GroupBox grpCaptureDimensions;
     private System.Windows.Forms.Label lblHintCaptureDimensions;
     private System.Windows.Forms.Label lblCaptureHeight;

@@ -74,6 +74,7 @@
     <string name="Delay">LED Vertraging</string>
     <string name="DelayAt">ms vertraging op</string>
     <string name="RestartOnError">Automatisch herverbinden bij foutmelding</string>
+    <string name="TrueGrabbing">Gebruik GUI data wanneer de video is geminimaliseerd in MediaPortal Live-modus</string>       
     <string name="RefreshRate">Hz</string>
     <string name="BlackbarDetection">Zwarte balk detectie elke</string>
     <string name="BlackbarDetectionThreshold">ms, met Beperking</string>

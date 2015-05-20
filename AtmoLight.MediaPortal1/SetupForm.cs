@@ -90,6 +90,7 @@ namespace AtmoLight
       ckStartAtmoWin.Checked = Settings.startAtmoWin;
       ckExitAtmoWin.Checked = Settings.exitAtmoWin;
       ckRestartOnError.Checked = Settings.restartOnError;
+      ckTrueGrabbing.Checked = Settings.trueGrabbing;
       ckBlackbarDetection.Checked = Settings.blackbarDetection;
       ckAtmowinEnabled.Checked = Settings.atmoWinTarget;
       ckHyperionEnabled.Checked = Settings.hyperionTarget;
@@ -206,6 +207,7 @@ namespace AtmoLight
       ckLowCpu.Text = Localization.Translate("SetupForm", "LowCPU");
       ckDelay.Text = Localization.Translate("SetupForm", "Delay");
       ckRestartOnError.Text = Localization.Translate("SetupForm", "RestartOnError");
+      ckTrueGrabbing.Text = Localization.Translate("SetupForm", "TrueGrabbing");	  
       lblRefreshRate.Text = Localization.Translate("SetupForm", "RefreshRate");
       ckBlackbarDetection.Text = Localization.Translate("SetupForm", "BlackbarDetection");
       lblBlackarDetectionMS.Text = Localization.Translate("SetupForm", "BlackbarDetectionThreshold");
@@ -808,6 +810,7 @@ namespace AtmoLight
       Settings.startAtmoWin = ckStartAtmoWin.Checked;
       Settings.exitAtmoWin = ckExitAtmoWin.Checked;
       Settings.restartOnError = ckRestartOnError.Checked;
+      Settings.trueGrabbing = ckTrueGrabbing.Checked;
       Settings.blackbarDetection = ckBlackbarDetection.Checked;
       Settings.blackbarDetectionTime = int.Parse(tbBlackbarDetectionTime.Text);
       Settings.delayReferenceRefreshRate = int.Parse(tbRefreshRate.Text);

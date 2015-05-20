@@ -74,6 +74,7 @@
     <string name="Delay">LED Délais</string>
     <string name="DelayAt">ms Délais à</string>
     <string name="RestartOnError">Reconnections-Auto si Erreur</string>
+	<string name="TrueGrabbing">Utiliser les données de l'interface graphique lorsque la vidéo est minimisée dans MediaPortal mode Live</string>	
     <string name="RefreshRate">Hz</string>
     <string name="BlackbarDetection">Blackbar Detection toute les</string>
     <string name="BlackbarDetectionThreshold">ms, avec Seuil</string>
