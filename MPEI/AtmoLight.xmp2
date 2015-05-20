@@ -296,47 +296,42 @@ public static void Main(PackageClass packageClass, ActionItem actionItem)
   <GeneralInfo>
     <Name>AtmoLight</Name>
     <Id>8d2c6d9d-03c8-4144-b0b8-85e3a2b0e001</Id>
-    <Author>gemx, Angie05, Rick164, legnod, azzuro, BassFan, Lightning303, HomeY, Sebastiii</Author>
+    <Author>gemx, Angie05, Rick164, legnod, azzuro, BassFan, Lightning303, HomeY, Sebastiii, popy</Author>
     <HomePage>https://code.google.com/p/ambilight-4-mediaportal/</HomePage>
     <ForumPage>http:/http://forum.team-mediaportal.com/threads/atmolight-1-10-0-0-2014-04-19.125633/</ForumPage>
     <UpdateUrl>https://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/Atmolight_update.xml</UpdateUrl>
     <Version>
       <Major>1</Major>
       <Minor>16</Minor>
-      <Build>0</Build>
-      <Revision>0</Revision>
+      <Build>1</Build>
+      <Revision>12</Revision>
     </Version>
-    <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
-
-
-
-The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.
-
-
-
-
-
-
-
-For this plugin to work you will also need AtmoWin. It will be installed automatically.
-
-
-
-
-
-
-
+    <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
+
+
+
+The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.
+
+
+
+
+
+
+
+For this plugin to work you will also need AtmoWin. It will be installed automatically.
+
+
+
+
+
+
+
 MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed. </ExtensionDescription>
-    <VersionDescription>Version 1.16.0.0
-- Added support to disable leds when MediaPortal uses its screen saver
-- Improved connection to AtmoHue
-- Improved communication to AtmoHue while in MediaPortal Live Mode
-- Improved blackbar detection
-- Added manual blackbar removal (user can choose manually the videos aspect ratio from the context menu)
-- Fixed delay feature (delay was not starting properly in all cases)
-- Switched to a new and better localization system</VersionDescription>
+    <VersionDescription>Version 1.16.1.12
+- Added support for MediaPortal 1.12 pre release and newer
+- Added support to show GUI frame data when a video is minimized</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
-    <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.16.0.0.mpe1</OnlineLocation>
+    <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.16.1.12.mpe1</OnlineLocation>
     <ReleaseDate>2015-05-20T10:45:58</ReleaseDate>
     <Tags>atmowin, boblight, hue, hyperion, ambilight, leds, arduino, atmoduino, raspberry pi, sedu-board, teensy 2, ws2801, ws2811, ws2812, ws2812b, neopixels</Tags>
     <Location>..\Release\MP1\[Name]_[Version].mpe1</Location>
@@ -441,7 +436,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>image\atmolight.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{e49d5ba4-b233-4124-8898-80e5964d4d7c}-atmolight.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{8a9df607-5437-47bb-ac1e-dd2e6a9180cd}-atmolight.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
