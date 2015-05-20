@@ -790,7 +790,6 @@ namespace AtmoLight.Configuration
     {
       base.Save();
       Settings settings = SettingsManager.Load<Settings>();
-      IPAddress ip;
       if (!string.IsNullOrEmpty(_value))
       {
         settings.HyperionIP = _value;
@@ -1306,6 +1305,25 @@ namespace AtmoLight.Configuration
       }
     }
   }
+	public class MonitorScreensaverState : YesNo
+	{
+		public delegate void SettingsChangedHandler();
+		public static event SettingsChangedHandler SettingsChanged;
+
+		public override void Load()
+		{
+			_yes = SettingsManager.Load<Settings>().MonitorScreensaverState;
+		}
+
+		public override void Save()
+		{
+			base.Save();
+			Settings settings = SettingsManager.Load<Settings>();
+			settings.MonitorScreensaverState = _yes;
+			SettingsManager.Save(settings);
+			SettingsChanged();
+		}
+	}
 
   public class BoblightTarget : YesNo
   {
@@ -1904,6 +1922,60 @@ namespace AtmoLight.Configuration
       SettingsManager.Save(settings);
 
       Core.GetInstance().ambiBoxAutoStop = _yes;
+    }
+  }
+
+  public class BlackbarDetectionLinkAreas : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().BlackbarDetectionLinkAreas;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BlackbarDetectionLinkAreas = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().blackbarDetectionLinkAreas = _yes;
+    }
+  }
+
+  public class BlackbarDetectionHorizontal : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().BlackbarDetectionHorizontal;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BlackbarDetectionHorizontal = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().blackbarDetectionHorizontal = _yes;
+    }
+  }
+
+  public class BlackbarDetectionVertical : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().BlackbarDetectionVertical;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.BlackbarDetectionVertical = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().blackbarDetectionVertical = _yes;
     }
   }
 }

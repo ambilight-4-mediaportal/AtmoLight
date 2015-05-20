@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -93,6 +94,9 @@ namespace AtmoLight
 
     [Setting(SettingScope.User, 64)]
     public int CaptureHeight { get; set; }
+
+    [Setting(SettingScope.User, true)]
+    public bool MonitorScreensaverState { get; set; }
 
     [Setting(SettingScope.User, "127.0.0.1")]
     public string HyperionIP { get; set; }
@@ -238,6 +242,15 @@ namespace AtmoLight
     [Setting(SettingScope.User, false)]
     public bool AmbiBoxTarget { get; set; }
 
+    [Setting(SettingScope.User, true)]
+    public bool BlackbarDetectionLinkAreas { get; set; }
+
+    [Setting(SettingScope.User, true)]
+    public bool BlackbarDetectionHorizontal { get; set; }
+
+    [Setting(SettingScope.User, true)]
+    public bool BlackbarDetectionVertical { get; set; }
+
 
     ISettingsManager settingsManager = ServiceRegistration.Get<ISettingsManager>();
     Settings settings;
@@ -263,6 +276,7 @@ namespace AtmoLight
       StopAtmoWinOnExit = settings.StopAtmoWinOnExit;
       StartAtmoWinOnStart = settings.StartAtmoWinOnStart;
       RestartAtmoWinOnError = settings.RestartAtmoWinOnError;
+      MonitorScreensaverState = settings.MonitorScreensaverState;
       StaticColorBlue = settings.StaticColorBlue;
       StaticColorGreen = settings.StaticColorGreen;
       StaticColorRed = settings.StaticColorRed;
@@ -320,6 +334,9 @@ namespace AtmoLight
       HueMinDiversion = settings.HueMinDiversion;
       HueSaturation = settings.HueSaturation;
       HueUseOverallLightness = settings.HueUseOverallLightness;
+      BlackbarDetectionLinkAreas = settings.BlackbarDetectionLinkAreas;
+      BlackbarDetectionHorizontal = settings.BlackbarDetectionHorizontal;
+      BlackbarDetectionVertical = settings.BlackbarDetectionVertical;
       return true;
     }
 
@@ -343,6 +360,7 @@ namespace AtmoLight
       settings.StopAtmoWinOnExit = StopAtmoWinOnExit;
       settings.StartAtmoWinOnStart = StartAtmoWinOnStart;
       settings.RestartAtmoWinOnError = RestartAtmoWinOnError;
+      settings.MonitorScreensaverState = MonitorScreensaverState;
       settings.StaticColorBlue = StaticColorBlue;
       settings.StaticColorGreen = StaticColorGreen;
       settings.StaticColorRed = StaticColorRed;
@@ -400,6 +418,9 @@ namespace AtmoLight
       settings.HueMinDiversion = HueMinDiversion;
       settings.HueSaturation = HueSaturation;
       settings.HueUseOverallLightness = HueUseOverallLightness;
+      settings.BlackbarDetectionLinkAreas = BlackbarDetectionLinkAreas;
+      settings.BlackbarDetectionHorizontal = BlackbarDetectionHorizontal;
+      settings.BlackbarDetectionVertical = BlackbarDetectionVertical;
       settingsManager.Save(settings);
       return true;
     }

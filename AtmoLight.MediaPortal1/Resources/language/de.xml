@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <ContentEffect>
+    <string name="LEDsDisabled">LEDs deaktiviert</string>
+    <string name="MediaPortalLiveMode">MediaPortal Live Modus</string>
+    <string name="ExternalLiveMode">Externer Live Modus</string>
+    <string name="StaticColor">Feste Farbe</string>
+    <string name="GIFReader">GIF Leser</string>
+    <string name="VUMeter">VU Meter</string>
+    <string name="VUMeterRainbow">VU Meter Regenbogen</string>
+    <string name="AtmoWinColorchanger">AtmoWin Farbenwechsler</string>
+    <string name="AtmoWinColorchangerLR">AtmoWin Farbenwechsler LR</string>
+  </ContentEffect>
+  <Common>
+    <string name="AtmoLight">AtmoLight</string>
+    <string name="IP">IP:</string>
+    <string name="Port">Port:</string>
+    <string name="ReconnectAttempts">Wiederverbindungs Versuche:</string>
+    <string name="ReconnectDelay">Wiederverbindungs Verzögerungs (ms):</string>
+    <string name="Threshold">Schwelle:</string>
+    <string name="BlackThreshold">Schwarz Schwelle:</string>
+    <string name="Saturation">Sättigung Korrektur:</string>
+    <string name="GeneralSettings">Allgemeine Einstellungen</string>
+    <string name="Gamma">Gamma Korrektur:</string>
+    <string name="Path">Pfad+Dateiname zu [Filename]</string>
+    <string name="StartTargetWithMP">Starte [Target] mit MediaPortal</string>
+    <string name="StopTargetWithMP">Stoppe [Target] mit MediaPortal</string>
+    <string name="ID">ID:</string>
+    <string name="MinDiversion">Min. Farbunterschied:</string>
+    <string name="OverallLightness">Vollständige Helligkeit benutzten</string>
+    <string name="Add">Hinzufügen</string>
+    <string name="Remove">Entfernen</string>
+    <string name="Update">Aktualisieren</string>
+    <string name="Save">Speichern</string>
+    <string name="Cancel">Abbrechen</string>
+    <string name="Apply">Übernehmen</string>
+    <string name="NA">n. v.</string>
+    <string name="Error">Fehler</string>
+    <string name="ErrorFile">Unzulässiger Dateiname. Bitte wählen Sie den Pfad zu [Filename].</string>
+    <string name="ErrorColor">Bitte geben Sie eine Zahl zwischen 0 und 255 für [Color].</string>
+    <string name="ErrorInvalidNumber">Bitte geben Sie eine Zahl ein die mindestens [minInteger] groß ist</string>
+    <string name="ErrorInvalidNumberRange">Bitte geben sie eine Zahl zwischen [minInteger] und [maxInteger] ein.</string>
+    <string name="ErrorRemoteButton">Sie können jede Fernbedienungstaste jeweils nur einmal zuweisen.</string>
+    <string name="ErrorIP">Bitte geben Sie eine gültige IP Adresse ein.</string>
+    <string name="ErrorFileGeneric">Bitte geben Sie einen gültigen Dateipfad ein.</string>
+    <string name="ErrorStartTime">Bitte geben Sie eine zulässige Startzeit an.</string>
+    <string name="ErrorEndTime">Bitte geben Sie eine zulässige Endzeit an.</string>
+    <string name="ErrorMiliseconds">Bitte geben Sie eine zulässige Millisekunden Zahl an.</string>
+    <string name="ErrorRefreshRate">Bitte geben Sie eine zulässige Bildwiederholungsfrequenz an.</string>
+    <string name="Red">Rot</string>
+    <string name="Green">Grün</string>
+    <string name="Blue">Blau</string>
+    <string name="Yellow">Gelb</string>
+    <string name="MS">ms</string>
+    <string name="NetworkSettings">Netzwerk</string>
+    <string name="None">Keine</string>
+  </Common>
+  <SetupForm>
+    <string name="EffectSettings">Effekt Einstellungen</string>
+    <string name="PluginSettings">Plugin Konfiguration</string>
+    <string name="VideoTVRec">Video/TV/Aufnahme:</string>
+    <string name="Menu">Menü/Oberfläche:</string>
+    <string name="Music">Musik:</string>
+    <string name="Radio">Radio:</string>
+    <string name="MediaPortalExit">MediaPortal Schließung:</string>
+    <string name="ToggleRemoteButton">LEDs AnAus Fernbedienungstaste:</string>
+    <string name="ProfileRemoteButton">Fernbedienungstasten Profile:</string>
+    <string name="MenuRemoteButton">Menü Fernbedienungstaste:</string>
+    <string name="ManualMode">LEDs aus beim Media Start (Manueller Modus)</string>
+    <string name="LowCPU">Niedrige CPU</string>
+    <string name="FramesBetween">ms zwischen Frames</string>
+    <string name="Start">Start:</string>
+    <string name="End">Ende:</string>
+    <string name="DisableBetween">LEDs deaktivieren zwischen</string>
+    <string name="Delay">LED Verzögerung</string>
+    <string name="DelayAt">ms Verzögerung bei</string>
+    <string name="RestartOnError">Auto. wiederverbingung bei Fehler</string>
+	<string name="TrueGrabbing">Verwende Nutzeroberflächen Daten in MediaPortal Live Modus wenn Video minimiert ist</string>	
+    <string name="RefreshRate">Hz</string>
+    <string name="BlackbarDetection">Schw. Balken Erkennung alle</string>
+    <string name="BlackbarDetectionThreshold">ms, mit Schwelle</string>
+    <string name="CaptureDimension">Aufnahme Auflösung</string>
+    <string name="Width">Breite:</string>
+    <string name="Height">Höhe:</string>
+    <string name="SelectTargets">Wähle Ziel Software</string>
+    <string name="ResumeDelay">Verzögerung nach Standby:</string>
+    <string name="VUMeterMaxHue">Max. hue:</string>
+    <string name="VUMeterMinHue">Min. hue:</string>
+    <string name="VUMeterMindB">Min. dB:</string>
+	<string name="MonitorScreensaverState">Schalte Leds aus wenn MediaPortal Bildschirmschoner aktiv ist</string>
+    <string name="LoadLanguage">Sprache laden</string>
+    <string name="MenuHint">Tipp: Sie können das Kontext Menü benutzten um den Effekt zu ändern, die LEDs an- bzw. auszuschalten und den 3D-SBS Modus zu ändern.</string>
+    <string name="TargetHint">Tipp: Wählen Sie die Hardware aus die Sie mit AtmoLight verwenden möchten und konfigurieren Sie diese in deren Tabs.</string>
+    <string name="CaptureDimensionHint">Tipp: Wird nur verwendet ohne AtmoWin.</string>
+    <string name="BlackbarDetectionLinkAreas">Schw. Balken Erkennung Zonen verknüpfen (Oben und Unten, sowie Links und Rechts)</string>
+    <string name="BlackbarDetectionHorizontal">Schw. Balken Erkennung Horizontaler Scan</string>
+    <string name="BlackbarDetectionVertical">Schw. Balken Erkennung Vertikaler Scan</string>
+  </SetupForm>
+  <ContextMenu>
+    <string name="LEDsOn">Schalte LEDs an</string>
+    <string name="LEDsOff">Schalte LEDs aus</string>
+    <string name="AtmoLightOn">Schalte AtmoLight an</string>
+    <string name="AtmoLightOff">Schalte AtmoLight aus</string>
+    <string name="ChangeEffect">Effekt auswählen</string>
+    <string name="ChangeProfile">Profil ändern</string>
+    <string name="3DOn">Schalte 3D SBS Modus an</string>
+    <string name="3DOff">Schalte 3D SBS Modus aus</string>
+    <string name="ChangeStaticColor">Feste Farbe ändern</string>
+    <string name="Manual">Manuell</string>
+    <string name="SaveColor">Speicher aktuelle Farbe</string>
+    <string name="LoadColor">Lade Farbe aus Einstellungen</string>
+    <string name="White">Weiß</string>
+    <string name="Cyan">Cyan</string>
+    <string name="Magenta">Magenta</string>
+    <string name="RGBError1">Der Wert muss eine Zahl sein</string>
+    <string name="RGBError2">und zwischen 0 und 255 liegen.</string>
+    <string name="ConnectionLost">Verbindung zu [Target] verloren!</string>
+    <string name="ManualStaticColor">Manuelle feste Farbe</string>
+    <string name="DelayOn">Schalte LED Verzögerung an</string>
+    <string name="DelayOff">Schalte LED Verzögerung aus</string>
+    <string name="ChangeDelay">Ändere LED Verzögerung</string>
+    <string name="DelayError1">Der Wert muss eine Zahl sein</string>
+    <string name="DelayError2">und zwischen 0 und 1000 liegen.</string>
+    <string name="Connect1">Verbindung zum Ziel verloren.</string>
+    <string name="Connect2">Möchten Sie diese wiederherstellen?</string>
+    <string name="BlackbarDetectionOn">Schalte schwarze Balken Erkennung an</string>
+    <string name="BlackbarDetectionOff">Schalte schwarze Balken Erkennung aus</string>
+    <string name="Reinitialise">Wiederverbinden zu verlorenen Zielen</string>
+    <string name="AtmoLightDisabled">AtmoLight ausgeschaltet</string>
+  </ContextMenu>
+  <AmbiBox>
+    <string name="AmbiBox">AmbiBox</string>
+    <string name="ExternalProfile">Externes Aufanhme Profil:</string>
+    <string name="MediaPortalProfile">MediaPortal Aufnahme Profil:</string>
+  </AmbiBox>
+  <AtmoOrb>
+    <string name="AtmoOrb">AtmoOrb</string>
+    <string name="BroadcastPort">Broadcast Port:</string>
+    <string name="ConnectionType">Verbindungs Typ</string>
+    <string name="HScan">HScan ab</string>
+    <string name="VScan">VScan ab</string>
+    <string name="ScanTo">bis</string>
+    <string name="LampSettings">Lampen Einstellungen</string>
+    <string name="TCP">TCP</string>
+    <string name="UDP">UDP</string>
+    <string name="InvertZone">Zonen umkehren</string>
+  </AtmoOrb>
+  <AtmoWin>
+    <string name="AtmoWin">AtmoWin</string>
+  </AtmoWin>
+  <Boblight>
+    <string name="Boblight">Boblight</string>
+    <string name="MaxFPS">Limitiere Aufnahme FPS auf:</string>
+    <string name="Speed">Geschwindigkeit:</string>
+    <string name="Autospeed">Auto. Geschwindigkeit:</string>
+    <string name="Value">Wert Korrektur:</string>
+    <string name="Interpolation">Interpolation:</string>
+    <string name="BoblightSettings">Boblight Einstellungen</string>
+  </Boblight>
+  <Hue>
+    <string name="Hue">Hue</string>
+    <string name="RemoteMachine">AtmoHue befindet sich auf einem anderem PC (Dateipfad Überprüfung überspringen)</string>
+    <string name="EnableBridgeOnResume">Beim aufwachen aus Standby Hue Bridge aktivieren</string>
+    <string name="DisableBridgeonSuspend">Hue Bridge deaktivieren wenn PC in Standby Modus geht</string>
+    <string name="AverageColor">Durchschnittliche Farben Einstellungen</string>
+    <string name="All">Alle</string>
+    <string name="Off">Aus</string>
+    <string name="LiveviewGroup">Hue - wähle aktive liveview Gruppe</string>
+    <string name="DisableAllGroups">Alle Gruppen deaktivieren</string>
+    <string name="StaticColorGroup">Hue - setze statische Farbe für Gruppe</string>
+    <string name="SelectStaticColorGroup">Hue - wähle statische Farbe für Gruppe</string>
+    <string name="Hint">Tipp: AtmoHue muss an der oben angegeben IP und dem Port verfügbar sein. Bitte hier nicht die Hue Bridge Informationen eintragen.</string>
+  </Hue>
+  <Hyperion>
+    <string name="Hyperion">Hyperion</string>
+    <string name="IPHostname">IP / Hostname:</string>
+    <string name="Priority">Priorität</string>
+    <string name="PriorityLive">Priorität live:</string>
+    <string name="PriorityStaticColor">Priorität für statische Farbe:</string>
+    <string name="LiveReconnect">Live Wiederverbindung (NICHT empfohlen) - Versucht Verbindung wiederherzustellen bis es erfolgreicht ist. Nur nützlich zum testen.</string>
+  </Hyperion>
+</resources>

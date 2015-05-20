@@ -42,9 +42,10 @@ namespace AtmoLight.Targets
     private Core coreObject;
 
     // HUE
-    private int hueDelayAtmoHue = 5000; 
     private int hueReconnectCounter = 0;
     private Boolean HueBridgeStartOnResume = false;
+    private Thread changeColorThreadHelper;
+    private volatile int[] changeColorBuffer = new int[5];
 
     // TCP
     private static TcpClient Socket = new TcpClient();
@@ -58,7 +59,9 @@ namespace AtmoLight.Targets
     // Locks
     private bool isInit = false;
     private volatile bool initLock = false;
+    private volatile bool changeColorThreadLock = true;
     private bool isAtmoHueRunning = false;
+    private readonly object changeColorBufferLock = new object();
 
     private enum APIcommandType
     {
@@ -102,7 +105,6 @@ namespace AtmoLight.Targets
         if (coreObject.hueStart)
         {
           isAtmoHueRunning = StartHue();
-          System.Threading.Thread.Sleep(hueDelayAtmoHue);
           if (isAtmoHueRunning)
           {
             Connect();
@@ -138,9 +140,7 @@ namespace AtmoLight.Targets
     {
       if (coreObject.reInitOnError || force)
       {
-        Thread t = new Thread(() => Initialise(force));
-        t.IsBackground = true;
-        t.Start();
+        Initialise(force);
       }
     }
 
@@ -169,6 +169,7 @@ namespace AtmoLight.Targets
       try
       {
         Hue.Start();
+        Hue.WaitForInputIdle();
       }
       catch (Exception)
       {
@@ -215,6 +216,7 @@ namespace AtmoLight.Targets
             Socket.ReceiveTimeout = 5000;
             Socket.Connect(coreObject.hueIP, coreObject.huePort);
             Stream = Socket.GetStream();
+            
             Log.Debug("HueHandler - Connected to AtmoHue");
           }
           catch (Exception e)
@@ -246,6 +248,11 @@ namespace AtmoLight.Targets
 
       //Reset Init lock
       initLock = false;
+
+      if (IsConnected())
+      {
+        StartChangeColorThread();
+      }
 
       //Reset counter when we have finished
       hueReconnectCounter = 0;
@@ -280,6 +287,7 @@ namespace AtmoLight.Targets
     {
       try
       {
+        StopChangeColorThread();
         Socket.Close();
       }
       catch (Exception e)
@@ -309,25 +317,16 @@ namespace AtmoLight.Targets
 
     public void ChangeColor(int red, int green, int blue, int priority, int brightness)
     {
-      Thread t = new Thread(() => ChangeColorThread(red,green,blue,priority,brightness));
-      t.IsBackground = true;
-      t.Start();
+      lock (changeColorBufferLock)
+      {
+        changeColorBuffer[0] = red;
+        changeColorBuffer[1] = green;
+        changeColorBuffer[2] = blue;
+        changeColorBuffer[3] = priority;
+        changeColorBuffer[4] = brightness;
+      }
+    }
 
-    }
-    public void ChangeColorThread(int red, int green, int blue, int priority, int brightness)
-    {
-      try
-      {
-        string message = string.Format("{0},{1},{2},{3},{4},{5},{6}", "ATMOLIGHT", APIcommandType.Color, red.ToString(), green.ToString(), blue.ToString(), priority.ToString(), brightness.ToString());
-        sendAPIcommand(message);
-      }
-      catch (Exception e)
-      {
-        Log.Error("HueHandler - error during sending color");
-        Log.Error(string.Format("HueHandler - {0}", e.Message));
-        ReInitialise(false);
-      }
-    }
     public bool ChangeEffect(ContentEffect effect)
     {
       if (!IsConnected())
@@ -622,123 +621,49 @@ namespace AtmoLight.Targets
     }
     #endregion
 
-  }
-  #region class Win32API
-  public sealed class Win32API
-  {
-    [StructLayout(LayoutKind.Sequential)]
-    public struct RECT
+    #region Change Color Thread
+    private void StartChangeColorThread()
     {
-      public int left;
-      public int top;
-      public int right;
-      public int bottom;
+      changeColorThreadLock = false;
+      changeColorThreadHelper = new Thread(() => ChangeColorThread());
+      changeColorThreadHelper.Name = "AtmoLight Hue ChangeColor";
+      changeColorThreadHelper.IsBackground = true;
+      changeColorThreadHelper.Start();
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    private struct PROCESSENTRY32
+    private void StopChangeColorThread()
     {
-      public uint dwSize;
-      public uint cntUsage;
-      public uint th32ProcessID;
-      public IntPtr th32DefaultHeapID;
-      public uint th32ModuleID;
-      public uint cntThreads;
-      public uint th32ParentProcessID;
-      public int pcPriClassBase;
-      public uint dwFlags;
-      [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
-      public string szExeFile;
+      changeColorThreadLock = true;
     }
 
-    private const uint TH32CS_SNAPPROCESS = 0x00000002;
-
-    [DllImport("user32.dll")]
-    public static extern IntPtr FindWindow(string lpClassName, String lpWindowName);
-
-    [DllImport("user32.dll")]
-    public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
-
-    [DllImport("user32.dll")]
-    public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
-
-    private const int WM_CLOSE = 0x10;
-    private const int WM_DESTROY = 0x2;
-
-    [DllImport("user32.dll")]
-    public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
-
-    [DllImport("kernel32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-    public static extern Int64 GetTickCount();
-
-    [DllImport("kernel32.dll")]
-    private static extern int Process32First(IntPtr hSnapshot,
-                                     ref PROCESSENTRY32 lppe);
-
-    [DllImport("kernel32.dll")]
-    private static extern int Process32Next(IntPtr hSnapshot,
-                                    ref PROCESSENTRY32 lppe);
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern IntPtr CreateToolhelp32Snapshot(uint dwFlags,
-                                                   uint th32ProcessID);
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern bool CloseHandle(IntPtr hSnapshot);
-    private const int WM_MouseMove = 0x0200;
-
-    public static void RefreshTrayArea()
+    private void ChangeColorThread()
     {
-
-      RECT rect;
-
-      IntPtr systemTrayContainerHandle = FindWindow("Shell_TrayWnd", null);
-      IntPtr systemTrayHandle = FindWindowEx(systemTrayContainerHandle, IntPtr.Zero, "TrayNotifyWnd", null);
-      IntPtr sysPagerHandle = FindWindowEx(systemTrayHandle, IntPtr.Zero, "SysPager", null);
-      IntPtr notificationAreaHandle = FindWindowEx(sysPagerHandle, IntPtr.Zero, "ToolbarWindow32", null);
-      GetClientRect(notificationAreaHandle, out rect);
-      for (var x = 0; x < rect.right; x += 5)
-        for (var y = 0; y < rect.bottom; y += 5)
-          SendMessage(notificationAreaHandle, WM_MouseMove, 0, (y << 16) + x);
-    }
-
-    public static bool IsProcessRunning(string applicationName)
-    {
-      IntPtr handle = IntPtr.Zero;
-      try
+      int[] changeColorPrevColor = new int[5];
+      while (!changeColorThreadLock && IsConnected())
       {
-        // Create snapshot of the processes
-        handle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-        PROCESSENTRY32 info = new PROCESSENTRY32();
-        info.dwSize = (uint)System.Runtime.InteropServices.
-                      Marshal.SizeOf(typeof(PROCESSENTRY32));
-
-        // Get the first process
-        int first = Process32First(handle, ref info);
-
-        // While there's another process, retrieve it
-        do
+        lock (changeColorBufferLock)
         {
-          if (string.Compare(info.szExeFile,
-                applicationName, true) == 0)
+          try
           {
-            return true;
+            if (!changeColorBuffer.SequenceEqual(changeColorPrevColor))
+            {
+              sendAPIcommand(string.Format("{0},{1},{2},{3},{4},{5},{6}", "ATMOLIGHT", APIcommandType.Color, changeColorBuffer[0].ToString(), changeColorBuffer[1].ToString(), changeColorBuffer[2].ToString(), changeColorBuffer[3].ToString(), changeColorBuffer[4].ToString()));
+              Array.Copy(changeColorBuffer, changeColorPrevColor, 5);
+            }
+          }
+          catch (Exception e)
+          {
+            Log.Error("HueHandler - Error in ChangeColorThread");
+            Log.Error(string.Format("HueHandler - Exception: {0}", e.Message));
+            StopChangeColorThread();
+            ReInitialise(false);
+            continue;
           }
         }
-        while (Process32Next(handle, ref info) != 0);
+        System.Threading.Thread.Sleep(5);
       }
-      catch
-      {
-        throw;
-      }
-      finally
-      {
-        // Release handle of the snapshot
-        CloseHandle(handle);
-        handle = IntPtr.Zero;
-      }
-      return false;
     }
+    #endregion
+
   }
-  #endregion
 }

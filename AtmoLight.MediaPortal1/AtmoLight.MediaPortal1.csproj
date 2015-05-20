@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Localization.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SetupForm.cs">
@@ -70,8 +71,6 @@
     <Compile Include="SetupForm.Designer.cs">
       <DependentUpon>SetupForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IniAccess.cs" />
-    <Compile Include="LanguageLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -91,10 +90,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\language\DutchNL.lng" />
-    <None Include="Resources\language\EnglishUS.lng" />
-    <None Include="Resources\language\FrenchFR.lng" />
-    <None Include="Resources\language\GermanDE.lng" />
+    <Content Include="Resources\language\de.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Resources\language\fr.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Resources\language\nl.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Resources\language\en.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

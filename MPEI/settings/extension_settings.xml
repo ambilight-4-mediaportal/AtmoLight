@@ -359,6 +359,21 @@
 		displayname="Blackbar detection threshold:"    
 		description="Enter the blackbar detection threshold."/>		
 		
+		<setting entryname="atmolight" name="blackbarDetectionLinkAreas" type="string" defaultvalue="yes" listvalues="yes|no"
+		displayname="Link blackbar detection areas:"    
+		description="Select if you want to link the areas (top to bottom and left to right)."
+		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="blackbarDetectionHorizontal" type="string" defaultvalue="yes" listvalues="yes|no"
+		displayname="Blackbar detection horizontal scan:"    
+		description="Scan horizontally?"
+		displaylistvalues="Yes|No"/>
+		
+		<setting entryname="atmolight" name="blackbarDetectionVertical" type="string" defaultvalue="yes" listvalues="yes|no"
+		displayname="Blackbar detection vertical scan:"    
+		description="Scan vertically?"
+		displaylistvalues="Yes|No"/>
+		
 		<setting entryname="atmolight" name="powerModeChangedDelay" type="int" defaultvalue="5000" minvalue="0" maxvalue="99999"
 		displayname="Delay after standby:"    
 		description="Enter the the delay after standby."/>		

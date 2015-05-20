@@ -1,54 +1,58 @@
 ﻿using System;
 using MediaPortal.Profile;
-using Language;
 using System.Globalization;
 using System.Collections.Generic;
-
+using System.Text;
 
 namespace AtmoLight
 {
   public class Settings
   {
-    #region Config variables
-
+    #region Fields
     // Generic
     public static ContentEffect effectVideo;
     public static ContentEffect effectMusic;
     public static ContentEffect effectRadio;
     public static ContentEffect effectMenu;
     public static ContentEffect effectMPExit;
-    public static int killButton = 0;
-    public static int profileButton = 0;
-    public static int menuButton = 0;
-    public static bool sbs3dOn = false;
-    public static bool manualMode = false;
-    public static bool lowCPU = false;
-    public static int lowCPUTime = 0;
-    public static bool delay = false;
-    public static int delayReferenceTime = 0;
-    public static int delayReferenceRefreshRate = 0;
+    public static int killButton;
+    public static int profileButton;
+    public static int menuButton;
+    public static bool sbs3dOn;
+    public static bool manualMode;
+    public static bool lowCPU;
+    public static int lowCPUTime;
+    public static bool delay;
+    public static int delayReferenceTime;
+    public static int delayReferenceRefreshRate;
     public static DateTime excludeTimeStart;
     public static DateTime excludeTimeEnd;
-    public static int staticColorRed = 0;
-    public static int staticColorGreen = 0;
-    public static int staticColorBlue = 0;
-    public static bool restartOnError = true;
-    public static bool blackbarDetection = false;
-    public static int blackbarDetectionTime = 0;
+    public static int staticColorRed;
+    public static int staticColorGreen;
+    public static int staticColorBlue;
+    public static bool restartOnError;
+    public static bool trueGrabbing;
+    public static bool blackbarDetection;
+    public static int blackbarDetectionTime;
     public static int blackbarDetectionThreshold;
-    public static string gifFile = "";
-    public static int captureWidth = 0;
-    public static int captureHeight = 0;
+    public static string gifFile;
+    public static int captureWidth;
+    public static int captureHeight;
     public static int powerModeChangedDelay;
+    public static bool monitorScreensaverState;
     public static int vuMeterMindB;
     public static double vuMeterMinHue;
     public static double vuMeterMaxHue;
+    public static string currentLanguageFile;
+    public static bool blackbarDetectionHorizontal;
+    public static bool blackbarDetectionVertical;
+    public static bool blackbarDetectionLinkAreas;
 
     // Atmowin
     public static bool atmoWinTarget;
-    public static string atmowinExe = "";
-    public static bool startAtmoWin = true;
-    public static bool exitAtmoWin = true;
+    public static string atmowinExe;
+    public static bool startAtmoWin;
+    public static bool exitAtmoWin;
 
     // Boblight
     public static bool boblightTarget;
@@ -67,23 +71,23 @@ namespace AtmoLight
 
     // Hyperion
     public static bool hyperionTarget;
-    public static string hyperionIP = "";
-    public static int hyperionPort = 0;
-    public static int hyperionPriority = 0;
-    public static int hyperionReconnectDelay = 0;
-    public static int hyperionReconnectAttempts = 0;
-    public static int hyperionPriorityStaticColor = 0;
+    public static string hyperionIP;
+    public static int hyperionPort;
+    public static int hyperionPriority;
+    public static int hyperionReconnectDelay;
+    public static int hyperionReconnectAttempts;
+    public static int hyperionPriorityStaticColor;
     public static bool hyperionLiveReconnect;
 
     // Hue
     public static bool hueTarget;
-    public static string hueExe = "";
+    public static string hueExe;
     public static bool hueStart;
     public static bool hueIsRemoteMachine;
-    public static string hueIP = "";
-    public static int huePort = 0;
-    public static int hueReconnectDelay = 0;
-    public static int hueReconnectAttempts = 0;
+    public static string hueIP;
+    public static int huePort;
+    public static int hueReconnectDelay;
+    public static int hueReconnectAttempts;
     public static bool hueBridgeEnableOnResume;
     public static bool hueBridgeDisableOnSuspend;
     public static int hueMinDiversion;
@@ -114,16 +118,17 @@ namespace AtmoLight
     public static int atmoOrbBlackThreshold;
     public static bool atmoOrbUseOverallLightness;
     public static List<string> atmoOrbLamps = new List<string>();
-
-
     #endregion
 
+    #region Methods
     public static DateTime LoadTimeSetting(MediaPortal.Profile.Settings reader, string name, string defaultTime)
     {
       string s = reader.GetValueAsString("atmolight", name, defaultTime);
       DateTime dt;
       if (!DateTime.TryParse(s, out dt))
+      {
         dt = DateTime.Parse(defaultTime);
+      }
       return dt;
     }
 
@@ -190,6 +195,30 @@ namespace AtmoLight
         {
           effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMPExit", "LEDsDisabled"));
         }
+
+        currentLanguageFile = reader.GetValueAsString("atmolight", "CurrentLanguageFile", Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\AtmoLight\\en.xml");
+        if (currentLanguageFile.Substring(currentLanguageFile.Length - 3, 3).ToLower() == "lng")
+        {
+          int lastBackslash = currentLanguageFile.LastIndexOf("\\") + 1;
+          int lastDot = currentLanguageFile.LastIndexOf(".");
+
+          switch (currentLanguageFile.Substring(lastBackslash, lastDot - lastBackslash))
+          {
+            case "GermanDE":
+              currentLanguageFile = Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\AtmoLight\\de.xml";
+              break;
+            case "DutchNL":
+              currentLanguageFile = Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\AtmoLight\\nl.xml";
+              break;
+            case "FrenchFR":
+              currentLanguageFile = Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\AtmoLight\\fr.xml";
+              break;
+            default:
+            case "EnglishUS":
+              currentLanguageFile = Win32API.GetSpecialFolder(Win32API.CSIDL.CSIDL_COMMON_APPDATA) + "\\Team MediaPortal\\MediaPortal\\language\\AtmoLight\\en.xml";
+              break;
+          }
+        }
         
         // Normal settings loading
         atmowinExe = reader.GetValueAsString("atmolight", "atmowinexe", "");
@@ -210,12 +239,14 @@ namespace AtmoLight
         staticColorGreen = reader.GetValueAsInt("atmolight", "StaticColorGreen", 0);
         staticColorBlue = reader.GetValueAsInt("atmolight", "StaticColorBlue", 0);
         restartOnError = reader.GetValueAsBool("atmolight", "RestartOnError", true);
+        trueGrabbing = reader.GetValueAsBool("atmolight", "TrueGrabbing", true);
         delayReferenceRefreshRate = reader.GetValueAsInt("atmolight", "DelayRefreshRate", 50);
         blackbarDetection = reader.GetValueAsBool("atmolight", "BlackbarDetection", false);
         blackbarDetectionTime = reader.GetValueAsInt("atmolight", "BlackbarDetectionTime", 1000);
         gifFile = reader.GetValueAsString("atmolight", "GIFFile", "");
         captureWidth = reader.GetValueAsInt("atmolight", "captureWidth", 64);
         captureHeight = reader.GetValueAsInt("atmolight", "captureHeight", 64);
+        monitorScreensaverState = reader.GetValueAsBool("atmolight", "monitorScreensaverState", true);
         hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "127.0.0.1");
         hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 19445);
         hyperionReconnectDelay = reader.GetValueAsInt("atmolight", "hyperionReconnectDelay", 10000);
@@ -285,7 +316,9 @@ namespace AtmoLight
         hueMinDiversion = reader.GetValueAsInt("atmolight", "hueMinDiversion", 16);
         hueSaturation = Double.Parse(reader.GetValueAsString("atmolight", "hueSaturation", "0.2").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
         hueUseOverallLightness = reader.GetValueAsBool("atmolight", "hueUseOverallLightness", true);
-
+        blackbarDetectionHorizontal = reader.GetValueAsBool("atmolight", "blackbarDetectionHorizontal", true);
+        blackbarDetectionVertical = reader.GetValueAsBool("atmolight", "blackbarDetectionVertical", true);
+        blackbarDetectionLinkAreas = reader.GetValueAsBool("atmolight", "blackbarDetectionLinkAreas", true);
       }
     }
     public static void SaveSettings()
@@ -311,17 +344,19 @@ namespace AtmoLight
         reader.SetValueAsBool("atmolight", "StartAtmoWin", startAtmoWin);
         reader.SetValue("atmolight", "excludeTimeStart", excludeTimeStart.ToString("HH:mm"));
         reader.SetValue("atmolight", "excludeTimeEnd", excludeTimeEnd.ToString("HH:mm"));
-        reader.SetValue("atmolight", "CurrentLanguageFile", LanguageLoader.strCurrentLanguageFile);
+        reader.SetValue("atmolight", "CurrentLanguageFile", currentLanguageFile);
         reader.SetValue("atmolight", "StaticColorRed", staticColorRed);
         reader.SetValue("atmolight", "StaticColorGreen", staticColorGreen);
         reader.SetValue("atmolight", "StaticColorBlue", staticColorBlue);
         reader.SetValueAsBool("atmolight", "RestartOnError", restartOnError);
+        reader.SetValueAsBool("atmolight", "TrueGrabbing", trueGrabbing);
         reader.SetValue("atmolight", "DelayRefreshRate", delayReferenceRefreshRate);
         reader.SetValueAsBool("atmolight", "BlackbarDetection", blackbarDetection);
         reader.SetValue("atmolight", "BlackbarDetectionTime", blackbarDetectionTime);
         reader.SetValue("atmolight", "GIFFile", gifFile);
         reader.SetValue("atmolight", "captureWidth", (int)captureWidth);
         reader.SetValue("atmolight", "captureHeight", (int)captureHeight);
+        reader.SetValueAsBool("atmolight", "monitorScreensaverState", monitorScreensaverState);
         reader.SetValue("atmolight", "hyperionIP", hyperionIP);
         reader.SetValue("atmolight", "hyperionPort", (int)hyperionPort);
         reader.SetValue("atmolight", "hyperionPriority", (int)hyperionPriority);
@@ -392,6 +427,9 @@ namespace AtmoLight
         reader.SetValue("atmolight", "hueBlackThreshold", hueBlackThreshold.ToString());
         reader.SetValue("atmolight", "hueSaturation", hueSaturation.ToString());
         reader.SetValueAsBool("atmolight", "hueUseOverallLightness", hueUseOverallLightness);
+        reader.SetValueAsBool("atmolight", "blackbarDetectionHorizontal", blackbarDetectionHorizontal);
+        reader.SetValueAsBool("atmolight", "blackbarDetectionVertical", blackbarDetectionVertical);
+        reader.SetValueAsBool("atmolight", "blackbarDetectionLinkAreas", blackbarDetectionLinkAreas);
       }
     }
 
@@ -436,5 +474,6 @@ namespace AtmoLight
           return ContentEffect.LEDsDisabled;
       }
     }
+    #endregion
   }
 }

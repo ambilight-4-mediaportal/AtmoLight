@@ -19,6 +19,7 @@ using MediaPortal.Common.Messaging;
 using MediaPortal.Common.Runtime;
 using MediaPortal.UI.Control.InputManager;
 using MediaPortal.UI.Presentation.Actions;
+using MediaPortal.UI.Presentation.Screens;
 using SharpDX;
 using SharpDX.Direct3D9;
 
@@ -28,6 +29,7 @@ namespace AtmoLight
   public class Plugin : IPluginStateTracker
   {
     #region Fields
+
     protected AsynchronousMessageQueue messageQueue;
     private Core coreObject;
 
@@ -42,20 +44,15 @@ namespace AtmoLight
 
     // Player helper
     private ISharpDXVideoPlayer player;
-    #endregion
 
-    #region Win32API
-    public sealed class Win32API
-    {
-      [DllImport("kernel32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-      public static extern Int64 GetTickCount();
-    }
     #endregion
 
     #region IPluginStateTracker implementation
+
     public void Activated(PluginRuntime pluginRuntime)
     {
-      messageQueue = new AsynchronousMessageQueue(this, new string[] { SystemMessaging.CHANNEL, PlayerManagerMessaging.CHANNEL });
+      messageQueue = new AsynchronousMessageQueue(this,
+        new string[] {SystemMessaging.CHANNEL, PlayerManagerMessaging.CHANNEL});
       messageQueue.MessageReceived += OnMessageReceived;
       messageQueue.Start();
     }
@@ -85,6 +82,7 @@ namespace AtmoLight
     #endregion
 
     #region Initialise
+
     private void Initialise()
     {
       // Log Handler
@@ -93,7 +91,8 @@ namespace AtmoLight
       // Version Infos
       var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
       DateTime buildDate = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).LastWriteTime;
-      Log.Info("Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build, version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
+      Log.Info("Version {0}.{1}.{2}.{3}, build on {4} at {5}.", version.Major, version.Minor, version.Build,
+        version.Revision, buildDate.ToShortDateString(), buildDate.ToLongTimeString());
 
       // Settings
       Log.Debug("Loading settings.");
@@ -107,6 +106,10 @@ namespace AtmoLight
 
       // General settings
       coreObject.SetDelay(settings.DelayTime);
+      if (settings.Delay)
+      {
+        coreObject.EnableDelay();
+      }
       coreObject.SetGIFPath(settings.GIFFile);
       coreObject.SetReInitOnError(settings.RestartAtmoWinOnError);
       coreObject.SetStaticColor(settings.StaticColorRed, settings.StaticColorGreen, settings.StaticColorBlue);
@@ -115,6 +118,9 @@ namespace AtmoLight
       coreObject.blackbarDetectionTime = settings.BlackbarDetectionTime;
       coreObject.blackbarDetectionThreshold = settings.BlackbarDetectionThreshold;
       coreObject.powerModeChangedDelay = settings.PowerModeChangedDelay;
+      coreObject.blackbarDetectionLinkAreas = settings.BlackbarDetectionLinkAreas;
+      coreObject.blackbarDetectionHorizontal = settings.BlackbarDetectionHorizontal;
+      coreObject.blackbarDetectionVertical = settings.BlackbarDetectionVertical;
 
       // AmbiBox
       coreObject.ambiBoxAutoStart = settings.AmbiBoxAutoStart;
@@ -194,6 +200,7 @@ namespace AtmoLight
       if (CheckForStartRequirements())
       {
         coreObject.ChangeEffect(settings.MenuEffect, true);
+        CalculateDelay();
       }
       else
       {
@@ -205,10 +212,20 @@ namespace AtmoLight
       // Handlers
       Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
       Core.OnNewVUMeter += new Core.NewVUMeterHander(OnNewVUMeter);
-      AtmoLight.Configuration.OnOffButton.ButtonsChanged += new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
-      AtmoLight.Configuration.ProfileButton.ButtonsChanged += new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      AtmoLight.Configuration.OnOffButton.ButtonsChanged +=
+        new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      AtmoLight.Configuration.ProfileButton.ButtonsChanged +=
+        new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
       SkinContext.DeviceSceneEnd += UICapture;
       SystemEvents.PowerModeChanged += PowerModeChanged;
+
+      if (settings.MonitorScreensaverState)
+      {
+        Thread screensaverMonitorThread = new Thread(monitorScreensaverState);
+        screensaverMonitorThread.IsBackground = true;
+        screensaverMonitorThread.Start();
+      }
+
       RegisterSettingsChangedHandler();
       RegisterKeyBindings();
     }
@@ -236,14 +253,24 @@ namespace AtmoLight
       Log.OnNewLog -= new Log.NewLogHandler(OnNewLog);
       Core.OnNewConnectionLost -= new Core.NewConnectionLostHandler(OnNewConnectionLost);
       Core.OnNewVUMeter -= new Core.NewVUMeterHander(OnNewVUMeter);
-      AtmoLight.Configuration.OnOffButton.ButtonsChanged -= new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
-      AtmoLight.Configuration.ProfileButton.ButtonsChanged -= new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      AtmoLight.Configuration.OnOffButton.ButtonsChanged -=
+        new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      AtmoLight.Configuration.ProfileButton.ButtonsChanged -=
+        new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
       SystemEvents.PowerModeChanged -= PowerModeChanged;
+
+      if (settings.MonitorScreensaverState)
+      {
+        settings.MonitorScreensaverState = false;
+      }
+
       UnregisterSettingsChangedHandler();
     }
+
     #endregion
 
     #region Utilities
+
     /// <summary>
     /// Check if LEDs should be activated.
     /// </summary>
@@ -255,10 +282,13 @@ namespace AtmoLight
         Log.Debug("LEDs should be deactivated. (Manual Mode)");
         return false;
       }
-      else if ((DateTime.Now >= Convert.ToDateTime(settings.ExcludeTimeStart) && DateTime.Now <= Convert.ToDateTime(settings.ExcludeTimeEnd)) ||
-              ((Convert.ToDateTime(settings.ExcludeTimeStart) > Convert.ToDateTime(settings.ExcludeTimeEnd)) &&
-              ((DateTime.Now <= Convert.ToDateTime(settings.ExcludeTimeStart) && DateTime.Now <= Convert.ToDateTime(settings.ExcludeTimeEnd)) ||
-              (DateTime.Now >= Convert.ToDateTime(settings.ExcludeTimeStart) && DateTime.Now >= Convert.ToDateTime(settings.ExcludeTimeEnd)))))
+      else if ((DateTime.Now >= Convert.ToDateTime(settings.ExcludeTimeStart) &&
+                DateTime.Now <= Convert.ToDateTime(settings.ExcludeTimeEnd)) ||
+               ((Convert.ToDateTime(settings.ExcludeTimeStart) > Convert.ToDateTime(settings.ExcludeTimeEnd)) &&
+                ((DateTime.Now <= Convert.ToDateTime(settings.ExcludeTimeStart) &&
+                  DateTime.Now <= Convert.ToDateTime(settings.ExcludeTimeEnd)) ||
+                 (DateTime.Now >= Convert.ToDateTime(settings.ExcludeTimeStart) &&
+                  DateTime.Now >= Convert.ToDateTime(settings.ExcludeTimeEnd)))))
       {
         Log.Debug("LEDs should be deactivated. (Timeframe)");
         return false;
@@ -278,20 +308,22 @@ namespace AtmoLight
       if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && coreObject.IsDelayEnabled())
       {
         int refreshRate = SkinContext.Direct3D.GetAdapterDisplayModeEx(0).RefreshRate;
-        coreObject.SetDelay((int)(((float)settings.DelayRefreshRate / (float)refreshRate) * (float)settings.DelayTime));
+        coreObject.SetDelay((int) (((float) settings.DelayRefreshRate/(float) refreshRate)*(float) settings.DelayTime));
       }
     }
+
     #endregion
 
     #region Message Handler
-    void OnMessageReceived(AsynchronousMessageQueue queue, SystemMessage message)
+
+    private void OnMessageReceived(AsynchronousMessageQueue queue, SystemMessage message)
     {
       if (message.ChannelName == SystemMessaging.CHANNEL)
       {
-        SystemMessaging.MessageType messageType = (SystemMessaging.MessageType)message.MessageType;
+        SystemMessaging.MessageType messageType = (SystemMessaging.MessageType) message.MessageType;
         if (messageType == SystemMessaging.MessageType.SystemStateChanged)
         {
-          SystemState newState = (SystemState)message.MessageData[SystemMessaging.NEW_STATE];
+          SystemState newState = (SystemState) message.MessageData[SystemMessaging.NEW_STATE];
           if (newState == SystemState.Running)
           {
             Initialise();
@@ -300,7 +332,7 @@ namespace AtmoLight
       }
       else if (message.ChannelName == PlayerManagerMessaging.CHANNEL)
       {
-        PlayerManagerMessaging.MessageType messageType = (PlayerManagerMessaging.MessageType)message.MessageType;
+        PlayerManagerMessaging.MessageType messageType = (PlayerManagerMessaging.MessageType) message.MessageType;
         if (messageType == PlayerManagerMessaging.MessageType.PlayerStarted)
         {
           Log.Info("Playback started.");
@@ -331,7 +363,8 @@ namespace AtmoLight
             coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
           }
         }
-        else if (messageType == PlayerManagerMessaging.MessageType.PlayerStopped || messageType == PlayerManagerMessaging.MessageType.PlayerEnded)
+        else if (messageType == PlayerManagerMessaging.MessageType.PlayerStopped ||
+                 messageType == PlayerManagerMessaging.MessageType.PlayerEnded)
         {
           Log.Info("Playback stopped.");
           ContentEffect effect;
@@ -365,12 +398,15 @@ namespace AtmoLight
         }
       }
     }
+
     #endregion
 
     #region UI Capture Event Handler
+
     public void UICapture(object sender, EventArgs args)
     {
-      if (!coreObject.IsConnected() || !coreObject.IsAtmoLightOn() || coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
+      if (!coreObject.IsConnected() || !coreObject.IsAtmoLightOn() ||
+          coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
       {
         return;
       }
@@ -394,14 +430,17 @@ namespace AtmoLight
       {
         if (surfaceDestination == null)
         {
-          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device, coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight(), SharpDX.Direct3D9.Format.A8R8G8B8, SharpDX.Direct3D9.MultisampleType.None, 0, true);
+          surfaceDestination = SharpDX.Direct3D9.Surface.CreateRenderTarget(SkinContext.Device,
+            coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight(), SharpDX.Direct3D9.Format.A8R8G8B8,
+            SharpDX.Direct3D9.MultisampleType.None, 0, true);
         }
 
         // Use the Player Surface if video is playing.
         // This results in lower time to calculate aswell as blackbar removal
         if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
         {
-          player = ServiceRegistration.Get<IPlayerContextManager>().PrimaryPlayerContext.CurrentPlayer as ISharpDXVideoPlayer;
+          player =
+            ServiceRegistration.Get<IPlayerContextManager>().PrimaryPlayerContext.CurrentPlayer as ISharpDXVideoPlayer;
           surfaceSource = player.Surface;
         }
         else
@@ -430,9 +469,11 @@ namespace AtmoLight
         Log.Error("Exception: {0}", ex.Message);
       }
     }
+
     #endregion
 
     #region Log Event Handler
+
     /// <summary>
     /// Event Handler for logging.
     /// This event gets called if logging is done from Core or from Plugin.
@@ -458,9 +499,11 @@ namespace AtmoLight
           break;
       }
     }
+
     #endregion
 
     #region Key Bindings
+
     private void ReregisterKeyBindings()
     {
       UnregisterKeyBindings();
@@ -566,54 +609,89 @@ namespace AtmoLight
         coreObject.ReInitialise();
       }
     }
+
     #endregion
 
     #region Connection Lost Handler
+
     /// <summary>
     /// Connection lost event handler.
     /// This event gets called if connection to AtmoWin is lost and not recoverable.
     /// </summary>
     private void OnNewConnectionLost(Target target)
     {
-      ServiceRegistration.Get<INotificationService>().EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]", MediaPortal.Common.Localization.LocalizationHelper.Translate("[AtmoLight.AtmoWinConnectionLost]").Replace("[Target]", target.ToString()), true);
+      ServiceRegistration.Get<INotificationService>()
+        .EnqueueNotification(NotificationType.Error, "[AtmoLight.Name]",
+          MediaPortal.Common.Localization.LocalizationHelper.Translate("[AtmoLight.AtmoWinConnectionLost]")
+            .Replace("[Target]", target.ToString()), true);
     }
+
     #endregion
 
     #region Settings Changed Hander
+
     private void RegisterSettingsChangedHandler()
     {
-      AtmoLight.Configuration.VideoEffect.SettingsChanged += new Configuration.VideoEffect.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.AudioEffect.SettingsChanged += new Configuration.AudioEffect.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.MenuEffect.SettingsChanged += new Configuration.MenuEffect.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.MPExitEffect.SettingsChanged += new Configuration.MPExitEffect.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.ManualMode.SettingsChanged += new Configuration.ManualMode.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.VideoEffect.SettingsChanged +=
+        new Configuration.VideoEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.AudioEffect.SettingsChanged +=
+        new Configuration.AudioEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MenuEffect.SettingsChanged +=
+        new Configuration.MenuEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MPExitEffect.SettingsChanged +=
+        new Configuration.MPExitEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ManualMode.SettingsChanged +=
+        new Configuration.ManualMode.SettingsChangedHandler(ReloadSettings);
       AtmoLight.Configuration.SBS3D.SettingsChanged += new Configuration.SBS3D.SettingsChangedHandler(ReloadSettings);
       AtmoLight.Configuration.LowCPU.SettingsChanged += new Configuration.LowCPU.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.LowCPUTime.SettingsChanged += new Configuration.LowCPUTime.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.DelayTime.SettingsChanged += new Configuration.DelayTime.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.DelayRefreshRate.SettingsChanged += new Configuration.DelayRefreshRate.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.ExcludeTimeStartHour.SettingsChanged += new Configuration.ExcludeTimeStartHour.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.ExcludeTimeEndHour.SettingsChanged += new Configuration.ExcludeTimeEndHour.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.ExcludeTimeStartMinutes.SettingsChanged += new Configuration.ExcludeTimeStartMinutes.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.ExcludeTimeEndMinutes.SettingsChanged += new Configuration.ExcludeTimeEndMinutes.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.LowCPUTime.SettingsChanged +=
+        new Configuration.LowCPUTime.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.DelayTime.SettingsChanged +=
+        new Configuration.DelayTime.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.DelayRefreshRate.SettingsChanged +=
+        new Configuration.DelayRefreshRate.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeStartHour.SettingsChanged +=
+        new Configuration.ExcludeTimeStartHour.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeEndHour.SettingsChanged +=
+        new Configuration.ExcludeTimeEndHour.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeStartMinutes.SettingsChanged +=
+        new Configuration.ExcludeTimeStartMinutes.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeEndMinutes.SettingsChanged +=
+        new Configuration.ExcludeTimeEndMinutes.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MonitorScreensaverState.SettingsChanged +=
+        new Configuration.MonitorScreensaverState.SettingsChangedHandler(ReloadSettings);
     }
 
     private void UnregisterSettingsChangedHandler()
     {
-      AtmoLight.Configuration.VideoEffect.SettingsChanged -= new Configuration.VideoEffect.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.AudioEffect.SettingsChanged -= new Configuration.AudioEffect.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.MenuEffect.SettingsChanged -= new Configuration.MenuEffect.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.MPExitEffect.SettingsChanged -= new Configuration.MPExitEffect.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.ManualMode.SettingsChanged -= new Configuration.ManualMode.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.VideoEffect.SettingsChanged -=
+        new Configuration.VideoEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.AudioEffect.SettingsChanged -=
+        new Configuration.AudioEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MenuEffect.SettingsChanged -=
+        new Configuration.MenuEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MPExitEffect.SettingsChanged -=
+        new Configuration.MPExitEffect.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ManualMode.SettingsChanged -=
+        new Configuration.ManualMode.SettingsChangedHandler(ReloadSettings);
       AtmoLight.Configuration.SBS3D.SettingsChanged -= new Configuration.SBS3D.SettingsChangedHandler(ReloadSettings);
       AtmoLight.Configuration.LowCPU.SettingsChanged -= new Configuration.LowCPU.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.LowCPUTime.SettingsChanged -= new Configuration.LowCPUTime.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.DelayTime.SettingsChanged -= new Configuration.DelayTime.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.DelayRefreshRate.SettingsChanged -= new Configuration.DelayRefreshRate.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.ExcludeTimeStartHour.SettingsChanged -= new Configuration.ExcludeTimeStartHour.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.ExcludeTimeEndHour.SettingsChanged -= new Configuration.ExcludeTimeEndHour.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.ExcludeTimeStartMinutes.SettingsChanged -= new Configuration.ExcludeTimeStartMinutes.SettingsChangedHandler(ReloadSettings);
-      AtmoLight.Configuration.ExcludeTimeEndMinutes.SettingsChanged -= new Configuration.ExcludeTimeEndMinutes.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.LowCPUTime.SettingsChanged -=
+        new Configuration.LowCPUTime.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.DelayTime.SettingsChanged -=
+        new Configuration.DelayTime.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.DelayRefreshRate.SettingsChanged -=
+        new Configuration.DelayRefreshRate.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeStartHour.SettingsChanged -=
+        new Configuration.ExcludeTimeStartHour.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeEndHour.SettingsChanged -=
+        new Configuration.ExcludeTimeEndHour.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeStartMinutes.SettingsChanged -=
+        new Configuration.ExcludeTimeStartMinutes.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.ExcludeTimeEndMinutes.SettingsChanged -=
+        new Configuration.ExcludeTimeEndMinutes.SettingsChangedHandler(ReloadSettings);
+      AtmoLight.Configuration.MonitorScreensaverState.SettingsChanged -=
+        new Configuration.MonitorScreensaverState.SettingsChangedHandler(ReloadSettings);
     }
 
     private void ReloadSettings()
@@ -624,9 +702,10 @@ namespace AtmoLight
     #endregion
 
     #region VU Meter Event Handler
+
     private double[] OnNewVUMeter()
     {
-      double[] dbLevel = new double[] { -200.0, -200.0 };
+      double[] dbLevel = new double[] {-200.0, -200.0};
 
       IPlayerContextManager playerContextManager = ServiceRegistration.Get<IPlayerContextManager>(false);
       if (playerContextManager == null)
@@ -655,9 +734,11 @@ namespace AtmoLight
       }
       return dbLevel;
     }
+
     #endregion
 
     #region PowerModeChanged Event
+
     private void PowerModeChanged(object sender, PowerModeChangedEventArgs powerMode)
     {
       if (powerMode.Mode == PowerModes.Resume)
@@ -674,6 +755,81 @@ namespace AtmoLight
 
       Task.Factory.StartNew(() => { coreObject.PowerModeChanged(powerMode.Mode); });
     }
+
+    #endregion
+
+    #region Monitor screensaver state
+
+    private void monitorScreensaverState()
+    {
+      Log.Debug("Started monitoring screensaver state");
+
+      Boolean LEDsDisabledByScreensaver = false;
+      IScreenControl screenControl = ServiceRegistration.Get<IScreenControl>();
+
+      while (settings.MonitorScreensaverState)
+      {
+        try
+        {
+          Boolean IsScreenSaverActive = screenControl.IsScreenSaverActive;
+
+          // Check for screensaver window
+          if (IsScreenSaverActive)
+          {
+            ContentEffect currenContentEffect = coreObject.GetCurrentEffect();
+
+            if (currenContentEffect == ContentEffect.MediaPortalLiveMode ||
+                currenContentEffect == ContentEffect.ExternalLiveMode || currenContentEffect == ContentEffect.Undefined)
+            {
+              coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+              LEDsDisabledByScreensaver = true;
+              Log.Debug("LEDs should be deactivated. (Screensaver detected)");
+            }
+          }
+          // Restore last known effect when coming back from screensaver
+          else if (LEDsDisabledByScreensaver)
+          {
+            LEDsDisabledByScreensaver = false;
+
+            ContentEffect effect;
+            if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
+            {
+              effect = settings.VideoEffect;
+            }
+            else if (ServiceRegistration.Get<IPlayerContextManager>().IsAudioContextActive)
+            {
+              effect = settings.AudioEffect;
+            }
+            else
+            {
+              effect = settings.MenuEffect;
+            }
+
+            coreObject.ChangeEffect(effect);
+            CalculateDelay();
+
+            Log.Debug("LEDs should be activated again. (Screensaver no longer active)");
+          }
+
+          // Sleep for 5 seconds
+          int sleepTime = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
+          Thread.Sleep(sleepTime);
+        }
+        catch (Exception ex)
+        {
+
+          // No logging as it could spam the logs
+
+          //Log.Error("Error in AtmolightPlugin_monitorScreensaverState.");
+          //Log.Error("Exception: {0}", ex.Message);
+
+          // Sleep for 5 seconds
+          int sleepTime = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
+          Thread.Sleep(sleepTime);
+        }
+      }
+    }
+
     #endregion
   }
 }

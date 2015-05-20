@@ -1,3 +1,16 @@
+Version 1.16.1.12
+- Added support for MediaPortal 1.12 pre release and newer
+- Added support to show GUI frame data when a video is minimized
+
+Version 1.16.0.0
+- Added support to disable leds when MediaPortal uses its screen saver
+- Improved connection to AtmoHue
+- Improved communication to AtmoHue while in MediaPortal Live Mode
+- Improved blackbar detection
+- Added manual blackbar removal (user can choose manually the videos aspect ratio from the context menu)
+- Fixed delay feature (delay was not starting properly in all cases)
+- Switched to a new and better localization system
+
 Version 1.15.1.0
 - Fixed bug where loading German language file would fail
 

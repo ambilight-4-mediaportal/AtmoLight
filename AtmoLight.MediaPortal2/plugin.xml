@@ -409,7 +409,19 @@
     <ConfigSetting
         Id="BlackbarDetectionThreshold"
         Text="[AtmoLight.BlackbarDetectionThreshold]"
-        ClassName="AtmoLight.Configuration.BlackbarDetectionThreshold"/>    
+        ClassName="AtmoLight.Configuration.BlackbarDetectionThreshold"/>
+    <ConfigSetting
+        Id="BlackbarDetectionLinkAreas"
+        Text="[AtmoLight.BlackbarDetectionLinkAreas]"
+        ClassName="AtmoLight.Configuration.BlackbarDetectionLinkAreas"/>
+    <ConfigSetting
+        Id="BlackbarDetectionHorizontal"
+        Text="[AtmoLight.BlackbarDetectionHorizontal]"
+        ClassName="AtmoLight.Configuration.BlackbarDetectionHorizontal"/>
+    <ConfigSetting
+        Id="BlackbarDetectionVertical"
+        Text="[AtmoLight.BlackbarDetectionVertical]"
+        ClassName="AtmoLight.Configuration.BlackbarDetectionVertical"/>
     <ConfigSetting
         Id="PowerModeChangedDelay"
         Text="[AtmoLight.PowerModeChangedDelay]"
@@ -422,6 +434,10 @@
         Id="CaptureHeight"
         Text="[AtmoLight.CaptureHeight]"
         ClassName="AtmoLight.Configuration.CaptureHeight"/>
+    <ConfigSetting
+        Id="MonitorScreensaverState"
+        Text="[AtmoLight.MonitorScreensaverState]"
+        ClassName="AtmoLight.Configuration.MonitorScreensaverState"/>
   </Register>
 
 </Plugin>
