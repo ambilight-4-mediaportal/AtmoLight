@@ -1106,16 +1106,12 @@ namespace AtmoLight
     /// </summary>
     private void SetPixelDataThread()
     {
-      if (!IsConnected())
-      {
-        return;
-      }
       try
       {
         Log.Debug("Starting delay thread.");
-        while (!setPixelDataLock && IsConnected())
+        while (!setPixelDataLock)
         {
-          if (delayTimingList.Count >= 1)
+          if (delayTimingList.Count >= 1 && IsConnected())
           {
             if (Win32API.GetTickCount() >= (delayTimingList[0] + delayTime))
             {
