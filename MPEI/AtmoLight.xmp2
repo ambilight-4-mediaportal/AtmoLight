@@ -275,23 +275,7 @@ public static void Main(PackageClass packageClass, ActionItem actionItem)
     </Items>
   </Dependencies>
   <PluginDependencies>
-    <Items>
-      <PluginDependencyItem AssemblyName="AtmoLight.MediaPortal1.dll">
-        <CompatibleVersion>
-          <Items>
-            <CompatibleVersionItem>
-              <MinRequiredVersion>1.1.6.27652</MinRequiredVersion>
-              <DesignedForVersion>1.1.6.27652</DesignedForVersion>
-            </CompatibleVersionItem>
-          </Items>
-        </CompatibleVersion>
-        <SubSystemsUsed>
-          <Items>
-            <SubSystemItem Name="MP.Config" />
-          </Items>
-        </SubSystemsUsed>
-      </PluginDependencyItem>
-    </Items>
+    <Items />
   </PluginDependencies>
   <GeneralInfo>
     <Name>AtmoLight</Name>
@@ -304,31 +288,60 @@ public static void Main(PackageClass packageClass, ActionItem actionItem)
       <Major>1</Major>
       <Minor>16</Minor>
       <Build>1</Build>
-      <Revision>12</Revision>
+      <Revision>30</Revision>
     </Version>
-    <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
-
-
-
-The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.
-
-
-
-
-
-
-
-For this plugin to work you will also need AtmoWin. It will be installed automatically.
-
-
-
-
-
-
-
+    <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
+
+
+
+
+
+
+
+The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+For this plugin to work you will also need AtmoWin. It will be installed automatically.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed. </ExtensionDescription>
-    <VersionDescription>Version 1.16.1.12
-- Added support for MediaPortal 1.12 pre release and newer
+    <VersionDescription>Version 1.16.1.30
+
+- Fixed behavior on resume (ignoring the resume delay)
+- Fixed delay buffer overflow in rare cases 
+- Ambibox handler bugfixes
+- New feature to disable leds on minimize or suspended state
+
+Version 1.16.1.12
+
+- Added support for MediaPortal 1.12 pre release and newer
+
 - Added support to show GUI frame data when a video is minimized</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.16.1.12.mpe1</OnlineLocation>
