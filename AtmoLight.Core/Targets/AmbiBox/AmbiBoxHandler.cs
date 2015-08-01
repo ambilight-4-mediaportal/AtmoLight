@@ -300,9 +300,7 @@ namespace AtmoLight
         viewStream.WriteByte((byte)((coreObject.GetCaptureWidth() >> 8) & 0xff)); // Width
         viewStream.WriteByte((byte)(coreObject.GetCaptureHeight() & 0xff)); // Height
         viewStream.WriteByte((byte)((coreObject.GetCaptureHeight() >> 8) & 0xff)); // Height
-        viewStream.WriteByte((byte)(int)(coreObject.GetCaptureWidth() / coreObject.GetCaptureHeight() * 100));
-
-        // Aspect ratio
+        viewStream.WriteByte((byte)(int)(coreObject.GetCaptureWidth() / coreObject.GetCaptureHeight() * 100)); // Aspect ratio
         viewStream.WriteByte(0x00); // Image format (RGBA)
         viewStream.WriteByte((byte)(pixeldata.Length & 0xff)); // Length
         viewStream.WriteByte((byte)((pixeldata.Length >> 8) & 0xff)); // Length
