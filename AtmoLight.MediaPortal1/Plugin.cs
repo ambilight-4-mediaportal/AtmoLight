@@ -90,12 +90,12 @@ namespace AtmoLight
       // PowerModeChanged Handler
       SystemEvents.PowerModeChanged += PowerModeChanged;
 
-      // Screensaver Handler
-      if (Settings.monitorScreensaverState)
+      // Mediaportal state Handler
+      if (Settings.monitorScreensaverState || Settings.monitorWindowState)
       {
-        Thread screensaverMonitorThread = new Thread(monitorScreensaverState);
-        screensaverMonitorThread.IsBackground = true;
-        screensaverMonitorThread.Start();
+        Thread monitorStateThread = new Thread(monitorMediaportalState);
+        monitorStateThread.IsBackground = true;
+        monitorStateThread.Start();
       }
 
       // g_Player Handler
@@ -259,10 +259,8 @@ namespace AtmoLight
       MediaPortal.FrameGrabber.GetInstance().OnNewFrame -= new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
       SystemEvents.PowerModeChanged -= PowerModeChanged;
 
-      if (Settings.monitorScreensaverState)
-      {
-        Settings.monitorScreensaverState = false;
-      }
+      Settings.monitorScreensaverState = false;
+      Settings.monitorWindowState = false;
 
       g_Player.PlayBackStarted -= new g_Player.StartedHandler(g_Player_PlayBackStarted);
       g_Player.PlayBackStopped -= new g_Player.StoppedHandler(g_Player_PlayBackStopped);
@@ -1332,18 +1330,19 @@ namespace AtmoLight
     }
     #endregion
 
-    #region Monitor screensaver state
+    #region Monitor screensaver and/or window state
 
-    private void monitorScreensaverState()
+    private void monitorMediaportalState()
     {
-      Boolean LEDsDisabledByScreensaver = false;
+      Boolean LEDsDisabledByMediaportalState = false;
 
-      while (Settings.monitorScreensaverState)
+      while (Settings.monitorScreensaverState || Settings.monitorWindowState)
       {
         try
         {
-          // Check for screensaver window, blank screen only for now.
-          if (GUIGraphicsContext.BlankScreen)
+          // Check for screensaver window and/or Window state, blank screen for screensaver / Suspended for window state
+          if ((GUIGraphicsContext.BlankScreen && Settings.monitorScreensaverState) ||
+             (GUIGraphicsContext.CurrentState == GUIGraphicsContext.State.SUSPENDING && Settings.monitorWindowState))
           {
             ContentEffect currenContentEffect = coreObject.GetCurrentEffect();
 
@@ -1351,14 +1350,14 @@ namespace AtmoLight
                 currenContentEffect == ContentEffect.ExternalLiveMode || currenContentEffect == ContentEffect.Undefined)
             {
               coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
-              LEDsDisabledByScreensaver = true;
-              Log.Debug("LEDs should be deactivated. (Screensaver detected)");
+              LEDsDisabledByMediaportalState = true;
+              Log.Debug("LEDs should be deactivated. (Screensaver detected and/or window state is minimized/suspended)");
             }
           }
-          // Restore last known effect when coming back from screensaver
-          else if (LEDsDisabledByScreensaver)
+          // Restore last known effect when coming back from screensaver and/or suspended window state
+          else if (LEDsDisabledByMediaportalState)
           {
-            LEDsDisabledByScreensaver = false;
+            LEDsDisabledByMediaportalState = false;
 
             if (g_Player.Playing)
             {
@@ -1371,28 +1370,21 @@ namespace AtmoLight
               CalculateDelay();
             }
 
-            Log.Debug("LEDs should be activated again. (Screensaver no longer active)");
+            Log.Debug("LEDs should be activated again. (Screensaver and or minimzed/suspended state no longer active)");
           }
 
           // Sleep for 5 seconds
-          int sleepTime = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
+          int sleepTime = (int)TimeSpan.FromSeconds(5).TotalMilliseconds;
           Thread.Sleep(sleepTime);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-
-          // No logging as it could spam the logs
-
-          //Log.Error("Error in AtmolightPlugin_monitorScreensaverState.");
-          //Log.Error("Exception: {0}", ex.Message);
-
           // Sleep for 5 seconds
-          int sleepTime = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
+          int sleepTime = (int)TimeSpan.FromSeconds(5).TotalMilliseconds;
           Thread.Sleep(sleepTime);
         }
       }
     }
-
     #endregion
 
     #region ISetupForm impementation

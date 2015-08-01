@@ -151,6 +151,7 @@ namespace AtmoLight
       tbHueSaturation.Text = Settings.hueSaturation.ToString();
       cbHueOverallLightness.Checked = Settings.hueUseOverallLightness;
       ckMonitorScreensaverState.Checked = Settings.monitorScreensaverState;
+      ckMonitorWindowState.Checked = Settings.monitorWindowState;
       cbBlackbarDetectionLinkAreas.Checked = Settings.blackbarDetectionLinkAreas;
       cbBlackbarDetectionHorizontal.Checked = Settings.blackbarDetectionHorizontal;
       cbBlackbarDetectionVertical.Checked = Settings.blackbarDetectionVertical;
@@ -216,6 +217,7 @@ namespace AtmoLight
       lblDelay.Text = Localization.Translate("SetupForm", "DelayAt");
       lblpowerModeChangedDelayMS.Text = Localization.Translate("Common", "MS");
       ckMonitorScreensaverState.Text = Localization.Translate("SetupForm", "MonitorScreensaverState");
+      ckMonitorWindowState.Text = Localization.Translate("SetupForm", "MonitorWindowState");
       cbBlackbarDetectionLinkAreas.Text = Localization.Translate("SetupForm", "BlackbarDetectionLinkAreas");
       cbBlackbarDetectionHorizontal.Text = Localization.Translate("SetupForm", "BlackbarDetectionHorizontal");
       cbBlackbarDetectionVertical.Text = Localization.Translate("SetupForm", "BlackbarDetectionVertical");
@@ -879,6 +881,7 @@ namespace AtmoLight
       Settings.hueSaturation = Double.Parse(tbHueSaturation.Text.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
       Settings.hueUseOverallLightness = cbHueOverallLightness.Checked;
       Settings.monitorScreensaverState = ckMonitorScreensaverState.Checked;
+      Settings.monitorWindowState = ckMonitorWindowState.Checked;
       Settings.blackbarDetectionLinkAreas = cbBlackbarDetectionLinkAreas.Checked;
       Settings.blackbarDetectionHorizontal = cbBlackbarDetectionHorizontal.Checked;
       Settings.blackbarDetectionVertical = cbBlackbarDetectionVertical.Checked;

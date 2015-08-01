@@ -260,6 +260,7 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
+      this.ckMonitorWindowState = new System.Windows.Forms.CheckBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -1042,6 +1043,7 @@
       // 
       // grpPluginOption
       // 
+      this.grpPluginOption.Controls.Add(this.ckMonitorWindowState);
       this.grpPluginOption.Controls.Add(this.cbBlackbarDetectionVertical);
       this.grpPluginOption.Controls.Add(this.cbBlackbarDetectionHorizontal);
       this.grpPluginOption.Controls.Add(this.cbBlackbarDetectionLinkAreas);
@@ -1122,7 +1124,7 @@
       // lblpowerModeChangedDelayMS
       // 
       this.lblpowerModeChangedDelayMS.AutoSize = true;
-      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(255, 328);
+      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(255, 353);
       this.lblpowerModeChangedDelayMS.Name = "lblpowerModeChangedDelayMS";
       this.lblpowerModeChangedDelayMS.Size = new System.Drawing.Size(20, 13);
       this.lblpowerModeChangedDelayMS.TabIndex = 35;
@@ -1131,7 +1133,7 @@
       // lblpowerModeChangedDelay
       // 
       this.lblpowerModeChangedDelay.AutoSize = true;
-      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(9, 325);
+      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(9, 350);
       this.lblpowerModeChangedDelay.Name = "lblpowerModeChangedDelay";
       this.lblpowerModeChangedDelay.Size = new System.Drawing.Size(101, 13);
       this.lblpowerModeChangedDelay.TabIndex = 34;
@@ -1148,7 +1150,7 @@
       // 
       // tbpowerModeChangedDelay
       // 
-      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(208, 325);
+      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(208, 350);
       this.tbpowerModeChangedDelay.Name = "tbpowerModeChangedDelay";
       this.tbpowerModeChangedDelay.Size = new System.Drawing.Size(41, 20);
       this.tbpowerModeChangedDelay.TabIndex = 33;
@@ -2671,11 +2673,21 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
+      // ckMonitorWindowState
+      // 
+      this.ckMonitorWindowState.AutoSize = true;
+      this.ckMonitorWindowState.Location = new System.Drawing.Point(13, 325);
+      this.ckMonitorWindowState.Name = "ckMonitorWindowState";
+      this.ckMonitorWindowState.Size = new System.Drawing.Size(295, 17);
+      this.ckMonitorWindowState.TabIndex = 42;
+      this.ckMonitorWindowState.Text = "Turn off leds while Mediaportal is minimized or suspended";
+      this.ckMonitorWindowState.UseVisualStyleBackColor = true;
+      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(872, 662);
+      this.ClientSize = new System.Drawing.Size(872, 661);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
@@ -2981,5 +2993,6 @@
     private System.Windows.Forms.CheckBox cbBlackbarDetectionVertical;
     private System.Windows.Forms.CheckBox cbBlackbarDetectionHorizontal;
     private System.Windows.Forms.CheckBox cbBlackbarDetectionLinkAreas;
+    private System.Windows.Forms.CheckBox ckMonitorWindowState;
   }
 }

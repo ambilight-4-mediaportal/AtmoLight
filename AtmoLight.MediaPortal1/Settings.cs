@@ -40,6 +40,7 @@ namespace AtmoLight
     public static int captureHeight;
     public static int powerModeChangedDelay;
     public static bool monitorScreensaverState;
+    public static bool monitorWindowState;
     public static int vuMeterMindB;
     public static double vuMeterMinHue;
     public static double vuMeterMaxHue;
@@ -247,6 +248,7 @@ namespace AtmoLight
         captureWidth = reader.GetValueAsInt("atmolight", "captureWidth", 64);
         captureHeight = reader.GetValueAsInt("atmolight", "captureHeight", 64);
         monitorScreensaverState = reader.GetValueAsBool("atmolight", "monitorScreensaverState", true);
+        monitorWindowState = reader.GetValueAsBool("atmolight", "monitorWindowState", true);
         hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "127.0.0.1");
         hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 19445);
         hyperionReconnectDelay = reader.GetValueAsInt("atmolight", "hyperionReconnectDelay", 10000);
@@ -357,6 +359,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "captureWidth", (int)captureWidth);
         reader.SetValue("atmolight", "captureHeight", (int)captureHeight);
         reader.SetValueAsBool("atmolight", "monitorScreensaverState", monitorScreensaverState);
+        reader.SetValueAsBool("atmolight", "monitorWindowState", monitorWindowState);
         reader.SetValue("atmolight", "hyperionIP", hyperionIP);
         reader.SetValue("atmolight", "hyperionPort", (int)hyperionPort);
         reader.SetValue("atmolight", "hyperionPriority", (int)hyperionPriority);
