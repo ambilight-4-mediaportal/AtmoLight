@@ -39,6 +39,8 @@ namespace AtmoLight
     private Core coreObject = Core.GetInstance();
     private volatile bool changeImageLock = false;
     private volatile bool initLock = false;
+    private volatile bool firstConnectionPass = false;
+
     private Thread initThreadHelper;
 
     private TelnetConnection ambiBoxConnection;
@@ -60,12 +62,13 @@ namespace AtmoLight
     {
       if (!initLock)
       {
+        firstConnectionPass = true;
         initThreadHelper = new Thread(() => InitThreaded(force));
         initThreadHelper.Name = "AtmoLight AmbiBox Init";
         initThreadHelper.IsBackground = true;
         initThreadHelper.Start();
       }
-      
+
     }
 
     public void ReInitialise(bool force = false)
@@ -80,6 +83,7 @@ namespace AtmoLight
     {
       Log.Debug("AmbiBoxHandler - Disposing AmbiBox handler.");
       Disconnect();
+
       if (coreObject.ambiBoxAutoStop)
       {
         StopAmbiBox();
@@ -199,13 +203,78 @@ namespace AtmoLight
     #endregion
 
     #region ChangeImage
+
     private void ChangeImageTask(byte[] pixeldata)
     {
-      changeImageLock = true;
-      using (MemoryMappedFile mmap = MemoryMappedFile.CreateOrOpen("AmbiBox_XBMC_SharedMemory", pixeldata.Length + 11, MemoryMappedFileAccess.ReadWrite, MemoryMappedFileOptions.None, null, HandleInheritability.Inheritable))
+      try
       {
-        var viewStream = mmap.CreateViewStream();
-        // Wait for AmbiBox to be ready.
+        changeImageLock = true;
+
+        /*
+        if (coreObject.ambiBoxFirstConnectionPass)
+        {
+          firstConnectionPass = false;
+
+          try
+          {
+            viewStream.Close();
+          }
+          catch (Exception e)
+          {
+            Log.Error("Error while closing viewstream");
+            Log.Error(e.Message);
+          }
+
+          try
+          {
+            mmap = null;
+          }
+          catch (Exception e)
+          {
+            Log.Error("Error while clearing memory map");
+          }
+
+          try
+          {
+            mmap = MemoryMappedFile.CreateOrOpen("AmbiBox_XBMC_SharedMemory", pixeldata.Length + 11,
+              MemoryMappedFileAccess.ReadWrite, MemoryMappedFileOptions.None, null, HandleInheritability.Inheritable);
+          }
+          catch (Exception e)
+          {
+            Log.Error("Error while creating memory map");
+            Log.Error(e.Message);
+          }
+
+          try
+          {
+            viewStream = null;
+          }
+          catch (Exception e)
+          {
+            Log.Error("Error while clearing viewstream");
+            Log.Error(e.Message);
+          }
+
+          try
+          {
+            viewStream = mmap.CreateViewStream();
+          }
+          catch (Exception e)
+          {
+            Log.Error("Error while creating viewstream");
+            Log.Error(e.Message);
+          }
+        }
+         */
+
+        MemoryMappedFile mmap = MemoryMappedFile.CreateOrOpen("AmbiBox_XBMC_SharedMemory", pixeldata.Length + 11,
+          MemoryMappedFileAccess.ReadWrite, MemoryMappedFileOptions.None, null, HandleInheritability.Inheritable);
+
+        MemoryMappedViewStream viewStream = mmap.CreateViewStream();
+
+        Stopwatch sw = new Stopwatch();
+        sw.Start();
+
         while (true)
         {
           viewStream.Seek(0, SeekOrigin.Begin);
@@ -213,26 +282,44 @@ namespace AtmoLight
           {
             break;
           }
-          System.Threading.Thread.Sleep(5);
+          else
+          {
+            if (sw.ElapsedMilliseconds > 2500)
+            {
+              changeImageLock = false;
+              sw.Stop();
+              return;
+            }
+          }
+          Thread.Sleep(10);
         }
 
         viewStream.Seek(0, SeekOrigin.Begin);
         viewStream.WriteByte(0xF0); // Begin
         viewStream.WriteByte((byte)(coreObject.GetCaptureWidth() & 0xff)); // Width
-        viewStream.WriteByte((byte)((coreObject.GetCaptureWidth() >> 8) & 0xff)); // With
+        viewStream.WriteByte((byte)((coreObject.GetCaptureWidth() >> 8) & 0xff)); // Width
         viewStream.WriteByte((byte)(coreObject.GetCaptureHeight() & 0xff)); // Height
         viewStream.WriteByte((byte)((coreObject.GetCaptureHeight() >> 8) & 0xff)); // Height
-        viewStream.WriteByte((byte)(int)(coreObject.GetCaptureWidth() / coreObject.GetCaptureHeight() * 100)); // Aspect radio
+        viewStream.WriteByte((byte)(int)(coreObject.GetCaptureWidth() / coreObject.GetCaptureHeight() * 100));
+
+        // Aspect ratio
         viewStream.WriteByte(0x00); // Image format (RGBA)
         viewStream.WriteByte((byte)(pixeldata.Length & 0xff)); // Length
         viewStream.WriteByte((byte)((pixeldata.Length >> 8) & 0xff)); // Length
         viewStream.WriteByte((byte)((pixeldata.Length >> 16) & 0xff)); // Length
         viewStream.WriteByte((byte)((pixeldata.Length >> 24) & 0xff)); // Length
+
         viewStream.Write(pixeldata, 0, pixeldata.Length); // Copy pixeldata into mmap
         viewStream.Close();
+        changeImageLock = false;
       }
-      changeImageLock = false;
+      catch (Exception e)
+      {
+        changeImageLock = false;
+        //firstConnectionPass = false;
+      }
     }
+
     #endregion
 
     #region AmbiBox API
@@ -391,6 +478,7 @@ namespace AtmoLight
     public bool StopAmbiBox()
     {
       Log.Debug("AmbiBoxHandler - Trying to stop AmbiBox.");
+
       foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension("AmbiBox")))
       {
         try
