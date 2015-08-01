@@ -256,8 +256,7 @@ namespace AtmoLight
     /// </summary>
     public void Stop()
     {
-      MediaPortal.FrameGrabber.GetInstance().OnNewFrame -=
-        new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+      MediaPortal.FrameGrabber.GetInstance().OnNewFrame -= new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
       SystemEvents.PowerModeChanged -= PowerModeChanged;
 
       if (Settings.monitorScreensaverState)
@@ -1321,17 +1320,16 @@ namespace AtmoLight
       {
         if (CheckForStartRequirements())
         {
-          coreObject.ChangeEffect(menuEffect, true);
+          coreObject.ChangeEffect(menuEffect, true, true);
         }
         else
         {
-          coreObject.ChangeEffect(ContentEffect.LEDsDisabled, true);
+          coreObject.ChangeEffect(ContentEffect.LEDsDisabled, true, true);
         }
       }
 
       Task.Factory.StartNew(() => { coreObject.PowerModeChanged(powerMode.Mode); });
     }
-
     #endregion
 
     #region Monitor screensaver state

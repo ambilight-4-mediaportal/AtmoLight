@@ -199,12 +199,12 @@ namespace AtmoLight
 
       if (CheckForStartRequirements())
       {
-        coreObject.ChangeEffect(settings.MenuEffect, true);
+        coreObject.ChangeEffect(settings.MenuEffect, true, true);
         CalculateDelay();
       }
       else
       {
-        coreObject.ChangeEffect(ContentEffect.LEDsDisabled, true);
+        coreObject.ChangeEffect(ContentEffect.LEDsDisabled, true, true);
       }
 
       coreObject.Initialise();

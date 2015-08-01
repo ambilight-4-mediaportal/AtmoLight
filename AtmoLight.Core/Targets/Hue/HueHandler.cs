@@ -608,6 +608,7 @@ namespace AtmoLight.Targets
           }
           break;
         case PowerModes.Suspend:
+          StopChangeColorThread();
           if (coreObject.hueBridgeDisableOnSuspend)
           {
             //Send Power OFF command

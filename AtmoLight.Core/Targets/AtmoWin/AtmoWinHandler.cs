@@ -245,6 +245,7 @@ namespace AtmoLight
       }
       else if (powerMode == PowerModes.Suspend)
       {
+        StopGetAtmoLiveViewSourceThread();
         ChangeEffect(ContentEffect.LEDsDisabled);
       }
     }

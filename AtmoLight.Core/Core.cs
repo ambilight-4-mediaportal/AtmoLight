@@ -916,21 +916,27 @@ namespace AtmoLight
     /// <param name="effect">Effect to change to</param>
     /// <param name="force">Force the effect change</param>
     /// <returns></returns>
-    public bool ChangeEffect(ContentEffect effect, bool force = false)
+    public bool ChangeEffect(ContentEffect effect, bool force = false, bool skipTargetsAndThreads = false)
     {
       if (!IsConnected() && !force)
       {
         return false;
       }
-      // Static color gets excluded so we can actually change it.
+
       if ((effect == currentEffect) && (!force))
       {
         Log.Debug("Effect \"{0}\" is already active. Nothing to do.", effect);
         return false;
       }
       currentEffect = effect;
-      Log.Info("Changing AtmoLight effect to: {0}", effect.ToString());
       StopAllThreads();
+
+      if (skipTargetsAndThreads)
+      {
+        Log.Debug("Setting internal AtmoLight effect (skipping targets and threads) to: {0}", effect.ToString());
+        return true;
+      }
+      Log.Info("Changing AtmoLight effect to: {0}", effect.ToString());
 
       lock (targetsLock)
       {
@@ -1017,7 +1023,13 @@ namespace AtmoLight
       if (powerMode == PowerModes.Resume)
       {
         System.Threading.Thread.Sleep(powerModeChangedDelay);
+        ChangeEffect(GetCurrentEffect(), true);
       }
+      else
+      {
+        StopAllThreads();
+      }
+
       lock (targetsLock)
       {
         foreach (var target in targets)
