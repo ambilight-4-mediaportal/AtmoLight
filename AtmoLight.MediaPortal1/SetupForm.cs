@@ -89,6 +89,8 @@ namespace AtmoLight
       ckDelay.Checked = Settings.delay;
       ckStartAtmoWin.Checked = Settings.startAtmoWin;
       ckExitAtmoWin.Checked = Settings.exitAtmoWin;
+      ckAtmoWakeHelperEnabled.Checked = Settings.atmoWakeHelperEnabled;
+      cbAtmoWakeHelperComPort.Text = Settings.atmoWakeHelperComPort;
       ckRestartOnError.Checked = Settings.restartOnError;
       ckTrueGrabbing.Checked = Settings.trueGrabbing;
       ckBlackbarDetection.Checked = Settings.blackbarDetection;
@@ -280,6 +282,9 @@ namespace AtmoLight
       grpAtmowinSettings.Text = Localization.Translate("Common", "GeneralSettings");
       ckStartAtmoWin.Text = Localization.Translate("Common", "StartTargetWithMP").Replace("[Target]", Localization.Translate("AtmoWin", "AtmoWin"));
       ckExitAtmoWin.Text = Localization.Translate("Common", "StopTargetWithMP").Replace("[Target]", Localization.Translate("AtmoWin", "AtmoWin"));
+      grpAtmowinWakeHelper.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperDescription");
+      lblAtmoWakeHelperComPort.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperComPort");
+      ckAtmoWakeHelperEnabled.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperEnabled");
 
       // Boblight
       lblBoblightIP.Text = Localization.Translate("Common", "IP");
@@ -811,6 +816,8 @@ namespace AtmoLight
       Settings.delay = ckDelay.Checked;
       Settings.startAtmoWin = ckStartAtmoWin.Checked;
       Settings.exitAtmoWin = ckExitAtmoWin.Checked;
+      Settings.atmoWakeHelperComPort = cbAtmoWakeHelperComPort.Text;
+      Settings.atmoWakeHelperEnabled = ckAtmoWakeHelperEnabled.Checked;
       Settings.restartOnError = ckRestartOnError.Checked;
       Settings.trueGrabbing = ckTrueGrabbing.Checked;
       Settings.blackbarDetection = ckBlackbarDetection.Checked;

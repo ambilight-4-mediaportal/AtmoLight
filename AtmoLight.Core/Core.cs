@@ -142,6 +142,8 @@ namespace AtmoLight
     public bool atmoWinAutoStart;
     public bool atmoWinAutoStop;
     public string atmoWinPath;
+    public bool atmoWakeHelperEnabled;
+    public string atmoWakeHelperComPort;
 
     // Boblight Settings Fields
     public string boblightIP;

@@ -54,6 +54,10 @@
       this.tbHyperionPort = new System.Windows.Forms.TextBox();
       this.lblHyperionPort = new System.Windows.Forms.Label();
       this.tabPageAtmowin = new System.Windows.Forms.TabPage();
+      this.grpAtmowinWakeHelper = new System.Windows.Forms.GroupBox();
+      this.lblAtmoWakeHelperComPort = new System.Windows.Forms.Label();
+      this.cbAtmoWakeHelperComPort = new System.Windows.Forms.ComboBox();
+      this.ckAtmoWakeHelperEnabled = new System.Windows.Forms.CheckBox();
       this.grpAtmowinSettings = new System.Windows.Forms.GroupBox();
       this.lblPathInfoAtmoWin = new System.Windows.Forms.Label();
       this.btnSelectFileAtmoWin = new System.Windows.Forms.Button();
@@ -99,6 +103,7 @@
       this.cbVideo = new System.Windows.Forms.ComboBox();
       this.lblVidTvRec = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
+      this.ckMonitorWindowState = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionVertical = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionHorizontal = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionLinkAreas = new System.Windows.Forms.CheckBox();
@@ -260,11 +265,11 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
-      this.ckMonitorWindowState = new System.Windows.Forms.CheckBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
       this.tabPageAtmowin.SuspendLayout();
+      this.grpAtmowinWakeHelper.SuspendLayout();
       this.grpAtmowinSettings.SuspendLayout();
       this.tabPageGeneric.SuspendLayout();
       this.grpTargets.SuspendLayout();
@@ -519,6 +524,7 @@
       // tabPageAtmowin
       // 
       this.tabPageAtmowin.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageAtmowin.Controls.Add(this.grpAtmowinWakeHelper);
       this.tabPageAtmowin.Controls.Add(this.grpAtmowinSettings);
       this.tabPageAtmowin.Location = new System.Drawing.Point(4, 22);
       this.tabPageAtmowin.Name = "tabPageAtmowin";
@@ -526,6 +532,86 @@
       this.tabPageAtmowin.Size = new System.Drawing.Size(842, 584);
       this.tabPageAtmowin.TabIndex = 1;
       this.tabPageAtmowin.Text = "Atmowin";
+      // 
+      // grpAtmowinWakeHelper
+      // 
+      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperComPort);
+      this.grpAtmowinWakeHelper.Controls.Add(this.cbAtmoWakeHelperComPort);
+      this.grpAtmowinWakeHelper.Controls.Add(this.ckAtmoWakeHelperEnabled);
+      this.grpAtmowinWakeHelper.Location = new System.Drawing.Point(13, 160);
+      this.grpAtmowinWakeHelper.Name = "grpAtmowinWakeHelper";
+      this.grpAtmowinWakeHelper.Size = new System.Drawing.Size(820, 125);
+      this.grpAtmowinWakeHelper.TabIndex = 27;
+      this.grpAtmowinWakeHelper.TabStop = false;
+      this.grpAtmowinWakeHelper.Text = "COM port wake helper (optional)";
+      // 
+      // lblAtmoWakeHelperComPort
+      // 
+      this.lblAtmoWakeHelperComPort.AutoSize = true;
+      this.lblAtmoWakeHelperComPort.Location = new System.Drawing.Point(6, 27);
+      this.lblAtmoWakeHelperComPort.Name = "lblAtmoWakeHelperComPort";
+      this.lblAtmoWakeHelperComPort.Size = new System.Drawing.Size(98, 13);
+      this.lblAtmoWakeHelperComPort.TabIndex = 2;
+      this.lblAtmoWakeHelperComPort.Text = "AtmoWin COM port";
+      // 
+      // cbAtmoWakeHelperComPort
+      // 
+      this.cbAtmoWakeHelperComPort.FormattingEnabled = true;
+      this.cbAtmoWakeHelperComPort.Items.AddRange(new object[] {
+            "COM1",
+            "COM2",
+            "COM3",
+            "COM4",
+            "COM5",
+            "COM6",
+            "COM7",
+            "COM8",
+            "COM9",
+            "COM10",
+            "COM11",
+            "COM12",
+            "COM13",
+            "COM14",
+            "COM15",
+            "COM16",
+            "COM17",
+            "COM18",
+            "COM19",
+            "COM20",
+            "COM21",
+            "COM22",
+            "COM23",
+            "COM24",
+            "COM25",
+            "COM26",
+            "COM27",
+            "COM28",
+            "COM29",
+            "COM30",
+            "COM31",
+            "COM32",
+            "COM33",
+            "COM34",
+            "COM35",
+            "COM36",
+            "COM37",
+            "COM38",
+            "COM39",
+            "COM40"});
+      this.cbAtmoWakeHelperComPort.Location = new System.Drawing.Point(6, 48);
+      this.cbAtmoWakeHelperComPort.Name = "cbAtmoWakeHelperComPort";
+      this.cbAtmoWakeHelperComPort.Size = new System.Drawing.Size(121, 21);
+      this.cbAtmoWakeHelperComPort.TabIndex = 1;
+      // 
+      // ckAtmoWakeHelperEnabled
+      // 
+      this.ckAtmoWakeHelperEnabled.AutoSize = true;
+      this.ckAtmoWakeHelperEnabled.Location = new System.Drawing.Point(6, 75);
+      this.ckAtmoWakeHelperEnabled.Name = "ckAtmoWakeHelperEnabled";
+      this.ckAtmoWakeHelperEnabled.Size = new System.Drawing.Size(65, 17);
+      this.ckAtmoWakeHelperEnabled.TabIndex = 0;
+      this.ckAtmoWakeHelperEnabled.Text = "Enabled";
+      this.ckAtmoWakeHelperEnabled.UseVisualStyleBackColor = true;
       // 
       // grpAtmowinSettings
       // 
@@ -1080,6 +1166,16 @@
       this.grpPluginOption.TabIndex = 11;
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
+      // 
+      // ckMonitorWindowState
+      // 
+      this.ckMonitorWindowState.AutoSize = true;
+      this.ckMonitorWindowState.Location = new System.Drawing.Point(13, 325);
+      this.ckMonitorWindowState.Name = "ckMonitorWindowState";
+      this.ckMonitorWindowState.Size = new System.Drawing.Size(295, 17);
+      this.ckMonitorWindowState.TabIndex = 42;
+      this.ckMonitorWindowState.Text = "Turn off leds while Mediaportal is minimized or suspended";
+      this.ckMonitorWindowState.UseVisualStyleBackColor = true;
       // 
       // cbBlackbarDetectionVertical
       // 
@@ -2673,16 +2769,6 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
-      // ckMonitorWindowState
-      // 
-      this.ckMonitorWindowState.AutoSize = true;
-      this.ckMonitorWindowState.Location = new System.Drawing.Point(13, 325);
-      this.ckMonitorWindowState.Name = "ckMonitorWindowState";
-      this.ckMonitorWindowState.Size = new System.Drawing.Size(295, 17);
-      this.ckMonitorWindowState.TabIndex = 42;
-      this.ckMonitorWindowState.Text = "Turn off leds while Mediaportal is minimized or suspended";
-      this.ckMonitorWindowState.UseVisualStyleBackColor = true;
-      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2707,6 +2793,8 @@
       this.grpHyperionNetworkSettings.ResumeLayout(false);
       this.grpHyperionNetworkSettings.PerformLayout();
       this.tabPageAtmowin.ResumeLayout(false);
+      this.grpAtmowinWakeHelper.ResumeLayout(false);
+      this.grpAtmowinWakeHelper.PerformLayout();
       this.grpAtmowinSettings.ResumeLayout(false);
       this.grpAtmowinSettings.PerformLayout();
       this.tabPageGeneric.ResumeLayout(false);
@@ -2994,5 +3082,9 @@
     private System.Windows.Forms.CheckBox cbBlackbarDetectionHorizontal;
     private System.Windows.Forms.CheckBox cbBlackbarDetectionLinkAreas;
     private System.Windows.Forms.CheckBox ckMonitorWindowState;
+    private System.Windows.Forms.GroupBox grpAtmowinWakeHelper;
+    private System.Windows.Forms.ComboBox cbAtmoWakeHelperComPort;
+    private System.Windows.Forms.CheckBox ckAtmoWakeHelperEnabled;
+    private System.Windows.Forms.Label lblAtmoWakeHelperComPort;
   }
 }

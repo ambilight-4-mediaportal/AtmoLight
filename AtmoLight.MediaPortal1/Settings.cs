@@ -54,6 +54,8 @@ namespace AtmoLight
     public static string atmowinExe;
     public static bool startAtmoWin;
     public static bool exitAtmoWin;
+    public static bool atmoWakeHelperEnabled;
+    public static string atmoWakeHelperComPort;
 
     // Boblight
     public static bool boblightTarget;
@@ -236,6 +238,8 @@ namespace AtmoLight
         delayReferenceTime = reader.GetValueAsInt("atmolight", "DelayTime", 0);
         exitAtmoWin = reader.GetValueAsBool("atmolight", "ExitAtmoWin", true);
         startAtmoWin = reader.GetValueAsBool("atmolight", "StartAtmoWin", true);
+        atmoWakeHelperEnabled = reader.GetValueAsBool("atmolight", "atmoWakeHelperEnabled", false);
+        atmoWakeHelperComPort = reader.GetValueAsString("atmolight", "atmoWakeHelperComPort", "");
         staticColorRed = reader.GetValueAsInt("atmolight", "StaticColorRed", 0);
         staticColorGreen = reader.GetValueAsInt("atmolight", "StaticColorGreen", 0);
         staticColorBlue = reader.GetValueAsInt("atmolight", "StaticColorBlue", 0);
@@ -344,6 +348,8 @@ namespace AtmoLight
         reader.SetValue("atmolight", "DelayTime", delayReferenceTime);
         reader.SetValueAsBool("atmolight", "ExitAtmoWin", exitAtmoWin);
         reader.SetValueAsBool("atmolight", "StartAtmoWin", startAtmoWin);
+        reader.SetValueAsBool("atmolight", "atmoWakeHelperEnabled", atmoWakeHelperEnabled);
+        reader.SetValue("atmolight", "atmoWakeHelperComPort", atmoWakeHelperComPort);
         reader.SetValue("atmolight", "excludeTimeStart", excludeTimeStart.ToString("HH:mm"));
         reader.SetValue("atmolight", "excludeTimeEnd", excludeTimeEnd.ToString("HH:mm"));
         reader.SetValue("atmolight", "CurrentLanguageFile", currentLanguageFile);

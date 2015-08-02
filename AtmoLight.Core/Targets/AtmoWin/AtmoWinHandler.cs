@@ -242,11 +242,23 @@ namespace AtmoLight
       if (powerMode == PowerModes.Resume)
       {
         ChangeEffect(coreObject.GetCurrentEffect());
+
+        //AtmoWakeHelper
+        if(coreObject.atmoWakeHelperEnabled)
+        {
+          AtmoWakeHelperThread(powerMode);
+        }
       }
       else if (powerMode == PowerModes.Suspend)
       {
         StopGetAtmoLiveViewSourceThread();
         ChangeEffect(ContentEffect.LEDsDisabled);
+
+        //AtmoWakeHelper
+        if (coreObject.atmoWakeHelperEnabled)
+        {
+          AtmoWakeHelperThread(powerMode);
+        }
       }
     }
     #endregion
@@ -744,6 +756,15 @@ namespace AtmoLight
         Log.Error("AtmoWinHandler - Error in GetAtmoLiveViewSourceThread.");
         Log.Error("AtmoWinHandler - Exception: {0}", ex.Message);
       }
+    }
+    #endregion
+
+    #region AtmoWakeHelper
+    private void AtmoWakeHelperThread(PowerModes e)
+    {
+      Thread t = new Thread(() => AtmoLight.Targets.AtmoWin.AtmoWakeHelper.PowerModeChanged(e, coreObject.atmoWinPath, coreObject.atmoWakeHelperComPort));
+      t.IsBackground = true;
+      t.Start();     
     }
     #endregion
   }

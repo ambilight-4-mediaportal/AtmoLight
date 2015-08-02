@@ -39,8 +39,6 @@ namespace AtmoLight
     private Core coreObject = Core.GetInstance();
     private volatile bool changeImageLock = false;
     private volatile bool initLock = false;
-    private volatile bool firstConnectionPass = false;
-
     private Thread initThreadHelper;
 
     private TelnetConnection ambiBoxConnection;
@@ -62,7 +60,6 @@ namespace AtmoLight
     {
       if (!initLock)
       {
-        firstConnectionPass = true;
         initThreadHelper = new Thread(() => InitThreaded(force));
         initThreadHelper.Name = "AtmoLight AmbiBox Init";
         initThreadHelper.IsBackground = true;
@@ -210,63 +207,6 @@ namespace AtmoLight
       {
         changeImageLock = true;
 
-        /*
-        if (coreObject.ambiBoxFirstConnectionPass)
-        {
-          firstConnectionPass = false;
-
-          try
-          {
-            viewStream.Close();
-          }
-          catch (Exception e)
-          {
-            Log.Error("Error while closing viewstream");
-            Log.Error(e.Message);
-          }
-
-          try
-          {
-            mmap = null;
-          }
-          catch (Exception e)
-          {
-            Log.Error("Error while clearing memory map");
-          }
-
-          try
-          {
-            mmap = MemoryMappedFile.CreateOrOpen("AmbiBox_XBMC_SharedMemory", pixeldata.Length + 11,
-              MemoryMappedFileAccess.ReadWrite, MemoryMappedFileOptions.None, null, HandleInheritability.Inheritable);
-          }
-          catch (Exception e)
-          {
-            Log.Error("Error while creating memory map");
-            Log.Error(e.Message);
-          }
-
-          try
-          {
-            viewStream = null;
-          }
-          catch (Exception e)
-          {
-            Log.Error("Error while clearing viewstream");
-            Log.Error(e.Message);
-          }
-
-          try
-          {
-            viewStream = mmap.CreateViewStream();
-          }
-          catch (Exception e)
-          {
-            Log.Error("Error while creating viewstream");
-            Log.Error(e.Message);
-          }
-        }
-         */
-
         MemoryMappedFile mmap = MemoryMappedFile.CreateOrOpen("AmbiBox_XBMC_SharedMemory", pixeldata.Length + 11,
           MemoryMappedFileAccess.ReadWrite, MemoryMappedFileOptions.None, null, HandleInheritability.Inheritable);
 
@@ -311,7 +251,7 @@ namespace AtmoLight
         viewStream.Close();
         changeImageLock = false;
       }
-      catch (Exception e)
+      catch (Exception)
       {
         changeImageLock = false;
         //firstConnectionPass = false;
