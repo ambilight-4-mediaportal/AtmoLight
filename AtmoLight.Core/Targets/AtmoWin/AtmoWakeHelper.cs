@@ -17,7 +17,7 @@ namespace AtmoLight.Targets.AtmoWin
 
       if (powerMode == PowerModes.Resume)
       {
-        // optional resume delay
+        // Optional resume delay
         Thread.Sleep(resumeDelay);
 
         if (File.Exists(appUSBDeview))
