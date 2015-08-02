@@ -91,6 +91,7 @@ namespace AtmoLight
       ckExitAtmoWin.Checked = Settings.exitAtmoWin;
       ckAtmoWakeHelperEnabled.Checked = Settings.atmoWakeHelperEnabled;
       cbAtmoWakeHelperComPort.Text = Settings.atmoWakeHelperComPort;
+      tbAtmoWakeHelperResumeDelay.Text = Settings.atmoWakeHelperResumeDelay.ToString();
       ckRestartOnError.Checked = Settings.restartOnError;
       ckTrueGrabbing.Checked = Settings.trueGrabbing;
       ckBlackbarDetection.Checked = Settings.blackbarDetection;
@@ -283,8 +284,9 @@ namespace AtmoLight
       ckStartAtmoWin.Text = Localization.Translate("Common", "StartTargetWithMP").Replace("[Target]", Localization.Translate("AtmoWin", "AtmoWin"));
       ckExitAtmoWin.Text = Localization.Translate("Common", "StopTargetWithMP").Replace("[Target]", Localization.Translate("AtmoWin", "AtmoWin"));
       grpAtmowinWakeHelper.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperDescription");
-      lblAtmoWakeHelperComPort.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperComPort");
       ckAtmoWakeHelperEnabled.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperEnabled");
+      lblAtmoWakeHelperComPort.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperComPort");
+      lblAtmoWakeHelperResumeDelay.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperResumeDelay");
 
       // Boblight
       lblBoblightIP.Text = Localization.Translate("Common", "IP");
@@ -506,6 +508,25 @@ namespace AtmoLight
         MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumber") .Replace("[minInteger]", minValue.ToString()) + " - [" + lblCaptureHeight.Text + "]", Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
+
+      //AtmoWin wake helper delay
+      minValue = 0;
+      maxValue = 999999;
+      if (validatorInt(tbAtmoWakeHelperResumeDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange").Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoWakeHelperResumeDelay.Text + "]", Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+      
+      //Hyperion port
+      minValue = 1;
+      maxValue = 65535;
+      if (validatorInt(tbHyperionPort.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange").Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblHyperionPort.Text + "]", Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
 
       //Hyperion port
       minValue = 1;
@@ -816,8 +837,9 @@ namespace AtmoLight
       Settings.delay = ckDelay.Checked;
       Settings.startAtmoWin = ckStartAtmoWin.Checked;
       Settings.exitAtmoWin = ckExitAtmoWin.Checked;
-      Settings.atmoWakeHelperComPort = cbAtmoWakeHelperComPort.Text;
       Settings.atmoWakeHelperEnabled = ckAtmoWakeHelperEnabled.Checked;
+      Settings.atmoWakeHelperComPort = cbAtmoWakeHelperComPort.Text;
+      Settings.atmoWakeHelperResumeDelay = int.Parse(tbAtmoWakeHelperResumeDelay.Text);
       Settings.restartOnError = ckRestartOnError.Checked;
       Settings.trueGrabbing = ckTrueGrabbing.Checked;
       Settings.blackbarDetection = ckBlackbarDetection.Checked;
@@ -1190,6 +1212,8 @@ namespace AtmoLight
 
     }
 
+    // AtmoWin
+
     private void edFile_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
       if (validatorPath(edFileAtmoWin.Text) == false && string.IsNullOrEmpty(edFileAtmoWin.Text) == false)
@@ -1197,6 +1221,17 @@ namespace AtmoLight
         MessageBox.Show(Localization.Translate("Common", "ErrorFileGeneric") , Localization.Translate("Common", "Error"),  MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
+    private void tbAtmoWakeHelperResumeDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 999999;
+      if (validatorInt(tbAtmoWakeHelperResumeDelay.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds"), Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    // Hyperion
 
     private void tbHyperionIP_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
@@ -2048,5 +2083,7 @@ namespace AtmoLight
       }
     }
     #endregion
+
+
   }
 }

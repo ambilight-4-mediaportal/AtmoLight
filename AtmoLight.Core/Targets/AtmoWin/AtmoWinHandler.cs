@@ -762,7 +762,7 @@ namespace AtmoLight
     #region AtmoWakeHelper
     private void AtmoWakeHelperThread(PowerModes e)
     {
-      Thread t = new Thread(() => AtmoLight.Targets.AtmoWin.AtmoWakeHelper.PowerModeChanged(e, coreObject.atmoWinPath, coreObject.atmoWakeHelperComPort));
+      Thread t = new Thread(() => AtmoLight.Targets.AtmoWin.AtmoWakeHelper.PowerModeChanged(e, coreObject.atmoWinPath, coreObject.atmoWakeHelperComPort, coreObject.atmoWakeHelperResumeDelay));
       t.IsBackground = true;
       t.Start();     
     }

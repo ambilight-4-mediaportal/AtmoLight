@@ -55,6 +55,8 @@
       this.lblHyperionPort = new System.Windows.Forms.Label();
       this.tabPageAtmowin = new System.Windows.Forms.TabPage();
       this.grpAtmowinWakeHelper = new System.Windows.Forms.GroupBox();
+      this.lblAtmoWakeHelperResumeDelay = new System.Windows.Forms.Label();
+      this.tbAtmoWakeHelperResumeDelay = new System.Windows.Forms.TextBox();
       this.lblAtmoWakeHelperComPort = new System.Windows.Forms.Label();
       this.cbAtmoWakeHelperComPort = new System.Windows.Forms.ComboBox();
       this.ckAtmoWakeHelperEnabled = new System.Windows.Forms.CheckBox();
@@ -535,6 +537,8 @@
       // 
       // grpAtmowinWakeHelper
       // 
+      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperResumeDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.tbAtmoWakeHelperResumeDelay);
       this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperComPort);
       this.grpAtmowinWakeHelper.Controls.Add(this.cbAtmoWakeHelperComPort);
       this.grpAtmowinWakeHelper.Controls.Add(this.ckAtmoWakeHelperEnabled);
@@ -545,10 +549,27 @@
       this.grpAtmowinWakeHelper.TabStop = false;
       this.grpAtmowinWakeHelper.Text = "COM port wake helper (optional)";
       // 
+      // lblAtmoWakeHelperResumeDelay
+      // 
+      this.lblAtmoWakeHelperResumeDelay.AutoSize = true;
+      this.lblAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(12, 81);
+      this.lblAtmoWakeHelperResumeDelay.Name = "lblAtmoWakeHelperResumeDelay";
+      this.lblAtmoWakeHelperResumeDelay.Size = new System.Drawing.Size(96, 13);
+      this.lblAtmoWakeHelperResumeDelay.TabIndex = 4;
+      this.lblAtmoWakeHelperResumeDelay.Text = "Resume delay (ms)";
+      // 
+      // tbAtmoWakeHelperResumeDelay
+      // 
+      this.tbAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(163, 78);
+      this.tbAtmoWakeHelperResumeDelay.Name = "tbAtmoWakeHelperResumeDelay";
+      this.tbAtmoWakeHelperResumeDelay.Size = new System.Drawing.Size(70, 20);
+      this.tbAtmoWakeHelperResumeDelay.TabIndex = 3;
+      this.tbAtmoWakeHelperResumeDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWakeHelperResumeDelay_Validating);
+      // 
       // lblAtmoWakeHelperComPort
       // 
       this.lblAtmoWakeHelperComPort.AutoSize = true;
-      this.lblAtmoWakeHelperComPort.Location = new System.Drawing.Point(6, 27);
+      this.lblAtmoWakeHelperComPort.Location = new System.Drawing.Point(10, 46);
       this.lblAtmoWakeHelperComPort.Name = "lblAtmoWakeHelperComPort";
       this.lblAtmoWakeHelperComPort.Size = new System.Drawing.Size(98, 13);
       this.lblAtmoWakeHelperComPort.TabIndex = 2;
@@ -598,15 +619,15 @@
             "COM38",
             "COM39",
             "COM40"});
-      this.cbAtmoWakeHelperComPort.Location = new System.Drawing.Point(6, 48);
+      this.cbAtmoWakeHelperComPort.Location = new System.Drawing.Point(163, 43);
       this.cbAtmoWakeHelperComPort.Name = "cbAtmoWakeHelperComPort";
-      this.cbAtmoWakeHelperComPort.Size = new System.Drawing.Size(121, 21);
+      this.cbAtmoWakeHelperComPort.Size = new System.Drawing.Size(70, 21);
       this.cbAtmoWakeHelperComPort.TabIndex = 1;
       // 
       // ckAtmoWakeHelperEnabled
       // 
       this.ckAtmoWakeHelperEnabled.AutoSize = true;
-      this.ckAtmoWakeHelperEnabled.Location = new System.Drawing.Point(6, 75);
+      this.ckAtmoWakeHelperEnabled.Location = new System.Drawing.Point(10, 19);
       this.ckAtmoWakeHelperEnabled.Name = "ckAtmoWakeHelperEnabled";
       this.ckAtmoWakeHelperEnabled.Size = new System.Drawing.Size(65, 17);
       this.ckAtmoWakeHelperEnabled.TabIndex = 0;
@@ -3086,5 +3107,7 @@
     private System.Windows.Forms.ComboBox cbAtmoWakeHelperComPort;
     private System.Windows.Forms.CheckBox ckAtmoWakeHelperEnabled;
     private System.Windows.Forms.Label lblAtmoWakeHelperComPort;
+    private System.Windows.Forms.TextBox tbAtmoWakeHelperResumeDelay;
+    private System.Windows.Forms.Label lblAtmoWakeHelperResumeDelay;
   }
 }

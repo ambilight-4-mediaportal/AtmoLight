@@ -11,54 +11,54 @@ namespace AtmoLight.Targets.AtmoWin
 {
   class AtmoWakeHelper
   {
-    public static void PowerModeChanged(PowerModes powerMode, string atmoWinLocation, string comPort)
+    public static void PowerModeChanged(PowerModes powerMode, string atmoWinLocation, string comPort, int resumeDelay)
     {
       string appUSBDeview = @"C:\Program Files (x86)\Team MediaPortal\MediaPortal\USBDeview.exe";
 
-      if(powerMode == PowerModes.Resume)
+      if (powerMode == PowerModes.Resume)
       {
-          // Sleep 2.5s to allow for disk startup
-          Thread.Sleep(2500);
+        // optional resume delay
+        Thread.Sleep(resumeDelay);
 
-          if (File.Exists(appUSBDeview))
+        if (File.Exists(appUSBDeview))
+        {
+          // Close Atmowin
+          try
           {
-            // Close Atmowin
-            try
-            {
-              Process[] proc = Process.GetProcessesByName("AtmoWinA");
-              proc[0].Kill();
-            }
-            catch (Exception eProcAtmoKill)
-            {
-              Log.Error("AtmoWinHandler - [RESUME] Error while closing Atmowin:" + eProcAtmoKill.ToString());
-            }
+            Process[] proc = Process.GetProcessesByName("AtmoWinA");
+            proc[0].Kill();
+          }
+          catch (Exception eProcAtmoKill)
+          {
+            Log.Error("AtmoWinHandler - [RESUME] Error while closing Atmowin:" + eProcAtmoKill.ToString());
+          }
 
-            // Disconnect COM port
-            startProcess(appUSBDeview, "/disable_by_drive " + comPort);
+          // Disconnect COM port
+          startProcess(appUSBDeview, "/disable_by_drive " + comPort);
 
-            // Connect COM port
-            startProcess(appUSBDeview, "/enable_by_drive " + comPort);
+          // Connect COM port
+          startProcess(appUSBDeview, "/enable_by_drive " + comPort);
 
-            // Start Atmowin
-            if (File.Exists(atmoWinLocation))
-            {
-              startProcess(atmoWinLocation, "");
-            }
-            else
-            {
-              Log.Error(string.Format("AtmoWinHandler -[RESUME] Couldn't find the AtmoWinA.exe file: {0}", atmoWinLocation));
-            }
+          // Start Atmowin
+          if (File.Exists(atmoWinLocation))
+          {
+            startProcess(atmoWinLocation, "");
           }
           else
           {
-            Log.Error("AtmoWinHandler -[RESUME] Missing required program:  " + appUSBDeview);
+            Log.Error(string.Format("AtmoWinHandler -[RESUME] Couldn't find the AtmoWinA.exe file: {0}", atmoWinLocation));
           }
+        }
+        else
+        {
+          Log.Error("AtmoWinHandler -[RESUME] Missing required program:  " + appUSBDeview);
+        }
       }
       else if (powerMode == PowerModes.Suspend)
       {
-          // Disconnect COM port
-          Log.Debug("[SUSPEND] Disconnect " + comPort);
-          startProcess(appUSBDeview, "/disable_by_drive " + comPort);
+        // Disconnect COM port
+        Log.Debug("[SUSPEND] Disconnect " + comPort);
+        startProcess(appUSBDeview, "/disable_by_drive " + comPort);
       }
     }
 

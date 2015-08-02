@@ -157,6 +157,7 @@
     <string name="AtmoWakeHelperDescription">COM port wake helper (optional)</string>
     <string name="AtmoWakeHelperComPort">AtmoWin COM port</string>
     <string name="AtmoWakeHelperEnabled">Enabled</string>
+    <string name="AtmoWakeHelperResumeDelay">Resume delay (ms)</string>
   </AtmoWin>
   <Boblight>
     <string name="Boblight">Boblight</string>

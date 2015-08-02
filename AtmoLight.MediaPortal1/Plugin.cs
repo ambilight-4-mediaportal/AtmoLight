@@ -179,6 +179,7 @@ namespace AtmoLight
       coreObject.atmoWinAutoStop = Settings.exitAtmoWin;
       coreObject.atmoWakeHelperEnabled = Settings.atmoWakeHelperEnabled;
       coreObject.atmoWakeHelperComPort = Settings.atmoWakeHelperComPort;
+      coreObject.atmoWakeHelperResumeDelay = Settings.atmoWakeHelperResumeDelay;
       if (Settings.atmoWinTarget)
       {
         coreObject.AddTarget(Target.AtmoWin);
