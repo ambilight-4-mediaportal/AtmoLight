@@ -768,7 +768,7 @@ namespace AtmoLight
     #region AtmoWakeHelper
     private void AtmoWakeHelper(PowerModes e)
     {
-      AtmoLight.Targets.AtmoWin.AtmoWakeHelper.PowerModeChanged(e, coreObject.atmoWinPath, coreObject.atmoWakeHelperComPort, coreObject.atmoWakeHelperResumeDelay);
+      AtmoLight.Targets.AtmoWin.AtmoWakeHelper.PowerModeChanged(e, coreObject.atmoWakeHelperComPort, coreObject.atmoWakeHelperResumeDelay);
     }
     #endregion
   }

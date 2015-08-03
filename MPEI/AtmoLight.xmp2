@@ -45,6 +45,13 @@
               <ZipFileName>Installer{CopyFile}\{f6f2d950-e19b-4fd2-aa27-41b9fadbb7c5}-USBDeview.exe</ZipFileName>
               <DestinationFilename>%Base%\USBDeview.exe</DestinationFilename>
             </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>AlwaysOverwrite</UpdateOption>
+              <LocalFileName>..\Packages\USBDeview\USBDeview-x86.exe</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ccd6658c-73d6-40d1-b1a2-23f6f90769da}-USBDeview-x86.exe</ZipFileName>
+              <DestinationFilename>%Base%\USBDeview-x86.exe</DestinationFilename>
+            </FileItem>
           </Items>
         </Files>
       </GroupItem>
@@ -311,7 +318,7 @@ public static void Main(PackageClass packageClass, ActionItem actionItem)
       <Major>1</Major>
       <Minor>16</Minor>
       <Build>1</Build>
-      <Revision>35</Revision>
+      <Revision>36</Revision>
     </Version>
     <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
 
@@ -439,6 +446,13 @@ Version 1.16.1.12
         <LocalFileName>..\Packages\USBDeview\USBDeview.exe</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{f6f2d950-e19b-4fd2-aa27-41b9fadbb7c5}-USBDeview.exe</ZipFileName>
         <DestinationFilename>%Base%\USBDeview.exe</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>AlwaysOverwrite</UpdateOption>
+        <LocalFileName>..\Packages\USBDeview\USBDeview-x86.exe</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ccd6658c-73d6-40d1-b1a2-23f6f90769da}-USBDeview-x86.exe</ZipFileName>
+        <DestinationFilename>%Base%\USBDeview-x86.exe</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
