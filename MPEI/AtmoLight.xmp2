@@ -311,7 +311,7 @@ public static void Main(PackageClass packageClass, ActionItem actionItem)
       <Major>1</Major>
       <Minor>16</Minor>
       <Build>1</Build>
-      <Revision>32</Revision>
+      <Revision>35</Revision>
     </Version>
     <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
 

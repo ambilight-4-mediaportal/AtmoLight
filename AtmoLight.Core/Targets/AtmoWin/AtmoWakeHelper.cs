@@ -20,13 +20,19 @@ namespace AtmoLight.Targets.AtmoWin
         // Optional resume delay
         Thread.Sleep(resumeDelay);
 
+        Log.Debug("AtmoWinHandler - [RESUME] AtmoWakeHelper INIT");
         if (File.Exists(appUSBDeview))
         {
           // Close Atmowin
           try
           {
+            Log.Debug("AtmoWinHandler - [RESUME] AtmoWakeHelper killing AtmoWin process");
             Process[] proc = Process.GetProcessesByName("AtmoWinA");
-            proc[0].Kill();
+
+            if (proc.Count() >= 0)
+            {
+              proc[0].Kill();
+            }
           }
           catch (Exception eProcAtmoKill)
           {
@@ -34,30 +40,30 @@ namespace AtmoLight.Targets.AtmoWin
           }
 
           // Disconnect COM port
+          Log.Debug("[SUSPEND] AtmoWakeHelper disconnecting " + comPort);
           startProcess(appUSBDeview, "/disable_by_drive " + comPort);
 
+          // Sleep timer to avoid Windows being to quick upon COM port unlocking
+          Thread.Sleep(1500);
+
           // Connect COM port
+          Log.Debug("[SUSPEND] AtmoWakeHelper connecting " + comPort);
           startProcess(appUSBDeview, "/enable_by_drive " + comPort);
 
-          // Start Atmowin
-          if (File.Exists(atmoWinLocation))
-          {
-            startProcess(atmoWinLocation, "");
-          }
-          else
-          {
-            Log.Error(string.Format("AtmoWinHandler -[RESUME] Couldn't find the AtmoWinA.exe file: {0}", atmoWinLocation));
-          }
+          // Sleep timer to avoid Windows being to quick upon COM port unlocking
+          Thread.Sleep(1500);
         }
         else
         {
           Log.Error("AtmoWinHandler -[RESUME] Missing required program:  " + appUSBDeview);
         }
+
+        Log.Debug("AtmoWinHandler - [RESUME] AtmoWakeHelper COMPLETED");
       }
       else if (powerMode == PowerModes.Suspend)
       {
         // Disconnect COM port
-        Log.Debug("[SUSPEND] Disconnect " + comPort);
+        Log.Debug("[SUSPEND] AtmoWakeHelper disconnecting " + comPort);
         startProcess(appUSBDeview, "/disable_by_drive " + comPort);
       }
     }
@@ -76,9 +82,6 @@ namespace AtmoLight.Targets.AtmoWin
       {
         Log.Error(string.Format("AtmoWinHandler - Error while starting process ( {0} ) : {1}", program, eStartProcess));
       }
-
-      // Sleep timer to avoid Windows being to quick upon COM port unlocking
-      Thread.Sleep(2500);
     }
   }
 }

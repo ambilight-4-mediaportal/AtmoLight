@@ -241,13 +241,19 @@ namespace AtmoLight
     {
       if (powerMode == PowerModes.Resume)
       {
-        ChangeEffect(coreObject.GetCurrentEffect());
-
         //AtmoWakeHelper
-        if(coreObject.atmoWakeHelperEnabled)
+        if (coreObject.atmoWakeHelperEnabled)
         {
-          AtmoWakeHelperThread(powerMode);
+          ContentEffect currentEffect = coreObject.GetCurrentEffect();
+          AtmoWakeHelper(powerMode);
+          ReInitialise(true);
+          ChangeEffect(currentEffect);
         }
+        else
+        {
+          ChangeEffect(coreObject.GetCurrentEffect());
+        }
+
       }
       else if (powerMode == PowerModes.Suspend)
       {
@@ -257,7 +263,7 @@ namespace AtmoLight
         //AtmoWakeHelper
         if (coreObject.atmoWakeHelperEnabled)
         {
-          AtmoWakeHelperThread(powerMode);
+          AtmoWakeHelper(powerMode);
         }
       }
     }
@@ -760,11 +766,9 @@ namespace AtmoLight
     #endregion
 
     #region AtmoWakeHelper
-    private void AtmoWakeHelperThread(PowerModes e)
+    private void AtmoWakeHelper(PowerModes e)
     {
-      Thread t = new Thread(() => AtmoLight.Targets.AtmoWin.AtmoWakeHelper.PowerModeChanged(e, coreObject.atmoWinPath, coreObject.atmoWakeHelperComPort, coreObject.atmoWakeHelperResumeDelay));
-      t.IsBackground = true;
-      t.Start();     
+      AtmoLight.Targets.AtmoWin.AtmoWakeHelper.PowerModeChanged(e, coreObject.atmoWinPath, coreObject.atmoWakeHelperComPort, coreObject.atmoWakeHelperResumeDelay);
     }
     #endregion
   }
