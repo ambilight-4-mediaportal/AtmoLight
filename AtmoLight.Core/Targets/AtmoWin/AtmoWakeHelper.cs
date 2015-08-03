@@ -15,7 +15,6 @@ namespace AtmoLight.Targets.AtmoWin
     #region COM reconnection
     public static void PowerModeChanged(PowerModes powerMode, string comPort, int resumeDelay)
     {
-
       string appUSBDeviewPath = @"C:\Program Files (x86)\Team MediaPortal\MediaPortal\";
       string appUSBDeviewExe = "USBDeview.exe";
 
@@ -40,16 +39,16 @@ namespace AtmoLight.Targets.AtmoWin
           try
           {
             Log.Debug("AtmoWinHandler - [RESUME] AtmoWakeHelper killing AtmoWin process");
-            Process[] proc = Process.GetProcessesByName("AtmoWinA");
+            string atmoWinProcessName = "AtmoWinA";
 
-            if (proc.Count() >= 0)
+            foreach (var process in Process.GetProcessesByName(atmoWinProcessName))
             {
-              proc[0].Kill();
+              process.Kill();
             }
           }
           catch (Exception eProcAtmoKill)
           {
-            Log.Error("AtmoWinHandler - [RESUME] Error while closing Atmowin:" + eProcAtmoKill.ToString());
+            Log.Error("AtmoWinHandler - [RESUME] AtmoWakeHelper Error while closing Atmowin:" + eProcAtmoKill.ToString());
           }
 
           // Disconnect COM port
@@ -100,6 +99,22 @@ namespace AtmoLight.Targets.AtmoWin
     #endregion
 
     #region OS 64-bit detection
+
+    [DllImport("kernel32.dll")]
+    static extern IntPtr GetCurrentProcess();
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+    static extern IntPtr GetModuleHandle(string moduleName);
+
+    [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
+    static extern IntPtr GetProcAddress(IntPtr hModule,
+        [MarshalAs(UnmanagedType.LPStr)]string procName);
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+
+    static extern bool IsWow64Process(IntPtr hProcess, out bool wow64Process);
+
     /// <summary>
     /// The function determines whether the current operating system is a 
     /// 64-bit operating system.
@@ -143,20 +158,6 @@ namespace AtmoLight.Targets.AtmoWin
       }
       return (GetProcAddress(moduleHandle, methodName) != IntPtr.Zero);
     }
-
-    [DllImport("kernel32.dll")]
-    static extern IntPtr GetCurrentProcess();
-
-    [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-    static extern IntPtr GetModuleHandle(string moduleName);
-
-    [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
-    static extern IntPtr GetProcAddress(IntPtr hModule,
-        [MarshalAs(UnmanagedType.LPStr)]string procName);
-
-    [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    static extern bool IsWow64Process(IntPtr hProcess, out bool wow64Process);
 
     #endregion
   }
