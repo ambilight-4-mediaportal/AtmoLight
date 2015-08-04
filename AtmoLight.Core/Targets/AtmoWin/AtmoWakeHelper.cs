@@ -35,32 +35,20 @@ namespace AtmoLight.Targets.AtmoWin
         Log.Debug("AtmoWinHandler - [RESUME] AtmoWakeHelper INIT");
         if (File.Exists(appUSBDeview))
         {
-          // Close Atmowin
-          try
-          {
-            Log.Debug("AtmoWinHandler - [RESUME] AtmoWakeHelper killing AtmoWin process");
-            string atmoWinProcessName = "AtmoWinA";
-
-            foreach (var process in Process.GetProcessesByName(atmoWinProcessName))
-            {
-              process.Kill();
-            }
-          }
-          catch (Exception eProcAtmoKill)
-          {
-            Log.Error("AtmoWinHandler - [RESUME] AtmoWakeHelper Error while closing Atmowin:" + eProcAtmoKill.ToString());
-          }
+          // Kill Atmowin
+          Log.Debug("AtmoWinHandler - [RESUME] AtmoWakeHelper killing AtmoWin process");
+          killAtmoWin();
 
           // Disconnect COM port
           Log.Debug("[SUSPEND] AtmoWakeHelper disconnecting " + comPort);
-          startProcess(appUSBDeview, "/disable_by_drive " + comPort);
+          startProcess(appUSBDeview, "/disable_by_drive " + comPort, true);
 
           // Sleep timer to avoid Windows being to quick upon COM port unlocking
           Thread.Sleep(1500);
 
           // Connect COM port
           Log.Debug("[SUSPEND] AtmoWakeHelper connecting " + comPort);
-          startProcess(appUSBDeview, "/enable_by_drive " + comPort);
+          startProcess(appUSBDeview, "/enable_by_drive " + comPort, true);
 
           // Sleep timer to avoid Windows being to quick upon COM port unlocking
           Thread.Sleep(1500);
@@ -74,21 +62,53 @@ namespace AtmoLight.Targets.AtmoWin
       }
       else if (powerMode == PowerModes.Suspend)
       {
+        // Kill Atmowin
+        Log.Debug("AtmoWinHandler - [SUSPEND] AtmoWakeHelper killing AtmoWin process");
+        killAtmoWin();
+
         // Disconnect COM port
         Log.Debug("[SUSPEND] AtmoWakeHelper disconnecting " + comPort);
-        startProcess(appUSBDeview, "/disable_by_drive " + comPort);
+        startProcess(appUSBDeview, "/disable_by_drive " + comPort, false);
       }
     }
 
-    private static void startProcess(string program, string arguments)
+    private static void killAtmoWin()
+    {
+      try
+      {
+        string atmoWinProcessName = "AtmoWinA";
+
+        foreach (var process in Process.GetProcessesByName(atmoWinProcessName))
+        {
+          Log.Debug("AtmoWinHandler - AtmoWakeHelper killed AtmoWin process");
+          process.Kill();
+        }
+      }
+      catch (Exception eProcAtmoKill)
+      {
+        Log.Error("AtmoWinHandler - AtmoWakeHelper Error while closing Atmowin:" + eProcAtmoKill.ToString());
+      }
+    }
+    private static void startProcess(string program, string arguments, bool waitForExit)
     {
       try
       {
         ProcessStartInfo startInfo = new ProcessStartInfo();
         startInfo.FileName = program;
         startInfo.Arguments = arguments;
-        Process proc = Process.Start(startInfo);
-        proc.WaitForExit(10000);
+        Process proc = new Process();
+
+        if (waitForExit)
+        {
+          proc.StartInfo = startInfo;
+          proc.WaitForExit(10000);
+          proc.Start();
+        }
+        else
+        {
+          proc.StartInfo = startInfo;
+          proc.Start();
+        }
       }
       catch (Exception eStartProcess)
       {
