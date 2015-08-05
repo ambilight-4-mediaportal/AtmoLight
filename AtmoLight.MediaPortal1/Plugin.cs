@@ -180,6 +180,10 @@ namespace AtmoLight
       coreObject.atmoWakeHelperEnabled = Settings.atmoWakeHelperEnabled;
       coreObject.atmoWakeHelperComPort = Settings.atmoWakeHelperComPort;
       coreObject.atmoWakeHelperResumeDelay = Settings.atmoWakeHelperResumeDelay;
+      coreObject.atmoWakeHelperDisconnectDelay = Settings.atmoWakeHelperDisconnectDelay;
+      coreObject.atmoWakeHelperConnectDelay = Settings.atmoWakeHelperConnectDelay;
+      coreObject.atmoWakeHelperReinitializationDelay = Settings.atmoWakeHelperReinitializationDelay;
+
       if (Settings.atmoWinTarget)
       {
         coreObject.AddTarget(Target.AtmoWin);

@@ -145,6 +145,9 @@ namespace AtmoLight
     public bool atmoWakeHelperEnabled;
     public string atmoWakeHelperComPort;
     public int atmoWakeHelperResumeDelay;
+    public int atmoWakeHelperDisconnectDelay;
+    public int atmoWakeHelperConnectDelay;
+    public int atmoWakeHelperReinitializationDelay;
 
     // Boblight Settings Fields
     public string boblightIP;

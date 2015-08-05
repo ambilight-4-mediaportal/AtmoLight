@@ -245,10 +245,22 @@ namespace AtmoLight
         //AtmoWakeHelper
         if (coreObject.atmoWakeHelperEnabled)
         {
-          ContentEffect currentEffect = coreObject.GetCurrentEffect();
+          // Set lock to prevent it from reinitializing during COM reconnection
+          reInitialiseLock = true;
+          Log.Debug("AtmoWinHandler - [AtmoWakeHelper] locking reinit during reconnection of COM port");
           Disconnect();
           StopAtmoWin();
+
+          // Reconnect COM ports and setting user configured delays
+          AtmoLight.Targets.AtmoWin.AtmoWakeHelper.disconnectDelay = coreObject.atmoWakeHelperDisconnectDelay;
+          AtmoLight.Targets.AtmoWin.AtmoWakeHelper.connectDelay = coreObject.atmoWakeHelperConnectDelay;
+
+          Log.Debug("AtmoWinHandler - [AtmoWakeHelper] reconnecting COM port");
           AtmoLight.Targets.AtmoWin.AtmoWakeHelper.reconnectCOM(coreObject.atmoWakeHelperComPort, coreObject.atmoWakeHelperResumeDelay);
+          Log.Debug("AtmoWinHandler - [AtmoWakeHelper] reconnected COM ports and releasing reinit lock");
+          Thread.Sleep(AtmoLight.Targets.AtmoWin.AtmoWakeHelper.connectDelay = coreObject.atmoWakeHelperReinitializationDelay);
+          reInitialiseLock = false;
+          Log.Debug("AtmoWinHandler - [AtmoWakeHelper] started reinit");
           ReInitialise(true);
         }
         else

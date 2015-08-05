@@ -158,6 +158,9 @@
     <string name="AtmoWakeHelperEnabled">Enabled</string>
     <string name="AtmoWakeHelperComPort">AtmoWin COM port</string>
     <string name="AtmoWakeHelperResumeDelay">Resume delay (ms)</string>
+    <string name="AtmoWakeHelperDisconnectDelay">Disconnect delay (ms)</string>
+    <string name="AtmoWakeHelperConnectDelay">Connect delay (ms)</string>
+    <string name="AtmoWakeHelperReinitializationDelay">Reinitialization delay (ms)</string>
   </AtmoWin>
   <Boblight>
     <string name="Boblight">Boblight</string>

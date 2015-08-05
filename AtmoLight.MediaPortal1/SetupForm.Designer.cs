@@ -267,6 +267,12 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
+      this.lblAtmoWakeHelperDisconnectDelay = new System.Windows.Forms.Label();
+      this.tbAtmoWakeHelperDisconnectDelay = new System.Windows.Forms.TextBox();
+      this.lblAtmoWakeHelperConnectDelay = new System.Windows.Forms.Label();
+      this.tbAtmoWakeHelperConnectDelay = new System.Windows.Forms.TextBox();
+      this.lblAtmoWakeHelperReinitializationDelay = new System.Windows.Forms.Label();
+      this.tbAtmoWakeHelperReinitializationDelay = new System.Windows.Forms.TextBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -537,6 +543,12 @@
       // 
       // grpAtmowinWakeHelper
       // 
+      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperReinitializationDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.tbAtmoWakeHelperReinitializationDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperConnectDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.tbAtmoWakeHelperConnectDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperDisconnectDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.tbAtmoWakeHelperDisconnectDelay);
       this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperResumeDelay);
       this.grpAtmowinWakeHelper.Controls.Add(this.tbAtmoWakeHelperResumeDelay);
       this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperComPort);
@@ -544,7 +556,7 @@
       this.grpAtmowinWakeHelper.Controls.Add(this.ckAtmoWakeHelperEnabled);
       this.grpAtmowinWakeHelper.Location = new System.Drawing.Point(13, 160);
       this.grpAtmowinWakeHelper.Name = "grpAtmowinWakeHelper";
-      this.grpAtmowinWakeHelper.Size = new System.Drawing.Size(820, 125);
+      this.grpAtmowinWakeHelper.Size = new System.Drawing.Size(820, 233);
       this.grpAtmowinWakeHelper.TabIndex = 27;
       this.grpAtmowinWakeHelper.TabStop = false;
       this.grpAtmowinWakeHelper.Text = "COM port wake helper (optional)";
@@ -560,7 +572,7 @@
       // 
       // tbAtmoWakeHelperResumeDelay
       // 
-      this.tbAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(163, 78);
+      this.tbAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(199, 78);
       this.tbAtmoWakeHelperResumeDelay.Name = "tbAtmoWakeHelperResumeDelay";
       this.tbAtmoWakeHelperResumeDelay.Size = new System.Drawing.Size(70, 20);
       this.tbAtmoWakeHelperResumeDelay.TabIndex = 3;
@@ -619,7 +631,7 @@
             "COM38",
             "COM39",
             "COM40"});
-      this.cbAtmoWakeHelperComPort.Location = new System.Drawing.Point(163, 43);
+      this.cbAtmoWakeHelperComPort.Location = new System.Drawing.Point(199, 43);
       this.cbAtmoWakeHelperComPort.Name = "cbAtmoWakeHelperComPort";
       this.cbAtmoWakeHelperComPort.Size = new System.Drawing.Size(70, 21);
       this.cbAtmoWakeHelperComPort.TabIndex = 1;
@@ -2790,6 +2802,57 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
+      // lblAtmoWakeHelperDisconnectDelay
+      // 
+      this.lblAtmoWakeHelperDisconnectDelay.AutoSize = true;
+      this.lblAtmoWakeHelperDisconnectDelay.Location = new System.Drawing.Point(12, 117);
+      this.lblAtmoWakeHelperDisconnectDelay.Name = "lblAtmoWakeHelperDisconnectDelay";
+      this.lblAtmoWakeHelperDisconnectDelay.Size = new System.Drawing.Size(111, 13);
+      this.lblAtmoWakeHelperDisconnectDelay.TabIndex = 6;
+      this.lblAtmoWakeHelperDisconnectDelay.Text = "Disconnect delay (ms)";
+      // 
+      // tbAtmoWakeHelperDisconnectDelay
+      // 
+      this.tbAtmoWakeHelperDisconnectDelay.Location = new System.Drawing.Point(199, 114);
+      this.tbAtmoWakeHelperDisconnectDelay.Name = "tbAtmoWakeHelperDisconnectDelay";
+      this.tbAtmoWakeHelperDisconnectDelay.Size = new System.Drawing.Size(70, 20);
+      this.tbAtmoWakeHelperDisconnectDelay.TabIndex = 5;
+      this.tbAtmoWakeHelperDisconnectDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWakeHelperDisconnectDelay_Validating);
+      // 
+      // lblAtmoWakeHelperConnectDelay
+      // 
+      this.lblAtmoWakeHelperConnectDelay.AutoSize = true;
+      this.lblAtmoWakeHelperConnectDelay.Location = new System.Drawing.Point(12, 156);
+      this.lblAtmoWakeHelperConnectDelay.Name = "lblAtmoWakeHelperConnectDelay";
+      this.lblAtmoWakeHelperConnectDelay.Size = new System.Drawing.Size(97, 13);
+      this.lblAtmoWakeHelperConnectDelay.TabIndex = 8;
+      this.lblAtmoWakeHelperConnectDelay.Text = "Connect delay (ms)";
+      // 
+      // tbAtmoWakeHelperConnectDelay
+      // 
+      this.tbAtmoWakeHelperConnectDelay.Location = new System.Drawing.Point(199, 153);
+      this.tbAtmoWakeHelperConnectDelay.Name = "tbAtmoWakeHelperConnectDelay";
+      this.tbAtmoWakeHelperConnectDelay.Size = new System.Drawing.Size(70, 20);
+      this.tbAtmoWakeHelperConnectDelay.TabIndex = 7;
+      this.tbAtmoWakeHelperConnectDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWakeHelperConnectDelay_Validating);
+      // 
+      // lblAtmoWakeHelperReinitializationDelay
+      // 
+      this.lblAtmoWakeHelperReinitializationDelay.AutoSize = true;
+      this.lblAtmoWakeHelperReinitializationDelay.Location = new System.Drawing.Point(12, 196);
+      this.lblAtmoWakeHelperReinitializationDelay.Name = "lblAtmoWakeHelperReinitializationDelay";
+      this.lblAtmoWakeHelperReinitializationDelay.Size = new System.Drawing.Size(124, 13);
+      this.lblAtmoWakeHelperReinitializationDelay.TabIndex = 10;
+      this.lblAtmoWakeHelperReinitializationDelay.Text = "Reinitialization delay (ms)";
+      // 
+      // tbAtmoWakeHelperReinitializationDelay
+      // 
+      this.tbAtmoWakeHelperReinitializationDelay.Location = new System.Drawing.Point(199, 193);
+      this.tbAtmoWakeHelperReinitializationDelay.Name = "tbAtmoWakeHelperReinitializationDelay";
+      this.tbAtmoWakeHelperReinitializationDelay.Size = new System.Drawing.Size(70, 20);
+      this.tbAtmoWakeHelperReinitializationDelay.TabIndex = 9;
+      this.tbAtmoWakeHelperReinitializationDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWakeHelperReinitializationDelay_Validating);
+      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3109,5 +3172,11 @@
     private System.Windows.Forms.Label lblAtmoWakeHelperComPort;
     private System.Windows.Forms.TextBox tbAtmoWakeHelperResumeDelay;
     private System.Windows.Forms.Label lblAtmoWakeHelperResumeDelay;
+    private System.Windows.Forms.Label lblAtmoWakeHelperReinitializationDelay;
+    private System.Windows.Forms.TextBox tbAtmoWakeHelperReinitializationDelay;
+    private System.Windows.Forms.Label lblAtmoWakeHelperConnectDelay;
+    private System.Windows.Forms.TextBox tbAtmoWakeHelperConnectDelay;
+    private System.Windows.Forms.Label lblAtmoWakeHelperDisconnectDelay;
+    private System.Windows.Forms.TextBox tbAtmoWakeHelperDisconnectDelay;
   }
 }

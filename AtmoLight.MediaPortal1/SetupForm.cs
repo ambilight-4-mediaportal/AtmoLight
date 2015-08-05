@@ -92,6 +92,9 @@ namespace AtmoLight
       ckAtmoWakeHelperEnabled.Checked = Settings.atmoWakeHelperEnabled;
       cbAtmoWakeHelperComPort.Text = Settings.atmoWakeHelperComPort;
       tbAtmoWakeHelperResumeDelay.Text = Settings.atmoWakeHelperResumeDelay.ToString();
+      tbAtmoWakeHelperDisconnectDelay.Text = Settings.atmoWakeHelperDisconnectDelay.ToString();
+      tbAtmoWakeHelperConnectDelay.Text = Settings.atmoWakeHelperConnectDelay.ToString();
+      tbAtmoWakeHelperReinitializationDelay.Text = Settings.atmoWakeHelperReinitializationDelay.ToString();
       ckRestartOnError.Checked = Settings.restartOnError;
       ckTrueGrabbing.Checked = Settings.trueGrabbing;
       ckBlackbarDetection.Checked = Settings.blackbarDetection;
@@ -287,6 +290,9 @@ namespace AtmoLight
       ckAtmoWakeHelperEnabled.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperEnabled");
       lblAtmoWakeHelperComPort.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperComPort");
       lblAtmoWakeHelperResumeDelay.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperResumeDelay");
+      lblAtmoWakeHelperDisconnectDelay.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperDisconnectDelay");
+      lblAtmoWakeHelperConnectDelay.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperConnectDelay");
+      lblAtmoWakeHelperReinitializationDelay.Text = Localization.Translate("AtmoWin", "AtmoWakeHelperReinitializationDelay");
 
       // Boblight
       lblBoblightIP.Text = Localization.Translate("Common", "IP");
@@ -509,12 +515,39 @@ namespace AtmoLight
         return;
       }
 
-      //AtmoWin wake helper delay
+      //AtmoWin wake helper resume delay
       minValue = 0;
       maxValue = 999999;
       if (validatorInt(tbAtmoWakeHelperResumeDelay.Text, minValue, maxValue, true) == false)
       {
         MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange").Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoWakeHelperResumeDelay.Text + "]", Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      //AtmoWin wake helper disconnect delay
+      minValue = 0;
+      maxValue = 999999;
+      if (validatorInt(tbAtmoWakeHelperDisconnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange").Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoWakeHelperDisconnectDelay.Text + "]", Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      //AtmoWin wake helper connect delay
+      minValue = 0;
+      maxValue = 999999;
+      if (validatorInt(tbAtmoWakeHelperConnectDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange").Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoWakeHelperConnectDelay.Text + "]", Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
+      //AtmoWin wake helper reconnect delay
+      minValue = 0;
+      maxValue = 999999;
+      if (validatorInt(tbAtmoWakeHelperReinitializationDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange").Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoWakeHelperReinitializationDelay.Text + "]", Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
       
@@ -840,6 +873,9 @@ namespace AtmoLight
       Settings.atmoWakeHelperEnabled = ckAtmoWakeHelperEnabled.Checked;
       Settings.atmoWakeHelperComPort = cbAtmoWakeHelperComPort.Text;
       Settings.atmoWakeHelperResumeDelay = int.Parse(tbAtmoWakeHelperResumeDelay.Text);
+      Settings.atmoWakeHelperDisconnectDelay = int.Parse(tbAtmoWakeHelperDisconnectDelay.Text);
+      Settings.atmoWakeHelperConnectDelay = int.Parse(tbAtmoWakeHelperConnectDelay.Text);
+      Settings.atmoWakeHelperReinitializationDelay = int.Parse(tbAtmoWakeHelperReinitializationDelay.Text);
       Settings.restartOnError = ckRestartOnError.Checked;
       Settings.trueGrabbing = ckTrueGrabbing.Checked;
       Settings.blackbarDetection = ckBlackbarDetection.Checked;
@@ -1226,6 +1262,37 @@ namespace AtmoLight
       int minValue = 0;
       int maxValue = 999999;
       if (validatorInt(tbAtmoWakeHelperResumeDelay.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds"), Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+
+    private void tbAtmoWakeHelperDisconnectDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 999999;
+      if (validatorInt(tbAtmoWakeHelperDisconnectDelay.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds"), Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoWakeHelperConnectDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 999999;
+      if (validatorInt(tbAtmoWakeHelperConnectDelay.Text, minValue, maxValue, false) == false)
+      {
+        MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds"), Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private void tbAtmoWakeHelperReinitializationDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      int minValue = 0;
+      int maxValue = 999999;
+      if (validatorInt(tbAtmoWakeHelperReinitializationDelay.Text, minValue, maxValue, false) == false)
       {
         MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds"), Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
@@ -2083,7 +2150,5 @@ namespace AtmoLight
       }
     }
     #endregion
-
-
   }
 }
