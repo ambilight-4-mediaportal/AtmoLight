@@ -237,19 +237,19 @@ namespace AtmoLight
       if (!ChangeEffect(coreObject.GetCurrentEffect())) return;
     }
 
-    public void PowerModeChanged(PowerModes powerMode)
+    public void 
+      PowerModeChanged(PowerModes powerMode)
     {
       if (powerMode == PowerModes.Resume)
       {
         //AtmoWakeHelper
-        if (coreObject.atmoWakeHelperEnabled && !coreObject.reInitOnError)
+        if (coreObject.atmoWakeHelperEnabled)
         {
           ContentEffect currentEffect = coreObject.GetCurrentEffect();
           Disconnect();
           StopAtmoWin();
-          AtmoLight.Targets.AtmoWin.AtmoWakeHelper.reconnectCOM(coreObject.atmoWakeHelperComPort);
+          AtmoLight.Targets.AtmoWin.AtmoWakeHelper.reconnectCOM(coreObject.atmoWakeHelperComPort, coreObject.atmoWakeHelperResumeDelay);
           ReInitialise(true);
-          ChangeEffect(currentEffect);
         }
         else
         {
@@ -261,14 +261,6 @@ namespace AtmoLight
       {
         StopGetAtmoLiveViewSourceThread();
         ChangeEffect(ContentEffect.LEDsDisabled);
-
-        // AtmoWakeHelper
-        if (coreObject.atmoWakeHelperEnabled)
-        {
-          Disconnect();
-          StopAtmoWin();
-          AtmoLight.Targets.AtmoWin.AtmoWakeHelper.reconnectCOM(coreObject.atmoWakeHelperComPort);
-        }
       }
     }
     #endregion
@@ -341,14 +333,6 @@ namespace AtmoLight
 
       reInitialiseLock = true;
       Log.Debug("AtmoWinHandler - Reinitialising.");
-
-      // AtmoWakeHelper
-      if(coreObject.atmoWakeHelperEnabled)
-      {
-        Disconnect();
-        StopAtmoWin();
-        AtmoLight.Targets.AtmoWin.AtmoWakeHelper.reconnectCOM(coreObject.atmoWakeHelperComPort);
-      }
 
       if (!Disconnect() || !StopAtmoWin() ||  !InitialiseThreaded(force))
       {
@@ -780,9 +764,6 @@ namespace AtmoLight
         Log.Error("AtmoWinHandler - Exception: {0}", ex.Message);
       }
     }
-    #endregion
-
-    #region AtmoWakeHelper
     #endregion
   }
 }
