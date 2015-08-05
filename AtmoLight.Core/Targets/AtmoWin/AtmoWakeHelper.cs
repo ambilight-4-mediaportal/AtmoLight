@@ -13,41 +13,34 @@ namespace AtmoLight.Targets.AtmoWin
   class AtmoWakeHelper
   {
     #region COM reconnection
-    public static void PowerModeChanged(PowerModes powerMode, string comPort, int resumeDelay)
+
+    public static bool reconnectCOM(string comPort)
     {
-      string appUSBDeviewPath = @"C:\Program Files (x86)\Team MediaPortal\MediaPortal\";
-      string appUSBDeviewExe = "USBDeview.exe";
-
-      // Detect x86 systems and use other executable if required.
-      if(!Is64BitOperatingSystem())
+      try
       {
-        appUSBDeviewPath = @"C:\Program Files\Team MediaPortal\MediaPortal\";
-        appUSBDeviewExe = "USBDeview-x86.exe";
-      }
+        string appUSBDeviewPath = @"C:\Program Files (x86)\Team MediaPortal\MediaPortal\";
+        string appUSBDeviewExe = "USBDeview.exe";
 
-      string appUSBDeview = Path.Combine(appUSBDeviewPath, appUSBDeviewExe);
+        // Detect x86 systems and use other executable if required.
+        if (!Is64BitOperatingSystem())
+        {
+          appUSBDeviewPath = @"C:\Program Files\Team MediaPortal\MediaPortal\";
+          appUSBDeviewExe = "USBDeview-x86.exe";
+        }
 
-      if (powerMode == PowerModes.Resume)
-      {
-        // Optional resume delay
-        Thread.Sleep(resumeDelay);
+        string appUSBDeview = Path.Combine(appUSBDeviewPath, appUSBDeviewExe);
 
-        Log.Debug("AtmoWinHandler - [RESUME] AtmoWakeHelper INIT");
         if (File.Exists(appUSBDeview))
         {
-          // Kill Atmowin
-          Log.Debug("AtmoWinHandler - [RESUME] AtmoWakeHelper killing AtmoWin process");
-          killAtmoWin();
-
           // Disconnect COM port
-          Log.Debug("[SUSPEND] AtmoWakeHelper disconnecting " + comPort);
+          Log.Debug("AtmoWakeHelper disconnecting " + comPort);
           startProcess(appUSBDeview, "/disable_by_drive " + comPort, true);
 
           // Sleep timer to avoid Windows being to quick upon COM port unlocking
           Thread.Sleep(1500);
 
           // Connect COM port
-          Log.Debug("[SUSPEND] AtmoWakeHelper connecting " + comPort);
+          Log.Debug("AtmoWakeHelper connecting " + comPort);
           startProcess(appUSBDeview, "/enable_by_drive " + comPort, true);
 
           // Sleep timer to avoid Windows being to quick upon COM port unlocking
@@ -55,39 +48,18 @@ namespace AtmoLight.Targets.AtmoWin
         }
         else
         {
-          Log.Error("AtmoWinHandler -[RESUME] Missing required program:  " + appUSBDeview);
-        }
-
-        Log.Debug("AtmoWinHandler - [RESUME] AtmoWakeHelper COMPLETED");
-      }
-      else if (powerMode == PowerModes.Suspend)
-      {
-        // Kill Atmowin
-        Log.Debug("AtmoWinHandler - [SUSPEND] AtmoWakeHelper killing AtmoWin process");
-        killAtmoWin();
-
-        // Disconnect COM port
-        Log.Debug("[SUSPEND] AtmoWakeHelper disconnecting " + comPort);
-        startProcess(appUSBDeview, "/disable_by_drive " + comPort, false);
-      }
-    }
-
-    private static void killAtmoWin()
-    {
-      try
-      {
-        string atmoWinProcessName = "AtmoWinA";
-
-        foreach (var process in Process.GetProcessesByName(atmoWinProcessName))
-        {
-          Log.Debug("AtmoWinHandler - AtmoWakeHelper killed AtmoWin process");
-          process.Kill();
+          Log.Error("AtmoWakeHelper is missing USBdeview executable: " + appUSBDeview);
+          return false;
         }
       }
-      catch (Exception eProcAtmoKill)
+      catch(Exception e)
       {
-        Log.Error("AtmoWinHandler - AtmoWakeHelper Error while closing Atmowin:" + eProcAtmoKill.ToString());
+        Log.Error("AtmoWakeHelper error during USBdeview");
+        Log.Error(e.Message);
+        return false;
       }
+
+      return true;
     }
     private static void startProcess(string program, string arguments, bool waitForExit)
     {

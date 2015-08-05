@@ -242,10 +242,12 @@ namespace AtmoLight
       if (powerMode == PowerModes.Resume)
       {
         //AtmoWakeHelper
-        if (coreObject.atmoWakeHelperEnabled)
+        if (coreObject.atmoWakeHelperEnabled && !coreObject.reInitOnError)
         {
           ContentEffect currentEffect = coreObject.GetCurrentEffect();
-          AtmoWakeHelper(powerMode);
+          Disconnect();
+          StopAtmoWin();
+          AtmoLight.Targets.AtmoWin.AtmoWakeHelper.reconnectCOM(coreObject.atmoWakeHelperComPort);
           ReInitialise(true);
           ChangeEffect(currentEffect);
         }
@@ -260,10 +262,12 @@ namespace AtmoLight
         StopGetAtmoLiveViewSourceThread();
         ChangeEffect(ContentEffect.LEDsDisabled);
 
-        //AtmoWakeHelper
+        // AtmoWakeHelper
         if (coreObject.atmoWakeHelperEnabled)
         {
-          AtmoWakeHelper(powerMode);
+          Disconnect();
+          StopAtmoWin();
+          AtmoLight.Targets.AtmoWin.AtmoWakeHelper.reconnectCOM(coreObject.atmoWakeHelperComPort);
         }
       }
     }
@@ -326,6 +330,7 @@ namespace AtmoLight
         Log.Debug("AtmoWinHandler - Reinitialising locked.");
         return;
       }
+
       if (!coreObject.reInitOnError && !force)
       {
         Disconnect();
@@ -337,7 +342,15 @@ namespace AtmoLight
       reInitialiseLock = true;
       Log.Debug("AtmoWinHandler - Reinitialising.");
 
-      if (!Disconnect() || !StopAtmoWin() || !InitialiseThreaded(force))
+      // AtmoWakeHelper
+      if(coreObject.atmoWakeHelperEnabled)
+      {
+        Disconnect();
+        StopAtmoWin();
+        AtmoLight.Targets.AtmoWin.AtmoWakeHelper.reconnectCOM(coreObject.atmoWakeHelperComPort);
+      }
+
+      if (!Disconnect() || !StopAtmoWin() ||  !InitialiseThreaded(force))
       {
         Disconnect();
         StopAtmoWin();
@@ -393,6 +406,10 @@ namespace AtmoLight
         Marshal.ReleaseComObject(atmoLiveViewControl);
         atmoLiveViewControl = null;
       }
+
+      // Sleep timer to avoid Windows being to quick upon COM port unlocking
+      Thread.Sleep(1500);
+
       return true;
     }
 
@@ -766,10 +783,6 @@ namespace AtmoLight
     #endregion
 
     #region AtmoWakeHelper
-    private void AtmoWakeHelper(PowerModes e)
-    {
-      AtmoLight.Targets.AtmoWin.AtmoWakeHelper.PowerModeChanged(e, coreObject.atmoWakeHelperComPort, coreObject.atmoWakeHelperResumeDelay);
-    }
     #endregion
   }
 }
