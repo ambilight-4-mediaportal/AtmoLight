@@ -593,6 +593,10 @@ namespace AtmoLight
     /// <param name="pixelData">Pixel Data</param>
     private void AddDelayListItem(byte[] pixelData, byte[] bmiInfoHeader)
     {
+      if (!setPixelDataThreadHelper.IsAlive)
+      {
+        return;
+      }
       if (delayTimingList.Count <= 60)
       {
         lock (listLock)
