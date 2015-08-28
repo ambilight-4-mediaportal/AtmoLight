@@ -5,15 +5,19 @@
     AutoActivate="True"
     Author="Lightning303, Rick164"
     Copyright="GPL"
-    Description="AtmoLight Plugin"
-    PluginVersion="2.1">
+    Description="AtmoLight Plugin">
+
+<Version
+    PluginVersion="2.2"
+    ReleaseDate="2015-08-28 01:00:00 GMT+01:00"
+    CurrentAPI="1"/>
     
   <DependsOn>
-    <PluginReference PluginId="{D87D92F0-5E71-470a-A2A4-430F90A28BF3}"/> <!-- SkinEngine -->
-    <PluginReference PluginId="{A965AFE5-44F9-46e0-980E-40BBE17F25CA}"/> <!-- VideoPlayers -->
-    <PluginReference PluginId="{1AFF4467-64B0-4ca1-AF28-9AEDF3525BCE}"/> <!-- ConfigurationManager -->
-    <PluginReference PluginId="{B765A4B6-F455-4941-BDAE-2CE45208BFEB}"/> <!-- Configuration plugin -->
-    <PluginReference PluginId="{9886EB43-B3EB-4cf1-A979-8D4D8874C555}"/> <!-- BassPlayer plugin -->
+    <PluginReference PluginId="{D87D92F0-5E71-470a-A2A4-430F90A28BF3}" CompatibleAPI="1"/> <!-- SkinEngine -->
+    <PluginReference PluginId="{A965AFE5-44F9-46e0-980E-40BBE17F25CA}" CompatibleAPI="1"/> <!-- VideoPlayers -->
+    <PluginReference PluginId="{1AFF4467-64B0-4ca1-AF28-9AEDF3525BCE}" CompatibleAPI="1"/> <!-- ConfigurationManager -->
+    <PluginReference PluginId="{B765A4B6-F455-4941-BDAE-2CE45208BFEB}" CompatibleAPI="1"/> <!-- Configuration plugin -->
+    <PluginReference PluginId="{9886EB43-B3EB-4cf1-A979-8D4D8874C555}" CompatibleAPI="1"/> <!-- BassPlayer plugin -->
   </DependsOn>
     
   <Runtime>
