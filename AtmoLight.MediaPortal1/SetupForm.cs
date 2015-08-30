@@ -84,6 +84,8 @@ namespace AtmoLight
       tbHueReconnectAttempts.Text = Settings.hueReconnectAttempts.ToString();
       ckHueBridgeEnableOnResume.Checked = Settings.hueBridgeEnableOnResume;
       ckHueBridgeDisableOnSuspend.Checked = Settings.hueBridgeDisableOnSuspend;
+      ckHueTheaterEnabled.Checked = Settings.hueTheaterEnabled;
+      ckHueTheaterRestoreLights.Checked = Settings.hueTheaterRestoreLights;
       ckOnMediaStart.Checked = Settings.manualMode;
       ckLowCpu.Checked = Settings.lowCPU;
       ckDelay.Checked = Settings.delay;
@@ -307,6 +309,9 @@ namespace AtmoLight
       lblHueReconnectAttempts.Text = Localization.Translate("Common", "ReconnectAttempts");
       ckHueBridgeEnableOnResume.Text = Localization.Translate("Hue", "EnableBridgeOnResume");
       ckHueBridgeDisableOnSuspend.Text = Localization.Translate("Hue", "DisableBridgeonSuspend");
+      ckHueTheaterEnabled.Text = Localization.Translate("Hue", "HueTheaterEnabled");
+      ckHueTheaterRestoreLights.Text = Localization.Translate("Hue", "HueTheaterRestoreLights");
+
       lblHueMinDiversion.Text = Localization.Translate("Common", "MinDiversion");
       lblHueThreshold.Text = Localization.Translate("Common", "Threshold");
       lblHueBlackThreshold.Text = Localization.Translate("Common", "BlackThreshold");
@@ -316,6 +321,7 @@ namespace AtmoLight
       grpHueGeneralSettings.Text = Localization.Translate("Common", "GeneralSettings");
       grpHueNetworkSettings.Text = Localization.Translate("Common", "NetworkSettings");
       lblHintHue.Text = Localization.Translate("Hue", "Hint");
+      lblHintHueTheaterMode.Text = Localization.Translate("Hue", "HintTheaterMode");
 
       // Hyperion
       lblHyperionIP.Text = Localization.Translate("Hyperion", "IPHostname");
@@ -836,6 +842,8 @@ namespace AtmoLight
       Settings.hueReconnectAttempts = int.Parse(tbHueReconnectAttempts.Text);
       Settings.hueBridgeEnableOnResume = ckHueBridgeEnableOnResume.Checked;
       Settings.hueBridgeDisableOnSuspend = ckHueBridgeDisableOnSuspend.Checked;
+      Settings.hueTheaterEnabled = ckHueTheaterEnabled.Checked;
+      Settings.hueTheaterRestoreLights = ckHueTheaterRestoreLights.Checked;
       Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
       Settings.hueTarget = ckHueEnabled.Checked;
       Settings.hyperionTarget = ckHyperionEnabled.Checked;
@@ -2041,5 +2049,6 @@ namespace AtmoLight
       }
     }
     #endregion
+
   }
 }

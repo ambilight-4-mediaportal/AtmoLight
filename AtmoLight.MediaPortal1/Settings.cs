@@ -96,6 +96,8 @@ namespace AtmoLight
     public static int hueBlackThreshold;
     public static double hueSaturation;
     public static bool hueUseOverallLightness;
+    public static bool hueTheaterEnabled;
+    public static bool hueTheaterRestoreLights;
 
     // AmbiBox
     public static bool ambiBoxTarget;
@@ -265,6 +267,8 @@ namespace AtmoLight
         hueReconnectAttempts = reader.GetValueAsInt("atmolight", "hueReconnectAttempts", 5);
         hueBridgeEnableOnResume = reader.GetValueAsBool("atmolight", "hueBridgeEnableOnResume", false);
         hueBridgeDisableOnSuspend = reader.GetValueAsBool("atmolight", "hueBridgeDisableOnSuspend", false);
+        hueTheaterEnabled = reader.GetValueAsBool("atmolight", "hueTheaterEnabled", false);
+        hueTheaterRestoreLights = reader.GetValueAsBool("atmolight", "hueTheaterRestoreLights", false);
         boblightIP = reader.GetValueAsString("atmolight", "boblightIP", "127.0.0.1");
         boblightPort = reader.GetValueAsInt("atmolight", "boblightPort", 19333);
         boblightMaxFPS = reader.GetValueAsInt("atmolight", "boblightMaxFPS", 10);
@@ -376,6 +380,8 @@ namespace AtmoLight
         reader.SetValue("atmolight", "hueReconnectAttempts", (int)hueReconnectAttempts);
         reader.SetValueAsBool("atmolight", "hueBridgeEnableOnResume", hueBridgeEnableOnResume);
         reader.SetValueAsBool("atmolight", "hueBridgeDisableOnSuspend", hueBridgeDisableOnSuspend);
+        reader.SetValueAsBool("atmolight", "hueTheaterEnabled", hueTheaterEnabled);
+        reader.SetValueAsBool("atmolight", "hueTheaterRestoreLights", hueTheaterRestoreLights);
         reader.SetValue("atmolight", "boblightIP", boblightIP);
         reader.SetValue("atmolight", "boblightPort", boblightPort);
         reader.SetValue("atmolight", "boblightMaxFPS", boblightMaxFPS);

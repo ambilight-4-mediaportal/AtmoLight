@@ -99,6 +99,7 @@
       this.cbVideo = new System.Windows.Forms.ComboBox();
       this.lblVidTvRec = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
+      this.ckMonitorWindowState = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionVertical = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionHorizontal = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionLinkAreas = new System.Windows.Forms.CheckBox();
@@ -230,6 +231,9 @@
       this.lblBoblightPort = new System.Windows.Forms.Label();
       this.lblBoblightIP = new System.Windows.Forms.Label();
       this.tabPageHue = new System.Windows.Forms.TabPage();
+      this.grpHueTheaterMode = new System.Windows.Forms.GroupBox();
+      this.ckHueTheaterRestoreLights = new System.Windows.Forms.CheckBox();
+      this.ckHueTheaterEnabled = new System.Windows.Forms.CheckBox();
       this.grpHueAverageColor = new System.Windows.Forms.GroupBox();
       this.cbHueOverallLightness = new System.Windows.Forms.CheckBox();
       this.tbHueSaturation = new System.Windows.Forms.TextBox();
@@ -260,7 +264,7 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
-      this.ckMonitorWindowState = new System.Windows.Forms.CheckBox();
+      this.lblHintHueTheaterMode = new System.Windows.Forms.Label();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -292,6 +296,7 @@
       ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightSpeed)).BeginInit();
       this.grpBoblightGeneral.SuspendLayout();
       this.tabPageHue.SuspendLayout();
+      this.grpHueTheaterMode.SuspendLayout();
       this.grpHueAverageColor.SuspendLayout();
       this.grpHueGeneralSettings.SuspendLayout();
       this.grpHueNetworkSettings.SuspendLayout();
@@ -1080,6 +1085,16 @@
       this.grpPluginOption.TabIndex = 11;
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
+      // 
+      // ckMonitorWindowState
+      // 
+      this.ckMonitorWindowState.AutoSize = true;
+      this.ckMonitorWindowState.Location = new System.Drawing.Point(13, 325);
+      this.ckMonitorWindowState.Name = "ckMonitorWindowState";
+      this.ckMonitorWindowState.Size = new System.Drawing.Size(295, 17);
+      this.ckMonitorWindowState.TabIndex = 42;
+      this.ckMonitorWindowState.Text = "Turn off leds while Mediaportal is minimized or suspended";
+      this.ckMonitorWindowState.UseVisualStyleBackColor = true;
       // 
       // cbBlackbarDetectionVertical
       // 
@@ -2375,6 +2390,7 @@
       // tabPageHue
       // 
       this.tabPageHue.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageHue.Controls.Add(this.grpHueTheaterMode);
       this.tabPageHue.Controls.Add(this.grpHueAverageColor);
       this.tabPageHue.Controls.Add(this.grpHueGeneralSettings);
       this.tabPageHue.Controls.Add(this.grpHueNetworkSettings);
@@ -2383,6 +2399,40 @@
       this.tabPageHue.Size = new System.Drawing.Size(842, 584);
       this.tabPageHue.TabIndex = 3;
       this.tabPageHue.Text = "Hue";
+      // 
+      // grpHueTheaterMode
+      // 
+      this.grpHueTheaterMode.Controls.Add(this.lblHintHueTheaterMode);
+      this.grpHueTheaterMode.Controls.Add(this.ckHueTheaterRestoreLights);
+      this.grpHueTheaterMode.Controls.Add(this.ckHueTheaterEnabled);
+      this.grpHueTheaterMode.Location = new System.Drawing.Point(10, 452);
+      this.grpHueTheaterMode.Name = "grpHueTheaterMode";
+      this.grpHueTheaterMode.Size = new System.Drawing.Size(820, 129);
+      this.grpHueTheaterMode.TabIndex = 29;
+      this.grpHueTheaterMode.TabStop = false;
+      this.grpHueTheaterMode.Text = "Theater mode";
+      // 
+      // ckHueTheaterRestoreLights
+      // 
+      this.ckHueTheaterRestoreLights.AutoSize = true;
+      this.ckHueTheaterRestoreLights.Location = new System.Drawing.Point(6, 82);
+      this.ckHueTheaterRestoreLights.Name = "ckHueTheaterRestoreLights";
+      this.ckHueTheaterRestoreLights.Size = new System.Drawing.Size(201, 17);
+      this.ckHueTheaterRestoreLights.TabIndex = 8;
+      this.ckHueTheaterRestoreLights.Text = "Restore lights after playback stopped";
+      this.ckHueTheaterRestoreLights.UseVisualStyleBackColor = true;
+      // 
+      // ckHueTheaterEnabled
+      // 
+      this.ckHueTheaterEnabled.AutoSize = true;
+      this.ckHueTheaterEnabled.Checked = true;
+      this.ckHueTheaterEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.ckHueTheaterEnabled.Location = new System.Drawing.Point(6, 57);
+      this.ckHueTheaterEnabled.Name = "ckHueTheaterEnabled";
+      this.ckHueTheaterEnabled.Size = new System.Drawing.Size(124, 17);
+      this.ckHueTheaterEnabled.TabIndex = 7;
+      this.ckHueTheaterEnabled.Text = "Enable theater mode";
+      this.ckHueTheaterEnabled.UseVisualStyleBackColor = true;
       // 
       // grpHueAverageColor
       // 
@@ -2673,15 +2723,15 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
-      // ckMonitorWindowState
+      // lblHintHueTheaterMode
       // 
-      this.ckMonitorWindowState.AutoSize = true;
-      this.ckMonitorWindowState.Location = new System.Drawing.Point(13, 325);
-      this.ckMonitorWindowState.Name = "ckMonitorWindowState";
-      this.ckMonitorWindowState.Size = new System.Drawing.Size(295, 17);
-      this.ckMonitorWindowState.TabIndex = 42;
-      this.ckMonitorWindowState.Text = "Turn off leds while Mediaportal is minimized or suspended";
-      this.ckMonitorWindowState.UseVisualStyleBackColor = true;
+      this.lblHintHueTheaterMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblHintHueTheaterMode.Location = new System.Drawing.Point(3, 27);
+      this.lblHintHueTheaterMode.Name = "lblHintHueTheaterMode";
+      this.lblHintHueTheaterMode.Size = new System.Drawing.Size(796, 13);
+      this.lblHintHueTheaterMode.TabIndex = 22;
+      this.lblHintHueTheaterMode.Text = "Hint: when theater mode is enabled the lights will turn off during movie playback" +
+    " and back on after playback if that option is enabled";
       // 
       // SetupForm
       // 
@@ -2749,6 +2799,8 @@
       this.grpBoblightGeneral.ResumeLayout(false);
       this.grpBoblightGeneral.PerformLayout();
       this.tabPageHue.ResumeLayout(false);
+      this.grpHueTheaterMode.ResumeLayout(false);
+      this.grpHueTheaterMode.PerformLayout();
       this.grpHueAverageColor.ResumeLayout(false);
       this.grpHueAverageColor.PerformLayout();
       this.grpHueGeneralSettings.ResumeLayout(false);
@@ -2994,5 +3046,9 @@
     private System.Windows.Forms.CheckBox cbBlackbarDetectionHorizontal;
     private System.Windows.Forms.CheckBox cbBlackbarDetectionLinkAreas;
     private System.Windows.Forms.CheckBox ckMonitorWindowState;
+    private System.Windows.Forms.GroupBox grpHueTheaterMode;
+    private System.Windows.Forms.CheckBox ckHueTheaterRestoreLights;
+    private System.Windows.Forms.CheckBox ckHueTheaterEnabled;
+    private System.Windows.Forms.Label lblHintHueTheaterMode;
   }
 }

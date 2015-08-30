@@ -46,6 +46,8 @@ namespace AtmoLight.Targets
     private Boolean HueBridgeStartOnResume = false;
     private Thread changeColorThreadHelper;
     private volatile int[] changeColorBuffer = new int[5];
+    private Boolean TheaterModeIsActivated = false;
+    private Boolean TheaterModeFirstStart = true;
 
     // TCP
     private static TcpClient Socket = new TcpClient();
@@ -69,6 +71,7 @@ namespace AtmoLight.Targets
       Group,
       Power,
       Room,
+      Theater
     }
 
     #endregion
@@ -309,7 +312,7 @@ namespace AtmoLight.Targets
       }
       catch (Exception e)
       {
-        Log.Error("HueHandler - error during sending power command");
+        Log.Error("HueHandler - error during sending command");
         Log.Error(string.Format("HueHandler - {0}", e.Message));
         ReInitialise(false);
       }
@@ -319,6 +322,12 @@ namespace AtmoLight.Targets
     {
       lock (changeColorBufferLock)
       {
+        if (TheaterModeIsActivated)
+        {
+          // While theater mode is active cancel all color commands
+          return;
+        }
+
         changeColorBuffer[0] = red;
         changeColorBuffer[1] = green;
         changeColorBuffer[2] = blue;
@@ -333,18 +342,86 @@ namespace AtmoLight.Targets
       {
         return false;
       }
+      
       switch (effect)
       {
         case ContentEffect.StaticColor:
           ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2], 10, 0);
           break;
         case ContentEffect.LEDsDisabled:
+          if (coreObject.hueTheaterEnabled && coreObject.hueTheaterRestoreLights && !TheaterModeFirstStart && TheaterModeIsActivated)
+          {
+            // Send theater command
+            TheaterMode("DISABLE");
+            TheaterModeIsActivated = false;
+            Array.Clear(changeColorBuffer, 0, changeColorBuffer.Length);
+            StartChangeColorThread();
+          }
+          else if (coreObject.hueTheaterEnabled && TheaterModeFirstStart)
+          {
+            // Do nothing
+            TheaterModeFirstStart = false;
+          }
+          else
+          {
+            ChangeColor(0, 0, 0, 1, 0);
+          }
+          break;
+        case ContentEffect.MediaPortalLiveMode:
+          if (coreObject.hueTheaterEnabled)
+          {
+            // Send theater command   
+            TheaterModeIsActivated = true;
+            StopChangeColorThread();
+            TheaterMode("ENABLE");
+          }
+          break;
+        case ContentEffect.VUMeter:
+          if (coreObject.hueTheaterEnabled)
+          {
+            // Send theater command  
+            TheaterModeIsActivated = true;
+            StopChangeColorThread();
+            TheaterMode("ENABLE");
+          }          
+          break;
+        case ContentEffect.VUMeterRainbow:
+          if (coreObject.hueTheaterEnabled)
+          {
+            // Send theater command
+            TheaterModeIsActivated = true;
+            StopChangeColorThread();
+            TheaterMode("ENABLE");
+          }          
+          break;
         case ContentEffect.Undefined:
         default:
-          ChangeColor(0, 0, 0, 1, 0);
+          if (coreObject.hueTheaterEnabled && coreObject.hueTheaterRestoreLights && !TheaterModeFirstStart && TheaterModeIsActivated)
+          {
+            // Send theater command
+            TheaterMode("DISABLE");
+            Array.Clear(changeColorBuffer, 0, changeColorBuffer.Length);
+            StartChangeColorThread();
+            TheaterModeIsActivated = false;
+          }
+          else if (coreObject.hueTheaterEnabled && TheaterModeFirstStart)
+          {
+            // Do nothing
+            TheaterModeFirstStart = false;
+          }
+          else
+          {
+            ChangeColor(0, 0, 0, 1, 0);
+          }       
           break;
       }
       return true;
+    }
+
+    private void TheaterMode(string action)
+    {
+      string message = string.Format("{0},{1},{2}", "ATMOLIGHT - THEATER MODE", APIcommandType.Theater, action);
+      sendAPIcommand(message);
     }
     public void ChangeProfile()
     {
@@ -462,13 +539,13 @@ namespace AtmoLight.Targets
     }
     public void setActiveGroup(string groupName)
     {
-      Log.Debug(APIcommandType.Group + " --> " + groupName);
+      //Log.Debug(APIcommandType.Group + " --> " + groupName);
       string message = string.Format("{0},{1},{2},{3}", "ATMOLIGHT", APIcommandType.Group, "OnlyActivate", groupName);
       sendAPIcommand(message);
     }
     public void setGroupStaticColor(string groupName, string colorName)
     {
-      Log.Debug(APIcommandType.Group + " --> " + groupName);
+      //Log.Debug(APIcommandType.Group + " --> " + groupName);
       string message = string.Format("{0},{1},{2},{3},{4}", "ATMOLIGHT", APIcommandType.Group, "SetStaticColor", groupName, colorName);
       sendAPIcommand(message);
     }
