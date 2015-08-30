@@ -71,7 +71,7 @@ namespace AtmoLight.Targets
         Log.Debug("AtmoOrbHandler - Secussfully connected to lamp {0} ({1}:{2})", id, ip, port);
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
-          ChangeColor("000000");
+          ChangeColor("000000", true);
         }
         else if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
         {
@@ -92,7 +92,7 @@ namespace AtmoLight.Targets
             blueHex = "0" + blueHex;
           }
 
-          ChangeColor(redHex + greenHex + blueHex);
+          ChangeColor(redHex + greenHex + blueHex, false);
         }
       }
       catch (Exception ex)
@@ -125,7 +125,7 @@ namespace AtmoLight.Targets
       return isConnected;
     }
 
-    public void ChangeColor(string color)
+    public void ChangeColor(string color, bool forceLightsOff)
     {
       if (!IsConnected())
       {

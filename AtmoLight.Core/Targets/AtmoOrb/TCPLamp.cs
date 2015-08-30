@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Net;
@@ -18,7 +19,9 @@ namespace AtmoLight.Targets
     private int vScanStart;
     private int vScanEnd;
     private bool zoneInverted;
+
     private TcpClient tcpClient;
+    private Socket socket;
     private volatile bool connectLock = false;
     private Thread connectThreadHelper;
     private Core coreObject = Core.GetInstance();
@@ -86,10 +89,14 @@ namespace AtmoLight.Targets
       {
         Disconnect();
         tcpClient = new TcpClient(ip, port);
+        socket = tcpClient.Client;
+        Log.Debug("AtmoOrbHandler - Socket connected: " + socket.Connected);
+        Log.Debug("AtmoOrbHandler - TCP connected: " + tcpClient.Connected);
         Log.Debug("AtmoOrbHandler - Successfully connected to lamp {0} ({1}:{2})", id, ip, port);
+
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
-          ChangeColor("000000");
+          ChangeColor("000000", true);
         }
         else if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
         {
@@ -97,25 +104,15 @@ namespace AtmoLight.Targets
           string greenHex = coreObject.staticColor[1].ToString("X");
           string blueHex = coreObject.staticColor[2].ToString("X");
 
-          if (redHex.Length == 1)
-          {
-            redHex = "0" + redHex;
-          }
-          if (greenHex.Length == 1)
-          {
-            greenHex = "0" + greenHex;
-          }
-          if (blueHex.Length == 1)
-          {
-            blueHex = "0" + blueHex;
-          }
-
-          ChangeColor(redHex + greenHex + blueHex);
-          connectLock = false;
+          ChangeColor(redHex + greenHex + blueHex, false);
         }
+
+        // Reset lock
+        connectLock = false;
       }
       catch (Exception ex)
       {
+        connectLock = false;
         Log.Error("AtmoOrbHandler - Exception while connecting to lamp {0} ({1}:{2})", id, ip, port);
         Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
       }
@@ -144,19 +141,111 @@ namespace AtmoLight.Targets
       {
         return false;
       }
+
       return tcpClient.Connected && !connectLock;
     }
 
-    public void ChangeColor(string color)
+    public void ChangeColor(string color, bool forceLightsOff)
     {
       if (!IsConnected())
       {
         return;
       }
-      byte[] bytes = Encoding.ASCII.GetBytes("setcolor:" + color + ";");
-      NetworkStream stream = tcpClient.GetStream();
-      stream.Write(bytes, 0, bytes.Length);
-      stream.Close();
+
+      // Convert HEX to BYTE
+      byte red = byte.Parse(color.Substring(0, 2), System.Globalization.NumberStyles.AllowHexSpecifier);
+      byte green = byte.Parse(color.Substring(2, 2), System.Globalization.NumberStyles.AllowHexSpecifier);
+      byte blue = byte.Parse(color.Substring(4, 2), System.Globalization.NumberStyles.AllowHexSpecifier);
+
+      if (forceLightsOff)
+      {
+        ForceLightsOff();
+      }
+      else
+      {
+        try
+        {
+            // Fixed led count to expand later as its optional by default
+            byte ledCount = 24;
+            byte[] bytes = new byte[3 + ledCount * 3];
+
+            // Command identifier: C0FFEE
+            bytes[0] = 0xC0;
+            bytes[1] = 0xFF;
+            bytes[2] = 0xEE;
+
+            // Force OFF if value greater than 1
+            bytes[3] = 0;
+
+            // RED / GREEN / BLUE
+            bytes[4] = red;
+            bytes[5] = green;
+            bytes[6] = blue;
+
+            Send(socket, bytes, 0, bytes.Length, 10000);
+        }
+        catch (Exception e)
+        {
+          //Log.Error("Error during send message..");
+        }
+      }
+    }
+
+    private void ForceLightsOff()
+    {
+
+      try
+      {
+        // Fixed led count to expand later as its optional by default
+        byte ledCount = 24;
+        byte[] bytes = new byte[3 + ledCount * 3];
+
+        // Command identifier: C0FFEE
+        bytes[0] = 0xC0;
+        bytes[1] = 0xFF;
+        bytes[2] = 0xEE;
+
+        // Force OFF if value greater than 1
+        bytes[3] = 255;
+
+        // RED / GREEN / BLUE
+        bytes[4] = 0;
+        bytes[5] = 0;
+        bytes[6] = 0;
+
+        Send(socket, bytes, 0, bytes.Length, 10000);
+      }
+      catch (Exception e)
+      {
+        Log.Error("Error during send message..");
+      }
+    }
+
+    public static void Send(Socket socket, byte[] buffer, int offset, int size, int timeout)
+    {
+      int startTickCount = Environment.TickCount;
+      int sent = 0;  // how many bytes is already sent
+      do
+      {
+        if (Environment.TickCount > startTickCount + timeout)
+          throw new Exception("Timeout.");
+        try
+        {
+          sent += socket.Send(buffer, offset + sent, size - sent, SocketFlags.None);
+        }
+        catch (SocketException ex)
+        {
+          if (ex.SocketErrorCode == SocketError.WouldBlock ||
+              ex.SocketErrorCode == SocketError.IOPending ||
+              ex.SocketErrorCode == SocketError.NoBufferSpaceAvailable)
+          {
+            // socket buffer is probably full, wait and try again
+            Thread.Sleep(10);
+          }
+          else
+            //throw ex;  // any serious error occurr
+        }
+      } while (sent < size);
     }
   }
 }

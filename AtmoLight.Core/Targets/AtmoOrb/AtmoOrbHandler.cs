@@ -115,14 +115,23 @@ namespace AtmoLight.Targets
           ChangeColor((int)gammaCurve[coreObject.staticColor[0]], (int)gammaCurve[coreObject.staticColor[1]], (int)gammaCurve[coreObject.staticColor[2]]);
           return true;
         case ContentEffect.LEDsDisabled:
+          // Send command 3 times to make sure it arrives
+          ChangeColor(0, 0, 0, true);
+          System.Threading.Thread.Sleep(50);
+          ChangeColor(0, 0, 0, true);
+          System.Threading.Thread.Sleep(50);
+          ChangeColor(0, 0, 0, true);
+
+          return true;
         case ContentEffect.Undefined:
         default:
           // Send command 3 times to make sure it arrives
-          ChangeColor(0, 0, 0);
+          ChangeColor(0, 0, 0, true);
           System.Threading.Thread.Sleep(50);
-          ChangeColor(0, 0, 0);
+          ChangeColor(0, 0, 0, true);
           System.Threading.Thread.Sleep(50);
-          ChangeColor(0, 0, 0);
+          ChangeColor(0, 0, 0, true);
+
           return true;
       }
     }
@@ -143,6 +152,7 @@ namespace AtmoLight.Targets
       else if (powerMode == PowerModes.Suspend)
       {
         ChangeEffect(ContentEffect.LEDsDisabled);
+        Disconnect();
       }
     }
     #endregion
@@ -355,7 +365,7 @@ namespace AtmoLight.Targets
       }
     }
 
-    private void ChangeColor(int red, int green, int blue)
+    private void ChangeColor(int red, int green, int blue, bool forceLightsOff = false)
     {
       string redHex = red.ToString("X");
       string greenHex = green.ToString("X");
@@ -375,7 +385,7 @@ namespace AtmoLight.Targets
 
       foreach (var lamp in lamps)
       {
-        lamp.ChangeColor(redHex + greenHex + blueHex);
+        lamp.ChangeColor(redHex + greenHex + blueHex, forceLightsOff);
       }
     }
     #endregion

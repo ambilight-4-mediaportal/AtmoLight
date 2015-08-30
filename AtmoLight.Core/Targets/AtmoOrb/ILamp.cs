@@ -23,6 +23,6 @@ namespace AtmoLight.Targets
     void Connect(string ip, int port);
     void Disconnect();
     bool IsConnected();
-    void ChangeColor(string color);
+    void ChangeColor(string color, bool forceLightsOff);
   }
 }
