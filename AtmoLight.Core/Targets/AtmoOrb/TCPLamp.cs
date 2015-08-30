@@ -165,24 +165,24 @@ namespace AtmoLight.Targets
       {
         try
         {
-            // Fixed led count to expand later as its optional by default
-            byte ledCount = 24;
-            byte[] bytes = new byte[3 + ledCount * 3];
+          // Fixed led count to expand later as its optional by default
+          byte ledCount = 24;
+          byte[] bytes = new byte[3 + ledCount * 3];
 
-            // Command identifier: C0FFEE
-            bytes[0] = 0xC0;
-            bytes[1] = 0xFF;
-            bytes[2] = 0xEE;
+          // Command identifier: C0FFEE
+          bytes[0] = 0xC0;
+          bytes[1] = 0xFF;
+          bytes[2] = 0xEE;
 
-            // Force OFF if value greater than 1
-            bytes[3] = 0;
+          // Force OFF if value greater than 0
+          bytes[3] = 0;
 
-            // RED / GREEN / BLUE
-            bytes[4] = red;
-            bytes[5] = green;
-            bytes[6] = blue;
+          // RED / GREEN / BLUE
+          bytes[4] = red;
+          bytes[5] = green;
+          bytes[6] = blue;
 
-            Send(socket, bytes, 0, bytes.Length, 10000);
+          Send(socket, bytes, 0, bytes.Length, 1000);
         }
         catch (Exception e)
         {
@@ -205,7 +205,7 @@ namespace AtmoLight.Targets
         bytes[1] = 0xFF;
         bytes[2] = 0xEE;
 
-        // Force OFF if value greater than 1
+        // Force OFF if value greater than 0
         bytes[3] = 255;
 
         // RED / GREEN / BLUE
@@ -213,7 +213,7 @@ namespace AtmoLight.Targets
         bytes[5] = 0;
         bytes[6] = 0;
 
-        Send(socket, bytes, 0, bytes.Length, 10000);
+        Send(socket, bytes, 0, bytes.Length, 1000);
       }
       catch (Exception e)
       {
@@ -228,23 +228,21 @@ namespace AtmoLight.Targets
       do
       {
         if (Environment.TickCount > startTickCount + timeout)
-          throw new Exception("Timeout.");
-        try
-        {
-          sent += socket.Send(buffer, offset + sent, size - sent, SocketFlags.None);
-        }
-        catch (SocketException ex)
-        {
-          if (ex.SocketErrorCode == SocketError.WouldBlock ||
-              ex.SocketErrorCode == SocketError.IOPending ||
-              ex.SocketErrorCode == SocketError.NoBufferSpaceAvailable)
+          //throw new Exception("Timeout.");
+          try
           {
-            // socket buffer is probably full, wait and try again
-            Thread.Sleep(10);
+            sent += socket.Send(buffer, offset + sent, size - sent, SocketFlags.None);
           }
-          else
-            //throw ex;  // any serious error occurr
-        }
+          catch (SocketException ex)
+          {
+            if (ex.SocketErrorCode == SocketError.WouldBlock ||
+                ex.SocketErrorCode == SocketError.IOPending ||
+                ex.SocketErrorCode == SocketError.NoBufferSpaceAvailable)
+            {
+              // socket buffer is probably full, wait and try again
+              Thread.Sleep(30);
+            }
+          }
       } while (sent < size);
     }
   }
