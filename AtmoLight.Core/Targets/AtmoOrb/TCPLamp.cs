@@ -96,15 +96,15 @@ namespace AtmoLight.Targets
 
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
-          ChangeColor("000000", true);
+          ChangeColor(0, 0, 0, true);
         }
         else if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
         {
-          string redHex = coreObject.staticColor[0].ToString("X");
-          string greenHex = coreObject.staticColor[1].ToString("X");
-          string blueHex = coreObject.staticColor[2].ToString("X");
+          byte red = byte.Parse(coreObject.staticColor[0].ToString());
+          byte green = byte.Parse(coreObject.staticColor[1].ToString());
+          byte blue = byte.Parse(coreObject.staticColor[2].ToString());
 
-          ChangeColor(redHex + greenHex + blueHex, false);
+          ChangeColor(red, green, blue, false);
         }
 
         // Reset lock
@@ -145,17 +145,12 @@ namespace AtmoLight.Targets
       return tcpClient.Connected && !connectLock;
     }
 
-    public void ChangeColor(string color, bool forceLightsOff)
+    public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff)
     {
       if (!IsConnected())
       {
         return;
       }
-
-      // Convert HEX to BYTE
-      byte red = byte.Parse(color.Substring(0, 2), System.Globalization.NumberStyles.AllowHexSpecifier);
-      byte green = byte.Parse(color.Substring(2, 2), System.Globalization.NumberStyles.AllowHexSpecifier);
-      byte blue = byte.Parse(color.Substring(4, 2), System.Globalization.NumberStyles.AllowHexSpecifier);
 
       if (forceLightsOff)
       {
@@ -184,7 +179,7 @@ namespace AtmoLight.Targets
 
           Send(socket, bytes, 0, bytes.Length, 50);
         }
-        catch (Exception e)
+        catch (Exception)
         {
           //Log.Error("Error during send message..");
         }
@@ -215,10 +210,7 @@ namespace AtmoLight.Targets
 
         Send(socket, bytes, 0, bytes.Length, 50);
       }
-      catch (Exception e)
-      {
-        Log.Error("Error during send message..");
-      }
+      catch (Exception){}
     }
 
     public static void Send(Socket socket, byte[] buffer, int offset, int size, int timeout)

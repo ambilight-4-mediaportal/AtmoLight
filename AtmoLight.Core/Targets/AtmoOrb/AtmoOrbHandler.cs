@@ -102,17 +102,18 @@ namespace AtmoLight.Targets
       switch (effect)
       {
         case ContentEffect.MediaPortalLiveMode:
+
         case ContentEffect.GIFReader:
         case ContentEffect.VUMeter:
         case ContentEffect.VUMeterRainbow:
           return true;
         case ContentEffect.StaticColor:
           // Send command 3 times to make sure it arrives
-          ChangeColor((int)gammaCurve[coreObject.staticColor[0]], (int)gammaCurve[coreObject.staticColor[1]], (int)gammaCurve[coreObject.staticColor[2]]);
+          ChangeColor((byte)gammaCurve[coreObject.staticColor[0]], (byte)gammaCurve[coreObject.staticColor[1]], (byte)gammaCurve[coreObject.staticColor[2]]);
           System.Threading.Thread.Sleep(50);
-          ChangeColor((int)gammaCurve[coreObject.staticColor[0]], (int)gammaCurve[coreObject.staticColor[1]], (int)gammaCurve[coreObject.staticColor[2]]);
+          ChangeColor((byte)gammaCurve[coreObject.staticColor[0]], (byte)gammaCurve[coreObject.staticColor[1]], (byte)gammaCurve[coreObject.staticColor[2]]);
           System.Threading.Thread.Sleep(50);
-          ChangeColor((int)gammaCurve[coreObject.staticColor[0]], (int)gammaCurve[coreObject.staticColor[1]], (int)gammaCurve[coreObject.staticColor[2]]);
+          ChangeColor((byte)gammaCurve[coreObject.staticColor[0]], (byte)gammaCurve[coreObject.staticColor[1]], (byte)gammaCurve[coreObject.staticColor[2]]);
           return true;
         case ContentEffect.LEDsDisabled:
           // Send command 3 times to make sure it arrives
@@ -176,7 +177,7 @@ namespace AtmoLight.Targets
             string[] settings = coreObject.atmoOrbLamps[i].Split(',');
             if (settings[1] == "UDP")
             {
-              lamps.Add(new UDPLamp(settings[0], int.Parse(settings[2]), int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5]), bool.Parse(settings[6])));
+              lamps.Add(new UDPLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8])));
             }
             else if (settings[1] == "TCP")
             {
@@ -188,12 +189,10 @@ namespace AtmoLight.Targets
         // Connect tcp lamps
         foreach (var lamp in lamps)
         {
-          if (lamp.Type == LampType.TCP)
-          {
-            lamp.Connect(lamp.IP, lamp.Port);
-          }
+          lamp.Connect(lamp.IP, lamp.Port);
         }
 
+        /*
         // Start udp server if udp lamps are being used
         if (UDPLampPresent())
         {
@@ -209,7 +208,8 @@ namespace AtmoLight.Targets
           udpClientBroadcast.Send(bytes, bytes.Length, udpClientBroadcastEndpoint);
 
           udpClientBroadcast.Close();
-        }
+        }*/
+
         initLock = false;
       }
       catch (Exception ex)
@@ -255,7 +255,7 @@ namespace AtmoLight.Targets
               s = 1;
               l = 0.5 - ((double)y / coreObject.GetCaptureHeight() / 2);
               HSL.HSL2RGB(vuMeterHue, s, l, out r, out g, out b);
-              ChangeColor((int)gammaCurve[r], (int)gammaCurve[g], (int)gammaCurve[b]);
+              ChangeColor((byte)gammaCurve[r], (byte)gammaCurve[g], (byte)gammaCurve[b]);
               return;
             }
           }
@@ -333,7 +333,7 @@ namespace AtmoLight.Targets
                   HSL.HSL2RGB(hue, Math.Min(saturation + coreObject.atmoOrbSaturation, 1), (coreObject.atmoOrbUseOverallLightness ? lightnessOverall : lightness), out lamp.AverageColor[0], out lamp.AverageColor[1], out lamp.AverageColor[2]);
 
                   // Adjust gamma level and send to lamp
-                  ChangeColor((int)gammaCurve[lamp.AverageColor[0]], (int)gammaCurve[lamp.AverageColor[1]], (int)gammaCurve[lamp.AverageColor[2]]);
+                  ChangeColor((byte)gammaCurve[lamp.AverageColor[0]], (byte)gammaCurve[lamp.AverageColor[1]], (byte)gammaCurve[lamp.AverageColor[2]]);
                 }
               }
               else
@@ -345,12 +345,13 @@ namespace AtmoLight.Targets
 
                   if (lamp.OverallAverageColor[0] <= coreObject.atmoOrbBlackThreshold && lamp.OverallAverageColor[1] <= coreObject.atmoOrbBlackThreshold && lamp.OverallAverageColor[2] <= coreObject.atmoOrbBlackThreshold)
                   {
-                    ChangeColor(0, 0, 0);
+                    // Black threshold reached, forcing leds off as to clear smooth colors on the lamp side
+                    ChangeColor(0, 0, 0, true);
                   }
                   else
                   {
                     // Adjust gamma level and send to lamp
-                    ChangeColor((int)gammaCurve[lamp.OverallAverageColor[0]], (int)gammaCurve[lamp.OverallAverageColor[1]], (int)gammaCurve[lamp.OverallAverageColor[2]]);
+                    ChangeColor((byte)gammaCurve[lamp.OverallAverageColor[0]], (byte)gammaCurve[lamp.OverallAverageColor[1]], (byte)gammaCurve[lamp.OverallAverageColor[2]]);
                   }
                 }
               }
@@ -365,27 +366,12 @@ namespace AtmoLight.Targets
       }
     }
 
-    private void ChangeColor(int red, int green, int blue, bool forceLightsOff = false)
+    private void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff = false)
     {
-      string redHex = red.ToString("X");
-      string greenHex = green.ToString("X");
-      string blueHex = blue.ToString("X");
-      if (redHex.Length == 1)
-      {
-        redHex = "0" + redHex;
-      }
-      if (greenHex.Length == 1)
-      {
-        greenHex = "0" + greenHex;
-      }
-      if (blueHex.Length == 1)
-      {
-        blueHex = "0" + blueHex;
-      }
 
       foreach (var lamp in lamps)
       {
-        lamp.ChangeColor(redHex + greenHex + blueHex, forceLightsOff);
+        lamp.ChangeColor(red, green, blue, forceLightsOff);
       }
     }
     #endregion

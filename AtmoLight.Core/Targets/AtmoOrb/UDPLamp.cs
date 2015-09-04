@@ -22,9 +22,11 @@ namespace AtmoLight.Targets
     private IPEndPoint udpClientEndpoint;
     private Core coreObject = Core.GetInstance();
 
-    public UDPLamp(string id, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd, bool zoneInverted)
+    public UDPLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd, bool zoneInverted)
     {
       this.id = id;
+      this.ip = ip;
+      this.port = port;
       this.hScanStart = hScanStart;
       this.hScanEnd = hScanEnd;
       this.vScanStart = vScanStart;
@@ -68,31 +70,20 @@ namespace AtmoLight.Targets
         udpClient = new UdpClient();
         udpClientEndpoint = new IPEndPoint(IPAddress.Parse(ip), port);
         isConnected = true;
-        Log.Debug("AtmoOrbHandler - Secussfully connected to lamp {0} ({1}:{2})", id, ip, port);
+        Log.Debug("AtmoOrbHandler - Successfully connected to lamp {0} ({1}:{2})", id, ip, port);
+
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
-          ChangeColor("000000", true);
+          ChangeColor(0, 0, 0, true);
         }
         else if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
         {
-          string redHex = coreObject.staticColor[0].ToString("X");
-          string greenHex = coreObject.staticColor[1].ToString("X");
-          string blueHex = coreObject.staticColor[2].ToString("X");
 
-          if (redHex.Length == 1)
-          {
-            redHex = "0" + redHex;
-          }
-          if (greenHex.Length == 1)
-          {
-            greenHex = "0" + greenHex;
-          }
-          if (blueHex.Length == 1)
-          {
-            blueHex = "0" + blueHex;
-          }
+          byte red = byte.Parse(coreObject.staticColor[0].ToString());
+          byte green = byte.Parse(coreObject.staticColor[1].ToString());
+          byte blue = byte.Parse(coreObject.staticColor[2].ToString());
 
-          ChangeColor(redHex + greenHex + blueHex, false);
+          ChangeColor(red, green, blue, false);
         }
       }
       catch (Exception ex)
@@ -125,14 +116,76 @@ namespace AtmoLight.Targets
       return isConnected;
     }
 
-    public void ChangeColor(string color, bool forceLightsOff)
+    public void ChangeColor(byte red, byte green , byte blue, bool forceLightsOff)
     {
       if (!IsConnected())
       {
         return;
       }
-      byte[] bytes = Encoding.ASCII.GetBytes("setcolor:" + color + ";");
-      udpClient.Send(bytes, bytes.Length, udpClientEndpoint);
+      
+      if (forceLightsOff)
+      {
+        ForceLightsOff();
+      }
+      else
+      {
+        try
+        {
+          // Fixed led count to expand later as its optional by default
+          byte ledCount = 24;
+          byte[] bytes = new byte[3 + ledCount * 3];
+
+          // Command identifier: C0FFEE
+          bytes[0] = 0xC0;
+          bytes[1] = 0xFF;
+          bytes[2] = 0xEE;
+
+          // Force OFF if value greater than 1
+          bytes[3] = 0;
+
+          // RED / GREEN / BLUE
+          bytes[4] = red;
+          bytes[5] = green;
+          bytes[6] = blue;
+
+          udpClient.Send(bytes, bytes.Length, udpClientEndpoint);
+          //Send(socket, bytes, 0, bytes.Length, 50);
+        }
+        catch (Exception e)
+        {
+          Log.Error("Error during send message..");
+        }
+      }
     }
+    private void ForceLightsOff()
+    {
+      try
+      {
+        // Fixed led count to expand later as its optional by default
+        byte ledCount = 24;
+        byte[] bytes = new byte[3 + ledCount * 3];
+
+        // Command identifier: C0FFEE
+        bytes[0] = 0xC0;
+        bytes[1] = 0xFF;
+        bytes[2] = 0xEE;
+
+        // Force OFF if value greater than 1
+        bytes[3] = 255;
+
+        // RED / GREEN / BLUE
+        bytes[4] = 0;
+        bytes[5] = 0;
+        bytes[6] = 0;
+
+        udpClient.Send(bytes, bytes.Length, udpClientEndpoint);
+        //Send(socket, bytes, 0, bytes.Length, 50);
+      }
+      catch (Exception e)
+      {
+        Log.Error("Error during send message..");
+      }
+    }
+
   }
 }

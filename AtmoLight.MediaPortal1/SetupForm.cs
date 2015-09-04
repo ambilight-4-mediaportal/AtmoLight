@@ -1884,8 +1884,21 @@ namespace AtmoLight
       }
       else if (rbAtmoOrbUDP.Checked)
       {
-        lampString += "UDP,";
+        if (validatorIPAdress(tbAtmoOrbIP.Text) == false)
+        {
+          MessageBox.Show(Localization.Translate("Common", "ErrorIP") + " - [" + tbAtmoOrbIP.Text + "]", Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+        minValue = 1;
+        maxValue = 65535;
+        if (validatorInt(tbAtmoOrbPort.Text, minValue, maxValue, true) == false)
+        {
+          MessageBox.Show(Localization.Translate("Common", "ErrorInvalidNumberRange").Replace("[minInteger]", minValue.ToString()).Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbPort.Text + "]", Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+        lampString += "UDP," + tbAtmoOrbIP.Text + "," + tbAtmoOrbPort.Text + ",";
       }
+
       minValue = 0;
       maxValue = 100;
       if (validatorInt(tbAtmoOrbHScanStart.Text, minValue, maxValue, true) == false)
@@ -1991,15 +2004,15 @@ namespace AtmoLight
         {
           rbAtmoOrbUDP.Checked = true;
           rbAtmoOrbTCP.Checked = false;
-          tbAtmoOrbIP.ReadOnly = true;
-          tbAtmoOrbPort.ReadOnly = true;
-          tbAtmoOrbIP.Text = "";
-          tbAtmoOrbPort.Text = "";
-          tbAtmoOrbHScanStart.Text = lampSettings[2];
-          tbAtmoOrbHScanEnd.Text = lampSettings[3];
-          tbAtmoOrbVScanStart.Text = lampSettings[4];
-          tbAtmoOrbVScanEnd.Text = lampSettings[5];
-          cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[6]);
+          tbAtmoOrbIP.ReadOnly = false;
+          tbAtmoOrbPort.ReadOnly = false;
+          tbAtmoOrbIP.Text = lampSettings[2];
+          tbAtmoOrbPort.Text = lampSettings[3];
+          tbAtmoOrbHScanStart.Text = lampSettings[4];
+          tbAtmoOrbHScanEnd.Text = lampSettings[5];
+          tbAtmoOrbVScanStart.Text = lampSettings[6];
+          tbAtmoOrbVScanEnd.Text = lampSettings[7];
+          cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[8]);
         }
         else if (lampSettings[1] == "TCP")
         {
@@ -2020,6 +2033,7 @@ namespace AtmoLight
 
     private void rbAtmoOrbUDPTCP_CheckedChanged(object sender, EventArgs e)
     {
+      /*
       RadioButton rb = sender as RadioButton;
       if (rb != null)
       {
@@ -2038,7 +2052,7 @@ namespace AtmoLight
             tbAtmoOrbPort.Text = "";
           }
         }
-      }
+      }*/
     }
     #endregion
   }
