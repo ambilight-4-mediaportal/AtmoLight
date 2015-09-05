@@ -886,11 +886,30 @@ namespace AtmoLight
       Settings.blackbarDetectionHorizontal = cbBlackbarDetectionHorizontal.Checked;
       Settings.blackbarDetectionVertical = cbBlackbarDetectionVertical.Checked;
 
-      Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbVideo.Text));
-      Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbMusic.Text));
-      Settings.effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbRadio.Text));
-      Settings.effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbMenu.Text));
-      Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbMPExit.Text));
+      if(validatorString(cbVideo.Text, 1))
+      {
+        Settings.effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbVideo.Text));
+      }
+
+      if (validatorString(cbMusic.Text, 1))
+      {
+        Settings.effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbMusic.Text));
+      }
+
+      if (validatorString(cbRadio.Text, 1))
+      {
+        Settings.effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbRadio.Text));
+      }
+
+      if (validatorString(cbMenu.Text, 1))
+      {
+        Settings.effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbMenu.Text));
+      }
+
+      if (validatorString(cbMPExit.Text, 1))
+      {
+        Settings.effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), Localization.ReverseTranslate("ContentEffect", cbMPExit.Text));
+      }
 
       Settings.SaveSettings();
       this.DialogResult = DialogResult.OK;
@@ -1018,6 +1037,21 @@ namespace AtmoLight
     {
 
       Boolean IsValid = false;
+      return IsValid;
+    }
+    private Boolean validatorString(string input, double minLength)
+    {
+      Boolean IsValid = false;
+
+      try
+      {
+        if (String.IsNullOrEmpty(input) == false && input.Length >= minLength)
+        {
+          IsValid = true;
+        }
+      }
+      catch { };
+
       return IsValid;
     }
     #endregion
