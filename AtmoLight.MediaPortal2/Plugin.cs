@@ -405,8 +405,7 @@ namespace AtmoLight
 
     public void UICapture(object sender, EventArgs args)
     {
-      if (!coreObject.IsConnected() || !coreObject.IsAtmoLightOn() ||
-          coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
+      if (!coreObject.IsConnected() || !coreObject.IsAtmoLightOn() || coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
       {
         return;
       }
@@ -439,9 +438,13 @@ namespace AtmoLight
         // This results in lower time to calculate aswell as blackbar removal
         if (ServiceRegistration.Get<IPlayerContextManager>().IsVideoContextActive)
         {
-          player =
-            ServiceRegistration.Get<IPlayerContextManager>().PrimaryPlayerContext.CurrentPlayer as ISharpDXVideoPlayer;
-          surfaceSource = player.Surface;
+          player = ServiceRegistration.Get<IPlayerContextManager>().PrimaryPlayerContext.CurrentPlayer as ISharpDXVideoPlayer;
+
+          // player.Texture can be null even if VideoContext is active, e.g. at the start of a video
+          if (player.Texture != null)
+          {
+            surfaceSource = player.Texture.GetSurfaceLevel(0);
+          }
         }
         else
         {
