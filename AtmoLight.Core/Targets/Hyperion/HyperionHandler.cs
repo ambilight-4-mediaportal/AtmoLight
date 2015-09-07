@@ -311,6 +311,7 @@ namespace AtmoLight.Targets
       {
         return;
       }
+
       ColorRequest colorRequest = ColorRequest.CreateBuilder()
         .SetRgbColor((red * 256 * 256) + (green * 256) + blue)
         .SetPriority(coreObject.hyperionPriorityStaticColor)
@@ -363,9 +364,9 @@ namespace AtmoLight.Targets
     }
     public void ClearPrioritiesAtmoLight(int delay)
     {
-      ClearPriority(coreObject.hyperionPriority);
-      Thread.Sleep(delay);
       ClearPriority(coreObject.hyperionPriorityStaticColor);
+      Thread.Sleep(delay);
+      ClearPriority(coreObject.hyperionPriority);
     }
     public bool ChangeEffect(ContentEffect effect)
     {
@@ -376,11 +377,13 @@ namespace AtmoLight.Targets
       switch (effect)
       {
         case ContentEffect.StaticColor:
+          //Clear live priority channel and wait priority to clear
+          ClearPriority(coreObject.hyperionPriority);
+          Thread.Sleep(50);
           ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
           break;
         case ContentEffect.LEDsDisabled:
           ClearPrioritiesAtmoLight(250);
-
           break;
         case ContentEffect.Undefined:
         default:
