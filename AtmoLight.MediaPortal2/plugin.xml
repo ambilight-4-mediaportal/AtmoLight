@@ -161,6 +161,30 @@
         Id="StopAtmoWinOnExit"
         Text="[AtmoLight.StopAtmoWinOnExit]"
         ClassName="AtmoLight.Configuration.StopAtmoWinOnExit"/>
+    <ConfigSetting
+        Id="AtmoWakeHelperEnabled"
+        Text="[AtmoLight.AtmoWakeHelperEnabled]"
+        ClassName="AtmoLight.Configuration.AtmoWakeHelperEnabled"/>
+    <ConfigSetting
+        Id="AtmoWakeHelperComPort"
+        Text="[AtmoLight.AtmoWakeHelperComPort]"
+        ClassName="AtmoLight.Configuration.AtmoWakeHelperComPort"/>
+    <ConfigSetting
+        Id="AtmoWakeHelperResumeDelay"
+        Text="[AtmoLight.AtmoWakeHelperResumeDelay]"
+        ClassName="AtmoLight.Configuration.AtmoWakeHelperResumeDelay"/>
+    <ConfigSetting
+        Id="AtmoWakeHelperDisconnectDelay"
+        Text="[AtmoLight.AtmoWakeHelperDisconnectDelay]"
+        ClassName="AtmoLight.Configuration.AtmoWakeHelperDisconnectDelay"/>
+    <ConfigSetting
+        Id="AtmoWakeHelperConnectDelay"
+        Text="[AtmoLight.AtmoWakeHelperConnectDelay]"
+        ClassName="AtmoLight.Configuration.AtmoWakeHelperConnectDelay"/>
+    <ConfigSetting
+        Id="AtmoWakeHelperReinitializationDelay"
+        Text="[AtmoLight.AtmoWakeHelperReinitializationDelay]"
+        ClassName="AtmoLight.Configuration.AtmoWakeHelperReinitializationDelay"/>
   </Register>
   
   <!-- Boblight -->
@@ -305,6 +329,14 @@
         Id="HueUseOverallLightness"
         Text="[AtmoLight.HueUseOverallLightness]"
         ClassName="AtmoLight.Configuration.HueUseOverallLightness"/>
+    <ConfigSetting
+        Id="HueTheaterEnabled"
+        Text="[AtmoLight.HueTheaterEnabled]"
+        ClassName="AtmoLight.Configuration.HueTheaterEnabled"/>
+    <ConfigSetting
+        Id="HueTheaterRestoreLights"
+        Text="[AtmoLight.HueTheaterRestoreLights]"
+        ClassName="AtmoLight.Configuration.HueTheaterRestoreLights"/>
   </Register>
 
 

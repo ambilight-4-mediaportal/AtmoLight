@@ -23,6 +23,13 @@
   <string name="AtmoLight.StartAtmoWinOnStart">Start AtmoWin with MediaPortal</string>
   <string name="AtmoLight.StopAtmoWinOnExit">Stop AtmoWin with MediaPortal</string>
   <string name="AtmoLight.RestartAtmoWinOnError">Auto-Reconnect on Error</string>
+  <string name="AtmoLight.AtmoWakeHelperDescription">COM port wake helper (optional)</string>
+  <string name="AtmoLight.AtmoWakeHelperEnabled">Enabled</string>
+  <string name="AtmoLight.AtmoWakeHelperComPort">AtmoWin COM port</string>
+  <string name="AtmoLight.AtmoWakeHelperResumeDelay">Resume delay (ms)</string>
+  <string name="AtmoLight.AtmoWakeHelperDisconnectDelay">Disconnect delay (ms)</string>
+  <string name="AtmoLight.AtmoWakeHelperConnectDelay">Connect delay (ms)</string>
+  <string name="AtmoLight.AtmoWakeHelperReinitializationDelay">Reinitialization delay (ms)</string>
   <string name="AtmoLight.ExcludeTimeStartHour">Excluded timeframe (start hour)</string>
   <string name="AtmoLight.ExcludeTimeStartMinutes">Excluded timeframe (start minutes)</string>
   <string name="AtmoLight.ExcludeTimeEndHour">Excluded timeframe (stop hour)</string>
@@ -106,6 +113,8 @@
   <string name="AtmoLight.HueMinDiversion">Min. color diversion</string>
   <string name="AtmoLight.HueSaturation">Saturation correction</string>
   <string name="AtmoLight.HueUseOverallLightness">Use overall lightness</string>
+  <string name="AtmoLight.HueTheaterEnabled">Enable theater mode</string>
+  <string name="AtmoLight.HueTheaterRestoreLights">Restore lights after playback stopped</string>
   <string name="AtmoLight.BlackbarDetectionLinkAreas">Blackbar Detection link areas (top to bottom and left to right)</string>
   <string name="AtmoLight.BlackbarDetectionHorizontal">Blackbar Detection horizontal scan</string>
   <string name="AtmoLight.BlackbarDetectionVertical">Blackbar Detection vertical scan</string>

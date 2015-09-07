@@ -65,6 +65,24 @@ namespace AtmoLight
     [Setting(SettingScope.User, true)]
     public bool StartAtmoWinOnStart { get; set; }
     
+    [Setting(SettingScope.User, false)]
+    public bool AtmoWakeHelperEnabled { get; set; }
+
+    [Setting(SettingScope.User, "COM1")]
+    public string AtmoWakeHelperComPort { get; set; }
+
+    [Setting(SettingScope.User, 100)]
+    public int AtmoWakeHelperResumeDelay { get; set; }
+
+    [Setting(SettingScope.User, 100)]
+    public int AtmoWakeHelperDisconnectDelay { get; set; }
+
+    [Setting(SettingScope.User, 100)]
+    public int AtmoWakeHelperConnectDelay { get; set; }
+
+    [Setting(SettingScope.User, 0)]
+    public int AtmoWakeHelperReinitializationDelay { get; set; }
+
     [Setting(SettingScope.User, true)]
     public bool RestartAtmoWinOnError { get; set; }
     
@@ -160,6 +178,12 @@ namespace AtmoLight
 
     [Setting(SettingScope.User, true)]
     public bool HueUseOverallLightness { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool HueTheaterEnabled { get; set; }
+
+    [Setting(SettingScope.User, false)]
+    public bool HueTheaterRestoreLights { get; set; }
     
     [Setting(SettingScope.User, false)]
     public bool BoblightTarget { get; set; }
@@ -275,6 +299,12 @@ namespace AtmoLight
       DelayRefreshRate = settings.DelayRefreshRate;
       StopAtmoWinOnExit = settings.StopAtmoWinOnExit;
       StartAtmoWinOnStart = settings.StartAtmoWinOnStart;
+      AtmoWakeHelperEnabled = settings.AtmoWakeHelperEnabled;
+      AtmoWakeHelperComPort = settings.AtmoWakeHelperComPort;
+      AtmoWakeHelperResumeDelay = settings.AtmoWakeHelperResumeDelay;
+      AtmoWakeHelperDisconnectDelay = settings.AtmoWakeHelperDisconnectDelay;
+      AtmoWakeHelperConnectDelay = settings.AtmoWakeHelperConnectDelay;
+      AtmoWakeHelperReinitializationDelay = settings.AtmoWakeHelperReinitializationDelay;
       RestartAtmoWinOnError = settings.RestartAtmoWinOnError;
       MonitorScreensaverState = settings.MonitorScreensaverState;
       StaticColorBlue = settings.StaticColorBlue;
@@ -334,6 +364,8 @@ namespace AtmoLight
       HueMinDiversion = settings.HueMinDiversion;
       HueSaturation = settings.HueSaturation;
       HueUseOverallLightness = settings.HueUseOverallLightness;
+      HueTheaterEnabled = settings.HueTheaterEnabled;
+      HueTheaterRestoreLights = settings.HueTheaterRestoreLights;
       BlackbarDetectionLinkAreas = settings.BlackbarDetectionLinkAreas;
       BlackbarDetectionHorizontal = settings.BlackbarDetectionHorizontal;
       BlackbarDetectionVertical = settings.BlackbarDetectionVertical;
@@ -360,6 +392,12 @@ namespace AtmoLight
       settings.StopAtmoWinOnExit = StopAtmoWinOnExit;
       settings.StartAtmoWinOnStart = StartAtmoWinOnStart;
       settings.RestartAtmoWinOnError = RestartAtmoWinOnError;
+      settings.AtmoWakeHelperEnabled =AtmoWakeHelperEnabled;
+      settings.AtmoWakeHelperComPort = AtmoWakeHelperComPort;
+      settings.AtmoWakeHelperResumeDelay = AtmoWakeHelperResumeDelay;
+      settings.AtmoWakeHelperDisconnectDelay = AtmoWakeHelperDisconnectDelay;
+      settings.AtmoWakeHelperConnectDelay = AtmoWakeHelperConnectDelay;
+      settings.AtmoWakeHelperReinitializationDelay = AtmoWakeHelperReinitializationDelay;
       settings.MonitorScreensaverState = MonitorScreensaverState;
       settings.StaticColorBlue = StaticColorBlue;
       settings.StaticColorGreen = StaticColorGreen;
@@ -418,6 +456,8 @@ namespace AtmoLight
       settings.HueMinDiversion = HueMinDiversion;
       settings.HueSaturation = HueSaturation;
       settings.HueUseOverallLightness = HueUseOverallLightness;
+      settings.HueTheaterEnabled = HueTheaterEnabled;
+      settings.HueTheaterRestoreLights = HueTheaterRestoreLights;
       settings.BlackbarDetectionLinkAreas = BlackbarDetectionLinkAreas;
       settings.BlackbarDetectionHorizontal = BlackbarDetectionHorizontal;
       settings.BlackbarDetectionVertical = BlackbarDetectionVertical;

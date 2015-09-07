@@ -141,6 +141,12 @@ namespace AtmoLight
       coreObject.atmoWinPath = settings.AtmoWinExe;
       coreObject.atmoWinAutoStart = settings.StartAtmoWinOnStart;
       coreObject.atmoWinAutoStop = settings.StopAtmoWinOnExit;
+      coreObject.atmoWakeHelperEnabled = settings.AtmoWakeHelperEnabled;
+      coreObject.atmoWakeHelperComPort = settings.AtmoWakeHelperComPort;
+      coreObject.atmoWakeHelperResumeDelay = settings.AtmoWakeHelperResumeDelay;
+      coreObject.atmoWakeHelperDisconnectDelay = settings.AtmoWakeHelperDisconnectDelay;
+      coreObject.atmoWakeHelperConnectDelay = settings.AtmoWakeHelperConnectDelay;
+      coreObject.atmoWakeHelperReinitializationDelay = settings.AtmoWakeHelperReinitializationDelay;
       if (settings.AtmoWinTarget)
       {
         coreObject.AddTarget(Target.AtmoWin);
@@ -192,6 +198,8 @@ namespace AtmoLight
       coreObject.hueMinDiversion = settings.HueMinDiversion;
       coreObject.hueSaturation = settings.HueSaturation;
       coreObject.hueUseOverallLightness = settings.HueUseOverallLightness;
+      coreObject.hueTheaterEnabled = settings.HueTheaterEnabled;
+      coreObject.hueTheaterRestoreLights = settings.HueTheaterRestoreLights;
       if (settings.HueTarget)
       {
         coreObject.AddTarget(Target.Hue);

@@ -385,6 +385,132 @@ namespace AtmoLight.Configuration
     }
   }
 
+  public class AtmoWakeHelperEnabled : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().AtmoWakeHelperEnabled;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AtmoWakeHelperEnabled = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().atmoWakeHelperEnabled = _yes;
+    }
+  }
+
+  public class AtmoWakeHelperComPort : Entry
+  {
+    public override void Load()
+    {
+      _value = SettingsManager.Load<Settings>().HueIP;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AtmoWakeHelperComPort = _value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().atmoWakeHelperComPort = _value;
+    }
+    public override int DisplayLength
+    {
+      get { return 5; }
+    }
+  }
+
+  public class AtmoWakeHelperResumeDelay : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 10000;
+      _value = SettingsManager.Load<Settings>().AtmoWakeHelperResumeDelay;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AtmoWakeHelperResumeDelay = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().atmoWakeHelperResumeDelay = (int)_value;
+    }
+  }
+
+  public class AtmoWakeHelperDisconnectDelay : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 10000;
+      _value = SettingsManager.Load<Settings>().AtmoWakeHelperDisconnectDelay;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AtmoWakeHelperDisconnectDelay = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().atmoWakeHelperDisconnectDelay = (int)_value;
+    }
+  }
+
+  public class AtmoWakeHelperConnectDelay : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 10000;
+      _value = SettingsManager.Load<Settings>().AtmoWakeHelperConnectDelay;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AtmoWakeHelperConnectDelay = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().atmoWakeHelperConnectDelay = (int)_value;
+    }
+  }
+  public class AtmoWakeHelperReinitializationDelay : LimitedNumberSelect
+  {
+    public override void Load()
+    {
+      _type = NumberType.Integer;
+      _step = 1;
+      _lowerLimit = 0;
+      _upperLimit = 10000;
+      _value = SettingsManager.Load<Settings>().AtmoWakeHelperReinitializationDelay;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.AtmoWakeHelperReinitializationDelay = (int)_value;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().atmoWakeHelperReinitializationDelay = (int)_value;
+    }
+  }
   public class LowCPU : YesNo
   {
     public delegate void SettingsChangedHandler();
@@ -1251,6 +1377,42 @@ namespace AtmoLight.Configuration
       SettingsManager.Save(settings);
 
       Core.GetInstance().hueUseOverallLightness = _yes;
+    }
+  }
+
+  public class HueTheaterEnabled : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().HueTheaterEnabled;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueTheaterEnabled = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueTheaterEnabled = _yes;
+    }
+  }
+
+  public class HueTheaterRestoreLights : YesNo
+  {
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().HueTheaterRestoreLights;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.HueTheaterRestoreLights = _yes;
+      SettingsManager.Save(settings);
+
+      Core.GetInstance().hueTheaterRestoreLights = _yes;
     }
   }
 
