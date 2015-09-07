@@ -54,12 +54,6 @@
       this.tbHyperionPort = new System.Windows.Forms.TextBox();
       this.lblHyperionPort = new System.Windows.Forms.Label();
       this.tabPageAtmowin = new System.Windows.Forms.TabPage();
-      this.grpAtmowinWakeHelper = new System.Windows.Forms.GroupBox();
-      this.lblAtmoWakeHelperResumeDelay = new System.Windows.Forms.Label();
-      this.tbAtmoWakeHelperResumeDelay = new System.Windows.Forms.TextBox();
-      this.lblAtmoWakeHelperComPort = new System.Windows.Forms.Label();
-      this.cbAtmoWakeHelperComPort = new System.Windows.Forms.ComboBox();
-      this.ckAtmoWakeHelperEnabled = new System.Windows.Forms.CheckBox();
       this.grpAtmowinSettings = new System.Windows.Forms.GroupBox();
       this.lblPathInfoAtmoWin = new System.Windows.Forms.Label();
       this.btnSelectFileAtmoWin = new System.Windows.Forms.Button();
@@ -237,6 +231,9 @@
       this.lblBoblightPort = new System.Windows.Forms.Label();
       this.lblBoblightIP = new System.Windows.Forms.Label();
       this.tabPageHue = new System.Windows.Forms.TabPage();
+      this.grpHueTheaterMode = new System.Windows.Forms.GroupBox();
+      this.ckHueTheaterRestoreLights = new System.Windows.Forms.CheckBox();
+      this.ckHueTheaterEnabled = new System.Windows.Forms.CheckBox();
       this.grpHueAverageColor = new System.Windows.Forms.GroupBox();
       this.cbHueOverallLightness = new System.Windows.Forms.CheckBox();
       this.tbHueSaturation = new System.Windows.Forms.TextBox();
@@ -267,17 +264,11 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
-      this.lblAtmoWakeHelperDisconnectDelay = new System.Windows.Forms.Label();
-      this.tbAtmoWakeHelperDisconnectDelay = new System.Windows.Forms.TextBox();
-      this.lblAtmoWakeHelperConnectDelay = new System.Windows.Forms.Label();
-      this.tbAtmoWakeHelperConnectDelay = new System.Windows.Forms.TextBox();
-      this.lblAtmoWakeHelperReinitializationDelay = new System.Windows.Forms.Label();
-      this.tbAtmoWakeHelperReinitializationDelay = new System.Windows.Forms.TextBox();
+      this.lblHintHueTheaterMode = new System.Windows.Forms.Label();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
       this.tabPageAtmowin.SuspendLayout();
-      this.grpAtmowinWakeHelper.SuspendLayout();
       this.grpAtmowinSettings.SuspendLayout();
       this.tabPageGeneric.SuspendLayout();
       this.grpTargets.SuspendLayout();
@@ -305,6 +296,7 @@
       ((System.ComponentModel.ISupportInitialize)(this.tbarBoblightSpeed)).BeginInit();
       this.grpBoblightGeneral.SuspendLayout();
       this.tabPageHue.SuspendLayout();
+      this.grpHueTheaterMode.SuspendLayout();
       this.grpHueAverageColor.SuspendLayout();
       this.grpHueGeneralSettings.SuspendLayout();
       this.grpHueNetworkSettings.SuspendLayout();
@@ -532,7 +524,6 @@
       // tabPageAtmowin
       // 
       this.tabPageAtmowin.BackColor = System.Drawing.SystemColors.Control;
-      this.tabPageAtmowin.Controls.Add(this.grpAtmowinWakeHelper);
       this.tabPageAtmowin.Controls.Add(this.grpAtmowinSettings);
       this.tabPageAtmowin.Location = new System.Drawing.Point(4, 22);
       this.tabPageAtmowin.Name = "tabPageAtmowin";
@@ -540,111 +531,6 @@
       this.tabPageAtmowin.Size = new System.Drawing.Size(842, 584);
       this.tabPageAtmowin.TabIndex = 1;
       this.tabPageAtmowin.Text = "Atmowin";
-      // 
-      // grpAtmowinWakeHelper
-      // 
-      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperReinitializationDelay);
-      this.grpAtmowinWakeHelper.Controls.Add(this.tbAtmoWakeHelperReinitializationDelay);
-      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperConnectDelay);
-      this.grpAtmowinWakeHelper.Controls.Add(this.tbAtmoWakeHelperConnectDelay);
-      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperDisconnectDelay);
-      this.grpAtmowinWakeHelper.Controls.Add(this.tbAtmoWakeHelperDisconnectDelay);
-      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperResumeDelay);
-      this.grpAtmowinWakeHelper.Controls.Add(this.tbAtmoWakeHelperResumeDelay);
-      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperComPort);
-      this.grpAtmowinWakeHelper.Controls.Add(this.cbAtmoWakeHelperComPort);
-      this.grpAtmowinWakeHelper.Controls.Add(this.ckAtmoWakeHelperEnabled);
-      this.grpAtmowinWakeHelper.Location = new System.Drawing.Point(13, 160);
-      this.grpAtmowinWakeHelper.Name = "grpAtmowinWakeHelper";
-      this.grpAtmowinWakeHelper.Size = new System.Drawing.Size(820, 233);
-      this.grpAtmowinWakeHelper.TabIndex = 27;
-      this.grpAtmowinWakeHelper.TabStop = false;
-      this.grpAtmowinWakeHelper.Text = "COM port wake helper (optional)";
-      // 
-      // lblAtmoWakeHelperResumeDelay
-      // 
-      this.lblAtmoWakeHelperResumeDelay.AutoSize = true;
-      this.lblAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(12, 81);
-      this.lblAtmoWakeHelperResumeDelay.Name = "lblAtmoWakeHelperResumeDelay";
-      this.lblAtmoWakeHelperResumeDelay.Size = new System.Drawing.Size(96, 13);
-      this.lblAtmoWakeHelperResumeDelay.TabIndex = 4;
-      this.lblAtmoWakeHelperResumeDelay.Text = "Resume delay (ms)";
-      // 
-      // tbAtmoWakeHelperResumeDelay
-      // 
-      this.tbAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(199, 78);
-      this.tbAtmoWakeHelperResumeDelay.Name = "tbAtmoWakeHelperResumeDelay";
-      this.tbAtmoWakeHelperResumeDelay.Size = new System.Drawing.Size(70, 20);
-      this.tbAtmoWakeHelperResumeDelay.TabIndex = 3;
-      this.tbAtmoWakeHelperResumeDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWakeHelperResumeDelay_Validating);
-      // 
-      // lblAtmoWakeHelperComPort
-      // 
-      this.lblAtmoWakeHelperComPort.AutoSize = true;
-      this.lblAtmoWakeHelperComPort.Location = new System.Drawing.Point(10, 46);
-      this.lblAtmoWakeHelperComPort.Name = "lblAtmoWakeHelperComPort";
-      this.lblAtmoWakeHelperComPort.Size = new System.Drawing.Size(98, 13);
-      this.lblAtmoWakeHelperComPort.TabIndex = 2;
-      this.lblAtmoWakeHelperComPort.Text = "AtmoWin COM port";
-      // 
-      // cbAtmoWakeHelperComPort
-      // 
-      this.cbAtmoWakeHelperComPort.FormattingEnabled = true;
-      this.cbAtmoWakeHelperComPort.Items.AddRange(new object[] {
-            "COM1",
-            "COM2",
-            "COM3",
-            "COM4",
-            "COM5",
-            "COM6",
-            "COM7",
-            "COM8",
-            "COM9",
-            "COM10",
-            "COM11",
-            "COM12",
-            "COM13",
-            "COM14",
-            "COM15",
-            "COM16",
-            "COM17",
-            "COM18",
-            "COM19",
-            "COM20",
-            "COM21",
-            "COM22",
-            "COM23",
-            "COM24",
-            "COM25",
-            "COM26",
-            "COM27",
-            "COM28",
-            "COM29",
-            "COM30",
-            "COM31",
-            "COM32",
-            "COM33",
-            "COM34",
-            "COM35",
-            "COM36",
-            "COM37",
-            "COM38",
-            "COM39",
-            "COM40"});
-      this.cbAtmoWakeHelperComPort.Location = new System.Drawing.Point(199, 43);
-      this.cbAtmoWakeHelperComPort.Name = "cbAtmoWakeHelperComPort";
-      this.cbAtmoWakeHelperComPort.Size = new System.Drawing.Size(70, 21);
-      this.cbAtmoWakeHelperComPort.TabIndex = 1;
-      // 
-      // ckAtmoWakeHelperEnabled
-      // 
-      this.ckAtmoWakeHelperEnabled.AutoSize = true;
-      this.ckAtmoWakeHelperEnabled.Location = new System.Drawing.Point(10, 19);
-      this.ckAtmoWakeHelperEnabled.Name = "ckAtmoWakeHelperEnabled";
-      this.ckAtmoWakeHelperEnabled.Size = new System.Drawing.Size(65, 17);
-      this.ckAtmoWakeHelperEnabled.TabIndex = 0;
-      this.ckAtmoWakeHelperEnabled.Text = "Enabled";
-      this.ckAtmoWakeHelperEnabled.UseVisualStyleBackColor = true;
       // 
       // grpAtmowinSettings
       // 
@@ -2504,6 +2390,7 @@
       // tabPageHue
       // 
       this.tabPageHue.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageHue.Controls.Add(this.grpHueTheaterMode);
       this.tabPageHue.Controls.Add(this.grpHueAverageColor);
       this.tabPageHue.Controls.Add(this.grpHueGeneralSettings);
       this.tabPageHue.Controls.Add(this.grpHueNetworkSettings);
@@ -2512,6 +2399,40 @@
       this.tabPageHue.Size = new System.Drawing.Size(842, 584);
       this.tabPageHue.TabIndex = 3;
       this.tabPageHue.Text = "Hue";
+      // 
+      // grpHueTheaterMode
+      // 
+      this.grpHueTheaterMode.Controls.Add(this.lblHintHueTheaterMode);
+      this.grpHueTheaterMode.Controls.Add(this.ckHueTheaterRestoreLights);
+      this.grpHueTheaterMode.Controls.Add(this.ckHueTheaterEnabled);
+      this.grpHueTheaterMode.Location = new System.Drawing.Point(10, 452);
+      this.grpHueTheaterMode.Name = "grpHueTheaterMode";
+      this.grpHueTheaterMode.Size = new System.Drawing.Size(820, 129);
+      this.grpHueTheaterMode.TabIndex = 29;
+      this.grpHueTheaterMode.TabStop = false;
+      this.grpHueTheaterMode.Text = "Theater mode";
+      // 
+      // ckHueTheaterRestoreLights
+      // 
+      this.ckHueTheaterRestoreLights.AutoSize = true;
+      this.ckHueTheaterRestoreLights.Location = new System.Drawing.Point(6, 82);
+      this.ckHueTheaterRestoreLights.Name = "ckHueTheaterRestoreLights";
+      this.ckHueTheaterRestoreLights.Size = new System.Drawing.Size(201, 17);
+      this.ckHueTheaterRestoreLights.TabIndex = 8;
+      this.ckHueTheaterRestoreLights.Text = "Restore lights after playback stopped";
+      this.ckHueTheaterRestoreLights.UseVisualStyleBackColor = true;
+      // 
+      // ckHueTheaterEnabled
+      // 
+      this.ckHueTheaterEnabled.AutoSize = true;
+      this.ckHueTheaterEnabled.Checked = true;
+      this.ckHueTheaterEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.ckHueTheaterEnabled.Location = new System.Drawing.Point(6, 57);
+      this.ckHueTheaterEnabled.Name = "ckHueTheaterEnabled";
+      this.ckHueTheaterEnabled.Size = new System.Drawing.Size(124, 17);
+      this.ckHueTheaterEnabled.TabIndex = 7;
+      this.ckHueTheaterEnabled.Text = "Enable theater mode";
+      this.ckHueTheaterEnabled.UseVisualStyleBackColor = true;
       // 
       // grpHueAverageColor
       // 
@@ -2802,56 +2723,15 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
-      // lblAtmoWakeHelperDisconnectDelay
+      // lblHintHueTheaterMode
       // 
-      this.lblAtmoWakeHelperDisconnectDelay.AutoSize = true;
-      this.lblAtmoWakeHelperDisconnectDelay.Location = new System.Drawing.Point(12, 117);
-      this.lblAtmoWakeHelperDisconnectDelay.Name = "lblAtmoWakeHelperDisconnectDelay";
-      this.lblAtmoWakeHelperDisconnectDelay.Size = new System.Drawing.Size(111, 13);
-      this.lblAtmoWakeHelperDisconnectDelay.TabIndex = 6;
-      this.lblAtmoWakeHelperDisconnectDelay.Text = "Disconnect delay (ms)";
-      // 
-      // tbAtmoWakeHelperDisconnectDelay
-      // 
-      this.tbAtmoWakeHelperDisconnectDelay.Location = new System.Drawing.Point(199, 114);
-      this.tbAtmoWakeHelperDisconnectDelay.Name = "tbAtmoWakeHelperDisconnectDelay";
-      this.tbAtmoWakeHelperDisconnectDelay.Size = new System.Drawing.Size(70, 20);
-      this.tbAtmoWakeHelperDisconnectDelay.TabIndex = 5;
-      this.tbAtmoWakeHelperDisconnectDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWakeHelperDisconnectDelay_Validating);
-      // 
-      // lblAtmoWakeHelperConnectDelay
-      // 
-      this.lblAtmoWakeHelperConnectDelay.AutoSize = true;
-      this.lblAtmoWakeHelperConnectDelay.Location = new System.Drawing.Point(12, 156);
-      this.lblAtmoWakeHelperConnectDelay.Name = "lblAtmoWakeHelperConnectDelay";
-      this.lblAtmoWakeHelperConnectDelay.Size = new System.Drawing.Size(97, 13);
-      this.lblAtmoWakeHelperConnectDelay.TabIndex = 8;
-      this.lblAtmoWakeHelperConnectDelay.Text = "Connect delay (ms)";
-      // 
-      // tbAtmoWakeHelperConnectDelay
-      // 
-      this.tbAtmoWakeHelperConnectDelay.Location = new System.Drawing.Point(199, 153);
-      this.tbAtmoWakeHelperConnectDelay.Name = "tbAtmoWakeHelperConnectDelay";
-      this.tbAtmoWakeHelperConnectDelay.Size = new System.Drawing.Size(70, 20);
-      this.tbAtmoWakeHelperConnectDelay.TabIndex = 7;
-      this.tbAtmoWakeHelperConnectDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWakeHelperConnectDelay_Validating);
-      // 
-      // lblAtmoWakeHelperReinitializationDelay
-      // 
-      this.lblAtmoWakeHelperReinitializationDelay.AutoSize = true;
-      this.lblAtmoWakeHelperReinitializationDelay.Location = new System.Drawing.Point(12, 196);
-      this.lblAtmoWakeHelperReinitializationDelay.Name = "lblAtmoWakeHelperReinitializationDelay";
-      this.lblAtmoWakeHelperReinitializationDelay.Size = new System.Drawing.Size(124, 13);
-      this.lblAtmoWakeHelperReinitializationDelay.TabIndex = 10;
-      this.lblAtmoWakeHelperReinitializationDelay.Text = "Reinitialization delay (ms)";
-      // 
-      // tbAtmoWakeHelperReinitializationDelay
-      // 
-      this.tbAtmoWakeHelperReinitializationDelay.Location = new System.Drawing.Point(199, 193);
-      this.tbAtmoWakeHelperReinitializationDelay.Name = "tbAtmoWakeHelperReinitializationDelay";
-      this.tbAtmoWakeHelperReinitializationDelay.Size = new System.Drawing.Size(70, 20);
-      this.tbAtmoWakeHelperReinitializationDelay.TabIndex = 9;
-      this.tbAtmoWakeHelperReinitializationDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWakeHelperReinitializationDelay_Validating);
+      this.lblHintHueTheaterMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.lblHintHueTheaterMode.Location = new System.Drawing.Point(3, 27);
+      this.lblHintHueTheaterMode.Name = "lblHintHueTheaterMode";
+      this.lblHintHueTheaterMode.Size = new System.Drawing.Size(796, 13);
+      this.lblHintHueTheaterMode.TabIndex = 22;
+      this.lblHintHueTheaterMode.Text = "Hint: when theater mode is enabled the lights will turn off during movie playback" +
+    " and back on after playback if that option is enabled";
       // 
       // SetupForm
       // 
@@ -2877,8 +2757,6 @@
       this.grpHyperionNetworkSettings.ResumeLayout(false);
       this.grpHyperionNetworkSettings.PerformLayout();
       this.tabPageAtmowin.ResumeLayout(false);
-      this.grpAtmowinWakeHelper.ResumeLayout(false);
-      this.grpAtmowinWakeHelper.PerformLayout();
       this.grpAtmowinSettings.ResumeLayout(false);
       this.grpAtmowinSettings.PerformLayout();
       this.tabPageGeneric.ResumeLayout(false);
@@ -2921,6 +2799,8 @@
       this.grpBoblightGeneral.ResumeLayout(false);
       this.grpBoblightGeneral.PerformLayout();
       this.tabPageHue.ResumeLayout(false);
+      this.grpHueTheaterMode.ResumeLayout(false);
+      this.grpHueTheaterMode.PerformLayout();
       this.grpHueAverageColor.ResumeLayout(false);
       this.grpHueAverageColor.PerformLayout();
       this.grpHueGeneralSettings.ResumeLayout(false);
@@ -3166,17 +3046,9 @@
     private System.Windows.Forms.CheckBox cbBlackbarDetectionHorizontal;
     private System.Windows.Forms.CheckBox cbBlackbarDetectionLinkAreas;
     private System.Windows.Forms.CheckBox ckMonitorWindowState;
-    private System.Windows.Forms.GroupBox grpAtmowinWakeHelper;
-    private System.Windows.Forms.ComboBox cbAtmoWakeHelperComPort;
-    private System.Windows.Forms.CheckBox ckAtmoWakeHelperEnabled;
-    private System.Windows.Forms.Label lblAtmoWakeHelperComPort;
-    private System.Windows.Forms.TextBox tbAtmoWakeHelperResumeDelay;
-    private System.Windows.Forms.Label lblAtmoWakeHelperResumeDelay;
-    private System.Windows.Forms.Label lblAtmoWakeHelperReinitializationDelay;
-    private System.Windows.Forms.TextBox tbAtmoWakeHelperReinitializationDelay;
-    private System.Windows.Forms.Label lblAtmoWakeHelperConnectDelay;
-    private System.Windows.Forms.TextBox tbAtmoWakeHelperConnectDelay;
-    private System.Windows.Forms.Label lblAtmoWakeHelperDisconnectDelay;
-    private System.Windows.Forms.TextBox tbAtmoWakeHelperDisconnectDelay;
+    private System.Windows.Forms.GroupBox grpHueTheaterMode;
+    private System.Windows.Forms.CheckBox ckHueTheaterRestoreLights;
+    private System.Windows.Forms.CheckBox ckHueTheaterEnabled;
+    private System.Windows.Forms.Label lblHintHueTheaterMode;
   }
 }

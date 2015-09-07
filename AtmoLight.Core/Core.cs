@@ -187,6 +187,9 @@ namespace AtmoLight
     public int hueMinDiversion;
     public bool hueUseOverallLightness;
     public double hueSaturation;
+    public bool hueTheaterEnabled;
+    public bool hueTheaterRestoreLights;
+
     #endregion
 
     #region Constructor/Deconstructor

@@ -235,6 +235,9 @@ namespace AtmoLight
       coreObject.hueBlackThreshold = Settings.hueBlackThreshold;
       coreObject.hueSaturation = Settings.hueSaturation;
       coreObject.hueUseOverallLightness = Settings.hueUseOverallLightness;
+      coreObject.hueTheaterEnabled = Settings.hueTheaterEnabled;
+      coreObject.hueTheaterRestoreLights = Settings.hueTheaterRestoreLights;
+
       if (Settings.hueTarget)
       {
         coreObject.AddTarget(Target.Hue);
