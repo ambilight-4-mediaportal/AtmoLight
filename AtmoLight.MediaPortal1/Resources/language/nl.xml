@@ -92,7 +92,7 @@
     <string name="MenuHint">Gebruik het context menu om tussen effecten te wisselen, schakel de leds in/uit of wissel tussen 3D-SBS modus.</string>
     <string name="TargetHint">Hint: Selecteer de apparaten welke je bij AtmoLight wilt gebruiken en stel deze in op het daarvoor bedoelde tabblad</string>
     <string name="CaptureDimensionHint">Hint: Wordt alleen gebruikt wanneer Atmowin niet ingeschakeld is</string>
-    <string name="BlackbarDetectionLinkAreas">Zwarte balken detectie link locatie's (Onder naar Boven en van Links naar Rechts)</string>
+    <string name="BlackbarDetectionLinkAreas">Zwarte balken detectie link locatie's (Boven naar Onder en van Links naar Rechts)</string>
     <string name="BlackbarDetectionHorizontal">Blackbar detectie horizontale scan</string>
     <string name="BlackbarDetectionVertical">Blackbar detectie verticale scan</string>
   </SetupForm>
