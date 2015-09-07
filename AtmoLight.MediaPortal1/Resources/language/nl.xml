@@ -92,6 +92,9 @@
     <string name="MenuHint">Gebruik het context menu om tussen effecten te wisselen, schakel de leds in/uit of wissel tussen 3D-SBS modus.</string>
     <string name="TargetHint">Hint: Selecteer de apparaten welke je bij AtmoLight wilt gebruiken en stel deze in op het daarvoor bedoelde tabblad</string>
     <string name="CaptureDimensionHint">Hint: Wordt alleen gebruikt wanneer Atmowin niet ingeschakeld is</string>
+    <string name="BlackbarDetectionLinkAreas">Zwarte balken detectie link locatie's (Onder naar Boven en van Links naar Rechts)</string>
+    <string name="BlackbarDetectionHorizontal">Blackbar detectie horizontale scan</string>
+    <string name="BlackbarDetectionVertical">Blackbar detectie verticale scan</string>
   </SetupForm>
   <ContextMenu>
     <string name="LEDsOn">Schakel LEDs in</string>
@@ -122,7 +125,14 @@
     <string name="Connect2">Wil je opnieuw verbinden?</string>
     <string name="BlackbarDetectionOn">Schakel zwarte balk detectie in</string>
     <string name="BlackbarDetectionOff">Schakel zwarte balk detectie uit</string>
+    <string name="BlackbarDetection">Zwarte balken detectie</string>
+    <string name="BlackbarDetectionDisableManual">Shakel automatische detectie in</string>
+    <string name="BlackbarDetection1.33:1">Handmatig 1.33:1 (4x3)</string>
+    <string name="BlackbarDetection1.78:1">Handmatig 1.78:1 (16x9)</string>
+    <string name="BlackbarDetection1.85:1">Handmatig 1.85:1</string>
+    <string name="BlackbarDetection2.35:1">Handmatig 2.35:1 (21x9)</string>
     <string name="Reinitialise">Opnieuw verbinden met alle doelwitten</string>
+    <string name="AtmoLightDisabled">AtmoLight uitgeschakeld</string>
   </ContextMenu>
   <AmbiBox>
     <string name="AmbiBox">AmbiBox</string>
@@ -147,6 +157,9 @@
     <string name="AtmoWakeHelperEnabled">Ingeschakeld</string>
     <string name="AtmoWakeHelperComPort">AtmoWin COM poort</string>
     <string name="AtmoWakeHelperResumeDelay">Hervatten vertraging (ms)</string>
+    <string name="AtmoWakeHelperDisconnectDelay">Verbreek vertraging (ms)</string>
+    <string name="AtmoWakeHelperConnectDelay">Opnieuw verbinden vertraging (ms)</string>
+    <string name="AtmoWakeHelperReinitializationDelay">Herinitialisatie vertraging (ms)</string>
   </AtmoWin>
   <Boblight>
     <string name="Boblight">Boblight</string>
@@ -162,6 +175,8 @@
     <string name="RemoteMachine">AtmoHue is op externe machine (schakelt bestand/pad controle uit)</string>
     <string name="EnableBridgeOnResume">Zet Hue Bridge aan wanneer de machine hervat uit standby</string>
     <string name="DisableBridgeonSuspend">Zet Hue Bridge uit tijdens standby</string>
+    <string name="HueTheaterEnabled">Theather modus ingeschakeld</string>
+    <string name="HueTheaterRestoreLights">Herstel lichten wanneer video stopt</string>
     <string name="AverageColor">Gemiddelde kleur instellingen</string>
     <string name="All">Alle</string>
     <string name="Off">Uit</string>
@@ -170,6 +185,7 @@
     <string name="StaticColorGroup">Hue - stel statische kleur in voor groep</string>
     <string name="SelectStaticColorGroup">Hue - selecteer statische kleur voor groep</string>
     <string name="Hint">Hint: vereist dat AtmoHue draait op bovenstaande IP en port, vul hier niet je Hue Bridge informatie in</string>
+    <string name="HintTheaterMode">Hint: wanneer theater modus is ingeschakeld zal deze de lichten uitzetten tijdens afspelen van een video en weer aan wanneer de video gestopt wordt indien deze optie is ingeschakeld</string>
   </Hue>
   <Hyperion>
     <string name="Hyperion">Hyperion</string>
