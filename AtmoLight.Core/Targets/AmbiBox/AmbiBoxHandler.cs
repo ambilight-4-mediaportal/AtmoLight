@@ -39,7 +39,6 @@ namespace AtmoLight
     private Core coreObject = Core.GetInstance();
     private volatile bool changeImageLock = false;
     private volatile bool initLock = false;
-    private volatile bool firstConnectionPass = false;
 
     private Thread initThreadHelper;
 
@@ -62,7 +61,6 @@ namespace AtmoLight
     {
       if (!initLock)
       {
-        firstConnectionPass = true;
         initThreadHelper = new Thread(() => InitThreaded(force));
         initThreadHelper.Name = "AtmoLight AmbiBox Init";
         initThreadHelper.IsBackground = true;
@@ -311,7 +309,7 @@ namespace AtmoLight
         viewStream.Close();
         changeImageLock = false;
       }
-      catch (Exception e)
+      catch (Exception)
       {
         changeImageLock = false;
         //firstConnectionPass = false;
