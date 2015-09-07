@@ -237,11 +237,37 @@ namespace AtmoLight
       if (!ChangeEffect(coreObject.GetCurrentEffect())) return;
     }
 
-    public void PowerModeChanged(PowerModes powerMode)
+    public void 
+      PowerModeChanged(PowerModes powerMode)
     {
       if (powerMode == PowerModes.Resume)
       {
-        ChangeEffect(coreObject.GetCurrentEffect());
+        //AtmoWakeHelper
+        if (coreObject.atmoWakeHelperEnabled)
+        {
+          // Set lock to prevent it from reinitializing during COM reconnection
+          reInitialiseLock = true;
+          Log.Debug("AtmoWinHandler - [AtmoWakeHelper] locking reinit during reconnection of COM port");
+          Disconnect();
+          StopAtmoWin();
+
+          // Reconnect COM ports and setting user configured delays
+          AtmoLight.Targets.AtmoWin.AtmoWakeHelper.disconnectDelay = coreObject.atmoWakeHelperDisconnectDelay;
+          AtmoLight.Targets.AtmoWin.AtmoWakeHelper.connectDelay = coreObject.atmoWakeHelperConnectDelay;
+
+          Log.Debug("AtmoWinHandler - [AtmoWakeHelper] reconnecting COM port");
+          AtmoLight.Targets.AtmoWin.AtmoWakeHelper.reconnectCOM(coreObject.atmoWakeHelperComPort, coreObject.atmoWakeHelperResumeDelay);
+          Log.Debug("AtmoWinHandler - [AtmoWakeHelper] reconnected COM ports and releasing reinit lock");
+          Thread.Sleep(AtmoLight.Targets.AtmoWin.AtmoWakeHelper.connectDelay = coreObject.atmoWakeHelperReinitializationDelay);
+          reInitialiseLock = false;
+          Log.Debug("AtmoWinHandler - [AtmoWakeHelper] started reinit");
+          ReInitialise(true);
+        }
+        else
+        {
+          ChangeEffect(coreObject.GetCurrentEffect());
+        }
+
       }
       else if (powerMode == PowerModes.Suspend)
       {
@@ -308,6 +334,7 @@ namespace AtmoLight
         Log.Debug("AtmoWinHandler - Reinitialising locked.");
         return;
       }
+
       if (!coreObject.reInitOnError && !force)
       {
         Disconnect();
@@ -319,7 +346,7 @@ namespace AtmoLight
       reInitialiseLock = true;
       Log.Debug("AtmoWinHandler - Reinitialising.");
 
-      if (!Disconnect() || !StopAtmoWin() || !InitialiseThreaded(force))
+      if (!Disconnect() || !StopAtmoWin() ||  !InitialiseThreaded(force))
       {
         Disconnect();
         StopAtmoWin();
@@ -375,6 +402,10 @@ namespace AtmoLight
         Marshal.ReleaseComObject(atmoLiveViewControl);
         atmoLiveViewControl = null;
       }
+
+      // Sleep timer to avoid Windows being to quick upon COM port unlocking
+      Thread.Sleep(1500);
+
       return true;
     }
 

@@ -208,63 +208,6 @@ namespace AtmoLight
       {
         changeImageLock = true;
 
-        /*
-        if (coreObject.ambiBoxFirstConnectionPass)
-        {
-          firstConnectionPass = false;
-
-          try
-          {
-            viewStream.Close();
-          }
-          catch (Exception e)
-          {
-            Log.Error("Error while closing viewstream");
-            Log.Error(e.Message);
-          }
-
-          try
-          {
-            mmap = null;
-          }
-          catch (Exception e)
-          {
-            Log.Error("Error while clearing memory map");
-          }
-
-          try
-          {
-            mmap = MemoryMappedFile.CreateOrOpen("AmbiBox_XBMC_SharedMemory", pixeldata.Length + 11,
-              MemoryMappedFileAccess.ReadWrite, MemoryMappedFileOptions.None, null, HandleInheritability.Inheritable);
-          }
-          catch (Exception e)
-          {
-            Log.Error("Error while creating memory map");
-            Log.Error(e.Message);
-          }
-
-          try
-          {
-            viewStream = null;
-          }
-          catch (Exception e)
-          {
-            Log.Error("Error while clearing viewstream");
-            Log.Error(e.Message);
-          }
-
-          try
-          {
-            viewStream = mmap.CreateViewStream();
-          }
-          catch (Exception e)
-          {
-            Log.Error("Error while creating viewstream");
-            Log.Error(e.Message);
-          }
-        }
-         */
-
         MemoryMappedFile mmap = MemoryMappedFile.CreateOrOpen("AmbiBox_XBMC_SharedMemory", pixeldata.Length + 11,
           MemoryMappedFileAccess.ReadWrite, MemoryMappedFileOptions.None, null, HandleInheritability.Inheritable);
 

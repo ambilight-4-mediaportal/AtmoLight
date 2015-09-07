@@ -38,6 +38,20 @@
               <ZipFileName>Installer{CopyFile}\{d79ac7b0-ad9d-4428-ad98-860bad85324d}-Google.ProtocolBuffers.dll</ZipFileName>
               <DestinationFilename>%Plugins%\process\Google.ProtocolBuffers.dll</DestinationFilename>
             </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>AlwaysOverwrite</UpdateOption>
+              <LocalFileName>..\Packages\USBDeview\USBDeview.exe</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{f6f2d950-e19b-4fd2-aa27-41b9fadbb7c5}-USBDeview.exe</ZipFileName>
+              <DestinationFilename>%Base%\USBDeview.exe</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>AlwaysOverwrite</UpdateOption>
+              <LocalFileName>..\Packages\USBDeview\USBDeview-x86.exe</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ccd6658c-73d6-40d1-b1a2-23f6f90769da}-USBDeview-x86.exe</ZipFileName>
+              <DestinationFilename>%Base%\USBDeview-x86.exe</DestinationFilename>
+            </FileItem>
           </Items>
         </Files>
       </GroupItem>
@@ -275,7 +289,23 @@ public static void Main(PackageClass packageClass, ActionItem actionItem)
     </Items>
   </Dependencies>
   <PluginDependencies>
-    <Items />
+    <Items>
+      <PluginDependencyItem AssemblyName="AtmoLight.MediaPortal1.dll">
+        <CompatibleVersion>
+          <Items>
+            <CompatibleVersionItem>
+              <MinRequiredVersion>1.1.6.27652</MinRequiredVersion>
+              <DesignedForVersion>1.1.6.27652</DesignedForVersion>
+            </CompatibleVersionItem>
+          </Items>
+        </CompatibleVersion>
+        <SubSystemsUsed>
+          <Items>
+            <SubSystemItem Name="MP.Config" />
+          </Items>
+        </SubSystemsUsed>
+      </PluginDependencyItem>
+    </Items>
   </PluginDependencies>
   <GeneralInfo>
     <Name>AtmoLight</Name>
@@ -288,7 +318,7 @@ public static void Main(PackageClass packageClass, ActionItem actionItem)
       <Major>1</Major>
       <Minor>16</Minor>
       <Build>1</Build>
-      <Revision>30</Revision>
+      <Revision>36</Revision>
     </Version>
     <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
 
@@ -409,6 +439,20 @@ Version 1.16.1.12
         <LocalFileName>..\AtmoLight.Core\bin\Release\Google.ProtocolBuffers.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{d79ac7b0-ad9d-4428-ad98-860bad85324d}-Google.ProtocolBuffers.dll</ZipFileName>
         <DestinationFilename>%Plugins%\process\Google.ProtocolBuffers.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>AlwaysOverwrite</UpdateOption>
+        <LocalFileName>..\Packages\USBDeview\USBDeview.exe</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{f6f2d950-e19b-4fd2-aa27-41b9fadbb7c5}-USBDeview.exe</ZipFileName>
+        <DestinationFilename>%Base%\USBDeview.exe</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>AlwaysOverwrite</UpdateOption>
+        <LocalFileName>..\Packages\USBDeview\USBDeview-x86.exe</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ccd6658c-73d6-40d1-b1a2-23f6f90769da}-USBDeview-x86.exe</ZipFileName>
+        <DestinationFilename>%Base%\USBDeview-x86.exe</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />

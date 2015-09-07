@@ -143,6 +143,10 @@
   </AtmoOrb>
   <AtmoWin>
     <string name="AtmoWin">AtmoWin</string>
+    <string name="AtmoWakeHelperDescription">COM port wake helper (optioneel)</string>
+    <string name="AtmoWakeHelperEnabled">Ingeschakeld</string>
+    <string name="AtmoWakeHelperComPort">AtmoWin COM poort</string>
+    <string name="AtmoWakeHelperResumeDelay">Hervatten vertraging (ms)</string>
   </AtmoWin>
   <Boblight>
     <string name="Boblight">Boblight</string>

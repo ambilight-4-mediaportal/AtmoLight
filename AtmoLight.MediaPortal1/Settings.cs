@@ -54,6 +54,12 @@ namespace AtmoLight
     public static string atmowinExe;
     public static bool startAtmoWin;
     public static bool exitAtmoWin;
+    public static bool atmoWakeHelperEnabled;
+    public static string atmoWakeHelperComPort;
+    public static int atmoWakeHelperResumeDelay;
+    public static int atmoWakeHelperDisconnectDelay;
+    public static int atmoWakeHelperConnectDelay;
+    public static int atmoWakeHelperReinitializationDelay;
 
     // Boblight
     public static bool boblightTarget;
@@ -236,6 +242,12 @@ namespace AtmoLight
         delayReferenceTime = reader.GetValueAsInt("atmolight", "DelayTime", 0);
         exitAtmoWin = reader.GetValueAsBool("atmolight", "ExitAtmoWin", true);
         startAtmoWin = reader.GetValueAsBool("atmolight", "StartAtmoWin", true);
+        atmoWakeHelperEnabled = reader.GetValueAsBool("atmolight", "atmoWakeHelperEnabled", false);
+        atmoWakeHelperComPort = reader.GetValueAsString("atmolight", "atmoWakeHelperComPort", "");
+        atmoWakeHelperResumeDelay = reader.GetValueAsInt("atmolight", "atmoWakeHelperResumeDelay", 2500);
+        atmoWakeHelperDisconnectDelay = reader.GetValueAsInt("atmolight", "atmoWakeHelperDisconnectDelay", 1500);
+        atmoWakeHelperConnectDelay = reader.GetValueAsInt("atmolight", "atmoWakeHelperConnectDelay", 1500);
+        atmoWakeHelperReinitializationDelay = reader.GetValueAsInt("atmolight", "atmoWakeHelperReinitializationDelay", 0);
         staticColorRed = reader.GetValueAsInt("atmolight", "StaticColorRed", 0);
         staticColorGreen = reader.GetValueAsInt("atmolight", "StaticColorGreen", 0);
         staticColorBlue = reader.GetValueAsInt("atmolight", "StaticColorBlue", 0);
@@ -344,6 +356,12 @@ namespace AtmoLight
         reader.SetValue("atmolight", "DelayTime", delayReferenceTime);
         reader.SetValueAsBool("atmolight", "ExitAtmoWin", exitAtmoWin);
         reader.SetValueAsBool("atmolight", "StartAtmoWin", startAtmoWin);
+        reader.SetValueAsBool("atmolight", "atmoWakeHelperEnabled", atmoWakeHelperEnabled);
+        reader.SetValue("atmolight", "atmoWakeHelperComPort", atmoWakeHelperComPort);
+        reader.SetValue("atmolight", "atmoWakeHelperResumeDelay", atmoWakeHelperResumeDelay);
+        reader.SetValue("atmolight", "atmoWakeHelperDisconnectDelay", atmoWakeHelperDisconnectDelay);
+        reader.SetValue("atmolight", "atmoWakeHelperConnectDelay", atmoWakeHelperConnectDelay);
+        reader.SetValue("atmolight", "atmoWakeHelperReinitializationDelay", atmoWakeHelperReinitializationDelay);
         reader.SetValue("atmolight", "excludeTimeStart", excludeTimeStart.ToString("HH:mm"));
         reader.SetValue("atmolight", "excludeTimeEnd", excludeTimeEnd.ToString("HH:mm"));
         reader.SetValue("atmolight", "CurrentLanguageFile", currentLanguageFile);

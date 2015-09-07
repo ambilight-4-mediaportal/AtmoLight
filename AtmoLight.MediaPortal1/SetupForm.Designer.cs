@@ -54,6 +54,12 @@
       this.tbHyperionPort = new System.Windows.Forms.TextBox();
       this.lblHyperionPort = new System.Windows.Forms.Label();
       this.tabPageAtmowin = new System.Windows.Forms.TabPage();
+      this.grpAtmowinWakeHelper = new System.Windows.Forms.GroupBox();
+      this.lblAtmoWakeHelperResumeDelay = new System.Windows.Forms.Label();
+      this.tbAtmoWakeHelperResumeDelay = new System.Windows.Forms.TextBox();
+      this.lblAtmoWakeHelperComPort = new System.Windows.Forms.Label();
+      this.cbAtmoWakeHelperComPort = new System.Windows.Forms.ComboBox();
+      this.ckAtmoWakeHelperEnabled = new System.Windows.Forms.CheckBox();
       this.grpAtmowinSettings = new System.Windows.Forms.GroupBox();
       this.lblPathInfoAtmoWin = new System.Windows.Forms.Label();
       this.btnSelectFileAtmoWin = new System.Windows.Forms.Button();
@@ -99,6 +105,7 @@
       this.cbVideo = new System.Windows.Forms.ComboBox();
       this.lblVidTvRec = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
+      this.ckMonitorWindowState = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionVertical = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionHorizontal = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionLinkAreas = new System.Windows.Forms.CheckBox();
@@ -260,11 +267,17 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
-      this.ckMonitorWindowState = new System.Windows.Forms.CheckBox();
+      this.lblAtmoWakeHelperDisconnectDelay = new System.Windows.Forms.Label();
+      this.tbAtmoWakeHelperDisconnectDelay = new System.Windows.Forms.TextBox();
+      this.lblAtmoWakeHelperConnectDelay = new System.Windows.Forms.Label();
+      this.tbAtmoWakeHelperConnectDelay = new System.Windows.Forms.TextBox();
+      this.lblAtmoWakeHelperReinitializationDelay = new System.Windows.Forms.Label();
+      this.tbAtmoWakeHelperReinitializationDelay = new System.Windows.Forms.TextBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
       this.tabPageAtmowin.SuspendLayout();
+      this.grpAtmowinWakeHelper.SuspendLayout();
       this.grpAtmowinSettings.SuspendLayout();
       this.tabPageGeneric.SuspendLayout();
       this.grpTargets.SuspendLayout();
@@ -519,6 +532,7 @@
       // tabPageAtmowin
       // 
       this.tabPageAtmowin.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageAtmowin.Controls.Add(this.grpAtmowinWakeHelper);
       this.tabPageAtmowin.Controls.Add(this.grpAtmowinSettings);
       this.tabPageAtmowin.Location = new System.Drawing.Point(4, 22);
       this.tabPageAtmowin.Name = "tabPageAtmowin";
@@ -526,6 +540,111 @@
       this.tabPageAtmowin.Size = new System.Drawing.Size(842, 584);
       this.tabPageAtmowin.TabIndex = 1;
       this.tabPageAtmowin.Text = "Atmowin";
+      // 
+      // grpAtmowinWakeHelper
+      // 
+      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperReinitializationDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.tbAtmoWakeHelperReinitializationDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperConnectDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.tbAtmoWakeHelperConnectDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperDisconnectDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.tbAtmoWakeHelperDisconnectDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperResumeDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.tbAtmoWakeHelperResumeDelay);
+      this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperComPort);
+      this.grpAtmowinWakeHelper.Controls.Add(this.cbAtmoWakeHelperComPort);
+      this.grpAtmowinWakeHelper.Controls.Add(this.ckAtmoWakeHelperEnabled);
+      this.grpAtmowinWakeHelper.Location = new System.Drawing.Point(13, 160);
+      this.grpAtmowinWakeHelper.Name = "grpAtmowinWakeHelper";
+      this.grpAtmowinWakeHelper.Size = new System.Drawing.Size(820, 233);
+      this.grpAtmowinWakeHelper.TabIndex = 27;
+      this.grpAtmowinWakeHelper.TabStop = false;
+      this.grpAtmowinWakeHelper.Text = "COM port wake helper (optional)";
+      // 
+      // lblAtmoWakeHelperResumeDelay
+      // 
+      this.lblAtmoWakeHelperResumeDelay.AutoSize = true;
+      this.lblAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(12, 81);
+      this.lblAtmoWakeHelperResumeDelay.Name = "lblAtmoWakeHelperResumeDelay";
+      this.lblAtmoWakeHelperResumeDelay.Size = new System.Drawing.Size(96, 13);
+      this.lblAtmoWakeHelperResumeDelay.TabIndex = 4;
+      this.lblAtmoWakeHelperResumeDelay.Text = "Resume delay (ms)";
+      // 
+      // tbAtmoWakeHelperResumeDelay
+      // 
+      this.tbAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(199, 78);
+      this.tbAtmoWakeHelperResumeDelay.Name = "tbAtmoWakeHelperResumeDelay";
+      this.tbAtmoWakeHelperResumeDelay.Size = new System.Drawing.Size(70, 20);
+      this.tbAtmoWakeHelperResumeDelay.TabIndex = 3;
+      this.tbAtmoWakeHelperResumeDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWakeHelperResumeDelay_Validating);
+      // 
+      // lblAtmoWakeHelperComPort
+      // 
+      this.lblAtmoWakeHelperComPort.AutoSize = true;
+      this.lblAtmoWakeHelperComPort.Location = new System.Drawing.Point(10, 46);
+      this.lblAtmoWakeHelperComPort.Name = "lblAtmoWakeHelperComPort";
+      this.lblAtmoWakeHelperComPort.Size = new System.Drawing.Size(98, 13);
+      this.lblAtmoWakeHelperComPort.TabIndex = 2;
+      this.lblAtmoWakeHelperComPort.Text = "AtmoWin COM port";
+      // 
+      // cbAtmoWakeHelperComPort
+      // 
+      this.cbAtmoWakeHelperComPort.FormattingEnabled = true;
+      this.cbAtmoWakeHelperComPort.Items.AddRange(new object[] {
+            "COM1",
+            "COM2",
+            "COM3",
+            "COM4",
+            "COM5",
+            "COM6",
+            "COM7",
+            "COM8",
+            "COM9",
+            "COM10",
+            "COM11",
+            "COM12",
+            "COM13",
+            "COM14",
+            "COM15",
+            "COM16",
+            "COM17",
+            "COM18",
+            "COM19",
+            "COM20",
+            "COM21",
+            "COM22",
+            "COM23",
+            "COM24",
+            "COM25",
+            "COM26",
+            "COM27",
+            "COM28",
+            "COM29",
+            "COM30",
+            "COM31",
+            "COM32",
+            "COM33",
+            "COM34",
+            "COM35",
+            "COM36",
+            "COM37",
+            "COM38",
+            "COM39",
+            "COM40"});
+      this.cbAtmoWakeHelperComPort.Location = new System.Drawing.Point(199, 43);
+      this.cbAtmoWakeHelperComPort.Name = "cbAtmoWakeHelperComPort";
+      this.cbAtmoWakeHelperComPort.Size = new System.Drawing.Size(70, 21);
+      this.cbAtmoWakeHelperComPort.TabIndex = 1;
+      // 
+      // ckAtmoWakeHelperEnabled
+      // 
+      this.ckAtmoWakeHelperEnabled.AutoSize = true;
+      this.ckAtmoWakeHelperEnabled.Location = new System.Drawing.Point(10, 19);
+      this.ckAtmoWakeHelperEnabled.Name = "ckAtmoWakeHelperEnabled";
+      this.ckAtmoWakeHelperEnabled.Size = new System.Drawing.Size(65, 17);
+      this.ckAtmoWakeHelperEnabled.TabIndex = 0;
+      this.ckAtmoWakeHelperEnabled.Text = "Enabled";
+      this.ckAtmoWakeHelperEnabled.UseVisualStyleBackColor = true;
       // 
       // grpAtmowinSettings
       // 
@@ -1080,6 +1199,16 @@
       this.grpPluginOption.TabIndex = 11;
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
+      // 
+      // ckMonitorWindowState
+      // 
+      this.ckMonitorWindowState.AutoSize = true;
+      this.ckMonitorWindowState.Location = new System.Drawing.Point(13, 325);
+      this.ckMonitorWindowState.Name = "ckMonitorWindowState";
+      this.ckMonitorWindowState.Size = new System.Drawing.Size(295, 17);
+      this.ckMonitorWindowState.TabIndex = 42;
+      this.ckMonitorWindowState.Text = "Turn off leds while Mediaportal is minimized or suspended";
+      this.ckMonitorWindowState.UseVisualStyleBackColor = true;
       // 
       // cbBlackbarDetectionVertical
       // 
@@ -2673,15 +2802,56 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
-      // ckMonitorWindowState
+      // lblAtmoWakeHelperDisconnectDelay
       // 
-      this.ckMonitorWindowState.AutoSize = true;
-      this.ckMonitorWindowState.Location = new System.Drawing.Point(13, 325);
-      this.ckMonitorWindowState.Name = "ckMonitorWindowState";
-      this.ckMonitorWindowState.Size = new System.Drawing.Size(295, 17);
-      this.ckMonitorWindowState.TabIndex = 42;
-      this.ckMonitorWindowState.Text = "Turn off leds while Mediaportal is minimized or suspended";
-      this.ckMonitorWindowState.UseVisualStyleBackColor = true;
+      this.lblAtmoWakeHelperDisconnectDelay.AutoSize = true;
+      this.lblAtmoWakeHelperDisconnectDelay.Location = new System.Drawing.Point(12, 117);
+      this.lblAtmoWakeHelperDisconnectDelay.Name = "lblAtmoWakeHelperDisconnectDelay";
+      this.lblAtmoWakeHelperDisconnectDelay.Size = new System.Drawing.Size(111, 13);
+      this.lblAtmoWakeHelperDisconnectDelay.TabIndex = 6;
+      this.lblAtmoWakeHelperDisconnectDelay.Text = "Disconnect delay (ms)";
+      // 
+      // tbAtmoWakeHelperDisconnectDelay
+      // 
+      this.tbAtmoWakeHelperDisconnectDelay.Location = new System.Drawing.Point(199, 114);
+      this.tbAtmoWakeHelperDisconnectDelay.Name = "tbAtmoWakeHelperDisconnectDelay";
+      this.tbAtmoWakeHelperDisconnectDelay.Size = new System.Drawing.Size(70, 20);
+      this.tbAtmoWakeHelperDisconnectDelay.TabIndex = 5;
+      this.tbAtmoWakeHelperDisconnectDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWakeHelperDisconnectDelay_Validating);
+      // 
+      // lblAtmoWakeHelperConnectDelay
+      // 
+      this.lblAtmoWakeHelperConnectDelay.AutoSize = true;
+      this.lblAtmoWakeHelperConnectDelay.Location = new System.Drawing.Point(12, 156);
+      this.lblAtmoWakeHelperConnectDelay.Name = "lblAtmoWakeHelperConnectDelay";
+      this.lblAtmoWakeHelperConnectDelay.Size = new System.Drawing.Size(97, 13);
+      this.lblAtmoWakeHelperConnectDelay.TabIndex = 8;
+      this.lblAtmoWakeHelperConnectDelay.Text = "Connect delay (ms)";
+      // 
+      // tbAtmoWakeHelperConnectDelay
+      // 
+      this.tbAtmoWakeHelperConnectDelay.Location = new System.Drawing.Point(199, 153);
+      this.tbAtmoWakeHelperConnectDelay.Name = "tbAtmoWakeHelperConnectDelay";
+      this.tbAtmoWakeHelperConnectDelay.Size = new System.Drawing.Size(70, 20);
+      this.tbAtmoWakeHelperConnectDelay.TabIndex = 7;
+      this.tbAtmoWakeHelperConnectDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWakeHelperConnectDelay_Validating);
+      // 
+      // lblAtmoWakeHelperReinitializationDelay
+      // 
+      this.lblAtmoWakeHelperReinitializationDelay.AutoSize = true;
+      this.lblAtmoWakeHelperReinitializationDelay.Location = new System.Drawing.Point(12, 196);
+      this.lblAtmoWakeHelperReinitializationDelay.Name = "lblAtmoWakeHelperReinitializationDelay";
+      this.lblAtmoWakeHelperReinitializationDelay.Size = new System.Drawing.Size(124, 13);
+      this.lblAtmoWakeHelperReinitializationDelay.TabIndex = 10;
+      this.lblAtmoWakeHelperReinitializationDelay.Text = "Reinitialization delay (ms)";
+      // 
+      // tbAtmoWakeHelperReinitializationDelay
+      // 
+      this.tbAtmoWakeHelperReinitializationDelay.Location = new System.Drawing.Point(199, 193);
+      this.tbAtmoWakeHelperReinitializationDelay.Name = "tbAtmoWakeHelperReinitializationDelay";
+      this.tbAtmoWakeHelperReinitializationDelay.Size = new System.Drawing.Size(70, 20);
+      this.tbAtmoWakeHelperReinitializationDelay.TabIndex = 9;
+      this.tbAtmoWakeHelperReinitializationDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbAtmoWakeHelperReinitializationDelay_Validating);
       // 
       // SetupForm
       // 
@@ -2707,6 +2877,8 @@
       this.grpHyperionNetworkSettings.ResumeLayout(false);
       this.grpHyperionNetworkSettings.PerformLayout();
       this.tabPageAtmowin.ResumeLayout(false);
+      this.grpAtmowinWakeHelper.ResumeLayout(false);
+      this.grpAtmowinWakeHelper.PerformLayout();
       this.grpAtmowinSettings.ResumeLayout(false);
       this.grpAtmowinSettings.PerformLayout();
       this.tabPageGeneric.ResumeLayout(false);
@@ -2994,5 +3166,17 @@
     private System.Windows.Forms.CheckBox cbBlackbarDetectionHorizontal;
     private System.Windows.Forms.CheckBox cbBlackbarDetectionLinkAreas;
     private System.Windows.Forms.CheckBox ckMonitorWindowState;
+    private System.Windows.Forms.GroupBox grpAtmowinWakeHelper;
+    private System.Windows.Forms.ComboBox cbAtmoWakeHelperComPort;
+    private System.Windows.Forms.CheckBox ckAtmoWakeHelperEnabled;
+    private System.Windows.Forms.Label lblAtmoWakeHelperComPort;
+    private System.Windows.Forms.TextBox tbAtmoWakeHelperResumeDelay;
+    private System.Windows.Forms.Label lblAtmoWakeHelperResumeDelay;
+    private System.Windows.Forms.Label lblAtmoWakeHelperReinitializationDelay;
+    private System.Windows.Forms.TextBox tbAtmoWakeHelperReinitializationDelay;
+    private System.Windows.Forms.Label lblAtmoWakeHelperConnectDelay;
+    private System.Windows.Forms.TextBox tbAtmoWakeHelperConnectDelay;
+    private System.Windows.Forms.Label lblAtmoWakeHelperDisconnectDelay;
+    private System.Windows.Forms.TextBox tbAtmoWakeHelperDisconnectDelay;
   }
 }
