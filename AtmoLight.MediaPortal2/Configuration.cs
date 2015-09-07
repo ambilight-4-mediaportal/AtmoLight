@@ -407,7 +407,7 @@ namespace AtmoLight.Configuration
   {
     public override void Load()
     {
-      _value = SettingsManager.Load<Settings>().HueIP;
+      _value = SettingsManager.Load<Settings>().AtmoWakeHelperComPort;
     }
 
     public override void Save()
