@@ -102,7 +102,8 @@ namespace AtmoLight.Targets
       switch (effect)
       {
         case ContentEffect.MediaPortalLiveMode:
-
+          ChangeColor(0, 0, 0, true);
+          return true;
         case ContentEffect.GIFReader:
         case ContentEffect.VUMeter:
         case ContentEffect.VUMeterRainbow:
