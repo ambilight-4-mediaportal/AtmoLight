@@ -140,7 +140,7 @@ namespace AtmoLight.Targets
           bytes[1] = 0xFF;
           bytes[2] = 0xEE;
 
-          // Force OFF if value greater than 1
+          // Options parameter, force leds off = 1
           bytes[3] = 0;
 
           // RED / GREEN / BLUE
@@ -170,8 +170,8 @@ namespace AtmoLight.Targets
         bytes[1] = 0xFF;
         bytes[2] = 0xEE;
 
-        // Force OFF if value greater than 1
-        bytes[3] = 255;
+        // Options parameter, force leds off = 1
+        bytes[3] = 1;
 
         // RED / GREEN / BLUE
         bytes[4] = 0;
