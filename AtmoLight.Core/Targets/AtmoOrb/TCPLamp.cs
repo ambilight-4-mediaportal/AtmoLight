@@ -6,11 +6,11 @@ namespace AtmoLight.Targets
 {
   internal class TCPLamp : ILamp
   {
-    private TcpClient _tcpClient;
-    private Socket _socket;
-    private volatile bool _connectLock;
-    private Thread _connectThreadHelper;
-    private readonly Core _coreObject = Core.GetInstance();
+    private TcpClient _client;
+    private Socket socket;
+    private volatile bool connectLock;
+    private Thread connectThreadHelper;
+    private readonly Core coreObject = Core.GetInstance();
 
     public TCPLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd,
       bool zoneInverted)
@@ -58,52 +58,52 @@ namespace AtmoLight.Targets
     {
       IP = ip;
       Port = port;
-      if (!_connectLock)
+      if (!connectLock)
       {
-        _connectThreadHelper = new Thread(() => ConnectThreaded(ip, port));
-        _connectThreadHelper.Name = "AtmoLight AtmoOrb Connect " + ID;
-        _connectThreadHelper.IsBackground = true;
-        _connectThreadHelper.Start();
+        connectThreadHelper = new Thread(() => ConnectThreaded(ip, port));
+        connectThreadHelper.Name = "AtmoLight AtmoOrb Connect " + ID;
+        connectThreadHelper.IsBackground = true;
+        connectThreadHelper.Start();
       }
     }
 
     private void ConnectThreaded(string ip, int port)
     {
-      if (_connectLock)
+      if (connectLock)
       {
         Log.Debug("AtmoOrbHandler - Connect locked for lamp {0}.", ID);
         return;
       }
-      _connectLock = true;
+      connectLock = true;
       try
       {
         Disconnect();
-        _tcpClient = new TcpClient(ip, port);
-        _socket = _tcpClient.Client;
-        Log.Debug("AtmoOrbHandler - Socket connected: " + _socket.Connected);
-        Log.Debug("AtmoOrbHandler - TCP connected: " + _tcpClient.Connected);
+        _client = new TcpClient(ip, port);
+        socket = _client.Client;
+        Log.Debug("AtmoOrbHandler - Socket connected: " + socket.Connected);
+        Log.Debug("AtmoOrbHandler - TCP connected: " + _client.Connected);
         Log.Debug("AtmoOrbHandler - Successfully connected to lamp {0} ({1}:{2})", ID, ip, port);
 
-        if (_coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ||
-            _coreObject.GetCurrentEffect() == ContentEffect.Undefined)
+        if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ||
+            coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
           ChangeColor(0, 0, 0, true);
         }
-        else if (_coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
+        else if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
         {
-          var red = byte.Parse(_coreObject.staticColor[0].ToString());
-          var green = byte.Parse(_coreObject.staticColor[1].ToString());
-          var blue = byte.Parse(_coreObject.staticColor[2].ToString());
+          var red = byte.Parse(coreObject.staticColor[0].ToString());
+          var green = byte.Parse(coreObject.staticColor[1].ToString());
+          var blue = byte.Parse(coreObject.staticColor[2].ToString());
 
           ChangeColor(red, green, blue, false);
         }
 
         // Reset lock
-        _connectLock = false;
+        connectLock = false;
       }
       catch (Exception ex)
       {
-        _connectLock = false;
+        connectLock = false;
         Log.Error("AtmoOrbHandler - Exception while connecting to lamp {0} ({1}:{2})", ID, ip, port);
         Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
       }
@@ -113,10 +113,10 @@ namespace AtmoLight.Targets
     {
       try
       {
-        if (_tcpClient != null)
+        if (_client != null)
         {
-          _tcpClient.Close();
-          _tcpClient = null;
+          _client.Close();
+          _client = null;
         }
       }
       catch (Exception ex)
@@ -128,12 +128,12 @@ namespace AtmoLight.Targets
 
     public bool IsConnected()
     {
-      if (_tcpClient == null)
+      if (_client == null)
       {
         return false;
       }
 
-      return _tcpClient.Connected && !_connectLock;
+      return _client.Connected && !connectLock;
     }
 
     public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff)
@@ -168,7 +168,7 @@ namespace AtmoLight.Targets
         bytes[5] = green;
         bytes[6] = blue;
 
-        Send(_socket, bytes, 0, bytes.Length, 50);
+        Send(socket, bytes, 0, bytes.Length, 50);
       }
       catch (Exception)
       {

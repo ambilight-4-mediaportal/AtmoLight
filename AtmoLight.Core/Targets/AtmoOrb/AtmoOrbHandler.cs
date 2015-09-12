@@ -46,15 +46,15 @@ namespace AtmoLight.Targets
       }
     }
 
-    private readonly Core _coreObject = Core.GetInstance();
-    private volatile bool _initLock;
-    private Thread _initThreadHelper;
+    private readonly Core coreObject = Core.GetInstance();
+    private volatile bool initLock;
+    private Thread initThreadHelper;
 
-    private UdpClient _udpServer;
-    private UdpClient _udpClientBroadcast;
+    private UdpClient udpBroadcastServer;
+    private UdpClient udpBroadcastClient;
 
-    private readonly double[] _gammaCurve = new double[256];
-    private double _vuMeterHue;
+    private readonly double[] gammaCurve = new double[256];
+    private double vuMeterHue;
 
     private List<ILamp> lamps = new List<ILamp>();
 
@@ -74,18 +74,18 @@ namespace AtmoLight.Targets
 
     public void Initialise(bool force = false)
     {
-      if (!_initLock)
+      if (!initLock)
       {
-        _initThreadHelper = new Thread(() => InitThreaded(force));
-        _initThreadHelper.Name = "AtmoLight AtmoOrb Init";
-        _initThreadHelper.IsBackground = true;
-        _initThreadHelper.Start();
+        initThreadHelper = new Thread(() => InitThreaded(force));
+        initThreadHelper.Name = "AtmoLight AtmoOrb Init";
+        initThreadHelper.IsBackground = true;
+        initThreadHelper.Start();
       }
     }
 
     public void ReInitialise(bool force)
     {
-      if (_coreObject.reInitOnError || force)
+      if (coreObject.reInitOnError || force)
       {
         Initialise(force);
       }
@@ -123,14 +123,14 @@ namespace AtmoLight.Targets
           return true;
         case ContentEffect.StaticColor:
           // Send command 3 times to make sure it arrives
-          ChangeColor((byte) _gammaCurve[_coreObject.staticColor[0]], (byte) _gammaCurve[_coreObject.staticColor[1]],
-            (byte) _gammaCurve[_coreObject.staticColor[2]]);
+          ChangeColor((byte) gammaCurve[coreObject.staticColor[0]], (byte) gammaCurve[coreObject.staticColor[1]],
+            (byte) gammaCurve[coreObject.staticColor[2]]);
           Thread.Sleep(50);
-          ChangeColor((byte) _gammaCurve[_coreObject.staticColor[0]], (byte) _gammaCurve[_coreObject.staticColor[1]],
-            (byte) _gammaCurve[_coreObject.staticColor[2]]);
+          ChangeColor((byte) gammaCurve[coreObject.staticColor[0]], (byte) gammaCurve[coreObject.staticColor[1]],
+            (byte) gammaCurve[coreObject.staticColor[2]]);
           Thread.Sleep(50);
-          ChangeColor((byte) _gammaCurve[_coreObject.staticColor[0]], (byte) _gammaCurve[_coreObject.staticColor[1]],
-            (byte) _gammaCurve[_coreObject.staticColor[2]]);
+          ChangeColor((byte) gammaCurve[coreObject.staticColor[0]], (byte) gammaCurve[coreObject.staticColor[1]],
+            (byte) gammaCurve[coreObject.staticColor[2]]);
           return true;
         case ContentEffect.LEDsDisabled:
           // Send command 3 times to make sure it arrives
@@ -179,20 +179,20 @@ namespace AtmoLight.Targets
 
     private void InitThreaded(bool force = false)
     {
-      if (_initLock)
+      if (initLock)
       {
         Log.Debug("AtmoOrbHandler - Initialising locked.");
         return;
       }
-      _initLock = true;
+      initLock = true;
       try
       {
         // Read lamp map and create lamp instances
         if (lamps.Count == 0)
         {
-          for (var i = 0; i < _coreObject.atmoOrbLamps.Count; i++)
+          for (var i = 0; i < coreObject.atmoOrbLamps.Count; i++)
           {
-            var settings = _coreObject.atmoOrbLamps[i].Split(',');
+            var settings = coreObject.atmoOrbLamps[i].Split(',');
 
             if (settings[1] == "UDP_IP")
             {
@@ -233,21 +233,21 @@ namespace AtmoLight.Targets
         // Start udp server if udp lamps are being used
         if (UdpBroadcastLampPresent())
         {
-          if (_udpServer == null)
+          if (udpBroadcastServer == null)
           {
-            _udpServer = new UdpClient(_coreObject.atmoOrbBroadcastPort);
+            udpBroadcastServer = new UdpClient(coreObject.atmoOrbBroadcastPort);
             UdpBroadcastServerListen();
           }
 
-          _udpClientBroadcast = new UdpClient();
-          var udpClientBroadcastEndpoint = new IPEndPoint(IPAddress.Broadcast, _coreObject.atmoOrbBroadcastPort);
+          udpBroadcastClient = new UdpClient();
+          var udpClientBroadcastEndpoint = new IPEndPoint(IPAddress.Broadcast, coreObject.atmoOrbBroadcastPort);
           var bytes = Encoding.ASCII.GetBytes("M-SEARCH");
-          _udpClientBroadcast.Send(bytes, bytes.Length, udpClientBroadcastEndpoint);
+          udpBroadcastClient.Send(bytes, bytes.Length, udpClientBroadcastEndpoint);
 
-          _udpClientBroadcast.Close();
+          udpBroadcastClient.Close();
         }
 
-        _initLock = false;
+        initLock = false;
       }
       catch (Exception ex)
       {
@@ -277,29 +277,29 @@ namespace AtmoLight.Targets
 
       try
       {
-        if (_coreObject.GetCurrentEffect() == ContentEffect.VUMeter ||
-            _coreObject.GetCurrentEffect() == ContentEffect.VUMeterRainbow)
+        if (coreObject.GetCurrentEffect() == ContentEffect.VUMeter ||
+            coreObject.GetCurrentEffect() == ContentEffect.VUMeterRainbow)
         {
-          for (var y = 0; y < _coreObject.GetCaptureHeight(); y++)
+          for (var y = 0; y < coreObject.GetCaptureHeight(); y++)
           {
-            var row = _coreObject.GetCaptureWidth()*y*4;
+            var row = coreObject.GetCaptureWidth()*y*4;
 
             if ((pixeldata[row] != 0 || pixeldata[row + 1] != 0 || pixeldata[row + 2] != 0) ||
-                (pixeldata[row + ((_coreObject.GetCaptureWidth() - 1)*4)] != 0 ||
-                 pixeldata[row + ((_coreObject.GetCaptureWidth() - 1)*4) + 1] != 0 ||
-                 pixeldata[row + ((_coreObject.GetCaptureWidth() - 1)*4) + 2] != 0))
+                (pixeldata[row + ((coreObject.GetCaptureWidth() - 1)*4)] != 0 ||
+                 pixeldata[row + ((coreObject.GetCaptureWidth() - 1)*4) + 1] != 0 ||
+                 pixeldata[row + ((coreObject.GetCaptureWidth() - 1)*4) + 2] != 0))
             {
               int r, g, b;
               double s, l;
-              _vuMeterHue += 1.0/1200.0;
-              if (_vuMeterHue > 1)
+              vuMeterHue += 1.0/1200.0;
+              if (vuMeterHue > 1)
               {
-                _vuMeterHue -= 1;
+                vuMeterHue -= 1;
               }
               s = 1;
-              l = 0.5 - ((double) y/_coreObject.GetCaptureHeight()/2);
-              HSL.HSL2RGB(_vuMeterHue, s, l, out r, out g, out b);
-              ChangeColor((byte) _gammaCurve[r], (byte) _gammaCurve[g], (byte) _gammaCurve[b]);
+              l = 0.5 - ((double) y/coreObject.GetCaptureHeight()/2);
+              HSL.HSL2RGB(vuMeterHue, s, l, out r, out g, out b);
+              ChangeColor((byte) gammaCurve[r], (byte) gammaCurve[g], (byte) gammaCurve[b]);
               return;
             }
           }
@@ -317,32 +317,32 @@ namespace AtmoLight.Targets
               lamp.PixelCount = 0;
             }
           }
-          for (var y = 0; y < _coreObject.GetCaptureHeight(); y++)
+          for (var y = 0; y < coreObject.GetCaptureHeight(); y++)
           {
-            var row = _coreObject.GetCaptureWidth()*y*4;
-            for (var x = 0; x < _coreObject.GetCaptureWidth(); x++)
+            var row = coreObject.GetCaptureWidth()*y*4;
+            for (var x = 0; x < coreObject.GetCaptureWidth(); x++)
             {
               foreach (var lamp in lamps)
               {
                 if (lamp.IsConnected())
                 {
-                  if ((lamp.ZoneInverted == false && x >= lamp.HScanStart*_coreObject.GetCaptureWidth()/100 &&
-                       x <= lamp.HScanEnd*_coreObject.GetCaptureWidth()/100 &&
-                       y >= lamp.VScanStart*_coreObject.GetCaptureHeight()/100 &&
-                       y <= lamp.VScanEnd*_coreObject.GetCaptureHeight()/100)
+                  if ((lamp.ZoneInverted == false && x >= lamp.HScanStart*coreObject.GetCaptureWidth()/100 &&
+                       x <= lamp.HScanEnd*coreObject.GetCaptureWidth()/100 &&
+                       y >= lamp.VScanStart*coreObject.GetCaptureHeight()/100 &&
+                       y <= lamp.VScanEnd*coreObject.GetCaptureHeight()/100)
                       ||
                       (lamp.ZoneInverted &&
-                       (x <= lamp.HScanStart*_coreObject.GetCaptureWidth()/100 ||
-                        x >= lamp.HScanEnd*_coreObject.GetCaptureWidth()/100) &&
-                       (y <= lamp.VScanStart*_coreObject.GetCaptureHeight()/100 ||
-                        y >= lamp.VScanEnd*_coreObject.GetCaptureHeight()/100)))
+                       (x <= lamp.HScanStart*coreObject.GetCaptureWidth()/100 ||
+                        x >= lamp.HScanEnd*coreObject.GetCaptureWidth()/100) &&
+                       (y <= lamp.VScanStart*coreObject.GetCaptureHeight()/100 ||
+                        y >= lamp.VScanEnd*coreObject.GetCaptureHeight()/100)))
                   {
                     lamp.OverallAverageColor[0] += pixeldata[row + x*4 + 2];
                     lamp.OverallAverageColor[1] += pixeldata[row + x*4 + 1];
                     lamp.OverallAverageColor[2] += pixeldata[row + x*4];
-                    if (Math.Abs(pixeldata[row + x*4 + 2] - pixeldata[row + x*4 + 1]) > _coreObject.atmoOrbMinDiversion ||
-                        Math.Abs(pixeldata[row + x*4 + 2] - pixeldata[row + x*4]) > _coreObject.atmoOrbMinDiversion ||
-                        Math.Abs(pixeldata[row + x*4 + 1] - pixeldata[row + x*4]) > _coreObject.atmoOrbMinDiversion)
+                    if (Math.Abs(pixeldata[row + x*4 + 2] - pixeldata[row + x*4 + 1]) > coreObject.atmoOrbMinDiversion ||
+                        Math.Abs(pixeldata[row + x*4 + 2] - pixeldata[row + x*4]) > coreObject.atmoOrbMinDiversion ||
+                        Math.Abs(pixeldata[row + x*4 + 1] - pixeldata[row + x*4]) > coreObject.atmoOrbMinDiversion)
                     {
                       lamp.AverageColor[0] += pixeldata[row + x*4 + 2];
                       lamp.AverageColor[1] += pixeldata[row + x*4 + 1];
@@ -358,18 +358,18 @@ namespace AtmoLight.Targets
           {
             if (lamp.IsConnected())
             {
-              lamp.OverallAverageColor[0] /= (_coreObject.GetCaptureHeight()*_coreObject.GetCaptureWidth());
-              lamp.OverallAverageColor[1] /= (_coreObject.GetCaptureHeight()*_coreObject.GetCaptureWidth());
-              lamp.OverallAverageColor[2] /= (_coreObject.GetCaptureHeight()*_coreObject.GetCaptureWidth());
+              lamp.OverallAverageColor[0] /= (coreObject.GetCaptureHeight()*coreObject.GetCaptureWidth());
+              lamp.OverallAverageColor[1] /= (coreObject.GetCaptureHeight()*coreObject.GetCaptureWidth());
+              lamp.OverallAverageColor[2] /= (coreObject.GetCaptureHeight()*coreObject.GetCaptureWidth());
               if (lamp.PixelCount > 0)
               {
                 lamp.AverageColor[0] /= lamp.PixelCount;
                 lamp.AverageColor[1] /= lamp.PixelCount;
                 lamp.AverageColor[2] /= lamp.PixelCount;
 
-                if (Math.Abs(lamp.AverageColor[0] - lamp.PreviousColor[0]) >= _coreObject.atmoOrbThreshold ||
-                    Math.Abs(lamp.AverageColor[1] - lamp.PreviousColor[1]) >= _coreObject.atmoOrbThreshold ||
-                    Math.Abs(lamp.AverageColor[2] - lamp.PreviousColor[2]) >= _coreObject.atmoOrbThreshold)
+                if (Math.Abs(lamp.AverageColor[0] - lamp.PreviousColor[0]) >= coreObject.atmoOrbThreshold ||
+                    Math.Abs(lamp.AverageColor[1] - lamp.PreviousColor[1]) >= coreObject.atmoOrbThreshold ||
+                    Math.Abs(lamp.AverageColor[2] - lamp.PreviousColor[2]) >= coreObject.atmoOrbThreshold)
                 {
                   double hue;
                   double saturation;
@@ -388,27 +388,27 @@ namespace AtmoLight.Targets
                     out hueOverall, out saturationOverall, out lightnessOverall);
 
                   // Convert back to rgb with adjusted saturation and lightness
-                  HSL.HSL2RGB(hue, Math.Min(saturation + _coreObject.atmoOrbSaturation, 1),
-                    (_coreObject.atmoOrbUseOverallLightness ? lightnessOverall : lightness), out lamp.AverageColor[0],
+                  HSL.HSL2RGB(hue, Math.Min(saturation + coreObject.atmoOrbSaturation, 1),
+                    (coreObject.atmoOrbUseOverallLightness ? lightnessOverall : lightness), out lamp.AverageColor[0],
                     out lamp.AverageColor[1], out lamp.AverageColor[2]);
 
                   // Adjust gamma level and send to lamp
-                  ChangeColor((byte) _gammaCurve[lamp.AverageColor[0]], (byte) _gammaCurve[lamp.AverageColor[1]],
-                    (byte) _gammaCurve[lamp.AverageColor[2]]);
+                  ChangeColor((byte) gammaCurve[lamp.AverageColor[0]], (byte) gammaCurve[lamp.AverageColor[1]],
+                    (byte) gammaCurve[lamp.AverageColor[2]]);
                 }
               }
               else
               {
-                if (Math.Abs(lamp.OverallAverageColor[0] - lamp.PreviousColor[0]) >= _coreObject.atmoOrbThreshold ||
-                    Math.Abs(lamp.OverallAverageColor[1] - lamp.PreviousColor[1]) >= _coreObject.atmoOrbThreshold ||
-                    Math.Abs(lamp.OverallAverageColor[2] - lamp.PreviousColor[2]) >= _coreObject.atmoOrbThreshold)
+                if (Math.Abs(lamp.OverallAverageColor[0] - lamp.PreviousColor[0]) >= coreObject.atmoOrbThreshold ||
+                    Math.Abs(lamp.OverallAverageColor[1] - lamp.PreviousColor[1]) >= coreObject.atmoOrbThreshold ||
+                    Math.Abs(lamp.OverallAverageColor[2] - lamp.PreviousColor[2]) >= coreObject.atmoOrbThreshold)
                 {
                   // Save new color as previous color
                   lamp.PreviousColor = lamp.OverallAverageColor;
 
-                  if (lamp.OverallAverageColor[0] <= _coreObject.atmoOrbBlackThreshold &&
-                      lamp.OverallAverageColor[1] <= _coreObject.atmoOrbBlackThreshold &&
-                      lamp.OverallAverageColor[2] <= _coreObject.atmoOrbBlackThreshold)
+                  if (lamp.OverallAverageColor[0] <= coreObject.atmoOrbBlackThreshold &&
+                      lamp.OverallAverageColor[1] <= coreObject.atmoOrbBlackThreshold &&
+                      lamp.OverallAverageColor[2] <= coreObject.atmoOrbBlackThreshold)
                   {
                     // Black threshold reached, forcing leds off as to clear smooth colors on the lamp side
                     ChangeColor(0, 0, 0, true);
@@ -416,8 +416,8 @@ namespace AtmoLight.Targets
                   else
                   {
                     // Adjust gamma level and send to lamp
-                    ChangeColor((byte) _gammaCurve[lamp.OverallAverageColor[0]],
-                      (byte) _gammaCurve[lamp.OverallAverageColor[1]], (byte) _gammaCurve[lamp.OverallAverageColor[2]]);
+                    ChangeColor((byte) gammaCurve[lamp.OverallAverageColor[0]],
+                      (byte) gammaCurve[lamp.OverallAverageColor[1]], (byte) gammaCurve[lamp.OverallAverageColor[2]]);
                   }
                 }
               }
@@ -463,15 +463,15 @@ namespace AtmoLight.Targets
 
     private void UdpBroadcastServerListen()
     {
-      _udpServer.BeginReceive(UdpBroadcastServerReceive, new object());
+      udpBroadcastServer.BeginReceive(UdpBroadcastServerReceive, new object());
     }
 
     private void UdpBroadcastServerReceive(IAsyncResult ar)
     {
       try
       {
-        var udpServerEndpoint = new IPEndPoint(IPAddress.Any, _coreObject.atmoOrbBroadcastPort);
-        var bytes = _udpServer.EndReceive(ar, ref udpServerEndpoint);
+        var udpServerEndpoint = new IPEndPoint(IPAddress.Any, coreObject.atmoOrbBroadcastPort);
+        var bytes = udpBroadcastServer.EndReceive(ar, ref udpServerEndpoint);
         var message = Encoding.ASCII.GetString(bytes);
         var splitMessage = message.Split(':', ',', ';');
         if (splitMessage.Length >= 4)
@@ -505,10 +505,10 @@ namespace AtmoLight.Targets
 
     private void CalcGammaCurve()
     {
-      for (var i = 0; i < _gammaCurve.Length; i++)
+      for (var i = 0; i < gammaCurve.Length; i++)
       {
-        _gammaCurve[i] = Math.Pow(i/((double) _gammaCurve.Length - 1.0f), _coreObject.atmoOrbGamma)*
-                        (_gammaCurve.Length - 1.0f);
+        gammaCurve[i] = Math.Pow(i/((double) gammaCurve.Length - 1.0f), coreObject.atmoOrbGamma)*
+                        (gammaCurve.Length - 1.0f);
       }
     }
 

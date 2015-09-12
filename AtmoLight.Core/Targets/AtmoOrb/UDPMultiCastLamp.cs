@@ -6,10 +6,10 @@ namespace AtmoLight.Targets
 {
   internal class UDPMulticastLamp : ILamp
   {
-    private bool _isConnected;
-    private Socket _socket;
-    private IPEndPoint _clientEndpoint;
-    private readonly Core _coreObject = Core.GetInstance();
+    private bool isConnected;
+    private Socket socket;
+    private IPEndPoint clientEndpoint;
+    private readonly Core coreObject = Core.GetInstance();
 
     public UDPMulticastLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd,
       bool zoneInverted)
@@ -63,26 +63,26 @@ namespace AtmoLight.Targets
 
         var multiCastIp = IPAddress.Parse(ip);
 
-        _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        _clientEndpoint = new IPEndPoint(multiCastIp, port);
-        _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership,
+        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        clientEndpoint = new IPEndPoint(multiCastIp, port);
+        socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership,
           new MulticastOption(multiCastIp));
-        _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 2);
-        _socket.Connect(_clientEndpoint);
+        socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 2);
+        socket.Connect(clientEndpoint);
 
-        _isConnected = true;
+        isConnected = true;
         Log.Debug("AtmoOrbHandler - [UDP Multicast] Successfully joined UDP multicast group {0} ({1}:{2})", ID, ip, port);
 
-        if (_coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ||
-            _coreObject.GetCurrentEffect() == ContentEffect.Undefined)
+        if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ||
+            coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
           ChangeColor(0, 0, 0, true);
         }
-        else if (_coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
+        else if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
         {
-          var red = byte.Parse(_coreObject.staticColor[0].ToString());
-          var green = byte.Parse(_coreObject.staticColor[1].ToString());
-          var blue = byte.Parse(_coreObject.staticColor[2].ToString());
+          var red = byte.Parse(coreObject.staticColor[0].ToString());
+          var green = byte.Parse(coreObject.staticColor[1].ToString());
+          var blue = byte.Parse(coreObject.staticColor[2].ToString());
 
           ChangeColor(red, green, blue, false);
         }
@@ -98,13 +98,13 @@ namespace AtmoLight.Targets
     {
       try
       {
-        if (_socket != null)
+        if (socket != null)
         {
-          _socket.Close();
-          _socket = null;
-          _clientEndpoint = null;
+          socket.Close();
+          socket = null;
+          clientEndpoint = null;
         }
-        _isConnected = false;
+        isConnected = false;
       }
       catch (Exception ex)
       {
@@ -115,7 +115,7 @@ namespace AtmoLight.Targets
 
     public bool IsConnected()
     {
-      return _isConnected;
+      return isConnected;
     }
 
     public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff)
@@ -150,7 +150,7 @@ namespace AtmoLight.Targets
         bytes[5] = green;
         bytes[6] = blue;
 
-        _socket.Send(bytes, bytes.Length, SocketFlags.None);
+        socket.Send(bytes, bytes.Length, SocketFlags.None);
       }
       catch (Exception e)
       {

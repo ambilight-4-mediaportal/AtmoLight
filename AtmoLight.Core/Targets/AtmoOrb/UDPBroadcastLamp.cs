@@ -1,40 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Net.Sockets;
 using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace AtmoLight.Targets
 {
-  class UDPBroadcastLamp : ILamp
+  internal class UDPBroadcastLamp : ILamp
   {
-    private string id;
-    private string ip;
-    private int port;
-    private int hScanStart;
-    private int hScanEnd;
-    private int vScanStart;
-    private int vScanEnd;
-    private bool zoneInverted;
-    private bool isConnected = false;
+    private bool isConnected;
     private UdpClient udpClient;
     private IPEndPoint udpClientEndpoint;
-    private Core coreObject = Core.GetInstance();
+    private readonly Core coreObject = Core.GetInstance();
 
     public UDPBroadcastLamp(string id, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd, bool zoneInverted)
     {
-      this.id = id;
-      this.hScanStart = hScanStart;
-      this.hScanEnd = hScanEnd;
-      this.vScanStart = vScanStart;
-      this.vScanEnd = vScanEnd;
-      this.zoneInverted = zoneInverted;
+      ID = id;
+      HScanStart = hScanStart;
+      HScanEnd = hScanEnd;
+      VScanStart = vScanStart;
+      VScanEnd = vScanEnd;
+      ZoneInverted = zoneInverted;
     }
 
-    public string ID { get { return id; } }
+    public string ID { get; private set; }
 
-    public LampType Type { get { return LampType.UDPBroadcast; } }
+    public LampType Type
+    {
+      get { return LampType.UDPBroadcast; }
+    }
 
     public int[] OverallAverageColor { get; set; }
 
@@ -44,32 +37,33 @@ namespace AtmoLight.Targets
 
     public int PixelCount { get; set; }
 
-    public int HScanStart { get { return hScanStart; } }
+    public int HScanStart { get; private set; }
 
-    public int HScanEnd { get { return hScanEnd; } }
+    public int HScanEnd { get; private set; }
 
-    public int VScanStart { get { return vScanStart; } }
+    public int VScanStart { get; private set; }
 
-    public int VScanEnd { get { return vScanEnd; } }
+    public int VScanEnd { get; private set; }
 
-    public bool ZoneInverted { get { return zoneInverted; } }
+    public bool ZoneInverted { get; private set; }
 
-    public string IP { get { return ip; } }
+    public string IP { get; private set; }
 
-    public int Port { get { return port; } }
+    public int Port { get; private set; }
 
     public void Connect(string ip, int port)
     {
-      this.ip = ip;
-      this.port = port;
+      IP = ip;
+      Port = port;
       try
       {
         Disconnect();
         udpClient = new UdpClient();
         udpClientEndpoint = new IPEndPoint(IPAddress.Parse(ip), port);
         isConnected = true;
-        Log.Debug("AtmoOrbHandler - Successfully connected to lamp {0} ({1}:{2})", id, ip, port);
-        if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.Undefined)
+        Log.Debug("AtmoOrbHandler -[UDP Broadcast] Successfully connected to lamp {0} ({1}:{2})", ID, ip, port);
+        if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ||
+            coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
           ChangeColor(0, 0, 0, true);
         }
@@ -80,8 +74,8 @@ namespace AtmoLight.Targets
       }
       catch (Exception ex)
       {
-        Log.Error("AtmoOrbHandler - Exception while connecting to lamp {0} ({1}:{2})", id, ip, port);
-        Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
+        Log.Error("AtmoOrbHandler - [UDP Broadcast] Exception while connecting to lamp {0} ({1}:{2})", ID, ip, port);
+        Log.Error("AtmoOrbHandler - [UDP Broadcast] Exception: {0}", ex.Message);
       }
     }
 
@@ -98,8 +92,8 @@ namespace AtmoLight.Targets
       }
       catch (Exception ex)
       {
-        Log.Error("AtmoOrbHandler - Exception while disconnecting from lamp {0} ({1}:{2})", id, ip, port);
-        Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
+        Log.Error("AtmoOrbHandler - [UDP Broadcast] Exception while disconnecting from lamp {0} ({1}:{2})", ID, IP, Port);
+        Log.Error("AtmoOrbHandler - [UDP Broadcast] Exception: {0}", ex.Message);
       }
     }
 
@@ -110,13 +104,13 @@ namespace AtmoLight.Targets
 
     public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff)
     {
-      String color = String.Format("#{0:X}{1:X}{2:X}", red, green, blue);
+      var color = string.Format("#{0:X}{1:X}{2:X}", red, green, blue);
 
       if (!IsConnected())
       {
         return;
       }
-      byte[] bytes = Encoding.ASCII.GetBytes("setcolor:" + color + ";");
+      var bytes = Encoding.ASCII.GetBytes("setcolor:" + color + ";");
       udpClient.Send(bytes, bytes.Length, udpClientEndpoint);
     }
   }
