@@ -2460,7 +2460,7 @@ namespace AtmoLight
         tbAtmoOrbID.Text = lampSettings[0];
         if (lampSettings[1] == "UDP_IP")
         {
-          rbAtmoOrbUDP.Checked = false;
+          rbAtmoOrbUDP.Checked = true;
           rbAtmoOrbTCP.Checked = false;
           tbAtmoOrbIP.ReadOnly = false;
           tbAtmoOrbPort.ReadOnly = false;
@@ -2475,7 +2475,7 @@ namespace AtmoLight
         }
         if (lampSettings[1] == "UDP_Multicast")
         {
-          rbAtmoOrbUDP.Checked = false;
+          rbAtmoOrbUDP.Checked = true;
           rbAtmoOrbTCP.Checked = false;
           tbAtmoOrbIP.ReadOnly = false;
           tbAtmoOrbPort.ReadOnly = false;
