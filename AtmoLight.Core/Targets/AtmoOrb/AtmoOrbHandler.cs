@@ -10,9 +10,10 @@ namespace AtmoLight.Targets
 {
   public enum LampType
   {
-    UDP,
-    UDPMultiCast,
-    TCP
+    TCP,
+    UDPIP,
+    UDPBroadcast,
+    UDPMultiCast
   }
 
   internal class AtmoOrbHandler : ITargets
@@ -192,12 +193,18 @@ namespace AtmoLight.Targets
           for (var i = 0; i < _coreObject.atmoOrbLamps.Count; i++)
           {
             var settings = _coreObject.atmoOrbLamps[i].Split(',');
-            if (settings[1] == "UDP")
+
+            if (settings[1] == "UDP_IP")
             {
-              lamps.Add(new UDPLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]),
+              lamps.Add(new UDPIPLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]),
                 int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8])));
             }
-            else if (settings[1] == "UDP Multicast")
+            else if (settings[1] == "UDP_Broadcast")
+            {
+              lamps.Add(new UDPBroadcastLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]),
+                int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8])));
+            }
+            else if (settings[1] == "UDP_Multicast")
             {
               lamps.Add(new UDPMulticastLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]),
                 int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8])));
@@ -224,12 +231,12 @@ namespace AtmoLight.Targets
         }
 
         // Start udp server if udp lamps are being used
-        if (UdpLampPresent())
+        if (UdpBroadcastLampPresent())
         {
           if (_udpServer == null)
           {
             _udpServer = new UdpClient(_coreObject.atmoOrbBroadcastPort);
-            UdpServerListen();
+            UdpBroadcastServerListen();
           }
 
           _udpClientBroadcast = new UdpClient();
@@ -442,11 +449,11 @@ namespace AtmoLight.Targets
 
     #region UDP Server
 
-    private bool UdpLampPresent()
+    private bool UdpBroadcastLampPresent()
     {
       foreach (var lamp in lamps)
       {
-        if (lamp.Type == LampType.UDP)
+        if (lamp.Type == LampType.UDPBroadcast)
         {
           return true;
         }
@@ -454,12 +461,12 @@ namespace AtmoLight.Targets
       return false;
     }
 
-    private void UdpServerListen()
+    private void UdpBroadcastServerListen()
     {
-      _udpServer.BeginReceive(UdpServerReceive, new object());
+      _udpServer.BeginReceive(UdpBroadcastServerReceive, new object());
     }
 
-    private void UdpServerReceive(IAsyncResult ar)
+    private void UdpBroadcastServerReceive(IAsyncResult ar)
     {
       try
       {
@@ -483,7 +490,7 @@ namespace AtmoLight.Targets
             }
           }
         }
-        UdpServerListen();
+        UdpBroadcastServerListen();
       }
       catch (Exception ex)
       {

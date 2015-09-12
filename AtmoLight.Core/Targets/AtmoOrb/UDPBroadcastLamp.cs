@@ -4,14 +4,14 @@ using System.Net.Sockets;
 
 namespace AtmoLight.Targets
 {
-  internal class UDPLamp : ILamp
+  internal class UDPBroadcastLamp : ILamp
   {
     private bool _isConnected;
     private UdpClient _client;
     private IPEndPoint clientEndpoint;
     private readonly Core _coreObject = Core.GetInstance();
 
-    public UDPLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd,
+    public UDPBroadcastLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd,
       bool zoneInverted)
     {
       ID = id;
@@ -28,7 +28,7 @@ namespace AtmoLight.Targets
 
     public LampType Type
     {
-      get { return LampType.UDP; }
+      get { return LampType.UDPBroadcast; }
     }
 
     public int[] OverallAverageColor { get; set; }
