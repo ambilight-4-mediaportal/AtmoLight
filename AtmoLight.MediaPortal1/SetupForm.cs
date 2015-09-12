@@ -2229,7 +2229,7 @@ namespace AtmoLight
       {
         if (validatorIPAdress(tbAtmoOrbIP.Text) == false)
         {
-          MessageBox.Show(Localization.Translate("Common", "ErrorIP") + " - [" + tbAtmoOrbIP.Text + "]",
+          MessageBox.Show(Localization.Translate("Common", "ErrorIP") + " - [" + lblAtmoOrbIP.Text + "]",
             Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
@@ -2240,7 +2240,7 @@ namespace AtmoLight
           MessageBox.Show(
             Localization.Translate("Common", "ErrorInvalidNumberRange")
               .Replace("[minInteger]", minValue.ToString())
-              .Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbPort.Text + "]",
+              .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbPort.Text + "]",
             Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
@@ -2252,7 +2252,7 @@ namespace AtmoLight
         {
           if (validatorIPAdress(tbAtmoOrbIP.Text) == false)
           {
-            MessageBox.Show(Localization.Translate("Common", "ErrorIP") + " - [" + tbAtmoOrbIP.Text + "]",
+            MessageBox.Show(Localization.Translate("Common", "ErrorIP") + " - [" + lblAtmoOrbIP.Text + "]",
               Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
           }
@@ -2290,7 +2290,7 @@ namespace AtmoLight
         MessageBox.Show(
           Localization.Translate("Common", "ErrorInvalidNumberRange")
             .Replace("[minInteger]", minValue.ToString())
-            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanStart.Text + "]",
+            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbHScan.Text + "]",
           Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
@@ -2300,7 +2300,7 @@ namespace AtmoLight
         MessageBox.Show(
           Localization.Translate("Common", "ErrorInvalidNumberRange")
             .Replace("[minInteger]", minValue.ToString())
-            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanEnd.Text + "]",
+            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbHScan.Text + "]",
           Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
@@ -2310,7 +2310,7 @@ namespace AtmoLight
         MessageBox.Show(
           Localization.Translate("Common", "ErrorInvalidNumberRange")
             .Replace("[minInteger]", minValue.ToString())
-            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanStart.Text + "]",
+            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbVScan.Text + "]",
           Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
@@ -2320,7 +2320,7 @@ namespace AtmoLight
         MessageBox.Show(
           Localization.Translate("Common", "ErrorInvalidNumberRange")
             .Replace("[minInteger]", minValue.ToString())
-            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanEnd.Text + "]",
+            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbVScan.Text + "]",
           Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
@@ -2358,7 +2358,7 @@ namespace AtmoLight
       {
         if (validatorIPAdress(tbAtmoOrbIP.Text) == false)
         {
-          MessageBox.Show(Localization.Translate("Common", "ErrorIP") + " - [" + tbAtmoOrbIP.Text + "]",
+          MessageBox.Show(Localization.Translate("Common", "ErrorIP") + " - [" + lblAtmoOrbIP.Text + "]",
             Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
@@ -2369,7 +2369,7 @@ namespace AtmoLight
           MessageBox.Show(
             Localization.Translate("Common", "ErrorInvalidNumberRange")
               .Replace("[minInteger]", minValue.ToString())
-              .Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbPort.Text + "]",
+              .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbPort.Text + "]",
             Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
@@ -2381,7 +2381,7 @@ namespace AtmoLight
         {
           if (validatorIPAdress(tbAtmoOrbIP.Text) == false)
           {
-            MessageBox.Show(Localization.Translate("Common", "ErrorIP") + " - [" + tbAtmoOrbIP.Text + "]",
+            MessageBox.Show(Localization.Translate("Common", "ErrorIP") + " - [" + lblAtmoOrbIP.Text + "]",
               Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
           }
@@ -2393,7 +2393,7 @@ namespace AtmoLight
             MessageBox.Show(
               Localization.Translate("Common", "ErrorInvalidNumberRange")
                 .Replace("[minInteger]", minValue.ToString())
-                .Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbPort.Text + "]",
+                .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbPort.Text + "]",
               Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
           }
@@ -2411,7 +2411,7 @@ namespace AtmoLight
         MessageBox.Show(
           Localization.Translate("Common", "ErrorInvalidNumberRange")
             .Replace("[minInteger]", minValue.ToString())
-            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanStart.Text + "]",
+            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbHScan.Text + "]",
           Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
@@ -2421,7 +2421,7 @@ namespace AtmoLight
         MessageBox.Show(
           Localization.Translate("Common", "ErrorInvalidNumberRange")
             .Replace("[minInteger]", minValue.ToString())
-            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbHScanEnd.Text + "]",
+            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbHScan.Text + "]",
           Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
@@ -2431,7 +2431,7 @@ namespace AtmoLight
         MessageBox.Show(
           Localization.Translate("Common", "ErrorInvalidNumberRange")
             .Replace("[minInteger]", minValue.ToString())
-            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanStart.Text + "]",
+            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbVScan.Text + "]",
           Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
@@ -2441,7 +2441,7 @@ namespace AtmoLight
         MessageBox.Show(
           Localization.Translate("Common", "ErrorInvalidNumberRange")
             .Replace("[minInteger]", minValue.ToString())
-            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbVScanEnd.Text + "]",
+            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbVScan.Text + "]",
           Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
