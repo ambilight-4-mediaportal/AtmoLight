@@ -71,7 +71,7 @@ namespace AtmoLight.Targets
         _socket.Connect(_clientEndpoint);
 
         _isConnected = true;
-        Log.Debug("AtmoOrbHandler - Successfully joined UDP multicast group {0} ({1}:{2})", ID, ip, port);
+        Log.Debug("AtmoOrbHandler - [UDP Multicast] Successfully joined UDP multicast group {0} ({1}:{2})", ID, ip, port);
 
         if (_coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ||
             _coreObject.GetCurrentEffect() == ContentEffect.Undefined)
@@ -89,8 +89,8 @@ namespace AtmoLight.Targets
       }
       catch (Exception ex)
       {
-        Log.Error("AtmoOrbHandler - Exception while connecting to UDP multicast group {0} ({1}:{2})", ID, ip, port);
-        Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
+        Log.Error("AtmoOrbHandler - [UDP Multicast] Exception while connecting to UDP multicast group {0} ({1}:{2})", ID, ip, port);
+        Log.Error("AtmoOrbHandler - [UDP Multicast] Exception: {0}", ex.Message);
       }
     }
 
@@ -108,8 +108,8 @@ namespace AtmoLight.Targets
       }
       catch (Exception ex)
       {
-        Log.Error("AtmoOrbHandler - Exception while disconnecting from UDP multicast group {0} ({1}:{2})", ID, IP, Port);
-        Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
+        Log.Error("AtmoOrbHandler - [UDP Multicast] Exception while disconnecting from UDP multicast group {0} ({1}:{2})", ID, IP, Port);
+        Log.Error("AtmoOrbHandler - [UDP Multicast] Exception: {0}", ex.Message);
       }
     }
 

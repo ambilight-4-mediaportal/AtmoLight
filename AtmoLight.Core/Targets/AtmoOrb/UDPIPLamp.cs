@@ -66,7 +66,7 @@ namespace AtmoLight.Targets
         _client = new UdpClient();
         _clientEndpoint = new IPEndPoint(IPAddress.Parse(ip), port);
         _isConnected = true;
-        Log.Debug("AtmoOrbHandler - Successfully connected to lamp {0} ({1}:{2})", ID, ip, port);
+        Log.Debug("AtmoOrbHandler - [UDP IP] Successfully connected to lamp {0} ({1}:{2})", ID, ip, port);
 
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ||
             coreObject.GetCurrentEffect() == ContentEffect.Undefined)
@@ -85,8 +85,8 @@ namespace AtmoLight.Targets
       }
       catch (Exception ex)
       {
-        Log.Error("AtmoOrbHandler - Exception while connecting to lamp {0} ({1}:{2})", ID, ip, port);
-        Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
+        Log.Error("AtmoOrbHandler - [UDP IP] Exception while connecting to lamp {0} ({1}:{2})", ID, ip, port);
+        Log.Error("AtmoOrbHandler - [UDP IP] Exception: {0}", ex.Message);
       }
     }
 
@@ -103,8 +103,8 @@ namespace AtmoLight.Targets
       }
       catch (Exception ex)
       {
-        Log.Error("AtmoOrbHandler - Exception while disconnecting from lamp {0} ({1}:{2})", ID, IP, Port);
-        Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
+        Log.Error("AtmoOrbHandler - [UDP IP] Exception while disconnecting from lamp {0} ({1}:{2})", ID, IP, Port);
+        Log.Error("AtmoOrbHandler - [UDP IP] Exception: {0}", ex.Message);
       }
     }
 
