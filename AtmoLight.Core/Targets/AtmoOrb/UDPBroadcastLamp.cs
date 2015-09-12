@@ -8,7 +8,7 @@ namespace AtmoLight.Targets
   {
     private bool _isConnected;
     private UdpClient _client;
-    private IPEndPoint clientEndpoint;
+    private IPEndPoint _clientEndpoint;
     private readonly Core _coreObject = Core.GetInstance();
 
     public UDPBroadcastLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd,
@@ -61,7 +61,7 @@ namespace AtmoLight.Targets
       {
         Disconnect();
         _client = new UdpClient();
-        clientEndpoint = new IPEndPoint(IPAddress.Parse(ip), port);
+        _clientEndpoint = new IPEndPoint(IPAddress.Parse(ip), port);
         _isConnected = true;
         Log.Debug("AtmoOrbHandler - Successfully connected to lamp {0} ({1}:{2})", ID, ip, port);
 
@@ -141,7 +141,7 @@ namespace AtmoLight.Targets
         bytes[5] = green;
         bytes[6] = blue;
 
-        _client.Send(bytes, bytes.Length, clientEndpoint);
+        _client.Send(bytes, bytes.Length, _clientEndpoint);
       }
       catch (Exception e)
       {

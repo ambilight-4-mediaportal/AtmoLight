@@ -8,7 +8,7 @@ namespace AtmoLight.Targets
   {
     private bool _isConnected;
     private Socket _socket;
-    private IPEndPoint _ipClientEndpoint;
+    private IPEndPoint _clientEndpoint;
     private readonly Core _coreObject = Core.GetInstance();
 
     public UDPMulticastLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd,
@@ -64,11 +64,11 @@ namespace AtmoLight.Targets
         var multiCastIp = IPAddress.Parse(ip);
 
         _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        _ipClientEndpoint = new IPEndPoint(multiCastIp, port);
+        _clientEndpoint = new IPEndPoint(multiCastIp, port);
         _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership,
           new MulticastOption(multiCastIp));
         _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 2);
-        _socket.Connect(_ipClientEndpoint);
+        _socket.Connect(_clientEndpoint);
 
         _isConnected = true;
         Log.Debug("AtmoOrbHandler - Successfully joined UDP multicast group {0} ({1}:{2})", ID, ip, port);
@@ -102,7 +102,7 @@ namespace AtmoLight.Targets
         {
           _socket.Close();
           _socket = null;
-          _ipClientEndpoint = null;
+          _clientEndpoint = null;
         }
         _isConnected = false;
       }
