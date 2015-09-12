@@ -2541,11 +2541,13 @@ namespace AtmoLight
             {
               tbAtmoOrbIP.ReadOnly = false;
               tbAtmoOrbPort.ReadOnly = false;
+              cbAtmoOrbProtocolType.Enabled = true;
             }
             else if (cbAtmoOrbProtocolType.Text == "Broadcast")
             {
               tbAtmoOrbIP.ReadOnly = true;
               tbAtmoOrbPort.ReadOnly = true;
+              cbAtmoOrbProtocolType.Enabled = true;
               tbAtmoOrbIP.Text = "";
               tbAtmoOrbPort.Text = "";
             }
@@ -2553,6 +2555,7 @@ namespace AtmoLight
             {
               tbAtmoOrbIP.ReadOnly = false;
               tbAtmoOrbPort.ReadOnly = false;
+              cbAtmoOrbProtocolType.Enabled = true;
             }
           }
         }
