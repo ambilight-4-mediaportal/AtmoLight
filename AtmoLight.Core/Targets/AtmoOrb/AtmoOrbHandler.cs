@@ -15,6 +15,7 @@ namespace AtmoLight.Targets
   public enum LampType
   {
     UDP,
+    UDPMultiCast,
     TCP
   }
 
@@ -173,12 +174,17 @@ namespace AtmoLight.Targets
         // Read lamp map and create lamp instances
         if (lamps.Count == 0)
         {
+          
           for (int i = 0; i < coreObject.atmoOrbLamps.Count; i++)
           {
             string[] settings = coreObject.atmoOrbLamps[i].Split(',');
             if (settings[1] == "UDP")
             {
               lamps.Add(new UDPLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8])));
+            }
+            else if (settings[1] == "UDP Multicast")
+            {
+              lamps.Add(new UDPMulticastLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]), int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8])));
             }
             else if (settings[1] == "TCP")
             {
@@ -187,13 +193,19 @@ namespace AtmoLight.Targets
           }
         }
 
-        // Connect tcp lamps
+        // Connect tcp and/or join udp multicast groups
         foreach (var lamp in lamps)
         {
-          lamp.Connect(lamp.IP, lamp.Port);
+          if (lamp.Type == LampType.TCP)
+          {
+            lamp.Connect(lamp.IP, lamp.Port);
+          }
+          else if (lamp.Type == LampType.UDPMultiCast)
+          {
+            lamp.Connect(lamp.IP, lamp.Port);
+          }
         }
 
-        /*
         // Start udp server if udp lamps are being used
         if (UDPLampPresent())
         {
@@ -209,7 +221,7 @@ namespace AtmoLight.Targets
           udpClientBroadcast.Send(bytes, bytes.Length, udpClientBroadcastEndpoint);
 
           udpClientBroadcast.Close();
-        }*/
+        }
 
         initLock = false;
       }
@@ -236,6 +248,7 @@ namespace AtmoLight.Targets
       {
         return;
       }
+
       try
       {
         if (coreObject.GetCurrentEffect() == ContentEffect.VUMeter || coreObject.GetCurrentEffect() == ContentEffect.VUMeterRainbow)
@@ -369,6 +382,10 @@ namespace AtmoLight.Targets
 
     private void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff = false)
     {
+      if (!IsConnected())
+      {
+        return;
+      }
 
       foreach (var lamp in lamps)
       {

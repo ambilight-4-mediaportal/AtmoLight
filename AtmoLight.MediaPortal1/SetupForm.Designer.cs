@@ -99,6 +99,7 @@
       this.cbVideo = new System.Windows.Forms.ComboBox();
       this.lblVidTvRec = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
+      this.ckMonitorWindowState = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionVertical = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionHorizontal = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionLinkAreas = new System.Windows.Forms.CheckBox();
@@ -260,7 +261,7 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
-      this.ckMonitorWindowState = new System.Windows.Forms.CheckBox();
+      this.rbAtmoOrbUDPMulticast = new System.Windows.Forms.RadioButton();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -1081,6 +1082,16 @@
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
       // 
+      // ckMonitorWindowState
+      // 
+      this.ckMonitorWindowState.AutoSize = true;
+      this.ckMonitorWindowState.Location = new System.Drawing.Point(13, 325);
+      this.ckMonitorWindowState.Name = "ckMonitorWindowState";
+      this.ckMonitorWindowState.Size = new System.Drawing.Size(295, 17);
+      this.ckMonitorWindowState.TabIndex = 42;
+      this.ckMonitorWindowState.Text = "Turn off leds while Mediaportal is minimized or suspended";
+      this.ckMonitorWindowState.UseVisualStyleBackColor = true;
+      // 
       // cbBlackbarDetectionVertical
       // 
       this.cbBlackbarDetectionVertical.AutoSize = true;
@@ -1699,6 +1710,7 @@
       // 
       // grpAtmoOrbLamps
       // 
+      this.grpAtmoOrbLamps.Controls.Add(this.rbAtmoOrbUDPMulticast);
       this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbVScanTo);
       this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbHScanTo);
       this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbConnection);
@@ -2673,15 +2685,17 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
-      // ckMonitorWindowState
+      // rbAtmoOrbUDPMulticast
       // 
-      this.ckMonitorWindowState.AutoSize = true;
-      this.ckMonitorWindowState.Location = new System.Drawing.Point(13, 325);
-      this.ckMonitorWindowState.Name = "ckMonitorWindowState";
-      this.ckMonitorWindowState.Size = new System.Drawing.Size(295, 17);
-      this.ckMonitorWindowState.TabIndex = 42;
-      this.ckMonitorWindowState.Text = "Turn off leds while Mediaportal is minimized or suspended";
-      this.ckMonitorWindowState.UseVisualStyleBackColor = true;
+      this.rbAtmoOrbUDPMulticast.AutoSize = true;
+      this.rbAtmoOrbUDPMulticast.Location = new System.Drawing.Point(640, 48);
+      this.rbAtmoOrbUDPMulticast.Name = "rbAtmoOrbUDPMulticast";
+      this.rbAtmoOrbUDPMulticast.Size = new System.Drawing.Size(93, 17);
+      this.rbAtmoOrbUDPMulticast.TabIndex = 22;
+      this.rbAtmoOrbUDPMulticast.TabStop = true;
+      this.rbAtmoOrbUDPMulticast.Text = "UDP Multicast";
+      this.rbAtmoOrbUDPMulticast.UseVisualStyleBackColor = true;
+      this.rbAtmoOrbUDPMulticast.CheckedChanged += new System.EventHandler(this.rbAtmoOrbUDPTCP_CheckedChanged);
       // 
       // SetupForm
       // 
@@ -2994,5 +3008,6 @@
     private System.Windows.Forms.CheckBox cbBlackbarDetectionHorizontal;
     private System.Windows.Forms.CheckBox cbBlackbarDetectionLinkAreas;
     private System.Windows.Forms.CheckBox ckMonitorWindowState;
+    private System.Windows.Forms.RadioButton rbAtmoOrbUDPMulticast;
   }
 }
