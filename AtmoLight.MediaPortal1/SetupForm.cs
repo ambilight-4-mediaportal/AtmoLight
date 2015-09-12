@@ -507,7 +507,6 @@ namespace AtmoLight
         return;
       }
 
-
       /*
        * Settings with specific Integer restrictions
        */

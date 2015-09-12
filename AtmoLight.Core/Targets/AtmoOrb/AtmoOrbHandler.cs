@@ -201,8 +201,8 @@ namespace AtmoLight.Targets
             }
             else if (settings[1] == "UDP_Broadcast")
             {
-              lamps.Add(new UDPBroadcastLamp(settings[0], int.Parse(settings[4]),int.Parse(settings[5]),
-                int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8])));
+              lamps.Add(new UDPBroadcastLamp(settings[0], int.Parse(settings[2]),int.Parse(settings[3]),
+                int.Parse(settings[4]), int.Parse(settings[5]), bool.Parse(settings[6])));
             }
             else if (settings[1] == "UDP_Multicast")
             {
