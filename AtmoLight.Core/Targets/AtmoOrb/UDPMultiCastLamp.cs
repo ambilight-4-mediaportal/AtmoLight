@@ -125,48 +125,10 @@ namespace AtmoLight.Targets
         return;
       }
 
-      if (forceLightsOff)
-      {
-        ForceLightsOff();
-      }
-      else
-      {
-        try
-        {
-          // Fixed led count to expand later as its optional by default
-          byte ledCount = 24;
-          var bytes = new byte[3 + ledCount*3];
-
-          // Command identifier: C0FFEE
-          bytes[0] = 0xC0;
-          bytes[1] = 0xFF;
-          bytes[2] = 0xEE;
-
-          // Options parameter, force leds off = 1
-          bytes[3] = 0;
-
-          // RED / GREEN / BLUE
-          bytes[4] = red;
-          bytes[5] = green;
-          bytes[6] = blue;
-
-          _socket.Send(bytes, bytes.Length, SocketFlags.None);
-          //Send(socket, bytes, 0, bytes.Length, 50);
-        }
-        catch (Exception e)
-        {
-          Log.Error("Error during send message..");
-        }
-      }
-    }
-
-    private void ForceLightsOff()
-    {
       try
       {
-        // Fixed led count to expand later as its optional by default
-        byte ledCount = 24;
-        var bytes = new byte[3 + ledCount*3];
+        byte commandCount = 24;
+        byte[] bytes = new byte[3 + commandCount * 3];
 
         // Command identifier: C0FFEE
         bytes[0] = 0xC0;
@@ -174,12 +136,19 @@ namespace AtmoLight.Targets
         bytes[2] = 0xEE;
 
         // Options parameter, force leds off = 1
-        bytes[3] = 1;
+        if (forceLightsOff)
+        {
+          bytes[3] = 1;
+        }
+        else
+        {
+          bytes[3] = 0;
+        }
 
         // RED / GREEN / BLUE
-        bytes[4] = 0;
-        bytes[5] = 0;
-        bytes[6] = 0;
+        bytes[4] = red;
+        bytes[5] = green;
+        bytes[6] = blue;
 
         _socket.Send(bytes, bytes.Length, SocketFlags.None);
         //Send(socket, bytes, 0, bytes.Length, 50);

@@ -1,42 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Net.Sockets;
 using System.Net;
+using System.Net.Sockets;
 
 namespace AtmoLight.Targets
 {
-  class UDPLamp : ILamp
+  internal class UDPLamp : ILamp
   {
-    private string id;
-    private string ip;
-    private int port;
-    private int hScanStart;
-    private int hScanEnd;
-    private int vScanStart;
-    private int vScanEnd;
-    private bool zoneInverted;
-    private bool isConnected = false;
-    private UdpClient udpClient;
-    private IPEndPoint udpClientEndpoint;
-    private Core coreObject = Core.GetInstance();
+    private bool _isConnected;
+    private UdpClient _client;
+    private IPEndPoint clientEndpoint;
+    private readonly Core _coreObject = Core.GetInstance();
 
-    public UDPLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd, bool zoneInverted)
+    public UDPLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd,
+      bool zoneInverted)
     {
-      this.id = id;
-      this.ip = ip;
-      this.port = port;
-      this.hScanStart = hScanStart;
-      this.hScanEnd = hScanEnd;
-      this.vScanStart = vScanStart;
-      this.vScanEnd = vScanEnd;
-      this.zoneInverted = zoneInverted;
+      ID = id;
+      IP = ip;
+      Port = port;
+      HScanStart = hScanStart;
+      HScanEnd = hScanEnd;
+      VScanStart = vScanStart;
+      VScanEnd = vScanEnd;
+      ZoneInverted = zoneInverted;
     }
 
-    public string ID { get { return id; } }
+    public string ID { get; private set; }
 
-    public LampType Type { get { return LampType.UDP; } }
+    public LampType Type
+    {
+      get { return LampType.UDP; }
+    }
 
     public int[] OverallAverageColor { get; set; }
 
@@ -46,49 +39,49 @@ namespace AtmoLight.Targets
 
     public int PixelCount { get; set; }
 
-    public int HScanStart { get { return hScanStart; } }
+    public int HScanStart { get; private set; }
 
-    public int HScanEnd { get { return hScanEnd; } }
+    public int HScanEnd { get; private set; }
 
-    public int VScanStart { get { return vScanStart; } }
+    public int VScanStart { get; private set; }
 
-    public int VScanEnd { get { return vScanEnd; } }
+    public int VScanEnd { get; private set; }
 
-    public bool ZoneInverted { get { return zoneInverted; } }
+    public bool ZoneInverted { get; private set; }
 
-    public string IP { get { return ip; } }
+    public string IP { get; private set; }
 
-    public int Port { get { return port; } }
+    public int Port { get; private set; }
 
     public void Connect(string ip, int port)
     {
-      this.ip = ip;
-      this.port = port;
+      IP = ip;
+      Port = port;
       try
       {
         Disconnect();
-        udpClient = new UdpClient();
-        udpClientEndpoint = new IPEndPoint(IPAddress.Parse(ip), port);
-        isConnected = true;
-        Log.Debug("AtmoOrbHandler - Successfully connected to lamp {0} ({1}:{2})", id, ip, port);
+        _client = new UdpClient();
+        clientEndpoint = new IPEndPoint(IPAddress.Parse(ip), port);
+        _isConnected = true;
+        Log.Debug("AtmoOrbHandler - Successfully connected to lamp {0} ({1}:{2})", ID, ip, port);
 
-        if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.Undefined)
+        if (_coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ||
+            _coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
           ChangeColor(0, 0, 0, true);
         }
-        else if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
+        else if (_coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
         {
-
-          byte red = byte.Parse(coreObject.staticColor[0].ToString());
-          byte green = byte.Parse(coreObject.staticColor[1].ToString());
-          byte blue = byte.Parse(coreObject.staticColor[2].ToString());
+          var red = byte.Parse(_coreObject.staticColor[0].ToString());
+          var green = byte.Parse(_coreObject.staticColor[1].ToString());
+          var blue = byte.Parse(_coreObject.staticColor[2].ToString());
 
           ChangeColor(red, green, blue, false);
         }
       }
       catch (Exception ex)
       {
-        Log.Error("AtmoOrbHandler - Exception while connecting to lamp {0} ({1}:{2})", id, ip, port);
+        Log.Error("AtmoOrbHandler - Exception while connecting to lamp {0} ({1}:{2})", ID, ip, port);
         Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
       }
     }
@@ -97,73 +90,36 @@ namespace AtmoLight.Targets
     {
       try
       {
-        if (udpClient != null)
+        if (_client != null)
         {
-          udpClient.Close();
-          udpClient = null;
+          _client.Close();
+          _client = null;
         }
-        isConnected = false;
+        _isConnected = false;
       }
       catch (Exception ex)
       {
-        Log.Error("AtmoOrbHandler - Exception while disconnecting from lamp {0} ({1}:{2})", id, ip, port);
+        Log.Error("AtmoOrbHandler - Exception while disconnecting from lamp {0} ({1}:{2})", ID, IP, Port);
         Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
       }
     }
 
     public bool IsConnected()
     {
-      return isConnected;
+      return _isConnected;
     }
 
-    public void ChangeColor(byte red, byte green , byte blue, bool forceLightsOff)
+    public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff)
     {
       if (!IsConnected())
       {
         return;
       }
-      
-      if (forceLightsOff)
-      {
-        ForceLightsOff();
-      }
-      else
-      {
-        try
-        {
-          // Fixed led count to expand later as its optional by default
-          byte ledCount = 24;
-          byte[] bytes = new byte[3 + ledCount * 3];
 
-          // Command identifier: C0FFEE
-          bytes[0] = 0xC0;
-          bytes[1] = 0xFF;
-          bytes[2] = 0xEE;
-
-          // Options parameter, force leds off = 1
-          bytes[3] = 0;
-
-          // RED / GREEN / BLUE
-          bytes[4] = red;
-          bytes[5] = green;
-          bytes[6] = blue;
-
-          udpClient.Send(bytes, bytes.Length, udpClientEndpoint);
-          //Send(socket, bytes, 0, bytes.Length, 50);
-        }
-        catch (Exception e)
-        {
-          Log.Error("Error during send message..");
-        }
-      }
-    }
-    private void ForceLightsOff()
-    {
       try
       {
-        // Fixed led count to expand later as its optional by default
-        byte ledCount = 24;
-        byte[] bytes = new byte[3 + ledCount * 3];
+        byte commandCount = 24;
+        byte[] bytes = new byte[3 + commandCount * 3];
 
         // Command identifier: C0FFEE
         bytes[0] = 0xC0;
@@ -171,14 +127,21 @@ namespace AtmoLight.Targets
         bytes[2] = 0xEE;
 
         // Options parameter, force leds off = 1
-        bytes[3] = 1;
+        if (forceLightsOff)
+        {
+          bytes[3] = 1;
+        }
+        else
+        {
+          bytes[3] = 0;
+        }
 
         // RED / GREEN / BLUE
-        bytes[4] = 0;
-        bytes[5] = 0;
-        bytes[6] = 0;
+        bytes[4] = red;
+        bytes[5] = green;
+        bytes[6] = blue;
 
-        udpClient.Send(bytes, bytes.Length, udpClientEndpoint);
+        _client.Send(bytes, bytes.Length, clientEndpoint);
         //Send(socket, bytes, 0, bytes.Length, 50);
       }
       catch (Exception e)
@@ -186,6 +149,5 @@ namespace AtmoLight.Targets
         Log.Error("Error during send message..");
       }
     }
-
   }
 }
