@@ -2704,7 +2704,7 @@
       // lblAtmoOrbProtocol
       // 
       this.lblAtmoOrbProtocol.AutoSize = true;
-      this.lblAtmoOrbProtocol.Location = new System.Drawing.Point(347, 77);
+      this.lblAtmoOrbProtocol.Location = new System.Drawing.Point(350, 75);
       this.lblAtmoOrbProtocol.Name = "lblAtmoOrbProtocol";
       this.lblAtmoOrbProtocol.Size = new System.Drawing.Size(49, 13);
       this.lblAtmoOrbProtocol.TabIndex = 23;
