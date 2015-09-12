@@ -151,7 +151,6 @@ namespace AtmoLight.Targets
         bytes[6] = blue;
 
         _socket.Send(bytes, bytes.Length, SocketFlags.None);
-        //Send(socket, bytes, 0, bytes.Length, 50);
       }
       catch (Exception e)
       {
