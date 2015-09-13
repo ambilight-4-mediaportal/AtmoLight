@@ -303,7 +303,23 @@ public class Script
     </Items>
   </Dependencies>
   <PluginDependencies>
-    <Items />
+    <Items>
+      <PluginDependencyItem AssemblyName="AtmoLight.MediaPortal1.dll">
+        <CompatibleVersion>
+          <Items>
+            <CompatibleVersionItem>
+              <MinRequiredVersion>1.1.6.27652</MinRequiredVersion>
+              <DesignedForVersion>1.1.6.27652</DesignedForVersion>
+            </CompatibleVersionItem>
+          </Items>
+        </CompatibleVersion>
+        <SubSystemsUsed>
+          <Items>
+            <SubSystemItem Name="MP.Config" />
+          </Items>
+        </SubSystemsUsed>
+      </PluginDependencyItem>
+    </Items>
   </PluginDependencies>
   <GeneralInfo>
     <Name>AtmoLight</Name>
@@ -316,7 +332,7 @@ public class Script
       <Major>1</Major>
       <Minor>16</Minor>
       <Build>1</Build>
-      <Revision>40</Revision>
+      <Revision>36</Revision>
     </Version>
     <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
 

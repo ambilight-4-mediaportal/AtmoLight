@@ -1,18 +1,17 @@
 ﻿using System;
+using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 
 namespace AtmoLight.Targets
 {
-  internal class TCPLamp : ILamp
+  internal class UDPMulticastLamp : ILamp
   {
-    private TcpClient _client;
+    private bool isConnected;
     private Socket socket;
-    private volatile bool connectLock;
-    private Thread connectThreadHelper;
+    private IPEndPoint clientEndpoint;
     private readonly Core coreObject = Core.GetInstance();
 
-    public TCPLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd,
+    public UDPMulticastLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd,
       bool zoneInverted)
     {
       ID = id;
@@ -29,7 +28,7 @@ namespace AtmoLight.Targets
 
     public LampType Type
     {
-      get { return LampType.TCP; }
+      get { return LampType.UDPMultiCast; }
     }
 
     public int[] OverallAverageColor { get; set; }
@@ -58,31 +57,21 @@ namespace AtmoLight.Targets
     {
       IP = ip;
       Port = port;
-      if (!connectLock)
-      {
-        connectThreadHelper = new Thread(() => ConnectThreaded(ip, port));
-        connectThreadHelper.Name = "AtmoLight AtmoOrb Connect " + ID;
-        connectThreadHelper.IsBackground = true;
-        connectThreadHelper.Start();
-      }
-    }
-
-    private void ConnectThreaded(string ip, int port)
-    {
-      if (connectLock)
-      {
-        Log.Debug("AtmoOrbHandler - Connect locked for lamp {0}.", ID);
-        return;
-      }
-      connectLock = true;
       try
       {
         Disconnect();
-        _client = new TcpClient(ip, port);
-        socket = _client.Client;
-        Log.Debug("AtmoOrbHandler - Socket connected: " + socket.Connected);
-        Log.Debug("AtmoOrbHandler - TCP connected: " + _client.Connected);
-        Log.Debug("AtmoOrbHandler - Successfully connected to lamp {0} ({1}:{2})", ID, ip, port);
+
+        var multiCastIp = IPAddress.Parse(ip);
+
+        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        clientEndpoint = new IPEndPoint(multiCastIp, port);
+        socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership,
+          new MulticastOption(multiCastIp));
+        socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 2);
+        socket.Connect(clientEndpoint);
+
+        isConnected = true;
+        Log.Debug("AtmoOrbHandler - [UDP Multicast] Successfully joined UDP multicast group {0} ({1}:{2})", ID, ip, port);
 
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ||
             coreObject.GetCurrentEffect() == ContentEffect.Undefined)
@@ -97,15 +86,11 @@ namespace AtmoLight.Targets
 
           ChangeColor(red, green, blue, false, ID);
         }
-
-        // Reset lock
-        connectLock = false;
       }
       catch (Exception ex)
       {
-        connectLock = false;
-        Log.Error("AtmoOrbHandler - Exception while connecting to lamp {0} ({1}:{2})", ID, ip, port);
-        Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
+        Log.Error("AtmoOrbHandler - [UDP Multicast] Exception while connecting to UDP multicast group {0} ({1}:{2})", ID, ip, port);
+        Log.Error("AtmoOrbHandler - [UDP Multicast] Exception: {0}", ex.Message);
       }
     }
 
@@ -113,27 +98,24 @@ namespace AtmoLight.Targets
     {
       try
       {
-        if (_client != null)
+        if (socket != null)
         {
-          _client.Close();
-          _client = null;
+          socket.Close();
+          socket = null;
+          clientEndpoint = null;
         }
+        isConnected = false;
       }
       catch (Exception ex)
       {
-        Log.Error("AtmoOrbHandler - Exception while disconnecting from lamp {0} ({1}:{2})", ID, IP, Port);
-        Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
+        Log.Error("AtmoOrbHandler - [UDP Multicast] Exception while disconnecting from UDP multicast group {0} ({1}:{2})", ID, IP, Port);
+        Log.Error("AtmoOrbHandler - [UDP Multicast] Exception: {0}", ex.Message);
       }
     }
 
     public bool IsConnected()
     {
-      if (_client == null)
-      {
-        return false;
-      }
-
-      return _client.Connected && !connectLock;
+      return isConnected;
     }
 
     public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff, string orbId)
@@ -172,31 +154,12 @@ namespace AtmoLight.Targets
         bytes[6] = green;
         bytes[7] = blue;
 
-        Send(socket, bytes, 0, bytes.Length, 50);
+        socket.Send(bytes, bytes.Length, SocketFlags.None);
       }
-      catch (Exception)
+      catch (Exception e)
       {
-        //Log.Error("Error during send message..");
+        Log.Error("Error during send message..");
       }
-    }
-
-    public static void Send(Socket socket, byte[] buffer, int offset, int size, int timeout)
-    {
-      var startTickCount = Environment.TickCount;
-      var sent = 0; // how many bytes is already sent
-      do
-      {
-        if (Environment.TickCount > startTickCount + timeout)
-          return;
-        try
-        {
-          sent += socket.Send(buffer, offset + sent, size - sent, SocketFlags.None);
-        }
-        catch (Exception e)
-        {
-          //
-        }
-      } while (sent < size);
     }
   }
 }
