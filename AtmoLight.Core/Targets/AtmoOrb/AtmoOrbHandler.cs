@@ -441,7 +441,7 @@ namespace AtmoLight.Targets
 
       foreach (var lamp in lamps)
       {
-        lamp.ChangeColor(red, green, blue, forceLightsOff);
+        lamp.ChangeColor(red, green, blue, forceLightsOff, lamp.ID);
       }
     }
 
@@ -473,6 +473,7 @@ namespace AtmoLight.Targets
         var udpServerEndpoint = new IPEndPoint(IPAddress.Any, coreObject.atmoOrbBroadcastPort);
         var bytes = udpBroadcastServer.EndReceive(ar, ref udpServerEndpoint);
         var message = Encoding.ASCII.GetString(bytes);
+
         var splitMessage = message.Split(':', ',', ';');
         if (splitMessage.Length >= 4)
         {

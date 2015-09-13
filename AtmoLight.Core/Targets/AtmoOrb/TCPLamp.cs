@@ -87,7 +87,7 @@ namespace AtmoLight.Targets
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ||
             coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
-          ChangeColor(0, 0, 0, true);
+          ChangeColor(0, 0, 0, true, ID);
         }
         else if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
         {
@@ -95,7 +95,7 @@ namespace AtmoLight.Targets
           var green = byte.Parse(coreObject.staticColor[1].ToString());
           var blue = byte.Parse(coreObject.staticColor[2].ToString());
 
-          ChangeColor(red, green, blue, false);
+          ChangeColor(red, green, blue, false, ID);
         }
 
         // Reset lock
@@ -136,7 +136,7 @@ namespace AtmoLight.Targets
       return _client.Connected && !connectLock;
     }
 
-    public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff)
+    public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff, string orbId)
     {
       if (!IsConnected())
       {
@@ -153,20 +153,22 @@ namespace AtmoLight.Targets
         bytes[1] = 0xFF;
         bytes[2] = 0xEE;
 
-        // Options parameter, force leds off = 1
+        // Options parameter: 1 = force off | 2 = validate command by Orb ID
         if (forceLightsOff)
         {
           bytes[3] = 1;
         }
         else
         {
-          bytes[3] = 0;
+          // Always validate by Orb ID
+          bytes[3] = 2;
+          bytes[4] = byte.Parse(orbId);
         }
 
         // RED / GREEN / BLUE
-        bytes[4] = red;
-        bytes[5] = green;
-        bytes[6] = blue;
+        bytes[5] = red;
+        bytes[6] = green;
+        bytes[7] = blue;
 
         Send(socket, bytes, 0, bytes.Length, 50);
       }

@@ -65,11 +65,11 @@ namespace AtmoLight.Targets
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ||
             coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
-          ChangeColor(0, 0, 0, true);
+          ChangeColor(0, 0, 0, true, ID);
         }
         else if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
         {
-          ChangeColor(0, 0, 0, false);
+          ChangeColor(0, 0, 0, false, ID);
         }
       }
       catch (Exception ex)
@@ -102,7 +102,7 @@ namespace AtmoLight.Targets
       return isConnected;
     }
 
-    public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff)
+    public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff, string orbId)
     {
       var color = string.Format("#{0:X}{1:X}{2:X}", red, green, blue);
 
