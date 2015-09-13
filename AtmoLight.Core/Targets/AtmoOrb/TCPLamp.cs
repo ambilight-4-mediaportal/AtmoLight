@@ -162,8 +162,10 @@ namespace AtmoLight.Targets
         {
           // Always validate by Orb ID
           bytes[3] = 2;
-          bytes[4] = byte.Parse(orbId);
         }
+
+        // Orb ID
+        bytes[4] = byte.Parse(orbId);
 
         // RED / GREEN / BLUE
         bytes[5] = red;
