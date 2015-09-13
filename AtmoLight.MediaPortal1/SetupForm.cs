@@ -2555,6 +2555,8 @@ namespace AtmoLight
               tbAtmoOrbIP.ReadOnly = false;
               tbAtmoOrbPort.ReadOnly = false;
               cbAtmoOrbProtocolType.Enabled = true;
+              tbAtmoOrbIP.Text = "239.15.18.2";
+              tbAtmoOrbPort.Text = "49692";
             }
           }
         }
@@ -2578,6 +2580,8 @@ namespace AtmoLight
       {
         tbAtmoOrbIP.ReadOnly = false;
         tbAtmoOrbPort.ReadOnly = false;
+        tbAtmoOrbIP.Text = "239.15.18.2";
+        tbAtmoOrbPort.Text = "49692";
       }
     }
 
