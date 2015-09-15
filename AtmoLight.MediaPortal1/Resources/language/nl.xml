@@ -40,6 +40,7 @@
     <string name="ErrorColor">Voor aub een nummer tussen tussen 0 en 255 voor [Color].</string>
     <string name="ErrorInvalidNumber">Een geldig nummer is verplicht en moet binnen beginnen op [minInteger].</string>
     <string name="ErrorInvalidNumberRange">Een geldig nummer tussen [minInteger] en [maxInteger] is verplicht.</string>
+    <string name="ErrorInvalidString">You have to enter a text value</string>
     <string name="ErrorRemoteButton">Je kan deze afstansbediening knop niet aan meer dan 1 taak toewijzen.</string>
     <string name="ErrorIP">Er is een ongeldig IP adres ingevuld.</string>
     <string name="ErrorFileGeneric">Er is een ongeldige bestand/pad ingevuld.</string>
@@ -53,6 +54,7 @@
     <string name="Yellow">Geel</string>
     <string name="MS">ms</string>
     <string name="NetworkSettings">Netwerk</string>
+    <string name="None">Geen</string>
   </Common>
   <SetupForm>
     <string name="EffectSettings">Effect instellingen</string>
@@ -143,6 +145,7 @@
     <string name="AtmoOrb">AtmoOrb</string>
     <string name="BroadcastPort">Uitzendings port:</string>
     <string name="ConnectionType">Connectie type</string>
+    <string name="Protocol">Protocol</string>
     <string name="HScan">Hscan van</string>
     <string name="VScan">Vscan van</string>
     <string name="ScanTo">tot</string>

@@ -39,6 +39,7 @@
     <string name="ErrorFile">Unzulässiger Dateiname. Bitte wählen Sie den Pfad zu [Filename].</string>
     <string name="ErrorColor">Bitte geben Sie eine Zahl zwischen 0 und 255 für [Color].</string>
     <string name="ErrorInvalidNumber">Bitte geben Sie eine Zahl ein die mindestens [minInteger] groß ist</string>
+	<string name="ErrorInvalidString">You have to enter a text value</string>
     <string name="ErrorInvalidNumberRange">Bitte geben sie eine Zahl zwischen [minInteger] und [maxInteger] ein.</string>
     <string name="ErrorRemoteButton">Sie können jede Fernbedienungstaste jeweils nur einmal zuweisen.</string>
     <string name="ErrorIP">Bitte geben Sie eine gültige IP Adresse ein.</string>
@@ -138,6 +139,7 @@
     <string name="AtmoOrb">AtmoOrb</string>
     <string name="BroadcastPort">Broadcast Port:</string>
     <string name="ConnectionType">Verbindungs Typ</string>
+	<string name="Protocol">Protokoll</string>
     <string name="HScan">HScan ab</string>
     <string name="VScan">VScan ab</string>
     <string name="ScanTo">bis</string>
@@ -148,6 +150,13 @@
   </AtmoOrb>
   <AtmoWin>
     <string name="AtmoWin">AtmoWin</string>
+	<string name="AtmoWakeHelperDescription">COM Port aufwach Helfer (optional)</string>
+	<string name="AtmoWakeHelperEnabled">Aktivieren</string>
+	<string name="AtmoWakeHelperComPort">AtmoWin COM Port</string>
+	<string name="AtmoWakeHelperResumeDelay">Aufwach Verzögerung (ms)</string>
+	<string name="AtmoWakeHelperDisconnectDelay">Trenn Verzögerung (ms)</string>
+	<string name="AtmoWakeHelperConnectDelay">Verbindungs Verzögerung (ms)</string>
+	<string name="AtmoWakeHelperReinitializationDelay">Wiederverbindungs Verzögerung (ms)</string>
   </AtmoWin>
   <Boblight>
     <string name="Boblight">Boblight</string>
@@ -163,6 +172,8 @@
     <string name="RemoteMachine">AtmoHue befindet sich auf einem anderem PC (Dateipfad Überprüfung überspringen)</string>
     <string name="EnableBridgeOnResume">Beim aufwachen aus Standby Hue Bridge aktivieren</string>
     <string name="DisableBridgeonSuspend">Hue Bridge deaktivieren wenn PC in Standby Modus geht</string>
+	<string name="HueTheaterEnabled">Kino Modus aktivieren</string>
+	<string name="HueTheaterRestoreLights">Lichter nach Videoende wieder einschalten</string>
     <string name="AverageColor">Durchschnittliche Farben Einstellungen</string>
     <string name="All">Alle</string>
     <string name="Off">Aus</string>
@@ -171,6 +182,7 @@
     <string name="StaticColorGroup">Hue - setze statische Farbe für Gruppe</string>
     <string name="SelectStaticColorGroup">Hue - wähle statische Farbe für Gruppe</string>
     <string name="Hint">Tipp: AtmoHue muss an der oben angegeben IP und dem Port verfügbar sein. Bitte hier nicht die Hue Bridge Informationen eintragen.</string>
+	<string name="HintTheaterMode">Tipp: Wenn der Kino Modus aktiviert ist, werden die Lichter während der Wiedergabe ausgeschaltet und hinterher wieder eingeschaltet, falls diese Option aktiviert ist</string>
   </Hue>
   <Hyperion>
     <string name="Hyperion">Hyperion</string>

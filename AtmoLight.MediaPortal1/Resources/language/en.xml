@@ -40,6 +40,7 @@
     <string name="ErrorColor">Please enter a number between 0 and 255 for [Color].</string>
     <string name="ErrorInvalidNumber">You have to enter a valid number starting at [minInteger]</string>
     <string name="ErrorInvalidNumberRange">You have to enter a valid number between [minInteger] and [maxInteger]</string>
+    <string name="ErrorInvalidString">You have to enter a text value</string>
     <string name="ErrorRemoteButton">You cant use the same remote key for more than one task.</string>
     <string name="ErrorIP">You have entered an invalid IP address</string>
     <string name="ErrorFileGeneric">You have selected an invalid file/path</string>
@@ -144,6 +145,7 @@
     <string name="AtmoOrb">AtmoOrb</string>
     <string name="BroadcastPort">Broadcast port:</string>
     <string name="ConnectionType">Connection type</string>
+    <string name="Protocol">Protocol</string>
     <string name="HScan">Hscan from</string>
     <string name="VScan">Vscan from</string>
     <string name="ScanTo">to</string>

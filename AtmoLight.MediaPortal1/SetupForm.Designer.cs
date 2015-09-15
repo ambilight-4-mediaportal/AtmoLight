@@ -174,6 +174,8 @@
       this.btnSelectFileAmbiBox = new System.Windows.Forms.Button();
       this.tabPageAtmoOrb = new System.Windows.Forms.TabPage();
       this.grpAtmoOrbLamps = new System.Windows.Forms.GroupBox();
+      this.lblAtmoOrbProtocol = new System.Windows.Forms.Label();
+      this.cbAtmoOrbProtocol = new System.Windows.Forms.ComboBox();
       this.lblAtmoOrbVScanTo = new System.Windows.Forms.Label();
       this.lblAtmoOrbHScanTo = new System.Windows.Forms.Label();
       this.lblAtmoOrbConnection = new System.Windows.Forms.Label();
@@ -277,8 +279,6 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
-      this.cbAtmoOrbProtocolType = new System.Windows.Forms.ComboBox();
-      this.lblAtmoOrbProtocol = new System.Windows.Forms.Label();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -1887,7 +1887,7 @@
       // grpAtmoOrbLamps
       // 
       this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbProtocol);
-      this.grpAtmoOrbLamps.Controls.Add(this.cbAtmoOrbProtocolType);
+      this.grpAtmoOrbLamps.Controls.Add(this.cbAtmoOrbProtocol);
       this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbVScanTo);
       this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbHScanTo);
       this.grpAtmoOrbLamps.Controls.Add(this.lblAtmoOrbConnection);
@@ -1916,6 +1916,29 @@
       this.grpAtmoOrbLamps.TabIndex = 1;
       this.grpAtmoOrbLamps.TabStop = false;
       this.grpAtmoOrbLamps.Text = "Lamp settings";
+      // 
+      // lblAtmoOrbProtocol
+      // 
+      this.lblAtmoOrbProtocol.AutoSize = true;
+      this.lblAtmoOrbProtocol.Location = new System.Drawing.Point(350, 75);
+      this.lblAtmoOrbProtocol.Name = "lblAtmoOrbProtocol";
+      this.lblAtmoOrbProtocol.Size = new System.Drawing.Size(49, 13);
+      this.lblAtmoOrbProtocol.TabIndex = 23;
+      this.lblAtmoOrbProtocol.Text = "Protocol:";
+      // 
+      // cbAtmoOrbProtocol
+      // 
+      this.cbAtmoOrbProtocol.FormattingEnabled = true;
+      this.cbAtmoOrbProtocol.Items.AddRange(new object[] {
+            "IP",
+            "Broadcast",
+            "Multicast"});
+      this.cbAtmoOrbProtocol.Location = new System.Drawing.Point(490, 72);
+      this.cbAtmoOrbProtocol.Name = "cbAtmoOrbProtocol";
+      this.cbAtmoOrbProtocol.Size = new System.Drawing.Size(100, 21);
+      this.cbAtmoOrbProtocol.TabIndex = 22;
+      this.cbAtmoOrbProtocol.SelectedIndexChanged += new System.EventHandler(this.cbAtmoOrbProtocolType_SelectedIndexChanged);
+      this.cbAtmoOrbProtocol.Validating += new System.ComponentModel.CancelEventHandler(this.cbAtmoOrbProtocolType_Validating);
       // 
       // lblAtmoOrbVScanTo
       // 
@@ -2907,29 +2930,6 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
-      // cbAtmoOrbProtocolType
-      // 
-      this.cbAtmoOrbProtocolType.FormattingEnabled = true;
-      this.cbAtmoOrbProtocolType.Items.AddRange(new object[] {
-            "IP",
-            "Broadcast",
-            "Multicast"});
-      this.cbAtmoOrbProtocolType.Location = new System.Drawing.Point(490, 72);
-      this.cbAtmoOrbProtocolType.Name = "cbAtmoOrbProtocolType";
-      this.cbAtmoOrbProtocolType.Size = new System.Drawing.Size(100, 21);
-      this.cbAtmoOrbProtocolType.TabIndex = 22;
-      this.cbAtmoOrbProtocolType.SelectedIndexChanged += new System.EventHandler(this.cbAtmoOrbProtocolType_SelectedIndexChanged);
-      this.cbAtmoOrbProtocolType.Validating += new System.ComponentModel.CancelEventHandler(this.cbAtmoOrbProtocolType_Validating);
-      // 
-      // lblAtmoOrbProtocol
-      // 
-      this.lblAtmoOrbProtocol.AutoSize = true;
-      this.lblAtmoOrbProtocol.Location = new System.Drawing.Point(350, 75);
-      this.lblAtmoOrbProtocol.Name = "lblAtmoOrbProtocol";
-      this.lblAtmoOrbProtocol.Size = new System.Drawing.Size(49, 13);
-      this.lblAtmoOrbProtocol.TabIndex = 23;
-      this.lblAtmoOrbProtocol.Text = "Protocol:";
-      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3246,7 +3246,7 @@
     private System.Windows.Forms.CheckBox cbBlackbarDetectionLinkAreas;
     private System.Windows.Forms.CheckBox ckMonitorWindowState;
     private System.Windows.Forms.Label lblAtmoOrbProtocol;
-    private System.Windows.Forms.ComboBox cbAtmoOrbProtocolType;
+    private System.Windows.Forms.ComboBox cbAtmoOrbProtocol;
     private System.Windows.Forms.GroupBox grpHueTheaterMode;
     private System.Windows.Forms.CheckBox ckHueTheaterRestoreLights;
     private System.Windows.Forms.CheckBox ckHueTheaterEnabled;

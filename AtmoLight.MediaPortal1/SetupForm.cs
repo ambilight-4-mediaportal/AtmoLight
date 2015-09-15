@@ -266,6 +266,7 @@ namespace AtmoLight
       lblAtmoOrbBlackThreshold.Text = Localization.Translate("Common", "BlackThreshold");
       lblAtmoOrbBroadcastPort.Text = Localization.Translate("AtmoOrb", "BroadcastPort");
       lblAtmoOrbConnection.Text = Localization.Translate("AtmoOrb", "ConnectionType");
+      lblAtmoOrbProtocol.Text = Localization.Translate("AtmoOrb", "Protocol");
       lblAtmoOrbGamma.Text = Localization.Translate("Common", "Gamma");
       lblAtmoOrbHScan.Text = Localization.Translate("AtmoOrb", "HScan");
       lblAtmoOrbHScanTo.Text = Localization.Translate("AtmoOrb", "ScanTo");
@@ -2388,7 +2389,7 @@ namespace AtmoLight
       }
       else if (rbAtmoOrbUDP.Checked)
       {
-        if (cbAtmoOrbProtocolType.Text == "IP" || cbAtmoOrbProtocolType.Text == "Multicast")
+        if (cbAtmoOrbProtocol.Text == "IP" || cbAtmoOrbProtocol.Text == "Multicast")
         {
           if (validatorIPAdress(tbAtmoOrbIP.Text) == false)
           {
@@ -2408,17 +2409,18 @@ namespace AtmoLight
               Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
           }
-          lampString += String.Format("UDP_{0}", cbAtmoOrbProtocolType.Text) + "," +tbAtmoOrbIP.Text + "," + tbAtmoOrbPort.Text + ",";
+          lampString += String.Format("UDP_{0}", cbAtmoOrbProtocol.Text) + "," +tbAtmoOrbIP.Text + "," + tbAtmoOrbPort.Text + ",";
         }
-        else if (cbAtmoOrbProtocolType.Text == "Broadcast")
+        else if (cbAtmoOrbProtocol.Text == "Broadcast")
         {
-          lampString += string.Format("UDP_{0}", cbAtmoOrbProtocolType.Text) + ",";
+          lampString += string.Format("UDP_{0}", cbAtmoOrbProtocol.Text) + ",";
         }
       }
 
-      if (string.IsNullOrEmpty(cbAtmoOrbProtocolType.Text))
+      if (validatorString(cbAtmoOrbProtocol.Text, 1) == false)
       {
-        MessageBox.Show("Protocol type may not be empty: [" + lblAtmoOrbProtocol.Text + "]",
+        MessageBox.Show(
+          Localization.Translate("Common", "ErrorInvalidString") + " - [" + lblAtmoOrbPort.Text + "]",
           Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
@@ -2467,7 +2469,7 @@ namespace AtmoLight
       lampString += tbAtmoOrbHScanStart.Text + "," + tbAtmoOrbHScanEnd.Text + "," + tbAtmoOrbVScanStart.Text + "," +
                     tbAtmoOrbVScanEnd.Text + ",";
       lampString += cbAtmoOrbInvertZone.Checked + ",";
-      lampString += cbAtmoOrbProtocolType.Text;
+      lampString += cbAtmoOrbProtocol.Text;
       Settings.atmoOrbLamps.Add(lampString);
       lbAtmoOrbLamps.Items.Add(tbAtmoOrbID.Text);
     }
@@ -2487,9 +2489,10 @@ namespace AtmoLight
       string lampString = "";
       lampString += tbAtmoOrbID.Text + ",";
 
-      if (string.IsNullOrEmpty(cbAtmoOrbProtocolType.Text))
+      if (validatorString(cbAtmoOrbProtocol.Text, 1) == false)
       {
-        MessageBox.Show("Protocol type may not be empty: [" + lblAtmoOrbProtocol.Text + "]",
+        MessageBox.Show(
+          Localization.Translate("Common", "ErrorInvalidString") + " - [" + lblAtmoOrbPort.Text + "]",
           Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
@@ -2517,7 +2520,7 @@ namespace AtmoLight
       }
       else if (rbAtmoOrbUDP.Checked)
       {
-        if (cbAtmoOrbProtocolType.Text == "IP" || cbAtmoOrbProtocolType.Text == "Multicast")
+        if (cbAtmoOrbProtocol.Text == "IP" || cbAtmoOrbProtocol.Text == "Multicast")
         {
           if (validatorIPAdress(tbAtmoOrbIP.Text) == false)
           {
@@ -2537,11 +2540,11 @@ namespace AtmoLight
               Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
           }
-          lampString += String.Format("UDP_{0}", cbAtmoOrbProtocolType.Text) + "," + tbAtmoOrbIP.Text + "," + tbAtmoOrbPort.Text + ",";
+          lampString += String.Format("UDP_{0}", cbAtmoOrbProtocol.Text) + "," + tbAtmoOrbIP.Text + "," + tbAtmoOrbPort.Text + ",";
         }
-        else if (cbAtmoOrbProtocolType.Text == "Broadcast")
+        else if (cbAtmoOrbProtocol.Text == "Broadcast")
         {
-          lampString += string.Format("UDP_{0}", cbAtmoOrbProtocolType.Text) + ",";
+          lampString += string.Format("UDP_{0}", cbAtmoOrbProtocol.Text) + ",";
         }
       }
       minValue = 0;
@@ -2588,7 +2591,7 @@ namespace AtmoLight
       lampString += tbAtmoOrbHScanStart.Text + "," + tbAtmoOrbHScanEnd.Text + "," + tbAtmoOrbVScanStart.Text + "," +
                     tbAtmoOrbVScanEnd.Text + ",";
       lampString += cbAtmoOrbInvertZone.Checked + ",";
-      lampString += cbAtmoOrbProtocolType.Text;
+      lampString += cbAtmoOrbProtocol.Text;
       Settings.atmoOrbLamps[lbAtmoOrbLamps.Items.IndexOf(tbAtmoOrbID.Text)] = lampString;
     }
 
@@ -2611,7 +2614,7 @@ namespace AtmoLight
           tbAtmoOrbVScanStart.Text = lampSettings[6];
           tbAtmoOrbVScanEnd.Text = lampSettings[7];
           cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[8]);
-          cbAtmoOrbProtocolType.Text = lampSettings[9];
+          cbAtmoOrbProtocol.Text = lampSettings[9];
         }
         if (lampSettings[1] == "UDP_Multicast")
         {
@@ -2626,7 +2629,7 @@ namespace AtmoLight
           tbAtmoOrbVScanStart.Text = lampSettings[6];
           tbAtmoOrbVScanEnd.Text = lampSettings[7];
           cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[8]);
-          cbAtmoOrbProtocolType.Text = lampSettings[9];
+          cbAtmoOrbProtocol.Text = lampSettings[9];
         }
         if (lampSettings[1] == "UDP_Broadcast")
         {
@@ -2641,7 +2644,7 @@ namespace AtmoLight
           tbAtmoOrbVScanStart.Text = lampSettings[4];
           tbAtmoOrbVScanEnd.Text = lampSettings[5];
           cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[6]);
-          cbAtmoOrbProtocolType.Text = lampSettings[7];
+          cbAtmoOrbProtocol.Text = lampSettings[7];
         }
         else if (lampSettings[1] == "TCP")
         {
@@ -2656,7 +2659,7 @@ namespace AtmoLight
           tbAtmoOrbVScanStart.Text = lampSettings[6];
           tbAtmoOrbVScanEnd.Text = lampSettings[7];
           cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[8]);
-          cbAtmoOrbProtocolType.Text = lampSettings[9];
+          cbAtmoOrbProtocol.Text = lampSettings[9];
         }
       }
     }
@@ -2672,30 +2675,30 @@ namespace AtmoLight
           {
             tbAtmoOrbIP.ReadOnly = false;
             tbAtmoOrbPort.ReadOnly = false;
-            cbAtmoOrbProtocolType.Text = "IP";
-            cbAtmoOrbProtocolType.Enabled = false;
+            cbAtmoOrbProtocol.Text = "IP";
+            cbAtmoOrbProtocol.Enabled = false;
           }
           else if (rb.Text == "UDP")
           {
-            if (cbAtmoOrbProtocolType.Text == "IP")
+            if (cbAtmoOrbProtocol.Text == "IP")
             {
               tbAtmoOrbIP.ReadOnly = false;
               tbAtmoOrbPort.ReadOnly = false;
-              cbAtmoOrbProtocolType.Enabled = true;
+              cbAtmoOrbProtocol.Enabled = true;
             }
-            else if (cbAtmoOrbProtocolType.Text == "Broadcast")
+            else if (cbAtmoOrbProtocol.Text == "Broadcast")
             {
               tbAtmoOrbIP.ReadOnly = true;
               tbAtmoOrbPort.ReadOnly = true;
-              cbAtmoOrbProtocolType.Enabled = true;
+              cbAtmoOrbProtocol.Enabled = true;
               tbAtmoOrbIP.Text = "";
               tbAtmoOrbPort.Text = "";
             }
-            else if (cbAtmoOrbProtocolType.Text == "Multicast")
+            else if (cbAtmoOrbProtocol.Text == "Multicast")
             {
               tbAtmoOrbIP.ReadOnly = false;
               tbAtmoOrbPort.ReadOnly = false;
-              cbAtmoOrbProtocolType.Enabled = true;
+              cbAtmoOrbProtocol.Enabled = true;
               tbAtmoOrbIP.Text = "239.15.18.2";
               tbAtmoOrbPort.Text = "49692";
             }
@@ -2705,19 +2708,19 @@ namespace AtmoLight
     }
     private void cbAtmoOrbProtocolType_SelectedIndexChanged(object sender, EventArgs e)
     {
-      if (cbAtmoOrbProtocolType.Text == "IP")
+      if (cbAtmoOrbProtocol.Text == "IP")
       {
         tbAtmoOrbIP.ReadOnly = false;
         tbAtmoOrbPort.ReadOnly = false;
       }
-      else if (cbAtmoOrbProtocolType.Text == "Broadcast")
+      else if (cbAtmoOrbProtocol.Text == "Broadcast")
       {
         tbAtmoOrbIP.ReadOnly = true;
         tbAtmoOrbPort.ReadOnly = true;
         tbAtmoOrbIP.Text = "";
         tbAtmoOrbPort.Text = "";
       }
-      else if (cbAtmoOrbProtocolType.Text == "Multicast")
+      else if (cbAtmoOrbProtocol.Text == "Multicast")
       {
         tbAtmoOrbIP.ReadOnly = false;
         tbAtmoOrbPort.ReadOnly = false;
