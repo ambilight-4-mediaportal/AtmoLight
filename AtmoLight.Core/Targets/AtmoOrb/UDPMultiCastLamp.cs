@@ -12,7 +12,7 @@ namespace AtmoLight.Targets
     private readonly Core coreObject = Core.GetInstance();
 
     public UDPMulticastLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd,
-      bool zoneInverted)
+      bool zoneInverted, int ledCount)
     {
       ID = id;
       IP = ip;
@@ -22,6 +22,7 @@ namespace AtmoLight.Targets
       VScanStart = vScanStart;
       VScanEnd = vScanEnd;
       ZoneInverted = zoneInverted;
+      LedCount = ledCount;
     }
 
     public string ID { get; private set; }
@@ -52,6 +53,8 @@ namespace AtmoLight.Targets
     public string IP { get; private set; }
 
     public int Port { get; private set; }
+
+    public int LedCount { get; private set; }
 
     public void Connect(string ip, int port)
     {
@@ -128,7 +131,7 @@ namespace AtmoLight.Targets
       try
       {
         byte commandCount = 24;
-        byte[] bytes = new byte[5 + commandCount * 3];
+        byte[] bytes = new byte[5 + LedCount * 3];
 
         // Command identifier: C0FFEE
         bytes[0] = 0xC0;

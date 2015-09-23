@@ -2466,9 +2466,21 @@ namespace AtmoLight
           Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
+
+      if (validatorInt(tbAtmoOrbLedCount.Text, 0, 5000, true) == false)
+      {
+        MessageBox.Show(
+          Localization.Translate("Common", "ErrorInvalidNumberRange")
+            .Replace("[minInteger]", minValue.ToString())
+            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbLedCount.Text + "]",
+          Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       lampString += tbAtmoOrbHScanStart.Text + "," + tbAtmoOrbHScanEnd.Text + "," + tbAtmoOrbVScanStart.Text + "," +
                     tbAtmoOrbVScanEnd.Text + ",";
       lampString += cbAtmoOrbInvertZone.Checked + ",";
+      lampString += tbAtmoOrbLedCount.Text + ",";
       lampString += cbAtmoOrbProtocol.Text;
       Settings.atmoOrbLamps.Add(lampString);
       lbAtmoOrbLamps.Items.Add(tbAtmoOrbID.Text);
@@ -2591,6 +2603,7 @@ namespace AtmoLight
       lampString += tbAtmoOrbHScanStart.Text + "," + tbAtmoOrbHScanEnd.Text + "," + tbAtmoOrbVScanStart.Text + "," +
                     tbAtmoOrbVScanEnd.Text + ",";
       lampString += cbAtmoOrbInvertZone.Checked + ",";
+      lampString += tbAtmoOrbLedCount.Text + ",";
       lampString += cbAtmoOrbProtocol.Text;
       Settings.atmoOrbLamps[lbAtmoOrbLamps.Items.IndexOf(tbAtmoOrbID.Text)] = lampString;
     }
@@ -2614,7 +2627,18 @@ namespace AtmoLight
           tbAtmoOrbVScanStart.Text = lampSettings[6];
           tbAtmoOrbVScanEnd.Text = lampSettings[7];
           cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[8]);
-          cbAtmoOrbProtocol.Text = lampSettings[9];
+
+          // Legacy checks
+          try
+          {
+            tbAtmoOrbLedCount.Text = lampSettings[9];
+            cbAtmoOrbProtocol.Text = lampSettings[10];
+          }
+          catch (Exception)
+          {
+            tbAtmoOrbLedCount.Text = "24";
+            cbAtmoOrbProtocol.Text = "IP";
+          }
         }
         if (lampSettings[1] == "UDP_Multicast")
         {
@@ -2629,7 +2653,18 @@ namespace AtmoLight
           tbAtmoOrbVScanStart.Text = lampSettings[6];
           tbAtmoOrbVScanEnd.Text = lampSettings[7];
           cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[8]);
-          cbAtmoOrbProtocol.Text = lampSettings[9];
+
+          // Legacy checks
+          try
+          {
+            tbAtmoOrbLedCount.Text = lampSettings[9];
+            cbAtmoOrbProtocol.Text = lampSettings[10];
+          }
+          catch (Exception)
+          {
+            tbAtmoOrbLedCount.Text = "24";
+            cbAtmoOrbProtocol.Text = "Multicast";
+          }
         }
         if (lampSettings[1] == "UDP_Broadcast")
         {
@@ -2644,7 +2679,20 @@ namespace AtmoLight
           tbAtmoOrbVScanStart.Text = lampSettings[4];
           tbAtmoOrbVScanEnd.Text = lampSettings[5];
           cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[6]);
-          cbAtmoOrbProtocol.Text = lampSettings[7];
+          tbAtmoOrbLedCount.Text = lampSettings[7];
+          cbAtmoOrbProtocol.Text = lampSettings[8];
+
+          // Legacy checks
+          try
+          {
+            tbAtmoOrbLedCount.Text = lampSettings[7];
+            cbAtmoOrbProtocol.Text = lampSettings[8];
+          }
+          catch (Exception)
+          {
+            tbAtmoOrbLedCount.Text = "27";
+            cbAtmoOrbProtocol.Text = "Broadcast";
+          }
         }
         else if (lampSettings[1] == "TCP")
         {
@@ -2659,7 +2707,18 @@ namespace AtmoLight
           tbAtmoOrbVScanStart.Text = lampSettings[6];
           tbAtmoOrbVScanEnd.Text = lampSettings[7];
           cbAtmoOrbInvertZone.Checked = bool.Parse(lampSettings[8]);
-          cbAtmoOrbProtocol.Text = lampSettings[9];
+
+          // Legacy checks
+          try
+          {
+            tbAtmoOrbLedCount.Text = lampSettings[9];
+            cbAtmoOrbProtocol.Text = lampSettings[10];
+          }
+          catch (Exception)
+          {
+            tbAtmoOrbLedCount.Text = "24";
+            cbAtmoOrbProtocol.Text = "IP";
+          }
         }
       }
     }
@@ -2677,6 +2736,7 @@ namespace AtmoLight
             tbAtmoOrbPort.ReadOnly = false;
             cbAtmoOrbProtocol.Text = "IP";
             cbAtmoOrbProtocol.Enabled = false;
+            tbAtmoOrbLedCount.Text = "24";
           }
           else if (rb.Text == "UDP")
           {
@@ -2685,6 +2745,7 @@ namespace AtmoLight
               tbAtmoOrbIP.ReadOnly = false;
               tbAtmoOrbPort.ReadOnly = false;
               cbAtmoOrbProtocol.Enabled = true;
+              tbAtmoOrbLedCount.Text = "24";
             }
             else if (cbAtmoOrbProtocol.Text == "Broadcast")
             {
@@ -2693,6 +2754,7 @@ namespace AtmoLight
               cbAtmoOrbProtocol.Enabled = true;
               tbAtmoOrbIP.Text = "";
               tbAtmoOrbPort.Text = "";
+              tbAtmoOrbLedCount.Text = "27";
             }
             else if (cbAtmoOrbProtocol.Text == "Multicast")
             {
@@ -2701,6 +2763,7 @@ namespace AtmoLight
               cbAtmoOrbProtocol.Enabled = true;
               tbAtmoOrbIP.Text = "239.15.18.2";
               tbAtmoOrbPort.Text = "49692";
+              tbAtmoOrbLedCount.Text = "24";
             }
           }
         }
@@ -2712,6 +2775,7 @@ namespace AtmoLight
       {
         tbAtmoOrbIP.ReadOnly = false;
         tbAtmoOrbPort.ReadOnly = false;
+        tbAtmoOrbLedCount.Text = "24";
       }
       else if (cbAtmoOrbProtocol.Text == "Broadcast")
       {
@@ -2719,6 +2783,7 @@ namespace AtmoLight
         tbAtmoOrbPort.ReadOnly = true;
         tbAtmoOrbIP.Text = "";
         tbAtmoOrbPort.Text = "";
+        tbAtmoOrbLedCount.Text = "27";
       }
       else if (cbAtmoOrbProtocol.Text == "Multicast")
       {
@@ -2726,6 +2791,7 @@ namespace AtmoLight
         tbAtmoOrbPort.ReadOnly = false;
         tbAtmoOrbIP.Text = "239.15.18.2";
         tbAtmoOrbPort.Text = "49692";
+        tbAtmoOrbLedCount.Text = "24";
       }
     }
 

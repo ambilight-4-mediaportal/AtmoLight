@@ -332,7 +332,7 @@ public class Script
       <Major>1</Major>
       <Minor>16</Minor>
       <Build>1</Build>
-      <Revision>40</Revision>
+      <Revision>41</Revision>
     </Version>
     <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
 
@@ -507,7 +507,7 @@ Version 1.16.1.12
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>image\atmolight.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{fddae37c-4f15-4e7c-bfed-7218a10fbfaf}-atmolight.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{cd09ee8f-1587-440d-91a1-caf404fd10dd}-atmolight.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>

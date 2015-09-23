@@ -197,7 +197,7 @@ namespace AtmoLight.Targets
             if (settings[1] == "UDP_IP")
             {
               lamps.Add(new UDPIPLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]),
-                int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8])));
+                int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8]), int.Parse(settings[9])));
             }
             else if (settings[1] == "UDP_Broadcast")
             {
@@ -207,12 +207,12 @@ namespace AtmoLight.Targets
             else if (settings[1] == "UDP_Multicast")
             {
               lamps.Add(new UDPMulticastLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]),
-                int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8])));
+                int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8]), int.Parse(settings[9])));
             }
             else if (settings[1] == "TCP")
             {
               lamps.Add(new TCPLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]),
-                int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8])));
+                int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8]), int.Parse(settings[9])));
             }
           }
         }
