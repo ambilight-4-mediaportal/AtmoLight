@@ -2016,7 +2016,7 @@
       // lblAtmoOrbVScan
       // 
       this.lblAtmoOrbVScan.AutoSize = true;
-      this.lblAtmoOrbVScan.Location = new System.Drawing.Point(349, 203);
+      this.lblAtmoOrbVScan.Location = new System.Drawing.Point(349, 200);
       this.lblAtmoOrbVScan.Name = "lblAtmoOrbVScan";
       this.lblAtmoOrbVScan.Size = new System.Drawing.Size(62, 13);
       this.lblAtmoOrbVScan.TabIndex = 15;
@@ -2041,7 +2041,7 @@
       // lblAtmoOrbHScan
       // 
       this.lblAtmoOrbHScan.AutoSize = true;
-      this.lblAtmoOrbHScan.Location = new System.Drawing.Point(349, 178);
+      this.lblAtmoOrbHScan.Location = new System.Drawing.Point(349, 175);
       this.lblAtmoOrbHScan.Name = "lblAtmoOrbHScan";
       this.lblAtmoOrbHScan.Size = new System.Drawing.Size(63, 13);
       this.lblAtmoOrbHScan.TabIndex = 12;
@@ -2075,7 +2075,7 @@
       // lblAtmoOrbIP
       // 
       this.lblAtmoOrbIP.AutoSize = true;
-      this.lblAtmoOrbIP.Location = new System.Drawing.Point(350, 101);
+      this.lblAtmoOrbIP.Location = new System.Drawing.Point(350, 100);
       this.lblAtmoOrbIP.Name = "lblAtmoOrbIP";
       this.lblAtmoOrbIP.Size = new System.Drawing.Size(20, 13);
       this.lblAtmoOrbIP.TabIndex = 8;
