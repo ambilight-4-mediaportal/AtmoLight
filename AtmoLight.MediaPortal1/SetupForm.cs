@@ -274,6 +274,7 @@ namespace AtmoLight
       lblAtmoOrbIP.Text = Localization.Translate("Common", "IP");
       lblAtmoOrbMinDiversion.Text = Localization.Translate("Common", "MinDiversion");
       lblAtmoOrbPort.Text = Localization.Translate("Common", "Port");
+      lblAtmoOrbLedCount.Text = Localization.Translate("AtmoOrb", "LedCount");
       lblAtmoOrbSaturation.Text = Localization.Translate("Common", "Saturation");
       lblAtmoOrbThreshold.Text = Localization.Translate("Common", "Threshold");
       lblAtmoOrbVScan.Text = Localization.Translate("AtmoOrb", "VScan");

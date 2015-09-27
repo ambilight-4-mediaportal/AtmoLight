@@ -146,6 +146,7 @@
     <string name="BroadcastPort">Uitzendings port:</string>
     <string name="ConnectionType">Connectie type</string>
     <string name="Protocol">Protocol</string>
+    <string name="LedCount">LED aantal:</string>
     <string name="HScan">Hscan van</string>
     <string name="VScan">Vscan van</string>
     <string name="ScanTo">tot</string>
