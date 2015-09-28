@@ -40,6 +40,7 @@
     <string name="ErrorColor">Veuillez entrer un chiffre compris entre 0 et 255 pour [Color].</string>
     <string name="ErrorInvalidNumber">Vous devez saisir une valeur à partir de [minInteger]</string>
     <string name="ErrorInvalidNumberRange">Vous devez saisir une valeur compris entre [minInteger] et [maxInteger]</string>
+    <string name="ErrorInvalidString">Vous devez entrer dans un texte</string>
     <string name="ErrorRemoteButton">Vous ne pouvez pas utiliser le même bouton pour plusieurs actions.</string>
     <string name="ErrorIP">L'adresse IP est invalide</string>
     <string name="ErrorFileGeneric">Le chemin d'accès au fichier est erroné.</string>
@@ -87,6 +88,7 @@
     <string name="VUMeterMinHue">Min. hue:</string>
     <string name="VUMeterMindB">Min. dB:</string>
     <string name="MonitorScreensaverState">Eteindre les leds, lorsque l'écran de veille MediaPortal est actif</string>
+    <string name="MonitorWindowState">Eteindre les leds lorsque Mediaportal est minimisé ou en veille</string>
     <string name="LoadLanguage">Chang. Langage</string>
     <string name="MenuHint">Hint:Utiliser le menu pour changer d'effet, activer/désactiver les LEDs ou basculer sur 3D-SBS.</string>
     <string name="TargetHint">Hint: Sélectionner l'équipement avec lequel vous souhaiter utiliser Atmolight, et configurer le dans son propre onglet</string>
@@ -132,6 +134,8 @@
     <string name="AtmoOrb">AtmoOrb</string>
     <string name="BroadcastPort">Broadcast port:</string>
     <string name="ConnectionType">Connexion type</string>
+    <string name="Protocol">Protocole</string>
+    <string name="LedCount">Nombre de LED:</string>
     <string name="HScan">Hscan depuis</string>
     <string name="VScan">Vscan depuis</string>
     <string name="ScanTo">vers</string>
@@ -141,7 +145,13 @@
     <string name="InvertZone">Inverser zone</string>
   </AtmoOrb>
   <AtmoWin>
-    <string name="AtmoWin">AtmoWin</string>
+    <string name="AtmoWin">AtmoWin</string> 
+    <string name="AtmoWakeHelperEnabled">Activé</string>
+    <string name="AtmoWakeHelperComPort">AtmoWin port COM</string>
+    <string name="AtmoWakeHelperResumeDelay">Délais "sortie de veille" (ms)</string>
+    <string name="AtmoWakeHelperDisconnectDelay">Délais de déconnexion (ms)</string>
+    <string name="AtmoWakeHelperConnectDelay">Délais de connexion (ms)</string>
+    <string name="AtmoWakeHelperReinitializationDelay">Délais de réinitialisation (ms)</string>
   </AtmoWin>
   <Boblight>
     <string name="Boblight">Boblight</string>
@@ -157,6 +167,8 @@
     <string name="RemoteMachine">Atmohue est sur une machine distante (ignoré fichier/dossier verif.)</string>
     <string name="EnableBridgeOnResume">Démarrer le Pont Hue à la sortie de veille</string>
     <string name="DisableBridgeonSuspend">Eteindre le pont Hue à la mise en veille</string>
+    <string name="HueTheaterEnabled">Activer Mode Théâtre</string>
+    <string name="HueTheaterRestoreLights">Restaurer les leds apres une lecture arrêté</string>
     <string name="AverageColor">Réglage couleur moyenne</string>
     <string name="All">Tout</string>
     <string name="Off">Off</string>
@@ -165,6 +177,7 @@
     <string name="StaticColorGroup">Hue - définir couleur statique du groupe</string>
     <string name="SelectStaticColorGroup">Hue - sélectionner couleur statique du groupe</string>
     <string name="Hint">Besoin d'avoir AtmoHue démarré sur l'IP et Port du dessus, ne pas indiquer vos infos. Hue Bridge</string>
+    <string name="HintTheaterMode">Astuce: lorsque le mode de théâtre est activée, les lumières se désactive durant la lecture du film et s'active lorsque la lecture est terminée, si cette option est activée</string>
   </Hue>
   <Hyperion>
     <string name="Hyperion">Hyperion</string>
