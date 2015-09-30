@@ -363,9 +363,6 @@ namespace AtmoLight.Targets
                        (y <= lamp.VScanStart*coreObject.GetCaptureHeight()/100 ||
                         y >= lamp.VScanEnd*coreObject.GetCaptureHeight()/100)))
                   {
-                    lamp.OverallAverageColor[0] += pixeldata[row + x*4 + 2];
-                    lamp.OverallAverageColor[1] += pixeldata[row + x*4 + 1];
-                    lamp.OverallAverageColor[2] += pixeldata[row + x*4];
                     if (Math.Abs(pixeldata[row + x*4 + 2] - pixeldata[row + x*4 + 1]) > coreObject.atmoOrbMinDiversion ||
                         Math.Abs(pixeldata[row + x*4 + 2] - pixeldata[row + x*4]) > coreObject.atmoOrbMinDiversion ||
                         Math.Abs(pixeldata[row + x*4 + 1] - pixeldata[row + x*4]) > coreObject.atmoOrbMinDiversion)
@@ -376,6 +373,10 @@ namespace AtmoLight.Targets
                       lamp.PixelCount++;
                     }
                   }
+
+                  lamp.OverallAverageColor[0] += pixeldata[row + x * 4 + 2];
+                  lamp.OverallAverageColor[1] += pixeldata[row + x * 4 + 1];
+                  lamp.OverallAverageColor[2] += pixeldata[row + x * 4];
                 }
               }
             }
@@ -387,6 +388,7 @@ namespace AtmoLight.Targets
               lamp.OverallAverageColor[0] /= (coreObject.GetCaptureHeight()*coreObject.GetCaptureWidth());
               lamp.OverallAverageColor[1] /= (coreObject.GetCaptureHeight()*coreObject.GetCaptureWidth());
               lamp.OverallAverageColor[2] /= (coreObject.GetCaptureHeight()*coreObject.GetCaptureWidth());
+
               if (lamp.PixelCount > 0)
               {
                 lamp.AverageColor[0] /= lamp.PixelCount;
