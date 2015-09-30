@@ -57,6 +57,7 @@ namespace AtmoLight.Targets
     private double vuMeterHue;
 
     private List<ILamp> lamps = new List<ILamp>();
+    private Dictionary<String, Socket> multicastGroups = new Dictionary<String, Socket>();
 
     #endregion
 
@@ -206,8 +207,33 @@ namespace AtmoLight.Targets
             }
             else if (settings[1] == "UDP_Multicast")
             {
-              lamps.Add(new UDPMulticastLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]),
-                int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8]), int.Parse(settings[9])));
+              string multiCastIp = settings[2];
+
+              // Join new or excisting multicast group
+              if (!multicastGroups.ContainsKey(multiCastIp))
+              {
+                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                IPEndPoint clientEndpoint = new IPEndPoint(IPAddress.Parse(multiCastIp), 49692);
+                socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership,
+                  new MulticastOption(IPAddress.Parse(multiCastIp)));
+                socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 2);
+                socket.Connect(clientEndpoint);
+
+                multicastGroups.Add(multiCastIp, socket);
+
+                lamps.Add(new UDPMulticastLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]),
+                  int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8]),
+                  int.Parse(settings[9]), socket));
+              }
+              else
+              {
+                Socket multicastSocket = multicastGroups[multiCastIp];
+
+                lamps.Add(new UDPMulticastLamp(settings[0], settings[2], int.Parse(settings[3]),
+                  int.Parse(settings[4]),
+                  int.Parse(settings[5]), int.Parse(settings[6]), int.Parse(settings[7]), bool.Parse(settings[8]),
+                  int.Parse(settings[9]), multicastSocket));
+              }
             }
             else if (settings[1] == "TCP")
             {
