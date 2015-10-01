@@ -151,7 +151,7 @@ namespace AtmoLight.Targets
 
         Socket.Send(bytes, bytes.Length, SocketFlags.None);
       }
-      catch (Exception e)
+      catch (Exception)
       {
         Log.Error("Error during send message..");
       }
