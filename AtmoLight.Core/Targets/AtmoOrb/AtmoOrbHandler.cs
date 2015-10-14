@@ -123,32 +123,17 @@ namespace AtmoLight.Targets
         case ContentEffect.VUMeterRainbow:
           return true;
         case ContentEffect.StaticColor:
-          // Send command 3 times to make sure it arrives
-          ChangeColor((byte) gammaCurve[coreObject.staticColor[0]], (byte) gammaCurve[coreObject.staticColor[1]],
-            (byte) gammaCurve[coreObject.staticColor[2]]);
-          Thread.Sleep(50);
-          ChangeColor((byte) gammaCurve[coreObject.staticColor[0]], (byte) gammaCurve[coreObject.staticColor[1]],
-            (byte) gammaCurve[coreObject.staticColor[2]]);
-          Thread.Sleep(50);
           ChangeColor((byte) gammaCurve[coreObject.staticColor[0]], (byte) gammaCurve[coreObject.staticColor[1]],
             (byte) gammaCurve[coreObject.staticColor[2]]);
           return true;
         case ContentEffect.LEDsDisabled:
           // Send command 3 times to make sure it arrives
           ChangeColor(0, 0, 0, true);
-          Thread.Sleep(50);
-          ChangeColor(0, 0, 0, true);
-          Thread.Sleep(50);
-          ChangeColor(0, 0, 0, true);
 
           return true;
         case ContentEffect.Undefined:
         default:
           // Send command 3 times to make sure it arrives
-          ChangeColor(0, 0, 0, true);
-          Thread.Sleep(50);
-          ChangeColor(0, 0, 0, true);
-          Thread.Sleep(50);
           ChangeColor(0, 0, 0, true);
 
           return true;

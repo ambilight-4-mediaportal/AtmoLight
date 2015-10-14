@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
 using System.Net.Sockets;
 using System.Linq;
+using System.Net;
 using Microsoft.Win32;
 using proto;
 using AtmoLight.Targets;
@@ -65,9 +66,11 @@ namespace AtmoLight
     private Thread setPixelDataThreadHelper;
     private Thread gifReaderThreadHelper;
     private Thread vuMeterThreadHelper;
+    private Thread apiThreadHelper;
 
     // States
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current active effect
+    private bool APIserverEnabled;
 
     // Lists
     private List<ITargets> targets = new List<ITargets>();
@@ -81,6 +84,7 @@ namespace AtmoLight
     private volatile bool setPixelDataLock = true; // Lock for SetPixelData thread
     private volatile bool gifReaderLock = true;
     private volatile bool vuMeterLock = true;
+    private volatile bool apiServerLock = true;
 
     // Event Handler
     public delegate void NewConnectionLostHandler(Target target);
@@ -213,6 +217,9 @@ namespace AtmoLight
       {
         target.Dispose();
       }
+
+      // Stop API server
+      StopAPIserverThread();
     }
     #endregion
 
@@ -232,6 +239,10 @@ namespace AtmoLight
         }
       }
 
+      // Start API server
+      APIserverEnabled = true;
+      apiServerLock = false;
+      StartAPIserverThread();
     }
 
     /// <summary>
@@ -246,6 +257,7 @@ namespace AtmoLight
           target.ReInitialise(true);
         }
       }
+
     }
     #endregion
 
@@ -1115,6 +1127,30 @@ namespace AtmoLight
     }
 
     /// <summary>
+    /// Start the API server thread.
+    /// </summary>
+    private void StartAPIserverThread()
+    {
+      if (!apiServerLock)
+      {
+        apiServerLock = true;
+        apiThreadHelper = new Thread(() => APIserverThread());
+        apiThreadHelper.Name = "AtmoLight API server";
+        apiThreadHelper.IsBackground = true;
+        apiThreadHelper.Start();
+      }
+    }
+
+    /// <summary>
+    /// Stop the API server thread.
+    /// </summary>
+    private void StopAPIserverThread()
+    {
+      apiServerLock = false;
+      APIserverEnabled = false;
+    }
+
+    /// <summary>
     /// Stop all core threads.
     /// </summary>
     private void StopAllThreads()
@@ -1345,6 +1381,52 @@ namespace AtmoLight
         Log.Error("Exception: {0}", ex.Message);
       }
     }
+    #endregion
+
+    #region API SERVER
+
+    private void APIserverThread()
+    {
+      UdpClient client = new UdpClient();
+
+      client.ExclusiveAddressUse = false;
+      IPEndPoint localEp = new IPEndPoint(IPAddress.Any, 16400);
+
+      client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+      client.ExclusiveAddressUse = false;
+
+      client.Client.Bind(localEp);
+
+      IPAddress multicastaddress = IPAddress.Parse("239.1.15.19");
+      client.JoinMulticastGroup(multicastaddress);
+
+      Log.Debug("API - multicast receiver has started");
+
+      while (APIserverEnabled)
+      {
+        Byte[] data = client.Receive(ref localEp);
+        string strData = Encoding.ASCII.GetString(data);
+        if (strData.Contains("|"))
+        {
+          try
+          {
+            string rawCommand = string.Format("RAW command: {0}", strData);
+            Log.Debug("API - RAW COMMAND:" + rawCommand);
+            string[] dataInput = strData.Split('|');
+            string destination = dataInput[0];
+            string commandType = dataInput[1];
+            string color = dataInput[2];
+            string[] colorSplit = color.Split(':');
+            SetStaticColor(int.Parse(colorSplit[0]), int.Parse(colorSplit[1]), int.Parse(colorSplit[2]));
+            ChangeEffect(ContentEffect.StaticColor, true);
+          }
+          catch (Exception)
+          {
+          }
+        }
+      }
+    }
+
     #endregion
   }
 }
