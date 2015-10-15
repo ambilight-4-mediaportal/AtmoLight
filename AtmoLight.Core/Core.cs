@@ -70,7 +70,10 @@ namespace AtmoLight
 
     // States
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current active effect
+    public ContentEffect apiStoredPlaybackEffect; // Stored playbackEffect to restore when apiOverrideActive is disabled
     public bool apiServerEnabled;
+    public bool apiOverrideActive; // If true disables all other AtmoLight internal commands
+
 
     // Lists
     private List<ITargets> targets = new List<ITargets>();
@@ -935,24 +938,26 @@ namespace AtmoLight
     #endregion
 
     #region Control Methods
+
     /// <summary>
     /// Change effect.
     /// </summary>
     /// <param name="effect">Effect to change to</param>
     /// <param name="force">Force the effect change</param>
     /// <returns></returns>
-    public bool ChangeEffect(ContentEffect effect, bool force = false, bool skipTargetsAndThreads = false)
+    public bool ChangeEffect(ContentEffect effect, bool force = false, bool skipTargetsAndThreads = false, bool apiCommand = false)
     {
       if (!IsConnected() && !force)
       {
         return false;
       }
 
-      if ((effect == currentEffect) && (!force))
+      if (((effect == currentEffect) && (!force)))
       {
         Log.Debug("Effect \"{0}\" is already active. Nothing to do.", effect);
         return false;
       }
+
       currentEffect = effect;
       StopAllThreads();
 
@@ -961,7 +966,12 @@ namespace AtmoLight
         Log.Debug("Setting internal AtmoLight effect (skipping targets and threads) to: {0}", effect.ToString());
         return true;
       }
-      Log.Info("Changing AtmoLight effect to: {0}", effect.ToString());
+
+      // Only log if it isn't a API command (would flood it otherwise)
+      if (!apiCommand)
+      {
+        Log.Info("Changing AtmoLight effect to: {0}", effect.ToString());
+      }
 
       lock (targetsLock)
       {
@@ -991,6 +1001,7 @@ namespace AtmoLight
       {
         StartVUMeterThread();
       }
+
       return true;
     }
 
@@ -1406,12 +1417,13 @@ namespace AtmoLight
       {
         Byte[] data = client.Receive(ref localEp);
         string strData = Encoding.ASCII.GetString(data);
-        if (strData.Contains("|"))
+        if (strData.Contains("atmolight|"))
         {
           try
           {
-            string rawCommand = string.Format("RAW command: {0}", strData);
-            Log.Debug("API - RAW COMMAND:" + rawCommand);
+            ///string rawCommand = string.Format("RAW command: {0}", strData);
+            //Log.Debug("API - RAW COMMAND:" + rawCommand);
+
             string[] dataInput = strData.Split('|');
             string destination = dataInput[0];
             string commandType = dataInput[1];
@@ -1421,20 +1433,61 @@ namespace AtmoLight
               string color = dataInput[2];
               string[] colorSplit = color.Split(':');
 
+              int priority = int.Parse(dataInput[3]);
+              if (priority == 100)
+              {
+                apiOverrideActive = true;
+              }
+              else
+              {
+                apiOverrideActive = false;
+              }
+
               targetResendCommand = false;
               SetStaticColor(int.Parse(colorSplit[0]), int.Parse(colorSplit[1]), int.Parse(colorSplit[2]));
-              ChangeEffect(ContentEffect.StaticColor, true);
+              ChangeEffect(ContentEffect.StaticColor, true, false, true);
               targetResendCommand = true;
             }
             else if (commandType == "effect")
             {
               string effect = dataInput[2];
+
+              int priority = int.Parse(dataInput[3]);
+              if (priority == 100)
+              {
+                apiOverrideActive = true;
+              }
+              else
+              {
+                apiOverrideActive = false;
+              }
+
               ContentEffect contentEffect = (ContentEffect)Enum.Parse(typeof(ContentEffect), effect);
-              ChangeEffect(contentEffect, true);
+              ChangeEffect(contentEffect, true, false, true);
+            }
+            else if (commandType == "priority")
+            {
+              // 0 = Disable API override | > 0 = Enable API override
+              int priority = int.Parse(dataInput[2]);
+
+              if (priority == 0)
+              {
+                Log.Debug("Disabling API override");
+                apiOverrideActive = false;
+
+                // Restore last known effect
+                ChangeEffect(apiStoredPlaybackEffect, true);
+              }
+              else
+              {
+                Log.Debug("Enabling API override");
+                apiOverrideActive = true;
+              }
             }
           }
           catch (Exception)
           {
+
           }
         }
       }

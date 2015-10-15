@@ -310,6 +310,13 @@ namespace AtmoLight
         Log.Debug("LEDs should be deactivated. (permanently toggled off by user)");
         return false;
       }
+      if (coreObject.apiOverrideActive)
+      {
+        Log.Debug("API override is activated.");
+        coreObject.apiStoredPlaybackEffect = playbackEffect;
+        return false;
+      }
+
       // If starttime is bigger than endtime, then now has to be smaller than both or bigger than both to deactive the leds 
       else if ((DateTime.Now.TimeOfDay >= Settings.excludeTimeStart.TimeOfDay &&
                 DateTime.Now.TimeOfDay <= Settings.excludeTimeEnd.TimeOfDay) ||
@@ -463,7 +470,10 @@ namespace AtmoLight
         }
         else
         {
-          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          if (!coreObject.apiOverrideActive)
+          {
+            coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          }
         }
       }
       catch (Exception ex)
@@ -493,7 +503,10 @@ namespace AtmoLight
         }
         else
         {
-          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          if (!coreObject.apiOverrideActive)
+          {
+            coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          }
         }
       }
       catch (Exception ex)
@@ -524,7 +537,10 @@ namespace AtmoLight
         }
         else
         {
-          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          if (!coreObject.apiOverrideActive)
+          {
+            coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          }
         }
       }
       catch (Exception ex)
