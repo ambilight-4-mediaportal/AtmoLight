@@ -377,10 +377,19 @@ namespace AtmoLight.Targets
       switch (effect)
       {
         case ContentEffect.StaticColor:
+
           //Clear live priority channel and wait priority to clear
           ClearPriority(coreObject.hyperionPriority);
-          Thread.Sleep(50);
-          ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
+
+          if (coreObject.TargetResendCommand)
+          {
+            Thread.Sleep(50);
+            ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
+          }
+          else
+          {
+            ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
+          }
           break;
         case ContentEffect.LEDsDisabled:
           ClearPrioritiesAtmoLight(250);

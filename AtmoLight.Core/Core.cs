@@ -115,6 +115,7 @@ namespace AtmoLight
     public bool blackbarDetectionLinkAreas;
     public bool blackbarDetectionManual = false;
     public BlackbarDetectionAR blackbarDetectionAR;
+    public bool TargetResendCommand = true;
 
     public int powerModeChangedDelay;
     public int vuMeterMindB;
@@ -1420,13 +1421,15 @@ namespace AtmoLight
             {
               string color = dataInput[2];
               string[] colorSplit = color.Split(':');
+
+              TargetResendCommand = false;
               SetStaticColor(int.Parse(colorSplit[0]), int.Parse(colorSplit[1]), int.Parse(colorSplit[2]));
               ChangeEffect(ContentEffect.StaticColor, true);
+              TargetResendCommand = true;
             }
             else if (commandType == "effect")
             {
               string effect = dataInput[2];
-
               ContentEffect contentEffect = (ContentEffect)Enum.Parse(typeof(ContentEffect), effect);
               ChangeEffect(contentEffect, true);
             }
