@@ -952,7 +952,7 @@ namespace AtmoLight
         return false;
       }
 
-      if (((effect == currentEffect) && (!force)))
+      if ((effect == currentEffect) && (!force))
       {
         Log.Debug("Effect \"{0}\" is already active. Nothing to do.", effect);
         return false;
