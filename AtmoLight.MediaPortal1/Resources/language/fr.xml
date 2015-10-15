@@ -54,6 +54,7 @@
     <string name="Yellow">Jaune</string>
     <string name="MS">ms</string>
     <string name="NetworkSettings">Réseau</string>
+    <string name="None">Aucun</string>
   </Common>
   <SetupForm>
     <string name="EffectSettings">Effect settings</string>
@@ -75,7 +76,7 @@
     <string name="Delay">LED Délais</string>
     <string name="DelayAt">ms Délais à</string>
     <string name="RestartOnError">Reconnections-Auto si Erreur</string>
-	<string name="TrueGrabbing">Utiliser les données de l'interface graphique lorsque la vidéo est minimisée dans MediaPortal mode Live</string>	
+    <string name="TrueGrabbing">Utiliser les données de l'interface graphique lorsque la vidéo est minimisée dans MediaPortal mode Live</string>
     <string name="RefreshRate">Hz</string>
     <string name="BlackbarDetection">Blackbar Detection toute les</string>
     <string name="BlackbarDetectionThreshold">ms, avec Seuil</string>
@@ -93,6 +94,11 @@
     <string name="MenuHint">Hint:Utiliser le menu pour changer d'effet, activer/désactiver les LEDs ou basculer sur 3D-SBS.</string>
     <string name="TargetHint">Hint: Sélectionner l'équipement avec lequel vous souhaiter utiliser Atmolight, et configurer le dans son propre onglet</string>
     <string name="CaptureDimensionHint">Hint: Seulement utilisé quand Atmowin désactivé</string>
+    <string name="BlackbarDetectionLinkAreas">Blackbar Detection zone(de haut en bas et de gauche a droite)</string>
+    <string name="BlackbarDetectionHorizontal">Blackbar Detection scan horizontal</string>
+    <string name="BlackbarDetectionVertical">Blackbar Detection scan vertical</string>
+    <string name="AdvancedOptions">Options avancées</string>
+    <string name="RemoteApiServer">Autoriser le contrôle à distance</string>
   </SetupForm>
   <ContextMenu>
     <string name="LEDsOn">LEDs > ON</string>
@@ -123,7 +129,14 @@
     <string name="Connect2">Voulez-vous la rétablir ?</string>
     <string name="BlackbarDetectionOn">Blackbar Detection > ON</string>
     <string name="BlackbarDetectionOff">Blackbar Detection > OFF</string>
+    <string name="BlackbarDetection">Blackbar Detection</string>
+    <string name="BlackbarDetectionDisableManual">Activer detection automatique</string>
+    <string name="BlackbarDetection1.33:1">Manuel 1.33:1 (4x3)</string>
+    <string name="BlackbarDetection1.78:1">Manuel 1.78:1 (16x9)</string>
+    <string name="BlackbarDetection1.85:1">Manuel 1.85:1</string>
+    <string name="BlackbarDetection2.35:1">Manuel 2.35:1 (21x9)</string>
     <string name="Reinitialise">Reconnections sur Equpt. perdu.</string>
+    <string name="AtmoLightDisabled">AtmoLight désactivé</string>
   </ContextMenu>
   <AmbiBox>
     <string name="AmbiBox">AmbiBox</string>
@@ -145,7 +158,8 @@
     <string name="InvertZone">Inverser zone</string>
   </AtmoOrb>
   <AtmoWin>
-    <string name="AtmoWin">AtmoWin</string> 
+    <string name="AtmoWin">AtmoWin</string>
+    <string name="AtmoWakeHelperDescription">Port COM "Wake Helper" (facultatif)</string>
     <string name="AtmoWakeHelperEnabled">Activé</string>
     <string name="AtmoWakeHelperComPort">AtmoWin port COM</string>
     <string name="AtmoWakeHelperResumeDelay">Délais "sortie de veille" (ms)</string>
