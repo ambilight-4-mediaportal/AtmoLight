@@ -1415,10 +1415,21 @@ namespace AtmoLight
             string[] dataInput = strData.Split('|');
             string destination = dataInput[0];
             string commandType = dataInput[1];
-            string color = dataInput[2];
-            string[] colorSplit = color.Split(':');
-            SetStaticColor(int.Parse(colorSplit[0]), int.Parse(colorSplit[1]), int.Parse(colorSplit[2]));
-            ChangeEffect(ContentEffect.StaticColor, true);
+
+            if (commandType == "static")
+            {
+              string color = dataInput[2];
+              string[] colorSplit = color.Split(':');
+              SetStaticColor(int.Parse(colorSplit[0]), int.Parse(colorSplit[1]), int.Parse(colorSplit[2]));
+              ChangeEffect(ContentEffect.StaticColor, true);
+            }
+            else if (commandType == "effect")
+            {
+              string effect = dataInput[2];
+
+              ContentEffect contentEffect = (ContentEffect)Enum.Parse(typeof(ContentEffect), effect);
+              ChangeEffect(contentEffect, true);
+            }
           }
           catch (Exception)
           {
