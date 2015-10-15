@@ -144,6 +144,9 @@ namespace AtmoLight
       coreObject.blackbarDetectionVertical = Settings.blackbarDetectionVertical;
       coreObject.blackbarDetectionLinkAreas = Settings.blackbarDetectionLinkAreas;
 
+      // API
+      coreObject.apiServerEnabled = Settings.remoteApiServer;
+
       // AmbiBox
       coreObject.ambiBoxIP = Settings.ambiBoxIP;
       coreObject.ambiBoxPort = Settings.ambiBoxPort;

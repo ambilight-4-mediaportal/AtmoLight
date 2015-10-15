@@ -474,6 +474,10 @@
         Id="MonitorScreensaverState"
         Text="[AtmoLight.MonitorScreensaverState]"
         ClassName="AtmoLight.Configuration.MonitorScreensaverState"/>
+    <ConfigSetting
+        Id="RemoteApiServer"
+        Text="[AtmoLight.RemoteApiServer]"
+        ClassName="AtmoLight.Configuration.RemoteApiServer"/>
   </Register>
 
 </Plugin>

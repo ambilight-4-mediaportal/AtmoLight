@@ -1861,6 +1861,24 @@ namespace AtmoLight.Configuration
       Core.GetInstance().powerModeChangedDelay = (int)_value;
     }
   }
+  public class RemoteApiServer : YesNo
+  {
+    public delegate void SettingsChangedHandler();
+    public static event SettingsChangedHandler SettingsChanged;
+    public override void Load()
+    {
+      _yes = SettingsManager.Load<Settings>().RemoteApiServer;
+    }
+
+    public override void Save()
+    {
+      base.Save();
+      Settings settings = SettingsManager.Load<Settings>();
+      settings.RemoteApiServer = _yes;
+      SettingsManager.Save(settings);
+      SettingsChanged();
+    }
+  }
 
   public class AmbiBoxTarget : YesNo
   {

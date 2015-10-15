@@ -381,7 +381,7 @@ namespace AtmoLight.Targets
           //Clear live priority channel and wait priority to clear
           ClearPriority(coreObject.hyperionPriority);
 
-          if (coreObject.TargetResendCommand)
+          if (coreObject.targetResendCommand)
           {
             Thread.Sleep(50);
             ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);

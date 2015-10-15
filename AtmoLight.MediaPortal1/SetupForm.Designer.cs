@@ -281,6 +281,8 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
+      this.grpAdvancedOptions = new System.Windows.Forms.GroupBox();
+      this.cbRemoteApiServer = new System.Windows.Forms.CheckBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -317,6 +319,7 @@
       this.grpHueAverageColor.SuspendLayout();
       this.grpHueGeneralSettings.SuspendLayout();
       this.grpHueNetworkSettings.SuspendLayout();
+      this.grpAdvancedOptions.SuspendLayout();
       this.SuspendLayout();
       // 
       // btnSave
@@ -885,6 +888,7 @@
       // 
       // grpMode
       // 
+      this.grpMode.Controls.Add(this.grpAdvancedOptions);
       this.grpMode.Controls.Add(this.ckTrueGrabbing);
       this.grpMode.Controls.Add(this.grpVUMeter);
       this.grpMode.Controls.Add(this.cbMPExit);
@@ -2950,6 +2954,26 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
+      // grpAdvancedOptions
+      // 
+      this.grpAdvancedOptions.Controls.Add(this.cbRemoteApiServer);
+      this.grpAdvancedOptions.Location = new System.Drawing.Point(7, 352);
+      this.grpAdvancedOptions.Name = "grpAdvancedOptions";
+      this.grpAdvancedOptions.Size = new System.Drawing.Size(338, 61);
+      this.grpAdvancedOptions.TabIndex = 34;
+      this.grpAdvancedOptions.TabStop = false;
+      this.grpAdvancedOptions.Text = "Advanced options";
+      // 
+      // cbRemoteApiServer
+      // 
+      this.cbRemoteApiServer.AutoSize = true;
+      this.cbRemoteApiServer.Location = new System.Drawing.Point(10, 20);
+      this.cbRemoteApiServer.Name = "cbRemoteApiServer";
+      this.cbRemoteApiServer.Size = new System.Drawing.Size(146, 17);
+      this.cbRemoteApiServer.TabIndex = 0;
+      this.cbRemoteApiServer.Text = "Enable remote API server";
+      this.cbRemoteApiServer.UseVisualStyleBackColor = true;
+      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3026,6 +3050,8 @@
       this.grpHueGeneralSettings.PerformLayout();
       this.grpHueNetworkSettings.ResumeLayout(false);
       this.grpHueNetworkSettings.PerformLayout();
+      this.grpAdvancedOptions.ResumeLayout(false);
+      this.grpAdvancedOptions.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -3285,5 +3311,7 @@
     private System.Windows.Forms.TextBox tbAtmoWakeHelperDisconnectDelay;
     private System.Windows.Forms.TextBox tbAtmoOrbLedCount;
     private System.Windows.Forms.Label lblAtmoOrbLedCount;
+    private System.Windows.Forms.GroupBox grpAdvancedOptions;
+    private System.Windows.Forms.CheckBox cbRemoteApiServer;
   }
 }

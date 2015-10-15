@@ -124,7 +124,7 @@ namespace AtmoLight.Targets
           return true;
         case ContentEffect.StaticColor:
 
-          if (coreObject.TargetResendCommand)
+          if (coreObject.targetResendCommand)
           {
             // Send command 3 times to make sure it arrives
             ChangeColor((byte) gammaCurve[coreObject.staticColor[0]], (byte) gammaCurve[coreObject.staticColor[1]],
@@ -141,7 +141,7 @@ namespace AtmoLight.Targets
           }
           return true;
         case ContentEffect.LEDsDisabled:
-          if (coreObject.TargetResendCommand)
+          if (coreObject.targetResendCommand)
           {
             // Send command 3 times to make sure it arrives
             ChangeColor(0, 0, 0, true);
@@ -157,7 +157,7 @@ namespace AtmoLight.Targets
           return true;
         case ContentEffect.Undefined:
         default:
-          if (coreObject.TargetResendCommand)
+          if (coreObject.targetResendCommand)
           {
             // Send command 3 times to make sure it arrives
             ChangeColor(0, 0, 0, true);

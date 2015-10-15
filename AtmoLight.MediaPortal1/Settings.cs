@@ -48,6 +48,7 @@ namespace AtmoLight
     public static bool blackbarDetectionHorizontal;
     public static bool blackbarDetectionVertical;
     public static bool blackbarDetectionLinkAreas;
+    public static bool remoteApiServer;
 
     // Atmowin
     public static bool atmoWinTarget;
@@ -337,6 +338,7 @@ namespace AtmoLight
         blackbarDetectionHorizontal = reader.GetValueAsBool("atmolight", "blackbarDetectionHorizontal", true);
         blackbarDetectionVertical = reader.GetValueAsBool("atmolight", "blackbarDetectionVertical", true);
         blackbarDetectionLinkAreas = reader.GetValueAsBool("atmolight", "blackbarDetectionLinkAreas", true);
+        remoteApiServer = reader.GetValueAsBool("atmolight", "remoteApiServer", false);
       }
     }
     public static void SaveSettings()
@@ -457,6 +459,7 @@ namespace AtmoLight
         reader.SetValueAsBool("atmolight", "blackbarDetectionHorizontal", blackbarDetectionHorizontal);
         reader.SetValueAsBool("atmolight", "blackbarDetectionVertical", blackbarDetectionVertical);
         reader.SetValueAsBool("atmolight", "blackbarDetectionLinkAreas", blackbarDetectionLinkAreas);
+        reader.SetValueAsBool("atmolight", "remoteApiServer", remoteApiServer);
       }
     }
 

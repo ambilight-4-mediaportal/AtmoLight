@@ -122,6 +122,9 @@ namespace AtmoLight
       coreObject.blackbarDetectionHorizontal = settings.BlackbarDetectionHorizontal;
       coreObject.blackbarDetectionVertical = settings.BlackbarDetectionVertical;
 
+      // API
+      coreObject.apiServerEnabled = settings.RemoteApiServer;
+
       // AmbiBox
       coreObject.ambiBoxAutoStart = settings.AmbiBoxAutoStart;
       coreObject.ambiBoxAutoStop = settings.AmbiBoxAutoStop;

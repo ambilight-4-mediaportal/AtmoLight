@@ -275,6 +275,9 @@ namespace AtmoLight
     [Setting(SettingScope.User, true)]
     public bool BlackbarDetectionVertical { get; set; }
 
+    [Setting(SettingScope.User, false)]
+    public bool RemoteApiServer { get; set; }
+
 
     ISettingsManager settingsManager = ServiceRegistration.Get<ISettingsManager>();
     Settings settings;
@@ -369,6 +372,7 @@ namespace AtmoLight
       BlackbarDetectionLinkAreas = settings.BlackbarDetectionLinkAreas;
       BlackbarDetectionHorizontal = settings.BlackbarDetectionHorizontal;
       BlackbarDetectionVertical = settings.BlackbarDetectionVertical;
+      RemoteApiServer = settings.RemoteApiServer;
       return true;
     }
 
@@ -461,6 +465,7 @@ namespace AtmoLight
       settings.BlackbarDetectionLinkAreas = BlackbarDetectionLinkAreas;
       settings.BlackbarDetectionHorizontal = BlackbarDetectionHorizontal;
       settings.BlackbarDetectionVertical = BlackbarDetectionVertical;
+      settings.RemoteApiServer = RemoteApiServer;
       settingsManager.Save(settings);
       return true;
     }

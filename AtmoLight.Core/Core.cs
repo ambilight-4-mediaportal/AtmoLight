@@ -70,7 +70,7 @@ namespace AtmoLight
 
     // States
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current active effect
-    private bool APIserverEnabled;
+    public bool apiServerEnabled;
 
     // Lists
     private List<ITargets> targets = new List<ITargets>();
@@ -115,7 +115,7 @@ namespace AtmoLight
     public bool blackbarDetectionLinkAreas;
     public bool blackbarDetectionManual = false;
     public BlackbarDetectionAR blackbarDetectionAR;
-    public bool TargetResendCommand = true;
+    public bool targetResendCommand = true;
 
     public int powerModeChangedDelay;
     public int vuMeterMindB;
@@ -241,7 +241,6 @@ namespace AtmoLight
       }
 
       // Start API server
-      APIserverEnabled = true;
       apiServerLock = false;
       StartAPIserverThread();
     }
@@ -1148,7 +1147,7 @@ namespace AtmoLight
     private void StopAPIserverThread()
     {
       apiServerLock = false;
-      APIserverEnabled = false;
+      apiServerEnabled = false;
     }
 
     /// <summary>
@@ -1403,7 +1402,7 @@ namespace AtmoLight
 
       Log.Debug("API - multicast receiver has started");
 
-      while (APIserverEnabled)
+      while (apiServerEnabled)
       {
         Byte[] data = client.Receive(ref localEp);
         string strData = Encoding.ASCII.GetString(data);
@@ -1422,10 +1421,10 @@ namespace AtmoLight
               string color = dataInput[2];
               string[] colorSplit = color.Split(':');
 
-              TargetResendCommand = false;
+              targetResendCommand = false;
               SetStaticColor(int.Parse(colorSplit[0]), int.Parse(colorSplit[1]), int.Parse(colorSplit[2]));
               ChangeEffect(ContentEffect.StaticColor, true);
-              TargetResendCommand = true;
+              targetResendCommand = true;
             }
             else if (commandType == "effect")
             {

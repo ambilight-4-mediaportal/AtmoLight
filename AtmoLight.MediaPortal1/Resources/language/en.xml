@@ -97,6 +97,8 @@
     <string name="BlackbarDetectionLinkAreas">Blackbar Detection link areas (top to bottom and left to right)</string>
     <string name="BlackbarDetectionHorizontal">Blackbar Detection horizontal scan</string>
     <string name="BlackbarDetectionVertical">Blackbar Detection vertical scan</string>
+    <string name="AdvancedOptions">Advanced options</string>
+    <string name="RemoteApiServer">Enable remote API server</string>
   </SetupForm>
   <ContextMenu>
     <string name="LEDsOn">Switch LEDs on</string>
