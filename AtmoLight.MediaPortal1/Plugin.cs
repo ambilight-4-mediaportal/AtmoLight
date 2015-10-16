@@ -281,7 +281,10 @@ namespace AtmoLight
 
       GUIWindowManager.OnNewAction -= new OnActionHandler(OnNewAction);
 
-      coreObject.ChangeEffect(Settings.effectMPExit);
+      if (!coreObject.apiOverrideActive)
+      {
+        coreObject.ChangeEffect(Settings.effectMPExit);
+      }
 
       coreObject.Dispose();
 

@@ -41,10 +41,12 @@ namespace AtmoLight.Targets
 
     private static TcpClient Socket = new TcpClient();
     private Stream Stream;
-    private bool isInit = false;
-    private volatile bool initLock = false;
-    private int hyperionReconnectCounter = 0;
+    private bool isInit;
+    private volatile bool initLock;
+    private int hyperionReconnectCounter;
     private string hyperionpreviousHostname = "";
+    private bool priorityCleared;
+    private bool priorityStaticColorCleared;
 
     private Stopwatch liveReconnectSW = new Stopwatch();
 
@@ -333,6 +335,16 @@ namespace AtmoLight.Targets
         {
           return;
         }
+
+        if (priority == coreObject.hyperionPriorityStaticColor)
+        {
+          priorityStaticColorCleared = true;
+        }
+        else if (priority == coreObject.hyperionPriority)
+        {
+          priorityCleared = true;
+        }
+
         ClearRequest clearRequest = ClearRequest.CreateBuilder()
         .SetPriority(priority)
         .Build();
@@ -378,11 +390,17 @@ namespace AtmoLight.Targets
       {
         case ContentEffect.StaticColor:
 
-          //Clear live priority channel and wait priority to clear
-          ClearPriority(coreObject.hyperionPriority);
+          if (!priorityCleared)
+          {
+            //Clear live priority channel
+            ClearPriority(coreObject.hyperionPriority);
+          }
+
+          priorityStaticColorCleared = false;
 
           if (coreObject.targetResendCommand)
           {
+            ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
             Thread.Sleep(50);
             ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
           }
@@ -390,6 +408,9 @@ namespace AtmoLight.Targets
           {
             ChangeColor(coreObject.staticColor[0], coreObject.staticColor[1], coreObject.staticColor[2]);
           }
+          break;
+        case ContentEffect.MediaPortalLiveMode:
+          priorityCleared = false;
           break;
         case ContentEffect.LEDsDisabled:
           ClearPrioritiesAtmoLight(250);
