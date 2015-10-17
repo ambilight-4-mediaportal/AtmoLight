@@ -1,3 +1,15 @@
+Version 1.16.1.50
+
+- Remote API support, currently supports AtmoLight Remote (Android)
+- AtmoWakeHelper integration
+- Expanded AtmoOrb handler to support new types of devices (Particle Core/Photon)
+- Added Theater mode support to Hue (requires AtmoHue 0.0.87 or higher)
+- Option to disable leds on minimize or suspended state
+- Fixed AtmoWin resume delay
+- Fixed Hyperion static color bug so that it now restores the color if previously set as default
+- Fixed behavior on resume (ignoring the resume delay)
+- Fixed delay buffer overflow in rare cases
+
 Version 1.16.1.12
 - Added support for MediaPortal 1.12 pre release and newer
 - Added support to show GUI frame data when a video is minimized
