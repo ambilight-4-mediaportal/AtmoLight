@@ -1416,8 +1416,8 @@ namespace AtmoLight
       while (apiServerEnabled)
       {
         Byte[] data = client.Receive(ref localEp);
-        string strData = Encoding.ASCII.GetString(data);
-        if (strData.Contains("atmolight|"))
+        string strData = Encoding.ASCII.GetString(data).Trim();
+        if (strData.StartsWith("atmolight|") && strData.EndsWith(";"))
         {
           try
           {
