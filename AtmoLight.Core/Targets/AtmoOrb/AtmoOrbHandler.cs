@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -116,7 +117,6 @@ namespace AtmoLight.Targets
       switch (effect)
       {
         case ContentEffect.MediaPortalLiveMode:
-          ChangeColor(0, 0, 0, true);
           return true;
         case ContentEffect.GIFReader:
         case ContentEffect.VUMeter:
@@ -367,103 +367,97 @@ namespace AtmoLight.Targets
             var row = coreObject.GetCaptureWidth()*y*4;
             for (var x = 0; x < coreObject.GetCaptureWidth(); x++)
             {
-              foreach (var lamp in lamps)
+              foreach (var lamp in lamps.Where(lamp => lamp.IsConnected()))
               {
-                if (lamp.IsConnected())
+                if ((lamp.ZoneInverted == false && x >= lamp.HScanStart*coreObject.GetCaptureWidth()/100 &&
+                     x <= lamp.HScanEnd*coreObject.GetCaptureWidth()/100 &&
+                     y >= lamp.VScanStart*coreObject.GetCaptureHeight()/100 &&
+                     y <= lamp.VScanEnd*coreObject.GetCaptureHeight()/100)
+                    ||
+                    (lamp.ZoneInverted &&
+                     (x <= lamp.HScanStart*coreObject.GetCaptureWidth()/100 ||
+                      x >= lamp.HScanEnd*coreObject.GetCaptureWidth()/100) &&
+                     (y <= lamp.VScanStart*coreObject.GetCaptureHeight()/100 ||
+                      y >= lamp.VScanEnd*coreObject.GetCaptureHeight()/100)))
                 {
-                  if ((lamp.ZoneInverted == false && x >= lamp.HScanStart*coreObject.GetCaptureWidth()/100 &&
-                       x <= lamp.HScanEnd*coreObject.GetCaptureWidth()/100 &&
-                       y >= lamp.VScanStart*coreObject.GetCaptureHeight()/100 &&
-                       y <= lamp.VScanEnd*coreObject.GetCaptureHeight()/100)
-                      ||
-                      (lamp.ZoneInverted &&
-                       (x <= lamp.HScanStart*coreObject.GetCaptureWidth()/100 ||
-                        x >= lamp.HScanEnd*coreObject.GetCaptureWidth()/100) &&
-                       (y <= lamp.VScanStart*coreObject.GetCaptureHeight()/100 ||
-                        y >= lamp.VScanEnd*coreObject.GetCaptureHeight()/100)))
+                  if (Math.Abs(pixeldata[row + x*4 + 2] - pixeldata[row + x*4 + 1]) > coreObject.atmoOrbMinDiversion ||
+                      Math.Abs(pixeldata[row + x*4 + 2] - pixeldata[row + x*4]) > coreObject.atmoOrbMinDiversion ||
+                      Math.Abs(pixeldata[row + x*4 + 1] - pixeldata[row + x*4]) > coreObject.atmoOrbMinDiversion)
                   {
-                    lamp.OverallAverageColor[0] += pixeldata[row + x*4 + 2];
-                    lamp.OverallAverageColor[1] += pixeldata[row + x*4 + 1];
-                    lamp.OverallAverageColor[2] += pixeldata[row + x*4];
-                    if (Math.Abs(pixeldata[row + x*4 + 2] - pixeldata[row + x*4 + 1]) > coreObject.atmoOrbMinDiversion ||
-                        Math.Abs(pixeldata[row + x*4 + 2] - pixeldata[row + x*4]) > coreObject.atmoOrbMinDiversion ||
-                        Math.Abs(pixeldata[row + x*4 + 1] - pixeldata[row + x*4]) > coreObject.atmoOrbMinDiversion)
-                    {
-                      lamp.AverageColor[0] += pixeldata[row + x*4 + 2];
-                      lamp.AverageColor[1] += pixeldata[row + x*4 + 1];
-                      lamp.AverageColor[2] += pixeldata[row + x*4];
-                      lamp.PixelCount++;
-                    }
+                    lamp.AverageColor[0] += pixeldata[row + x*4 + 2];
+                    lamp.AverageColor[1] += pixeldata[row + x*4 + 1];
+                    lamp.AverageColor[2] += pixeldata[row + x*4];
+                    lamp.PixelCount++;
                   }
                 }
+
+                lamp.OverallAverageColor[0] += pixeldata[row + x*4 + 2];
+                lamp.OverallAverageColor[1] += pixeldata[row + x*4 + 1];
+                lamp.OverallAverageColor[2] += pixeldata[row + x*4];
               }
             }
           }
-          foreach (var lamp in lamps)
+          foreach (var lamp in lamps.Where(lamp => lamp.IsConnected()))
           {
-            if (lamp.IsConnected())
+            lamp.OverallAverageColor[0] /= (coreObject.GetCaptureHeight()*coreObject.GetCaptureWidth());
+            lamp.OverallAverageColor[1] /= (coreObject.GetCaptureHeight()*coreObject.GetCaptureWidth());
+            lamp.OverallAverageColor[2] /= (coreObject.GetCaptureHeight()*coreObject.GetCaptureWidth());
+
+            if (lamp.PixelCount > 0)
             {
-              lamp.OverallAverageColor[0] /= (coreObject.GetCaptureHeight()*coreObject.GetCaptureWidth());
-              lamp.OverallAverageColor[1] /= (coreObject.GetCaptureHeight()*coreObject.GetCaptureWidth());
-              lamp.OverallAverageColor[2] /= (coreObject.GetCaptureHeight()*coreObject.GetCaptureWidth());
-              if (lamp.PixelCount > 0)
+              lamp.AverageColor[0] /= lamp.PixelCount;
+              lamp.AverageColor[1] /= lamp.PixelCount;
+              lamp.AverageColor[2] /= lamp.PixelCount;
+
+              if (Math.Abs(lamp.AverageColor[0] - lamp.PreviousColor[0]) >= coreObject.atmoOrbThreshold ||
+                  Math.Abs(lamp.AverageColor[1] - lamp.PreviousColor[1]) >= coreObject.atmoOrbThreshold ||
+                  Math.Abs(lamp.AverageColor[2] - lamp.PreviousColor[2]) >= coreObject.atmoOrbThreshold)
               {
-                lamp.AverageColor[0] /= lamp.PixelCount;
-                lamp.AverageColor[1] /= lamp.PixelCount;
-                lamp.AverageColor[2] /= lamp.PixelCount;
+                double hue;
+                double saturation;
+                double lightness;
+                double hueOverall;
+                double saturationOverall;
+                double lightnessOverall;
 
-                if (Math.Abs(lamp.AverageColor[0] - lamp.PreviousColor[0]) >= coreObject.atmoOrbThreshold ||
-                    Math.Abs(lamp.AverageColor[1] - lamp.PreviousColor[1]) >= coreObject.atmoOrbThreshold ||
-                    Math.Abs(lamp.AverageColor[2] - lamp.PreviousColor[2]) >= coreObject.atmoOrbThreshold)
-                {
-                  double hue;
-                  double saturation;
-                  double lightness;
-                  double hueOverall;
-                  double saturationOverall;
-                  double lightnessOverall;
+                // Save new color as previous color
+                lamp.PreviousColor = lamp.AverageColor;
 
-                  // Save new color as previous color
-                  lamp.PreviousColor = lamp.AverageColor;
+                // Convert to hsl color model
+                HSL.RGB2HSL(lamp.AverageColor[0], lamp.AverageColor[1], lamp.AverageColor[2], out hue, out saturation,
+                  out lightness);
+                HSL.RGB2HSL(lamp.OverallAverageColor[0], lamp.OverallAverageColor[1], lamp.OverallAverageColor[2],
+                  out hueOverall, out saturationOverall, out lightnessOverall);
 
-                  // Convert to hsl color model
-                  HSL.RGB2HSL(lamp.AverageColor[0], lamp.AverageColor[1], lamp.AverageColor[2], out hue, out saturation,
-                    out lightness);
-                  HSL.RGB2HSL(lamp.OverallAverageColor[0], lamp.OverallAverageColor[1], lamp.OverallAverageColor[2],
-                    out hueOverall, out saturationOverall, out lightnessOverall);
+                // Convert back to rgb with adjusted saturation and lightness
+                HSL.HSL2RGB(hue, Math.Min(saturation + coreObject.atmoOrbSaturation, 1),
+                  (coreObject.atmoOrbUseOverallLightness ? lightnessOverall : lightness), out lamp.AverageColor[0],
+                  out lamp.AverageColor[1], out lamp.AverageColor[2]);
 
-                  // Convert back to rgb with adjusted saturation and lightness
-                  HSL.HSL2RGB(hue, Math.Min(saturation + coreObject.atmoOrbSaturation, 1),
-                    (coreObject.atmoOrbUseOverallLightness ? lightnessOverall : lightness), out lamp.AverageColor[0],
-                    out lamp.AverageColor[1], out lamp.AverageColor[2]);
-
-                  // Adjust gamma level and send to lamp
-                  ChangeColor((byte) gammaCurve[lamp.AverageColor[0]], (byte) gammaCurve[lamp.AverageColor[1]],
-                    (byte) gammaCurve[lamp.AverageColor[2]]);
-                }
+                // Adjust gamma level and send to lamp
+                ChangeColor(red: (byte) gammaCurve[lamp.AverageColor[0]], green: (byte) gammaCurve[lamp.AverageColor[1]], blue: (byte) gammaCurve[lamp.AverageColor[2]]);
               }
-              else
+            }
+            else
+            {
+              if (Math.Abs(lamp.OverallAverageColor[0] - lamp.PreviousColor[0]) >= coreObject.atmoOrbThreshold ||
+                  Math.Abs(lamp.OverallAverageColor[1] - lamp.PreviousColor[1]) >= coreObject.atmoOrbThreshold ||
+                  Math.Abs(lamp.OverallAverageColor[2] - lamp.PreviousColor[2]) >= coreObject.atmoOrbThreshold)
               {
-                if (Math.Abs(lamp.OverallAverageColor[0] - lamp.PreviousColor[0]) >= coreObject.atmoOrbThreshold ||
-                    Math.Abs(lamp.OverallAverageColor[1] - lamp.PreviousColor[1]) >= coreObject.atmoOrbThreshold ||
-                    Math.Abs(lamp.OverallAverageColor[2] - lamp.PreviousColor[2]) >= coreObject.atmoOrbThreshold)
-                {
-                  // Save new color as previous color
-                  lamp.PreviousColor = lamp.OverallAverageColor;
+                // Save new color as previous color
+                lamp.PreviousColor = lamp.OverallAverageColor;
 
-                  if (lamp.OverallAverageColor[0] <= coreObject.atmoOrbBlackThreshold &&
-                      lamp.OverallAverageColor[1] <= coreObject.atmoOrbBlackThreshold &&
-                      lamp.OverallAverageColor[2] <= coreObject.atmoOrbBlackThreshold)
-                  {
-                    // Black threshold reached, forcing leds off as to clear smooth colors on the lamp side
-                    ChangeColor(0, 0, 0, true);
-                  }
-                  else
-                  {
-                    // Adjust gamma level and send to lamp
-                    ChangeColor((byte) gammaCurve[lamp.OverallAverageColor[0]],
-                      (byte) gammaCurve[lamp.OverallAverageColor[1]], (byte) gammaCurve[lamp.OverallAverageColor[2]]);
-                  }
+                if (lamp.OverallAverageColor[0] <= coreObject.atmoOrbBlackThreshold &&
+                    lamp.OverallAverageColor[1] <= coreObject.atmoOrbBlackThreshold &&
+                    lamp.OverallAverageColor[2] <= coreObject.atmoOrbBlackThreshold)
+                {
+                  // Black threshold reached, forcing leds off as to clear smooth colors on the lamp side
+                  ChangeColor(red: 0, green: 0, blue: 0, forceLightsOff: true);
+                }
+                else
+                {
+                  // Adjust gamma level and send to lamp
+                  ChangeColor(red: (byte) gammaCurve[lamp.OverallAverageColor[0]], green: (byte) gammaCurve[lamp.OverallAverageColor[1]], blue: (byte) gammaCurve[lamp.OverallAverageColor[2]]);
                 }
               }
             }
@@ -486,7 +480,7 @@ namespace AtmoLight.Targets
 
       foreach (var lamp in lamps)
       {
-        lamp.ChangeColor(red, green, blue, forceLightsOff, lamp.ID);
+        lamp.ChangeColor(red: red, green: green, blue: blue, forceLightsOff: forceLightsOff, orbId: lamp.ID);
       }
     }
 
