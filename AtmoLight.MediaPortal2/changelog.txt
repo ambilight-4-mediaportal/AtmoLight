@@ -1,3 +1,7 @@
+Version 2.3.0.0
+
+- Config options added to support new AtmoLight features
+
 Version 2.2.0.0
 - Added support to disable leds when MediaPortal uses its screen saver
 - Improved connection to AtmoHue
