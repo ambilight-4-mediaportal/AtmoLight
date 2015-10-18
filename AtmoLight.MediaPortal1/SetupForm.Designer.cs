@@ -913,7 +913,7 @@
       // grpAdvancedOptions
       // 
       this.grpAdvancedOptions.Controls.Add(this.cbRemoteApiServer);
-      this.grpAdvancedOptions.Location = new System.Drawing.Point(4, 352);
+      this.grpAdvancedOptions.Location = new System.Drawing.Point(4, 350);
       this.grpAdvancedOptions.Name = "grpAdvancedOptions";
       this.grpAdvancedOptions.Size = new System.Drawing.Size(340, 61);
       this.grpAdvancedOptions.TabIndex = 34;
