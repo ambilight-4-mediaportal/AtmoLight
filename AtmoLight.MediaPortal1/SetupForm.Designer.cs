@@ -636,9 +636,9 @@
       this.grpAtmowinWakeHelper.Controls.Add(this.lblAtmoWakeHelperComPort);
       this.grpAtmowinWakeHelper.Controls.Add(this.cbAtmoWakeHelperComPort);
       this.grpAtmowinWakeHelper.Controls.Add(this.ckAtmoWakeHelperEnabled);
-      this.grpAtmowinWakeHelper.Location = new System.Drawing.Point(13, 160);
+      this.grpAtmowinWakeHelper.Location = new System.Drawing.Point(10, 140);
       this.grpAtmowinWakeHelper.Name = "grpAtmowinWakeHelper";
-      this.grpAtmowinWakeHelper.Size = new System.Drawing.Size(281, 244);
+      this.grpAtmowinWakeHelper.Size = new System.Drawing.Size(820, 180);
       this.grpAtmowinWakeHelper.TabIndex = 27;
       this.grpAtmowinWakeHelper.TabStop = false;
       this.grpAtmowinWakeHelper.Text = "COM port wake helper (optional)";
@@ -646,7 +646,7 @@
       // lblAtmoWakeHelperReinitializationDelay
       // 
       this.lblAtmoWakeHelperReinitializationDelay.AutoSize = true;
-      this.lblAtmoWakeHelperReinitializationDelay.Location = new System.Drawing.Point(7, 195);
+      this.lblAtmoWakeHelperReinitializationDelay.Location = new System.Drawing.Point(10, 155);
       this.lblAtmoWakeHelperReinitializationDelay.Name = "lblAtmoWakeHelperReinitializationDelay";
       this.lblAtmoWakeHelperReinitializationDelay.Size = new System.Drawing.Size(124, 13);
       this.lblAtmoWakeHelperReinitializationDelay.TabIndex = 10;
@@ -654,7 +654,7 @@
       // 
       // tbAtmoWakeHelperReinitializationDelay
       // 
-      this.tbAtmoWakeHelperReinitializationDelay.Location = new System.Drawing.Point(200, 192);
+      this.tbAtmoWakeHelperReinitializationDelay.Location = new System.Drawing.Point(200, 152);
       this.tbAtmoWakeHelperReinitializationDelay.Name = "tbAtmoWakeHelperReinitializationDelay";
       this.tbAtmoWakeHelperReinitializationDelay.Size = new System.Drawing.Size(70, 20);
       this.tbAtmoWakeHelperReinitializationDelay.TabIndex = 9;
@@ -663,7 +663,7 @@
       // lblAtmoWakeHelperConnectDelay
       // 
       this.lblAtmoWakeHelperConnectDelay.AutoSize = true;
-      this.lblAtmoWakeHelperConnectDelay.Location = new System.Drawing.Point(7, 160);
+      this.lblAtmoWakeHelperConnectDelay.Location = new System.Drawing.Point(10, 130);
       this.lblAtmoWakeHelperConnectDelay.Name = "lblAtmoWakeHelperConnectDelay";
       this.lblAtmoWakeHelperConnectDelay.Size = new System.Drawing.Size(97, 13);
       this.lblAtmoWakeHelperConnectDelay.TabIndex = 8;
@@ -671,7 +671,7 @@
       // 
       // tbAtmoWakeHelperConnectDelay
       // 
-      this.tbAtmoWakeHelperConnectDelay.Location = new System.Drawing.Point(200, 157);
+      this.tbAtmoWakeHelperConnectDelay.Location = new System.Drawing.Point(200, 127);
       this.tbAtmoWakeHelperConnectDelay.Name = "tbAtmoWakeHelperConnectDelay";
       this.tbAtmoWakeHelperConnectDelay.Size = new System.Drawing.Size(70, 20);
       this.tbAtmoWakeHelperConnectDelay.TabIndex = 7;
@@ -680,7 +680,7 @@
       // lblAtmoWakeHelperDisconnectDelay
       // 
       this.lblAtmoWakeHelperDisconnectDelay.AutoSize = true;
-      this.lblAtmoWakeHelperDisconnectDelay.Location = new System.Drawing.Point(7, 125);
+      this.lblAtmoWakeHelperDisconnectDelay.Location = new System.Drawing.Point(10, 105);
       this.lblAtmoWakeHelperDisconnectDelay.Name = "lblAtmoWakeHelperDisconnectDelay";
       this.lblAtmoWakeHelperDisconnectDelay.Size = new System.Drawing.Size(111, 13);
       this.lblAtmoWakeHelperDisconnectDelay.TabIndex = 6;
@@ -688,7 +688,7 @@
       // 
       // tbAtmoWakeHelperDisconnectDelay
       // 
-      this.tbAtmoWakeHelperDisconnectDelay.Location = new System.Drawing.Point(200, 122);
+      this.tbAtmoWakeHelperDisconnectDelay.Location = new System.Drawing.Point(200, 102);
       this.tbAtmoWakeHelperDisconnectDelay.Name = "tbAtmoWakeHelperDisconnectDelay";
       this.tbAtmoWakeHelperDisconnectDelay.Size = new System.Drawing.Size(70, 20);
       this.tbAtmoWakeHelperDisconnectDelay.TabIndex = 5;
@@ -697,7 +697,7 @@
       // lblAtmoWakeHelperResumeDelay
       // 
       this.lblAtmoWakeHelperResumeDelay.AutoSize = true;
-      this.lblAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(7, 90);
+      this.lblAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(10, 80);
       this.lblAtmoWakeHelperResumeDelay.Name = "lblAtmoWakeHelperResumeDelay";
       this.lblAtmoWakeHelperResumeDelay.Size = new System.Drawing.Size(96, 13);
       this.lblAtmoWakeHelperResumeDelay.TabIndex = 4;
@@ -705,7 +705,7 @@
       // 
       // tbAtmoWakeHelperResumeDelay
       // 
-      this.tbAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(200, 87);
+      this.tbAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(200, 77);
       this.tbAtmoWakeHelperResumeDelay.Name = "tbAtmoWakeHelperResumeDelay";
       this.tbAtmoWakeHelperResumeDelay.Size = new System.Drawing.Size(70, 20);
       this.tbAtmoWakeHelperResumeDelay.TabIndex = 3;
@@ -714,7 +714,7 @@
       // lblAtmoWakeHelperComPort
       // 
       this.lblAtmoWakeHelperComPort.AutoSize = true;
-      this.lblAtmoWakeHelperComPort.Location = new System.Drawing.Point(7, 55);
+      this.lblAtmoWakeHelperComPort.Location = new System.Drawing.Point(10, 55);
       this.lblAtmoWakeHelperComPort.Name = "lblAtmoWakeHelperComPort";
       this.lblAtmoWakeHelperComPort.Size = new System.Drawing.Size(98, 13);
       this.lblAtmoWakeHelperComPort.TabIndex = 2;
@@ -772,7 +772,7 @@
       // ckAtmoWakeHelperEnabled
       // 
       this.ckAtmoWakeHelperEnabled.AutoSize = true;
-      this.ckAtmoWakeHelperEnabled.Location = new System.Drawing.Point(10, 25);
+      this.ckAtmoWakeHelperEnabled.Location = new System.Drawing.Point(12, 25);
       this.ckAtmoWakeHelperEnabled.Name = "ckAtmoWakeHelperEnabled";
       this.ckAtmoWakeHelperEnabled.Size = new System.Drawing.Size(65, 17);
       this.ckAtmoWakeHelperEnabled.TabIndex = 0;
@@ -915,7 +915,7 @@
       this.grpAdvancedOptions.Controls.Add(this.cbRemoteApiServer);
       this.grpAdvancedOptions.Location = new System.Drawing.Point(4, 350);
       this.grpAdvancedOptions.Name = "grpAdvancedOptions";
-      this.grpAdvancedOptions.Size = new System.Drawing.Size(340, 61);
+      this.grpAdvancedOptions.Size = new System.Drawing.Size(340, 50);
       this.grpAdvancedOptions.TabIndex = 34;
       this.grpAdvancedOptions.TabStop = false;
       this.grpAdvancedOptions.Text = "Advanced options";
@@ -923,7 +923,7 @@
       // cbRemoteApiServer
       // 
       this.cbRemoteApiServer.AutoSize = true;
-      this.cbRemoteApiServer.Location = new System.Drawing.Point(8, 25);
+      this.cbRemoteApiServer.Location = new System.Drawing.Point(12, 25);
       this.cbRemoteApiServer.Name = "cbRemoteApiServer";
       this.cbRemoteApiServer.Size = new System.Drawing.Size(146, 17);
       this.cbRemoteApiServer.TabIndex = 0;
@@ -2648,7 +2648,7 @@
       this.grpHueTheaterMode.Controls.Add(this.ckHueTheaterEnabled);
       this.grpHueTheaterMode.Location = new System.Drawing.Point(10, 450);
       this.grpHueTheaterMode.Name = "grpHueTheaterMode";
-      this.grpHueTheaterMode.Size = new System.Drawing.Size(820, 129);
+      this.grpHueTheaterMode.Size = new System.Drawing.Size(820, 100);
       this.grpHueTheaterMode.TabIndex = 29;
       this.grpHueTheaterMode.TabStop = false;
       this.grpHueTheaterMode.Text = "Theater mode";
@@ -2978,7 +2978,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(872, 661);
+      this.ClientSize = new System.Drawing.Size(872, 662);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
