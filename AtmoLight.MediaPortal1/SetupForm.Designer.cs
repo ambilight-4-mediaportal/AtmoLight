@@ -2646,7 +2646,7 @@
       this.grpHueTheaterMode.Controls.Add(this.lblHintHueTheaterMode);
       this.grpHueTheaterMode.Controls.Add(this.ckHueTheaterRestoreLights);
       this.grpHueTheaterMode.Controls.Add(this.ckHueTheaterEnabled);
-      this.grpHueTheaterMode.Location = new System.Drawing.Point(10, 452);
+      this.grpHueTheaterMode.Location = new System.Drawing.Point(10, 450);
       this.grpHueTheaterMode.Name = "grpHueTheaterMode";
       this.grpHueTheaterMode.Size = new System.Drawing.Size(820, 129);
       this.grpHueTheaterMode.TabIndex = 29;
@@ -2656,7 +2656,7 @@
       // lblHintHueTheaterMode
       // 
       this.lblHintHueTheaterMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintHueTheaterMode.Location = new System.Drawing.Point(3, 27);
+      this.lblHintHueTheaterMode.Location = new System.Drawing.Point(9, 25);
       this.lblHintHueTheaterMode.Name = "lblHintHueTheaterMode";
       this.lblHintHueTheaterMode.Size = new System.Drawing.Size(796, 13);
       this.lblHintHueTheaterMode.TabIndex = 22;
@@ -2666,7 +2666,7 @@
       // ckHueTheaterRestoreLights
       // 
       this.ckHueTheaterRestoreLights.AutoSize = true;
-      this.ckHueTheaterRestoreLights.Location = new System.Drawing.Point(6, 82);
+      this.ckHueTheaterRestoreLights.Location = new System.Drawing.Point(12, 75);
       this.ckHueTheaterRestoreLights.Name = "ckHueTheaterRestoreLights";
       this.ckHueTheaterRestoreLights.Size = new System.Drawing.Size(201, 17);
       this.ckHueTheaterRestoreLights.TabIndex = 8;
@@ -2678,7 +2678,7 @@
       this.ckHueTheaterEnabled.AutoSize = true;
       this.ckHueTheaterEnabled.Checked = true;
       this.ckHueTheaterEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckHueTheaterEnabled.Location = new System.Drawing.Point(6, 57);
+      this.ckHueTheaterEnabled.Location = new System.Drawing.Point(12, 50);
       this.ckHueTheaterEnabled.Name = "ckHueTheaterEnabled";
       this.ckHueTheaterEnabled.Size = new System.Drawing.Size(124, 17);
       this.ckHueTheaterEnabled.TabIndex = 7;
