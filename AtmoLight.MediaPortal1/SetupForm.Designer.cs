@@ -646,7 +646,7 @@
       // lblAtmoWakeHelperReinitializationDelay
       // 
       this.lblAtmoWakeHelperReinitializationDelay.AutoSize = true;
-      this.lblAtmoWakeHelperReinitializationDelay.Location = new System.Drawing.Point(5, 195);
+      this.lblAtmoWakeHelperReinitializationDelay.Location = new System.Drawing.Point(7, 195);
       this.lblAtmoWakeHelperReinitializationDelay.Name = "lblAtmoWakeHelperReinitializationDelay";
       this.lblAtmoWakeHelperReinitializationDelay.Size = new System.Drawing.Size(124, 13);
       this.lblAtmoWakeHelperReinitializationDelay.TabIndex = 10;
@@ -663,7 +663,7 @@
       // lblAtmoWakeHelperConnectDelay
       // 
       this.lblAtmoWakeHelperConnectDelay.AutoSize = true;
-      this.lblAtmoWakeHelperConnectDelay.Location = new System.Drawing.Point(5, 160);
+      this.lblAtmoWakeHelperConnectDelay.Location = new System.Drawing.Point(7, 160);
       this.lblAtmoWakeHelperConnectDelay.Name = "lblAtmoWakeHelperConnectDelay";
       this.lblAtmoWakeHelperConnectDelay.Size = new System.Drawing.Size(97, 13);
       this.lblAtmoWakeHelperConnectDelay.TabIndex = 8;
@@ -680,7 +680,7 @@
       // lblAtmoWakeHelperDisconnectDelay
       // 
       this.lblAtmoWakeHelperDisconnectDelay.AutoSize = true;
-      this.lblAtmoWakeHelperDisconnectDelay.Location = new System.Drawing.Point(5, 125);
+      this.lblAtmoWakeHelperDisconnectDelay.Location = new System.Drawing.Point(7, 125);
       this.lblAtmoWakeHelperDisconnectDelay.Name = "lblAtmoWakeHelperDisconnectDelay";
       this.lblAtmoWakeHelperDisconnectDelay.Size = new System.Drawing.Size(111, 13);
       this.lblAtmoWakeHelperDisconnectDelay.TabIndex = 6;
@@ -697,7 +697,7 @@
       // lblAtmoWakeHelperResumeDelay
       // 
       this.lblAtmoWakeHelperResumeDelay.AutoSize = true;
-      this.lblAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(5, 90);
+      this.lblAtmoWakeHelperResumeDelay.Location = new System.Drawing.Point(7, 90);
       this.lblAtmoWakeHelperResumeDelay.Name = "lblAtmoWakeHelperResumeDelay";
       this.lblAtmoWakeHelperResumeDelay.Size = new System.Drawing.Size(96, 13);
       this.lblAtmoWakeHelperResumeDelay.TabIndex = 4;
@@ -714,7 +714,7 @@
       // lblAtmoWakeHelperComPort
       // 
       this.lblAtmoWakeHelperComPort.AutoSize = true;
-      this.lblAtmoWakeHelperComPort.Location = new System.Drawing.Point(5, 55);
+      this.lblAtmoWakeHelperComPort.Location = new System.Drawing.Point(7, 55);
       this.lblAtmoWakeHelperComPort.Name = "lblAtmoWakeHelperComPort";
       this.lblAtmoWakeHelperComPort.Size = new System.Drawing.Size(98, 13);
       this.lblAtmoWakeHelperComPort.TabIndex = 2;
@@ -1456,7 +1456,7 @@
       this.grpDeactivate.Controls.Add(this.lblEnd);
       this.grpDeactivate.Controls.Add(this.edExcludeStart);
       this.grpDeactivate.Controls.Add(this.lblStart);
-      this.grpDeactivate.Location = new System.Drawing.Point(5, 480);
+      this.grpDeactivate.Location = new System.Drawing.Point(5, 465);
       this.grpDeactivate.Name = "grpDeactivate";
       this.grpDeactivate.Size = new System.Drawing.Size(450, 80);
       this.grpDeactivate.TabIndex = 8;
