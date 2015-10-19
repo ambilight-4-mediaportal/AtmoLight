@@ -1,5 +1,4 @@
-Version 1.16.1.50
-
+Version 1.17.0.0
 - Remote API support, currently supports AtmoLight Remote (Android)
 - AtmoWakeHelper integration
 - Expanded AtmoOrb handler to support new types of devices (Particle Core/Photon)

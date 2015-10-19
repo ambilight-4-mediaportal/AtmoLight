@@ -325,58 +325,20 @@ public class Script
     <Name>AtmoLight</Name>
     <Id>8d2c6d9d-03c8-4144-b0b8-85e3a2b0e001</Id>
     <Author>gemx, Angie05, Rick164, legnod, azzuro, BassFan, Lightning303, HomeY, Sebastiii, popy</Author>
-    <HomePage>https://code.google.com/p/ambilight-4-mediaportal/</HomePage>
+    <HomePage>https://github.com/ambilight-4-mediaportal/AtmoLight</HomePage>
     <ForumPage>http:/http://forum.team-mediaportal.com/threads/atmolight-1-10-0-0-2014-04-19.125633/</ForumPage>
-    <UpdateUrl>https://ambilight-4-mediaportal.googlecode.com/git/MPEI/Atmolight%20process%20plugin/Atmolight_update.xml</UpdateUrl>
+    <UpdateUrl>https://raw.githubusercontent.com/ambilight-4-mediaportal/AtmoLight/master/MPEI/Atmolight_update.xml</UpdateUrl>
     <Version>
       <Major>1</Major>
-      <Minor>16</Minor>
-      <Build>1</Build>
-      <Revision>50</Revision>
+      <Minor>17</Minor>
+      <Build>0</Build>
+      <Revision>0</Revision>
     </Version>
     <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
-
-
-
-
-
-
-
 The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 For this plugin to work you will also need AtmoWin. It will be installed automatically.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed. </ExtensionDescription>
-    <VersionDescription>Version 1.16.1.50
-
+MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed.</ExtensionDescription>
+    <VersionDescription>Version 1.17.0.0
 - Remote API support, currently supports AtmoLight Remote (Android)
 - AtmoWakeHelper integration
 - Expanded AtmoOrb handler to support new types of devices (Particle Core/Photon)
@@ -385,23 +347,10 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
 - Fixed AtmoWin resume delay
 - Fixed Hyperion static color bug so that it now restores the color if previously set as default
 - Fixed behavior on resume (ignoring the resume delay)
-- Fixed delay buffer overflow in rare cases
-
-Version 1.16.1.30
-
-- Fixed behavior on resume (ignoring the resume delay)
-- Fixed delay buffer overflow in rare cases 
-- Ambibox handler bugfixes
-- New feature to disable leds on minimize or suspended state
-
-Version 1.16.1.12
-
-- Added support for MediaPortal 1.12 pre release and newer
-
-- Added support to show GUI frame data when a video is minimized</VersionDescription>
+- Fixed delay buffer overflow in rare cases</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
-    <OnlineLocation>https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/AtmoLight_1.16.1.12.mpe1</OnlineLocation>
-    <ReleaseDate>2015-05-20T10:45:58</ReleaseDate>
+    <OnlineLocation>https://github.com/ambilight-4-mediaportal/Binaries/raw/master/AtmoLight%20for%20MediaPortal/AtmoLight_1.17.0.0.mpe1</OnlineLocation>
+    <ReleaseDate>2015-10-19T10:45:58</ReleaseDate>
     <Tags>atmowin, boblight, hue, hyperion, ambilight, leds, arduino, atmoduino, raspberry pi, sedu-board, teensy 2, ws2801, ws2811, ws2812, ws2812b, neopixels</Tags>
     <Location>..\Release\MP1\[Name]_[Version].mpe1</Location>
     <Params>
