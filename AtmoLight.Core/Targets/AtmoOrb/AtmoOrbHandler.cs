@@ -213,7 +213,6 @@ namespace AtmoLight.Targets
           for (var i = 0; i < coreObject.atmoOrbLamps.Count; i++)
           {
             var settings = coreObject.atmoOrbLamps[i].Split(',');
-
             if (settings[1] == "UDP_IP")
             {
               lamps.Add(new UDPIPLamp(settings[0], settings[2], int.Parse(settings[3]), int.Parse(settings[4]),
@@ -265,7 +264,7 @@ namespace AtmoLight.Targets
         // Connect tcp and/or join udp multicast groups
         foreach (var lamp in lamps)
         {
-          if (lamp.Type == LampType.TCP)
+          if (lamp.Type == LampType.TCP || lamp.Type == LampType.UDPIP)
           {
             lamp.Connect(lamp.IP, lamp.Port);
           }
