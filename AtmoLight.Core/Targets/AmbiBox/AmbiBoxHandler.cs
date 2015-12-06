@@ -45,7 +45,7 @@ namespace AtmoLight
     private TelnetConnection ambiBoxConnection;
     private List<string> profileList = new List<string>();
     private string currentProfile;
-    private int reconnectAttempts = 0;
+    private int reconnectAttempts;
     private int ledCount;
     #endregion
 
@@ -223,16 +223,13 @@ namespace AtmoLight
           {
             break;
           }
-          else
+
+          if (sw.ElapsedMilliseconds > coreObject.ambiBoxChangeImageDelay)
           {
-            if (sw.ElapsedMilliseconds > 2500)
-            {
-              changeImageLock = false;
-              sw.Stop();
-              return;
-            }
+            changeImageLock = false;
+            sw.Stop();
+            return;
           }
-          Thread.Sleep(10);
         }
 
         viewStream.Seek(0, SeekOrigin.Begin);
@@ -252,10 +249,11 @@ namespace AtmoLight
         viewStream.Close();
         changeImageLock = false;
       }
-      catch (Exception)
+      catch (Exception e)
       {
         changeImageLock = false;
-        //firstConnectionPass = false;
+        Log.Error("Error occurred durin AmbiBox changeImage()");
+        Log.Error(e.Message);
       }
     }
 

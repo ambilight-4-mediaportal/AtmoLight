@@ -156,6 +156,8 @@
       this.tabMenu = new System.Windows.Forms.TabControl();
       this.tabPageAmbiBox = new System.Windows.Forms.TabPage();
       this.grpAmbiBoxNetwork = new System.Windows.Forms.GroupBox();
+      this.tbAmbiboxChangeImageDelay = new System.Windows.Forms.TextBox();
+      this.lblAmbiboxChangeImageDelay = new System.Windows.Forms.Label();
       this.tbAmbiBoxExternalProfile = new System.Windows.Forms.TextBox();
       this.tbAmbiBoxMediaPortalProfile = new System.Windows.Forms.TextBox();
       this.tbAmbiBoxReconnectDelay = new System.Windows.Forms.TextBox();
@@ -1718,6 +1720,8 @@
       // 
       // grpAmbiBoxNetwork
       // 
+      this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiboxChangeImageDelay);
+      this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiboxChangeImageDelay);
       this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxExternalProfile);
       this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxMediaPortalProfile);
       this.grpAmbiBoxNetwork.Controls.Add(this.tbAmbiBoxReconnectDelay);
@@ -1732,21 +1736,37 @@
       this.grpAmbiBoxNetwork.Controls.Add(this.lblAmbiBoxIP);
       this.grpAmbiBoxNetwork.Location = new System.Drawing.Point(10, 140);
       this.grpAmbiBoxNetwork.Name = "grpAmbiBoxNetwork";
-      this.grpAmbiBoxNetwork.Size = new System.Drawing.Size(820, 175);
+      this.grpAmbiBoxNetwork.Size = new System.Drawing.Size(820, 251);
       this.grpAmbiBoxNetwork.TabIndex = 1;
       this.grpAmbiBoxNetwork.TabStop = false;
       this.grpAmbiBoxNetwork.Text = "AmbiBox API";
       // 
+      // tbAmbiboxChangeImageDelay
+      // 
+      this.tbAmbiboxChangeImageDelay.Location = new System.Drawing.Point(230, 122);
+      this.tbAmbiboxChangeImageDelay.Name = "tbAmbiboxChangeImageDelay";
+      this.tbAmbiboxChangeImageDelay.Size = new System.Drawing.Size(100, 20);
+      this.tbAmbiboxChangeImageDelay.TabIndex = 15;
+      // 
+      // lblAmbiboxChangeImageDelay
+      // 
+      this.lblAmbiboxChangeImageDelay.AutoSize = true;
+      this.lblAmbiboxChangeImageDelay.Location = new System.Drawing.Point(10, 125);
+      this.lblAmbiboxChangeImageDelay.Name = "lblAmbiboxChangeImageDelay";
+      this.lblAmbiboxChangeImageDelay.Size = new System.Drawing.Size(107, 13);
+      this.lblAmbiboxChangeImageDelay.TabIndex = 14;
+      this.lblAmbiboxChangeImageDelay.Text = "Change Image delay:";
+      // 
       // tbAmbiBoxExternalProfile
       // 
-      this.tbAmbiBoxExternalProfile.Location = new System.Drawing.Point(230, 147);
+      this.tbAmbiBoxExternalProfile.Location = new System.Drawing.Point(230, 172);
       this.tbAmbiBoxExternalProfile.Name = "tbAmbiBoxExternalProfile";
       this.tbAmbiBoxExternalProfile.Size = new System.Drawing.Size(100, 20);
       this.tbAmbiBoxExternalProfile.TabIndex = 13;
       // 
       // tbAmbiBoxMediaPortalProfile
       // 
-      this.tbAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(230, 122);
+      this.tbAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(230, 147);
       this.tbAmbiBoxMediaPortalProfile.Name = "tbAmbiBoxMediaPortalProfile";
       this.tbAmbiBoxMediaPortalProfile.Size = new System.Drawing.Size(100, 20);
       this.tbAmbiBoxMediaPortalProfile.TabIndex = 12;
@@ -1786,7 +1806,7 @@
       // lblAmbiBoxExternalProfile
       // 
       this.lblAmbiBoxExternalProfile.AutoSize = true;
-      this.lblAmbiBoxExternalProfile.Location = new System.Drawing.Point(10, 150);
+      this.lblAmbiBoxExternalProfile.Location = new System.Drawing.Point(10, 175);
       this.lblAmbiBoxExternalProfile.Name = "lblAmbiBoxExternalProfile";
       this.lblAmbiBoxExternalProfile.Size = new System.Drawing.Size(118, 13);
       this.lblAmbiBoxExternalProfile.TabIndex = 6;
@@ -1795,7 +1815,7 @@
       // lblAmbiBoxMediaPortalProfile
       // 
       this.lblAmbiBoxMediaPortalProfile.AutoSize = true;
-      this.lblAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(10, 125);
+      this.lblAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(10, 150);
       this.lblAmbiBoxMediaPortalProfile.Name = "lblAmbiBoxMediaPortalProfile";
       this.lblAmbiBoxMediaPortalProfile.Size = new System.Drawing.Size(136, 13);
       this.lblAmbiBoxMediaPortalProfile.TabIndex = 5;
@@ -2978,7 +2998,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(872, 662);
+      this.ClientSize = new System.Drawing.Size(872, 661);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
@@ -3313,5 +3333,7 @@
     private System.Windows.Forms.Label lblAtmoOrbLedCount;
     private System.Windows.Forms.GroupBox grpAdvancedOptions;
     private System.Windows.Forms.CheckBox cbRemoteApiServer;
+    private System.Windows.Forms.TextBox tbAmbiboxChangeImageDelay;
+    private System.Windows.Forms.Label lblAmbiboxChangeImageDelay;
   }
 }

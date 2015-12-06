@@ -134,6 +134,7 @@ namespace AtmoLight
       tbAmbiBoxPort.Text = Settings.ambiBoxPort.ToString();
       tbAmbiBoxMaxReconnectAttempts.Text = Settings.ambiBoxMaxReconnectAttempts.ToString();
       tbAmbiBoxReconnectDelay.Text = Settings.ambiBoxReconnectDelay.ToString();
+      tbAmbiboxChangeImageDelay.Text = Settings.ambiBoxChangeImageDelay.ToString();
       tbAmbiBoxMediaPortalProfile.Text = Settings.ambiBoxMediaPortalProfile;
       tbAmbiBoxExternalProfile.Text = Settings.ambiBoxExternalProfile;
       tbAtmoOrbBlackThreshold.Text = Settings.atmoOrbBlackThreshold.ToString();
@@ -258,6 +259,7 @@ namespace AtmoLight
       lblAmbiBoxPath.Text = Localization.Translate("Common", "Path").Replace("[Filename]", "AmbiBox.exe");
       lblAmbiBoxPort.Text = Localization.Translate("Common", "Port");
       lblAmbiBoxReconnectDelay.Text = Localization.Translate("Common", "ReconnectDelay");
+      lblAmbiboxChangeImageDelay.Text = Localization.Translate("AmbiBox", "ChangeImageDelay");
       cbAmbiBoxAutoStart.Text = Localization.Translate("Common", "StartTargetWithMP")
         .Replace("[Target]", Localization.Translate("AmbiBox", "AmbiBox"));
       cbAmbiBoxAutoStop.Text = Localization.Translate("Common", "StopTargetWithMP")
@@ -842,6 +844,19 @@ namespace AtmoLight
         return;
       }
 
+      // AmbiBox Change Image Delay
+      minValue = 0;
+      maxValue = 99999;
+      if (validatorInt(tbAmbiboxChangeImageDelay.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(
+          Localization.Translate("Common", "ErrorInvalidNumberRange")
+            .Replace("[minInteger]", minValue.ToString())
+            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAmbiboxChangeImageDelay.Text + "]",
+          Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       // AtmoOrb Broadcast Port
       minValue = 1;
       maxValue = 65535;
@@ -1085,6 +1100,7 @@ namespace AtmoLight
       Settings.ambiBoxPort = int.Parse(tbAmbiBoxPort.Text);
       Settings.ambiBoxMaxReconnectAttempts = int.Parse(tbAmbiBoxMaxReconnectAttempts.Text);
       Settings.ambiBoxReconnectDelay = int.Parse(tbAmbiBoxReconnectDelay.Text);
+      Settings.ambiBoxChangeImageDelay = int.Parse(tbAmbiboxChangeImageDelay.Text);
       Settings.ambiBoxMediaPortalProfile = tbAmbiBoxMediaPortalProfile.Text;
       Settings.ambiBoxExternalProfile = tbAmbiBoxExternalProfile.Text;
       Settings.atmoOrbBlackThreshold = int.Parse(tbAtmoOrbBlackThreshold.Text);

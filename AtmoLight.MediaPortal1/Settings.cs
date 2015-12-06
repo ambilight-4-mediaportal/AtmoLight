@@ -112,6 +112,7 @@ namespace AtmoLight
     public static int ambiBoxPort;
     public static int ambiBoxMaxReconnectAttempts;
     public static int ambiBoxReconnectDelay;
+    public static int ambiBoxChangeImageDelay;
     public static string ambiBoxMediaPortalProfile;
     public static string ambiBoxExternalProfile;
     public static string ambiBoxPath;
@@ -305,6 +306,7 @@ namespace AtmoLight
         ambiBoxPort = reader.GetValueAsInt("atmolight", "ambiBoxPort", 3636);
         ambiBoxMaxReconnectAttempts = reader.GetValueAsInt("atmolight", "ambiBoxMaxReconnectAttempts", 5);
         ambiBoxReconnectDelay = reader.GetValueAsInt("atmolight", "ambiBoxReconnectDelay", 5000);
+        ambiBoxChangeImageDelay = reader.GetValueAsInt("atmolight", "ambiBoxChangeImageDelay", 10);
         ambiBoxMediaPortalProfile = reader.GetValueAsString("atmolight", "ambiBoxMediaPortalProfile", "MediaPortal");
         ambiBoxExternalProfile = reader.GetValueAsString("atmolight", "ambiBoxExternalProfile", "External");
         ambiBoxPath = reader.GetValueAsString("atmolight", "ambiBoxPath", "C:\\Program Files (x86)\\AmbiBox\\AmbiBox.exe");
@@ -420,6 +422,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "ambiBoxPort", ambiBoxPort.ToString());
         reader.SetValue("atmolight", "ambiBoxMaxReconnectAttempts", ambiBoxMaxReconnectAttempts.ToString());
         reader.SetValue("atmolight", "ambiBoxReconnectDelay", ambiBoxReconnectDelay.ToString());
+        reader.SetValue("atmolight", "ambiBoxChangeImageDelay", ambiBoxChangeImageDelay.ToString());
         reader.SetValue("atmolight", "ambiBoxMediaPortalProfile", ambiBoxMediaPortalProfile.ToString());
         reader.SetValue("atmolight", "ambiBoxExternalProfile", ambiBoxExternalProfile.ToString());
         reader.SetValue("atmolight", "ambiBoxPath", ambiBoxPath.ToString());
