@@ -532,7 +532,6 @@ namespace AtmoLight.Targets
 
       if (coreObject.atmoOrbUseInternalSmoothing)
       {
-
         if (forceLightsOff)
         {
           foreach (var lamp in lamps)

@@ -145,8 +145,8 @@ namespace AtmoLight
       ckAtmoOrbEnabled.Checked = Settings.atmoOrbTarget;
       cbAtmoOrbUseOverallLightness.Checked = Settings.atmoOrbUseOverallLightness;
       cbAtmoOrbUseInternalSmoothing.Checked = Settings.atmoOrbUseInternalSmoothing;
-      tblAtmoOrbSmoothSteps.Text = Settings.atmoOrbSmoothSteps.ToString();
-      tblAtmoOrbSmoothDelay.Text = Settings.atmoOrbSmoothDelay.ToString();
+      tbAtmoOrbSmoothSteps.Text = Settings.atmoOrbSmoothSteps.ToString();
+      tbAtmoOrbSmoothDelay.Text = Settings.atmoOrbSmoothDelay.ToString();
 
       for (int i = 0; i < Settings.atmoOrbLamps.Count; i++)
       {
@@ -903,8 +903,8 @@ namespace AtmoLight
 
       // AtmoOrb Smooth Steps
       minValue = 0;
-      maxValue = 500;
-      if (validatorInt(tblAtmoOrbSmoothSteps.Text, minValue, maxValue, true) == false)
+      maxValue = 1000;
+      if (validatorInt(tbAtmoOrbSmoothSteps.Text, minValue, maxValue, true) == false)
       {
         MessageBox.Show(
           Localization.Translate("Common", "ErrorInvalidNumberRange")
@@ -916,8 +916,8 @@ namespace AtmoLight
 
       // AtmoOrb Smooth Delay
       minValue = 0;
-      maxValue = 500;
-      if (validatorInt(tblAtmoOrbSmoothDelay.Text, minValue, maxValue, true) == false)
+      maxValue = 10000;
+      if (validatorInt(tbAtmoOrbSmoothDelay.Text, minValue, maxValue, true) == false)
       {
         MessageBox.Show(
           Localization.Translate("Common", "ErrorInvalidNumberRange")
@@ -1130,8 +1130,8 @@ namespace AtmoLight
       Settings.atmoOrbThreshold = int.Parse(tbAtmoOrbThreshold.Text);
       Settings.atmoOrbUseOverallLightness = cbAtmoOrbUseOverallLightness.Checked;
       Settings.atmoOrbUseInternalSmoothing = cbAtmoOrbUseInternalSmoothing.Checked;
-      Settings.atmoOrbSmoothSteps = int.Parse(tblAtmoOrbSmoothSteps.Text);
-      Settings.atmoOrbSmoothDelay = int.Parse(tblAtmoOrbSmoothDelay.Text);
+      Settings.atmoOrbSmoothSteps = int.Parse(tbAtmoOrbSmoothSteps.Text);
+      Settings.atmoOrbSmoothDelay = int.Parse(tbAtmoOrbSmoothDelay.Text);
 
       Settings.atmoOrbTarget = ckAtmoOrbEnabled.Checked;
       Settings.vuMeterMaxHue = Double.Parse(tbVUMeterMaxHue.Text.Replace(",", "."),

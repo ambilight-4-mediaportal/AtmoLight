@@ -203,8 +203,8 @@
       this.btnAtmoOrbAdd = new System.Windows.Forms.Button();
       this.lbAtmoOrbLamps = new System.Windows.Forms.ListBox();
       this.grpAtmoOrbBasicSettings = new System.Windows.Forms.GroupBox();
-      this.tblAtmoOrbSmoothDelay = new System.Windows.Forms.TextBox();
-      this.tblAtmoOrbSmoothSteps = new System.Windows.Forms.TextBox();
+      this.tbAtmoOrbSmoothDelay = new System.Windows.Forms.TextBox();
+      this.tbAtmoOrbSmoothSteps = new System.Windows.Forms.TextBox();
       this.lblAtmoOrbSmoothDelay = new System.Windows.Forms.Label();
       this.lblAtmoOrbSmoothSteps = new System.Windows.Forms.Label();
       this.cbAtmoOrbUseInternalSmoothing = new System.Windows.Forms.CheckBox();
@@ -2191,8 +2191,8 @@
       // 
       // grpAtmoOrbBasicSettings
       // 
-      this.grpAtmoOrbBasicSettings.Controls.Add(this.tblAtmoOrbSmoothDelay);
-      this.grpAtmoOrbBasicSettings.Controls.Add(this.tblAtmoOrbSmoothSteps);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbSmoothDelay);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbSmoothSteps);
       this.grpAtmoOrbBasicSettings.Controls.Add(this.lblAtmoOrbSmoothDelay);
       this.grpAtmoOrbBasicSettings.Controls.Add(this.lblAtmoOrbSmoothSteps);
       this.grpAtmoOrbBasicSettings.Controls.Add(this.cbAtmoOrbUseInternalSmoothing);
@@ -2216,19 +2216,19 @@
       this.grpAtmoOrbBasicSettings.TabStop = false;
       this.grpAtmoOrbBasicSettings.Text = "Basic settings";
       // 
-      // tblAtmoOrbSmoothDelay
+      // tbAtmoOrbSmoothDelay
       // 
-      this.tblAtmoOrbSmoothDelay.Location = new System.Drawing.Point(505, 147);
-      this.tblAtmoOrbSmoothDelay.Name = "tblAtmoOrbSmoothDelay";
-      this.tblAtmoOrbSmoothDelay.Size = new System.Drawing.Size(100, 20);
-      this.tblAtmoOrbSmoothDelay.TabIndex = 25;
+      this.tbAtmoOrbSmoothDelay.Location = new System.Drawing.Point(505, 147);
+      this.tbAtmoOrbSmoothDelay.Name = "tbAtmoOrbSmoothDelay";
+      this.tbAtmoOrbSmoothDelay.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbSmoothDelay.TabIndex = 25;
       // 
-      // tblAtmoOrbSmoothSteps
+      // tbAtmoOrbSmoothSteps
       // 
-      this.tblAtmoOrbSmoothSteps.Location = new System.Drawing.Point(505, 122);
-      this.tblAtmoOrbSmoothSteps.Name = "tblAtmoOrbSmoothSteps";
-      this.tblAtmoOrbSmoothSteps.Size = new System.Drawing.Size(100, 20);
-      this.tblAtmoOrbSmoothSteps.TabIndex = 24;
+      this.tbAtmoOrbSmoothSteps.Location = new System.Drawing.Point(505, 122);
+      this.tbAtmoOrbSmoothSteps.Name = "tbAtmoOrbSmoothSteps";
+      this.tbAtmoOrbSmoothSteps.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbSmoothSteps.TabIndex = 24;
       // 
       // lblAtmoOrbSmoothDelay
       // 
@@ -3368,7 +3368,7 @@
     private System.Windows.Forms.CheckBox cbAtmoOrbUseInternalSmoothing;
     private System.Windows.Forms.Label lblAtmoOrbSmoothSteps;
     private System.Windows.Forms.Label lblAtmoOrbSmoothDelay;
-    private System.Windows.Forms.TextBox tblAtmoOrbSmoothSteps;
-    private System.Windows.Forms.TextBox tblAtmoOrbSmoothDelay;
+    private System.Windows.Forms.TextBox tbAtmoOrbSmoothSteps;
+    private System.Windows.Forms.TextBox tbAtmoOrbSmoothDelay;
   }
 }
