@@ -332,7 +332,7 @@ public class Script
       <Major>1</Major>
       <Minor>17</Minor>
       <Build>0</Build>
-      <Revision>0</Revision>
+      <Revision>5</Revision>
     </Version>
     <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
 The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.

@@ -71,7 +71,7 @@ namespace AtmoLight.Targets
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ||
             coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
-          ChangeColor(0, 0, 0, true, ID);
+          ChangeColor(0, 0, 0, true, true, ID);
         }
         else if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
         {
@@ -79,7 +79,7 @@ namespace AtmoLight.Targets
           var green = byte.Parse(coreObject.staticColor[1].ToString());
           var blue = byte.Parse(coreObject.staticColor[2].ToString());
 
-          ChangeColor(red, green, blue, false, ID);
+          ChangeColor(red, green, blue, false, true, ID);
         }
       }
       catch (Exception ex)
@@ -114,7 +114,7 @@ namespace AtmoLight.Targets
       return true;
     }
 
-    public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff, string orbId)
+    public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff, bool useLampSmoothing, string orbId)
     {
       if (!IsConnected())
       {
@@ -130,7 +130,7 @@ namespace AtmoLight.Targets
         bytes[1] = 0xFF;
         bytes[2] = 0xEE;
 
-        // Options parameter: 1 = force off | 2 = validate command by Orb ID
+        // Options parameter: 1 = force off | 2 = validate command by Orb ID | 4 = use lamp smoothing and validate by Orb ID
         if (forceLightsOff)
         {
           bytes[3] = 1;
@@ -138,7 +138,14 @@ namespace AtmoLight.Targets
         else
         {
           // Always validate by Orb ID
-          bytes[3] = 2;
+          if (useLampSmoothing)
+          {
+            bytes[3] = 4;
+          }
+          else
+          {
+            bytes[3] = 2;
+          }
         }
 
         // Orb ID
