@@ -155,7 +155,7 @@ namespace AtmoLight.Targets
         bytes[1] = 0xFF;
         bytes[2] = 0xEE;
 
-        // Options parameter: 1 = force off | 2 = validate command by Orb ID | 4 = use lamp smoothing and validate by Orb ID
+        // Options parameter: 1 = force off | 2 = use lamp smoothing and validate by Orb ID | 4 = validate by Orb ID
         if (forceLightsOff)
         {
           bytes[3] = 1;
@@ -165,11 +165,11 @@ namespace AtmoLight.Targets
           // Always validate by Orb ID
           if (useLampSmoothing)
           {
-            bytes[3] = 4;
+            bytes[3] = 2;
           }
           else
           {
-            bytes[3] = 2;
+            bytes[3] = 4;
           }
         }
 
