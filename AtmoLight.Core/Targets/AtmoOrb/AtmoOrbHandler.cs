@@ -553,7 +553,7 @@ namespace AtmoLight.Targets
       {
         foreach (var lamp in lamps)
         {
-          lamp.ChangeColor(red: (byte)currentColor[0], green: (byte)currentColor[1], blue: (byte)currentColor[2], forceLightsOff: forceLightsOff, useLampSmoothing: true, orbId: lamp.ID);
+          lamp.ChangeColor(red: (byte)red, green: (byte)green, blue: (byte)blue, forceLightsOff: forceLightsOff, useLampSmoothing: true, orbId: lamp.ID);
         }
       }
     }

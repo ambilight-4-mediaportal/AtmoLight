@@ -160,7 +160,6 @@ namespace AtmoLight.Targets
       }
       catch (Exception)
       {
-        //Log.Error("Error during send message");
       }
     }
   }
