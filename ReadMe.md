@@ -23,8 +23,7 @@ AtmoLight is a plugin for MediaPortal1 and MediaPortal2 to add support for ambil
 ## Useful Links
 
  * [Frequently Asked Questions](https://github.com/ambilight-4-mediaportal/AtmoLight/wiki/Frequently-Asked-Questions)
- * [Google code project page](https://code.google.com/p/ambilight-4-mediaportal/)
- * [Download Archive](https://ambilight-4-mediaportal.googlecode.com/git/MPEI%20Release/Atmolight/)
+ * [Download Archive](https://github.com/ambilight-4-mediaportal/Binaries/tree/master/AtmoLight%20for%20MediaPortal)
  * [Patched MediaPortal.exe Archive](https://ambilight-4-mediaportal.googlecode.com/git/MediaPortal/MediaPortal.exe/)
  * [IRC Webchat (#ambilight4mediaportal @ freenode)](http://webchat.freenode.net/)
  * [AtmoLight for MediaPortal 1 Forum thread](http://forum.team-mediaportal.com/threads/atmolight-1-13-0-0-2014-06-17.125633/)
