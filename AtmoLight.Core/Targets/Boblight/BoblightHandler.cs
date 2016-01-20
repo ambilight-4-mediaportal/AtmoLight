@@ -261,7 +261,7 @@ namespace AtmoLight
             return false;
           }
 
-          string lightsMessage = SendCommand("get lights", true);
+          string lightsMessage = SendCommand("get lights\n", true);
           if (string.IsNullOrEmpty(lightsMessage))
           {
             return false;
