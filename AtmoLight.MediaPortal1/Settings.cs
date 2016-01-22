@@ -113,6 +113,7 @@ namespace AtmoLight
     public static int ambiBoxPort;
     public static int ambiBoxMaxReconnectAttempts;
     public static int ambiBoxReconnectDelay;
+    public static int ambiBoxChangeImageDelay;
     public static string ambiBoxMediaPortalProfile;
     public static string ambiBoxExternalProfile;
     public static string ambiBoxPath;
@@ -128,6 +129,11 @@ namespace AtmoLight
     public static double atmoOrbGamma;
     public static int atmoOrbBlackThreshold;
     public static bool atmoOrbUseOverallLightness;
+    public static bool atmoOrbUseInternalSmoothing;
+    public static int atmoOrbSmoothSteps;
+    public static int atmoOrbSmoothDelay;
+
+
     public static List<string> atmoOrbLamps = new List<string>();
     #endregion
 
@@ -230,7 +236,7 @@ namespace AtmoLight
               break;
           }
         }
-        
+
         // Normal settings loading
         atmowinExe = reader.GetValueAsString("atmolight", "atmowinexe", "");
         killButton = reader.GetValueAsInt("atmolight", "killbutton", 4);
@@ -306,6 +312,7 @@ namespace AtmoLight
         ambiBoxPort = reader.GetValueAsInt("atmolight", "ambiBoxPort", 3636);
         ambiBoxMaxReconnectAttempts = reader.GetValueAsInt("atmolight", "ambiBoxMaxReconnectAttempts", 5);
         ambiBoxReconnectDelay = reader.GetValueAsInt("atmolight", "ambiBoxReconnectDelay", 5000);
+        ambiBoxChangeImageDelay = reader.GetValueAsInt("atmolight", "ambiBoxChangeImageDelay", 10);
         ambiBoxMediaPortalProfile = reader.GetValueAsString("atmolight", "ambiBoxMediaPortalProfile", "MediaPortal");
         ambiBoxExternalProfile = reader.GetValueAsString("atmolight", "ambiBoxExternalProfile", "External");
         ambiBoxPath = reader.GetValueAsString("atmolight", "ambiBoxPath", "C:\\Program Files (x86)\\AmbiBox\\AmbiBox.exe");
@@ -319,6 +326,10 @@ namespace AtmoLight
         atmoOrbSaturation = Double.Parse(reader.GetValueAsString("atmolight", "atmoOrbSaturation", "0.2").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
         atmoOrbThreshold = reader.GetValueAsInt("atmolight", "atmoOrbThreshold", 0);
         atmoOrbUseOverallLightness = reader.GetValueAsBool("atmolight", "atmoOrbUseOverallLightness", true);
+        atmoOrbUseInternalSmoothing = reader.GetValueAsBool("atmolight", "atmoOrbUseInternalSmoothing", false);
+        atmoOrbSmoothSteps = reader.GetValueAsInt("atmolight", "atmoOrbSmoothSteps", 10);
+        atmoOrbSmoothDelay = reader.GetValueAsInt("atmolight", "atmoOrbSmoothDelay", 1);
+
         string atmoOrbLampTemp = reader.GetValueAsString("atmolight", "atmoOrbLamps", "");
         string[] atmoOrbLampTempSplit = atmoOrbLampTemp.Split('|');
         for (int i = 0; i < atmoOrbLampTempSplit.Length; i++)
@@ -421,6 +432,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "ambiBoxPort", ambiBoxPort.ToString());
         reader.SetValue("atmolight", "ambiBoxMaxReconnectAttempts", ambiBoxMaxReconnectAttempts.ToString());
         reader.SetValue("atmolight", "ambiBoxReconnectDelay", ambiBoxReconnectDelay.ToString());
+        reader.SetValue("atmolight", "ambiBoxChangeImageDelay", ambiBoxChangeImageDelay.ToString());
         reader.SetValue("atmolight", "ambiBoxMediaPortalProfile", ambiBoxMediaPortalProfile.ToString());
         reader.SetValue("atmolight", "ambiBoxExternalProfile", ambiBoxExternalProfile.ToString());
         reader.SetValue("atmolight", "ambiBoxPath", ambiBoxPath.ToString());
@@ -442,6 +454,10 @@ namespace AtmoLight
         reader.SetValue("atmolight", "atmoOrbSaturation", atmoOrbSaturation.ToString());
         reader.SetValue("atmolight", "atmoOrbThreshold", atmoOrbThreshold.ToString());
         reader.SetValueAsBool("atmolight", "atmoOrbUseOverallLightness", atmoOrbUseOverallLightness);
+        reader.SetValueAsBool("atmolight", "atmoOrbUseInternalSmoothing", atmoOrbUseInternalSmoothing);
+        reader.SetValue("atmolight", "atmoOrbSmoothSteps", atmoOrbSmoothSteps.ToString());
+        reader.SetValue("atmolight", "atmoOrbSmoothDelay", atmoOrbSmoothDelay.ToString());
+
         string atmoOrbLampsTemp = "";
         for (int i = 0; i < atmoOrbLamps.Count; i++)
         {

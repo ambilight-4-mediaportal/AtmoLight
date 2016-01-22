@@ -144,6 +144,10 @@ namespace AtmoLight
     public double atmoOrbGamma;
     public int atmoOrbBlackThreshold;
     public bool atmoOrbUseOverallLightness;
+    public bool atmoOrbUseInternalSmoothing;
+    public int atmoOrbSmoothSteps;
+    public int atmoOrbSmoothDelay;
+
     public List<string> atmoOrbLamps = new List<string>();
 
     // AtmoWin Settings Fields

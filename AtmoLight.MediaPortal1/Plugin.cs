@@ -171,6 +171,10 @@ namespace AtmoLight
       coreObject.atmoOrbSaturation = Settings.atmoOrbSaturation;
       coreObject.atmoOrbThreshold = Settings.atmoOrbThreshold;
       coreObject.atmoOrbUseOverallLightness = Settings.atmoOrbUseOverallLightness;
+      coreObject.atmoOrbUseInternalSmoothing = Settings.atmoOrbUseInternalSmoothing;
+      coreObject.atmoOrbSmoothSteps = Settings.atmoOrbSmoothSteps;
+      coreObject.atmoOrbSmoothDelay = Settings.atmoOrbSmoothDelay;
+
       if (Settings.atmoOrbTarget)
       {
         coreObject.AddTarget(Target.AtmoOrb);
