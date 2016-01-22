@@ -65,6 +65,7 @@ namespace AtmoLight
     // Other Fields
     private int captureWidth;
     private int captureHeight;
+    private bool staticColorSentDisabledEffect = false;
     #endregion
 
     #region Constructor
@@ -155,6 +156,12 @@ namespace AtmoLight
       {
         return false;
       }
+
+      if (effect != ContentEffect.StaticColor)
+      {
+        staticColorSentDisabledEffect = false;
+      }
+
       StopGetAtmoLiveViewSourceThread();
       switch (effect)
       {
@@ -175,7 +182,11 @@ namespace AtmoLight
           StartGetAtmoLiveViewSourceThread();
           break;
         case ContentEffect.StaticColor:
-          if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
+          if (!staticColorSentDisabledEffect)
+          {
+            if (!SetAtmoEffect(ComEffectMode.cemDisabled)) return false;
+            staticColorSentDisabledEffect = true;
+          }
           if (!SetAtmoColor((byte)coreObject.staticColor[0], (byte)coreObject.staticColor[1], (byte)coreObject.staticColor[2])) return false;
           // Workaround for SEDU.
           // Without the sleep it would not change to color.
