@@ -152,6 +152,7 @@ namespace AtmoLight
       coreObject.ambiBoxPort = Settings.ambiBoxPort;
       coreObject.ambiBoxMaxReconnectAttempts = Settings.ambiBoxMaxReconnectAttempts;
       coreObject.ambiBoxReconnectDelay = Settings.ambiBoxReconnectDelay;
+      coreObject.ambiBoxChangeImageDelay = Settings.ambiBoxChangeImageDelay;
       coreObject.ambiBoxMediaPortalProfile = Settings.ambiBoxMediaPortalProfile;
       coreObject.ambiBoxExternalProfile = Settings.ambiBoxExternalProfile;
       coreObject.ambiBoxPath = Settings.ambiBoxPath;
