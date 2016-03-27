@@ -486,7 +486,7 @@ namespace AtmoLight.Targets
                   out lamp.AverageColor[1], out lamp.AverageColor[2]);
 
                 // Adjust gamma level and send to lamp
-                ChangeColor(red: (byte)gammaCurve[lamp.AverageColor[0]], green: (byte)gammaCurve[lamp.AverageColor[1]], blue: (byte)gammaCurve[lamp.AverageColor[2]]);
+                lamp.ChangeColor((byte)gammaCurve[lamp.AverageColor[0]], (byte)gammaCurve[lamp.AverageColor[1]], (byte)gammaCurve[lamp.AverageColor[2]], false, lamp.ID);
               }
             }
             else
@@ -503,12 +503,12 @@ namespace AtmoLight.Targets
                     lamp.OverallAverageColor[2] <= coreObject.atmoOrbBlackThreshold)
                 {
                   // Black threshold reached, forcing leds off as to clear smooth colors on the lamp side
-                  ChangeColor(red: 0, green: 0, blue: 0, forceLightsOff: true);
+                  lamp.ChangeColor(0, 0, 0, true, lamp.ID);
                 }
                 else
                 {
                   // Adjust gamma level and send to lamp
-                  ChangeColor(red: (byte)gammaCurve[lamp.OverallAverageColor[0]], green: (byte)gammaCurve[lamp.OverallAverageColor[1]], blue: (byte)gammaCurve[lamp.OverallAverageColor[2]]);
+                  lamp.ChangeColor((byte)gammaCurve[lamp.OverallAverageColor[0]], (byte)gammaCurve[lamp.OverallAverageColor[1]], (byte)gammaCurve[lamp.OverallAverageColor[2]], false, lamp.ID);
                 }
               }
             }

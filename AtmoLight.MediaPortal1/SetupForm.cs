@@ -10,6 +10,7 @@ namespace AtmoLight
   public partial class SetupForm : Form
   {
     private Core coreObject = Core.GetInstance();
+    private Boolean atmoOrbSelectedIndexChangedHelper = false;
 
     #region Init
 
@@ -2483,6 +2484,18 @@ namespace AtmoLight
         return;
       }
 
+      minValue = 1;
+      maxValue = 255;
+      if (validatorInt(tbAtmoOrbID.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(
+          Localization.Translate("Common", "ErrorInvalidNumberRange")
+            .Replace("[minInteger]", minValue.ToString())
+            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbID.Text + "]",
+          Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       minValue = 0;
       maxValue = 100;
       if (validatorInt(tbAtmoOrbHScanStart.Text, minValue, maxValue, true) == false)
@@ -2555,6 +2568,11 @@ namespace AtmoLight
 
     private void btnAtmoOrbUpdate_Click(object sender, EventArgs e)
     {
+      if (lbAtmoOrbLamps.Items.IndexOf(tbAtmoOrbID.Text) < 0)
+      {
+        btnAtmoOrbAdd_Click(sender, e);
+        return;
+      }
       int minValue, maxValue;
       string lampString = "";
       lampString += tbAtmoOrbID.Text + ",";
@@ -2617,6 +2635,18 @@ namespace AtmoLight
           lampString += string.Format("UDP_{0}", cbAtmoOrbProtocol.Text) + ",";
         }
       }
+      minValue = 1;
+      maxValue = 255;
+      if (validatorInt(tbAtmoOrbID.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(
+          Localization.Translate("Common", "ErrorInvalidNumberRange")
+            .Replace("[minInteger]", minValue.ToString())
+            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbID.Text + "]",
+          Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       minValue = 0;
       maxValue = 100;
       if (validatorInt(tbAtmoOrbHScanStart.Text, minValue, maxValue, true) == false)
@@ -2670,6 +2700,7 @@ namespace AtmoLight
     {
       if (lbAtmoOrbLamps.SelectedIndex >= 0)
       {
+        atmoOrbSelectedIndexChangedHelper = true;
         string[] lampSettings = Settings.atmoOrbLamps[lbAtmoOrbLamps.SelectedIndex].Split(',');
         tbAtmoOrbID.Text = lampSettings[0];
         if (lampSettings[1] == "UDP_IP")
@@ -2748,7 +2779,7 @@ namespace AtmoLight
           }
           catch (Exception)
           {
-            tbAtmoOrbLedCount.Text = "27";
+            tbAtmoOrbLedCount.Text = "24";
             cbAtmoOrbProtocol.Text = "Broadcast";
           }
         }
@@ -2779,6 +2810,7 @@ namespace AtmoLight
           }
         }
       }
+      atmoOrbSelectedIndexChangedHelper = false;
     }
 
     private void rbAtmoOrbUDPTCP_CheckedChanged(object sender, EventArgs e)
@@ -2795,6 +2827,10 @@ namespace AtmoLight
             cbAtmoOrbProtocol.Text = "IP";
             cbAtmoOrbProtocol.Enabled = false;
             tbAtmoOrbLedCount.Text = "24";
+            tbAtmoOrbHScanStart.Text = "0";
+            tbAtmoOrbHScanEnd.Text = "100";
+            tbAtmoOrbVScanStart.Text = "0";
+            tbAtmoOrbVScanEnd.Text = "100";
           }
           else if (rb.Text == "UDP")
           {
@@ -2804,6 +2840,10 @@ namespace AtmoLight
               tbAtmoOrbPort.ReadOnly = false;
               cbAtmoOrbProtocol.Enabled = true;
               tbAtmoOrbLedCount.Text = "24";
+              tbAtmoOrbHScanStart.Text = "0";
+              tbAtmoOrbHScanEnd.Text = "100";
+              tbAtmoOrbVScanStart.Text = "0";
+              tbAtmoOrbVScanEnd.Text = "100";
             }
             else if (cbAtmoOrbProtocol.Text == "Broadcast")
             {
@@ -2812,7 +2852,11 @@ namespace AtmoLight
               cbAtmoOrbProtocol.Enabled = true;
               tbAtmoOrbIP.Text = "";
               tbAtmoOrbPort.Text = "";
-              tbAtmoOrbLedCount.Text = "27";
+              tbAtmoOrbLedCount.Text = "24";
+              tbAtmoOrbHScanStart.Text = "0";
+              tbAtmoOrbHScanEnd.Text = "100";
+              tbAtmoOrbVScanStart.Text = "0";
+              tbAtmoOrbVScanEnd.Text = "100";
             }
             else if (cbAtmoOrbProtocol.Text == "Multicast")
             {
@@ -2822,6 +2866,10 @@ namespace AtmoLight
               tbAtmoOrbIP.Text = "239.15.18.2";
               tbAtmoOrbPort.Text = "49692";
               tbAtmoOrbLedCount.Text = "24";
+              tbAtmoOrbHScanStart.Text = "0";
+              tbAtmoOrbHScanEnd.Text = "100";
+              tbAtmoOrbVScanStart.Text = "0";
+              tbAtmoOrbVScanEnd.Text = "100";
             }
           }
         }
@@ -2829,11 +2877,19 @@ namespace AtmoLight
     }
     private void cbAtmoOrbProtocolType_SelectedIndexChanged(object sender, EventArgs e)
     {
+      if (atmoOrbSelectedIndexChangedHelper)
+      {
+        return;
+      }
       if (cbAtmoOrbProtocol.Text == "IP")
       {
         tbAtmoOrbIP.ReadOnly = false;
         tbAtmoOrbPort.ReadOnly = false;
         tbAtmoOrbLedCount.Text = "24";
+        tbAtmoOrbHScanStart.Text = "0";
+        tbAtmoOrbHScanEnd.Text = "100";
+        tbAtmoOrbVScanStart.Text = "0";
+        tbAtmoOrbVScanEnd.Text = "100";
       }
       else if (cbAtmoOrbProtocol.Text == "Broadcast")
       {
@@ -2841,7 +2897,11 @@ namespace AtmoLight
         tbAtmoOrbPort.ReadOnly = true;
         tbAtmoOrbIP.Text = "";
         tbAtmoOrbPort.Text = "";
-        tbAtmoOrbLedCount.Text = "27";
+        tbAtmoOrbLedCount.Text = "24";
+        tbAtmoOrbHScanStart.Text = "0";
+        tbAtmoOrbHScanEnd.Text = "100";
+        tbAtmoOrbVScanStart.Text = "0";
+        tbAtmoOrbVScanEnd.Text = "100";
       }
       else if (cbAtmoOrbProtocol.Text == "Multicast")
       {
@@ -2850,6 +2910,10 @@ namespace AtmoLight
         tbAtmoOrbIP.Text = "239.15.18.2";
         tbAtmoOrbPort.Text = "49692";
         tbAtmoOrbLedCount.Text = "24";
+        tbAtmoOrbHScanStart.Text = "0";
+        tbAtmoOrbHScanEnd.Text = "100";
+        tbAtmoOrbVScanStart.Text = "0";
+        tbAtmoOrbVScanEnd.Text = "100";
       }
     }
 
