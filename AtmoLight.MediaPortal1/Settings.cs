@@ -129,9 +129,7 @@ namespace AtmoLight
     public static double atmoOrbGamma;
     public static int atmoOrbBlackThreshold;
     public static bool atmoOrbUseOverallLightness;
-    public static bool atmoOrbUseInternalSmoothing;
-    public static int atmoOrbSmoothSteps;
-    public static int atmoOrbSmoothDelay;
+    public static bool atmoOrbUseSmoothing;
 
 
     public static List<string> atmoOrbLamps = new List<string>();
@@ -326,9 +324,7 @@ namespace AtmoLight
         atmoOrbSaturation = Double.Parse(reader.GetValueAsString("atmolight", "atmoOrbSaturation", "0.2").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
         atmoOrbThreshold = reader.GetValueAsInt("atmolight", "atmoOrbThreshold", 0);
         atmoOrbUseOverallLightness = reader.GetValueAsBool("atmolight", "atmoOrbUseOverallLightness", true);
-        atmoOrbUseInternalSmoothing = reader.GetValueAsBool("atmolight", "atmoOrbUseInternalSmoothing", false);
-        atmoOrbSmoothSteps = reader.GetValueAsInt("atmolight", "atmoOrbSmoothSteps", 10);
-        atmoOrbSmoothDelay = reader.GetValueAsInt("atmolight", "atmoOrbSmoothDelay", 1);
+        atmoOrbUseSmoothing = reader.GetValueAsBool("atmolight", "atmoOrbUseSmoothing", true);
 
         string atmoOrbLampTemp = reader.GetValueAsString("atmolight", "atmoOrbLamps", "");
         string[] atmoOrbLampTempSplit = atmoOrbLampTemp.Split('|');
@@ -454,9 +450,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "atmoOrbSaturation", atmoOrbSaturation.ToString());
         reader.SetValue("atmolight", "atmoOrbThreshold", atmoOrbThreshold.ToString());
         reader.SetValueAsBool("atmolight", "atmoOrbUseOverallLightness", atmoOrbUseOverallLightness);
-        reader.SetValueAsBool("atmolight", "atmoOrbUseInternalSmoothing", atmoOrbUseInternalSmoothing);
-        reader.SetValue("atmolight", "atmoOrbSmoothSteps", atmoOrbSmoothSteps.ToString());
-        reader.SetValue("atmolight", "atmoOrbSmoothDelay", atmoOrbSmoothDelay.ToString());
+        reader.SetValueAsBool("atmolight", "atmoOrbUseSmoothing", atmoOrbUseSmoothing);
 
         string atmoOrbLampsTemp = "";
         for (int i = 0; i < atmoOrbLamps.Count; i++)

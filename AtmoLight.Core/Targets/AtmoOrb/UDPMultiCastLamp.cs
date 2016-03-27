@@ -6,7 +6,6 @@ namespace AtmoLight.Targets
 {
   internal class UDPMulticastLamp : ILamp
   {
-    private bool isConnected;
     private readonly Core coreObject = Core.GetInstance();
 
     public UDPMulticastLamp(string id, string ip, int port, int hScanStart, int hScanEnd, int vScanStart, int vScanEnd,
@@ -65,13 +64,12 @@ namespace AtmoLight.Targets
       {
         //Disconnect();
 
-        isConnected = true;
         Log.Debug("AtmoOrbHandler - [UDP Multicast] Successfully joined UDP multicast group {0} ({1}:{2})", ID, ip, port);
 
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled ||
             coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
-          ChangeColor(0, 0, 0, true, true, ID);
+          ChangeColor(0, 0, 0, true, ID);
         }
         else if (coreObject.GetCurrentEffect() == ContentEffect.StaticColor)
         {
@@ -79,7 +77,7 @@ namespace AtmoLight.Targets
           var green = byte.Parse(coreObject.staticColor[1].ToString());
           var blue = byte.Parse(coreObject.staticColor[2].ToString());
 
-          ChangeColor(red, green, blue, false, true, ID);
+          ChangeColor(red, green, blue, false, ID);
         }
       }
       catch (Exception ex)
@@ -114,7 +112,7 @@ namespace AtmoLight.Targets
       return true;
     }
 
-    public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff, bool useLampSmoothing, string orbId)
+    public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff, string orbId)
     {
       if (!IsConnected())
       {
@@ -138,7 +136,7 @@ namespace AtmoLight.Targets
         else
         {
           // Always validate by Orb ID
-          if (useLampSmoothing)
+          if (coreObject.atmoOrbUseSmoothing)
           {
             bytes[3] = 2;
           }

@@ -60,16 +60,6 @@ namespace AtmoLight.Targets
 
     private List<ILamp> lamps = new List<ILamp>();
     private Dictionary<String, Socket> multicastGroups = new Dictionary<String, Socket>();
-
-
-    // SMOOTHING SETTINGS
-    private long smoothMillis;
-    private int[] nextColor = new int[3];
-    private int[] prevColor = new int[3];
-    private int[] currentColor = new int[3];
-    private byte smoothStep;
-
-
     #endregion
 
     #region Constructor
@@ -320,48 +310,6 @@ namespace AtmoLight.Targets
 
     #endregion
 
-
-    #region SmoothColor
-    void setSmoothColor(byte red, byte green, byte blue)
-    {
-      if (smoothStep == coreObject.atmoOrbSmoothSteps)
-      {
-        if (nextColor[0] == red && nextColor[1] == green && nextColor[2] == blue)
-        {
-          return;
-        }
-
-        prevColor[0] = currentColor[0];
-        prevColor[1] = currentColor[1];
-        prevColor[2] = currentColor[2];
-
-        nextColor[0] = red;
-        nextColor[1] = green;
-        nextColor[2] = blue;
-
-
-        smoothMillis = Environment.TickCount;
-        smoothStep = 0;
-      }
-    }
-
-    // Display one step to the next color
-    void smoothColor(Boolean forceLightsOff)
-    {
-      smoothStep++;
-
-      currentColor[0] = (byte)(prevColor[0] + (((nextColor[0] - prevColor[0]) * smoothStep) / coreObject.atmoOrbSmoothSteps));
-      currentColor[1] = (byte)(prevColor[1] + (((nextColor[1] - prevColor[1]) * smoothStep) / coreObject.atmoOrbSmoothSteps));
-      currentColor[2] = (byte)(prevColor[2] + (((nextColor[2] - prevColor[2]) * smoothStep) / coreObject.atmoOrbSmoothSteps));
-
-      foreach (var lamp in lamps)
-      {
-        lamp.ChangeColor(red: (byte)currentColor[0], green: (byte)currentColor[1], blue: (byte)currentColor[2], forceLightsOff: forceLightsOff, useLampSmoothing: false, orbId: lamp.ID);
-      }
-    }
-
-    #endregion
-
     #region ChangeImage/Color
 
     public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
@@ -529,31 +477,9 @@ namespace AtmoLight.Targets
         return;
       }
 
-      if (coreObject.atmoOrbUseInternalSmoothing)
+      foreach (var lamp in lamps)
       {
-        if (forceLightsOff)
-        {
-          foreach (var lamp in lamps)
-          {
-            lamp.ChangeColor(red: 0, green: 0, blue: 0, forceLightsOff: forceLightsOff, useLampSmoothing: false, orbId: lamp.ID);
-          }
-          return;
-        }
-
-        setSmoothColor(red, green, blue);
-
-        if (smoothStep < coreObject.atmoOrbSmoothSteps &&
-            Environment.TickCount >= (smoothMillis + (coreObject.atmoOrbSmoothDelay*(smoothStep + 1))))
-        {
-          smoothColor(forceLightsOff);
-        }
-      }
-      else
-      {
-        foreach (var lamp in lamps)
-        {
-          lamp.ChangeColor(red: (byte)red, green: (byte)green, blue: (byte)blue, forceLightsOff: forceLightsOff, useLampSmoothing: true, orbId: lamp.ID);
-        }
+        lamp.ChangeColor((byte)red, (byte)green, (byte)blue, forceLightsOff, lamp.ID);
       }
     }
 

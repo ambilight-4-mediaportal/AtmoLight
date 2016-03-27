@@ -146,9 +146,7 @@ namespace AtmoLight
       tbAtmoOrbThreshold.Text = Settings.atmoOrbThreshold.ToString();
       ckAtmoOrbEnabled.Checked = Settings.atmoOrbTarget;
       cbAtmoOrbUseOverallLightness.Checked = Settings.atmoOrbUseOverallLightness;
-      cbAtmoOrbUseInternalSmoothing.Checked = Settings.atmoOrbUseInternalSmoothing;
-      tbAtmoOrbSmoothSteps.Text = Settings.atmoOrbSmoothSteps.ToString();
-      tbAtmoOrbSmoothDelay.Text = Settings.atmoOrbSmoothDelay.ToString();
+      cbAtmoOrbUseSmoothing.Checked = Settings.atmoOrbUseSmoothing;
 
       for (int i = 0; i < Settings.atmoOrbLamps.Count; i++)
       {
@@ -295,9 +293,7 @@ namespace AtmoLight
       rbAtmoOrbUDP.Text = Localization.Translate("AtmoOrb", "UDP");
       cbAtmoOrbInvertZone.Text = Localization.Translate("AtmoOrb", "InvertZone");
       cbAtmoOrbUseOverallLightness.Text = Localization.Translate("Common", "OverallLightness");
-      cbAtmoOrbUseInternalSmoothing.Text = Localization.Translate("AtmoOrb", "InternalSmoothing");
-      lblAtmoOrbSmoothSteps.Text = Localization.Translate("AtmoOrb", "SmoothSteps");
-      lblAtmoOrbSmoothDelay.Text = Localization.Translate("AtmoOrb", "SmoothDelay");
+      cbAtmoOrbUseSmoothing.Text = Localization.Translate("AtmoOrb", "InternalSmoothing");
       btnAtmoOrbAdd.Text = Localization.Translate("Common", "Add");
       btnAtmoOrbRemove.Text = Localization.Translate("Common", "Remove");
       btnAtmoOrbUpdate.Text = Localization.Translate("Common", "Update");
@@ -917,32 +913,6 @@ namespace AtmoLight
         return;
       }
 
-      // AtmoOrb Smooth Steps
-      minValue = 0;
-      maxValue = 1000;
-      if (validatorInt(tbAtmoOrbSmoothSteps.Text, minValue, maxValue, true) == false)
-      {
-        MessageBox.Show(
-          Localization.Translate("Common", "ErrorInvalidNumberRange")
-            .Replace("[minInteger]", minValue.ToString())
-            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbSmoothSteps.Text + "]",
-          Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
-        return;
-      }
-
-      // AtmoOrb Smooth Delay
-      minValue = 0;
-      maxValue = 10000;
-      if (validatorInt(tbAtmoOrbSmoothDelay.Text, minValue, maxValue, true) == false)
-      {
-        MessageBox.Show(
-          Localization.Translate("Common", "ErrorInvalidNumberRange")
-            .Replace("[minInteger]", minValue.ToString())
-            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + lblAtmoOrbSmoothDelay.Text + "]",
-          Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
-        return;
-      }
-
       // AtmoOrb Saturation
       double doubleMinValue = -1.0;
       double doubleMaxValue = 1.0;
@@ -1146,9 +1116,7 @@ namespace AtmoLight
         CultureInfo.InvariantCulture.NumberFormat);
       Settings.atmoOrbThreshold = int.Parse(tbAtmoOrbThreshold.Text);
       Settings.atmoOrbUseOverallLightness = cbAtmoOrbUseOverallLightness.Checked;
-      Settings.atmoOrbUseInternalSmoothing = cbAtmoOrbUseInternalSmoothing.Checked;
-      Settings.atmoOrbSmoothSteps = int.Parse(tbAtmoOrbSmoothSteps.Text);
-      Settings.atmoOrbSmoothDelay = int.Parse(tbAtmoOrbSmoothDelay.Text);
+      Settings.atmoOrbUseSmoothing = cbAtmoOrbUseSmoothing.Checked;
 
       Settings.atmoOrbTarget = ckAtmoOrbEnabled.Checked;
       Settings.vuMeterMaxHue = Double.Parse(tbVUMeterMaxHue.Text.Replace(",", "."),

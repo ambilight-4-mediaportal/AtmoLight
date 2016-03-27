@@ -157,9 +157,7 @@
     <string name="TCP">TCP</string>
     <string name="UDP">UDP</string>
     <string name="InvertZone">Invert zone</string>
-    <string name="InternalSmoothing">Use internal smoothing instead of lamps</string>
-    <string name="SmoothSteps">Smooth steps</string>
-    <string name="SmoothDelay">Smooth delay</string>
+    <string name="InternalSmoothing">Use smoothing</string>
   </AtmoOrb>
   <AtmoWin>
     <string name="AtmoWin">AtmoWin</string>

@@ -165,6 +165,7 @@
       this.tbAmbiBoxPort = new System.Windows.Forms.TextBox();
       this.tbAmbiBoxIP = new System.Windows.Forms.TextBox();
       this.lblAmbiBoxExternalProfile = new System.Windows.Forms.Label();
+      this.lblAmbiBoxMediaPortalProfile = new System.Windows.Forms.Label();
       this.lblAmbiBoxReconnectDelay = new System.Windows.Forms.Label();
       this.lblAmbiBoxMaxReconnectAttempts = new System.Windows.Forms.Label();
       this.lblAmbiBoxPort = new System.Windows.Forms.Label();
@@ -204,11 +205,7 @@
       this.btnAtmoOrbAdd = new System.Windows.Forms.Button();
       this.lbAtmoOrbLamps = new System.Windows.Forms.ListBox();
       this.grpAtmoOrbBasicSettings = new System.Windows.Forms.GroupBox();
-      this.tbAtmoOrbSmoothDelay = new System.Windows.Forms.TextBox();
-      this.tbAtmoOrbSmoothSteps = new System.Windows.Forms.TextBox();
-      this.lblAtmoOrbSmoothDelay = new System.Windows.Forms.Label();
-      this.lblAtmoOrbSmoothSteps = new System.Windows.Forms.Label();
-      this.cbAtmoOrbUseInternalSmoothing = new System.Windows.Forms.CheckBox();
+      this.cbAtmoOrbUseSmoothing = new System.Windows.Forms.CheckBox();
       this.tbAtmoOrbGamma = new System.Windows.Forms.TextBox();
       this.tbAtmoOrbSaturation = new System.Windows.Forms.TextBox();
       this.lblAtmoOrbGamma = new System.Windows.Forms.Label();
@@ -289,7 +286,6 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
-      this.lblAmbiBoxMediaPortalProfile = new System.Windows.Forms.Label();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -1294,7 +1290,7 @@
       // ckMonitorWindowState
       // 
       this.ckMonitorWindowState.AutoSize = true;
-      this.ckMonitorWindowState.Location = new System.Drawing.Point(13, 325);
+      this.ckMonitorWindowState.Location = new System.Drawing.Point(12, 325);
       this.ckMonitorWindowState.Name = "ckMonitorWindowState";
       this.ckMonitorWindowState.Size = new System.Drawing.Size(295, 17);
       this.ckMonitorWindowState.TabIndex = 42;
@@ -1817,6 +1813,15 @@
       this.lblAmbiBoxExternalProfile.TabIndex = 6;
       this.lblAmbiBoxExternalProfile.Text = "External capture profile:";
       // 
+      // lblAmbiBoxMediaPortalProfile
+      // 
+      this.lblAmbiBoxMediaPortalProfile.AutoSize = true;
+      this.lblAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(10, 150);
+      this.lblAmbiBoxMediaPortalProfile.Name = "lblAmbiBoxMediaPortalProfile";
+      this.lblAmbiBoxMediaPortalProfile.Size = new System.Drawing.Size(136, 13);
+      this.lblAmbiBoxMediaPortalProfile.TabIndex = 5;
+      this.lblAmbiBoxMediaPortalProfile.Text = "MediaPortal capture profile:";
+      // 
       // lblAmbiBoxReconnectDelay
       // 
       this.lblAmbiBoxReconnectDelay.AutoSize = true;
@@ -1954,9 +1959,9 @@
       this.grpAtmoOrbLamps.Controls.Add(this.btnAtmoOrbUpdate);
       this.grpAtmoOrbLamps.Controls.Add(this.btnAtmoOrbAdd);
       this.grpAtmoOrbLamps.Controls.Add(this.lbAtmoOrbLamps);
-      this.grpAtmoOrbLamps.Location = new System.Drawing.Point(10, 190);
+      this.grpAtmoOrbLamps.Location = new System.Drawing.Point(10, 140);
       this.grpAtmoOrbLamps.Name = "grpAtmoOrbLamps";
-      this.grpAtmoOrbLamps.Size = new System.Drawing.Size(820, 341);
+      this.grpAtmoOrbLamps.Size = new System.Drawing.Size(820, 280);
       this.grpAtmoOrbLamps.TabIndex = 1;
       this.grpAtmoOrbLamps.TabStop = false;
       this.grpAtmoOrbLamps.Text = "Lamp settings";
@@ -2202,11 +2207,7 @@
       // 
       // grpAtmoOrbBasicSettings
       // 
-      this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbSmoothDelay);
-      this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbSmoothSteps);
-      this.grpAtmoOrbBasicSettings.Controls.Add(this.lblAtmoOrbSmoothDelay);
-      this.grpAtmoOrbBasicSettings.Controls.Add(this.lblAtmoOrbSmoothSteps);
-      this.grpAtmoOrbBasicSettings.Controls.Add(this.cbAtmoOrbUseInternalSmoothing);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.cbAtmoOrbUseSmoothing);
       this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbGamma);
       this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbSaturation);
       this.grpAtmoOrbBasicSettings.Controls.Add(this.lblAtmoOrbGamma);
@@ -2222,52 +2223,20 @@
       this.grpAtmoOrbBasicSettings.Controls.Add(this.cbAtmoOrbUseOverallLightness);
       this.grpAtmoOrbBasicSettings.Location = new System.Drawing.Point(10, 10);
       this.grpAtmoOrbBasicSettings.Name = "grpAtmoOrbBasicSettings";
-      this.grpAtmoOrbBasicSettings.Size = new System.Drawing.Size(820, 175);
+      this.grpAtmoOrbBasicSettings.Size = new System.Drawing.Size(820, 125);
       this.grpAtmoOrbBasicSettings.TabIndex = 0;
       this.grpAtmoOrbBasicSettings.TabStop = false;
       this.grpAtmoOrbBasicSettings.Text = "Basic settings";
       // 
-      // tbAtmoOrbSmoothDelay
-      // 
-      this.tbAtmoOrbSmoothDelay.Location = new System.Drawing.Point(505, 147);
-      this.tbAtmoOrbSmoothDelay.Name = "tbAtmoOrbSmoothDelay";
-      this.tbAtmoOrbSmoothDelay.Size = new System.Drawing.Size(100, 20);
-      this.tbAtmoOrbSmoothDelay.TabIndex = 25;
-      // 
-      // tbAtmoOrbSmoothSteps
-      // 
-      this.tbAtmoOrbSmoothSteps.Location = new System.Drawing.Point(505, 122);
-      this.tbAtmoOrbSmoothSteps.Name = "tbAtmoOrbSmoothSteps";
-      this.tbAtmoOrbSmoothSteps.Size = new System.Drawing.Size(100, 20);
-      this.tbAtmoOrbSmoothSteps.TabIndex = 24;
-      // 
-      // lblAtmoOrbSmoothDelay
-      // 
-      this.lblAtmoOrbSmoothDelay.AutoSize = true;
-      this.lblAtmoOrbSmoothDelay.Location = new System.Drawing.Point(350, 150);
-      this.lblAtmoOrbSmoothDelay.Name = "lblAtmoOrbSmoothDelay";
-      this.lblAtmoOrbSmoothDelay.Size = new System.Drawing.Size(74, 13);
-      this.lblAtmoOrbSmoothDelay.TabIndex = 23;
-      this.lblAtmoOrbSmoothDelay.Text = "Smooth delay:";
-      // 
-      // lblAtmoOrbSmoothSteps
-      // 
-      this.lblAtmoOrbSmoothSteps.AutoSize = true;
-      this.lblAtmoOrbSmoothSteps.Location = new System.Drawing.Point(350, 125);
-      this.lblAtmoOrbSmoothSteps.Name = "lblAtmoOrbSmoothSteps";
-      this.lblAtmoOrbSmoothSteps.Size = new System.Drawing.Size(74, 13);
-      this.lblAtmoOrbSmoothSteps.TabIndex = 22;
-      this.lblAtmoOrbSmoothSteps.Text = "Smooth steps:";
-      // 
       // cbAtmoOrbUseInternalSmoothing
       // 
-      this.cbAtmoOrbUseInternalSmoothing.AutoSize = true;
-      this.cbAtmoOrbUseInternalSmoothing.Location = new System.Drawing.Point(350, 100);
-      this.cbAtmoOrbUseInternalSmoothing.Name = "cbAtmoOrbUseInternalSmoothing";
-      this.cbAtmoOrbUseInternalSmoothing.Size = new System.Drawing.Size(212, 17);
-      this.cbAtmoOrbUseInternalSmoothing.TabIndex = 21;
-      this.cbAtmoOrbUseInternalSmoothing.Text = "Use internal smoothing instead of lamps";
-      this.cbAtmoOrbUseInternalSmoothing.UseVisualStyleBackColor = true;
+      this.cbAtmoOrbUseSmoothing.AutoSize = true;
+      this.cbAtmoOrbUseSmoothing.Location = new System.Drawing.Point(350, 100);
+      this.cbAtmoOrbUseSmoothing.Name = "cbAtmoOrbUseInternalSmoothing";
+      this.cbAtmoOrbUseSmoothing.Size = new System.Drawing.Size(96, 17);
+      this.cbAtmoOrbUseSmoothing.TabIndex = 21;
+      this.cbAtmoOrbUseSmoothing.Text = "Use smoothing";
+      this.cbAtmoOrbUseSmoothing.UseVisualStyleBackColor = true;
       // 
       // tbAtmoOrbGamma
       // 
@@ -3037,20 +3006,11 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
-      // lblAmbiBoxMediaPortalProfile
-      // 
-      this.lblAmbiBoxMediaPortalProfile.AutoSize = true;
-      this.lblAmbiBoxMediaPortalProfile.Location = new System.Drawing.Point(10, 150);
-      this.lblAmbiBoxMediaPortalProfile.Name = "lblAmbiBoxMediaPortalProfile";
-      this.lblAmbiBoxMediaPortalProfile.Size = new System.Drawing.Size(136, 13);
-      this.lblAmbiBoxMediaPortalProfile.TabIndex = 5;
-      this.lblAmbiBoxMediaPortalProfile.Text = "MediaPortal capture profile:";
-      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(872, 661);
+      this.ClientSize = new System.Drawing.Size(872, 662);
       this.Controls.Add(this.tabMenu);
       this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
@@ -3384,11 +3344,7 @@
     private System.Windows.Forms.Label lblAtmoOrbLedCount;
     private System.Windows.Forms.GroupBox grpAdvancedOptions;
     private System.Windows.Forms.CheckBox cbRemoteApiServer;
-    private System.Windows.Forms.CheckBox cbAtmoOrbUseInternalSmoothing;
-    private System.Windows.Forms.Label lblAtmoOrbSmoothSteps;
-    private System.Windows.Forms.Label lblAtmoOrbSmoothDelay;
-    private System.Windows.Forms.TextBox tbAtmoOrbSmoothSteps;
-    private System.Windows.Forms.TextBox tbAtmoOrbSmoothDelay;
+    private System.Windows.Forms.CheckBox cbAtmoOrbUseSmoothing;
     private System.Windows.Forms.TextBox tbAmbiboxChangeImageDelay;
     private System.Windows.Forms.Label lblAmbiboxChangeImageDelay;
     private System.Windows.Forms.Label lblAmbiBoxMediaPortalProfile;
