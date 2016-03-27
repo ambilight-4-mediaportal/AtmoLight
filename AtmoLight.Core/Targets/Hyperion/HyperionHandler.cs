@@ -46,7 +46,6 @@ namespace AtmoLight.Targets
     private int hyperionReconnectCounter;
     private string hyperionpreviousHostname = "";
     private bool priorityCleared;
-    private bool priorityStaticColorCleared;
 
     private Stopwatch liveReconnectSW = new Stopwatch();
 
@@ -336,11 +335,7 @@ namespace AtmoLight.Targets
           return;
         }
 
-        if (priority == coreObject.hyperionPriorityStaticColor)
-        {
-          priorityStaticColorCleared = true;
-        }
-        else if (priority == coreObject.hyperionPriority)
+        if (priority == coreObject.hyperionPriority)
         {
           priorityCleared = true;
         }
@@ -395,8 +390,6 @@ namespace AtmoLight.Targets
             //Clear live priority channel
             ClearPriority(coreObject.hyperionPriority);
           }
-
-          priorityStaticColorCleared = false;
 
           if (coreObject.targetResendCommand)
           {

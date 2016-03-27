@@ -157,7 +157,7 @@ namespace AtmoLight.Targets
 
         _client.Send(bytes, bytes.Length, _clientEndpoint);
       }
-      catch (Exception e)
+      catch (Exception)
       {
         Log.Error("Error during send message..");
       }

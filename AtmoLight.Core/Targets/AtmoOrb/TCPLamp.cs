@@ -201,7 +201,7 @@ namespace AtmoLight.Targets
         {
           sent += socket.Send(buffer, offset + sent, size - sent, SocketFlags.None);
         }
-        catch (Exception e)
+        catch (Exception)
         {
           //
         }
