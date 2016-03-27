@@ -63,17 +63,14 @@ namespace AtmoLight.Targets
     #endregion
 
     #region Constructor
-
     public AtmoOrbHandler()
     {
       CalcGammaCurve();
       Log.Debug("AtmoOrbHandler - AtmoOrb as target added.");
     }
-
     #endregion
 
     #region ITargets Methods
-
     public void Initialise(bool force = false)
     {
       if (!initLock)
@@ -117,63 +114,20 @@ namespace AtmoLight.Targets
       switch (effect)
       {
         case ContentEffect.MediaPortalLiveMode:
-          return true;
         case ContentEffect.GIFReader:
         case ContentEffect.VUMeter:
         case ContentEffect.VUMeterRainbow:
           return true;
         case ContentEffect.StaticColor:
-
-          if (coreObject.targetResendCommand)
-          {
-            // Send command 3 times to make sure it arrives
-            ChangeColor((byte)gammaCurve[coreObject.staticColor[0]], (byte)gammaCurve[coreObject.staticColor[1]],
-              (byte)gammaCurve[coreObject.staticColor[2]]);
-            Thread.Sleep(50);
-            ChangeColor((byte)gammaCurve[coreObject.staticColor[0]], (byte)gammaCurve[coreObject.staticColor[1]],
-              (byte)gammaCurve[coreObject.staticColor[2]]);
-            Thread.Sleep(50);
-          }
-          else
-          {
-            ChangeColor((byte)gammaCurve[coreObject.staticColor[0]], (byte)gammaCurve[coreObject.staticColor[1]],
-            (byte)gammaCurve[coreObject.staticColor[2]]);
-          }
-          return true;
-        case ContentEffect.LEDsDisabled:
-          if (coreObject.targetResendCommand)
-          {
-            // Send command 3 times to make sure it arrives
-            ChangeColor(0, 0, 0, true);
-            Thread.Sleep(50);
-            ChangeColor(0, 0, 0, true);
-            Thread.Sleep(50);
-            ChangeColor(0, 0, 0, true);
-          }
-          else
-          {
-            ChangeColor(0, 0, 0, true);
-          }
+          ChangeColor((byte)gammaCurve[coreObject.staticColor[0]], (byte)gammaCurve[coreObject.staticColor[1]], (byte)gammaCurve[coreObject.staticColor[2]]);
           return true;
         case ContentEffect.Undefined:
+        case ContentEffect.LEDsDisabled:
         default:
-          if (coreObject.targetResendCommand)
-          {
-            // Send command 3 times to make sure it arrives
-            ChangeColor(0, 0, 0, true);
-            Thread.Sleep(50);
-            ChangeColor(0, 0, 0, true);
-            Thread.Sleep(50);
-            ChangeColor(0, 0, 0, true);
-          }
-          else
-          {
-            ChangeColor(0, 0, 0, true);
-          }
+          ChangeColor(0, 0, 0, true);
           return true;
       }
     }
-
 
     public void ChangeProfile()
     {
@@ -192,11 +146,9 @@ namespace AtmoLight.Targets
         Disconnect();
       }
     }
-
     #endregion
 
     #region Init and Disconnect
-
     private void InitThreaded(bool force = false)
     {
       if (initLock)
@@ -264,11 +216,7 @@ namespace AtmoLight.Targets
         // Connect tcp and/or join udp multicast groups
         foreach (var lamp in lamps)
         {
-          if (lamp.Type == LampType.TCP || lamp.Type == LampType.UDPIP)
-          {
-            lamp.Connect(lamp.IP, lamp.Port);
-          }
-          else if (lamp.Type == LampType.UDPMultiCast)
+          if (lamp.Type == LampType.TCP || lamp.Type == LampType.UDPIP || lamp.Type == LampType.UDPMultiCast)
           {
             lamp.Connect(lamp.IP, lamp.Port);
           }
@@ -311,7 +259,6 @@ namespace AtmoLight.Targets
     #endregion
 
     #region ChangeImage/Color
-
     public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
       if (!IsConnected())
@@ -482,11 +429,9 @@ namespace AtmoLight.Targets
         lamp.ChangeColor((byte)red, (byte)green, (byte)blue, forceLightsOff, lamp.ID);
       }
     }
-
     #endregion
 
     #region UDP Server
-
     private bool UdpBroadcastLampPresent()
     {
       foreach (var lamp in lamps)
@@ -537,11 +482,9 @@ namespace AtmoLight.Targets
         Log.Error("AtmoOrbHandler - Exception: {0}", ex.Message);
       }
     }
-
     #endregion
 
     #region Utilities
-
     private void CalcGammaCurve()
     {
       for (var i = 0; i < gammaCurve.Length; i++)
@@ -550,7 +493,6 @@ namespace AtmoLight.Targets
                         (gammaCurve.Length - 1.0f);
       }
     }
-
     #endregion
   }
 }
