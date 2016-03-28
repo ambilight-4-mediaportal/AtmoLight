@@ -1,3 +1,13 @@
+Version 1.18.0.0
+- Added "Change Image Delay" option for AmbiBox
+- Fixed changing static color via remote API for AtmoWin
+- Added support for non-default MP data folder location
+- Fixed Boblight not being able to connect properly
+- Fixed AtmoOrb UDP IP connection
+- Fixed multiple bugs in the AtmoOrb SetupForm tab
+- Added option to enable/disable AtmoOrb smoothing
+- Improved AtmoOrb static color behaviour
+
 Version 1.17.0.0
 - Remote API support, currently supports AtmoLight Remote (Android)
 - AtmoWakeHelper integration
