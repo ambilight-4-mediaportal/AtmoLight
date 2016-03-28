@@ -7,6 +7,7 @@ Version 1.18.0.0
 - Fixed multiple bugs in the AtmoOrb SetupForm tab
 - Added option to enable/disable AtmoOrb smoothing
 - Improved AtmoOrb static color behaviour
+- Fixed bug where lights could change even though they shouldn't
 
 Version 1.17.0.0
 - Remote API support, currently supports AtmoLight Remote (Android)

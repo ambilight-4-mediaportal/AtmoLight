@@ -731,6 +731,10 @@ namespace AtmoLight
     /// <param name="force"></param>
     private void SendPixelData(byte[] pixelData, byte[] bmiInfoHeader, bool force = false)
     {
+      if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && GetCurrentEffect() != ContentEffect.GIFReader && GetCurrentEffect() != ContentEffect.VUMeter && GetCurrentEffect() != ContentEffect.VUMeterRainbow)
+      {
+        return;
+      }
       if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
       {
         AddDelayListItem(pixelData, bmiInfoHeader);
