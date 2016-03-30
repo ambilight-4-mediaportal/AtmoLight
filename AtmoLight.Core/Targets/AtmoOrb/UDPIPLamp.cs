@@ -113,7 +113,7 @@ namespace AtmoLight.Targets
       return _isConnected;
     }
 
-    public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff, string orbId)
+    public void ChangeColor(byte red, byte green, byte blue, bool skipSmoothing, string orbId)
     {
       if (!IsConnected())
       {
@@ -130,21 +130,14 @@ namespace AtmoLight.Targets
         bytes[2] = 0xEE;
 
         // Options parameter: 1 = force off | 2 = use lamp smoothing and validate by Orb ID | 4 = validate by Orb ID
-        if (forceLightsOff)
+        // Always validate by Orb ID
+        if (coreObject.atmoOrbUseSmoothing && !skipSmoothing)
         {
-          bytes[3] = 1;
+          bytes[3] = 2;
         }
         else
         {
-          // Always validate by Orb ID
-          if (coreObject.atmoOrbUseSmoothing)
-          {
-            bytes[3] = 2;
-          }
-          else
-          {
-            bytes[3] = 4;
-          }
+          bytes[3] = 4;
         }
 
         // Orb ID

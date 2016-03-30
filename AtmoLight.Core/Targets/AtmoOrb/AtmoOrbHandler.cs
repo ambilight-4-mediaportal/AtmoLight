@@ -345,6 +345,7 @@ namespace AtmoLight.Targets
           }
           foreach (var lamp in lamps.Where(lamp => lamp.IsConnected()))
           {
+            Boolean skipSmoothing = false;
             lamp.OverallAverageColor[0] /= (coreObject.GetCaptureHeight() * coreObject.GetCaptureWidth());
             lamp.OverallAverageColor[1] /= (coreObject.GetCaptureHeight() * coreObject.GetCaptureWidth());
             lamp.OverallAverageColor[2] /= (coreObject.GetCaptureHeight() * coreObject.GetCaptureWidth());
@@ -380,8 +381,13 @@ namespace AtmoLight.Targets
                   (coreObject.atmoOrbUseOverallLightness ? lightnessOverall : lightness), out lamp.AverageColor[0],
                   out lamp.AverageColor[1], out lamp.AverageColor[2]);
 
+                if (Math.Abs(gammaCurve[lamp.PreviousColor[0]] - gammaCurve[lamp.AverageColor[0]]) >= coreObject.atmoOrbSmoothThreshold || Math.Abs(gammaCurve[lamp.PreviousColor[1]] - gammaCurve[lamp.AverageColor[1]]) >= coreObject.atmoOrbSmoothThreshold || Math.Abs(gammaCurve[lamp.PreviousColor[2]] - gammaCurve[lamp.AverageColor[2]]) >= coreObject.atmoOrbSmoothThreshold)
+                {
+                  skipSmoothing = true;
+                }
+
                 // Adjust gamma level and send to lamp
-                lamp.ChangeColor((byte)gammaCurve[lamp.AverageColor[0]], (byte)gammaCurve[lamp.AverageColor[1]], (byte)gammaCurve[lamp.AverageColor[2]], false, lamp.ID);
+                lamp.ChangeColor((byte)gammaCurve[lamp.AverageColor[0]], (byte)gammaCurve[lamp.AverageColor[1]], (byte)gammaCurve[lamp.AverageColor[2]], skipSmoothing, lamp.ID);
               }
             }
             else
@@ -397,13 +403,22 @@ namespace AtmoLight.Targets
                     lamp.OverallAverageColor[1] <= coreObject.atmoOrbBlackThreshold &&
                     lamp.OverallAverageColor[2] <= coreObject.atmoOrbBlackThreshold)
                 {
-                  // Black threshold reached, forcing leds off as to clear smooth colors on the lamp side
-                  lamp.ChangeColor(0, 0, 0, true, lamp.ID);
+                  if (gammaCurve[lamp.PreviousColor[0]] >= coreObject.atmoOrbSmoothThreshold || gammaCurve[lamp.PreviousColor[1]] >= coreObject.atmoOrbSmoothThreshold || gammaCurve[lamp.PreviousColor[2]] >= coreObject.atmoOrbSmoothThreshold)
+                  {
+                    skipSmoothing = true;
+                  }
+
+                  lamp.ChangeColor(0, 0, 0, skipSmoothing, lamp.ID);
                 }
                 else
                 {
+                  if (Math.Abs(gammaCurve[lamp.PreviousColor[0]] - gammaCurve[lamp.OverallAverageColor[0]]) >= coreObject.atmoOrbSmoothThreshold || Math.Abs(gammaCurve[lamp.PreviousColor[1]] - gammaCurve[lamp.OverallAverageColor[1]]) >= coreObject.atmoOrbSmoothThreshold || Math.Abs(gammaCurve[lamp.PreviousColor[2]] - gammaCurve[lamp.OverallAverageColor[2]]) >= coreObject.atmoOrbSmoothThreshold)
+                  {
+                    skipSmoothing = true;
+                  }
+
                   // Adjust gamma level and send to lamp
-                  lamp.ChangeColor((byte)gammaCurve[lamp.OverallAverageColor[0]], (byte)gammaCurve[lamp.OverallAverageColor[1]], (byte)gammaCurve[lamp.OverallAverageColor[2]], false, lamp.ID);
+                  lamp.ChangeColor((byte)gammaCurve[lamp.OverallAverageColor[0]], (byte)gammaCurve[lamp.OverallAverageColor[1]], (byte)gammaCurve[lamp.OverallAverageColor[2]], skipSmoothing, lamp.ID);
                 }
               }
             }
@@ -417,7 +432,7 @@ namespace AtmoLight.Targets
       }
     }
 
-    private void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff = false)
+    private void ChangeColor(byte red, byte green, byte blue, bool skipSmoothing = false)
     {
       if (!IsConnected())
       {
@@ -426,7 +441,7 @@ namespace AtmoLight.Targets
 
       foreach (var lamp in lamps)
       {
-        lamp.ChangeColor((byte)red, (byte)green, (byte)blue, forceLightsOff, lamp.ID);
+        lamp.ChangeColor((byte)red, (byte)green, (byte)blue, skipSmoothing, lamp.ID);
       }
     }
     #endregion

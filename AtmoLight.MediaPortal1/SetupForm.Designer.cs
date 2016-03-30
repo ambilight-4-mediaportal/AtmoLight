@@ -286,6 +286,8 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
+      this.lblAtmoOrbSmoothingThreshold = new System.Windows.Forms.Label();
+      this.tbAtmoOrbSmoothingThreshold = new System.Windows.Forms.TextBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -1959,7 +1961,7 @@
       this.grpAtmoOrbLamps.Controls.Add(this.btnAtmoOrbUpdate);
       this.grpAtmoOrbLamps.Controls.Add(this.btnAtmoOrbAdd);
       this.grpAtmoOrbLamps.Controls.Add(this.lbAtmoOrbLamps);
-      this.grpAtmoOrbLamps.Location = new System.Drawing.Point(10, 140);
+      this.grpAtmoOrbLamps.Location = new System.Drawing.Point(10, 165);
       this.grpAtmoOrbLamps.Name = "grpAtmoOrbLamps";
       this.grpAtmoOrbLamps.Size = new System.Drawing.Size(820, 280);
       this.grpAtmoOrbLamps.TabIndex = 1;
@@ -2207,6 +2209,8 @@
       // 
       // grpAtmoOrbBasicSettings
       // 
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbSmoothingThreshold);
+      this.grpAtmoOrbBasicSettings.Controls.Add(this.lblAtmoOrbSmoothingThreshold);
       this.grpAtmoOrbBasicSettings.Controls.Add(this.cbAtmoOrbUseSmoothing);
       this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbGamma);
       this.grpAtmoOrbBasicSettings.Controls.Add(this.tbAtmoOrbSaturation);
@@ -2223,16 +2227,16 @@
       this.grpAtmoOrbBasicSettings.Controls.Add(this.cbAtmoOrbUseOverallLightness);
       this.grpAtmoOrbBasicSettings.Location = new System.Drawing.Point(10, 10);
       this.grpAtmoOrbBasicSettings.Name = "grpAtmoOrbBasicSettings";
-      this.grpAtmoOrbBasicSettings.Size = new System.Drawing.Size(820, 125);
+      this.grpAtmoOrbBasicSettings.Size = new System.Drawing.Size(820, 150);
       this.grpAtmoOrbBasicSettings.TabIndex = 0;
       this.grpAtmoOrbBasicSettings.TabStop = false;
       this.grpAtmoOrbBasicSettings.Text = "Basic settings";
       // 
-      // cbAtmoOrbUseInternalSmoothing
+      // cbAtmoOrbUseSmoothing
       // 
       this.cbAtmoOrbUseSmoothing.AutoSize = true;
-      this.cbAtmoOrbUseSmoothing.Location = new System.Drawing.Point(350, 100);
-      this.cbAtmoOrbUseSmoothing.Name = "cbAtmoOrbUseInternalSmoothing";
+      this.cbAtmoOrbUseSmoothing.Location = new System.Drawing.Point(350, 75);
+      this.cbAtmoOrbUseSmoothing.Name = "cbAtmoOrbUseSmoothing";
       this.cbAtmoOrbUseSmoothing.Size = new System.Drawing.Size(96, 17);
       this.cbAtmoOrbUseSmoothing.TabIndex = 21;
       this.cbAtmoOrbUseSmoothing.Text = "Use smoothing";
@@ -2240,7 +2244,7 @@
       // 
       // tbAtmoOrbGamma
       // 
-      this.tbAtmoOrbGamma.Location = new System.Drawing.Point(505, 47);
+      this.tbAtmoOrbGamma.Location = new System.Drawing.Point(500, 22);
       this.tbAtmoOrbGamma.Name = "tbAtmoOrbGamma";
       this.tbAtmoOrbGamma.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbGamma.TabIndex = 12;
@@ -2248,7 +2252,7 @@
       // 
       // tbAtmoOrbSaturation
       // 
-      this.tbAtmoOrbSaturation.Location = new System.Drawing.Point(505, 22);
+      this.tbAtmoOrbSaturation.Location = new System.Drawing.Point(160, 122);
       this.tbAtmoOrbSaturation.Name = "tbAtmoOrbSaturation";
       this.tbAtmoOrbSaturation.Size = new System.Drawing.Size(100, 20);
       this.tbAtmoOrbSaturation.TabIndex = 11;
@@ -2257,7 +2261,7 @@
       // lblAtmoOrbGamma
       // 
       this.lblAtmoOrbGamma.AutoSize = true;
-      this.lblAtmoOrbGamma.Location = new System.Drawing.Point(350, 50);
+      this.lblAtmoOrbGamma.Location = new System.Drawing.Point(350, 25);
       this.lblAtmoOrbGamma.Name = "lblAtmoOrbGamma";
       this.lblAtmoOrbGamma.Size = new System.Drawing.Size(96, 13);
       this.lblAtmoOrbGamma.TabIndex = 10;
@@ -2266,7 +2270,7 @@
       // lblAtmoOrbSaturation
       // 
       this.lblAtmoOrbSaturation.AutoSize = true;
-      this.lblAtmoOrbSaturation.Location = new System.Drawing.Point(350, 25);
+      this.lblAtmoOrbSaturation.Location = new System.Drawing.Point(10, 125);
       this.lblAtmoOrbSaturation.Name = "lblAtmoOrbSaturation";
       this.lblAtmoOrbSaturation.Size = new System.Drawing.Size(108, 13);
       this.lblAtmoOrbSaturation.TabIndex = 9;
@@ -2343,7 +2347,7 @@
       // cbAtmoOrbUseOverallLightness
       // 
       this.cbAtmoOrbUseOverallLightness.AutoSize = true;
-      this.cbAtmoOrbUseOverallLightness.Location = new System.Drawing.Point(350, 75);
+      this.cbAtmoOrbUseOverallLightness.Location = new System.Drawing.Point(350, 50);
       this.cbAtmoOrbUseOverallLightness.Name = "cbAtmoOrbUseOverallLightness";
       this.cbAtmoOrbUseOverallLightness.Size = new System.Drawing.Size(123, 17);
       this.cbAtmoOrbUseOverallLightness.TabIndex = 0;
@@ -3006,6 +3010,22 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
+      // lblAtmoOrbSmoothingThreshold
+      // 
+      this.lblAtmoOrbSmoothingThreshold.AutoSize = true;
+      this.lblAtmoOrbSmoothingThreshold.Location = new System.Drawing.Point(350, 100);
+      this.lblAtmoOrbSmoothingThreshold.Name = "lblAtmoOrbSmoothingThreshold";
+      this.lblAtmoOrbSmoothingThreshold.Size = new System.Drawing.Size(110, 13);
+      this.lblAtmoOrbSmoothingThreshold.TabIndex = 22;
+      this.lblAtmoOrbSmoothingThreshold.Text = "Smoothing Threshold:";
+      // 
+      // tbAtmoOrbSmoothingThreshold
+      // 
+      this.tbAtmoOrbSmoothingThreshold.Location = new System.Drawing.Point(500, 97);
+      this.tbAtmoOrbSmoothingThreshold.Name = "tbAtmoOrbSmoothingThreshold";
+      this.tbAtmoOrbSmoothingThreshold.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbSmoothingThreshold.TabIndex = 23;
+      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3348,5 +3368,7 @@
     private System.Windows.Forms.TextBox tbAmbiboxChangeImageDelay;
     private System.Windows.Forms.Label lblAmbiboxChangeImageDelay;
     private System.Windows.Forms.Label lblAmbiBoxMediaPortalProfile;
+    private System.Windows.Forms.TextBox tbAtmoOrbSmoothingThreshold;
+    private System.Windows.Forms.Label lblAtmoOrbSmoothingThreshold;
   }
 }

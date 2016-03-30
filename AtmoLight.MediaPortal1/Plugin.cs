@@ -173,6 +173,7 @@ namespace AtmoLight
       coreObject.atmoOrbThreshold = Settings.atmoOrbThreshold;
       coreObject.atmoOrbUseOverallLightness = Settings.atmoOrbUseOverallLightness;
       coreObject.atmoOrbUseSmoothing = Settings.atmoOrbUseSmoothing;
+      coreObject.atmoOrbSmoothThreshold = Settings.atmoOrbSmoothingThreshold;
 
       if (Settings.atmoOrbTarget)
       {

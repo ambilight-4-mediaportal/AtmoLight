@@ -102,7 +102,7 @@ namespace AtmoLight.Targets
       return isConnected;
     }
 
-    public void ChangeColor(byte red, byte green, byte blue, bool forceLightsOff, string orbId)
+    public void ChangeColor(byte red, byte green, byte blue, bool skipSmoothing, string orbId)
     {
       var color = string.Format("{0,2:X}{1,2:X}{2,2:X}", red, green, blue);
 

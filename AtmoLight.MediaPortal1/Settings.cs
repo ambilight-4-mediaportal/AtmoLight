@@ -130,6 +130,7 @@ namespace AtmoLight
     public static int atmoOrbBlackThreshold;
     public static bool atmoOrbUseOverallLightness;
     public static bool atmoOrbUseSmoothing;
+    public static int atmoOrbSmoothingThreshold;
 
 
     public static List<string> atmoOrbLamps = new List<string>();
@@ -325,6 +326,7 @@ namespace AtmoLight
         atmoOrbThreshold = reader.GetValueAsInt("atmolight", "atmoOrbThreshold", 0);
         atmoOrbUseOverallLightness = reader.GetValueAsBool("atmolight", "atmoOrbUseOverallLightness", true);
         atmoOrbUseSmoothing = reader.GetValueAsBool("atmolight", "atmoOrbUseSmoothing", true);
+        atmoOrbSmoothingThreshold = reader.GetValueAsInt("atmolight", "atmoOrbSmoothingThreshold", 200);
 
         string atmoOrbLampTemp = reader.GetValueAsString("atmolight", "atmoOrbLamps", "");
         string[] atmoOrbLampTempSplit = atmoOrbLampTemp.Split('|');
@@ -451,6 +453,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "atmoOrbThreshold", atmoOrbThreshold.ToString());
         reader.SetValueAsBool("atmolight", "atmoOrbUseOverallLightness", atmoOrbUseOverallLightness);
         reader.SetValueAsBool("atmolight", "atmoOrbUseSmoothing", atmoOrbUseSmoothing);
+        reader.SetValue("atmolight", "atmoOrbSmoothingThreshold", atmoOrbSmoothingThreshold.ToString());
 
         string atmoOrbLampsTemp = "";
         for (int i = 0; i < atmoOrbLamps.Count; i++)

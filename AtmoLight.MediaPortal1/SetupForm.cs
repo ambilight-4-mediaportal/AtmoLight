@@ -147,6 +147,7 @@ namespace AtmoLight
       ckAtmoOrbEnabled.Checked = Settings.atmoOrbTarget;
       cbAtmoOrbUseOverallLightness.Checked = Settings.atmoOrbUseOverallLightness;
       cbAtmoOrbUseSmoothing.Checked = Settings.atmoOrbUseSmoothing;
+      tbAtmoOrbSmoothingThreshold.Text = Settings.atmoOrbSmoothingThreshold.ToString();
 
       for (int i = 0; i < Settings.atmoOrbLamps.Count; i++)
       {
@@ -297,6 +298,7 @@ namespace AtmoLight
       btnAtmoOrbAdd.Text = Localization.Translate("Common", "Add");
       btnAtmoOrbRemove.Text = Localization.Translate("Common", "Remove");
       btnAtmoOrbUpdate.Text = Localization.Translate("Common", "Update");
+      lblAtmoOrbSmoothingThreshold.Text = Localization.Translate("AtmoOrb", "SmoothingThreshold");
 
       // AtmoWin
       lblPathInfoAtmoWin.Text = Localization.Translate("Common", "Path").Replace("[Filename]", "AtmoWinA.exe");
@@ -939,6 +941,19 @@ namespace AtmoLight
         return;
       }
 
+      // AtmoOrb SMoothing Threshold
+      minValue = 0;
+      maxValue = 255;
+      if (validatorInt(tbAtmoOrbSmoothingThreshold.Text, minValue, maxValue, true) == false)
+      {
+        MessageBox.Show(
+          Localization.Translate("Common", "ErrorInvalidNumberRange")
+            .Replace("[minInteger]", minValue.ToString())
+            .Replace("[maxInteger]", maxValue.ToString()) + " - [" + tbAtmoOrbSmoothingThreshold.Text + "]",
+          Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+
       // VUMeter Min dB
       minValue = -100;
       maxValue = 0;
@@ -1117,6 +1132,7 @@ namespace AtmoLight
       Settings.atmoOrbThreshold = int.Parse(tbAtmoOrbThreshold.Text);
       Settings.atmoOrbUseOverallLightness = cbAtmoOrbUseOverallLightness.Checked;
       Settings.atmoOrbUseSmoothing = cbAtmoOrbUseSmoothing.Checked;
+      Settings.atmoOrbSmoothingThreshold = int.Parse(tbAtmoOrbSmoothingThreshold.Text);
 
       Settings.atmoOrbTarget = ckAtmoOrbEnabled.Checked;
       Settings.vuMeterMaxHue = Double.Parse(tbVUMeterMaxHue.Text.Replace(",", "."),

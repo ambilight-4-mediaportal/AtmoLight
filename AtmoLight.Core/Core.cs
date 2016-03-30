@@ -146,6 +146,7 @@ namespace AtmoLight
     public int atmoOrbBlackThreshold;
     public bool atmoOrbUseOverallLightness;
     public bool atmoOrbUseSmoothing;
+    public int atmoOrbSmoothThreshold;
     public List<string> atmoOrbLamps = new List<string>();
 
     // AtmoWin Settings Fields
