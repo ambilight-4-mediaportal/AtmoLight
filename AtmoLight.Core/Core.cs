@@ -15,8 +15,6 @@ using System.Net;
 using Microsoft.Win32;
 using proto;
 using AtmoLight.Targets;
-using SlimDX;
-using SlimDX.Direct3D9;
 
 namespace AtmoLight
 {
@@ -100,19 +98,14 @@ namespace AtmoLight
 
     // Stopwatches
     private Stopwatch blackbarStopwatch = new Stopwatch();
+
     // Generic Fields
-        private int captureWidth = 64; // Default fallback capture width
+    private int captureWidth = 64; // Default fallback capture width
     private int captureHeight = 48; // Default fallback capture height
     private bool delayEnabled = false;
     private int delayTime = 0;
     private string gifPath = "";
     private Rectangle blackbarDetectionRect;
-
-    private static DxScreenCapture dxScreenCapture;
-    private bool dxscreenCaptureEnabled;
-    private bool dxScreenCaptureDelayEnabled;
-    private int dxscreenCaptureInterval = 15;
-    private bool dxScreenCaptureInitLock;
 
     // General settings for targets
     public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
@@ -234,7 +227,6 @@ namespace AtmoLight
 
       // Stop API server
       StopAPIserverThread();
-      dxscreenCaptureEnabled = false;
     }
     #endregion
 
@@ -257,13 +249,6 @@ namespace AtmoLight
       // Start API server
       apiServerLock = false;
       StartAPIserverThread();
-
-      // DirectX screen capture (madVR compatible)
-      // Early testing and requires additional work like renderer checks / error handling / config options
-      dxscreenCaptureEnabled = true;
-      Thread t = new Thread(DxScreenCaptureThread);
-      t.IsBackground = true;
-      t.Start();
     }
 
     /// <summary>
@@ -1184,14 +1169,6 @@ namespace AtmoLight
     }
 
     /// <summary>
-    /// Stop the DirectX screen capture thread.
-    /// </summary>
-    private void StopDirectXserverThread()
-    {
-      dxscreenCaptureEnabled = false;
-    }
-
-    /// <summary>
     /// Stop all core threads.
     /// </summary>
     private void StopAllThreads()
@@ -1420,111 +1397,6 @@ namespace AtmoLight
       {
         Log.Error("Error in VUMeterThread.");
         Log.Error("Exception: {0}", ex.Message);
-      }
-    }
-    #endregion
-
-    #region DXscreen capture
-
-    private void DxScreenCaptureThread()
-    {
-        while (dxscreenCaptureEnabled)
-        {
-            if (dxScreenCaptureInitLock)
-            {
-                continue;
-            }
-
-            if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && dxScreenCapture != null)
-            {
-                DisposeDxScreenCapture();
-            }
-            else if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-            {
-                if (dxScreenCapture == null)
-                {
-                    dxScreenCaptureInitLock = true;
-                    dxScreenCapture = new DxScreenCapture();
-                    dxScreenCaptureInitLock = false;
-                    Log.Error("Created DirectX capture device!");
-                    Log.Error(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
-
-                    if (dxScreenCaptureDelayEnabled)
-                    {
-                        Log.Error(string.Format("Delay is enabled and set to: {0}ms", 1000/dxScreenCapture.refreshRate));
-                    }
-                }
-
-                CaptureScreen();
-            }
-
-
-            if (dxScreenCaptureDelayEnabled)
-            {
-                // Delay based on current display refresh rate
-                Thread.Sleep(1000/dxScreenCapture.refreshRate);
-            }
-            else
-            {
-                // Default delay of 5ms to lower CPU usage during loop (limits it to 200FPS)
-                Thread.Sleep(5);
-            }
-        }
-
-        DisposeDxScreenCapture();
-    }
-
-    private void DisposeDxScreenCapture()
-    {
-      try
-      {
-        dxScreenCaptureInitLock = true;
-        if (dxScreenCapture.device != null)
-        {
-          dxScreenCapture.device.Dispose();
-          dxScreenCapture.device = null;
-
-          dxScreenCapture = null;
-        }
-        Log.Error("Disposed of DirectX capture device!");
-
-        dxScreenCaptureInitLock = false;
-      }
-      catch (Exception ex)
-      {
-        dxScreenCaptureInitLock = false;
-        Log.Error("Error in DxScreenCaptureThread");
-        Log.Error("Exception: {0}", ex.ToString());
-      }
-    }
-
-    private void CaptureScreen()
-    {
-      try
-      {
-        Surface s = dxScreenCapture.CaptureScreen();
-
-        DataStream ds = Surface.ToStream(s, ImageFileFormat.Bmp);
-
-        byte[] buffer = new byte[ds.Length];
-        using (MemoryStream stream = new MemoryStream())
-        {
-          int read;
-          while ((read = ds.Read(buffer, 0, buffer.Length)) > 0)
-          {
-            stream.Write(buffer, 0, read);
-          }
-
-          CalculateBitmap(stream);
-        }
-
-        ds = null;
-        s = null;
-      }
-      catch (Exception ex)
-      {
-        Log.Error("Error in CaptureScreen");
-        Log.Error("Exception: {0}", ex.ToString());
       }
     }
     #endregion

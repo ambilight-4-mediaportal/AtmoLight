@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
@@ -17,6 +18,9 @@ using Microsoft.DirectX.Direct3D;
 using Microsoft.Win32;
 using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
+
+using SlimDX;
+using SlimDX.Direct3D9;
 
 namespace AtmoLight
 {
@@ -40,8 +44,18 @@ namespace AtmoLight
 
     private List<ContentEffect> supportedEffects;
 
+    // MadVR check
+    private bool rendererIsMadVR;
+
+    // Internal DirectX capture
+    private static DxScreenCapture dxScreenCapture;
+    private bool dxscreenCaptureEnabled;
+    private bool dxScreenCaptureDelayEnabled;
+    private int dxscreenCaptureInterval = 15;
+    private bool dxScreenCaptureInitLock;
+
     // Frame Fields
-    private Surface rgbSurface = null; // RGB Surface
+    private Microsoft.DirectX.Direct3D.Surface rgbSurface = null; // RGB Surface
     private Int64 lastFrame = 0; // Tick count of the last frame
 
     // Static Color
@@ -103,9 +117,28 @@ namespace AtmoLight
       g_Player.PlayBackStopped += new g_Player.StoppedHandler(g_Player_PlayBackStopped);
       g_Player.PlayBackEnded += new g_Player.EndedHandler(g_Player_PlayBackEnded);
 
+
       // FrameGrabber Handler
-      MediaPortal.FrameGrabber.GetInstance().OnNewFrame +=
-        new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+      // If renderer is not EVR or VMR8/9 use internal DirectX capture, this allows for backwards compatability and is primarily for madVR support
+      if (GUIGraphicsContext.VideoRenderer != GUIGraphicsContext.VideoRendererType.EVR && GUIGraphicsContext.VideoRenderer != GUIGraphicsContext.VideoRendererType.VMR9)
+      {
+        Log.Debug("Detected non-standard video renderer, most likely madVR and switching to internal AtmoLight DirectX capture.");
+        // Disable UI capture as it will conflict
+        Settings.trueGrabbing = false;
+
+        // Start DirectX capture thread
+        dxscreenCaptureEnabled = true;
+        Thread t = new Thread(DxScreenCaptureThread);
+        t.IsBackground = true;
+        t.Start();
+      }
+      else
+      {
+        Log.Debug("Detected standard video renderer and subscribing Mediaportal core frame grabber");
+
+        MediaPortal.FrameGrabber.GetInstance().OnNewFrame +=
+          new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+      }
 
       // Button Handler
       GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
@@ -289,6 +322,9 @@ namespace AtmoLight
       {
         coreObject.ChangeEffect(Settings.effectMPExit);
       }
+
+      // Stop DirectX screen capture if active.
+      dxscreenCaptureEnabled = false;
 
       coreObject.Dispose();
 
@@ -612,7 +648,7 @@ namespace AtmoLight
       if (rgbSurface == null)
       {
         rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(coreObject.GetCaptureWidth(),
-          coreObject.GetCaptureHeight(), Format.A8R8G8B8,
+          coreObject.GetCaptureHeight(), Microsoft.DirectX.Direct3D.Format.A8R8G8B8,
           MultiSampleType.None, 0, true);
       }
       unsafe
@@ -630,7 +666,7 @@ namespace AtmoLight
               coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
           }
 
-          Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
+          Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(Microsoft.DirectX.Direct3D.ImageFileFormat.Bmp, rgbSurface);
 
           coreObject.CalculateBitmap(stream);
 
@@ -648,6 +684,118 @@ namespace AtmoLight
       }
     }
 
+    #endregion
+
+
+    #region DXscreen capture
+
+    private void DxScreenCaptureThread()
+    {
+      while (dxscreenCaptureEnabled)
+      {
+        if (coreObject == null || dxScreenCaptureInitLock)
+        {
+          continue;
+        }
+
+        if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() ||
+            !coreObject.IsAtmoLightOn())
+        {
+          continue;
+        }
+
+        if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && dxScreenCapture != null)
+        {
+          DisposeDxScreenCapture();
+        }
+        else if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+        {
+          if (dxScreenCapture == null)
+          {
+            dxScreenCaptureInitLock = true;
+            dxScreenCapture = new DxScreenCapture();
+            dxScreenCaptureInitLock = false;
+            Log.Error("Created DirectX capture device!");
+            Log.Error(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
+
+            if (dxScreenCaptureDelayEnabled)
+            {
+              Log.Error(string.Format("Delay is enabled and set to: {0}ms", 1000 / dxScreenCapture.refreshRate));
+            }
+          }
+
+          CaptureScreen();
+        }
+
+
+        if (dxScreenCaptureDelayEnabled)
+        {
+          // Delay based on current display refresh rate
+          Thread.Sleep(1000 / dxScreenCapture.refreshRate);
+        }
+        else
+        {
+          // Default delay of 5ms to lower CPU usage during loop (limits it to 200FPS)
+          Thread.Sleep(5);
+        }
+      }
+
+      DisposeDxScreenCapture();
+    }
+
+    private void DisposeDxScreenCapture()
+    {
+      try
+      {
+        dxScreenCaptureInitLock = true;
+        if (dxScreenCapture.device != null)
+        {
+          dxScreenCapture.device.Dispose();
+          dxScreenCapture.device = null;
+
+          dxScreenCapture = null;
+        }
+        Log.Error("Disposed of DirectX capture device!");
+
+        dxScreenCaptureInitLock = false;
+      }
+      catch (Exception ex)
+      {
+        dxScreenCaptureInitLock = false;
+        Log.Error("Error in DxScreenCaptureThread");
+        Log.Error("Exception: {0}", ex.ToString());
+      }
+    }
+
+    private void CaptureScreen()
+    {
+      try
+      {
+        SlimDX.Direct3D9.Surface s = dxScreenCapture.CaptureScreen();
+
+        DataStream ds = SlimDX.Direct3D9.Surface.ToStream(s, SlimDX.Direct3D9.ImageFileFormat.Bmp);
+
+        byte[] buffer = new byte[ds.Length];
+        using (MemoryStream stream = new MemoryStream())
+        {
+          int read;
+          while ((read = ds.Read(buffer, 0, buffer.Length)) > 0)
+          {
+            stream.Write(buffer, 0, read);
+          }
+
+          coreObject.CalculateBitmap(stream);
+        }
+
+        ds = null;
+        s = null;
+      }
+      catch (Exception ex)
+      {
+        Log.Error("Error in CaptureScreen");
+        Log.Error("Exception: {0}", ex.ToString());
+      }
+    }
     #endregion
 
     #region Button Event Handler

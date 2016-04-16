@@ -15,7 +15,7 @@
               <UpdateOption>AlwaysOverwrite</UpdateOption>
               <LocalFileName>..\AtmoDXUtil\bin\Release\AtmoDXUtil.dll</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{830936a6-1f0e-41a6-8c11-3f7a1efcd82c}-AtmoDXUtil.dll</ZipFileName>
-              <DestinationFilename>%Base%\AtmoDXUtil.dll</DestinationFilename>
+              <DestinationFilename>%Plugins%\AtmoDXUtil.dll</DestinationFilename>
             </FileItem>
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
@@ -51,6 +51,13 @@
               <LocalFileName>..\Packages\USBDeview\USBDeview-x86.exe</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{ccd6658c-73d6-40d1-b1a2-23f6f90769da}-USBDeview-x86.exe</ZipFileName>
               <DestinationFilename>%Base%\USBDeview-x86.exe</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>AlwaysOverwrite</UpdateOption>
+              <LocalFileName>..\AtmoLight.MediaPortal1\bin\x86\Release\SlimDX.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{f81fbffc-4f91-4208-891c-5ce02ce833e1}-SlimDX.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\process\SlimDX.dll</DestinationFilename>
             </FileItem>
           </Items>
         </Files>
@@ -332,7 +339,7 @@ public class Script
       <Major>1</Major>
       <Minor>17</Minor>
       <Build>0</Build>
-      <Revision>5</Revision>
+      <Revision>10</Revision>
     </Version>
     <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
 The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.
@@ -392,7 +399,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <UpdateOption>AlwaysOverwrite</UpdateOption>
         <LocalFileName>..\AtmoDXUtil\bin\Release\AtmoDXUtil.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{830936a6-1f0e-41a6-8c11-3f7a1efcd82c}-AtmoDXUtil.dll</ZipFileName>
-        <DestinationFilename>%Base%\AtmoDXUtil.dll</DestinationFilename>
+        <DestinationFilename>%Plugins%\AtmoDXUtil.dll</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
@@ -428,6 +435,13 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <LocalFileName>..\Packages\USBDeview\USBDeview-x86.exe</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{ccd6658c-73d6-40d1-b1a2-23f6f90769da}-USBDeview-x86.exe</ZipFileName>
         <DestinationFilename>%Base%\USBDeview-x86.exe</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>AlwaysOverwrite</UpdateOption>
+        <LocalFileName>..\AtmoLight.MediaPortal1\bin\x86\Release\SlimDX.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{f81fbffc-4f91-4208-891c-5ce02ce833e1}-SlimDX.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\process\SlimDX.dll</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
@@ -468,7 +482,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>image\atmolight.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{cd09ee8f-1587-440d-91a1-caf404fd10dd}-atmolight.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{62e19d2e-1840-4c22-bf85-e5dd3e0a2d96}-atmolight.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
