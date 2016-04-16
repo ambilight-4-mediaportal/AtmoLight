@@ -721,10 +721,9 @@ namespace AtmoLight
           // Check if capture device exists and send image
           if (dxScreenCapture != null)
           {
-            CaptureScreen();
+            CaptureDxScreen();
           }
         }
-
 
         if (dxScreenCaptureDelayEnabled)
         {
@@ -749,13 +748,14 @@ namespace AtmoLight
 
         if (dxScreenCapture == null)
         {
+          Log.Debug("Creating DirectX capture device...");
           dxScreenCapture = new DxScreenCapture();
-          Log.Error("Created DirectX capture device!");
-          Log.Error(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
+          Log.Debug("Created DirectX capture device!");
+          Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
 
           if (dxScreenCaptureDelayEnabled)
           {
-            Log.Error(string.Format("Delay is enabled and set to: {0}ms", 1000/dxScreenCapture.refreshRate));
+            Log.Debug(string.Format("Delay is enabled and set to: {0}ms", 1000/dxScreenCapture.refreshRate));
           }
         }
 
@@ -771,14 +771,32 @@ namespace AtmoLight
 
     private void ReInitDxScreenCapture()
     {
-      if (dxScreenCapture == null)
+      dxScreenCaptureInitLock = true;
+
+      try
       {
-        InitDxScreenCapture();
+        Log.Debug("Disposing of DirectX capture device...");
+        dxScreenCapture = null;
+        Log.Debug("Disposed of DirectX capture device!");
+
+        Log.Debug("Created DirectX capture device...");
+        dxScreenCapture = new DxScreenCapture();
+        Log.Debug("Created DirectX capture device!");
+
+        Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
+
+        if (dxScreenCaptureDelayEnabled)
+        {
+          Log.Debug(string.Format("Delay is enabled and set to: {0}ms", 1000 / dxScreenCapture.refreshRate));
+        }
+
+        dxScreenCaptureInitLock = true;
       }
-      else
+      catch (Exception ex)
       {
-        DisposeDxScreenCapture();
-        InitDxScreenCapture();
+        Log.Error("Error in ReInitDxScreenCapture");
+        Log.Error("Exception: {0}", ex.ToString());
+        dxScreenCaptureInitLock = false;
       }
     }
 
@@ -794,7 +812,7 @@ namespace AtmoLight
 
           dxScreenCapture = null;
         }
-        Log.Error("Disposed of DirectX capture device!");
+        Log.Debug("Disposed of DirectX capture device!");
 
         dxScreenCaptureInitLock = false;
       }
@@ -806,15 +824,10 @@ namespace AtmoLight
       }
     }
 
-    private void CaptureScreen()
+    private void CaptureDxScreen()
     {
       try
       {
-        if (dxScreenCaptureInitLock)
-        {
-          return;
-        }
-
         SlimDX.Direct3D9.Surface s = dxScreenCapture.CaptureScreen();
 
         DataStream ds = SlimDX.Direct3D9.Surface.ToStream(s, SlimDX.Direct3D9.ImageFileFormat.Bmp);
@@ -836,7 +849,7 @@ namespace AtmoLight
       }
       catch (Exception ex)
       {
-        Log.Error("Error in CaptureScreen");
+        Log.Error("Error in CaptureDxScreen");
         Log.Error("Exception: {0}", ex.ToString());
 
         // Try to re-init capture device
