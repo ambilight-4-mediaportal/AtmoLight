@@ -110,8 +110,9 @@ namespace AtmoLight
 
     private static DxScreenCapture dxScreenCapture;
     private bool dxscreenCaptureEnabled;
+    private bool dxScreenCaptureDelayEnabled;
     private int dxscreenCaptureInterval = 15;
-    private bool dxScreenInitLock;
+    private bool dxScreenCaptureInitLock;
 
     // General settings for targets
     public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
@@ -1429,7 +1430,7 @@ namespace AtmoLight
     {
       while (dxscreenCaptureEnabled)
       {
-        if (dxScreenInitLock)
+        if (dxScreenCaptureInitLock)
         {
           continue;
         }
@@ -1442,14 +1443,23 @@ namespace AtmoLight
         {
           if (dxScreenCapture == null)
           {
-            dxScreenInitLock = true;
+            dxScreenCaptureInitLock = true;
             dxScreenCapture = new DxScreenCapture();
-            dxScreenInitLock = false;
+            dxScreenCaptureInitLock = false;
             Log.Error("Created DirectX capture device!");
+            Log.Error(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
+            if (dxScreenCaptureDelayEnabled)
+            {
+              Log.Error(string.Format("Delay is enabled and set to: {0}ms", 1000/dxScreenCapture.refreshRate));
+            }
           }
 
           CaptureScreen();
-          Thread.Sleep(dxscreenCaptureInterval);
+
+          if (dxScreenCaptureDelayEnabled)
+          {
+            Thread.Sleep(1000 / dxScreenCapture.refreshRate);
+          }
         }
       }
 
@@ -1460,7 +1470,7 @@ namespace AtmoLight
     {
       try
       {
-        dxScreenInitLock = true;
+        dxScreenCaptureInitLock = true;
         if (dxScreenCapture.device != null)
         {
           dxScreenCapture.device.Dispose();
@@ -1470,11 +1480,11 @@ namespace AtmoLight
         }
         Log.Error("Disposed of DirectX capture device!");
 
-        dxScreenInitLock = false;
+        dxScreenCaptureInitLock = false;
       }
       catch (Exception ex)
       {
-        dxScreenInitLock = false;
+        dxScreenCaptureInitLock = false;
         Log.Error("Error in DxScreenCaptureThread");
         Log.Error("Exception: {0}", ex.ToString());
       }
