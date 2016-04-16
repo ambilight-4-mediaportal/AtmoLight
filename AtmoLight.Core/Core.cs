@@ -259,7 +259,7 @@ namespace AtmoLight
 
       // DirectX screen capture (madVR compatible)
       // Early testing and requires additional work like renderer checks / error handling / config options
-      dxCaptureTimer.Interval = 60;
+      dxCaptureTimer.Interval = 50;
       dxCaptureTimer.Tick += DxScreenCaptureInterval_Tick;
       dxCaptureTimer.Enabled = true;
     }
@@ -1423,21 +1423,19 @@ namespace AtmoLight
         return;
       }
 
-      if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
+      if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && dxScreenCapture != null)
       {
         try
         {
           dxScreenInitLock = true;
-          if (dxScreenCapture != null)
+          if (dxScreenCapture.device != null)
           {
-            if (dxScreenCapture.device != null)
-            {
-              dxScreenCapture.device.Dispose();
-              dxScreenCapture.device = null;
-            }
+            dxScreenCapture.device.Dispose();
+            dxScreenCapture.device = null;
 
             dxScreenCapture = null;
           }
+          Log.Error("Disposed of DirectX capture device!");
 
           dxScreenInitLock = false;
         }
@@ -1455,6 +1453,7 @@ namespace AtmoLight
           dxScreenInitLock = true;
           dxScreenCapture = new DxScreenCapture();
           dxScreenInitLock = false;
+          Log.Error("Created DirectX capture device!");
         }
 
         CaptureScreen();
