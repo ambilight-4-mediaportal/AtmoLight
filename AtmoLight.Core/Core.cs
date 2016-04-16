@@ -15,6 +15,8 @@ using System.Net;
 using Microsoft.Win32;
 using proto;
 using AtmoLight.Targets;
+using SlimDX;
+using SlimDX.Direct3D9;
 
 namespace AtmoLight
 {
@@ -98,14 +100,19 @@ namespace AtmoLight
 
     // Stopwatches
     private Stopwatch blackbarStopwatch = new Stopwatch();
+    private System.Windows.Forms.Timer dxCaptureTimer = new System.Windows.Forms.Timer();
 
     // Generic Fields
-    private int captureWidth = 64; // Default fallback capture width
+        private int captureWidth = 64; // Default fallback capture width
     private int captureHeight = 48; // Default fallback capture height
     private bool delayEnabled = false;
     private int delayTime = 0;
     private string gifPath = "";
     private Rectangle blackbarDetectionRect;
+
+    private static DxScreenCapture dxScreenCapture;
+    private bool dxscreenCaptureActive;
+    private bool dxScreenInitLock;
 
     // General settings for targets
     public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
@@ -249,6 +256,12 @@ namespace AtmoLight
       // Start API server
       apiServerLock = false;
       StartAPIserverThread();
+
+      // DirectX screen capture (madVR compatible)
+      // Early testing and requires additional work like renderer checks / error handling / config options
+      dxCaptureTimer.Interval = 60;
+      dxCaptureTimer.Tick += DxScreenCaptureInterval_Tick;
+      dxCaptureTimer.Enabled = true;
     }
 
     /// <summary>
@@ -1397,6 +1410,84 @@ namespace AtmoLight
       {
         Log.Error("Error in VUMeterThread.");
         Log.Error("Exception: {0}", ex.Message);
+      }
+    }
+    #endregion
+
+    #region DXscreen capture
+
+    private void DxScreenCaptureInterval_Tick(object sender, EventArgs e)
+    {
+      if (dxScreenInitLock)
+      {
+        return;
+      }
+
+      if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode)
+      {
+        try
+        {
+          dxScreenInitLock = true;
+          if (dxScreenCapture != null)
+          {
+            if (dxScreenCapture.device != null)
+            {
+              dxScreenCapture.device.Dispose();
+              dxScreenCapture.device = null;
+            }
+
+            dxScreenCapture = null;
+          }
+
+          dxScreenInitLock = false;
+        }
+        catch (Exception ex)
+        {
+          dxScreenInitLock = false;
+          Log.Error("Error in screenCaptureInterval_Tick.");
+          Log.Error("Exception: {0}", ex.ToString());
+        }
+      }
+      else if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      {
+        if (dxScreenCapture == null)
+        {
+          dxScreenInitLock = true;
+          dxScreenCapture = new DxScreenCapture();
+          dxScreenInitLock = false;
+        }
+
+        CaptureScreen();
+      }
+    }
+
+    private void CaptureScreen()
+    {
+      try
+      {
+        Surface s = dxScreenCapture.CaptureScreen();
+
+        DataStream ds = Surface.ToStream(s, ImageFileFormat.Bmp);
+
+        byte[] buffer = new byte[ds.Length];
+        using (MemoryStream stream = new MemoryStream())
+        {
+          int read;
+          while ((read = ds.Read(buffer, 0, buffer.Length)) > 0)
+          {
+            stream.Write(buffer, 0, read);
+          }
+
+          CalculateBitmap(stream);
+        }
+
+        ds = null;
+        s = null;
+      }
+      catch (Exception ex)
+      {
+        Log.Error("Error in CaptureScreen");
+        Log.Error("Exception: {0}", ex.ToString());
       }
     }
     #endregion
