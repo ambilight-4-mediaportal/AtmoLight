@@ -1428,48 +1428,50 @@ namespace AtmoLight
 
     private void DxScreenCaptureThread()
     {
-      while (dxscreenCaptureEnabled)
-      {
-        if (dxScreenCaptureInitLock)
+        while (dxscreenCaptureEnabled)
         {
-          continue;
-        }
+            if (dxScreenCaptureInitLock)
+            {
+                continue;
+            }
 
-        if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && dxScreenCapture != null)
-        {
-          DisposeDxScreenCapture();
-        }
-        else if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-        {
-          if (dxScreenCapture == null)
-          {
-            dxScreenCaptureInitLock = true;
-            dxScreenCapture = new DxScreenCapture();
-            dxScreenCaptureInitLock = false;
-            Log.Error("Created DirectX capture device!");
-            Log.Error(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
+            if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && dxScreenCapture != null)
+            {
+                DisposeDxScreenCapture();
+            }
+            else if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+            {
+                if (dxScreenCapture == null)
+                {
+                    dxScreenCaptureInitLock = true;
+                    dxScreenCapture = new DxScreenCapture();
+                    dxScreenCaptureInitLock = false;
+                    Log.Error("Created DirectX capture device!");
+                    Log.Error(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
+
+                    if (dxScreenCaptureDelayEnabled)
+                    {
+                        Log.Error(string.Format("Delay is enabled and set to: {0}ms", 1000/dxScreenCapture.refreshRate));
+                    }
+                }
+
+                CaptureScreen();
+            }
+
+
             if (dxScreenCaptureDelayEnabled)
             {
-              Log.Error(string.Format("Delay is enabled and set to: {0}ms", 1000/dxScreenCapture.refreshRate));
+                // Delay based on current display refresh rate
+                Thread.Sleep(1000/dxScreenCapture.refreshRate);
             }
-          }
-
-          CaptureScreen();
-
-          if (dxScreenCaptureDelayEnabled)
-          {
-            // Delay based on current display refresh rate
-            Thread.Sleep(1000/dxScreenCapture.refreshRate);
-          }
-          else
-          {
-            // Default delay of 1ms to lower CPU usage during loop
-            Thread.Sleep(1);
-          }
+            else
+            {
+                // Default delay of 1ms to lower CPU usage during loop
+                Thread.Sleep(5);
+            }
         }
-      }
 
-      DisposeDxScreenCapture();
+        DisposeDxScreenCapture();
     }
 
     private void DisposeDxScreenCapture()
