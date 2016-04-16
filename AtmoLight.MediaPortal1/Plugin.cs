@@ -702,14 +702,14 @@ namespace AtmoLight
         if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() ||
             !coreObject.IsAtmoLightOn())
         {
+          if (dxScreenCapture != null)
+          {
+            DisposeDxScreenCapture();
+          }
           continue;
         }
 
-        if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && dxScreenCapture != null)
-        {
-          DisposeDxScreenCapture();
-        }
-        else if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+        if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
         {
 
           // Init capture device
