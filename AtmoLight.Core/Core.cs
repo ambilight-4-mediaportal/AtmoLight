@@ -1458,7 +1458,13 @@ namespace AtmoLight
 
           if (dxScreenCaptureDelayEnabled)
           {
-            Thread.Sleep(1000 / dxScreenCapture.refreshRate);
+            // Delay based on current display refresh rate
+            Thread.Sleep(1000/dxScreenCapture.refreshRate);
+          }
+          else
+          {
+            // Default delay of 1ms to lower CPU usage during loop
+            Thread.Sleep(1);
           }
         }
       }
