@@ -1466,7 +1466,7 @@ namespace AtmoLight
             }
             else
             {
-                // Default delay of 1ms to lower CPU usage during loop
+                // Default delay of 5ms to lower CPU usage during loop (limits it to 200FPS)
                 Thread.Sleep(5);
             }
         }
