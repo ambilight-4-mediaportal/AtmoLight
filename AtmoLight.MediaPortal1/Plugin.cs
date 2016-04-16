@@ -790,7 +790,7 @@ namespace AtmoLight
           Log.Debug(string.Format("Delay is enabled and set to: {0}ms", 1000 / dxScreenCapture.refreshRate));
         }
 
-        dxScreenCaptureInitLock = true;
+        dxScreenCaptureInitLock = false;
       }
       catch (Exception ex)
       {
