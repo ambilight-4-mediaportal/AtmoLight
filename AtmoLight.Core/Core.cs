@@ -100,8 +100,6 @@ namespace AtmoLight
 
     // Stopwatches
     private Stopwatch blackbarStopwatch = new Stopwatch();
-    private System.Windows.Forms.Timer dxCaptureTimer = new System.Windows.Forms.Timer();
-
     // Generic Fields
         private int captureWidth = 64; // Default fallback capture width
     private int captureHeight = 48; // Default fallback capture height
@@ -111,7 +109,8 @@ namespace AtmoLight
     private Rectangle blackbarDetectionRect;
 
     private static DxScreenCapture dxScreenCapture;
-    private bool dxscreenCaptureActive;
+    private bool dxscreenCaptureEnabled;
+    private int dxscreenCaptureInterval = 15;
     private bool dxScreenInitLock;
 
     // General settings for targets
@@ -234,6 +233,7 @@ namespace AtmoLight
 
       // Stop API server
       StopAPIserverThread();
+      dxscreenCaptureEnabled = false;
     }
     #endregion
 
@@ -259,9 +259,10 @@ namespace AtmoLight
 
       // DirectX screen capture (madVR compatible)
       // Early testing and requires additional work like renderer checks / error handling / config options
-      dxCaptureTimer.Interval = 50;
-      dxCaptureTimer.Tick += DxScreenCaptureInterval_Tick;
-      dxCaptureTimer.Enabled = true;
+      dxscreenCaptureEnabled = true;
+      Thread t = new Thread(DxScreenCaptureThread);
+      t.IsBackground = true;
+      t.Start();
     }
 
     /// <summary>
@@ -1182,6 +1183,14 @@ namespace AtmoLight
     }
 
     /// <summary>
+    /// Stop the DirectX screen capture thread.
+    /// </summary>
+    private void StopDirectXserverThread()
+    {
+      dxscreenCaptureEnabled = false;
+    }
+
+    /// <summary>
     /// Stop all core threads.
     /// </summary>
     private void StopAllThreads()
@@ -1416,47 +1425,58 @@ namespace AtmoLight
 
     #region DXscreen capture
 
-    private void DxScreenCaptureInterval_Tick(object sender, EventArgs e)
+    private void DxScreenCaptureThread()
     {
-      if (dxScreenInitLock)
+      while (dxscreenCaptureEnabled)
       {
-        return;
-      }
-
-      if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && dxScreenCapture != null)
-      {
-        try
+        if (dxScreenInitLock)
         {
-          dxScreenInitLock = true;
-          if (dxScreenCapture.device != null)
+          continue;
+        }
+
+        if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && dxScreenCapture != null)
+        {
+          DisposeDxScreenCapture();
+        }
+        else if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+        {
+          if (dxScreenCapture == null)
           {
-            dxScreenCapture.device.Dispose();
-            dxScreenCapture.device = null;
-
-            dxScreenCapture = null;
+            dxScreenInitLock = true;
+            dxScreenCapture = new DxScreenCapture();
+            dxScreenInitLock = false;
+            Log.Error("Created DirectX capture device!");
           }
-          Log.Error("Disposed of DirectX capture device!");
 
-          dxScreenInitLock = false;
-        }
-        catch (Exception ex)
-        {
-          dxScreenInitLock = false;
-          Log.Error("Error in screenCaptureInterval_Tick.");
-          Log.Error("Exception: {0}", ex.ToString());
+          CaptureScreen();
+          Thread.Sleep(dxscreenCaptureInterval);
         }
       }
-      else if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-      {
-        if (dxScreenCapture == null)
-        {
-          dxScreenInitLock = true;
-          dxScreenCapture = new DxScreenCapture();
-          dxScreenInitLock = false;
-          Log.Error("Created DirectX capture device!");
-        }
 
-        CaptureScreen();
+      DisposeDxScreenCapture();
+    }
+
+    private void DisposeDxScreenCapture()
+    {
+      try
+      {
+        dxScreenInitLock = true;
+        if (dxScreenCapture.device != null)
+        {
+          dxScreenCapture.device.Dispose();
+          dxScreenCapture.device = null;
+
+          dxScreenCapture = null;
+        }
+        Log.Error("Disposed of DirectX capture device!");
+
+        dxScreenInitLock = false;
+      }
+      catch (Exception ex)
+      {
+        dxScreenInitLock = false;
+        Log.Error("Error in DxScreenCaptureThread");
+        Log.Error("Exception: {0}", ex.ToString());
       }
     }
 
