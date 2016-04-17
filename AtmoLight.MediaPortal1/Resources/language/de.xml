@@ -90,7 +90,7 @@
     <string name="VUMeterMindB">Min. dB:</string>
 	<string name="MonitorScreensaverState">Schalte Leds aus wenn MediaPortal Bildschirmschoner aktiv ist</string>
     <string name="MonitorWindowState">Schalte Leds aus wenn MediaPortal minimiert oder angehalten ist</string>
-    <string name="LoadLanguage">Sprache laden</string>
+    <string name="Language">Sprache:</string>
     <string name="MenuHint">Tipp: Sie können das Kontext Menü benutzten um den Effekt zu ändern, die LEDs an- bzw. auszuschalten und den 3D-SBS Modus zu ändern.</string>
     <string name="TargetHint">Tipp: Wählen Sie die Hardware aus die Sie mit AtmoLight verwenden möchten und konfigurieren Sie diese in deren Tabs.</string>
     <string name="CaptureDimensionHint">Tipp: Wird nur verwendet ohne AtmoWin.</string>

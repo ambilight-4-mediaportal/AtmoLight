@@ -34,7 +34,6 @@
       this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
       this.lblVersion = new System.Windows.Forms.Label();
       this.lblVersionVal = new System.Windows.Forms.Label();
-      this.btnLanguage = new System.Windows.Forms.Button();
       this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog3 = new System.Windows.Forms.OpenFileDialog();
       this.tabPageHyperion = new System.Windows.Forms.TabPage();
@@ -205,6 +204,8 @@
       this.btnAtmoOrbAdd = new System.Windows.Forms.Button();
       this.lbAtmoOrbLamps = new System.Windows.Forms.ListBox();
       this.grpAtmoOrbBasicSettings = new System.Windows.Forms.GroupBox();
+      this.tbAtmoOrbSmoothingThreshold = new System.Windows.Forms.TextBox();
+      this.lblAtmoOrbSmoothingThreshold = new System.Windows.Forms.Label();
       this.cbAtmoOrbUseSmoothing = new System.Windows.Forms.CheckBox();
       this.tbAtmoOrbGamma = new System.Windows.Forms.TextBox();
       this.tbAtmoOrbSaturation = new System.Windows.Forms.TextBox();
@@ -286,8 +287,8 @@
       this.lblHueIP = new System.Windows.Forms.Label();
       this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
-      this.lblAtmoOrbSmoothingThreshold = new System.Windows.Forms.Label();
-      this.tbAtmoOrbSmoothingThreshold = new System.Windows.Forms.TextBox();
+      this.cbLanguage = new System.Windows.Forms.ComboBox();
+      this.lblLanguage = new System.Windows.Forms.Label();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -372,17 +373,6 @@
       this.lblVersionVal.Size = new System.Drawing.Size(40, 13);
       this.lblVersionVal.TabIndex = 14;
       this.lblVersionVal.Text = "0.0.0.0";
-      // 
-      // btnLanguage
-      // 
-      this.btnLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnLanguage.Location = new System.Drawing.Point(266, 630);
-      this.btnLanguage.Name = "btnLanguage";
-      this.btnLanguage.Size = new System.Drawing.Size(105, 23);
-      this.btnLanguage.TabIndex = 102;
-      this.btnLanguage.Text = "Load Language";
-      this.btnLanguage.UseVisualStyleBackColor = true;
-      this.btnLanguage.Click += new System.EventHandler(this.btnLanguage_Click);
       // 
       // openFileDialog2
       // 
@@ -2232,6 +2222,22 @@
       this.grpAtmoOrbBasicSettings.TabStop = false;
       this.grpAtmoOrbBasicSettings.Text = "Basic settings";
       // 
+      // tbAtmoOrbSmoothingThreshold
+      // 
+      this.tbAtmoOrbSmoothingThreshold.Location = new System.Drawing.Point(500, 97);
+      this.tbAtmoOrbSmoothingThreshold.Name = "tbAtmoOrbSmoothingThreshold";
+      this.tbAtmoOrbSmoothingThreshold.Size = new System.Drawing.Size(100, 20);
+      this.tbAtmoOrbSmoothingThreshold.TabIndex = 23;
+      // 
+      // lblAtmoOrbSmoothingThreshold
+      // 
+      this.lblAtmoOrbSmoothingThreshold.AutoSize = true;
+      this.lblAtmoOrbSmoothingThreshold.Location = new System.Drawing.Point(350, 100);
+      this.lblAtmoOrbSmoothingThreshold.Name = "lblAtmoOrbSmoothingThreshold";
+      this.lblAtmoOrbSmoothingThreshold.Size = new System.Drawing.Size(110, 13);
+      this.lblAtmoOrbSmoothingThreshold.TabIndex = 22;
+      this.lblAtmoOrbSmoothingThreshold.Text = "Smoothing Threshold:";
+      // 
       // cbAtmoOrbUseSmoothing
       // 
       this.cbAtmoOrbUseSmoothing.AutoSize = true;
@@ -3010,29 +3016,38 @@
       // 
       this.openFileDialog5.Filter = "AmbiBox.exe|*.exe";
       // 
-      // lblAtmoOrbSmoothingThreshold
+      // cbLanguage
       // 
-      this.lblAtmoOrbSmoothingThreshold.AutoSize = true;
-      this.lblAtmoOrbSmoothingThreshold.Location = new System.Drawing.Point(350, 100);
-      this.lblAtmoOrbSmoothingThreshold.Name = "lblAtmoOrbSmoothingThreshold";
-      this.lblAtmoOrbSmoothingThreshold.Size = new System.Drawing.Size(110, 13);
-      this.lblAtmoOrbSmoothingThreshold.TabIndex = 22;
-      this.lblAtmoOrbSmoothingThreshold.Text = "Smoothing Threshold:";
+      this.cbLanguage.FormattingEnabled = true;
+      this.cbLanguage.Items.AddRange(new object[] {
+            "Dutch",
+            "English",
+            "French",
+            "German"});
+      this.cbLanguage.Location = new System.Drawing.Point(313, 632);
+      this.cbLanguage.Name = "cbLanguage";
+      this.cbLanguage.Size = new System.Drawing.Size(82, 21);
+      this.cbLanguage.TabIndex = 102;
+      this.cbLanguage.Text = "English";
+      this.cbLanguage.SelectedIndexChanged += new System.EventHandler(this.cbLanguage_SelectedIndexChanged);
       // 
-      // tbAtmoOrbSmoothingThreshold
+      // lblLanguage
       // 
-      this.tbAtmoOrbSmoothingThreshold.Location = new System.Drawing.Point(500, 97);
-      this.tbAtmoOrbSmoothingThreshold.Name = "tbAtmoOrbSmoothingThreshold";
-      this.tbAtmoOrbSmoothingThreshold.Size = new System.Drawing.Size(100, 20);
-      this.tbAtmoOrbSmoothingThreshold.TabIndex = 23;
+      this.lblLanguage.AutoSize = true;
+      this.lblLanguage.Location = new System.Drawing.Point(249, 635);
+      this.lblLanguage.Name = "lblLanguage";
+      this.lblLanguage.Size = new System.Drawing.Size(58, 13);
+      this.lblLanguage.TabIndex = 103;
+      this.lblLanguage.Text = "Language:";
       // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(872, 662);
+      this.ClientSize = new System.Drawing.Size(872, 661);
+      this.Controls.Add(this.lblLanguage);
+      this.Controls.Add(this.cbLanguage);
       this.Controls.Add(this.tabMenu);
-      this.Controls.Add(this.btnLanguage);
       this.Controls.Add(this.btnCancel);
       this.Controls.Add(this.lblVersionVal);
       this.Controls.Add(this.lblVersion);
@@ -3116,7 +3131,6 @@
     private System.Windows.Forms.OpenFileDialog openFileDialog1;
     private System.Windows.Forms.Label lblVersion;
     private System.Windows.Forms.Label lblVersionVal;
-    private System.Windows.Forms.Button btnLanguage;
     private System.Windows.Forms.OpenFileDialog openFileDialog2;
     private System.Windows.Forms.OpenFileDialog openFileDialog3;
     private System.Windows.Forms.TabPage tabPageHyperion;
@@ -3370,5 +3384,7 @@
     private System.Windows.Forms.Label lblAmbiBoxMediaPortalProfile;
     private System.Windows.Forms.TextBox tbAtmoOrbSmoothingThreshold;
     private System.Windows.Forms.Label lblAtmoOrbSmoothingThreshold;
+    private System.Windows.Forms.ComboBox cbLanguage;
+    private System.Windows.Forms.Label lblLanguage;
   }
 }
