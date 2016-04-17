@@ -46,6 +46,7 @@ namespace AtmoLight
     public static double vuMeterMinHue;
     public static double vuMeterMaxHue;
     public static string currentLanguage;
+    public static string currentLanguageFileLegacy;
     public static string currentLanguageFileLocation;
     public static bool blackbarDetectionHorizontal;
     public static bool blackbarDetectionVertical;
@@ -216,23 +217,23 @@ namespace AtmoLight
         currentLanguage = reader.GetValueAsString("atmolight", "CurrentLanguage", "English");
         
         // Check for presence of legacy file location (1.7.0.5 or lower)
-        string LanguageFileLegacy = reader.GetValueAsString("atmolight", "CurrentLanguageFile", "");
+        currentLanguageFileLegacy = reader.GetValueAsString("atmolight", "CurrentLanguageFile", "");
 
-        if (!string.IsNullOrEmpty(LanguageFileLegacy))
+        if (!string.IsNullOrEmpty(currentLanguageFileLegacy))
         {
-          if (LanguageFileLegacy.Contains("nl.xml"))
+          if (currentLanguageFileLegacy.Contains("nl.xml"))
           {
             currentLanguage = "Dutch";
           }
-          else if (LanguageFileLegacy.Contains("en.xml"))
+          else if (currentLanguageFileLegacy.Contains("en.xml"))
           {
             currentLanguage = "English";
           }
-          else if (LanguageFileLegacy.Contains("fr.xml"))
+          else if (currentLanguageFileLegacy.Contains("fr.xml"))
           {
             currentLanguage = "French";
           }
-          else if (LanguageFileLegacy.Contains("de.xml"))
+          else if (currentLanguageFileLegacy.Contains("de.xml"))
           {;
             currentLanguage = "German";
           }
@@ -416,6 +417,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "excludeTimeStart", excludeTimeStart.ToString("HH:mm"));
         reader.SetValue("atmolight", "excludeTimeEnd", excludeTimeEnd.ToString("HH:mm"));
         reader.SetValue("atmolight", "CurrentLanguage", currentLanguage);
+         reader.SetValue("atmolight", "currentLanguageFileLegacy", "");
         reader.SetValue("atmolight", "StaticColorRed", staticColorRed);
         reader.SetValue("atmolight", "StaticColorGreen", staticColorGreen);
         reader.SetValue("atmolight", "StaticColorBlue", staticColorBlue);
