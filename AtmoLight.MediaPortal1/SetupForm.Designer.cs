@@ -3018,6 +3018,7 @@
       // 
       // cbLanguage
       // 
+      this.cbLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
       this.cbLanguage.FormattingEnabled = true;
       this.cbLanguage.Items.AddRange(new object[] {
             "Dutch",
@@ -3028,7 +3029,6 @@
       this.cbLanguage.Name = "cbLanguage";
       this.cbLanguage.Size = new System.Drawing.Size(82, 21);
       this.cbLanguage.TabIndex = 102;
-      this.cbLanguage.Text = "English";
       this.cbLanguage.SelectedIndexChanged += new System.EventHandler(this.cbLanguage_SelectedIndexChanged);
       // 
       // lblLanguage
