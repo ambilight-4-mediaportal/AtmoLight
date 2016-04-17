@@ -214,10 +214,10 @@ namespace AtmoLight
           effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMPExit", "LEDsDisabled"));
         }
 
-        currentLanguage = reader.GetValueAsString("atmolight", "CurrentLanguage", "English");
+        currentLanguage = reader.GetValueAsString("atmolight", "currentLanguage", "English");
         
         // Check for presence of legacy file location (1.7.0.5 or lower)
-        currentLanguageFileLegacy = reader.GetValueAsString("atmolight", "CurrentLanguageFile", "");
+        currentLanguageFileLegacy = reader.GetValueAsString("atmolight", "currentLanguageFile", "");
 
         if (!string.IsNullOrEmpty(currentLanguageFileLegacy))
         {
@@ -416,8 +416,8 @@ namespace AtmoLight
         reader.SetValue("atmolight", "atmoWakeHelperReinitializationDelay", atmoWakeHelperReinitializationDelay);
         reader.SetValue("atmolight", "excludeTimeStart", excludeTimeStart.ToString("HH:mm"));
         reader.SetValue("atmolight", "excludeTimeEnd", excludeTimeEnd.ToString("HH:mm"));
-        reader.SetValue("atmolight", "CurrentLanguage", currentLanguage);
-         reader.SetValue("atmolight", "currentLanguageFileLegacy", "");
+        reader.SetValue("atmolight", "currentLanguage", currentLanguage);
+        reader.RemoveEntry("atmolight", "currentLanguageFile");
         reader.SetValue("atmolight", "StaticColorRed", staticColorRed);
         reader.SetValue("atmolight", "StaticColorGreen", staticColorGreen);
         reader.SetValue("atmolight", "StaticColorBlue", staticColorBlue);
