@@ -216,6 +216,7 @@ namespace AtmoLight
       lblVUMeterMinHue.Text = Localization.Translate("SetupForm", "VUMeterMinHue");
 
       // Plugin options
+      cbLanguage.Text = Settings.currentLanguage;
       grpPluginOption.Text = Localization.Translate("SetupForm", "PluginSettings");
       lblLedsOnOff.Text = Localization.Translate("SetupForm", "ToggleRemoteButton");
       lblProfile.Text = Localization.Translate("SetupForm", "ProfileRemoteButton");

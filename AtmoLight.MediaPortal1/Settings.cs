@@ -214,6 +214,29 @@ namespace AtmoLight
         }
 
         currentLanguage = reader.GetValueAsString("atmolight", "CurrentLanguage", "English");
+        
+        // Check for presence of legacy file location (1.7.0.5 or lower)
+        string LanguageFileLegacy = reader.GetValueAsString("atmolight", "CurrentLanguageFile", "");
+
+        if (!string.IsNullOrEmpty(LanguageFileLegacy))
+        {
+          if (LanguageFileLegacy.Contains("nl.xml"))
+          {
+            currentLanguage = "Dutch";
+          }
+          else if (LanguageFileLegacy.Contains("en.xml"))
+          {
+            currentLanguage = "English";
+          }
+          else if (LanguageFileLegacy.Contains("fr.xml"))
+          {
+            currentLanguage = "French";
+          }
+          else if (LanguageFileLegacy.Contains("de.xml"))
+          {;
+            currentLanguage = "German";
+          }
+        }
 
         string mediaportalLanguageDir =
           MediaPortal.Configuration.Config.GetFolder(MediaPortal.Configuration.Config.Dir.Language) + "\\";
