@@ -780,14 +780,8 @@ namespace AtmoLight
             ++deviceNum;
           }
 
-          // Fallback to default monitor index if none found
-          if (monitorIndex == -1)
-          {
-            monitorIndex = 0;
-          }
-
-          Log.Debug("Creating DirectX capture device on monitor #" + monitorIndex);
-          dxScreenCapture = new DxScreenCapture(monitorIndex);
+          Log.Debug("Creating DirectX capture device on monitor :" + Settings.captureMonitor);
+          dxScreenCapture = new DxScreenCapture(Settings.captureMonitor);
           Log.Debug("Created DirectX capture device!");
           Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
 
@@ -819,16 +813,25 @@ namespace AtmoLight
         dxScreenCapture = null;
         Log.Debug("Disposed of DirectX capture device!");
 
-        int monitorIndex = GUIGraphicsContext.currentMonitorIdx;
+        int monitorIndex = 0;
+        uint deviceNum = 0;
+        MediaPortal.Player.Win32.DISPLAY_DEVICE displayDevice = new MediaPortal.Player.Win32.DISPLAY_DEVICE();
+        displayDevice.cb = (ushort)Marshal.SizeOf(displayDevice);
 
-        // Fallback to default monitor index if none found
-        if (monitorIndex == -1)
+        while (EnumDisplayDevices(null, deviceNum, displayDevice, 0) != 0)
         {
-          monitorIndex = 0;
+          if (displayDevice.DeviceName ==
+              Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].Information.DeviceName)
+          {
+            // Set new monitorIndex
+            monitorIndex = (int)deviceNum;
+            Log.Debug("Setting detected screen to new detected MonitorIndex : {0}", (int)deviceNum);
+          }
+          ++deviceNum;
         }
 
-        Log.Debug("Creating DirectX capture device on monitor #" + monitorIndex);
-        dxScreenCapture = new DxScreenCapture(monitorIndex);
+        Log.Debug("Creating DirectX capture device on monitor : " + Settings.captureMonitor);
+        dxScreenCapture = new DxScreenCapture(Settings.captureMonitor);
         Log.Debug("Created DirectX capture device!");
 
         Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
@@ -857,11 +860,11 @@ namespace AtmoLight
         dxScreenCaptureInitLock = true;
         if (dxScreenCapture != null)
         {
-          if (dxScreenCapture.device != null)
-          {
-            dxScreenCapture.device.Dispose();
-            dxScreenCapture.device = null;
-          }
+          if(dxScreenCapture.device != null)
+          { 
+          dxScreenCapture.device.Dispose();
+          dxScreenCapture.device = null;
+}
 
           dxScreenCapture = null;
         }
