@@ -289,8 +289,6 @@
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
       this.cbLanguage = new System.Windows.Forms.ComboBox();
       this.lblLanguage = new System.Windows.Forms.Label();
-      this.lblCaptureMonitor = new System.Windows.Forms.Label();
-      this.cbCaptureDevice = new System.Windows.Forms.ComboBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -885,8 +883,6 @@
       // 
       // grpMode
       // 
-      this.grpMode.Controls.Add(this.cbCaptureDevice);
-      this.grpMode.Controls.Add(this.lblCaptureMonitor);
       this.grpMode.Controls.Add(this.grpAdvancedOptions);
       this.grpMode.Controls.Add(this.ckTrueGrabbing);
       this.grpMode.Controls.Add(this.grpVUMeter);
@@ -3044,23 +3040,6 @@
       this.lblLanguage.TabIndex = 103;
       this.lblLanguage.Text = "Language:";
       // 
-      // lblCaptureMonitor
-      // 
-      this.lblCaptureMonitor.AutoSize = true;
-      this.lblCaptureMonitor.Location = new System.Drawing.Point(9, 410);
-      this.lblCaptureMonitor.Name = "lblCaptureMonitor";
-      this.lblCaptureMonitor.Size = new System.Drawing.Size(82, 13);
-      this.lblCaptureMonitor.TabIndex = 35;
-      this.lblCaptureMonitor.Text = "Capture device:";
-      // 
-      // cbCaptureDevice
-      // 
-      this.cbCaptureDevice.FormattingEnabled = true;
-      this.cbCaptureDevice.Location = new System.Drawing.Point(90, 406);
-      this.cbCaptureDevice.Name = "cbCaptureDevice";
-      this.cbCaptureDevice.Size = new System.Drawing.Size(254, 21);
-      this.cbCaptureDevice.TabIndex = 36;
-      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3407,7 +3386,5 @@
     private System.Windows.Forms.Label lblAtmoOrbSmoothingThreshold;
     private System.Windows.Forms.ComboBox cbLanguage;
     private System.Windows.Forms.Label lblLanguage;
-    private System.Windows.Forms.Label lblCaptureMonitor;
-    private System.Windows.Forms.ComboBox cbCaptureDevice;
   }
 }

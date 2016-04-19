@@ -52,7 +52,6 @@ namespace AtmoLight
     public static bool blackbarDetectionVertical;
     public static bool blackbarDetectionLinkAreas;
     public static bool remoteApiServer;
-    public static string captureMonitor;
 
     // Atmowin
     public static bool atmoWinTarget;
@@ -307,7 +306,6 @@ namespace AtmoLight
         captureHeight = reader.GetValueAsInt("atmolight", "captureHeight", 64);
         monitorScreensaverState = reader.GetValueAsBool("atmolight", "monitorScreensaverState", true);
         monitorWindowState = reader.GetValueAsBool("atmolight", "monitorWindowState", true);
-        captureMonitor = reader.GetValueAsString("atmolight", "captureMonitor", "");
         hyperionIP = reader.GetValueAsString("atmolight", "hyperionIP", "127.0.0.1");
         hyperionPort = reader.GetValueAsInt("atmolight", "hyperionPort", 19445);
         hyperionReconnectDelay = reader.GetValueAsInt("atmolight", "hyperionReconnectDelay", 10000);
@@ -433,7 +431,6 @@ namespace AtmoLight
         reader.SetValue("atmolight", "captureHeight", (int)captureHeight);
         reader.SetValueAsBool("atmolight", "monitorScreensaverState", monitorScreensaverState);
         reader.SetValueAsBool("atmolight", "monitorWindowState", monitorWindowState);
-        reader.SetValue("atmolight", "captureMonitor", captureMonitor);
         reader.SetValue("atmolight", "hyperionIP", hyperionIP);
         reader.SetValue("atmolight", "hyperionPort", (int)hyperionPort);
         reader.SetValue("atmolight", "hyperionPriority", (int)hyperionPriority);

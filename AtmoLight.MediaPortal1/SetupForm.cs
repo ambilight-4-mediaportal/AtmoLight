@@ -157,15 +157,6 @@ namespace AtmoLight
         }
       }
 
-      var monitorArray = SlimDX.Windows.DisplayMonitor.EnumerateMonitors();
-      int index = 0;
-      foreach (var monitor in monitorArray)
-      {
-        cbCaptureDevice.Items.Add(monitor.DeviceName);
-      }
-
-      cbCaptureDevice.Text = Settings.captureMonitor;
-
       tbVUMeterMaxHue.Text = Settings.vuMeterMaxHue.ToString();
       tbVUMeterMindB.Text = Settings.vuMeterMindB.ToString();
       tbVUMeterMinHue.Text = Settings.vuMeterMinHue.ToString();
@@ -1093,7 +1084,6 @@ namespace AtmoLight
       Settings.hyperionLiveReconnect = ckHyperionLiveReconnect.Checked;
       Settings.captureWidth = int.Parse(tbCaptureWidth.Text);
       Settings.captureHeight = int.Parse(tbCaptureHeight.Text);
-      Settings.captureMonitor = cbCaptureDevice.Text;
       Settings.hueExe = edFileHue.Text;
       Settings.hueStart = ckStartHue.Checked;
       Settings.hueIsRemoteMachine = ckhueIsRemoteMachine.Checked;

@@ -10,7 +10,7 @@ namespace AtmoLight
     public int deviceIndex;
     public int refreshRate = 60;
     private SlimDX.Windows.DisplayMonitor deviceMonitor;
-    public DxScreenCapture(string deviceName)
+    public DxScreenCapture(int index)
     {
       try
       {
@@ -18,7 +18,7 @@ namespace AtmoLight
         present_params.Windowed = true;
         present_params.SwapEffect = SwapEffect.Discard;
         present_params.PresentationInterval = PresentInterval.Immediate;
-        int deviceIndex = getMonitor(deviceName);
+        int deviceIndex = getMonitor(index);
 
         device = new Device(new Direct3D(), deviceIndex, DeviceType.Hardware, IntPtr.Zero,
           CreateFlags.SoftwareVertexProcessing, present_params);
@@ -47,21 +47,19 @@ namespace AtmoLight
       return null;
     }
 
-    private int getMonitor(string deviceName)
+    private int getMonitor(int monitorIndex)
     {
       var monitorArray = SlimDX.Windows.DisplayMonitor.EnumerateMonitors();
       int index = 0;
       foreach (var monitor in monitorArray)
       {
-
-        Log.Error("Index: " + index);
-        Log.Error("Found monitor: " + monitor.DeviceName);
-        Log.Error("Is primary: " + monitor.IsPrimary);
-        Log.Error("Width: " + monitor.Bounds.Width);
-        Log.Error("Height: " + monitor.Bounds.Height);
-
-        if (monitor.DeviceName == deviceName)
+        if (monitor.IsPrimary)
         {
+          Log.Error("Gonna use monitor: " + monitor.DeviceName);
+          Log.Error("Is primary: " + monitor.IsPrimary);
+          Log.Error("Width: " + monitor.Bounds.Width);
+          Log.Error("Height: " + monitor.Bounds.Height);
+          Log.Error("Index: " + index);
           deviceMonitor = monitor;
           return index;
         }

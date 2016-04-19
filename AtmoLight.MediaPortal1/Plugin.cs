@@ -780,8 +780,8 @@ namespace AtmoLight
             ++deviceNum;
           }
 
-          Log.Debug("Creating DirectX capture device on monitor :" + Settings.captureMonitor);
-          dxScreenCapture = new DxScreenCapture(Settings.captureMonitor);
+          Log.Debug("Creating DirectX capture device on monitor...");
+          dxScreenCapture = new DxScreenCapture(monitorIndex);
           Log.Debug("Created DirectX capture device!");
           Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
 
@@ -830,8 +830,8 @@ namespace AtmoLight
           ++deviceNum;
         }
 
-        Log.Debug("Creating DirectX capture device on monitor : " + Settings.captureMonitor);
-        dxScreenCapture = new DxScreenCapture(Settings.captureMonitor);
+        Log.Debug("Creating DirectX capture device on monitor..");
+        dxScreenCapture = new DxScreenCapture(monitorIndex);
         Log.Debug("Created DirectX capture device!");
 
         Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
