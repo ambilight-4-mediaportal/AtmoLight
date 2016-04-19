@@ -737,8 +737,6 @@ namespace AtmoLight
             // Default delay of 5ms to lower CPU usage during loop (limits it to 200FPS)
             Thread.Sleep(5);
           }
-
-          DisposeDxScreenCapture();
         }
         catch (Exception ex)
         {
@@ -746,6 +744,9 @@ namespace AtmoLight
           //Log.Error("Exception: {0}", ex.ToString());
         }
       }
+
+      // Dispose of screen capture device
+      DisposeDxScreenCapture();
     }
 
     private void InitDxScreenCapture()
@@ -756,8 +757,9 @@ namespace AtmoLight
 
         if (dxScreenCapture == null)
         {
-          Log.Debug("Creating DirectX capture device on monitor #" + GUIGraphicsContext.currentMonitorIdx);
-          dxScreenCapture = new DxScreenCapture(GUIGraphicsContext.currentMonitorIdx);
+          int monitorIndex = GUIGraphicsContext.currentMonitorIdx;
+          Log.Debug("Creating DirectX capture device on monitor #" + monitorIndex);
+          dxScreenCapture = new DxScreenCapture(monitorIndex);
           Log.Debug("Created DirectX capture device!");
           Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
 
@@ -789,8 +791,9 @@ namespace AtmoLight
         dxScreenCapture = null;
         Log.Debug("Disposed of DirectX capture device!");
 
-        Log.Debug("Creating DirectX capture device on monitor #" + GUIGraphicsContext.currentMonitorIdx);
-        dxScreenCapture = new DxScreenCapture(GUIGraphicsContext.currentMonitorIdx);
+        int monitorIndex = GUIGraphicsContext.currentMonitorIdx;
+        Log.Debug("Creating DirectX capture device on monitor #" + monitorIndex);
+        dxScreenCapture = new DxScreenCapture(monitorIndex);
         Log.Debug("Created DirectX capture device!");
 
         Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
