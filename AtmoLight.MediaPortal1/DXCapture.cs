@@ -7,9 +7,9 @@ namespace AtmoLight
   public class DxScreenCapture
   {
     public Device device;
-    public int refreshRate = 60; 
+    public int refreshRate = 60;
 
-    public DxScreenCapture()
+    public DxScreenCapture(int monitorIndex)
     {
       try
       {
@@ -18,10 +18,10 @@ namespace AtmoLight
         present_params.SwapEffect = SwapEffect.Discard;
         present_params.PresentationInterval = PresentInterval.Immediate;
 
-        device = new Device(new Direct3D(), getMonitor(0), DeviceType.Hardware, IntPtr.Zero,
+        device = new Device(new Direct3D(), getMonitor(monitorIndex), DeviceType.Hardware, IntPtr.Zero,
           CreateFlags.SoftwareVertexProcessing, present_params);
-
-        refreshRate = device.GetDisplayMode(0).RefreshRate;
+        Log.Debug("SlimDX  monitor index #" + getMonitor(monitorIndex));
+        refreshRate = device.GetDisplayMode(monitorIndex).RefreshRate;
       }
       catch (Exception ex)
       {

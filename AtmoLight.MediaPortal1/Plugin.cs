@@ -694,50 +694,58 @@ namespace AtmoLight
     {
       while (dxscreenCaptureEnabled)
       {
-        if (coreObject == null || dxScreenCaptureInitLock)
+        try
         {
-          continue;
-        }
-
-        if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() ||
-            !coreObject.IsAtmoLightOn())
-        {
-          if (dxScreenCapture != null)
+          if (coreObject == null || dxScreenCaptureInitLock)
           {
-            DisposeDxScreenCapture();
-          }
-          continue;
-        }
-
-        if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-        {
-
-          // Init capture device
-          if (dxScreenCapture == null)
-          {
-            InitDxScreenCapture();
+            continue;
           }
 
-          // Check if capture device exists and send image
-          if (dxScreenCapture != null)
+          if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() ||
+              !coreObject.IsAtmoLightOn())
           {
-            CaptureDxScreen();
+            if (dxScreenCapture != null)
+            {
+              DisposeDxScreenCapture();
+            }
+            continue;
           }
-        }
 
-        if (dxScreenCaptureDelayEnabled)
-        {
-          // Delay based on current display refresh rate
-          Thread.Sleep(1000 / dxScreenCapture.refreshRate);
+          if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+          {
+
+            // Init capture device
+            if (dxScreenCapture == null)
+            {
+              InitDxScreenCapture();
+            }
+
+            // Check if capture device exists and send image
+            if (dxScreenCapture != null)
+            {
+              CaptureDxScreen();
+            }
+          }
+
+          if (dxScreenCaptureDelayEnabled)
+          {
+            // Delay based on current display refresh rate
+            Thread.Sleep(1000/dxScreenCapture.refreshRate);
+          }
+          else
+          {
+            // Default delay of 5ms to lower CPU usage during loop (limits it to 200FPS)
+            Thread.Sleep(5);
+          }
+
+          DisposeDxScreenCapture();
         }
-        else
+        catch (Exception ex)
         {
-          // Default delay of 5ms to lower CPU usage during loop (limits it to 200FPS)
-          Thread.Sleep(5);
+          //Log.Error("Error in DxScreenCaptureThread");
+          //Log.Error("Exception: {0}", ex.ToString());
         }
       }
-
-      DisposeDxScreenCapture();
     }
 
     private void InitDxScreenCapture()
@@ -748,8 +756,8 @@ namespace AtmoLight
 
         if (dxScreenCapture == null)
         {
-          Log.Debug("Creating DirectX capture device...");
-          dxScreenCapture = new DxScreenCapture();
+          Log.Debug("Creating DirectX capture device on monitor #" + GUIGraphicsContext.currentMonitorIdx);
+          dxScreenCapture = new DxScreenCapture(GUIGraphicsContext.currentMonitorIdx);
           Log.Debug("Created DirectX capture device!");
           Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
 
@@ -758,6 +766,8 @@ namespace AtmoLight
             Log.Debug(string.Format("Delay is enabled and set to: {0}ms", 1000/dxScreenCapture.refreshRate));
           }
         }
+
+        Thread.Sleep(500);
 
         dxScreenCaptureInitLock = false;
       }
@@ -779,8 +789,8 @@ namespace AtmoLight
         dxScreenCapture = null;
         Log.Debug("Disposed of DirectX capture device!");
 
-        Log.Debug("Created DirectX capture device...");
-        dxScreenCapture = new DxScreenCapture();
+        Log.Debug("Creating DirectX capture device on monitor #" + GUIGraphicsContext.currentMonitorIdx);
+        dxScreenCapture = new DxScreenCapture(GUIGraphicsContext.currentMonitorIdx);
         Log.Debug("Created DirectX capture device!");
 
         Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
@@ -789,6 +799,8 @@ namespace AtmoLight
         {
           Log.Debug(string.Format("Delay is enabled and set to: {0}ms", 1000 / dxScreenCapture.refreshRate));
         }
+
+        Thread.Sleep(500);
 
         dxScreenCaptureInitLock = false;
       }
