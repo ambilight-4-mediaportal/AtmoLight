@@ -758,6 +758,13 @@ namespace AtmoLight
         if (dxScreenCapture == null)
         {
           int monitorIndex = GUIGraphicsContext.currentMonitorIdx;
+
+          // Fallback to default monitor index if none found
+          if (monitorIndex == -1)
+          {
+            monitorIndex = 0;
+          }
+
           Log.Debug("Creating DirectX capture device on monitor #" + monitorIndex);
           dxScreenCapture = new DxScreenCapture(monitorIndex);
           Log.Debug("Created DirectX capture device!");
@@ -792,6 +799,13 @@ namespace AtmoLight
         Log.Debug("Disposed of DirectX capture device!");
 
         int monitorIndex = GUIGraphicsContext.currentMonitorIdx;
+
+        // Fallback to default monitor index if none found
+        if (monitorIndex == -1)
+        {
+          monitorIndex = 0;
+        }
+
         Log.Debug("Creating DirectX capture device on monitor #" + monitorIndex);
         dxScreenCapture = new DxScreenCapture(monitorIndex);
         Log.Debug("Created DirectX capture device!");
