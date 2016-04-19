@@ -18,13 +18,11 @@ namespace AtmoLight
         present_params.SwapEffect = SwapEffect.Discard;
         present_params.PresentationInterval = PresentInterval.Immediate;
 
-        device = new Device(new Direct3D(), getMonitor(monitorIndex), DeviceType.Hardware, IntPtr.Zero,
+        device = new Device(new Direct3D(), monitorIndex, DeviceType.Hardware, IntPtr.Zero,
           CreateFlags.SoftwareVertexProcessing, present_params);
-        Log.Debug("SlimDX  monitor index #" + getMonitor(monitorIndex));
         refreshRate = device.GetDisplayMode(monitorIndex).RefreshRate;
       }
-      catch (Exception ex)
-      {
+      catch (Exception){
       }
 
     }
@@ -41,21 +39,9 @@ namespace AtmoLight
         s.Dispose();
         return b;
       }
-      catch (Exception ex)
-      {
+      catch (Exception){
       }
       return null;
-    }
-
-    private int getMonitor(int monitorIndex)
-    {
-      var monitorArray = SlimDX.Windows.DisplayMonitor.EnumerateMonitors();
-
-      if ((monitorArray.Length - 1) >= monitorIndex)
-      {
-        return (monitorArray[monitorIndex] != null) ? monitorIndex : 0;
-      }
-      return 0;
     }
   }
 }

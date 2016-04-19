@@ -15,7 +15,7 @@
               <UpdateOption>AlwaysOverwrite</UpdateOption>
               <LocalFileName>..\AtmoDXUtil\bin\Release\AtmoDXUtil.dll</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{830936a6-1f0e-41a6-8c11-3f7a1efcd82c}-AtmoDXUtil.dll</ZipFileName>
-              <DestinationFilename>%Plugins%\AtmoDXUtil.dll</DestinationFilename>
+              <DestinationFilename>%Plugins%\process\AtmoDXUtil.dll</DestinationFilename>
             </FileItem>
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
@@ -399,7 +399,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <UpdateOption>AlwaysOverwrite</UpdateOption>
         <LocalFileName>..\AtmoDXUtil\bin\Release\AtmoDXUtil.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{830936a6-1f0e-41a6-8c11-3f7a1efcd82c}-AtmoDXUtil.dll</ZipFileName>
-        <DestinationFilename>%Plugins%\AtmoDXUtil.dll</DestinationFilename>
+        <DestinationFilename>%Plugins%\process\AtmoDXUtil.dll</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
@@ -482,7 +482,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>image\atmolight.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{62e19d2e-1840-4c22-bf85-e5dd3e0a2d96}-atmolight.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{669ba852-13f9-48e5-8dc8-b494b9868688}-atmolight.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
