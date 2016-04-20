@@ -90,7 +90,7 @@
     <string name="VUMeterMindB">Min. dB:</string>
     <string name="MonitorScreensaverState">Eteindre les leds, lorsque l'écran de veille MediaPortal est actif</string>
     <string name="MonitorWindowState">Eteindre les leds lorsque Mediaportal est minimisé ou en veille</string>
-    <string name="LoadLanguage">Chang. Langage</string>
+    <string name="Language">Langage:</string>
     <string name="MenuHint">Hint:Utiliser le menu pour changer d'effet, activer/désactiver les LEDs ou basculer sur 3D-SBS.</string>
     <string name="TargetHint">Hint: Sélectionner l'équipement avec lequel vous souhaiter utiliser Atmolight, et configurer le dans son propre onglet</string>
     <string name="CaptureDimensionHint">Hint: Seulement utilisé quand Atmowin désactivé</string>

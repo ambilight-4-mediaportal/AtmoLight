@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
@@ -28,7 +29,6 @@ namespace AtmoLight
     [DllImport("AtmoDXUtil.dll", PreserveSig = false, CharSet = CharSet.Auto)]
     private static extern void VideoSurfaceToRGBSurfaceExt(IntPtr src, int srcWidth, int srcHeight, IntPtr dst,
       int dstWidth, int dstHeight);
-
     #endregion
 
     #region Variables
@@ -39,7 +39,6 @@ namespace AtmoLight
     private bool AtmoLightDisabledByUser = false; // Toggle AtmoLight on/off
 
     private List<ContentEffect> supportedEffects;
-
     // Frame Fields
     private Surface rgbSurface = null; // RGB Surface
     private Int64 lastFrame = 0; // Tick count of the last frame
@@ -103,7 +102,7 @@ namespace AtmoLight
       g_Player.PlayBackStopped += new g_Player.StoppedHandler(g_Player_PlayBackStopped);
       g_Player.PlayBackEnded += new g_Player.EndedHandler(g_Player_PlayBackEnded);
 
-      // FrameGrabber Handler
+      // FrameGrabber Handler      
       MediaPortal.FrameGrabber.GetInstance().OnNewFrame +=
         new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
 
@@ -368,7 +367,7 @@ namespace AtmoLight
       {
         coreObject.SetDelay(
           (int)
-            (((float) Settings.delayReferenceRefreshRate/(float) GetRefreshRate())*(float) Settings.delayReferenceTime));
+            (((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
       }
     }
 
@@ -408,7 +407,7 @@ namespace AtmoLight
 
     private double[] OnNewVUMeter()
     {
-      double[] dbLevel = new double[] {-100.0, -100.0};
+      double[] dbLevel = new double[] { -100.0, -100.0 };
       if (BassMusicPlayer.Initialized)
       {
         if (BassMusicPlayer.Player.Playing)
@@ -574,26 +573,26 @@ namespace AtmoLight
       {
         return;
       }
-	  
+
       //Drop any frames?
       if (Settings.trueGrabbing)
       {
-          //GUI grabbing while video is minimized activated 
-          if (g_Player.Playing && (!GUIGraphicsContext.IsFullScreenVideo) && (FrameSource == FrameGrabber.FrameSource.Video))
-          {
-            //Drop Video frames when user has set TrueGrabbing & video is playing minimized -> just GUI frames will pass
-            return;
-          }
+        //GUI grabbing while video is minimized activated 
+        if (g_Player.Playing && (!GUIGraphicsContext.IsFullScreenVideo) && (FrameSource == FrameGrabber.FrameSource.Video))
+        {
+          //Drop Video frames when user has set TrueGrabbing & video is playing minimized -> just GUI frames will pass
+          return;
+        }
       }
       else
       {
-          //GUI grabbing while video is minimized deactivated 
-          if((g_Player.Playing) && (FrameSource == FrameGrabber.FrameSource.GUI))
-          {
-              //Drop GUI frames when user has NOT set TrueGrabbing & video is playing -> just video frames will pass
-            return;
-          }
-      }	  
+        //GUI grabbing while video is minimized deactivated 
+        if ((g_Player.Playing) && (FrameSource == FrameGrabber.FrameSource.GUI))
+        {
+          //Drop GUI frames when user has NOT set TrueGrabbing & video is playing -> just video frames will pass
+          return;
+        }
+      }
 
       // Low CPU setting.
       // Skip frame if LowCPUTime has not yet passed since last frame.
@@ -621,12 +620,12 @@ namespace AtmoLight
         {
           if (Settings.sbs3dOn)
           {
-            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width/2, height, (IntPtr) rgbSurface.UnmanagedComPointer,
+            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer,
               coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
           }
           else
           {
-            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr) rgbSurface.UnmanagedComPointer,
+            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer,
               coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
           }
 
@@ -739,7 +738,7 @@ namespace AtmoLight
     private string GetKeyboardString(string keyboardString)
     {
       VirtualKeyboard Keyboard =
-        (VirtualKeyboard) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
+        (VirtualKeyboard)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
       if (Keyboard == null)
       {
         return null;
@@ -766,7 +765,7 @@ namespace AtmoLight
       // Will result in problems and error messages otherwise
       GUIWindowManager.SendThreadCallback((p1, p2, o) =>
       {
-        GUIDialogOK dlgError = (GUIDialogOK) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_OK);
+        GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
         if (dlgError != null)
         {
           dlgError.SetHeading(Localization.Translate("Common", "Error") + "!");
@@ -786,7 +785,7 @@ namespace AtmoLight
       Log.Info("Opening AtmoLight context menu.");
 
       // Showing context menu
-      GUIDialogMenu dlg = (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
+      GUIDialogMenu dlg = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
       dlg.Reset();
       dlg.SetHeading(Localization.Translate("Common", "AtmoLight"));
 
@@ -924,12 +923,12 @@ namespace AtmoLight
       // Change Effect
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeEffect"))
       {
-        GUIDialogMenu dlgEffect = (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
+        GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgEffect.Reset();
         dlgEffect.SetHeading(Localization.Translate("ContextMenu", "ChangeEffect"));
 
         // Only show effects that are support by at least one target
-        foreach (ContentEffect effect in Enum.GetValues(typeof (ContentEffect)))
+        foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
         {
           if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
           {
@@ -955,7 +954,7 @@ namespace AtmoLight
         {
           ContentEffect temp =
             (ContentEffect)
-              Enum.Parse(typeof (ContentEffect),
+              Enum.Parse(typeof(ContentEffect),
                 Localization.ReverseTranslate("ContentEffect", dlgEffect.SelectedLabelText));
 
           if (g_Player.Playing)
@@ -1167,7 +1166,7 @@ namespace AtmoLight
       if (dlg.SelectedLabelText == Localization.Translate("Hue", "LiveviewGroup"))
       {
         GUIDialogMenu dlgHueSetActiveGroup =
-          (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
+          (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgHueSetActiveGroup.Reset();
         dlgHueSetActiveGroup.SetHeading(Localization.Translate("Hue", "LiveviewGroup"));
         dlgHueSetActiveGroup.Add(Localization.Translate("Hue", "All"));
@@ -1199,7 +1198,7 @@ namespace AtmoLight
       if (dlg.SelectedLabelText == Localization.Translate("Hue", "StaticColorGroup"))
       {
         GUIDialogMenu dlgHueSetActiveGroup =
-          (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
+          (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgHueSetActiveGroup.Reset();
         dlgHueSetActiveGroup.SetHeading(Localization.Translate("Hue", "StaticColorGroup"));
         dlgHueSetActiveGroup.Add(Localization.Translate("Hue", "All"));
@@ -1219,7 +1218,7 @@ namespace AtmoLight
         {
           string groupName = dlgHueSetActiveGroup.SelectedLabelText;
           GUIDialogMenu dlgHueSetStaticColorGroup =
-            (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
+            (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
           dlgHueSetStaticColorGroup.Reset();
           dlgHueSetStaticColorGroup.SetHeading(Localization.Translate("Hue", "SelectStaticColorGroup"));
           dlgHueSetStaticColorGroup.Add(Localization.Translate("Hue", "Off"));
@@ -1256,7 +1255,7 @@ namespace AtmoLight
       Log.Info("Opening AtmoLight Yes/No dialog.");
 
       // Showing Yes/No dialog
-      GUIDialogYesNo dlgYesNo = (GUIDialogYesNo) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_YES_NO);
+      GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
       if (dlgYesNo != null)
       {
         dlgYesNo.Reset();
@@ -1279,9 +1278,9 @@ namespace AtmoLight
     {
       if (Reset)
       {
-        staticColorTemp = new int[] {-1, -1, -1};
+        staticColorTemp = new int[] { -1, -1, -1 };
       }
-      GUIDialogMenu dlgRGB = (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
+      GUIDialogMenu dlgRGB = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
       dlgRGB.Reset();
       dlgRGB.SetHeading(Localization.Translate("ContextMenu", "ManualStaticColor"));
       dlgRGB.Add(

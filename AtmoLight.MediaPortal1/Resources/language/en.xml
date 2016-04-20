@@ -90,7 +90,7 @@
     <string name="VUMeterMindB">Min. dB:</string>
     <string name="MonitorScreensaverState">Turn off leds while Mediaportal screensaver is active</string>
     <string name="MonitorWindowState">Turn off leds while Mediaportal is minimized or suspended</string>
-    <string name="LoadLanguage">Load Language</string>
+    <string name="Language">Language:</string>
     <string name="MenuHint">Hint: Use the context menu to switch effects, enable/disable the LEDs or switch 3D-SBS mode.</string>
     <string name="TargetHint">Hint: Select the devices you want to use with AtmoLight and configure it on its designated tab</string>
     <string name="CaptureDimensionHint">Hint: Only used when Atmowin is not enabled</string>

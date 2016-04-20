@@ -186,7 +186,7 @@ namespace AtmoLight
       // Buttons
       btnSave.Text = Localization.Translate("Common", "Save");
       btnCancel.Text = Localization.Translate("Common", "Cancel");
-      btnLanguage.Text = Localization.Translate("SetupForm", "LoadLanguage");
+      lblLanguage.Text = Localization.Translate("SetupForm", "Language");
 
       // Targets
       grpTargets.Text = Localization.Translate("SetupForm", "SelectTargets");
@@ -216,6 +216,7 @@ namespace AtmoLight
       lblVUMeterMinHue.Text = Localization.Translate("SetupForm", "VUMeterMinHue");
 
       // Plugin options
+      cbLanguage.Text = Settings.currentLanguage;
       grpPluginOption.Text = Localization.Translate("SetupForm", "PluginSettings");
       lblLedsOnOff.Text = Localization.Translate("SetupForm", "ToggleRemoteButton");
       lblProfile.Text = Localization.Translate("SetupForm", "ProfileRemoteButton");
@@ -1189,19 +1190,52 @@ namespace AtmoLight
       this.DialogResult = DialogResult.OK;
     }
 
-    private void btnLanguage_Click(object sender, EventArgs e)
+    private void cbLanguage_SelectedIndexChanged(object sender, EventArgs e)
     {
-      openFileDialog2.InitialDirectory = Path.GetDirectoryName(Settings.currentLanguageFile);
-      if (openFileDialog2.ShowDialog() == DialogResult.OK)
-      {
-        Settings.currentLanguageFile = openFileDialog2.FileName;
+      LoadLanguage();
+    }
 
-        Localization.Load(Settings.currentLanguageFile);
+    private void LoadLanguage()
+    {
+      Settings.currentLanguage = cbLanguage.Text;
+
+      string mediaportalLanguageDir =
+        MediaPortal.Configuration.Config.GetFolder(MediaPortal.Configuration.Config.Dir.Language) + "\\";
+
+      if (string.IsNullOrEmpty(mediaportalLanguageDir) || !Directory.Exists(mediaportalLanguageDir))
+      {
+        mediaportalLanguageDir = @"C:\ProgramData\Team MediaPortal\MediaPortal\Language\";
+      }
+
+      try
+      {
+        switch (Settings.currentLanguage)
+        {
+          case "Dutch":
+            Settings.currentLanguageFileLocation = mediaportalLanguageDir + "\\AtmoLight\\nl.xml";
+            break;
+          case "English":
+            Settings.currentLanguageFileLocation = mediaportalLanguageDir + "\\AtmoLight\\en.xml";
+            break;
+          case "French":
+            Settings.currentLanguageFileLocation = mediaportalLanguageDir + "\\AtmoLight\\fr.xml";
+            break;
+          case "German":
+            Settings.currentLanguageFileLocation = mediaportalLanguageDir + "\\AtmoLight\\de.xml";
+            break;
+        }
+
+        Localization.Load(Settings.currentLanguageFileLocation);
 
         UpdateLanguageOnControls();
         UpdateEffectComboBoxes();
         UpdateRemoteButtonComboBoxes();
-        openFileDialog2.FileName = "";
+      }
+      catch (Exception ex)
+      {
+        Log.Error("Error during LoadLanguage");
+        Log.Error(ex.Message);
+        throw;
       }
     }
 
@@ -2906,6 +2940,5 @@ namespace AtmoLight
 
     }
     #endregion
-
   }
 }
