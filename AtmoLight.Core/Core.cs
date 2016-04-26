@@ -608,7 +608,10 @@ namespace AtmoLight
     /// <param name="target"></param>
     public void NewConnectionLost(Target target)
     {
-      OnNewConnectionLost(target);
+      if (OnNewConnectionLost != null)
+      {
+        OnNewConnectionLost(target);
+      }
     }
     #endregion
 

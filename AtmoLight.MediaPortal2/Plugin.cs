@@ -85,8 +85,14 @@ namespace AtmoLight
 
     private void Initialise()
     {
-      // Log Handler
+      // Handler
       Log.OnNewLog += new Log.NewLogHandler(OnNewLog);
+      Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
+      Core.OnNewVUMeter += new Core.NewVUMeterHander(OnNewVUMeter);
+      AtmoLight.Configuration.OnOffButton.ButtonsChanged += new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      AtmoLight.Configuration.ProfileButton.ButtonsChanged += new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
+      SkinContext.DeviceSceneEnd += UICapture;
+      SystemEvents.PowerModeChanged += PowerModeChanged;
 
       // Version Infos
       var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
@@ -219,16 +225,6 @@ namespace AtmoLight
       }
 
       coreObject.Initialise();
-
-      // Handlers
-      Core.OnNewConnectionLost += new Core.NewConnectionLostHandler(OnNewConnectionLost);
-      Core.OnNewVUMeter += new Core.NewVUMeterHander(OnNewVUMeter);
-      AtmoLight.Configuration.OnOffButton.ButtonsChanged +=
-        new Configuration.OnOffButton.ButtonsChangedHandler(ReregisterKeyBindings);
-      AtmoLight.Configuration.ProfileButton.ButtonsChanged +=
-        new Configuration.ProfileButton.ButtonsChangedHandler(ReregisterKeyBindings);
-      SkinContext.DeviceSceneEnd += UICapture;
-      SystemEvents.PowerModeChanged += PowerModeChanged;
 
       if (settings.MonitorScreensaverState)
       {
