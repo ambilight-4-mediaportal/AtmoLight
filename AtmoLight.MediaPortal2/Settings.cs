@@ -98,7 +98,7 @@ namespace AtmoLight
     [Setting(SettingScope.User, "")]
     public string GIFFile { get; set; }
 
-    [Setting(SettingScope.User, true)]
+    [Setting(SettingScope.User, false)]
     public bool AtmoWinTarget { get; set; }
 
     [Setting(SettingScope.User, false)]
