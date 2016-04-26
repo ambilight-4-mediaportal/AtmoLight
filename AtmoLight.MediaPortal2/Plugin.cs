@@ -829,7 +829,7 @@ namespace AtmoLight
           int sleepTime = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
           Thread.Sleep(sleepTime);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
 
           // No logging as it could spam the logs
