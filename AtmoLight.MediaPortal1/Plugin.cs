@@ -19,6 +19,9 @@ using Microsoft.Win32;
 using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
 
+using SlimDX;
+using SlimDX.Direct3D9;
+
 namespace AtmoLight
 {
   [PluginIcons("AtmoLight.Resources.Enabled.png", "AtmoLight.Resources.Disabled.png")]
@@ -29,6 +32,11 @@ namespace AtmoLight
     [DllImport("AtmoDXUtil.dll", PreserveSig = false, CharSet = CharSet.Auto)]
     private static extern void VideoSurfaceToRGBSurfaceExt(IntPtr src, int srcWidth, int srcHeight, IntPtr dst,
       int dstWidth, int dstHeight);
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    public static extern int EnumDisplayDevices([In] string lpDevice, [In] uint iDevNum,
+      [In] [Out] MediaPortal.Player.Win32.DISPLAY_DEVICE lpDisplayDevice, [In] uint dwFlags);
+
     #endregion
 
     #region Variables
@@ -39,8 +47,19 @@ namespace AtmoLight
     private bool AtmoLightDisabledByUser = false; // Toggle AtmoLight on/off
 
     private List<ContentEffect> supportedEffects;
+
+    // MadVR
+    public bool errorDuringDirectXcapture;
+
+    // Internal DirectX capture
+    private static DxScreenCapture dxScreenCapture;
+    private bool dxscreenCaptureEnabled;
+    private bool dxScreenCaptureDelayEnabled;
+    private int dxscreenCaptureInterval = 15;
+    private bool dxScreenCaptureInitLock;
+
     // Frame Fields
-    private Surface rgbSurface = null; // RGB Surface
+    private Microsoft.DirectX.Direct3D.Surface rgbSurface = null; // RGB Surface
     private Int64 lastFrame = 0; // Tick count of the last frame
 
     // Static Color
@@ -102,9 +121,29 @@ namespace AtmoLight
       g_Player.PlayBackStopped += new g_Player.StoppedHandler(g_Player_PlayBackStopped);
       g_Player.PlayBackEnded += new g_Player.EndedHandler(g_Player_PlayBackEnded);
 
-      // FrameGrabber Handler      
-      MediaPortal.FrameGrabber.GetInstance().OnNewFrame +=
-        new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+
+      // FrameGrabber Handler
+      // If renderer is MadVR use internal DirectX capture
+      if (Settings.useMadVideoRenderer)
+      {
+        Log.Debug("Detected MadVR video renderer, switching to internal AtmoLight DirectX capture.");
+
+        // Disable UI capture as it will conflict
+        Settings.trueGrabbing = false;
+
+        // Start DirectX capture thread
+        dxscreenCaptureEnabled = true;
+        Thread t = new Thread(DxScreenCaptureThread);
+        t.IsBackground = true;
+        t.Start();
+      }
+      else
+      {
+        Log.Debug("Detected standard video renderer and subscribing to Mediaportal core frame grabber");
+
+        MediaPortal.FrameGrabber.GetInstance().OnNewFrame +=
+          new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+      }
 
       // Button Handler
       GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
@@ -272,7 +311,8 @@ namespace AtmoLight
     /// </summary>
     public void Stop()
     {
-      MediaPortal.FrameGrabber.GetInstance().OnNewFrame -= new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+      MediaPortal.FrameGrabber.GetInstance().OnNewFrame -=
+        new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
       SystemEvents.PowerModeChanged -= PowerModeChanged;
 
       Settings.monitorScreensaverState = false;
@@ -288,6 +328,9 @@ namespace AtmoLight
       {
         coreObject.ChangeEffect(Settings.effectMPExit);
       }
+
+      // Stop DirectX screen capture if active.
+      dxscreenCaptureEnabled = false;
 
       coreObject.Dispose();
 
@@ -367,7 +410,7 @@ namespace AtmoLight
       {
         coreObject.SetDelay(
           (int)
-            (((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
+            (((float) Settings.delayReferenceRefreshRate/(float) GetRefreshRate())*(float) Settings.delayReferenceTime));
       }
     }
 
@@ -407,7 +450,7 @@ namespace AtmoLight
 
     private double[] OnNewVUMeter()
     {
-      double[] dbLevel = new double[] { -100.0, -100.0 };
+      double[] dbLevel = new double[] {-100.0, -100.0};
       if (BassMusicPlayer.Initialized)
       {
         if (BassMusicPlayer.Player.Playing)
@@ -566,7 +609,8 @@ namespace AtmoLight
     /// <param name="arHeight">Aspect ratio height.</param>
     /// <param name="pSurface">Surface.</param>
     /// <param name="FrameSource">Source of frame, see enums FrameGrabber.FrameSource</param>/// 
-    private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface, FrameGrabber.FrameSource FrameSource)
+    private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface,
+      FrameGrabber.FrameSource FrameSource)
     {
       if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() ||
           !coreObject.IsAtmoLightOn() || width == 0 || height == 0)
@@ -578,7 +622,8 @@ namespace AtmoLight
       if (Settings.trueGrabbing)
       {
         //GUI grabbing while video is minimized activated 
-        if (g_Player.Playing && (!GUIGraphicsContext.IsFullScreenVideo) && (FrameSource == FrameGrabber.FrameSource.Video))
+        if (g_Player.Playing && (!GUIGraphicsContext.IsFullScreenVideo) &&
+            (FrameSource == FrameGrabber.FrameSource.Video))
         {
           //Drop Video frames when user has set TrueGrabbing & video is playing minimized -> just GUI frames will pass
           return;
@@ -611,7 +656,7 @@ namespace AtmoLight
       if (rgbSurface == null)
       {
         rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(coreObject.GetCaptureWidth(),
-          coreObject.GetCaptureHeight(), Format.A8R8G8B8,
+          coreObject.GetCaptureHeight(), Microsoft.DirectX.Direct3D.Format.A8R8G8B8,
           MultiSampleType.None, 0, true);
       }
       unsafe
@@ -620,16 +665,17 @@ namespace AtmoLight
         {
           if (Settings.sbs3dOn)
           {
-            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer,
+            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width/2, height, (IntPtr) rgbSurface.UnmanagedComPointer,
               coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
           }
           else
           {
-            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer,
+            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr) rgbSurface.UnmanagedComPointer,
               coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
           }
 
-          Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(ImageFileFormat.Bmp, rgbSurface);
+          Microsoft.DirectX.GraphicsStream stream =
+            SurfaceLoader.SaveToStream(Microsoft.DirectX.Direct3D.ImageFileFormat.Bmp, rgbSurface);
 
           coreObject.CalculateBitmap(stream);
 
@@ -644,6 +690,237 @@ namespace AtmoLight
           rgbSurface.Dispose();
           rgbSurface = null;
         }
+      }
+    }
+
+    #endregion
+
+
+    #region DxScreen capture
+
+    private void DxScreenCaptureThread()
+    {
+      while (dxscreenCaptureEnabled)
+      {
+        try
+        {
+          if (coreObject == null || dxScreenCaptureInitLock || errorDuringDirectXcapture)
+          {
+            continue;
+          }
+
+          if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() ||
+              !coreObject.IsAtmoLightOn())
+          {
+            if (dxScreenCapture != null)
+            {
+              DisposeDxScreenCapture();
+            }
+            continue;
+          }
+
+          if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+          {
+
+            // Init capture device
+            if (dxScreenCapture == null)
+            {
+              InitDxScreenCapture();
+            }
+
+            // Check if capture device exists and send image
+            if (dxScreenCapture != null)
+            {
+              CaptureDxScreen();
+            }
+          }
+
+          if (dxScreenCaptureDelayEnabled)
+          {
+            // Delay based on current display refresh rate
+            Thread.Sleep(1000/dxScreenCapture.refreshRate);
+          }
+          else
+          {
+            // Default delay of 5ms to lower CPU usage during loop (limits it to 200FPS)
+            Thread.Sleep(5);
+          }
+        }
+        catch (Exception ex)
+        {
+          //Log.Error("Error in DxScreenCaptureThread");
+          //Log.Error("Exception: {0}", ex.ToString());
+        }
+      }
+
+      // Dispose of screen capture device
+      DisposeDxScreenCapture();
+    }
+
+    private void InitDxScreenCapture()
+    {
+      try
+      {
+        dxScreenCaptureInitLock = true;
+
+        int monitorIndex = 0;
+
+        if (dxScreenCapture == null)
+        {
+
+          uint deviceNum = 0;
+          MediaPortal.Player.Win32.DISPLAY_DEVICE displayDevice = new MediaPortal.Player.Win32.DISPLAY_DEVICE();
+          displayDevice.cb = (ushort) Marshal.SizeOf(displayDevice);
+
+          while (EnumDisplayDevices(null, deviceNum, displayDevice, 0) != 0)
+          {
+            if (displayDevice.DeviceName ==
+                Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].Information.DeviceName)
+            {
+              // Set new monitorIndex
+              monitorIndex = (int) deviceNum;
+              Log.Debug("Setting detected screen to new detected MonitorIndex : {0}", (int) deviceNum);
+            }
+            ++deviceNum;
+          }
+
+          Log.Debug("Creating DirectX capture device on monitor...");
+          dxScreenCapture = new DxScreenCapture(monitorIndex);
+          Log.Debug("Created DirectX capture device!");
+          Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
+
+          if (dxScreenCaptureDelayEnabled)
+          {
+            Log.Debug(string.Format("Delay is enabled and set to: {0}ms", 1000/dxScreenCapture.refreshRate));
+          }
+        }
+
+        Thread.Sleep(500);
+
+        dxScreenCaptureInitLock = false;
+      }
+      catch (Exception ex)
+      {
+        Log.Error("Error in InitDxScreenCapture");
+        Log.Error("Exception: {0}", ex.ToString());
+        dxScreenCaptureInitLock = false;
+      }
+    }
+
+    private void ReInitDxScreenCapture()
+    {
+      dxScreenCaptureInitLock = true;
+
+      try
+      {
+        Log.Debug("Disposing of DirectX capture device...");
+        dxScreenCapture = null;
+        Log.Debug("Disposed of DirectX capture device!");
+
+        int monitorIndex = 0;
+        uint deviceNum = 0;
+        MediaPortal.Player.Win32.DISPLAY_DEVICE displayDevice = new MediaPortal.Player.Win32.DISPLAY_DEVICE();
+        displayDevice.cb = (ushort) Marshal.SizeOf(displayDevice);
+
+        while (EnumDisplayDevices(null, deviceNum, displayDevice, 0) != 0)
+        {
+          if (displayDevice.DeviceName ==
+              Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].Information.DeviceName)
+          {
+            // Set new monitorIndex
+            monitorIndex = (int) deviceNum;
+            Log.Debug("Setting detected screen to new detected MonitorIndex : {0}", (int) deviceNum);
+          }
+          ++deviceNum;
+        }
+
+        Log.Debug("Creating DirectX capture device on monitor..");
+        dxScreenCapture = new DxScreenCapture(monitorIndex);
+        Log.Debug("Created DirectX capture device!");
+
+        Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
+
+        if (dxScreenCaptureDelayEnabled)
+        {
+          Log.Debug(string.Format("Delay is enabled and set to: {0}ms", 1000/dxScreenCapture.refreshRate));
+        }
+
+        Thread.Sleep(500);
+
+        dxScreenCaptureInitLock = false;
+      }
+      catch (Exception ex)
+      {
+        Log.Error("Error in ReInitDxScreenCapture");
+        Log.Error("Exception: {0}", ex.ToString());
+        dxScreenCaptureInitLock = false;
+      }
+    }
+
+    private void DisposeDxScreenCapture()
+    {
+      try
+      {
+        dxScreenCaptureInitLock = true;
+        if (dxScreenCapture != null)
+        {
+          if (dxScreenCapture.device != null)
+          {
+            dxScreenCapture.device.Dispose();
+            dxScreenCapture.device = null;
+          }
+
+          dxScreenCapture = null;
+        }
+        Log.Debug("Disposed of DirectX capture device!");
+
+        dxScreenCaptureInitLock = false;
+      }
+      catch (Exception ex)
+      {
+        Log.Error("Error in DxScreenCaptureThread");
+        Log.Error("Exception: {0}", ex.ToString());
+        dxScreenCaptureInitLock = false;
+      }
+    }
+
+    private void CaptureDxScreen()
+    {
+      try
+      {
+        SlimDX.Direct3D9.Surface s = dxScreenCapture.CaptureScreen();
+
+        if (s == null)
+        {
+          errorDuringDirectXcapture = true;
+          Log.Error("Error in CaptureDxScreen, no surface to read (wrong monitor index?)");
+          return;
+        }
+
+        DataStream ds = SlimDX.Direct3D9.Surface.ToStream(s, SlimDX.Direct3D9.ImageFileFormat.Bmp);
+
+        byte[] buffer = new byte[ds.Length];
+        using (MemoryStream stream = new MemoryStream())
+        {
+          int read;
+          while ((read = ds.Read(buffer, 0, buffer.Length)) > 0)
+          {
+            stream.Write(buffer, 0, read);
+          }
+
+          coreObject.CalculateBitmap(stream);
+        }
+
+        ds = null;
+        s = null;
+      }
+      catch (Exception ex)
+      {
+        Log.Error("Error in CaptureDxScreen");
+        Log.Error("Exception: {0}", ex.ToString());
+
+        // Try to re-init capture device
+        ReInitDxScreenCapture();
       }
     }
 
@@ -738,7 +1015,7 @@ namespace AtmoLight
     private string GetKeyboardString(string keyboardString)
     {
       VirtualKeyboard Keyboard =
-        (VirtualKeyboard)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
+        (VirtualKeyboard) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
       if (Keyboard == null)
       {
         return null;
@@ -765,7 +1042,7 @@ namespace AtmoLight
       // Will result in problems and error messages otherwise
       GUIWindowManager.SendThreadCallback((p1, p2, o) =>
       {
-        GUIDialogOK dlgError = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
+        GUIDialogOK dlgError = (GUIDialogOK) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_OK);
         if (dlgError != null)
         {
           dlgError.SetHeading(Localization.Translate("Common", "Error") + "!");
@@ -785,7 +1062,7 @@ namespace AtmoLight
       Log.Info("Opening AtmoLight context menu.");
 
       // Showing context menu
-      GUIDialogMenu dlg = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+      GUIDialogMenu dlg = (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
       dlg.Reset();
       dlg.SetHeading(Localization.Translate("Common", "AtmoLight"));
 
@@ -923,12 +1200,12 @@ namespace AtmoLight
       // Change Effect
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeEffect"))
       {
-        GUIDialogMenu dlgEffect = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+        GUIDialogMenu dlgEffect = (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgEffect.Reset();
         dlgEffect.SetHeading(Localization.Translate("ContextMenu", "ChangeEffect"));
 
         // Only show effects that are support by at least one target
-        foreach (ContentEffect effect in Enum.GetValues(typeof(ContentEffect)))
+        foreach (ContentEffect effect in Enum.GetValues(typeof (ContentEffect)))
         {
           if (supportedEffects.Contains(effect) && effect != ContentEffect.Undefined)
           {
@@ -954,7 +1231,7 @@ namespace AtmoLight
         {
           ContentEffect temp =
             (ContentEffect)
-              Enum.Parse(typeof(ContentEffect),
+              Enum.Parse(typeof (ContentEffect),
                 Localization.ReverseTranslate("ContentEffect", dlgEffect.SelectedLabelText));
 
           if (g_Player.Playing)
@@ -992,7 +1269,8 @@ namespace AtmoLight
       // Blackbar detection
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetection"))
       {
-        GUIDialogMenu dlgBlackbarDetection = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+        GUIDialogMenu dlgBlackbarDetection =
+          (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgBlackbarDetection.Reset();
         dlgBlackbarDetection.SetHeading(Localization.Translate("ContextMenu", "BlackbarDetection"));
 
@@ -1007,7 +1285,8 @@ namespace AtmoLight
 
         if (coreObject.blackbarDetectionManual)
         {
-          dlgBlackbarDetection.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetectionDisableManual")));
+          dlgBlackbarDetection.Add(
+            new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetectionDisableManual")));
         }
 
         dlgBlackbarDetection.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetection1.33:1")));
@@ -1018,7 +1297,7 @@ namespace AtmoLight
         dlgBlackbarDetection.DoModal(GUIWindowManager.ActiveWindow);
 
         if (dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionOn") ||
-             dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionOff"))
+            dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionOff"))
         {
           if (Settings.blackbarDetection)
           {
@@ -1033,26 +1312,31 @@ namespace AtmoLight
             coreObject.blackbarDetection = true;
           }
         }
-        else if (dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetectionDisableManual"))
+        else if (dlgBlackbarDetection.SelectedLabelText ==
+                 Localization.Translate("ContextMenu", "BlackbarDetectionDisableManual"))
         {
           coreObject.blackbarDetectionManual = false;
         }
-        else if (dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetection1.33:1"))
+        else if (dlgBlackbarDetection.SelectedLabelText ==
+                 Localization.Translate("ContextMenu", "BlackbarDetection1.33:1"))
         {
           coreObject.blackbarDetectionManual = true;
           coreObject.blackbarDetectionAR = BlackbarDetectionAR._1_33x1;
         }
-        else if (dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetection1.78:1"))
+        else if (dlgBlackbarDetection.SelectedLabelText ==
+                 Localization.Translate("ContextMenu", "BlackbarDetection1.78:1"))
         {
           coreObject.blackbarDetectionManual = true;
           coreObject.blackbarDetectionAR = BlackbarDetectionAR._1_78x1;
         }
-        else if (dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetection1.85:1"))
+        else if (dlgBlackbarDetection.SelectedLabelText ==
+                 Localization.Translate("ContextMenu", "BlackbarDetection1.85:1"))
         {
           coreObject.blackbarDetectionManual = true;
           coreObject.blackbarDetectionAR = BlackbarDetectionAR._1_85x1;
         }
-        else if (dlgBlackbarDetection.SelectedLabelText == Localization.Translate("ContextMenu", "BlackbarDetection2.35:1"))
+        else if (dlgBlackbarDetection.SelectedLabelText ==
+                 Localization.Translate("ContextMenu", "BlackbarDetection2.35:1"))
         {
           coreObject.blackbarDetectionManual = true;
           coreObject.blackbarDetectionAR = BlackbarDetectionAR._2_35x1;
@@ -1072,8 +1356,8 @@ namespace AtmoLight
         {
           coreObject.EnableDelay(
             (int)
-              (((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) *
-               (float)Settings.delayReferenceTime));
+              (((float) Settings.delayReferenceRefreshRate/(float) GetRefreshRate())*
+               (float) Settings.delayReferenceTime));
         }
       }
       // Change Delay
@@ -1086,7 +1370,7 @@ namespace AtmoLight
         {
           coreObject.SetDelay(delayTimeHelper);
           Settings.delayReferenceTime =
-            (int)(((float)delayTimeHelper * (float)GetRefreshRate()) / Settings.delayReferenceRefreshRate);
+            (int) (((float) delayTimeHelper*(float) GetRefreshRate())/Settings.delayReferenceRefreshRate);
         }
         else
         {
@@ -1098,7 +1382,7 @@ namespace AtmoLight
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeStaticColor"))
       {
         GUIDialogMenu dlgStaticColor =
-          (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+          (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgStaticColor.Reset();
         dlgStaticColor.SetHeading(Localization.Translate("ContextMenu", "ChangeStaticColor"));
         dlgStaticColor.Add(new GUIListItem(Localization.Translate("ContextMenu", "Manual")));
@@ -1166,7 +1450,7 @@ namespace AtmoLight
       if (dlg.SelectedLabelText == Localization.Translate("Hue", "LiveviewGroup"))
       {
         GUIDialogMenu dlgHueSetActiveGroup =
-          (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+          (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgHueSetActiveGroup.Reset();
         dlgHueSetActiveGroup.SetHeading(Localization.Translate("Hue", "LiveviewGroup"));
         dlgHueSetActiveGroup.Add(Localization.Translate("Hue", "All"));
@@ -1198,7 +1482,7 @@ namespace AtmoLight
       if (dlg.SelectedLabelText == Localization.Translate("Hue", "StaticColorGroup"))
       {
         GUIDialogMenu dlgHueSetActiveGroup =
-          (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+          (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgHueSetActiveGroup.Reset();
         dlgHueSetActiveGroup.SetHeading(Localization.Translate("Hue", "StaticColorGroup"));
         dlgHueSetActiveGroup.Add(Localization.Translate("Hue", "All"));
@@ -1218,7 +1502,7 @@ namespace AtmoLight
         {
           string groupName = dlgHueSetActiveGroup.SelectedLabelText;
           GUIDialogMenu dlgHueSetStaticColorGroup =
-            (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+            (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
           dlgHueSetStaticColorGroup.Reset();
           dlgHueSetStaticColorGroup.SetHeading(Localization.Translate("Hue", "SelectStaticColorGroup"));
           dlgHueSetStaticColorGroup.Add(Localization.Translate("Hue", "Off"));
@@ -1255,7 +1539,7 @@ namespace AtmoLight
       Log.Info("Opening AtmoLight Yes/No dialog.");
 
       // Showing Yes/No dialog
-      GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
+      GUIDialogYesNo dlgYesNo = (GUIDialogYesNo) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_YES_NO);
       if (dlgYesNo != null)
       {
         dlgYesNo.Reset();
@@ -1278,9 +1562,9 @@ namespace AtmoLight
     {
       if (Reset)
       {
-        staticColorTemp = new int[] { -1, -1, -1 };
+        staticColorTemp = new int[] {-1, -1, -1};
       }
-      GUIDialogMenu dlgRGB = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+      GUIDialogMenu dlgRGB = (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
       dlgRGB.Reset();
       dlgRGB.SetHeading(Localization.Translate("ContextMenu", "ManualStaticColor"));
       dlgRGB.Add(
@@ -1363,6 +1647,7 @@ namespace AtmoLight
 
       Task.Factory.StartNew(() => { coreObject.PowerModeChanged(powerMode.Mode); });
     }
+
     #endregion
 
     #region Monitor screensaver and/or window state
@@ -1377,7 +1662,7 @@ namespace AtmoLight
         {
           // Check for screensaver window and/or Window state, blank screen for screensaver / Suspended for window state
           if ((GUIGraphicsContext.BlankScreen && Settings.monitorScreensaverState) ||
-             (GUIGraphicsContext.CurrentState == GUIGraphicsContext.State.SUSPENDING && Settings.monitorWindowState))
+              (GUIGraphicsContext.CurrentState == GUIGraphicsContext.State.SUSPENDING && Settings.monitorWindowState))
           {
             ContentEffect currenContentEffect = coreObject.GetCurrentEffect();
 
@@ -1409,17 +1694,18 @@ namespace AtmoLight
           }
 
           // Sleep for 5 seconds
-          int sleepTime = (int)TimeSpan.FromSeconds(5).TotalMilliseconds;
+          int sleepTime = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
           Thread.Sleep(sleepTime);
         }
         catch (Exception)
         {
           // Sleep for 5 seconds
-          int sleepTime = (int)TimeSpan.FromSeconds(5).TotalMilliseconds;
+          int sleepTime = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
           Thread.Sleep(sleepTime);
         }
       }
     }
+
     #endregion
 
     #region ISetupForm impementation
