@@ -48,8 +48,9 @@ namespace AtmoLight
 
     private List<ContentEffect> supportedEffects;
 
-    // MadVR check
+    // MadVR
     private bool rendererIsMadVR;
+    public bool errorDuringDirectXcapture;
 
     // Internal DirectX capture
     private static DxScreenCapture dxScreenCapture;
@@ -700,7 +701,7 @@ namespace AtmoLight
       {
         try
         {
-          if (coreObject == null || dxScreenCaptureInitLock)
+          if (coreObject == null || dxScreenCaptureInitLock || errorDuringDirectXcapture)
           {
             continue;
           }
@@ -885,6 +886,13 @@ namespace AtmoLight
       try
       {
         SlimDX.Direct3D9.Surface s = dxScreenCapture.CaptureScreen();
+
+        if (s == null)
+        {
+          errorDuringDirectXcapture = true;
+          Log.Error("Error in CaptureDxScreen, no surface to read (wrong monitor index?)");
+          return;
+        }
 
         DataStream ds = SlimDX.Direct3D9.Surface.ToStream(s, SlimDX.Direct3D9.ImageFileFormat.Bmp);
 
