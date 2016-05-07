@@ -157,8 +157,7 @@ namespace AtmoLight
           mediaportalLanguageDir = @"C:\ProgramData\Team MediaPortal\MediaPortal\Language";
         }
 
-        string fallbackFilename =
-          Path.Combine(mediaportalLanguageDir, "\\AtmoLight\\en.xml");
+        string fallbackFilename = mediaportalLanguageDir + "\\AtmoLight\\en.xml";
 
         xmlFile = new XmlDocument();
         xmlFileFallback = new XmlDocument();
@@ -175,18 +174,19 @@ namespace AtmoLight
 
         try
         {
-          if (
-            File.Exists(fallbackFilename))
+          if (File.Exists(fallbackFilename))
           {
             xmlFileFallback.Load(fallbackFilename);
           }
           else
           {
             Log.Error(String.Format("Fallback language file {0} doesn't exist: ", fallbackFilename));
-            Log.Error("Mediaportal configuration language location: " + MediaPortal.Configuration.Config.GetFolder(MediaPortal.Configuration.Config.Dir.Language));
+            Log.Error("Mediaportal configuration language location: " +
+                      MediaPortal.Configuration.Config.GetFolder(MediaPortal.Configuration.Config.Dir.Language));
           }
         }
-        catch (Exception){
+        catch (Exception)
+        {
         }
       }
       catch (Exception e)

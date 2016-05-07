@@ -97,6 +97,8 @@
     <string name="BlackbarDetectionLinkAreas">Schw. Balken Erkennung Zonen verknüpfen (Oben und Unten, sowie Links und Rechts)</string>
     <string name="BlackbarDetectionHorizontal">Schw. Balken Erkennung Horizontaler Scan</string>
     <string name="BlackbarDetectionVertical">Schw. Balken Erkennung Vertikaler Scan</string>
+    <string name="AdvancedOptions">Erweiterte Optionen</string>
+    <string name="RemoteApiServer">Aktivieren Sie Remote- API-Server</string>
   </SetupForm>
   <ContextMenu>
     <string name="LEDsOn">Schalte LEDs an</string>
