@@ -337,9 +337,9 @@ public class Script
     <UpdateUrl>https://raw.githubusercontent.com/ambilight-4-mediaportal/AtmoLight/master/MPEI/Atmolight_update.xml</UpdateUrl>
     <Version>
       <Major>1</Major>
-      <Minor>17</Minor>
+      <Minor>18</Minor>
       <Build>0</Build>
-      <Revision>10</Revision>
+      <Revision>0</Revision>
     </Version>
     <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
 The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.
@@ -482,7 +482,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>image\atmolight.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{669ba852-13f9-48e5-8dc8-b494b9868688}-atmolight.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{c1e4703e-f41e-4e14-bcdb-7182423fcf5d}-atmolight.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>

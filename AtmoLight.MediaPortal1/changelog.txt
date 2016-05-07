@@ -9,6 +9,8 @@ Version 1.18.0.0
 - Improved AtmoOrb static color behaviour
 - Added "Smoothing Threshold" option to AtmoOrb handler
 - Fixed bug where lights could change even though they shouldn't
+- Localization improvements and fixes
+- MadVR support
 
 Version 1.17.0.0
 - Remote API support, currently supports AtmoLight Remote (Android)
