@@ -763,36 +763,14 @@ namespace AtmoLight
       {
         dxScreenCaptureInitLock = true;
 
-        int monitorIndex = 0;
+        Log.Debug("Creating DirectX capture device on display: {0}", Settings.monitorName);
+        dxScreenCapture = new DxScreenCapture(Settings.monitorIndex, Settings.monitorName);
+        Log.Debug("Created DirectX capture device!");
+        Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
 
-        if (dxScreenCapture == null)
+        if (dxScreenCaptureDelayEnabled)
         {
-
-          uint deviceNum = 0;
-          MediaPortal.Player.Win32.DISPLAY_DEVICE displayDevice = new MediaPortal.Player.Win32.DISPLAY_DEVICE();
-          displayDevice.cb = (ushort) Marshal.SizeOf(displayDevice);
-
-          while (EnumDisplayDevices(null, deviceNum, displayDevice, 0) != 0)
-          {
-            if (displayDevice.DeviceName ==
-                Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].Information.DeviceName)
-            {
-              // Set new monitorIndex
-              monitorIndex = (int) deviceNum;
-              Log.Debug("Setting detected screen to new detected MonitorIndex : {0}", (int) deviceNum);
-            }
-            ++deviceNum;
-          }
-
-          Log.Debug("Creating DirectX capture device on monitor...");
-          dxScreenCapture = new DxScreenCapture(monitorIndex);
-          Log.Debug("Created DirectX capture device!");
-          Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
-
-          if (dxScreenCaptureDelayEnabled)
-          {
-            Log.Debug(string.Format("Delay is enabled and set to: {0}ms", 1000/dxScreenCapture.refreshRate));
-          }
+          Log.Debug(string.Format("Delay is enabled and set to: {0}ms", 1000/dxScreenCapture.refreshRate));
         }
 
         Thread.Sleep(500);
@@ -817,25 +795,8 @@ namespace AtmoLight
         dxScreenCapture = null;
         Log.Debug("Disposed of DirectX capture device!");
 
-        int monitorIndex = 0;
-        uint deviceNum = 0;
-        MediaPortal.Player.Win32.DISPLAY_DEVICE displayDevice = new MediaPortal.Player.Win32.DISPLAY_DEVICE();
-        displayDevice.cb = (ushort) Marshal.SizeOf(displayDevice);
-
-        while (EnumDisplayDevices(null, deviceNum, displayDevice, 0) != 0)
-        {
-          if (displayDevice.DeviceName ==
-              Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].Information.DeviceName)
-          {
-            // Set new monitorIndex
-            monitorIndex = (int) deviceNum;
-            Log.Debug("Setting detected screen to new detected MonitorIndex : {0}", (int) deviceNum);
-          }
-          ++deviceNum;
-        }
-
-        Log.Debug("Creating DirectX capture device on monitor..");
-        dxScreenCapture = new DxScreenCapture(monitorIndex);
+        Log.Debug("Creating DirectX capture device on display: {0}", Settings.monitorName);
+        dxScreenCapture = new DxScreenCapture(Settings.monitorIndex, Settings.monitorName);
         Log.Debug("Created DirectX capture device!");
 
         Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));

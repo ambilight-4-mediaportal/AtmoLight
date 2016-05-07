@@ -134,8 +134,10 @@ namespace AtmoLight
     public static bool atmoOrbUseSmoothing;
     public static int atmoOrbSmoothingThreshold;
 
-    // MadVR check
+    // MadVR 
     public static bool useMadVideoRenderer;
+    public static int monitorIndex;
+    public static string monitorName;
 
     public static List<string> atmoOrbLamps = new List<string>();
     #endregion
@@ -387,6 +389,8 @@ namespace AtmoLight
         blackbarDetectionVertical = reader.GetValueAsBool("atmolight", "blackbarDetectionVertical", true);
         blackbarDetectionLinkAreas = reader.GetValueAsBool("atmolight", "blackbarDetectionLinkAreas", true);
         remoteApiServer = reader.GetValueAsBool("atmolight", "remoteApiServer", false);
+        monitorIndex = reader.GetValueAsInt("screenselector", "screennumber", 0);
+        monitorName = reader.GetValueAsString("screenselector", "screendisplayname", "");
         useMadVideoRenderer = reader.GetValueAsBool("general", "useMadVideoRenderer", false);
       }
     }

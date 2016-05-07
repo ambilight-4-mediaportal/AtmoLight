@@ -1,6 +1,5 @@
 ﻿using SlimDX.Direct3D9;
 using System;
-using System.Windows.Forms;
 
 namespace AtmoLight
 {
@@ -9,8 +8,9 @@ namespace AtmoLight
     public Device device;
     public int deviceIndex;
     public int refreshRate = 60;
-    private SlimDX.Windows.DisplayMonitor deviceMonitor;
-    public DxScreenCapture(int index)
+    public int resolutionHeight;
+    public int resolutionWidth;
+    public DxScreenCapture(int index, string monitorName)
     {
       try
       {
@@ -18,11 +18,14 @@ namespace AtmoLight
         present_params.Windowed = true;
         present_params.SwapEffect = SwapEffect.Discard;
         present_params.PresentationInterval = PresentInterval.Immediate;
-        int deviceIndex = getMonitor(index);
 
+        int deviceIndex = getMonitor(monitorName);
         device = new Device(new Direct3D(), deviceIndex, DeviceType.Hardware, IntPtr.Zero,
           CreateFlags.SoftwareVertexProcessing, present_params);
-        refreshRate = device.GetDisplayMode(0).RefreshRate;
+
+        refreshRate = device.GetDisplayMode(deviceIndex).RefreshRate;
+        resolutionWidth = device.GetDisplayMode(deviceIndex).Width;
+        resolutionHeight = device.GetDisplayMode(deviceIndex).Height;
       }
       catch (Exception ex){
         Log.Error("Error during DxScreenCapture class startup");
@@ -34,8 +37,8 @@ namespace AtmoLight
     {
       try
       {
-        Surface s = Surface.CreateOffscreenPlain(device, deviceMonitor.Bounds.Width,
-          deviceMonitor.Bounds.Height, Format.A8R8G8B8, Pool.Scratch);
+        Surface s = Surface.CreateOffscreenPlain(device, resolutionWidth,
+          resolutionHeight, Format.A8R8G8B8, Pool.Scratch);
         Surface b = Surface.CreateOffscreenPlain(device, (64), (64), Format.A8R8G8B8, Pool.Scratch);
         device.GetFrontBufferData(0, s);
         Surface.FromSurface(b, s, Filter.Triangle, 0);
@@ -47,26 +50,39 @@ namespace AtmoLight
       return null;
     }
 
-    private int getMonitor(int monitorIndex)
+    private int getMonitor(string monitorName)
     {
       var monitorArray = SlimDX.Windows.DisplayMonitor.EnumerateMonitors();
       int index = 0;
+
       foreach (var monitor in monitorArray)
       {
-        if (index == monitorIndex)
+        Log.Error("Found monitor: " + monitor.DeviceName);
+        Log.Error("Is primary: " + monitor.IsPrimary);
+        Log.Error("Width: " + monitor.Bounds.Width);
+        Log.Error("Height: " + monitor.Bounds.Height);
+        Log.Error("Index: " + index);
+
+        if (Equals(monitor.DeviceName.ToLower(), monitorName.ToLower()))
         {
           Log.Error("Gonna use monitor: " + monitor.DeviceName);
           Log.Error("Is primary: " + monitor.IsPrimary);
           Log.Error("Width: " + monitor.Bounds.Width);
           Log.Error("Height: " + monitor.Bounds.Height);
           Log.Error("Index: " + index);
-          deviceMonitor = monitor;
 
           return index;
         }
 
         index++;
       }
+
+      // No named match, fallback to default
+      if (monitorArray.Length == 1)
+      {
+        index = 0;
+      }
+
       return index;
     }
   }
