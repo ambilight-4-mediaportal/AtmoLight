@@ -415,7 +415,7 @@ namespace AtmoLight
         blackbarDetectionVertical = reader.GetValueAsBool("atmolight", "blackbarDetectionVertical", true);
         blackbarDetectionLinkAreas = reader.GetValueAsBool("atmolight", "blackbarDetectionLinkAreas", true);
         remoteApiServer = reader.GetValueAsBool("atmolight", "remoteApiServer", false);
-        useMadVideoRenderer = reader.GetValueAsBool("general", "useMadVideoRenderer", true);
+        useMadVideoRenderer = reader.GetValueAsBool("general", "useMadVideoRenderer", false);
       }
     }
 
