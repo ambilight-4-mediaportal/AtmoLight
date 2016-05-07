@@ -10,6 +10,7 @@ namespace AtmoLight
   public class Settings
   {
     #region Fields
+
     // Generic
     public static ContentEffect effectVideo;
     public static ContentEffect effectMusic;
@@ -134,11 +135,15 @@ namespace AtmoLight
     public static bool atmoOrbUseSmoothing;
     public static int atmoOrbSmoothingThreshold;
 
+    // MadVR check
+    public static bool useMadVideoRenderer;
 
     public static List<string> atmoOrbLamps = new List<string>();
+
     #endregion
 
     #region Methods
+
     public static DateTime LoadTimeSetting(MediaPortal.Profile.Settings reader, string name, string defaultTime)
     {
       string s = reader.GetValueAsString("atmolight", name, defaultTime);
@@ -153,7 +158,10 @@ namespace AtmoLight
 
     public static void LoadSettings()
     {
-      using (MediaPortal.Profile.Settings reader = new MediaPortal.Profile.Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
+      using (
+        MediaPortal.Profile.Settings reader =
+          new MediaPortal.Profile.Settings(
+            MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
       {
         // Legacy support
         // The effect settings were integers in the past, but now are strings.
@@ -167,7 +175,10 @@ namespace AtmoLight
         }
         else
         {
-          effectVideo = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectVideo", "MediaPortalLiveMode"));
+          effectVideo =
+            (ContentEffect)
+              Enum.Parse(typeof (ContentEffect),
+                reader.GetValueAsString("atmolight", "effectVideo", "MediaPortalLiveMode"));
         }
 
         int effectMusicInt;
@@ -178,7 +189,9 @@ namespace AtmoLight
         }
         else
         {
-          effectMusic = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMusic", "LEDsDisabled"));
+          effectMusic =
+            (ContentEffect)
+              Enum.Parse(typeof (ContentEffect), reader.GetValueAsString("atmolight", "effectMusic", "LEDsDisabled"));
         }
 
         int effecRadioInt;
@@ -189,7 +202,9 @@ namespace AtmoLight
         }
         else
         {
-          effectRadio = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectRadio", "LEDsDisabled"));
+          effectRadio =
+            (ContentEffect)
+              Enum.Parse(typeof (ContentEffect), reader.GetValueAsString("atmolight", "effectRadio", "LEDsDisabled"));
         }
 
         int effectMenuInt;
@@ -200,7 +215,9 @@ namespace AtmoLight
         }
         else
         {
-          effectMenu = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMenu", "LEDsDisabled"));
+          effectMenu =
+            (ContentEffect)
+              Enum.Parse(typeof (ContentEffect), reader.GetValueAsString("atmolight", "effectMenu", "LEDsDisabled"));
         }
 
         int effectMPExitInt;
@@ -211,11 +228,13 @@ namespace AtmoLight
         }
         else
         {
-          effectMPExit = (ContentEffect)Enum.Parse(typeof(ContentEffect), reader.GetValueAsString("atmolight", "effectMPExit", "LEDsDisabled"));
+          effectMPExit =
+            (ContentEffect)
+              Enum.Parse(typeof (ContentEffect), reader.GetValueAsString("atmolight", "effectMPExit", "LEDsDisabled"));
         }
 
         currentLanguage = reader.GetValueAsString("atmolight", "currentLanguage", "English");
-        
+
         // Check for presence of legacy file location (1.7.0.5 or lower)
         currentLanguageFileLegacy = reader.GetValueAsString("atmolight", "currentLanguageFile", "");
 
@@ -234,7 +253,8 @@ namespace AtmoLight
             currentLanguage = "French";
           }
           else if (currentLanguageFileLegacy.Contains("de.xml"))
-          {;
+          {
+            ;
             currentLanguage = "German";
           }
         }
@@ -335,7 +355,8 @@ namespace AtmoLight
         boblightSaturation = reader.GetValueAsInt("atmolight", "boblightSaturation", 1);
         boblightValue = reader.GetValueAsInt("atmolight", "boblightValue", 1);
         boblightThreshold = reader.GetValueAsInt("atmolight", "boblightThreshold", 20);
-        boblightGamma = Double.Parse(reader.GetValueAsString("atmolight", "boblightGamma", "2.2").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+        boblightGamma = Double.Parse(reader.GetValueAsString("atmolight", "boblightGamma", "2.2").Replace(",", "."),
+          CultureInfo.InvariantCulture.NumberFormat);
         atmoWinTarget = reader.GetValueAsBool("atmolight", "atmoWinTarget", true);
         boblightTarget = reader.GetValueAsBool("atmolight", "boblightTarget", false);
         hueTarget = reader.GetValueAsBool("atmolight", "hueTarget", false);
@@ -350,15 +371,19 @@ namespace AtmoLight
         ambiBoxChangeImageDelay = reader.GetValueAsInt("atmolight", "ambiBoxChangeImageDelay", 10);
         ambiBoxMediaPortalProfile = reader.GetValueAsString("atmolight", "ambiBoxMediaPortalProfile", "MediaPortal");
         ambiBoxExternalProfile = reader.GetValueAsString("atmolight", "ambiBoxExternalProfile", "External");
-        ambiBoxPath = reader.GetValueAsString("atmolight", "ambiBoxPath", "C:\\Program Files (x86)\\AmbiBox\\AmbiBox.exe");
+        ambiBoxPath = reader.GetValueAsString("atmolight", "ambiBoxPath",
+          "C:\\Program Files (x86)\\AmbiBox\\AmbiBox.exe");
         ambiBoxAutoStart = reader.GetValueAsBool("atmolight", "ambiBoxAutoStart", false);
         ambiBoxAutoStop = reader.GetValueAsBool("atmolight", "ambiBoxAutoStop", false);
         atmoOrbTarget = reader.GetValueAsBool("atmolight", "atmoOrbTarget", false);
         atmoOrbBlackThreshold = reader.GetValueAsInt("atmolight", "atmoOrbBlackThreshold", 16);
         atmoOrbBroadcastPort = reader.GetValueAsInt("atmolight", "atmoOrbBroadcastPort", 49692);
-        atmoOrbGamma = Double.Parse(reader.GetValueAsString("atmolight", "atmoOrbGamma", "1").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+        atmoOrbGamma = Double.Parse(reader.GetValueAsString("atmolight", "atmoOrbGamma", "1").Replace(",", "."),
+          CultureInfo.InvariantCulture.NumberFormat);
         atmoOrbMinDiversion = reader.GetValueAsInt("atmolight", "atmoOrbMinDiversion", 16);
-        atmoOrbSaturation = Double.Parse(reader.GetValueAsString("atmolight", "atmoOrbSaturation", "0.2").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+        atmoOrbSaturation =
+          Double.Parse(reader.GetValueAsString("atmolight", "atmoOrbSaturation", "0.2").Replace(",", "."),
+            CultureInfo.InvariantCulture.NumberFormat);
         atmoOrbThreshold = reader.GetValueAsInt("atmolight", "atmoOrbThreshold", 0);
         atmoOrbUseOverallLightness = reader.GetValueAsBool("atmolight", "atmoOrbUseOverallLightness", true);
         atmoOrbUseSmoothing = reader.GetValueAsBool("atmolight", "atmoOrbUseSmoothing", true);
@@ -374,22 +399,32 @@ namespace AtmoLight
           }
         }
         vuMeterMindB = reader.GetValueAsInt("atmolight", "vuMeterMindB", -24);
-        vuMeterMinHue = Double.Parse(reader.GetValueAsString("atmolight", "vuMeterMinHue", "0,74999").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
-        vuMeterMaxHue = Double.Parse(reader.GetValueAsString("atmolight", "vuMeterMaxHue", "0,95833").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+        vuMeterMinHue = Double.Parse(
+          reader.GetValueAsString("atmolight", "vuMeterMinHue", "0,74999").Replace(",", "."),
+          CultureInfo.InvariantCulture.NumberFormat);
+        vuMeterMaxHue = Double.Parse(
+          reader.GetValueAsString("atmolight", "vuMeterMaxHue", "0,95833").Replace(",", "."),
+          CultureInfo.InvariantCulture.NumberFormat);
         hueThreshold = reader.GetValueAsInt("atmolight", "hueThreshold", 16);
         hueBlackThreshold = reader.GetValueAsInt("atmolight", "hueBlackThreshold", 16);
         hueMinDiversion = reader.GetValueAsInt("atmolight", "hueMinDiversion", 16);
-        hueSaturation = Double.Parse(reader.GetValueAsString("atmolight", "hueSaturation", "0.2").Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+        hueSaturation = Double.Parse(reader.GetValueAsString("atmolight", "hueSaturation", "0.2").Replace(",", "."),
+          CultureInfo.InvariantCulture.NumberFormat);
         hueUseOverallLightness = reader.GetValueAsBool("atmolight", "hueUseOverallLightness", true);
         blackbarDetectionHorizontal = reader.GetValueAsBool("atmolight", "blackbarDetectionHorizontal", true);
         blackbarDetectionVertical = reader.GetValueAsBool("atmolight", "blackbarDetectionVertical", true);
         blackbarDetectionLinkAreas = reader.GetValueAsBool("atmolight", "blackbarDetectionLinkAreas", true);
         remoteApiServer = reader.GetValueAsBool("atmolight", "remoteApiServer", false);
+        useMadVideoRenderer = reader.GetValueAsBool("general", "useMadVideoRenderer", true);
       }
     }
+
     public static void SaveSettings()
     {
-      using (MediaPortal.Profile.Settings reader = new MediaPortal.Profile.Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
+      using (
+        MediaPortal.Profile.Settings reader =
+          new MediaPortal.Profile.Settings(
+            MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
       {
         reader.SetValue("atmolight", "atmowinexe", atmowinExe);
         reader.SetValue("atmolight", "effectVideo", effectVideo.ToString());
@@ -397,9 +432,9 @@ namespace AtmoLight
         reader.SetValue("atmolight", "effectRadio", effectRadio.ToString());
         reader.SetValue("atmolight", "effectMenu", effectMenu.ToString());
         reader.SetValue("atmolight", "effectMPExit", effectMPExit.ToString());
-        reader.SetValue("atmolight", "killbutton", (int)killButton);
-        reader.SetValue("atmolight", "cmbutton", (int)profileButton);
-        reader.SetValue("atmolight", "menubutton", (int)menuButton);
+        reader.SetValue("atmolight", "killbutton", (int) killButton);
+        reader.SetValue("atmolight", "cmbutton", (int) profileButton);
+        reader.SetValue("atmolight", "menubutton", (int) menuButton);
         reader.SetValueAsBool("atmolight", "OffOnStart", manualMode);
         reader.SetValueAsBool("atmolight", "SBS_3D_ON", sbs3dOn);
         reader.SetValueAsBool("atmolight", "lowCPU", lowCPU);
@@ -427,24 +462,24 @@ namespace AtmoLight
         reader.SetValueAsBool("atmolight", "BlackbarDetection", blackbarDetection);
         reader.SetValue("atmolight", "BlackbarDetectionTime", blackbarDetectionTime);
         reader.SetValue("atmolight", "GIFFile", gifFile);
-        reader.SetValue("atmolight", "captureWidth", (int)captureWidth);
-        reader.SetValue("atmolight", "captureHeight", (int)captureHeight);
+        reader.SetValue("atmolight", "captureWidth", (int) captureWidth);
+        reader.SetValue("atmolight", "captureHeight", (int) captureHeight);
         reader.SetValueAsBool("atmolight", "monitorScreensaverState", monitorScreensaverState);
         reader.SetValueAsBool("atmolight", "monitorWindowState", monitorWindowState);
         reader.SetValue("atmolight", "hyperionIP", hyperionIP);
-        reader.SetValue("atmolight", "hyperionPort", (int)hyperionPort);
-        reader.SetValue("atmolight", "hyperionPriority", (int)hyperionPriority);
-        reader.SetValue("atmolight", "hyperionReconnectDelay", (int)hyperionReconnectDelay);
-        reader.SetValue("atmolight", "hyperionReconnectAttempts", (int)hyperionReconnectAttempts);
-        reader.SetValue("atmolight", "hyperionStaticColorPriority", (int)hyperionPriorityStaticColor);
+        reader.SetValue("atmolight", "hyperionPort", (int) hyperionPort);
+        reader.SetValue("atmolight", "hyperionPriority", (int) hyperionPriority);
+        reader.SetValue("atmolight", "hyperionReconnectDelay", (int) hyperionReconnectDelay);
+        reader.SetValue("atmolight", "hyperionReconnectAttempts", (int) hyperionReconnectAttempts);
+        reader.SetValue("atmolight", "hyperionStaticColorPriority", (int) hyperionPriorityStaticColor);
         reader.SetValueAsBool("atmolight", "hyperionLiveReconnect", hyperionLiveReconnect);
         reader.SetValue("atmolight", "hueExe", hueExe);
         reader.SetValueAsBool("atmolight", "hueStart", hueStart);
         reader.SetValueAsBool("atmolight", "hueIsRemoteMachine", hueIsRemoteMachine);
         reader.SetValue("atmolight", "hueIP", hueIP);
-        reader.SetValue("atmolight", "huePort", (int)huePort);
-        reader.SetValue("atmolight", "hueReconnectDelay", (int)hueReconnectDelay);
-        reader.SetValue("atmolight", "hueReconnectAttempts", (int)hueReconnectAttempts);
+        reader.SetValue("atmolight", "huePort", (int) huePort);
+        reader.SetValue("atmolight", "hueReconnectDelay", (int) hueReconnectDelay);
+        reader.SetValue("atmolight", "hueReconnectAttempts", (int) hueReconnectAttempts);
         reader.SetValueAsBool("atmolight", "hueBridgeEnableOnResume", hueBridgeEnableOnResume);
         reader.SetValueAsBool("atmolight", "hueBridgeDisableOnSuspend", hueBridgeDisableOnSuspend);
         reader.SetValueAsBool("atmolight", "hueTheaterEnabled", hueTheaterEnabled);
@@ -516,7 +551,10 @@ namespace AtmoLight
 
     public static void SaveSpecificSetting(string Setting, String Value)
     {
-      using (MediaPortal.Profile.Settings reader = new MediaPortal.Profile.Settings(MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
+      using (
+        MediaPortal.Profile.Settings reader =
+          new MediaPortal.Profile.Settings(
+            MediaPortal.Configuration.Config.GetFile(MediaPortal.Configuration.Config.Dir.Config, "MediaPortal.xml")))
       {
         reader.SetValue("atmolight", Setting, Value);
       }
@@ -555,6 +593,7 @@ namespace AtmoLight
           return ContentEffect.LEDsDisabled;
       }
     }
+
     #endregion
   }
 }

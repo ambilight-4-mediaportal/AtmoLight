@@ -53,7 +53,7 @@ namespace AtmoLight
       int index = 0;
       foreach (var monitor in monitorArray)
       {
-        if (monitor.IsPrimary)
+        if (index == monitorIndex)
         {
           Log.Error("Gonna use monitor: " + monitor.DeviceName);
           Log.Error("Is primary: " + monitor.IsPrimary);
@@ -61,6 +61,7 @@ namespace AtmoLight
           Log.Error("Height: " + monitor.Bounds.Height);
           Log.Error("Index: " + index);
           deviceMonitor = monitor;
+
           return index;
         }
 

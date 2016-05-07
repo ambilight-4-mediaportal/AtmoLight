@@ -123,10 +123,10 @@ namespace AtmoLight
 
 
       // FrameGrabber Handler
-      // If renderer is not EVR or VMR8/9 use internal DirectX capture, this allows for backwards compatability and is primarily for madVR support
-      if (GUIGraphicsContext.VideoRenderer != GUIGraphicsContext.VideoRendererType.EVR && GUIGraphicsContext.VideoRenderer != GUIGraphicsContext.VideoRendererType.VMR9)
+      // If renderer is MadVR use internal DirectX capture
+      if (Settings.useMadVideoRenderer)
       {
-        Log.Debug("Detected non-standard video renderer, most likely madVR and switching to internal AtmoLight DirectX capture.");
+        Log.Debug("Detected MadVR video renderer, switching to internal AtmoLight DirectX capture.");
 
         // Disable UI capture as it will conflict
         Settings.trueGrabbing = false;
