@@ -342,7 +342,7 @@
       // btnCancel
       // 
       this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-      this.btnCancel.Location = new System.Drawing.Point(140, 630);
+      this.btnCancel.Location = new System.Drawing.Point(141, 630);
       this.btnCancel.Name = "btnCancel";
       this.btnCancel.Size = new System.Drawing.Size(105, 23);
       this.btnCancel.TabIndex = 101;
@@ -3025,7 +3025,7 @@
             "English",
             "French",
             "German"});
-      this.cbLanguage.Location = new System.Drawing.Point(330, 632);
+      this.cbLanguage.Location = new System.Drawing.Point(313, 632);
       this.cbLanguage.Name = "cbLanguage";
       this.cbLanguage.Size = new System.Drawing.Size(82, 21);
       this.cbLanguage.TabIndex = 102;
@@ -3034,7 +3034,7 @@
       // lblLanguage
       // 
       this.lblLanguage.AutoSize = true;
-      this.lblLanguage.Location = new System.Drawing.Point(260, 635);
+      this.lblLanguage.Location = new System.Drawing.Point(249, 635);
       this.lblLanguage.Name = "lblLanguage";
       this.lblLanguage.Size = new System.Drawing.Size(58, 13);
       this.lblLanguage.TabIndex = 103;
