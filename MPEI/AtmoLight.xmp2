@@ -210,6 +210,11 @@ public static void Main(PackageClass packageClass, ActionItem actionItem)
 		{
 			File.Delete(Path.Combine(SourceFilePath_plugin, "process\\AtmoWinRemoteControl.dll"));
 		}
+
+		if (File.Exists(Path.Combine(SourceFilePath_plugin, "process\\AtmoDXUtil.dll")))
+		{
+			File.Delete(Path.Combine(SourceFilePath_plugin, "process\\AtmoDXUtil.dll"));
+		}
 	   }
 	   catch { }
         }
