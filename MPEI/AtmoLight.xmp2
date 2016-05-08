@@ -15,7 +15,7 @@
               <UpdateOption>AlwaysOverwrite</UpdateOption>
               <LocalFileName>..\AtmoDXUtil\bin\Release\AtmoDXUtil.dll</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{830936a6-1f0e-41a6-8c11-3f7a1efcd82c}-AtmoDXUtil.dll</ZipFileName>
-              <DestinationFilename>%Plugins%\process\AtmoDXUtil.dll</DestinationFilename>
+              <DestinationFilename>%Base%\AtmoDXUtil.dll</DestinationFilename>
             </FileItem>
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
@@ -392,7 +392,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <UpdateOption>AlwaysOverwrite</UpdateOption>
         <LocalFileName>..\AtmoDXUtil\bin\Release\AtmoDXUtil.dll</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{830936a6-1f0e-41a6-8c11-3f7a1efcd82c}-AtmoDXUtil.dll</ZipFileName>
-        <DestinationFilename>%Plugins%\process\AtmoDXUtil.dll</DestinationFilename>
+        <DestinationFilename>%Base%\AtmoDXUtil.dll</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />

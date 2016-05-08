@@ -19,9 +19,6 @@ using Microsoft.Win32;
 using MediaPortal.Dialogs;
 using MediaPortal.Configuration;
 
-using SlimDX;
-using SlimDX.Direct3D9;
-
 namespace AtmoLight
 {
   [PluginIcons("AtmoLight.Resources.Enabled.png", "AtmoLight.Resources.Disabled.png")]
@@ -64,6 +61,9 @@ namespace AtmoLight
 
     // Core object
     private Core coreObject;
+
+    // D3D Device
+    private Device _atmoLightDevice;
 
     #endregion
 
@@ -494,6 +494,11 @@ namespace AtmoLight
             coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
           }
         }
+        if (rgbSurface != null)
+        {
+          rgbSurface?.Dispose();
+          rgbSurface = null;
+        }
       }
       catch (Exception ex)
       {
@@ -526,6 +531,11 @@ namespace AtmoLight
           {
             coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
           }
+        }
+        if (rgbSurface != null)
+        {
+          rgbSurface?.Dispose();
+          rgbSurface = null;
         }
       }
       catch (Exception ex)
@@ -560,6 +570,11 @@ namespace AtmoLight
           {
             coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
           }
+        }
+        if (rgbSurface != null)
+        {
+          rgbSurface?.Dispose();
+          rgbSurface = null;
         }
       }
       catch (Exception ex)
@@ -623,27 +638,14 @@ namespace AtmoLight
         }
       }
 
-      if (rgbSurface == null)
+      //If renderer is MadVR
+      _atmoLightDevice = Settings.useMadVideoRenderer ? GUIGraphicsContext.DX9DeviceMadVr : GUIGraphicsContext.DX9Device;
+
+      if (rgbSurface == null && _atmoLightDevice != null)
       {
-        //If renderer is MadVR
-        if (Settings.useMadVideoRenderer)
-        {
-          if (GUIGraphicsContext.DX9DeviceMadVr != null)
-          {
-            rgbSurface = GUIGraphicsContext.DX9DeviceMadVr.CreateRenderTarget(coreObject.GetCaptureWidth(),
-              coreObject.GetCaptureHeight(), Microsoft.DirectX.Direct3D.Format.A8R8G8B8,
-              MultiSampleType.None, 0, true);
-          }
-        }
-        else
-        {
-          if (GUIGraphicsContext.DX9Device != null)
-          {
-            rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(coreObject.GetCaptureWidth(),
-              coreObject.GetCaptureHeight(), Microsoft.DirectX.Direct3D.Format.A8R8G8B8,
-              MultiSampleType.None, 0, true);
-          }
-        }
+        rgbSurface = _atmoLightDevice.CreateRenderTarget(coreObject.GetCaptureWidth(),
+          coreObject.GetCaptureHeight(), Microsoft.DirectX.Direct3D.Format.A8R8G8B8,
+          MultiSampleType.None, 0, true);
       }
       unsafe
       {
@@ -651,7 +653,7 @@ namespace AtmoLight
         {
           if (Settings.sbs3dOn)
           {
-            if (rgbSurface != null)
+            if (rgbSurface != null && _atmoLightDevice != null)
             {
               VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer,
                 coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
@@ -659,20 +661,23 @@ namespace AtmoLight
           }
           else
           {
-            if (rgbSurface != null)
+            if (rgbSurface != null && _atmoLightDevice != null)
             {
               VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer,
                 coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
             }
           }
 
-          Microsoft.DirectX.GraphicsStream stream =
-            SurfaceLoader.SaveToStream(Microsoft.DirectX.Direct3D.ImageFileFormat.Bmp, rgbSurface);
+          if (rgbSurface != null && _atmoLightDevice != null)
+          {
+            using (Microsoft.DirectX.GraphicsStream stream = SurfaceLoader.SaveToStream(Microsoft.DirectX.Direct3D.ImageFileFormat.Bmp, rgbSurface))
+            {
+              coreObject.CalculateBitmap(stream);
 
-          coreObject.CalculateBitmap(stream);
-
-          stream.Close();
-          stream.Dispose();
+              stream.Close();
+              stream.Dispose();
+            }
+          }
         }
         catch (Exception ex)
         {
