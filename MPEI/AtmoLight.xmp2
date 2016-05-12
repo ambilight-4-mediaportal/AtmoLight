@@ -52,6 +52,13 @@
               <ZipFileName>Installer{CopyFile}\{ccd6658c-73d6-40d1-b1a2-23f6f90769da}-USBDeview-x86.exe</ZipFileName>
               <DestinationFilename>%Base%\USBDeview-x86.exe</DestinationFilename>
             </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>AlwaysOverwrite</UpdateOption>
+              <LocalFileName>..\Packages\SlimDX\SlimDX.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{c123831e-dbaa-4de1-8259-13da9086989a}-SlimDX.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\process\SlimDX.dll</DestinationFilename>
+            </FileItem>
           </Items>
         </Files>
       </GroupItem>
@@ -433,6 +440,13 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <LocalFileName>..\Packages\USBDeview\USBDeview-x86.exe</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{ccd6658c-73d6-40d1-b1a2-23f6f90769da}-USBDeview-x86.exe</ZipFileName>
         <DestinationFilename>%Base%\USBDeview-x86.exe</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>AlwaysOverwrite</UpdateOption>
+        <LocalFileName>..\Packages\SlimDX\SlimDX.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{c123831e-dbaa-4de1-8259-13da9086989a}-SlimDX.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\process\SlimDX.dll</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />

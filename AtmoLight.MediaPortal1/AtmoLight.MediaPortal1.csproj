@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DXCapture.cs" />
     <Compile Include="Localization.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Settings.cs" />
@@ -106,6 +107,9 @@
     <Content Include="Resources\language\en.xml">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
