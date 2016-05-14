@@ -142,6 +142,7 @@
     <string name="AmbiBox">AmbiBox</string>
     <string name="ExternalProfile">Profil capture externe:</string>
     <string name="MediaPortalProfile">MediaPortal capture profile:</string>
+    <string name="ChangeImageDelay">Changer retard d'image:</string>
   </AmbiBox>
   <AtmoOrb>
     <string name="AtmoOrb">AtmoOrb</string>
@@ -156,6 +157,8 @@
     <string name="TCP">TCP</string>
     <string name="UDP">UDP</string>
     <string name="InvertZone">Inverser zone</string>
+    <string name="InternalSmoothing">Utiliser le lissage</string>
+    <string name="SmoothingThreshold">Seuil Lissage</string>
   </AtmoOrb>
   <AtmoWin>
     <string name="AtmoWin">AtmoWin</string>

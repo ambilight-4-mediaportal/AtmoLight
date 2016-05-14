@@ -158,7 +158,7 @@
     <string name="UDP">UDP</string>
     <string name="InvertZone">Invert zone</string>
     <string name="InternalSmoothing">Use smoothing</string>
-    <string name="SmoothingThreshold">Smoothing Threshold</string>
+    <string name="SmoothingThreshold">Smoothing threshold</string>
   </AtmoOrb>
   <AtmoWin>
     <string name="AtmoWin">AtmoWin</string>

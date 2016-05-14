@@ -142,6 +142,7 @@
     <string name="AmbiBox">AmbiBox</string>
     <string name="ExternalProfile">Extern opname profiel:</string>
     <string name="MediaPortalProfile">MediaPortal opname profiel:</string>
+    <string name="ChangeImageDelay">Verander image traging:</string>
   </AmbiBox>
   <AtmoOrb>
     <string name="AtmoOrb">AtmoOrb</string>
@@ -156,6 +157,8 @@
     <string name="TCP">TCP</string>
     <string name="UDP">UDP</string>
     <string name="InvertZone">Zone omkeren</string>
+    <string name="InternalSmoothing">Gebruik smoothing</string>
+    <string name="SmoothingThreshold">Smoothing drempel</string>
   </AtmoOrb>
   <AtmoWin>
     <string name="AtmoWin">AtmoWin</string>

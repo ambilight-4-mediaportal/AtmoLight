@@ -136,6 +136,7 @@
     <string name="AmbiBox">AmbiBox</string>
     <string name="ExternalProfile">Externes Aufanhme Profil:</string>
     <string name="MediaPortalProfile">MediaPortal Aufnahme Profil:</string>
+	<string name="ChangeImageDelay">Bild ändern Verzögerung:</string>
   </AmbiBox>
   <AtmoOrb>
     <string name="AtmoOrb">AtmoOrb</string>
@@ -150,6 +151,8 @@
     <string name="TCP">TCP</string>
     <string name="UDP">UDP</string>
     <string name="InvertZone">Zonen umkehren</string>
+    <string name="InternalSmoothing">Verwenden Sie Glättung</string>
+    <string name="SmoothingThreshold">Glättungsschwelle</string>
   </AtmoOrb>
   <AtmoWin>
     <string name="AtmoWin">AtmoWin</string>
