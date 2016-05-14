@@ -338,7 +338,7 @@ public class Script
     <Id>8d2c6d9d-03c8-4144-b0b8-85e3a2b0e001</Id>
     <Author>gemx, Angie05, Rick164, legnod, azzuro, BassFan, Lightning303, HomeY, Sebastiii, popy</Author>
     <HomePage>https://github.com/ambilight-4-mediaportal/AtmoLight</HomePage>
-    <ForumPage>http:/http://forum.team-mediaportal.com/threads/atmolight-1-10-0-0-2014-04-19.125633/</ForumPage>
+    <ForumPage>http://forum.team-mediaportal.com/threads/atmolight-1-10-0-0-2014-04-19.125633/</ForumPage>
     <UpdateUrl>https://raw.githubusercontent.com/ambilight-4-mediaportal/AtmoLight/master/MPEI/Atmolight_update.xml</UpdateUrl>
     <Version>
       <Major>1</Major>
@@ -346,37 +346,67 @@ public class Script
       <Build>0</Build>
       <Revision>0</Revision>
     </Version>
-    <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
-
-The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.
-
-For this plugin to work you will also need AtmoWin. It will be installed automatically.
-
+    <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
+
+
+
+The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.
+
+
+
+For this plugin to work you will also need AtmoWin. It will be installed automatically.
+
+
+
 MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed.</ExtensionDescription>
-    <VersionDescription>Version 1.18.0.0
-
-- Added "Change Image Delay" option for AmbiBox
-
-- Fixed changing static color via remote API for AtmoWin
-
-- Added support for non-default MP data folder location
-
-- Fixed Boblight not being able to connect properly
-
-- Fixed AtmoOrb UDP IP connection
-
-- Fixed multiple bugs in the AtmoOrb SetupForm tab
-
-- Added option to enable/disable AtmoOrb smoothing
-
-- Improved AtmoOrb static color behaviour
-
-- Added "Smoothing Threshold" option to AtmoOrb handler
-
-- Fixed bug where lights could change even though they shouldn't
-
-- Localization improvements and fixes
-
+    <VersionDescription>Version 1.18.0.0
+
+
+
+- Added "Change Image Delay" option for AmbiBox
+
+
+
+- Fixed changing static color via remote API for AtmoWin
+
+
+
+- Added support for non-default MP data folder location
+
+
+
+- Fixed Boblight not being able to connect properly
+
+
+
+- Fixed AtmoOrb UDP IP connection
+
+
+
+- Fixed multiple bugs in the AtmoOrb SetupForm tab
+
+
+
+- Added option to enable/disable AtmoOrb smoothing
+
+
+
+- Improved AtmoOrb static color behaviour
+
+
+
+- Added "Smoothing Threshold" option to AtmoOrb handler
+
+
+
+- Fixed bug where lights could change even though they shouldn't
+
+
+
+- Localization improvements and fixes
+
+
+
 - MadVR support</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>https://github.com/ambilight-4-mediaportal/Binaries/raw/master/AtmoLight%20for%20MediaPortal/AtmoLight_1.18.0.0.mpe1</OnlineLocation>
