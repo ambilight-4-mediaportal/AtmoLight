@@ -123,7 +123,7 @@ namespace AtmoLight
       // If renderer is MadVR use internal DirectX capture
       if (Settings.useMadVideoRenderer)
       {
-        Log.Debug("Detected MadVR video renderer, switching to internal AtmoLight DirectX capture.");
+        Log.Debug("Detected madVR video renderer, switching to internal AtmoLight DirectX capture.");
 
         // Disable UI capture as it will conflict
         Settings.trueGrabbing = false;
@@ -691,7 +691,6 @@ namespace AtmoLight
     }
 
     #endregion
-
 
     #region DxScreen capture
 

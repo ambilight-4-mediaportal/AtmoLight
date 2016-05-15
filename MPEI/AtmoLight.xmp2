@@ -344,7 +344,7 @@ public class Script
       <Major>1</Major>
       <Minor>18</Minor>
       <Build>0</Build>
-      <Revision>0</Revision>
+      <Revision>1</Revision>
     </Version>
     <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
 

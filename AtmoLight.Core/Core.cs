@@ -56,9 +56,41 @@ namespace AtmoLight
     _2_35x1
   }
 
+  public class ChangeImageData
+  {
+
+    private byte[] pixelDataInfo;
+    private byte[] bmiInfoHeaderInfo;
+    private bool forceInfo;
+
+    public ChangeImageData() { }
+    public ChangeImageData(byte[] pixelData, byte[] bmiInfoHeader, bool force)
+    {
+      pixelDataInfo = pixelData;
+      bmiInfoHeaderInfo = bmiInfoHeader;
+      forceInfo = force;
+    }
+    public byte[] pixelData
+    {
+      get { return pixelDataInfo; }
+      set { pixelDataInfo = value; }
+    }
+    public byte[] bmiInfoHeader
+    {
+      get { return bmiInfoHeaderInfo; }
+      set { bmiInfoHeaderInfo = value; }
+    }
+    public bool force
+    {
+      get { return forceInfo; }
+      set { forceInfo = value; }
+    }
+  }
+
   public class Core
   {
     #region Fields
+
     // Core Instance
     private static Core instance = null;
 
@@ -71,9 +103,9 @@ namespace AtmoLight
     // States
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current active effect
     public ContentEffect apiStoredPlaybackEffect; // Stored playbackEffect to restore when apiOverrideActive is disabled
+    public bool targetChangeImageEnabled;
     public bool apiServerEnabled;
     public bool apiOverrideActive; // If true disables all other AtmoLight internal commands
-
 
     // Lists
     private List<ITargets> targets = new List<ITargets>();
@@ -106,6 +138,7 @@ namespace AtmoLight
     private int delayTime = 0;
     private string gifPath = "";
     private Rectangle blackbarDetectionRect;
+    private System.Collections.Queue targetChangeImageQueue = new System.Collections.Queue();
 
     // General settings for targets
     public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
@@ -225,6 +258,9 @@ namespace AtmoLight
         target.Dispose();
       }
 
+      // Stop Target change image worker thread
+      targetChangeImageEnabled = false;
+
       // Stop API server
       StopAPIserverThread();
     }
@@ -245,6 +281,12 @@ namespace AtmoLight
           target.Initialise(false);
         }
       }
+
+      // Start Target change image worker thread
+      targetChangeImageEnabled = true;
+      Thread t = new Thread(TargetChangeImageWorker);
+      t.IsBackground = true;
+      t.Start();
 
       // Start API server
       apiServerLock = false;
@@ -739,29 +781,39 @@ namespace AtmoLight
       if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
       {
         AddDelayListItem(pixelData, bmiInfoHeader);
-        lock (targetsLock)
-        {
-          foreach (var target in targets)
-          {
-            if (!target.AllowDelay && target.IsConnected())
-            {
-              target.ChangeImage(pixelData, bmiInfoHeader);
-            }
-          }
-        }
+
+        ChangeImageData data = new ChangeImageData(pixelData, bmiInfoHeader, force);
+        targetChangeImageQueue.Enqueue(data);
       }
       else
       {
-        lock (targetsLock)
+        ChangeImageData data = new ChangeImageData(pixelData, bmiInfoHeader, force);
+        targetChangeImageQueue.Enqueue(data);
+      }
+    }
+
+    private void TargetChangeImageWorker()
+    {
+      ChangeImageData data;
+
+      while (targetChangeImageEnabled)
+      {
+        if (targetChangeImageQueue.Count != 0)
         {
-          foreach (var target in targets)
+          data = (ChangeImageData)targetChangeImageQueue.Dequeue();
+
+          lock (targetsLock)
           {
-            if (target.IsConnected() && (target.AllowDelay || !force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
+            foreach (var target in targets)
             {
-              target.ChangeImage(pixelData, bmiInfoHeader);
+              if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
+              {
+                target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+              }
             }
           }
         }
+        Thread.Sleep(1);
       }
     }
 
