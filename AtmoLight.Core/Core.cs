@@ -782,20 +782,8 @@ namespace AtmoLight
         return;
       }
 
-      if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
-      {
-        AddDelayListItem(pixelData, bmiInfoHeader);
-
-        ChangeImageData data = new ChangeImageData(pixelData, bmiInfoHeader, force);
-        targetChangeImageQueue.Enqueue(data);
-        data = null;
-      }
-      else
-      {
-        ChangeImageData data = new ChangeImageData(pixelData, bmiInfoHeader, force);
-        targetChangeImageQueue.Enqueue(data);
-        data = null;
-      }
+      ChangeImageData data = new ChangeImageData(pixelData, bmiInfoHeader, force);
+      targetChangeImageQueue.Enqueue(data);
     }
 
     private void TargetChangeImageWorker()
@@ -817,6 +805,12 @@ namespace AtmoLight
           {
             foreach (var target in targets)
             {
+
+              if (IsDelayEnabled() && !data.force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
+              {
+                AddDelayListItem(data.pixelData, data.bmiInfoHeader);
+              }
+
               if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
               {
                 target.ChangeImage(data.pixelData, data.bmiInfoHeader);
