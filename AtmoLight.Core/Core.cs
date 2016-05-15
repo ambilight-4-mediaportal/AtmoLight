@@ -778,17 +778,27 @@ namespace AtmoLight
       {
         return;
       }
+
+      // Check if queue isn't filling up faster than we process it (> 60s of frames in queue), for instance in case of slower machines a frame pile-up may occur
+      if (targetChangeImageQueue.Count > 3600)
+      {
+        // Wait for it to stabilize first and don't enqueue new frames
+        return;
+      }
+
       if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
       {
         AddDelayListItem(pixelData, bmiInfoHeader);
 
         ChangeImageData data = new ChangeImageData(pixelData, bmiInfoHeader, force);
         targetChangeImageQueue.Enqueue(data);
+        data = null;
       }
       else
       {
         ChangeImageData data = new ChangeImageData(pixelData, bmiInfoHeader, force);
         targetChangeImageQueue.Enqueue(data);
+        data = null;
       }
     }
 
