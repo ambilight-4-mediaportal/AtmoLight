@@ -7,7 +7,7 @@ using pbc = global::Google.ProtocolBuffers.Collections;
 using pbd = global::Google.ProtocolBuffers.Descriptors;
 using scg = global::System.Collections.Generic;
 
-namespace proto
+namespace ProtoBuffer
 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -17,22 +17,22 @@ namespace proto
         #region Extension registration
         public static void RegisterAllExtensions(pb::ExtensionRegistry registry)
         {
-            registry.Add(global::proto.ColorRequest.ColorRequest_);
-            registry.Add(global::proto.ImageRequest.ImageRequest_);
-            registry.Add(global::proto.ClearRequest.ClearRequest_);
+            registry.Add(global::ProtoBuffer.ColorRequest.ColorRequest_);
+            registry.Add(global::ProtoBuffer.ImageRequest.ImageRequest_);
+            registry.Add(global::ProtoBuffer.ClearRequest.ClearRequest_);
         }
         #endregion
         #region Static variables
         internal static pbd::MessageDescriptor internal__static_proto_HyperionRequest__Descriptor;
-        internal static pb::FieldAccess.FieldAccessorTable<global::proto.HyperionRequest, global::proto.HyperionRequest.Builder> internal__static_proto_HyperionRequest__FieldAccessorTable;
+        internal static pb::FieldAccess.FieldAccessorTable<global::ProtoBuffer.HyperionRequest, global::ProtoBuffer.HyperionRequest.Builder> internal__static_proto_HyperionRequest__FieldAccessorTable;
         internal static pbd::MessageDescriptor internal__static_proto_ColorRequest__Descriptor;
-        internal static pb::FieldAccess.FieldAccessorTable<global::proto.ColorRequest, global::proto.ColorRequest.Builder> internal__static_proto_ColorRequest__FieldAccessorTable;
+        internal static pb::FieldAccess.FieldAccessorTable<global::ProtoBuffer.ColorRequest, global::ProtoBuffer.ColorRequest.Builder> internal__static_proto_ColorRequest__FieldAccessorTable;
         internal static pbd::MessageDescriptor internal__static_proto_ImageRequest__Descriptor;
-        internal static pb::FieldAccess.FieldAccessorTable<global::proto.ImageRequest, global::proto.ImageRequest.Builder> internal__static_proto_ImageRequest__FieldAccessorTable;
+        internal static pb::FieldAccess.FieldAccessorTable<global::ProtoBuffer.ImageRequest, global::ProtoBuffer.ImageRequest.Builder> internal__static_proto_ImageRequest__FieldAccessorTable;
         internal static pbd::MessageDescriptor internal__static_proto_ClearRequest__Descriptor;
-        internal static pb::FieldAccess.FieldAccessorTable<global::proto.ClearRequest, global::proto.ClearRequest.Builder> internal__static_proto_ClearRequest__FieldAccessorTable;
+        internal static pb::FieldAccess.FieldAccessorTable<global::ProtoBuffer.ClearRequest, global::ProtoBuffer.ClearRequest.Builder> internal__static_proto_ClearRequest__FieldAccessorTable;
         internal static pbd::MessageDescriptor internal__static_proto_HyperionReply__Descriptor;
-        internal static pb::FieldAccess.FieldAccessorTable<global::proto.HyperionReply, global::proto.HyperionReply.Builder> internal__static_proto_HyperionReply__FieldAccessorTable;
+        internal static pb::FieldAccess.FieldAccessorTable<global::ProtoBuffer.HyperionReply, global::ProtoBuffer.HyperionReply.Builder> internal__static_proto_HyperionReply__FieldAccessorTable;
         #endregion
         #region Descriptor
         public static pbd::FileDescriptor Descriptor
@@ -63,26 +63,26 @@ namespace proto
                 descriptor = root;
                 internal__static_proto_HyperionRequest__Descriptor = Descriptor.MessageTypes[0];
                 internal__static_proto_HyperionRequest__FieldAccessorTable =
-                    new pb::FieldAccess.FieldAccessorTable<global::proto.HyperionRequest, global::proto.HyperionRequest.Builder>(internal__static_proto_HyperionRequest__Descriptor,
+                    new pb::FieldAccess.FieldAccessorTable<global::ProtoBuffer.HyperionRequest, global::ProtoBuffer.HyperionRequest.Builder>(internal__static_proto_HyperionRequest__Descriptor,
                         new string[] { "Command", });
                 internal__static_proto_ColorRequest__Descriptor = Descriptor.MessageTypes[1];
                 internal__static_proto_ColorRequest__FieldAccessorTable =
-                    new pb::FieldAccess.FieldAccessorTable<global::proto.ColorRequest, global::proto.ColorRequest.Builder>(internal__static_proto_ColorRequest__Descriptor,
+                    new pb::FieldAccess.FieldAccessorTable<global::ProtoBuffer.ColorRequest, global::ProtoBuffer.ColorRequest.Builder>(internal__static_proto_ColorRequest__Descriptor,
                         new string[] { "Priority", "RgbColor", "Duration", });
-                global::proto.ColorRequest.ColorRequest_ = pb::GeneratedSingleExtension<global::proto.ColorRequest>.CreateInstance(global::proto.ColorRequest.Descriptor.Extensions[0]);
+                global::ProtoBuffer.ColorRequest.ColorRequest_ = pb::GeneratedSingleExtension<global::ProtoBuffer.ColorRequest>.CreateInstance(global::ProtoBuffer.ColorRequest.Descriptor.Extensions[0]);
                 internal__static_proto_ImageRequest__Descriptor = Descriptor.MessageTypes[2];
                 internal__static_proto_ImageRequest__FieldAccessorTable =
-                    new pb::FieldAccess.FieldAccessorTable<global::proto.ImageRequest, global::proto.ImageRequest.Builder>(internal__static_proto_ImageRequest__Descriptor,
+                    new pb::FieldAccess.FieldAccessorTable<global::ProtoBuffer.ImageRequest, global::ProtoBuffer.ImageRequest.Builder>(internal__static_proto_ImageRequest__Descriptor,
                         new string[] { "Priority", "Imagewidth", "Imageheight", "Imagedata", "Duration", });
-                global::proto.ImageRequest.ImageRequest_ = pb::GeneratedSingleExtension<global::proto.ImageRequest>.CreateInstance(global::proto.ImageRequest.Descriptor.Extensions[0]);
+                global::ProtoBuffer.ImageRequest.ImageRequest_ = pb::GeneratedSingleExtension<global::ProtoBuffer.ImageRequest>.CreateInstance(global::ProtoBuffer.ImageRequest.Descriptor.Extensions[0]);
                 internal__static_proto_ClearRequest__Descriptor = Descriptor.MessageTypes[3];
                 internal__static_proto_ClearRequest__FieldAccessorTable =
-                    new pb::FieldAccess.FieldAccessorTable<global::proto.ClearRequest, global::proto.ClearRequest.Builder>(internal__static_proto_ClearRequest__Descriptor,
+                    new pb::FieldAccess.FieldAccessorTable<global::ProtoBuffer.ClearRequest, global::ProtoBuffer.ClearRequest.Builder>(internal__static_proto_ClearRequest__Descriptor,
                         new string[] { "Priority", });
-                global::proto.ClearRequest.ClearRequest_ = pb::GeneratedSingleExtension<global::proto.ClearRequest>.CreateInstance(global::proto.ClearRequest.Descriptor.Extensions[0]);
+                global::ProtoBuffer.ClearRequest.ClearRequest_ = pb::GeneratedSingleExtension<global::ProtoBuffer.ClearRequest>.CreateInstance(global::ProtoBuffer.ClearRequest.Descriptor.Extensions[0]);
                 internal__static_proto_HyperionReply__Descriptor = Descriptor.MessageTypes[4];
                 internal__static_proto_HyperionReply__FieldAccessorTable =
-                    new pb::FieldAccess.FieldAccessorTable<global::proto.HyperionReply, global::proto.HyperionReply.Builder>(internal__static_proto_HyperionReply__Descriptor,
+                    new pb::FieldAccess.FieldAccessorTable<global::ProtoBuffer.HyperionReply, global::ProtoBuffer.HyperionReply.Builder>(internal__static_proto_HyperionReply__Descriptor,
                         new string[] { "Success", "Error", });
                 return null;
             };
@@ -118,12 +118,12 @@ namespace proto
 
         public static pbd::MessageDescriptor Descriptor
         {
-            get { return global::proto.Message.internal__static_proto_HyperionRequest__Descriptor; }
+            get { return global::ProtoBuffer.Message.internal__static_proto_HyperionRequest__Descriptor; }
         }
 
         protected override pb::FieldAccess.FieldAccessorTable<HyperionRequest, HyperionRequest.Builder> InternalFieldAccessors
         {
-            get { return global::proto.Message.internal__static_proto_HyperionRequest__FieldAccessorTable; }
+            get { return global::ProtoBuffer.Message.internal__static_proto_HyperionRequest__FieldAccessorTable; }
         }
 
         #region Nested types
@@ -143,12 +143,12 @@ namespace proto
 
         public const int CommandFieldNumber = 1;
         public bool hasCommand;
-        public global::proto.HyperionRequest.Types.Command command_ = global::proto.HyperionRequest.Types.Command.COLOR;
+        public global::ProtoBuffer.HyperionRequest.Types.Command command_ = global::ProtoBuffer.HyperionRequest.Types.Command.COLOR;
         public bool HasCommand
         {
             get { return hasCommand; }
         }
-        public global::proto.HyperionRequest.Types.Command Command
+        public global::ProtoBuffer.HyperionRequest.Types.Command Command
         {
             get { return command_; }
         }
@@ -313,12 +313,12 @@ namespace proto
 
             public override pbd::MessageDescriptor DescriptorForType
             {
-                get { return global::proto.HyperionRequest.Descriptor; }
+                get { return global::ProtoBuffer.HyperionRequest.Descriptor; }
             }
 
             public override HyperionRequest DefaultInstanceForType
             {
-                get { return global::proto.HyperionRequest.DefaultInstance; }
+                get { return global::ProtoBuffer.HyperionRequest.DefaultInstance; }
             }
 
             public override HyperionRequest BuildPartial()
@@ -346,7 +346,7 @@ namespace proto
 
             public override Builder MergeFrom(HyperionRequest other)
             {
-                if (other == global::proto.HyperionRequest.DefaultInstance) return this;
+                if (other == global::ProtoBuffer.HyperionRequest.DefaultInstance) return this;
                 PrepareBuilder();
                 if (other.HasCommand)
                 {
@@ -440,12 +440,12 @@ namespace proto
             {
                 get { return result.hasCommand; }
             }
-            public global::proto.HyperionRequest.Types.Command Command
+            public global::ProtoBuffer.HyperionRequest.Types.Command Command
             {
                 get { return result.Command; }
                 set { SetCommand(value); }
             }
-            public Builder SetCommand(global::proto.HyperionRequest.Types.Command value)
+            public Builder SetCommand(global::ProtoBuffer.HyperionRequest.Types.Command value)
             {
                 PrepareBuilder();
                 result.hasCommand = true;
@@ -456,13 +456,13 @@ namespace proto
             {
                 PrepareBuilder();
                 result.hasCommand = false;
-                result.command_ = global::proto.HyperionRequest.Types.Command.COLOR;
+                result.command_ = global::ProtoBuffer.HyperionRequest.Types.Command.COLOR;
                 return this;
             }
         }
         static HyperionRequest()
         {
-            object.ReferenceEquals(global::proto.Message.Descriptor, null);
+            object.ReferenceEquals(global::ProtoBuffer.Message.Descriptor, null);
         }
     }
 
@@ -490,16 +490,16 @@ namespace proto
 
         public static pbd::MessageDescriptor Descriptor
         {
-            get { return global::proto.Message.internal__static_proto_ColorRequest__Descriptor; }
+            get { return global::ProtoBuffer.Message.internal__static_proto_ColorRequest__Descriptor; }
         }
 
         protected override pb::FieldAccess.FieldAccessorTable<ColorRequest, ColorRequest.Builder> InternalFieldAccessors
         {
-            get { return global::proto.Message.internal__static_proto_ColorRequest__FieldAccessorTable; }
+            get { return global::ProtoBuffer.Message.internal__static_proto_ColorRequest__FieldAccessorTable; }
         }
 
         public const int ColorRequestFieldNumber = 10;
-        public static pb::GeneratedExtensionBase<global::proto.ColorRequest> ColorRequest_;
+        public static pb::GeneratedExtensionBase<global::ProtoBuffer.ColorRequest> ColorRequest_;
         public const int PriorityFieldNumber = 1;
         public bool hasPriority;
         public int priority_;
@@ -709,12 +709,12 @@ namespace proto
 
             public override pbd::MessageDescriptor DescriptorForType
             {
-                get { return global::proto.ColorRequest.Descriptor; }
+                get { return global::ProtoBuffer.ColorRequest.Descriptor; }
             }
 
             public override ColorRequest DefaultInstanceForType
             {
-                get { return global::proto.ColorRequest.DefaultInstance; }
+                get { return global::ProtoBuffer.ColorRequest.DefaultInstance; }
             }
 
             public override ColorRequest BuildPartial()
@@ -742,7 +742,7 @@ namespace proto
 
             public override Builder MergeFrom(ColorRequest other)
             {
-                if (other == global::proto.ColorRequest.DefaultInstance) return this;
+                if (other == global::ProtoBuffer.ColorRequest.DefaultInstance) return this;
                 PrepareBuilder();
                 if (other.HasPriority)
                 {
@@ -911,7 +911,7 @@ namespace proto
         }
         static ColorRequest()
         {
-            object.ReferenceEquals(global::proto.Message.Descriptor, null);
+            object.ReferenceEquals(global::ProtoBuffer.Message.Descriptor, null);
         }
     }
 
@@ -939,16 +939,16 @@ namespace proto
 
         public static pbd::MessageDescriptor Descriptor
         {
-            get { return global::proto.Message.internal__static_proto_ImageRequest__Descriptor; }
+            get { return global::ProtoBuffer.Message.internal__static_proto_ImageRequest__Descriptor; }
         }
 
         protected override pb::FieldAccess.FieldAccessorTable<ImageRequest, ImageRequest.Builder> InternalFieldAccessors
         {
-            get { return global::proto.Message.internal__static_proto_ImageRequest__FieldAccessorTable; }
+            get { return global::ProtoBuffer.Message.internal__static_proto_ImageRequest__FieldAccessorTable; }
         }
 
         public const int ImageRequestFieldNumber = 11;
-        public static pb::GeneratedExtensionBase<global::proto.ImageRequest> ImageRequest_;
+        public static pb::GeneratedExtensionBase<global::ProtoBuffer.ImageRequest> ImageRequest_;
         public const int PriorityFieldNumber = 1;
         public bool hasPriority;
         public int priority_;
@@ -1200,12 +1200,12 @@ namespace proto
 
             public override pbd::MessageDescriptor DescriptorForType
             {
-                get { return global::proto.ImageRequest.Descriptor; }
+                get { return global::ProtoBuffer.ImageRequest.Descriptor; }
             }
 
             public override ImageRequest DefaultInstanceForType
             {
-                get { return global::proto.ImageRequest.DefaultInstance; }
+                get { return global::ProtoBuffer.ImageRequest.DefaultInstance; }
             }
 
             public override ImageRequest BuildPartial()
@@ -1233,7 +1233,7 @@ namespace proto
 
             public override Builder MergeFrom(ImageRequest other)
             {
-                if (other == global::proto.ImageRequest.DefaultInstance) return this;
+                if (other == global::ProtoBuffer.ImageRequest.DefaultInstance) return this;
                 PrepareBuilder();
                 if (other.HasPriority)
                 {
@@ -1469,7 +1469,7 @@ namespace proto
         }
         static ImageRequest()
         {
-            object.ReferenceEquals(global::proto.Message.Descriptor, null);
+            object.ReferenceEquals(global::ProtoBuffer.Message.Descriptor, null);
         }
     }
 
@@ -1497,16 +1497,16 @@ namespace proto
 
         public static pbd::MessageDescriptor Descriptor
         {
-            get { return global::proto.Message.internal__static_proto_ClearRequest__Descriptor; }
+            get { return global::ProtoBuffer.Message.internal__static_proto_ClearRequest__Descriptor; }
         }
 
         protected override pb::FieldAccess.FieldAccessorTable<ClearRequest, ClearRequest.Builder> InternalFieldAccessors
         {
-            get { return global::proto.Message.internal__static_proto_ClearRequest__FieldAccessorTable; }
+            get { return global::ProtoBuffer.Message.internal__static_proto_ClearRequest__FieldAccessorTable; }
         }
 
         public const int ClearRequestFieldNumber = 12;
-        public static pb::GeneratedExtensionBase<global::proto.ClearRequest> ClearRequest_;
+        public static pb::GeneratedExtensionBase<global::ProtoBuffer.ClearRequest> ClearRequest_;
         public const int PriorityFieldNumber = 1;
         public bool hasPriority;
         public int priority_;
@@ -1675,12 +1675,12 @@ namespace proto
 
             public override pbd::MessageDescriptor DescriptorForType
             {
-                get { return global::proto.ClearRequest.Descriptor; }
+                get { return global::ProtoBuffer.ClearRequest.Descriptor; }
             }
 
             public override ClearRequest DefaultInstanceForType
             {
-                get { return global::proto.ClearRequest.DefaultInstance; }
+                get { return global::ProtoBuffer.ClearRequest.DefaultInstance; }
             }
 
             public override ClearRequest BuildPartial()
@@ -1708,7 +1708,7 @@ namespace proto
 
             public override Builder MergeFrom(ClearRequest other)
             {
-                if (other == global::proto.ClearRequest.DefaultInstance) return this;
+                if (other == global::ProtoBuffer.ClearRequest.DefaultInstance) return this;
                 PrepareBuilder();
                 if (other.HasPriority)
                 {
@@ -1811,7 +1811,7 @@ namespace proto
         }
         static ClearRequest()
         {
-            object.ReferenceEquals(global::proto.Message.Descriptor, null);
+            object.ReferenceEquals(global::ProtoBuffer.Message.Descriptor, null);
         }
     }
 
@@ -1839,12 +1839,12 @@ namespace proto
 
         public static pbd::MessageDescriptor Descriptor
         {
-            get { return global::proto.Message.internal__static_proto_HyperionReply__Descriptor; }
+            get { return global::ProtoBuffer.Message.internal__static_proto_HyperionReply__Descriptor; }
         }
 
         protected override pb::FieldAccess.FieldAccessorTable<HyperionReply, HyperionReply.Builder> InternalFieldAccessors
         {
-            get { return global::proto.Message.internal__static_proto_HyperionReply__FieldAccessorTable; }
+            get { return global::ProtoBuffer.Message.internal__static_proto_HyperionReply__FieldAccessorTable; }
         }
 
         public const int SuccessFieldNumber = 1;
@@ -2035,12 +2035,12 @@ namespace proto
 
             public override pbd::MessageDescriptor DescriptorForType
             {
-                get { return global::proto.HyperionReply.Descriptor; }
+                get { return global::ProtoBuffer.HyperionReply.Descriptor; }
             }
 
             public override HyperionReply DefaultInstanceForType
             {
-                get { return global::proto.HyperionReply.DefaultInstance; }
+                get { return global::ProtoBuffer.HyperionReply.DefaultInstance; }
             }
 
             public override HyperionReply BuildPartial()
@@ -2068,7 +2068,7 @@ namespace proto
 
             public override Builder MergeFrom(HyperionReply other)
             {
-                if (other == global::proto.HyperionReply.DefaultInstance) return this;
+                if (other == global::ProtoBuffer.HyperionReply.DefaultInstance) return this;
                 PrepareBuilder();
                 if (other.HasSuccess)
                 {
@@ -2205,7 +2205,7 @@ namespace proto
         }
         static HyperionReply()
         {
-            object.ReferenceEquals(global::proto.Message.Descriptor, null);
+            object.ReferenceEquals(global::ProtoBuffer.Message.Descriptor, null);
         }
     }
 

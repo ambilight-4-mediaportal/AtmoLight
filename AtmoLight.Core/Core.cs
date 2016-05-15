@@ -1,21 +1,22 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Net.Sockets;
+using System.Net;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices;
-using System.Drawing;
-using System.IO;
 using System.Windows.Media.Imaging;
-using System.Drawing.Imaging;
-using System.Net.Sockets;
-using System.Linq;
-using System.Net;
+
 using Microsoft.Win32;
-using proto;
 using AtmoLight.Targets;
-using System.Collections;
+using ProtoBuffer;
 
 namespace AtmoLight
 {
@@ -792,33 +793,35 @@ namespace AtmoLight
 
       while (targetChangeImageEnabled)
       {
+        if (targetChangeImageQueue.Count == 0)
+        {
+          Thread.Sleep(1);
+          continue;
+        }
+        
         if (targetChangeImageQueue.Count > 60)
         {
           targetChangeImageQueue.TrimToSize();
         }
 
-        if (targetChangeImageQueue.Count != 0)
+        data = (ChangeImageData)targetChangeImageQueue.Dequeue();
+
+        lock (targetsLock)
         {
-          data = (ChangeImageData)targetChangeImageQueue.Dequeue();
-
-          lock (targetsLock)
+          foreach (var target in targets)
           {
-            foreach (var target in targets)
+
+            if (IsDelayEnabled() && !data.force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
             {
+              AddDelayListItem(data.pixelData, data.bmiInfoHeader);
+            }
 
-              if (IsDelayEnabled() && !data.force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
-              {
-                AddDelayListItem(data.pixelData, data.bmiInfoHeader);
-              }
-
-              if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
-              {
-                target.ChangeImage(data.pixelData, data.bmiInfoHeader);
-              }
+            if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
+            {
+              target.ChangeImage(data.pixelData, data.bmiInfoHeader);
             }
           }
         }
-        Thread.Sleep(1);
       }
     }
 

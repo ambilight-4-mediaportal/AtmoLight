@@ -47,13 +47,12 @@ namespace AtmoLight
 
     private List<ContentEffect> supportedEffects;
 
-    // MadVR
-    public bool errorDuringDirectXcapture;
-
     // Internal DirectX capture
     private static DxScreenCapture dxScreenCapture;
     private bool dxscreenCaptureEnabled;
     private bool dxScreenCaptureInitLock;
+    private bool errorDuringDirectXcapture;
+    private long errorDuringDirectXcaptureTime;
 
     // Frame Fields
     private Microsoft.DirectX.Direct3D.Surface rgbSurface = null; // RGB Surface
@@ -700,8 +699,20 @@ namespace AtmoLight
       {
         try
         {
-          if (coreObject == null || dxScreenCaptureInitLock || errorDuringDirectXcapture)
+          if (errorDuringDirectXcapture && Math.Abs(DateTime.Now.Millisecond - errorDuringDirectXcaptureTime) < TimeSpan.FromSeconds(10).TotalMilliseconds)
           {
+            Thread.Sleep(5);
+            continue;
+          }
+          else if (errorDuringDirectXcapture)
+          {
+            Thread.Sleep(5);
+            errorDuringDirectXcapture = false;
+          }
+
+          if (coreObject == null || dxScreenCaptureInitLock)
+          {
+            Thread.Sleep(5);
             continue;
           }
 
@@ -752,7 +763,6 @@ namespace AtmoLight
 
         if (dxScreenCapture == null)
         {
-
           uint deviceNum = 0;
           MediaPortal.Player.Win32.DISPLAY_DEVICE displayDevice = new MediaPortal.Player.Win32.DISPLAY_DEVICE();
           displayDevice.cb = (ushort)Marshal.SizeOf(displayDevice);
@@ -764,7 +774,7 @@ namespace AtmoLight
             {
               // Set new monitorIndex
               monitorIndex = (int)deviceNum;
-              Log.Debug("Setting detected screen to new detected MonitorIndex : {0}", (int)deviceNum);
+              Log.Debug("Setting detected screen to new detected MonitorIndex: {0}", (int)deviceNum);
             }
             ++deviceNum;
           }
@@ -868,6 +878,7 @@ namespace AtmoLight
         if (s == null)
         {
           errorDuringDirectXcapture = true;
+          errorDuringDirectXcaptureTime = DateTime.Now.Millisecond;
           Log.Error("Error in CaptureDxScreen, no surface to read (wrong monitor index?)");
           return;
         }
