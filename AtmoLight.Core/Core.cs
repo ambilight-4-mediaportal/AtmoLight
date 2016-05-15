@@ -15,6 +15,7 @@ using System.Net;
 using Microsoft.Win32;
 using proto;
 using AtmoLight.Targets;
+using System.Collections;
 
 namespace AtmoLight
 {
@@ -134,11 +135,11 @@ namespace AtmoLight
     // Generic Fields
     private int captureWidth = 64; // Default fallback capture width
     private int captureHeight = 48; // Default fallback capture height
+    private Queue targetChangeImageQueue = new Queue(60);
     private bool delayEnabled = false;
     private int delayTime = 0;
     private string gifPath = "";
     private Rectangle blackbarDetectionRect;
-    private System.Collections.Queue targetChangeImageQueue = new System.Collections.Queue();
 
     // General settings for targets
     public int[] staticColor = { 0, 0, 0 }; // RGB code for static color
@@ -776,13 +777,6 @@ namespace AtmoLight
     {
       if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && GetCurrentEffect() != ContentEffect.GIFReader && GetCurrentEffect() != ContentEffect.VUMeter && GetCurrentEffect() != ContentEffect.VUMeterRainbow)
       {
-        return;
-      }
-
-      // Check if queue isn't filling up faster than we process it (> 60s of frames in queue), for instance in case of slower machines a frame pile-up may occur
-      if (targetChangeImageQueue.Count > 3600)
-      {
-        // Wait for it to stabilize first and don't enqueue new frames
         return;
       }
 
