@@ -11,7 +11,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Threading.Tasks; 
 using System.Windows.Media.Imaging;
 
 using Microsoft.Win32;
@@ -780,6 +780,10 @@ namespace AtmoLight
     {
       if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && GetCurrentEffect() != ContentEffect.GIFReader && GetCurrentEffect() != ContentEffect.VUMeter && GetCurrentEffect() != ContentEffect.VUMeterRainbow)
       {
+        if (targetChangeImageQueue.Count > 0)
+        {
+          targetChangeImageQueue.Clear();
+        }
         return;
       }
 
@@ -793,35 +797,39 @@ namespace AtmoLight
 
       while (targetChangeImageEnabled)
       {
-        if (targetChangeImageQueue.Count == 0)
+        try
         {
-          Thread.Sleep(1);
-          continue;
-        }
-        
-        if (targetChangeImageQueue.Count > 60)
-        {
-          targetChangeImageQueue.TrimToSize();
-        }
-
-        data = (ChangeImageData)targetChangeImageQueue.Dequeue();
-
-        lock (targetsLock)
-        {
-          foreach (var target in targets)
+          if (targetChangeImageQueue.Count == 0 || targets == null)
           {
+            Thread.Sleep(1);
+            continue;
+          }
 
-            if (IsDelayEnabled() && !data.force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
-            {
-              AddDelayListItem(data.pixelData, data.bmiInfoHeader);
-            }
+          if (targetChangeImageQueue.Count > 60)
+          {
+            targetChangeImageQueue.TrimToSize();
+          }
 
-            if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
+          data = (ChangeImageData)targetChangeImageQueue.Dequeue();
+
+          lock (targetsLock)
+          {
+            foreach (var target in targets)
             {
-              target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+
+              if (IsDelayEnabled() && !data.force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
+              {
+                AddDelayListItem(data.pixelData, data.bmiInfoHeader);
+              }
+
+              if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
+              {
+                target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+              }
             }
           }
         }
+        catch (Exception) { }
       }
     }
 
