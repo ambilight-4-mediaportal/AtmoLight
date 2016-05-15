@@ -812,19 +812,30 @@ namespace AtmoLight
 
           data = (ChangeImageData)targetChangeImageQueue.Dequeue();
 
-          lock (targetsLock)
+          if (IsDelayEnabled() && !data.force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
           {
-            foreach (var target in targets)
+            AddDelayListItem(data.pixelData, data.bmiInfoHeader);
+            lock (targetsLock)
             {
-
-              if (IsDelayEnabled() && !data.force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
+              foreach (var target in targets)
               {
-                AddDelayListItem(data.pixelData, data.bmiInfoHeader);
+                if (!target.AllowDelay && target.IsConnected())
+                {
+                  target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                }
               }
-
-              if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
+            }
+          }
+          else
+          {
+            lock (targetsLock)
+            {
+              foreach (var target in targets)
               {
-                target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
+                {
+                  target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                }
               }
             }
           }
