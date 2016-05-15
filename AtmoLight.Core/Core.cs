@@ -87,7 +87,6 @@ namespace AtmoLight
       set { forceInfo = value; }
     }
   }
-
   public class Core
   {
     #region Fields
@@ -651,7 +650,10 @@ namespace AtmoLight
     /// <param name="target"></param>
     public void NewConnectionLost(Target target)
     {
-      OnNewConnectionLost(target);
+      if (OnNewConnectionLost != null)
+      {
+        OnNewConnectionLost(target);
+     }
     }
     #endregion
 
@@ -802,6 +804,11 @@ namespace AtmoLight
 
       while (targetChangeImageEnabled)
       {
+        if (targetChangeImageQueue.Count > 60)
+        {
+          targetChangeImageQueue.TrimToSize();
+        }
+
         if (targetChangeImageQueue.Count != 0)
         {
           data = (ChangeImageData)targetChangeImageQueue.Dequeue();
