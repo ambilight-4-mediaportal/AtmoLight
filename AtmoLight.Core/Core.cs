@@ -780,10 +780,6 @@ namespace AtmoLight
     {
       if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && GetCurrentEffect() != ContentEffect.GIFReader && GetCurrentEffect() != ContentEffect.VUMeter && GetCurrentEffect() != ContentEffect.VUMeterRainbow)
       {
-        if (targetChangeImageQueue.Count > 0)
-        {
-          targetChangeImageQueue.Clear();
-        }
         return;
       }
 
@@ -804,8 +800,15 @@ namespace AtmoLight
             Thread.Sleep(1);
             continue;
           }
-
-          if (targetChangeImageQueue.Count > 60)
+          else if (GetCurrentEffect() == ContentEffect.LEDsDisabled & targetChangeImageQueue.Count > 0)
+          {
+            if (targetChangeImageQueue.Count > 0)
+            {
+              targetChangeImageQueue.Clear();
+            }
+            continue;
+          }
+          else if (targetChangeImageQueue.Count > 60)
           {
             targetChangeImageQueue.TrimToSize();
           }
