@@ -159,7 +159,6 @@ namespace AtmoLight
           return true;
       }
     }
-
     public void ChangeProfile()
     {
       int pos = profileList.IndexOf(currentProfile);
@@ -177,37 +176,12 @@ namespace AtmoLight
       SendCommand("unlock");
     }
 
-    public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
-    {
-      if (changeImageLock)
-      {
-        return;
-      }
-      Task.Factory.StartNew(() => { ChangeImageTask(pixeldata); });
-    }
-
-    public void PowerModeChanged(PowerModes powerMode)
-    {
-      if (powerMode == PowerModes.Resume)
-      {
-        Disconnect();
-        Initialise();
-      }
-      else if (powerMode == PowerModes.Suspend)
-      {
-        ChangeEffect(ContentEffect.LEDsDisabled);
-      }
-    }
-    #endregion
-
     #region ChangeImage
 
-    private void ChangeImageTask(byte[] pixeldata)
+    public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
       try
       {
-        changeImageLock = true;
-
         MemoryMappedFile mmap = MemoryMappedFile.CreateOrOpen("AmbiBox_XBMC_SharedMemory", pixeldata.Length + 11,
           MemoryMappedFileAccess.ReadWrite, MemoryMappedFileOptions.None, null, HandleInheritability.Inheritable);
 
@@ -226,8 +200,9 @@ namespace AtmoLight
 
           if (sw.ElapsedMilliseconds > coreObject.ambiBoxChangeImageDelay)
           {
-            changeImageLock = false;
             sw.Stop();
+            viewStream.Dispose();
+            mmap.Dispose();
             return;
           }
         }
@@ -247,16 +222,28 @@ namespace AtmoLight
 
         viewStream.Write(pixeldata, 0, pixeldata.Length); // Copy pixeldata into mmap
         viewStream.Close();
-        changeImageLock = false;
       }
       catch (Exception e)
       {
-        changeImageLock = false;
-        Log.Error("Error occurred durin AmbiBox changeImage()");
-        Log.Error(e.Message);
+        //Log.Error("Error occurred durin AmbiBox changeImage()");
+        //Log.Error(e.Message);
       }
     }
 
+    #endregion
+
+    public void PowerModeChanged(PowerModes powerMode)
+    {
+      if (powerMode == PowerModes.Resume)
+      {
+        Disconnect();
+        Initialise();
+      }
+      else if (powerMode == PowerModes.Suspend)
+      {
+        ChangeEffect(ContentEffect.LEDsDisabled);
+      }
+    }
     #endregion
 
     #region AmbiBox API

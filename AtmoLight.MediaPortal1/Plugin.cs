@@ -608,6 +608,11 @@ namespace AtmoLight
     private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface,
       FrameGrabber.FrameSource FrameSource)
     {
+      if (coreObject == null)
+      {
+        return;
+      }
+
       if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() ||
           !coreObject.IsAtmoLightOn() || width == 0 || height == 0)
       {
