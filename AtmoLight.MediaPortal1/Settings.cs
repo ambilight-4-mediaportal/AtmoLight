@@ -136,6 +136,7 @@ namespace AtmoLight
 
     // MadVR 
     public static bool useMadVideoRenderer;
+    public static bool useEVRenderer;
     public static int monitorIndex;
     public static string monitorName;
 
@@ -392,6 +393,7 @@ namespace AtmoLight
         monitorIndex = reader.GetValueAsInt("screenselector", "screennumber", 0);
         monitorName = reader.GetValueAsString("screenselector", "screendisplayname", "");
         useMadVideoRenderer = reader.GetValueAsBool("general", "useMadVideoRenderer", false);
+        useEVRenderer = reader.GetValueAsBool("general", "useEVRenderer", true);
       }
     }
     public static void SaveSettings()
