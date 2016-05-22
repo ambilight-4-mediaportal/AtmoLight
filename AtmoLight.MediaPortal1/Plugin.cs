@@ -121,7 +121,7 @@ namespace AtmoLight
 
       // FrameGrabber Handler
       // If renderer is MadVR use internal DirectX capture
-      if (Settings.useMadVideoRenderer)
+      if (Settings.useMadVideoRenderer && GUIGraphicsContext.VideoRenderer != GUIGraphicsContext.VideoRendererType.EVR && GUIGraphicsContext.VideoRenderer != GUIGraphicsContext.VideoRendererType.VMR9)
       {
         Log.Debug("Detected MadVR video renderer, switching to internal AtmoLight DirectX capture.");
 
