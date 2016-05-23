@@ -343,71 +343,35 @@ public class Script
     <Version>
       <Major>1</Major>
       <Minor>18</Minor>
-      <Build>0</Build>
+      <Build>1</Build>
       <Revision>0</Revision>
     </Version>
-    <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
-
-
-
-The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.
-
-
-
-For this plugin to work you will also need AtmoWin. It will be installed automatically.
-
-
-
+    <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
+
+
+
+The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.
+
+
+
+For this plugin to work you will also need AtmoWin. It will be installed automatically.
+
+
+
 MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed.</ExtensionDescription>
-    <VersionDescription>Version 1.18.0.0
-
-
-
-- Added "Change Image Delay" option for AmbiBox
-
-
-
-- Fixed changing static color via remote API for AtmoWin
-
-
-
-- Added support for non-default MP data folder location
-
-
-
-- Fixed Boblight not being able to connect properly
-
-
-
-- Fixed AtmoOrb UDP IP connection
-
-
-
-- Fixed multiple bugs in the AtmoOrb SetupForm tab
-
-
-
-- Added option to enable/disable AtmoOrb smoothing
-
-
-
-- Improved AtmoOrb static color behaviour
-
-
-
-- Added "Smoothing Threshold" option to AtmoOrb handler
-
-
-
-- Fixed bug where lights could change even though they shouldn't
-
-
-
-- Localization improvements and fixes
-
-
-
-- MadVR support</VersionDescription>
+    <VersionDescription>Version 1.18.1.0
+
+- Frames are now queued into 1 worker, this has benefits to performance and resources as we no now longer stack frames in case a device is too slow or irresponsive (mostly AmbiBox) and process them at the speed the device can handle them
+
+- Delay handling has been improved and merged into the new queue solution resulting in cleaner code and less threads running in background
+
+- Further AmbiBox improvements
+
+- Hue configuration now has a new option in its designated target tab to disable it for specific effects (currently VU only)
+
+- Hue theater can now be toggled on / off from the AtmoLight context menu, this setting is non-persistent so is restored to original after each Mediaportal restart
+
+- Improved madVR check to handle rare case where it could switch to internal DirectX capture incorrectly</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>https://github.com/ambilight-4-mediaportal/Binaries/raw/master/AtmoLight%20for%20MediaPortal/AtmoLight_1.18.0.0.mpe1</OnlineLocation>
     <ReleaseDate>2016-05-14T10:45:58</ReleaseDate>
@@ -535,7 +499,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>image\atmolight.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{1b109320-6581-41bb-9ade-32e97bda32ae}-atmolight.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{57f8cbec-0657-4099-b50e-567a1e6aae30}-atmolight.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>

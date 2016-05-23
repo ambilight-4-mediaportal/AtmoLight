@@ -377,7 +377,7 @@ namespace AtmoLight.Targets
           }
           break;
         case ContentEffect.VUMeter:
-          if (coreObject.hueTheaterEnabled)
+          if (coreObject.hueTheaterEnabled && coreObject.hueTheaterEnabledVU)
           {
             // Send theater command  
             TheaterModeIsActivated = true;
@@ -386,7 +386,7 @@ namespace AtmoLight.Targets
           }          
           break;
         case ContentEffect.VUMeterRainbow:
-          if (coreObject.hueTheaterEnabled)
+          if (coreObject.hueTheaterEnabled && coreObject.hueTheaterEnabledVU)
           {
             // Send theater command
             TheaterModeIsActivated = true;

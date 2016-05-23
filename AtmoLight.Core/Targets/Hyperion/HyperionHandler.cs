@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 using Microsoft.Win32;
-using proto;
+using ProtoBuffer;
 
 namespace AtmoLight.Targets
 {

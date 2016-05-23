@@ -289,6 +289,7 @@
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
       this.cbLanguage = new System.Windows.Forms.ComboBox();
       this.lblLanguage = new System.Windows.Forms.Label();
+      this.ckHueTheaterEnableVU = new System.Windows.Forms.CheckBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -2685,12 +2686,13 @@
       // 
       // grpHueTheaterMode
       // 
+      this.grpHueTheaterMode.Controls.Add(this.ckHueTheaterEnableVU);
       this.grpHueTheaterMode.Controls.Add(this.lblHintHueTheaterMode);
       this.grpHueTheaterMode.Controls.Add(this.ckHueTheaterRestoreLights);
       this.grpHueTheaterMode.Controls.Add(this.ckHueTheaterEnabled);
       this.grpHueTheaterMode.Location = new System.Drawing.Point(10, 450);
       this.grpHueTheaterMode.Name = "grpHueTheaterMode";
-      this.grpHueTheaterMode.Size = new System.Drawing.Size(820, 100);
+      this.grpHueTheaterMode.Size = new System.Drawing.Size(820, 131);
       this.grpHueTheaterMode.TabIndex = 29;
       this.grpHueTheaterMode.TabStop = false;
       this.grpHueTheaterMode.Text = "Theater mode";
@@ -3040,6 +3042,16 @@
       this.lblLanguage.TabIndex = 103;
       this.lblLanguage.Text = "Language:";
       // 
+      // ckHueTheaterEnableVU
+      // 
+      this.ckHueTheaterEnableVU.AutoSize = true;
+      this.ckHueTheaterEnableVU.Location = new System.Drawing.Point(12, 100);
+      this.ckHueTheaterEnableVU.Name = "ckHueTheaterEnableVU";
+      this.ckHueTheaterEnableVU.Size = new System.Drawing.Size(221, 17);
+      this.ckHueTheaterEnableVU.TabIndex = 23;
+      this.ckHueTheaterEnableVU.Text = "Use theater mode during VUmeter effects";
+      this.ckHueTheaterEnableVU.UseVisualStyleBackColor = true;
+      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3386,5 +3398,6 @@
     private System.Windows.Forms.Label lblAtmoOrbSmoothingThreshold;
     private System.Windows.Forms.ComboBox cbLanguage;
     private System.Windows.Forms.Label lblLanguage;
+    private System.Windows.Forms.CheckBox ckHueTheaterEnableVU;
   }
 }

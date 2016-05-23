@@ -47,13 +47,12 @@ namespace AtmoLight
 
     private List<ContentEffect> supportedEffects;
 
-    // MadVR
-    public bool errorDuringDirectXcapture;
-
     // Internal DirectX capture
     private static DxScreenCapture dxScreenCapture;
     private bool dxscreenCaptureEnabled;
     private bool dxScreenCaptureInitLock;
+    private bool errorDuringDirectXcapture;
+    private long errorDuringDirectXcaptureTime;
 
     // Frame Fields
     private Microsoft.DirectX.Direct3D.Surface rgbSurface = null; // RGB Surface
@@ -123,7 +122,7 @@ namespace AtmoLight
       // If renderer is MadVR use internal DirectX capture
       if (Settings.useMadVideoRenderer && !Settings.useEVRenderer)
       {
-        Log.Debug("Detected MadVR video renderer, switching to internal AtmoLight DirectX capture.");
+        Log.Debug("Detected madVR video renderer, switching to internal AtmoLight DirectX capture.");
 
         // Disable UI capture as it will conflict
         Settings.trueGrabbing = false;
@@ -279,6 +278,7 @@ namespace AtmoLight
       coreObject.hueUseOverallLightness = Settings.hueUseOverallLightness;
       coreObject.hueTheaterEnabled = Settings.hueTheaterEnabled;
       coreObject.hueTheaterRestoreLights = Settings.hueTheaterRestoreLights;
+      coreObject.hueTheaterEnabledVU = Settings.hueTheaterEnabledVU;
 
       if (Settings.hueTarget)
       {
@@ -609,6 +609,11 @@ namespace AtmoLight
     private void AtmolightPlugin_OnNewFrame(short width, short height, short arWidth, short arHeight, uint pSurface,
       FrameGrabber.FrameSource FrameSource)
     {
+      if (coreObject == null)
+      {
+        return;
+      }
+
       if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() ||
           !coreObject.IsAtmoLightOn() || width == 0 || height == 0)
       {
@@ -692,7 +697,6 @@ namespace AtmoLight
 
     #endregion
 
-
     #region DxScreen capture
 
     private void DxScreenCaptureThread()
@@ -701,8 +705,20 @@ namespace AtmoLight
       {
         try
         {
-          if (coreObject == null || dxScreenCaptureInitLock || errorDuringDirectXcapture)
+          if (errorDuringDirectXcapture && Math.Abs(DateTime.Now.Millisecond - errorDuringDirectXcaptureTime) < TimeSpan.FromSeconds(10).TotalMilliseconds)
           {
+            Thread.Sleep(5);
+            continue;
+          }
+          else if (errorDuringDirectXcapture)
+          {
+            Thread.Sleep(5);
+            errorDuringDirectXcapture = false;
+          }
+
+          if (coreObject == null || dxScreenCaptureInitLock)
+          {
+            Thread.Sleep(5);
             continue;
           }
 
@@ -753,7 +769,6 @@ namespace AtmoLight
 
         if (dxScreenCapture == null)
         {
-
           uint deviceNum = 0;
           MediaPortal.Player.Win32.DISPLAY_DEVICE displayDevice = new MediaPortal.Player.Win32.DISPLAY_DEVICE();
           displayDevice.cb = (ushort)Marshal.SizeOf(displayDevice);
@@ -765,7 +780,7 @@ namespace AtmoLight
             {
               // Set new monitorIndex
               monitorIndex = (int)deviceNum;
-              Log.Debug("Setting detected screen to new detected MonitorIndex : {0}", (int)deviceNum);
+              Log.Debug("Setting detected screen to new detected MonitorIndex: {0}", (int)deviceNum);
             }
             ++deviceNum;
           }
@@ -869,6 +884,7 @@ namespace AtmoLight
         if (s == null)
         {
           errorDuringDirectXcapture = true;
+          errorDuringDirectXcaptureTime = DateTime.Now.Millisecond;
           Log.Error("Error in CaptureDxScreen, no surface to read (wrong monitor index?)");
           return;
         }
@@ -1104,12 +1120,16 @@ namespace AtmoLight
       if (coreObject.GetTarget(Target.Hue) != null)
       {
         dlg.Add(new GUIListItem(Localization.Translate("Hue", "LiveviewGroup")));
-      }
-
-      // Hue set active liveview group
-      if (coreObject.GetTarget(Target.Hue) != null)
-      {
         dlg.Add(new GUIListItem(Localization.Translate("Hue", "StaticColorGroup")));
+
+        if (Settings.hueTheaterEnabled)
+        {
+          dlg.Add(new GUIListItem(Localization.Translate("Hue", "ToggleTheatherModeOff")));
+        }
+        else
+        {
+          dlg.Add(new GUIListItem(Localization.Translate("Hue", "ToggleTheatherModeOn")));
+        }
       }
 
       // Toggle On/Off AtmoLight
@@ -1501,7 +1521,17 @@ namespace AtmoLight
         }
       }
 
-
+      // Hue toggle theater mode
+      if (dlg.SelectedLabelText == Localization.Translate("Hue", "ToggleTheatherModeOff"))
+      {
+        Settings.hueTheaterEnabled = false;
+        coreObject.hueTheaterEnabled = false;
+      }
+      else if (dlg.SelectedLabelText == Localization.Translate("Hue", "ToggleTheatherModeOn"))
+      {
+        Settings.hueTheaterEnabled = true;
+        coreObject.hueTheaterEnabled = true;
+      }
     }
 
     /// <summary>

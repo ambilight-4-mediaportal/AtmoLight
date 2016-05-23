@@ -88,6 +88,7 @@ namespace AtmoLight
       ckHueBridgeDisableOnSuspend.Checked = Settings.hueBridgeDisableOnSuspend;
       ckHueTheaterEnabled.Checked = Settings.hueTheaterEnabled;
       ckHueTheaterRestoreLights.Checked = Settings.hueTheaterRestoreLights;
+      ckHueTheaterEnableVU.Checked = Settings.hueTheaterEnabledVU;
       ckOnMediaStart.Checked = Settings.manualMode;
       ckLowCpu.Checked = Settings.lowCPU;
       ckDelay.Checked = Settings.delay;
@@ -346,6 +347,7 @@ namespace AtmoLight
       ckHueBridgeDisableOnSuspend.Text = Localization.Translate("Hue", "DisableBridgeonSuspend");
       ckHueTheaterEnabled.Text = Localization.Translate("Hue", "HueTheaterEnabled");
       ckHueTheaterRestoreLights.Text = Localization.Translate("Hue", "HueTheaterRestoreLights");
+      ckHueTheaterEnableVU.Text =  Localization.Translate("Hue", "HueTheaterEnabledVU");
 
       lblHueMinDiversion.Text = Localization.Translate("Common", "MinDiversion");
       lblHueThreshold.Text = Localization.Translate("Common", "Threshold");
@@ -1095,6 +1097,7 @@ namespace AtmoLight
       Settings.hueBridgeDisableOnSuspend = ckHueBridgeDisableOnSuspend.Checked;
       Settings.hueTheaterEnabled = ckHueTheaterEnabled.Checked;
       Settings.hueTheaterRestoreLights = ckHueTheaterRestoreLights.Checked;
+      Settings.hueTheaterEnabledVU = ckHueTheaterEnableVU.Checked;
       Settings.atmoWinTarget = ckAtmowinEnabled.Checked;
       Settings.hueTarget = ckHueEnabled.Checked;
       Settings.hyperionTarget = ckHyperionEnabled.Checked;

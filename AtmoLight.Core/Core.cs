@@ -1,20 +1,22 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Net.Sockets;
+using System.Net;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices;
-using System.Drawing;
-using System.IO;
 using System.Windows.Media.Imaging;
-using System.Drawing.Imaging;
-using System.Net.Sockets;
-using System.Linq;
-using System.Net;
+
 using Microsoft.Win32;
-using proto;
 using AtmoLight.Targets;
+using ProtoBuffer;
 
 namespace AtmoLight
 {
@@ -56,9 +58,47 @@ namespace AtmoLight
     _2_35x1
   }
 
+  public class ChangeImageData
+  {
+
+    private byte[] pixelDataInfo;
+    private byte[] bmiInfoHeaderInfo;
+    private long tickInfo;
+    private bool forceInfo;
+
+    public ChangeImageData() { }
+    public ChangeImageData(byte[] pixelData, byte[] bmiInfoHeader, long tick, bool force)
+    {
+      pixelDataInfo = pixelData;
+      bmiInfoHeaderInfo = bmiInfoHeader;
+      tickInfo = tick;
+      forceInfo = force;
+    }
+    public byte[] pixelData
+    {
+      get { return pixelDataInfo; }
+      set { pixelDataInfo = value; }
+    }
+    public byte[] bmiInfoHeader
+    {
+      get { return bmiInfoHeaderInfo; }
+      set { bmiInfoHeaderInfo = value; }
+    }
+    public long tick
+    {
+      get { return tickInfo; }
+      set { tickInfo = value; }
+    }
+    public bool force
+    {
+      get { return forceInfo; }
+      set { forceInfo = value; }
+    }
+  }
   public class Core
   {
     #region Fields
+
     // Core Instance
     private static Core instance = null;
 
@@ -71,9 +111,9 @@ namespace AtmoLight
     // States
     private ContentEffect currentEffect = ContentEffect.Undefined; // Current active effect
     public ContentEffect apiStoredPlaybackEffect; // Stored playbackEffect to restore when apiOverrideActive is disabled
+    public bool targetChangeImageEnabled;
     public bool apiServerEnabled;
     public bool apiOverrideActive; // If true disables all other AtmoLight internal commands
-
 
     // Lists
     private List<ITargets> targets = new List<ITargets>();
@@ -102,6 +142,8 @@ namespace AtmoLight
     // Generic Fields
     private int captureWidth = 64; // Default fallback capture width
     private int captureHeight = 48; // Default fallback capture height
+    private Queue targetChangeImageQueue;
+    private int targetChangeImageQueueSize = 60;
     private bool delayEnabled = false;
     private int delayTime = 0;
     private string gifPath = "";
@@ -200,6 +242,7 @@ namespace AtmoLight
     public double hueSaturation;
     public bool hueTheaterEnabled;
     public bool hueTheaterRestoreLights;
+    public bool hueTheaterEnabledVU;
 
     #endregion
 
@@ -225,6 +268,9 @@ namespace AtmoLight
         target.Dispose();
       }
 
+      // Stop Target change image worker thread
+      targetChangeImageEnabled = false;
+
       // Stop API server
       StopAPIserverThread();
     }
@@ -245,6 +291,12 @@ namespace AtmoLight
           target.Initialise(false);
         }
       }
+
+      // Start Target change image worker thread
+      targetChangeImageEnabled = true;
+      Thread t = new Thread(TargetChangeImageWorker);
+      t.IsBackground = true;
+      t.Start();
 
       // Start API server
       apiServerLock = false;
@@ -608,75 +660,9 @@ namespace AtmoLight
     /// <param name="target"></param>
     public void NewConnectionLost(Target target)
     {
-      OnNewConnectionLost(target);
-    }
-    #endregion
-
-    #region Delay Lists
-    /// <summary>
-    /// Add new Items to the delay lists.
-    /// </summary>
-    /// <param name="bmiInfoHeader">Info Header</param>
-    /// <param name="pixelData">Pixel Data</param>
-    private void AddDelayListItem(byte[] pixelData, byte[] bmiInfoHeader)
-    {
-      if (!setPixelDataThreadHelper.IsAlive)
+      if (OnNewConnectionLost != null)
       {
-        return;
-      }
-      if (delayTimingList.Count <= 60)
-      {
-        lock (listLock)
-        {
-          delayTimingList.Add(Win32API.GetTickCount());
-          pixelDataList.Add(pixelData);
-          bmiInfoHeaderList.Add(bmiInfoHeader);
-        }
-      }
-      else
-      {
-        Log.Error("Delay buffer overflow.");
-      }
-    }
-
-    /// <summary>
-    /// Clear all delay lists.
-    /// </summary>
-    private void ClearDelayLists()
-    {
-      Log.Debug("Clearing delay lists.");
-      lock (listLock)
-      {
-        delayTimingList.Clear();
-        pixelDataList.Clear();
-        bmiInfoHeaderList.Clear();
-      }
-      Log.Debug("Delay lists cleared.");
-    }
-
-    /// <summary>
-    /// Trim all delay lists.
-    /// </summary>
-    private void TrimDelayLists()
-    {
-      lock (listLock)
-      {
-        delayTimingList.TrimExcess();
-        pixelDataList.TrimExcess();
-        bmiInfoHeaderList.TrimExcess();
-      }
-    }
-
-    /// <summary>
-    /// Delete first entry in all delay lists.
-    /// </summary>
-    private void DeleteFirstDelayListsItems()
-    {
-      lock (listLock)
-      {
-        delayTimingList.RemoveAt(0);
-        pixelDataList.RemoveAt(0);
-        bmiInfoHeaderList.RemoveAt(0);
+        OnNewConnectionLost(target);
       }
     }
     #endregion
@@ -736,32 +722,97 @@ namespace AtmoLight
       {
         return;
       }
-      if (IsDelayEnabled() && !force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
+
+      ChangeImageData data = new ChangeImageData(pixelData, bmiInfoHeader, Win32API.GetTickCount(), force);
+      targetChangeImageQueue.Enqueue(data);
+    }
+
+    private void TargetChangeImageWorker()
+    {
+      ChangeImageData data;
+      if (delayEnabled)
       {
-        AddDelayListItem(pixelData, bmiInfoHeader);
-        lock (targetsLock)
-        {
-          foreach (var target in targets)
-          {
-            if (!target.AllowDelay && target.IsConnected())
-            {
-              target.ChangeImage(pixelData, bmiInfoHeader);
-            }
-          }
-        }
+        targetChangeImageQueueSize = delayTime;
       }
-      else
+
+      targetChangeImageQueue = new Queue(targetChangeImageQueueSize);
+
+      while (targetChangeImageEnabled)
       {
-        lock (targetsLock)
+        try
         {
-          foreach (var target in targets)
+          if (targetChangeImageQueue.Count == 0 || targets == null)
           {
-            if (target.IsConnected() && (target.AllowDelay || !force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
+            // Check if delay was changed during runtime or is invalid
+            if (delayEnabled && targetChangeImageQueueSize != delayTime)
             {
-              target.ChangeImage(pixelData, bmiInfoHeader);
+              targetChangeImageQueueSize = delayTime;
+              targetChangeImageQueue.Clear();
+              targetChangeImageQueue = new Queue(targetChangeImageQueueSize);
+              Log.Debug("AtmoLight - target frame queue size set to delay size: " + targetChangeImageQueueSize);
+            }
+
+            Thread.Sleep(1);
+            continue;
+          }
+          else if (GetCurrentEffect() == ContentEffect.LEDsDisabled & targetChangeImageQueue.Count > 0)
+          {
+            targetChangeImageQueue.Clear();
+            continue;
+          }
+          else if (targetChangeImageQueue.Count > targetChangeImageQueueSize)
+          {
+            targetChangeImageQueue.TrimToSize();
+          }
+
+          data = (ChangeImageData)targetChangeImageQueue.Peek();
+
+          if (IsDelayEnabled() && !data.force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
+          {
+            bool frameTickMatched = false;
+            if (Win32API.GetTickCount() >= (data.tick + delayTime))
+            {
+              //Log.Debug("Frame tick matched -> {0} / {1}", Win32API.GetTickCount(), data.tick + delayTime);
+              targetChangeImageQueue.Dequeue();
+              frameTickMatched = true;
+            }
+
+            lock (targetsLock)
+            {
+              foreach (var target in targets)
+              {
+                if (!target.AllowDelay && target.IsConnected())
+                {
+                  target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                }
+                else if (target.IsConnected() && frameTickMatched)
+                {
+                  target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                }
+                else
+                {
+                  continue;
+                }
+              }
+            }
+          }
+          else
+          {
+            data = (ChangeImageData)targetChangeImageQueue.Dequeue();
+
+            lock (targetsLock)
+            {
+              foreach (var target in targets)
+              {
+                if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
+                {
+                  target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                }
+              }
             }
           }
         }
+        catch (Exception) { }
       }
     }
 
@@ -783,13 +834,13 @@ namespace AtmoLight
         // Horizontal Scan
         if (blackbarDetectionHorizontal)
         {
-          for (int y = 0; y < (int) (blackBarBitmap.Height/3); y++)
+          for (int y = 0; y < (int)(blackBarBitmap.Height / 3); y++)
           {
             if (yTopBound != -1 && yBottomBound != -1)
             {
               break;
             }
-            for (int x = (int) (blackBarBitmap.Width*0.33); x < (int) (blackBarBitmap.Width*0.66); x++)
+            for (int x = (int)(blackBarBitmap.Width * 0.33); x < (int)(blackBarBitmap.Width * 0.66); x++)
             {
               if (yTopBound != -1 && yBottomBound != -1)
               {
@@ -832,13 +883,13 @@ namespace AtmoLight
         // Vertical Scan
         if (blackbarDetectionVertical)
         {
-          for (int x = 0; x < (int) (blackBarBitmap.Width/3); x++)
+          for (int x = 0; x < (int)(blackBarBitmap.Width / 3); x++)
           {
             if (xLeftBound != -1 && xRightBound != -1)
             {
               break;
             }
-            for (int y = (int) (blackBarBitmap.Height*0.33); y < (int) (blackBarBitmap.Height*0.66); y++)
+            for (int y = (int)(blackBarBitmap.Height * 0.33); y < (int)(blackBarBitmap.Height * 0.66); y++)
             {
               if (xLeftBound != -1 && xRightBound != -1)
               {
@@ -997,7 +1048,6 @@ namespace AtmoLight
         if (delayEnabled)
         {
           Log.Debug("Adding {0}ms delay to the LEDs.", delayTime);
-          StartSetPixelDataThread();
         }
       }
       else if (effect == ContentEffect.GIFReader)
@@ -1011,6 +1061,7 @@ namespace AtmoLight
 
       return true;
     }
+
 
     /// <summary>
     /// Change profile.
@@ -1041,11 +1092,7 @@ namespace AtmoLight
         delayTime = delay;
       }
       delayEnabled = true;
-      if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-      {
-        Log.Info("Adding {0}ms delay to LEDs.", delayTime);
-        StartSetPixelDataThread();
-      }
+      Log.Info("Adding {0}ms delay to LEDs.", delayTime);
     }
 
     /// <summary>
@@ -1054,11 +1101,7 @@ namespace AtmoLight
     public void DisableDelay()
     {
       delayEnabled = false;
-      if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-      {
-        Log.Info("Removing delay.");
-        StopSetPixelDataThread();
-      }
+      Log.Info("Removing delay.");
     }
 
     public void PowerModeChanged(PowerModes powerMode)
@@ -1084,26 +1127,6 @@ namespace AtmoLight
     #endregion
 
     #region Threads
-    /// <summary>
-    /// Start the SetPixelData thread.
-    /// </summary>
-    private void StartSetPixelDataThread()
-    {
-      setPixelDataLock = false;
-      setPixelDataThreadHelper = new Thread(() => SetPixelDataThread());
-      setPixelDataThreadHelper.Name = "AtmoLight SetPixelData";
-      setPixelDataThreadHelper.IsBackground = true;
-      setPixelDataThreadHelper.Start();
-    }
-
-    /// <summary>
-    /// Stop the SetPixelData thread.
-    /// </summary>
-    private void StopSetPixelDataThread()
-    {
-      setPixelDataLock = true;
-    }
-
     /// <summary>
     /// Start the GIFReader thread.
     /// </summary>
@@ -1173,46 +1196,8 @@ namespace AtmoLight
     /// </summary>
     private void StopAllThreads()
     {
-      StopSetPixelDataThread();
       StopGIFReaderThread();
       StopVUMeterThread();
-    }
-
-    /// <summary>
-    /// Send pixel data to targets when MediaPortal liveview is used.
-    /// Also add a delay specified in settings.
-    /// This method is designed to run as its own thread.
-    /// </summary>
-    private void SetPixelDataThread()
-    {
-      try
-      {
-        Log.Debug("Starting delay thread.");
-        while (!setPixelDataLock)
-        {
-          if (delayTimingList.Count >= 1 && IsConnected())
-          {
-            if (Win32API.GetTickCount() >= (delayTimingList[0] + delayTime))
-            {
-              SendPixelData(pixelDataList[0], bmiInfoHeaderList[0], true);
-              DeleteFirstDelayListsItems();
-
-              // Trim the lists, to prevent a memory leak.
-              TrimDelayLists();
-            }
-          }
-          // Sleep 5ms to reduce cpu load.
-          System.Threading.Thread.Sleep(5);
-        }
-        ClearDelayLists();
-      }
-      catch (Exception ex)
-      {
-        Log.Error("Could not send pixeldata to targets.");
-        Log.Error("Exception: {0}", ex.Message);
-
-        ClearDelayLists();
-      }
     }
 
     /// <summary>
@@ -1224,7 +1209,7 @@ namespace AtmoLight
       {
         // Get gif as stream
         Stream gifSource = new FileStream(gifPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-        
+
         // Decode gif
         GifBitmapDecoder gifDecoder = new GifBitmapDecoder(gifSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
         BitmapMetadata gifDecoderMetadata = (BitmapMetadata)gifDecoder.Metadata;
@@ -1277,7 +1262,7 @@ namespace AtmoLight
                 }
               }
             }
-            
+
             // Resize Bitmap
             gifBitmap = new Bitmap(gifBitmap, new Size(GetCaptureWidth(), GetCaptureHeight()));
 

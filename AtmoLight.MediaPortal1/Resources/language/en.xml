@@ -186,11 +186,14 @@
     <string name="DisableBridgeonSuspend">Turn off Hue Bridge on suspend</string>
     <string name="HueTheaterEnabled">Enable theater mode</string>
     <string name="HueTheaterRestoreLights">Restore lights after playback stopped</string>
+    <string name="HueTheaterEnabledVU">Use theater mode during VUmeter effects</string>
     <string name="AverageColor">Average color settings</string>
     <string name="All">All</string>
     <string name="Off">Off</string>
     <string name="LiveviewGroup">Hue - set active liveview group</string>
     <string name="DisableAllGroups">Disable for all groups</string>
+    <string name="ToggleTheatherModeOff">Hue - turn OFF theater mode</string>
+    <string name="ToggleTheatherModeOn">Hue - turn ON theater mode</string>
     <string name="StaticColorGroup">Hue - set static color for group</string>
     <string name="SelectStaticColorGroup">Hue - select static color for group</string>
     <string name="Hint">Hint: requires AtmoHue to be running on the above IP and Port to function, do not enter your Hue bridge information here</string>
