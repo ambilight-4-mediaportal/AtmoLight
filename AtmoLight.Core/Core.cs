@@ -242,6 +242,7 @@ namespace AtmoLight
     public double hueSaturation;
     public bool hueTheaterEnabled;
     public bool hueTheaterRestoreLights;
+    public bool hueTheaterEnabledVU;
 
     #endregion
 

@@ -108,6 +108,7 @@ namespace AtmoLight
     public static bool hueUseOverallLightness;
     public static bool hueTheaterEnabled;
     public static bool hueTheaterRestoreLights;
+    public static bool hueTheaterEnabledVU;
 
     // AmbiBox
     public static bool ambiBoxTarget;
@@ -136,6 +137,7 @@ namespace AtmoLight
 
     // MadVR 
     public static bool useMadVideoRenderer;
+    public static bool useEVRenderer;
     public static int monitorIndex;
     public static string monitorName;
 
@@ -328,6 +330,7 @@ namespace AtmoLight
         hueBridgeDisableOnSuspend = reader.GetValueAsBool("atmolight", "hueBridgeDisableOnSuspend", false);
         hueTheaterEnabled = reader.GetValueAsBool("atmolight", "hueTheaterEnabled", false);
         hueTheaterRestoreLights = reader.GetValueAsBool("atmolight", "hueTheaterRestoreLights", false);
+        hueTheaterEnabledVU = reader.GetValueAsBool("atmolight", "hueTheaterEnabledVU", false);
         boblightIP = reader.GetValueAsString("atmolight", "boblightIP", "127.0.0.1");
         boblightPort = reader.GetValueAsInt("atmolight", "boblightPort", 19333);
         boblightMaxFPS = reader.GetValueAsInt("atmolight", "boblightMaxFPS", 10);
@@ -392,6 +395,7 @@ namespace AtmoLight
         monitorIndex = reader.GetValueAsInt("screenselector", "screennumber", 0);
         monitorName = reader.GetValueAsString("screenselector", "screendisplayname", "");
         useMadVideoRenderer = reader.GetValueAsBool("general", "useMadVideoRenderer", false);
+        useEVRenderer = reader.GetValueAsBool("general", "useEVRenderer", true);
       }
     }
     public static void SaveSettings()
@@ -456,6 +460,7 @@ namespace AtmoLight
         reader.SetValueAsBool("atmolight", "hueBridgeDisableOnSuspend", hueBridgeDisableOnSuspend);
         reader.SetValueAsBool("atmolight", "hueTheaterEnabled", hueTheaterEnabled);
         reader.SetValueAsBool("atmolight", "hueTheaterRestoreLights", hueTheaterRestoreLights);
+        reader.SetValueAsBool("atmolight", "hueTheaterEnabledVU", hueTheaterEnabledVU);          
         reader.SetValue("atmolight", "boblightIP", boblightIP);
         reader.SetValue("atmolight", "boblightPort", boblightPort);
         reader.SetValue("atmolight", "boblightMaxFPS", boblightMaxFPS);

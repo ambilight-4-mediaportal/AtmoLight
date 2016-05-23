@@ -120,7 +120,7 @@ namespace AtmoLight
 
       // FrameGrabber Handler
       // If renderer is MadVR use internal DirectX capture
-      if (Settings.useMadVideoRenderer && GUIGraphicsContext.VideoRenderer != GUIGraphicsContext.VideoRendererType.EVR && GUIGraphicsContext.VideoRenderer != GUIGraphicsContext.VideoRendererType.VMR9)
+      if (Settings.useMadVideoRenderer && !Settings.useEVRenderer)
       {
         Log.Debug("Detected madVR video renderer, switching to internal AtmoLight DirectX capture.");
 
@@ -278,6 +278,7 @@ namespace AtmoLight
       coreObject.hueUseOverallLightness = Settings.hueUseOverallLightness;
       coreObject.hueTheaterEnabled = Settings.hueTheaterEnabled;
       coreObject.hueTheaterRestoreLights = Settings.hueTheaterRestoreLights;
+      coreObject.hueTheaterEnabledVU = Settings.hueTheaterEnabledVU;
 
       if (Settings.hueTarget)
       {
@@ -1119,12 +1120,16 @@ namespace AtmoLight
       if (coreObject.GetTarget(Target.Hue) != null)
       {
         dlg.Add(new GUIListItem(Localization.Translate("Hue", "LiveviewGroup")));
-      }
-
-      // Hue set active liveview group
-      if (coreObject.GetTarget(Target.Hue) != null)
-      {
         dlg.Add(new GUIListItem(Localization.Translate("Hue", "StaticColorGroup")));
+
+        if (Settings.hueTheaterEnabled)
+        {
+          dlg.Add(new GUIListItem(Localization.Translate("Hue", "ToggleTheatherModeOff")));
+        }
+        else
+        {
+          dlg.Add(new GUIListItem(Localization.Translate("Hue", "ToggleTheatherModeOn")));
+        }
       }
 
       // Toggle On/Off AtmoLight
@@ -1516,7 +1521,17 @@ namespace AtmoLight
         }
       }
 
-
+      // Hue toggle theater mode
+      if (dlg.SelectedLabelText == Localization.Translate("Hue", "ToggleTheatherModeOff"))
+      {
+        Settings.hueTheaterEnabled = false;
+        coreObject.hueTheaterEnabled = false;
+      }
+      else if (dlg.SelectedLabelText == Localization.Translate("Hue", "ToggleTheatherModeOn"))
+      {
+        Settings.hueTheaterEnabled = true;
+        coreObject.hueTheaterEnabled = true;
+      }
     }
 
     /// <summary>
