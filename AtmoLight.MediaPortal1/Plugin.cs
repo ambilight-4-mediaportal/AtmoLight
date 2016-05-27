@@ -689,6 +689,12 @@ namespace AtmoLight
           Log.Error("Error in AtmolightPlugin_OnNewFrame.");
           Log.Error("Exception: {0}", ex.Message);
 
+          // Clear target queue on error
+          if (coreObject != null)
+          {
+            coreObject.targetChangeImageQueue.Clear();
+          }
+
           rgbSurface.Dispose();
           rgbSurface = null;
         }

@@ -142,7 +142,7 @@ namespace AtmoLight
     // Generic Fields
     private int captureWidth = 64; // Default fallback capture width
     private int captureHeight = 48; // Default fallback capture height
-    private Queue targetChangeImageQueue;
+    public Queue targetChangeImageQueue;
     private int targetChangeImageQueueSize = 60;
     private bool delayEnabled = false;
     private int delayTime = 0;
@@ -851,7 +851,7 @@ namespace AtmoLight
               {
                 colorTemp = blackBarBitmap.GetPixel(x, y);
                 if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold ||
-                    colorTemp.B > blackbarDetectionThreshold)
+                  colorTemp.B > blackbarDetectionThreshold)
                 {
                   yTopBound = y;
                   if (blackbarDetectionLinkAreas)
@@ -866,7 +866,7 @@ namespace AtmoLight
               {
                 colorTemp = blackBarBitmap.GetPixel(x, blackBarBitmap.Height - 1 - y);
                 if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold ||
-                    colorTemp.B > blackbarDetectionThreshold)
+                  colorTemp.B > blackbarDetectionThreshold)
                 {
                   yBottomBound = blackBarBitmap.Height - y;
                   if (blackbarDetectionLinkAreas)
@@ -879,7 +879,6 @@ namespace AtmoLight
             }
           }
         }
-
         // Vertical Scan
         if (blackbarDetectionVertical)
         {
@@ -900,7 +899,7 @@ namespace AtmoLight
               {
                 colorTemp = blackBarBitmap.GetPixel(x, y);
                 if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold ||
-                    colorTemp.B > blackbarDetectionThreshold)
+                  colorTemp.B > blackbarDetectionThreshold)
                 {
                   xLeftBound = x;
                   if (blackbarDetectionLinkAreas)
@@ -915,7 +914,7 @@ namespace AtmoLight
               {
                 colorTemp = blackBarBitmap.GetPixel(blackBarBitmap.Width - 1 - x, y);
                 if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold ||
-                    colorTemp.B > blackbarDetectionThreshold)
+                  colorTemp.B > blackbarDetectionThreshold)
                 {
                   xRightBound = blackBarBitmap.Width - x;
                   if (blackbarDetectionLinkAreas)
@@ -928,15 +927,12 @@ namespace AtmoLight
             }
           }
         }
-        yTopBound = yTopBound == -1 ? 0 : yTopBound;
-        yBottomBound = yBottomBound == -1 ? blackBarBitmap.Height : yBottomBound;
-        xLeftBound = xLeftBound == -1 ? 0 : xLeftBound;
-        xRightBound = xRightBound == -1 ? blackBarBitmap.Width : xRightBound;
 
-        if (yTopBound != 0 || yBottomBound != blackBarBitmap.Height || xLeftBound != 0 || xRightBound != blackBarBitmap.Width)
+        if (yTopBound != -1 && yBottomBound != -1 && xLeftBound != -1 && xRightBound != -1)
         {
           blackbarDetectionRect = new Rectangle(xLeftBound, yTopBound, xRightBound - xLeftBound, yBottomBound - yTopBound);
         }
+
         blackBarBitmap.Dispose();
         blackbarStopwatch.Restart();
       }

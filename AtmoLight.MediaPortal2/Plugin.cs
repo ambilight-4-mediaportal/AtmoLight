@@ -481,6 +481,12 @@ namespace AtmoLight
         surfaceDestination = null;
         Log.Error("Error in UICapture.");
         Log.Error("Exception: {0}", ex.Message);
+
+        // Clear target queue on error
+        if (coreObject != null)
+        {
+          coreObject.targetChangeImageQueue.Clear();
+        }
       }
     }
 
