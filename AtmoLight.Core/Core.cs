@@ -743,15 +743,6 @@ namespace AtmoLight
         {
           if (targetChangeImageQueue.Count == 0 || targets == null)
           {
-            // Check if delay was changed during runtime or is invalid
-            if (delayEnabled && targetChangeImageQueueSize != delayTime)
-            {
-              targetChangeImageQueueSize = delayTime;
-              targetChangeImageQueue.Clear();
-              targetChangeImageQueue = new Queue(targetChangeImageQueueSize);
-              Log.Debug("AtmoLight - target frame queue size set to delay size: " + targetChangeImageQueueSize);
-            }
-
             Thread.Sleep(1);
             continue;
           }
@@ -763,6 +754,15 @@ namespace AtmoLight
           else if (targetChangeImageQueue.Count > targetChangeImageQueueSize)
           {
             targetChangeImageQueue.TrimToSize();
+          }
+
+          // Check if delay was changed during runtime or is invalid
+          if (delayEnabled && targetChangeImageQueueSize != delayTime)
+          {
+            targetChangeImageQueueSize = delayTime;
+            targetChangeImageQueue.Clear();
+            targetChangeImageQueue = new Queue(targetChangeImageQueueSize);
+            Log.Debug("AtmoLight - target frame queue size set to delay size: " + targetChangeImageQueueSize);
           }
 
           data = (ChangeImageData)targetChangeImageQueue.Peek();
@@ -791,6 +791,7 @@ namespace AtmoLight
                 }
                 else
                 {
+                  Thread.Sleep(1);
                   continue;
                 }
               }
