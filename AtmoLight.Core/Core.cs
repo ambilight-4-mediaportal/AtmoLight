@@ -441,14 +441,26 @@ namespace AtmoLight
     /// </summary>
     /// <param name="delay">Delay in ms.</param>
     /// <returns>true or false</returns>
-    public bool SetDelay(int delay)
+    public bool SetDelay(int delay, float refreshRate)
     {
       if (delay > 0)
       {
         Log.Debug("Changing delay to {0}ms.", delay);
+
         delayTime = delay;
+
+        if (targetChangeImageQueue != null)
+        {
+          // Set queue size to delay * refresh rate
+          int frameQueueSize = delay * (int)refreshRate;
+          Log.Debug("Target frame queue size set to: {0},  based on delay {1} and refresh rate {2}.", frameQueueSize, delay, refreshRate);
+
+          targetChangeImageQueueSize = frameQueueSize;
+          targetChangeImageQueue.Clear();
+        }
         return true;
       }
+
       return false;
     }
 
@@ -554,7 +566,6 @@ namespace AtmoLight
     {
       return delayTime;
     }
-
     /// <summary>
     /// Returns the static color.
     /// </summary>
@@ -730,10 +741,6 @@ namespace AtmoLight
     private void TargetChangeImageWorker()
     {
       ChangeImageData data;
-      if (delayEnabled)
-      {
-        targetChangeImageQueueSize = delayTime;
-      }
 
       targetChangeImageQueue = new Queue(targetChangeImageQueueSize);
 
@@ -746,7 +753,7 @@ namespace AtmoLight
             Thread.Sleep(1);
             continue;
           }
-          else if (GetCurrentEffect() == ContentEffect.LEDsDisabled & targetChangeImageQueue.Count > 0)
+          else if (GetCurrentEffect() == ContentEffect.LEDsDisabled && targetChangeImageQueue.Count > 0)
           {
             targetChangeImageQueue.Clear();
             continue;
@@ -756,23 +763,15 @@ namespace AtmoLight
             targetChangeImageQueue.TrimToSize();
           }
 
-          // Check if delay was changed during runtime or is invalid
-          if (delayEnabled && targetChangeImageQueueSize != delayTime)
-          {
-            targetChangeImageQueueSize = delayTime;
-            targetChangeImageQueue.Clear();
-            targetChangeImageQueue = new Queue(targetChangeImageQueueSize);
-            Log.Debug("AtmoLight - target frame queue size set to delay size: " + targetChangeImageQueueSize);
-          }
-
           data = (ChangeImageData)targetChangeImageQueue.Peek();
 
           if (IsDelayEnabled() && !data.force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
           {
             bool frameTickMatched = false;
-            if (Win32API.GetTickCount() >= (data.tick + delayTime))
+            long tickCount = Win32API.GetTickCount();
+
+            if (tickCount >= (data.tick + delayTime))
             {
-              //Log.Debug("Frame tick matched -> {0} / {1}", Win32API.GetTickCount(), data.tick + delayTime);
               targetChangeImageQueue.Dequeue();
               frameTickMatched = true;
             }
@@ -787,6 +786,7 @@ namespace AtmoLight
                 }
                 else if (target.IsConnected() && frameTickMatched)
                 {
+                  //Log.Debug("Frame tick matched  -> {0} / {1}", Win32API.GetTickCount(), data.tick + delayTime);
                   target.ChangeImage(data.pixelData, data.bmiInfoHeader);
                 }
                 else
@@ -813,10 +813,10 @@ namespace AtmoLight
             }
           }
         }
-        catch (Exception) { }
+        catch (Exception){ 
+        }
       }
     }
-
     private Stream BlackbarDetection(Stream stream)
     {
       if (!blackbarStopwatch.IsRunning)

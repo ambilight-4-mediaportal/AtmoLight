@@ -158,7 +158,7 @@ namespace AtmoLight
       coreObject = Core.GetInstance();
 
       // General settings
-      coreObject.SetDelay(Settings.delayReferenceTime);
+      coreObject.SetDelay(Settings.delayReferenceTime, GetRefreshRate());
       if (Settings.delay)
       {
         coreObject.EnableDelay();
@@ -407,7 +407,7 @@ namespace AtmoLight
       {
         coreObject.SetDelay(
           (int)
-            (((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime));
+            (((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime), GetRefreshRate());
       }
     }
 
@@ -1370,7 +1370,7 @@ namespace AtmoLight
         if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) &&
             (delayTimeHelper <= 1000))
         {
-          coreObject.SetDelay(delayTimeHelper);
+          coreObject.SetDelay(delayTimeHelper, GetRefreshRate());
           Settings.delayReferenceTime =
             (int)(((float)delayTimeHelper * (float)GetRefreshRate()) / Settings.delayReferenceRefreshRate);
         }
