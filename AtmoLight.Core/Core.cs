@@ -440,6 +440,7 @@ namespace AtmoLight
     /// Changes the delay time.
     /// </summary>
     /// <param name="delay">Delay in ms.</param>
+    /// <param name="refreshrate">Refreshrate in hz.</param>
     /// <returns>true or false</returns>
     public bool SetDelay(int delay, float refreshRate)
     {
@@ -453,11 +454,13 @@ namespace AtmoLight
         {
           // Set queue size to delay * refresh rate
           int frameQueueSize = delay * (int)refreshRate;
-          Log.Debug("Target frame queue size set to: {0},  based on delay {1} and refresh rate {2}.", frameQueueSize, delay, refreshRate);
+          Log.Debug("Target frame queue size set to: {0}, based on delay {1} and refresh rate {2}.", frameQueueSize, delay, refreshRate);
 
           targetChangeImageQueueSize = frameQueueSize;
           targetChangeImageQueue.Clear();
+          targetChangeImageQueue = new Queue(targetChangeImageQueueSize);
         }
+
         return true;
       }
 
@@ -791,7 +794,7 @@ namespace AtmoLight
                 }
                 else
                 {
-                  Thread.Sleep(1);
+                  Thread.Sleep(5);
                   continue;
                 }
               }
