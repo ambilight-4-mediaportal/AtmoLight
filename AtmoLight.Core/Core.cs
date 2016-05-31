@@ -767,14 +767,13 @@ namespace AtmoLight
           data = (ChangeImageData)targetChangeImageQueue.Dequeue();
 
           if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-          {
-            
+          {           
             // Targets without delay
             lock (targetsLock)
             {
               foreach (var target in targets)
               {
-                if (!target.AllowDelay && target.IsConnected())
+                if (!target.AllowDelay && target.IsConnected() && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
                 {
                   target.ChangeImage(data.pixelData, data.bmiInfoHeader);
                 }
@@ -796,7 +795,7 @@ namespace AtmoLight
             {
               foreach (var target in targets)
               {
-                if (target.AllowDelay && target.IsConnected())
+                if (target.AllowDelay && target.IsConnected() && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
                 {
                   target.ChangeImage(data.pixelData, data.bmiInfoHeader);
                 }
