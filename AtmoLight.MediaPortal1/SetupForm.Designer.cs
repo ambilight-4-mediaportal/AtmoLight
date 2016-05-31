@@ -254,6 +254,7 @@
       this.lblBoblightIP = new System.Windows.Forms.Label();
       this.tabPageHue = new System.Windows.Forms.TabPage();
       this.grpHueTheaterMode = new System.Windows.Forms.GroupBox();
+      this.ckHueTheaterEnableVU = new System.Windows.Forms.CheckBox();
       this.lblHintHueTheaterMode = new System.Windows.Forms.Label();
       this.ckHueTheaterRestoreLights = new System.Windows.Forms.CheckBox();
       this.ckHueTheaterEnabled = new System.Windows.Forms.CheckBox();
@@ -289,7 +290,6 @@
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
       this.cbLanguage = new System.Windows.Forms.ComboBox();
       this.lblLanguage = new System.Windows.Forms.Label();
-      this.ckHueTheaterEnableVU = new System.Windows.Forms.CheckBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -1539,7 +1539,7 @@
       this.tbRefreshRate.Name = "tbRefreshRate";
       this.tbRefreshRate.Size = new System.Drawing.Size(41, 20);
       this.tbRefreshRate.TabIndex = 11;
-      this.tbRefreshRate.Text = "50";
+      this.tbRefreshRate.Text = "60";
       this.tbRefreshRate.Validating += new System.ComponentModel.CancelEventHandler(this.tbRefreshRate_Validating);
       // 
       // lblDelay
@@ -2697,6 +2697,16 @@
       this.grpHueTheaterMode.TabStop = false;
       this.grpHueTheaterMode.Text = "Theater mode";
       // 
+      // ckHueTheaterEnableVU
+      // 
+      this.ckHueTheaterEnableVU.AutoSize = true;
+      this.ckHueTheaterEnableVU.Location = new System.Drawing.Point(12, 100);
+      this.ckHueTheaterEnableVU.Name = "ckHueTheaterEnableVU";
+      this.ckHueTheaterEnableVU.Size = new System.Drawing.Size(221, 17);
+      this.ckHueTheaterEnableVU.TabIndex = 23;
+      this.ckHueTheaterEnableVU.Text = "Use theater mode during VUmeter effects";
+      this.ckHueTheaterEnableVU.UseVisualStyleBackColor = true;
+      // 
       // lblHintHueTheaterMode
       // 
       this.lblHintHueTheaterMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -3041,16 +3051,6 @@
       this.lblLanguage.Size = new System.Drawing.Size(58, 13);
       this.lblLanguage.TabIndex = 103;
       this.lblLanguage.Text = "Language:";
-      // 
-      // ckHueTheaterEnableVU
-      // 
-      this.ckHueTheaterEnableVU.AutoSize = true;
-      this.ckHueTheaterEnableVU.Location = new System.Drawing.Point(12, 100);
-      this.ckHueTheaterEnableVU.Name = "ckHueTheaterEnableVU";
-      this.ckHueTheaterEnableVU.Size = new System.Drawing.Size(221, 17);
-      this.ckHueTheaterEnableVU.TabIndex = 23;
-      this.ckHueTheaterEnableVU.Text = "Use theater mode during VUmeter effects";
-      this.ckHueTheaterEnableVU.UseVisualStyleBackColor = true;
       // 
       // SetupForm
       // 

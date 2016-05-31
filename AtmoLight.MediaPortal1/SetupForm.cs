@@ -420,7 +420,7 @@ namespace AtmoLight
       }
 
       //LED delay
-      if (validatorInt(tbDelay.Text, 1, 0, false) == false)
+      if (validatorInt(tbDelay.Text, 1, 1000, false) == false)
       {
         if (ckDelay.Checked)
         {
@@ -447,7 +447,7 @@ namespace AtmoLight
         else
         {
           //Didn't pass validation so save cleanly with default value even if option isn't used
-          tbRefreshRate.Text = "50";
+          tbRefreshRate.Text = "240";
         }
       }
 
@@ -1394,7 +1394,7 @@ namespace AtmoLight
     private void tbDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
       int minValue = 1;
-      int maxValue = 0;
+      int maxValue = 1000;
       if (validatorInt(tbDelay.Text, minValue, maxValue, false) == false)
       {
         if (ckDelay.Checked)
@@ -1408,7 +1408,7 @@ namespace AtmoLight
     private void tbRefreshRate_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
       int minValue = 1;
-      int maxValue = 0;
+      int maxValue = 240;
       if (validatorInt(tbRefreshRate.Text, minValue, maxValue, false) == false)
       {
         if (ckDelay.Checked)
