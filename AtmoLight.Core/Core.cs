@@ -763,48 +763,45 @@ namespace AtmoLight
             targetChangeImageQueue.Clear();
             continue;
           }
-       
+
           data = (ChangeImageData)targetChangeImageQueue.Dequeue();
 
-          if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-          {           
-            // Targets without delay
-            lock (targetsLock)
+          // Targets without delay
+          lock (targetsLock)
+          {
+            foreach (var target in targets)
             {
-              foreach (var target in targets)
+              if (!target.AllowDelay && target.IsConnected() && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
               {
-                if (!target.AllowDelay && target.IsConnected() && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-                {
-                  target.ChangeImage(data.pixelData, data.bmiInfoHeader);
-                }
+                target.ChangeImage(data.pixelData, data.bmiInfoHeader);
               }
             }
+          }
 
-            // Delay if target allows for delay and delay was enabled
-            if (IsAllowDelayTargetPresent() && !data.force && delayEnabled)
+          // Delay if target allows for delay and delay was enabled
+          if (IsAllowDelayTargetPresent() && !data.force && delayEnabled)
+          {
+            while (GetDelayTick() < (data.tick + delayTime))
             {
-              while (GetDelayTick() < (data.tick + delayTime))
-              {
-                Thread.Sleep(1);
-              }
-              //Log.Error("Frame tick matched diff -> {0} | Queue size: {1}", Math.Abs(GetDelayTick() - data.tick - delayTime), targetChangeImageQueue.Count);
+              Thread.Sleep(1);
             }
 
-            // Targets with delay
-            lock (targetsLock)
+            //Log.Error("Frame tick matched diff -> {0} | Queue size: {1}", Math.Abs(GetDelayTick() - data.tick - delayTime), targetChangeImageQueue.Count);
+          }
+
+          // Targets with delay
+          lock (targetsLock)
+          {
+            foreach (var target in targets)
             {
-              foreach (var target in targets)
+              if (target.AllowDelay && target.IsConnected() && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
               {
-                if (target.AllowDelay && target.IsConnected() && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-                {
-                  target.ChangeImage(data.pixelData, data.bmiInfoHeader);
-                }
+                target.ChangeImage(data.pixelData, data.bmiInfoHeader);
               }
             }
           }
         }
-        catch (Exception){ 
-        }
+        catch (Exception) { }
       }
     }
     private Stream BlackbarDetection(Stream stream)
