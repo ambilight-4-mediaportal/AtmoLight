@@ -649,6 +649,26 @@ namespace AtmoLight
       }
       return false;
     }
+
+    /// <summary>
+    /// Returns if at least one target disallows the use of a delay
+    /// </summary>
+    /// <returns></returns>
+    public bool IsDisAllowDelayTargetPresent()
+    {
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          if (!target.AllowDelay)
+          {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
     public ITargets GetTarget(Target target)
     {
       lock (targetsLock)
@@ -764,39 +784,82 @@ namespace AtmoLight
             continue;
           }
 
-          data = (ChangeImageData)targetChangeImageQueue.Dequeue();
-
-          // Targets without delay
-          lock (targetsLock)
+          // Use optimized method if all targets support delay
+          if (!IsDisAllowDelayTargetPresent() && delayEnabled)
           {
-            foreach (var target in targets)
+            data = (ChangeImageData)targetChangeImageQueue.Dequeue();
+
+            // Delay if target allows for delay and delay was enabled
+            if (IsAllowDelayTargetPresent() && !data.force && delayEnabled)
             {
-              if (!target.AllowDelay && target.IsConnected() && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+              while (GetDelayTick() < (data.tick + delayTime))
               {
-                target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                Thread.Sleep(1);
+              }
+
+              //Log.Debug("Frame tick matched diff -> {0} | Queue size: {1}", Math.Abs(GetDelayTick() - data.tick - delayTime), targetChangeImageQueue.Count);
+            }
+
+            lock (targetsLock)
+            {
+              foreach (var target in targets)
+              {
+                if (target.AllowDelay && target.IsConnected() && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+                {
+                  target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                }
               }
             }
           }
-
-          // Delay if target allows for delay and delay was enabled
-          if (IsAllowDelayTargetPresent() && !data.force && delayEnabled)
+          else
           {
-            while (GetDelayTick() < (data.tick + delayTime))
-            {
-              Thread.Sleep(1);
-            }
+            data = (ChangeImageData)targetChangeImageQueue.Peek();
 
-            //Log.Error("Frame tick matched diff -> {0} | Queue size: {1}", Math.Abs(GetDelayTick() - data.tick - delayTime), targetChangeImageQueue.Count);
-          }
-
-          // Targets with delay
-          lock (targetsLock)
-          {
-            foreach (var target in targets)
+            if (IsDelayEnabled() && !data.force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
             {
-              if (target.AllowDelay && target.IsConnected() && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+              bool frameTickMatched = false;
+              long tickCount = Win32API.GetTickCount();
+
+              if (tickCount >= (data.tick + delayTime))
               {
-                target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                targetChangeImageQueue.Dequeue();
+                frameTickMatched = true;
+              }
+
+              lock (targetsLock)
+              {
+                foreach (var target in targets)
+                {
+                  if (!target.AllowDelay && target.IsConnected())
+                  {
+                    target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                  }
+                  else if (target.IsConnected() && frameTickMatched)
+                  {
+                    //Log.Debug("Frame tick matched  -> {0} / {1}", Win32API.GetTickCount(), data.tick + delayTime);
+                    target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                  }
+                  else
+                  {
+                    Thread.Sleep(5);
+                    continue;
+                  }
+                }
+              }
+            }
+            else if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+            {
+              data = (ChangeImageData)targetChangeImageQueue.Dequeue();
+
+              lock (targetsLock)
+              {
+                foreach (var target in targets)
+                {
+                  if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
+                  {
+                    target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                  }
+                }
               }
             }
           }
