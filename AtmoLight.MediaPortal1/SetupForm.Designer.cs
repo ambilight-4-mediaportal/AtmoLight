@@ -137,8 +137,6 @@
       this.tbBlackbarDetectionTime = new System.Windows.Forms.TextBox();
       this.lblHintMenuButtons = new System.Windows.Forms.Label();
       this.ckBlackbarDetection = new System.Windows.Forms.CheckBox();
-      this.lblRefreshRate = new System.Windows.Forms.Label();
-      this.tbRefreshRate = new System.Windows.Forms.TextBox();
       this.lblDelay23 = new System.Windows.Forms.Label();
       this.tbDelay23 = new System.Windows.Forms.TextBox();
       this.lblDelay24 = new System.Windows.Forms.Label();
@@ -1407,7 +1405,7 @@
       this.lblHintCaptureDimensions.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.lblHintCaptureDimensions.Location = new System.Drawing.Point(130, 22);
       this.lblHintCaptureDimensions.Name = "lblHintCaptureDimensions";
-      this.lblHintCaptureDimensions.Size = new System.Drawing.Size(113, 51);
+      this.lblHintCaptureDimensions.Size = new System.Drawing.Size(97, 51);
       this.lblHintCaptureDimensions.TabIndex = 32;
       this.lblHintCaptureDimensions.Text = "Hint: Only used when Atmowin is disabled";
       // 
