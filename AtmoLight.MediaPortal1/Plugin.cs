@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.CodeDom;
 using System.Reflection;
 using System.Collections.Generic;
@@ -63,7 +63,11 @@ namespace AtmoLight
     private int staticColorHelper; // Helper var for static color change
 
     // Delay Feature
-    private int delayTimeHelper; // Helper var for delay time change
+    private int delayTimeHelper; // Helper var for delay time change - Legacy
+    private int delayRefresh23 = 0; // Helper for delay value 23 if set
+    private int delayRefresh24 = 0; // Helper for delay value 24 if set
+    private int delayRefresh50 = 0; // Helper for delay value 50 if set
+    private int delayRefresh59 = 0;// Helper for delay value 59 if set
 
     // SetupForm
     private SetupForm atmoLightSetupForm;
@@ -162,6 +166,11 @@ namespace AtmoLight
       if (Settings.delay)
       {
         coreObject.EnableDelay();
+        //initialist usuable settings for delay calculations
+        if (Settings.delayReferenceTime23 > 0) delayRefresh23 = 23;
+        if (Settings.delayReferenceTime24 > 0) delayRefresh24 = 24;
+        if (Settings.delayReferenceTime50 > 0) delayRefresh50 = 50;
+        if (Settings.delayReferenceTime59 > 0) delayRefresh59 = 59;
       }
       coreObject.SetGIFPath(Settings.gifFile);
       coreObject.SetReInitOnError(Settings.restartOnError);
@@ -292,7 +301,7 @@ namespace AtmoLight
       if (CheckForStartRequirements())
       {
         coreObject.ChangeEffect(menuEffect, true);
-        CalculateDelay();
+        UpdateDelay();
       }
       else
       {
@@ -401,16 +410,44 @@ namespace AtmoLight
     /// <summary>
     /// Calculates the delay dependent on the refresh rate.
     /// </summary>
-    private void CalculateDelay()
+    private void UpdateDelay()
     {
       if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && coreObject.IsDelayEnabled())
       {
-        coreObject.SetDelay(
-          (int)
-            (((float)Settings.delayReferenceRefreshRate / (float)GetRefreshRate()) * (float)Settings.delayReferenceTime), GetRefreshRate());
+          int CurrentRefreshRate = GetRefreshRate();
+          int ReferenceDelay = 0;
+          int ReferenceRefresh = 0;
+          //find how close we are to each configured refresh rate (delayRefresh values are either their refresh or 0 if unconfigured)
+          int ClosestMatch = (Math.Min(Math.Abs(CurrentRefreshRate  - delayRefresh23),
+              (Math.Min(Math.Abs(CurrentRefreshRate  - delayRefresh24),
+              (Math.Min(Math.Abs(CurrentRefreshRate  - delayRefresh50),
+              (Math.Abs(CurrentRefreshRate  - delayRefresh59))))))));
+          //which of these was it? in order of highest refresh first in case of a match
+          if (ClosestMatch == Math.Abs(CurrentRefreshRate - delayRefresh59))
+          {
+              ReferenceDelay = Settings.delayReferenceTime59;
+              ReferenceRefresh = 59;
+          } else if (ClosestMatch == Math.Abs(CurrentRefreshRate - delayRefresh50))
+          {
+              ReferenceDelay = Settings.delayReferenceTime50;
+              ReferenceRefresh = 50;
+          } else if (ClosestMatch == Math.Abs(CurrentRefreshRate - delayRefresh24))
+          {
+              ReferenceDelay = Settings.delayReferenceTime24;
+              ReferenceRefresh = 24;
+          } else if (ClosestMatch == Math.Abs(CurrentRefreshRate - delayRefresh23))
+          {
+              ReferenceDelay = Settings.delayReferenceTime23;
+              ReferenceRefresh = 23;
+          }
+          //if the current refresh is not an exact match, then use our best reference point in a ratio calculation
+          if (ReferenceRefresh != CurrentRefreshRate)
+          {
+              ReferenceDelay = (int)(((float)ReferenceRefresh / (float)CurrentRefreshRate) * (float)ReferenceDelay);
+          }
+        coreObject.SetDelay(ReferenceDelay);
       }
     }
-
     #endregion
 
     #region Log Event Handler
@@ -512,7 +549,7 @@ namespace AtmoLight
         if (CheckForStartRequirements())
         {
           coreObject.ChangeEffect(playbackEffect);
-          CalculateDelay();
+          UpdateDelay();
         }
         else
         {
@@ -545,7 +582,7 @@ namespace AtmoLight
         if (CheckForStartRequirements())
         {
           coreObject.ChangeEffect(menuEffect);
-          CalculateDelay();
+          UpdateDelay();
         }
         else
         {
@@ -579,7 +616,7 @@ namespace AtmoLight
         if (CheckForStartRequirements())
         {
           coreObject.ChangeEffect(menuEffect);
-          CalculateDelay();
+          UpdateDelay();
         }
         else
         {
@@ -967,12 +1004,12 @@ namespace AtmoLight
           if (g_Player.Playing)
           {
             coreObject.ChangeEffect(playbackEffect);
-            CalculateDelay();
+            UpdateDelay();
           }
           else
           {
             coreObject.ChangeEffect(menuEffect);
-            CalculateDelay();
+            UpdateDelay();
           }
         }
         else
@@ -1160,12 +1197,12 @@ namespace AtmoLight
           if (g_Player.Playing)
           {
             coreObject.ChangeEffect(playbackEffect);
-            CalculateDelay();
+            UpdateDelay();
           }
           else
           {
             coreObject.ChangeEffect(menuEffect);
-            CalculateDelay();
+            UpdateDelay();
           }
         }
         else
@@ -1186,7 +1223,7 @@ namespace AtmoLight
         {
           coreObject.ChangeEffect(menuEffect);
         }
-        CalculateDelay();
+        UpdateDelay();
       }
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "AtmoLightOff"))
       {
@@ -1239,7 +1276,7 @@ namespace AtmoLight
             menuEffect = temp;
           }
           coreObject.ChangeEffect(temp);
-          CalculateDelay();
+          UpdateDelay();
         }
       }
       // Change Profile
@@ -1688,12 +1725,12 @@ namespace AtmoLight
             if (g_Player.Playing)
             {
               coreObject.ChangeEffect(playbackEffect);
-              CalculateDelay();
+              UpdateDelay();
             }
             else
             {
               coreObject.ChangeEffect(menuEffect);
-              CalculateDelay();
+              UpdateDelay();
             }
 
             Log.Debug("LEDs should be activated again. (Screensaver and or minimzed/suspended state no longer active)");
