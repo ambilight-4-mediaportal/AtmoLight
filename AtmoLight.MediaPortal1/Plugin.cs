@@ -1135,7 +1135,7 @@ namespace AtmoLight
 
         if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && coreObject.GetDelayTime() > 0)
         {
-          formattedDelayTitle = string.Format("{0} ({1}){2} @ {3}hz",
+          formattedDelayTitle = string.Format("{0} ({1}{2} @ {3}hz)",
             Localization.Translate("ContextMenu", "ChangeDelay"), coreObject.GetDelayTime(), Localization.Translate("Common", "MS"), GetRefreshRate());
           dlg.Add(new GUIListItem(formattedDelayTitle));
         }
