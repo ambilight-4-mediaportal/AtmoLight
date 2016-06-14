@@ -1413,7 +1413,7 @@ namespace AtmoLight
         foreach (int refreshRate in refreshRates)
         {
           string formattedRefreshRate = "";
-          if(refreshRate == 23)
+          if (refreshRate == 23)
           {
             formattedRefreshRate = string.Format("{0}hz ({1})MS", refreshRate, Settings.delayReferenceTime23);
           }
@@ -1462,11 +1462,11 @@ namespace AtmoLight
             .Replace(" (" + Settings.delayReferenceTime24 + ")MS", string.Empty).Replace(" (" + Settings.delayReferenceTime50 + ")MS", string.Empty)
             .Replace(" (" + Settings.delayReferenceTime59 + ")MS", string.Empty).Trim();
           bool isValidInteger = int.TryParse(selectedItem, out selectedRefreshrate);
-        }
 
-        if (selectedRefreshrate > 0 && (int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) &&
-            (delayTimeHelper <= 1000))
-        {
+
+          if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) &&
+              (delayTimeHelper <= 1000))
+          {
             switch (selectedRefreshrate)
             {
               case 23:
@@ -1492,11 +1492,12 @@ namespace AtmoLight
             }
 
             UpdateDelay();
-        }
-        else
-        {
-          DialogError(Localization.Translate("ContextMenu", "DelayError1"),
-            Localization.Translate("ContextMenu", "DelayError2"));
+          }
+          else
+          {
+            DialogError(Localization.Translate("ContextMenu", "DelayError1"),
+              Localization.Translate("ContextMenu", "DelayError2"));
+          }
         }
       }
       // Change Static Color
