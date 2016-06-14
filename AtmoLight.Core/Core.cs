@@ -440,7 +440,6 @@ namespace AtmoLight
     /// Changes the delay time.
     /// </summary>
     /// <param name="delay">Delay in ms.</param>
-    /// <param name="refreshrate">Refreshrate in hz.</param>
     /// <returns>true or false</returns>
     public bool SetDelay(int delay)
     {

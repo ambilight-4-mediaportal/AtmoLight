@@ -1097,6 +1097,7 @@ namespace AtmoLight
       GUIDialogMenu dlg = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
       dlg.Reset();
       dlg.SetHeading(Localization.Translate("Common", "AtmoLight"));
+      string formattedDelayTitle = "";
 
       // Toggle On/Off
       if (!coreObject.IsAtmoLightOn())
@@ -1134,8 +1135,9 @@ namespace AtmoLight
 
         if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && coreObject.GetDelayTime() > 0)
         {
-          dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() +
-            Localization.Translate("Common", "MS") + ")"));
+          formattedDelayTitle = string.Format("{0} ({1}){2} @ {3}hz",
+            Localization.Translate("ContextMenu", "ChangeDelay"), coreObject.GetDelayTime(), Localization.Translate("Common", "MS"), GetRefreshRate());
+          dlg.Add(new GUIListItem(formattedDelayTitle));
         }
         else
         {
@@ -1400,15 +1402,13 @@ namespace AtmoLight
         }
       }
       // Change Delay
-      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeDelay") || dlg.SelectedLabelText ==
-        Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() +
-        Localization.Translate("Common", "MS") + ")")
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeDelay") || dlg.SelectedLabelText == formattedDelayTitle)
       {
-
         GUIDialogMenu dlgSetReferenceTime =
           (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgSetReferenceTime.Reset();
         dlgSetReferenceTime.SetHeading(Localization.Translate("ContextMenu", "SelectDelayReferenceTime"));
+        int selectedLabelIndex = 0;
 
         foreach (int refreshRate in refreshRates)
         {
@@ -1433,7 +1433,27 @@ namespace AtmoLight
           dlgSetReferenceTime.Add(formattedRefreshRate);
         }
 
-        dlgSetReferenceTime.SelectedLabel = 0;
+        // Set reference index if video is playing
+        if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+        {
+          switch (GetRefreshRate())
+          {
+            case 23:
+              selectedLabelIndex = 0;
+              break;
+            case 24:
+              selectedLabelIndex = 1;
+              break;
+            case 50:
+              selectedLabelIndex = 2;
+              break;
+            case 59:
+              selectedLabelIndex = 3;
+              break;
+          }
+        }
+
+        dlgSetReferenceTime.SelectedLabel = selectedLabelIndex;
         dlgSetReferenceTime.DoModal(GUIWindowManager.ActiveWindow);
         int selectedRefreshrate = 0;
         if (dlgSetReferenceTime.SelectedLabel >= 0)
