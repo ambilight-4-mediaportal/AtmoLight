@@ -62,8 +62,10 @@ namespace AtmoLight
       edExcludeStart.Text = Settings.excludeTimeStart.ToString("HH:mm");
       edExcludeEnd.Text = Settings.excludeTimeEnd.ToString("HH:mm");
       lowCpuTime.Text = Settings.lowCPUTime.ToString();
-      tbDelay.Text = Settings.delayReferenceTime.ToString();
-      tbRefreshRate.Text = Settings.delayReferenceRefreshRate.ToString();
+      tbDelay23.Text = Settings.delayReferenceTime23.ToString();
+      tbDelay24.Text = Settings.delayReferenceTime24.ToString();
+      tbDelay50.Text = Settings.delayReferenceTime50.ToString();
+      tbDelay59.Text = Settings.delayReferenceTime59.ToString();
       tbRed.Text = Settings.staticColorRed.ToString();
       tbGreen.Text = Settings.staticColorGreen.ToString();
       tbBlue.Text = Settings.staticColorBlue.ToString();
@@ -228,12 +230,14 @@ namespace AtmoLight
       ckDelay.Text = Localization.Translate("SetupForm", "Delay");
       ckRestartOnError.Text = Localization.Translate("SetupForm", "RestartOnError");
       ckTrueGrabbing.Text = Localization.Translate("SetupForm", "TrueGrabbing");
-      lblRefreshRate.Text = Localization.Translate("SetupForm", "RefreshRate");
       ckBlackbarDetection.Text = Localization.Translate("SetupForm", "BlackbarDetection");
       lblBlackarDetectionMS.Text = Localization.Translate("SetupForm", "BlackbarDetectionThreshold");
       lblpowerModeChangedDelay.Text = Localization.Translate("SetupForm", "ResumeDelay");
       lblFrames.Text = Localization.Translate("SetupForm", "FramesBetween");
-      lblDelay.Text = Localization.Translate("SetupForm", "DelayAt");
+      lblDelay23.Text = Localization.Translate("SetupForm", "MsAt23");
+      lblDelay24.Text = Localization.Translate("SetupForm", "MsAt24");
+      lblDelay50.Text = Localization.Translate("SetupForm", "MsAt50");
+      lblDelay59.Text = Localization.Translate("SetupForm", "MsAt59");
       lblpowerModeChangedDelayMS.Text = Localization.Translate("Common", "MS");
       ckMonitorScreensaverState.Text = Localization.Translate("SetupForm", "MonitorScreensaverState");
       ckMonitorWindowState.Text = Localization.Translate("SetupForm", "MonitorWindowState");
@@ -420,7 +424,7 @@ namespace AtmoLight
       }
 
       //LED delay
-      if (validatorInt(tbDelay.Text, 1, 1000, false) == false)
+      if (validatorInt(tbDelay23.Text, 1, 0, false) == false)
       {
         if (ckDelay.Checked)
         {
@@ -431,24 +435,50 @@ namespace AtmoLight
         else
         {
           //Didn't pass validation so save cleanly with default value even if option isn't used
-          tbDelay.Text = "0";
+          tbDelay23.Text = "0";
         }
       }
-
-      //Refresh rate
-      if (validatorInt(tbRefreshRate.Text, 1, 0, false) == false)
+      if (validatorInt(tbDelay24.Text, 1, 0, false) == false)
       {
-        if (ckDelay.Checked)
-        {
-          MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds") + " - [" + lblRefreshRate.Text + "]",
-            Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
-          return;
-        }
-        else
-        {
-          //Didn't pass validation so save cleanly with default value even if option isn't used
-          tbRefreshRate.Text = "240";
-        }
+          if (ckDelay.Checked)
+          {
+              MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds") + " - [" + ckDelay.Text + "]",
+                Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+              return;
+          }
+          else
+          {
+              //Didn't pass validation so save cleanly with default value even if option isn't used
+              tbDelay24.Text = "0";
+          }
+      }
+      if (validatorInt(tbDelay50.Text, 1, 0, false) == false)
+      {
+          if (ckDelay.Checked)
+          {
+              MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds") + " - [" + ckDelay.Text + "]",
+                Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+              return;
+          }
+          else
+          {
+              //Didn't pass validation so save cleanly with default value even if option isn't used
+              tbDelay50.Text = "0";
+          }
+      }
+      if (validatorInt(tbDelay59.Text, 1, 0, false) == false)
+      {
+          if (ckDelay.Checked)
+          {
+              MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds") + " - [" + ckDelay.Text + "]",
+                Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+              return;
+          }
+          else
+          {
+              //Didn't pass validation so save cleanly with default value even if option isn't used
+              tbDelay59.Text = "0";
+          }
       }
 
       //Black bar detection
@@ -1074,8 +1104,10 @@ namespace AtmoLight
       Settings.trueGrabbing = ckTrueGrabbing.Checked;
       Settings.blackbarDetection = ckBlackbarDetection.Checked;
       Settings.blackbarDetectionTime = int.Parse(tbBlackbarDetectionTime.Text);
-      Settings.delayReferenceRefreshRate = int.Parse(tbRefreshRate.Text);
-      Settings.delayReferenceTime = int.Parse(tbDelay.Text);
+      Settings.delayReferenceTime23 = int.Parse(tbDelay23.Text);
+      Settings.delayReferenceTime24 = int.Parse(tbDelay24.Text);
+      Settings.delayReferenceTime50 = int.Parse(tbDelay50.Text);
+      Settings.delayReferenceTime59 = int.Parse(tbDelay59.Text);
       Settings.gifFile = tbGIF.Text;
       Settings.hyperionIP = tbHyperionIP.Text;
       Settings.hyperionPort = int.Parse(tbHyperionPort.Text);
@@ -1391,11 +1423,11 @@ namespace AtmoLight
       }
     }
 
-    private void tbDelay_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    private void tbDelay23_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
       int minValue = 1;
-      int maxValue = 1000;
-      if (validatorInt(tbDelay.Text, minValue, maxValue, false) == false)
+      int maxValue = 0;
+      if (validatorInt(tbDelay23.Text, minValue, maxValue, false) == false)
       {
         if (ckDelay.Checked)
         {
@@ -1405,18 +1437,44 @@ namespace AtmoLight
       }
     }
 
-    private void tbRefreshRate_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    private void tbDelay24_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      int minValue = 1;
-      int maxValue = 240;
-      if (validatorInt(tbRefreshRate.Text, minValue, maxValue, false) == false)
-      {
-        if (ckDelay.Checked)
+        int minValue = 1;
+        int maxValue = 0;
+        if (validatorInt(tbDelay24.Text, minValue, maxValue, false) == false)
         {
-          MessageBox.Show(Localization.Translate("Common", "ErrorRefreshRate"),
-            Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (ckDelay.Checked)
+            {
+                MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds"),
+                  Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-      }
+    }
+    private void tbDelay50_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        int minValue = 1;
+        int maxValue = 0;
+        if (validatorInt(tbDelay50.Text, minValue, maxValue, false) == false)
+        {
+            if (ckDelay.Checked)
+            {
+                MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds"),
+                  Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+    }
+    private void tbDelay59_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        int minValue = 1;
+        int maxValue = 0;
+        if (validatorInt(tbDelay59.Text, minValue, maxValue, false) == false)
+        {
+            if (ckDelay.Checked)
+            {
+                MessageBox.Show(Localization.Translate("Common", "ErrorMiliseconds"),
+                  Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 
     private void tbBlackbarDetectionTime_Validating(object sender, System.ComponentModel.CancelEventArgs e)

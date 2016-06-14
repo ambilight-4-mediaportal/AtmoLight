@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MediaPortal.Profile;
 using System.Globalization;
 using System.Collections.Generic;
@@ -26,6 +26,10 @@ namespace AtmoLight
     public static bool delay;
     public static int delayReferenceTime;
     public static int delayReferenceRefreshRate;
+    public static int delayReferenceTime23;
+    public static int delayReferenceTime24;
+    public static int delayReferenceTime50;
+    public static int delayReferenceTime59;
     public static DateTime excludeTimeStart;
     public static DateTime excludeTimeEnd;
     public static int staticColorRed;
@@ -290,7 +294,30 @@ namespace AtmoLight
         lowCPU = reader.GetValueAsBool("atmolight", "lowCPU", false);
         lowCPUTime = reader.GetValueAsInt("atmolight", "lowCPUTime", 0);
         delay = reader.GetValueAsBool("atmolight", "Delay", false);
-        delayReferenceTime = reader.GetValueAsInt("atmolight", "DelayTime", 0);
+          //old refresh delay settings
+        delayReferenceRefreshRate = reader.GetValueAsInt("atmolight", "DelayRefreshRate",0);
+        delayReferenceTime  = reader.GetValueAsInt("atmolight", "DelayTime",0);
+		//new
+        delayReferenceTime23 = reader.GetValueAsInt("atmolight", "DelayTime23", 0);
+        delayReferenceTime24 = reader.GetValueAsInt("atmolight", "DelayTime24", 0);
+        delayReferenceTime50 = reader.GetValueAsInt("atmolight", "DelayTime50", 0);
+        delayReferenceTime59 = reader.GetValueAsInt("atmolight", "DelayTime59", 0);
+
+          //if all of the specific refresh values are 0, assume upgrade setting from single rate
+        if (delayReferenceTime23 ==0 && delayReferenceTime24 == 0 && delayReferenceTime50 ==0 && delayReferenceTime59 == 0)
+        {
+            switch (delayReferenceRefreshRate)
+            {
+                case 23: delayReferenceTime23 = delayReferenceTime;
+                    break;
+                case 24: delayReferenceTime24 = delayReferenceTime;
+                    break;
+                case 50: delayReferenceTime50 = delayReferenceTime;
+                    break;
+                case 59: delayReferenceTime59 = delayReferenceTime;
+                    break;
+            }
+        }
         exitAtmoWin = reader.GetValueAsBool("atmolight", "ExitAtmoWin", true);
         startAtmoWin = reader.GetValueAsBool("atmolight", "StartAtmoWin", true);
         atmoWakeHelperEnabled = reader.GetValueAsBool("atmolight", "atmoWakeHelperEnabled", false);
@@ -304,7 +331,6 @@ namespace AtmoLight
         staticColorBlue = reader.GetValueAsInt("atmolight", "StaticColorBlue", 0);
         restartOnError = reader.GetValueAsBool("atmolight", "RestartOnError", true);
         trueGrabbing = reader.GetValueAsBool("atmolight", "TrueGrabbing", true);
-        delayReferenceRefreshRate = reader.GetValueAsInt("atmolight", "DelayRefreshRate", 50);
         blackbarDetection = reader.GetValueAsBool("atmolight", "BlackbarDetection", false);
         blackbarDetectionTime = reader.GetValueAsInt("atmolight", "BlackbarDetectionTime", 1000);
         gifFile = reader.GetValueAsString("atmolight", "GIFFile", "");
@@ -417,6 +443,11 @@ namespace AtmoLight
         reader.SetValue("atmolight", "lowCPUTime", lowCPUTime);
         reader.SetValueAsBool("atmolight", "Delay", delay);
         reader.SetValue("atmolight", "DelayTime", delayReferenceTime);
+        reader.SetValue("atmolight", "DelayRefreshRate", delayReferenceRefreshRate);
+        reader.SetValue("atmolight", "DelayTime23", delayReferenceTime23);
+        reader.SetValue("atmolight", "DelayTime24", delayReferenceTime24);
+        reader.SetValue("atmolight", "DelayTime50", delayReferenceTime50);
+        reader.SetValue("atmolight", "DelayTime59", delayReferenceTime59);
         reader.SetValueAsBool("atmolight", "ExitAtmoWin", exitAtmoWin);
         reader.SetValueAsBool("atmolight", "StartAtmoWin", startAtmoWin);
         reader.SetValueAsBool("atmolight", "atmoWakeHelperEnabled", atmoWakeHelperEnabled);
@@ -434,7 +465,6 @@ namespace AtmoLight
         reader.SetValue("atmolight", "StaticColorBlue", staticColorBlue);
         reader.SetValueAsBool("atmolight", "RestartOnError", restartOnError);
         reader.SetValueAsBool("atmolight", "TrueGrabbing", trueGrabbing);
-        reader.SetValue("atmolight", "DelayRefreshRate", delayReferenceRefreshRate);
         reader.SetValueAsBool("atmolight", "BlackbarDetection", blackbarDetection);
         reader.SetValue("atmolight", "BlackbarDetectionTime", blackbarDetectionTime);
         reader.SetValue("atmolight", "GIFFile", gifFile);

@@ -442,7 +442,7 @@ namespace AtmoLight
     /// <param name="delay">Delay in ms.</param>
     /// <param name="refreshrate">Refreshrate in hz.</param>
     /// <returns>true or false</returns>
-    public bool SetDelay(int delay, float refreshRate)
+    public bool SetDelay(int delay)
     {
       if (delay > 0)
       {

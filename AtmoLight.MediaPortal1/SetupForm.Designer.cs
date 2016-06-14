@@ -137,10 +137,14 @@
       this.tbBlackbarDetectionTime = new System.Windows.Forms.TextBox();
       this.lblHintMenuButtons = new System.Windows.Forms.Label();
       this.ckBlackbarDetection = new System.Windows.Forms.CheckBox();
-      this.lblRefreshRate = new System.Windows.Forms.Label();
-      this.tbRefreshRate = new System.Windows.Forms.TextBox();
-      this.lblDelay = new System.Windows.Forms.Label();
-      this.tbDelay = new System.Windows.Forms.TextBox();
+      this.lblDelay23 = new System.Windows.Forms.Label();
+      this.tbDelay23 = new System.Windows.Forms.TextBox();
+      this.lblDelay24 = new System.Windows.Forms.Label();
+      this.tbDelay24 = new System.Windows.Forms.TextBox();
+      this.lblDelay50 = new System.Windows.Forms.Label();
+      this.tbDelay50 = new System.Windows.Forms.TextBox();
+      this.lblDelay59 = new System.Windows.Forms.Label();
+      this.tbDelay59 = new System.Windows.Forms.TextBox();
       this.ckDelay = new System.Windows.Forms.CheckBox();
       this.lblMenuButton = new System.Windows.Forms.Label();
       this.cbMenuButton = new System.Windows.Forms.ComboBox();
@@ -1258,10 +1262,14 @@
       this.grpPluginOption.Controls.Add(this.tbBlackbarDetectionTime);
       this.grpPluginOption.Controls.Add(this.lblHintMenuButtons);
       this.grpPluginOption.Controls.Add(this.ckBlackbarDetection);
-      this.grpPluginOption.Controls.Add(this.lblRefreshRate);
-      this.grpPluginOption.Controls.Add(this.tbRefreshRate);
-      this.grpPluginOption.Controls.Add(this.lblDelay);
-      this.grpPluginOption.Controls.Add(this.tbDelay);
+      this.grpPluginOption.Controls.Add(this.lblDelay23);
+      this.grpPluginOption.Controls.Add(this.tbDelay23);
+      this.grpPluginOption.Controls.Add(this.lblDelay24);
+      this.grpPluginOption.Controls.Add(this.tbDelay24);
+      this.grpPluginOption.Controls.Add(this.lblDelay50);
+      this.grpPluginOption.Controls.Add(this.tbDelay50);
+      this.grpPluginOption.Controls.Add(this.lblDelay59);
+      this.grpPluginOption.Controls.Add(this.tbDelay59);
       this.grpPluginOption.Controls.Add(this.ckDelay);
       this.grpPluginOption.Controls.Add(this.lblMenuButton);
       this.grpPluginOption.Controls.Add(this.cbMenuButton);
@@ -1283,7 +1291,7 @@
       // ckMonitorWindowState
       // 
       this.ckMonitorWindowState.AutoSize = true;
-      this.ckMonitorWindowState.Location = new System.Drawing.Point(12, 325);
+      this.ckMonitorWindowState.Location = new System.Drawing.Point(13, 409);
       this.ckMonitorWindowState.Name = "ckMonitorWindowState";
       this.ckMonitorWindowState.Size = new System.Drawing.Size(295, 17);
       this.ckMonitorWindowState.TabIndex = 42;
@@ -1293,7 +1301,7 @@
       // cbBlackbarDetectionVertical
       // 
       this.cbBlackbarDetectionVertical.AutoSize = true;
-      this.cbBlackbarDetectionVertical.Location = new System.Drawing.Point(12, 250);
+      this.cbBlackbarDetectionVertical.Location = new System.Drawing.Point(13, 334);
       this.cbBlackbarDetectionVertical.Name = "cbBlackbarDetectionVertical";
       this.cbBlackbarDetectionVertical.Size = new System.Drawing.Size(180, 17);
       this.cbBlackbarDetectionVertical.TabIndex = 41;
@@ -1303,7 +1311,7 @@
       // cbBlackbarDetectionHorizontal
       // 
       this.cbBlackbarDetectionHorizontal.AutoSize = true;
-      this.cbBlackbarDetectionHorizontal.Location = new System.Drawing.Point(12, 225);
+      this.cbBlackbarDetectionHorizontal.Location = new System.Drawing.Point(13, 309);
       this.cbBlackbarDetectionHorizontal.Name = "cbBlackbarDetectionHorizontal";
       this.cbBlackbarDetectionHorizontal.Size = new System.Drawing.Size(191, 17);
       this.cbBlackbarDetectionHorizontal.TabIndex = 40;
@@ -1313,7 +1321,7 @@
       // cbBlackbarDetectionLinkAreas
       // 
       this.cbBlackbarDetectionLinkAreas.AutoSize = true;
-      this.cbBlackbarDetectionLinkAreas.Location = new System.Drawing.Point(12, 200);
+      this.cbBlackbarDetectionLinkAreas.Location = new System.Drawing.Point(13, 284);
       this.cbBlackbarDetectionLinkAreas.Name = "cbBlackbarDetectionLinkAreas";
       this.cbBlackbarDetectionLinkAreas.Size = new System.Drawing.Size(309, 17);
       this.cbBlackbarDetectionLinkAreas.TabIndex = 39;
@@ -1323,7 +1331,7 @@
       // ckMonitorScreensaverState
       // 
       this.ckMonitorScreensaverState.AutoSize = true;
-      this.ckMonitorScreensaverState.Location = new System.Drawing.Point(12, 300);
+      this.ckMonitorScreensaverState.Location = new System.Drawing.Point(13, 384);
       this.ckMonitorScreensaverState.Name = "ckMonitorScreensaverState";
       this.ckMonitorScreensaverState.Size = new System.Drawing.Size(273, 17);
       this.ckMonitorScreensaverState.TabIndex = 38;
@@ -1333,7 +1341,7 @@
       // lblpowerModeChangedDelayMS
       // 
       this.lblpowerModeChangedDelayMS.AutoSize = true;
-      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(255, 353);
+      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(256, 437);
       this.lblpowerModeChangedDelayMS.Name = "lblpowerModeChangedDelayMS";
       this.lblpowerModeChangedDelayMS.Size = new System.Drawing.Size(20, 13);
       this.lblpowerModeChangedDelayMS.TabIndex = 35;
@@ -1342,7 +1350,7 @@
       // lblpowerModeChangedDelay
       // 
       this.lblpowerModeChangedDelay.AutoSize = true;
-      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(9, 350);
+      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(10, 434);
       this.lblpowerModeChangedDelay.Name = "lblpowerModeChangedDelay";
       this.lblpowerModeChangedDelay.Size = new System.Drawing.Size(101, 13);
       this.lblpowerModeChangedDelay.TabIndex = 34;
@@ -1350,7 +1358,7 @@
       // 
       // tbBlackbarDetectionThreshold
       // 
-      this.tbBlackbarDetectionThreshold.Location = new System.Drawing.Point(373, 172);
+      this.tbBlackbarDetectionThreshold.Location = new System.Drawing.Point(374, 256);
       this.tbBlackbarDetectionThreshold.Name = "tbBlackbarDetectionThreshold";
       this.tbBlackbarDetectionThreshold.Size = new System.Drawing.Size(41, 20);
       this.tbBlackbarDetectionThreshold.TabIndex = 33;
@@ -1359,7 +1367,7 @@
       // 
       // tbpowerModeChangedDelay
       // 
-      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(208, 350);
+      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(209, 434);
       this.tbpowerModeChangedDelay.Name = "tbpowerModeChangedDelay";
       this.tbpowerModeChangedDelay.Size = new System.Drawing.Size(41, 20);
       this.tbpowerModeChangedDelay.TabIndex = 33;
@@ -1371,7 +1379,7 @@
       this.ckRestartOnError.AutoSize = true;
       this.ckRestartOnError.Checked = true;
       this.ckRestartOnError.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.ckRestartOnError.Location = new System.Drawing.Point(12, 275);
+      this.ckRestartOnError.Location = new System.Drawing.Point(13, 359);
       this.ckRestartOnError.Name = "ckRestartOnError";
       this.ckRestartOnError.Size = new System.Drawing.Size(144, 17);
       this.ckRestartOnError.TabIndex = 32;
@@ -1385,9 +1393,9 @@
       this.grpCaptureDimensions.Controls.Add(this.lblCaptureWidth);
       this.grpCaptureDimensions.Controls.Add(this.tbCaptureWidth);
       this.grpCaptureDimensions.Controls.Add(this.tbCaptureHeight);
-      this.grpCaptureDimensions.Location = new System.Drawing.Point(5, 380);
+      this.grpCaptureDimensions.Location = new System.Drawing.Point(226, 465);
       this.grpCaptureDimensions.Name = "grpCaptureDimensions";
-      this.grpCaptureDimensions.Size = new System.Drawing.Size(450, 80);
+      this.grpCaptureDimensions.Size = new System.Drawing.Size(234, 80);
       this.grpCaptureDimensions.TabIndex = 31;
       this.grpCaptureDimensions.TabStop = false;
       this.grpCaptureDimensions.Text = "Capture dimensions";
@@ -1395,9 +1403,9 @@
       // lblHintCaptureDimensions
       // 
       this.lblHintCaptureDimensions.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.lblHintCaptureDimensions.Location = new System.Drawing.Point(195, 25);
+      this.lblHintCaptureDimensions.Location = new System.Drawing.Point(130, 22);
       this.lblHintCaptureDimensions.Name = "lblHintCaptureDimensions";
-      this.lblHintCaptureDimensions.Size = new System.Drawing.Size(248, 38);
+      this.lblHintCaptureDimensions.Size = new System.Drawing.Size(97, 51);
       this.lblHintCaptureDimensions.TabIndex = 32;
       this.lblHintCaptureDimensions.Text = "Hint: Only used when Atmowin is disabled";
       // 
@@ -1440,7 +1448,7 @@
       // lblBlackarDetectionMS
       // 
       this.lblBlackarDetectionMS.AutoSize = true;
-      this.lblBlackarDetectionMS.Location = new System.Drawing.Point(256, 175);
+      this.lblBlackarDetectionMS.Location = new System.Drawing.Point(257, 259);
       this.lblBlackarDetectionMS.Name = "lblBlackarDetectionMS";
       this.lblBlackarDetectionMS.Size = new System.Drawing.Size(95, 13);
       this.lblBlackarDetectionMS.TabIndex = 30;
@@ -1454,7 +1462,7 @@
       this.grpDeactivate.Controls.Add(this.lblStart);
       this.grpDeactivate.Location = new System.Drawing.Point(5, 465);
       this.grpDeactivate.Name = "grpDeactivate";
-      this.grpDeactivate.Size = new System.Drawing.Size(450, 80);
+      this.grpDeactivate.Size = new System.Drawing.Size(215, 80);
       this.grpDeactivate.TabIndex = 8;
       this.grpDeactivate.TabStop = false;
       this.grpDeactivate.Text = "Disable LEDs between";
@@ -1497,7 +1505,7 @@
       // 
       // tbBlackbarDetectionTime
       // 
-      this.tbBlackbarDetectionTime.Location = new System.Drawing.Point(209, 172);
+      this.tbBlackbarDetectionTime.Location = new System.Drawing.Point(209, 256);
       this.tbBlackbarDetectionTime.Name = "tbBlackbarDetectionTime";
       this.tbBlackbarDetectionTime.Size = new System.Drawing.Size(41, 20);
       this.tbBlackbarDetectionTime.TabIndex = 13;
@@ -1517,48 +1525,84 @@
       // ckBlackbarDetection
       // 
       this.ckBlackbarDetection.AutoSize = true;
-      this.ckBlackbarDetection.Location = new System.Drawing.Point(12, 175);
+      this.ckBlackbarDetection.Location = new System.Drawing.Point(13, 259);
       this.ckBlackbarDetection.Name = "ckBlackbarDetection";
       this.ckBlackbarDetection.Size = new System.Drawing.Size(146, 17);
       this.ckBlackbarDetection.TabIndex = 12;
       this.ckBlackbarDetection.Text = "Blackbar Detection every";
       this.ckBlackbarDetection.UseVisualStyleBackColor = true;
       // 
-      // lblRefreshRate
+      // lblDelay23
       // 
-      this.lblRefreshRate.AutoSize = true;
-      this.lblRefreshRate.Location = new System.Drawing.Point(415, 150);
-      this.lblRefreshRate.Name = "lblRefreshRate";
-      this.lblRefreshRate.Size = new System.Drawing.Size(20, 13);
-      this.lblRefreshRate.TabIndex = 27;
-      this.lblRefreshRate.Text = "Hz";
+      this.lblDelay23.AutoSize = true;
+      this.lblDelay23.Location = new System.Drawing.Point(256, 150);
+      this.lblDelay23.Name = "lblDelay23";
+      this.lblDelay23.Size = new System.Drawing.Size(79, 13);
+      this.lblDelay23.TabIndex = 24;
+      this.lblDelay23.Text = "ms at 23.976hz";
       // 
-      // tbRefreshRate
+      // tbDelay23
       // 
-      this.tbRefreshRate.Location = new System.Drawing.Point(373, 147);
-      this.tbRefreshRate.Name = "tbRefreshRate";
-      this.tbRefreshRate.Size = new System.Drawing.Size(41, 20);
-      this.tbRefreshRate.TabIndex = 11;
-      this.tbRefreshRate.Text = "60";
-      this.tbRefreshRate.Validating += new System.ComponentModel.CancelEventHandler(this.tbRefreshRate_Validating);
+      this.tbDelay23.Location = new System.Drawing.Point(209, 147);
+      this.tbDelay23.Name = "tbDelay23";
+      this.tbDelay23.Size = new System.Drawing.Size(41, 20);
+      this.tbDelay23.TabIndex = 10;
+      this.tbDelay23.Text = "0";
+      this.tbDelay23.Validating += new System.ComponentModel.CancelEventHandler(this.tbDelay23_Validating);
       // 
-      // lblDelay
+      // lblDelay24
       // 
-      this.lblDelay.AutoSize = true;
-      this.lblDelay.Location = new System.Drawing.Point(256, 150);
-      this.lblDelay.Name = "lblDelay";
-      this.lblDelay.Size = new System.Drawing.Size(62, 13);
-      this.lblDelay.TabIndex = 24;
-      this.lblDelay.Text = "ms Delay at";
+      this.lblDelay24.AutoSize = true;
+      this.lblDelay24.Location = new System.Drawing.Point(256, 176);
+      this.lblDelay24.Name = "lblDelay24";
+      this.lblDelay24.Size = new System.Drawing.Size(58, 13);
+      this.lblDelay24.TabIndex = 44;
+      this.lblDelay24.Text = "ms at 24hz";
       // 
-      // tbDelay
+      // tbDelay24
       // 
-      this.tbDelay.Location = new System.Drawing.Point(209, 147);
-      this.tbDelay.Name = "tbDelay";
-      this.tbDelay.Size = new System.Drawing.Size(41, 20);
-      this.tbDelay.TabIndex = 10;
-      this.tbDelay.Text = "0";
-      this.tbDelay.Validating += new System.ComponentModel.CancelEventHandler(this.tbDelay_Validating);
+      this.tbDelay24.Location = new System.Drawing.Point(209, 173);
+      this.tbDelay24.Name = "tbDelay24";
+      this.tbDelay24.Size = new System.Drawing.Size(41, 20);
+      this.tbDelay24.TabIndex = 43;
+      this.tbDelay24.Text = "0";
+      this.tbDelay24.Validating += new System.ComponentModel.CancelEventHandler(this.tbDelay24_Validating);
+      // 
+      // lblDelay50
+      // 
+      this.lblDelay50.AutoSize = true;
+      this.lblDelay50.Location = new System.Drawing.Point(256, 202);
+      this.lblDelay50.Name = "lblDelay50";
+      this.lblDelay50.Size = new System.Drawing.Size(58, 13);
+      this.lblDelay50.TabIndex = 46;
+      this.lblDelay50.Text = "ms at 50hz";
+      // 
+      // tbDelay50
+      // 
+      this.tbDelay50.Location = new System.Drawing.Point(209, 199);
+      this.tbDelay50.Name = "tbDelay50";
+      this.tbDelay50.Size = new System.Drawing.Size(41, 20);
+      this.tbDelay50.TabIndex = 45;
+      this.tbDelay50.Text = "0";
+      this.tbDelay50.Validating += new System.ComponentModel.CancelEventHandler(this.tbDelay50_Validating);
+      // 
+      // lblDelay59
+      // 
+      this.lblDelay59.AutoSize = true;
+      this.lblDelay59.Location = new System.Drawing.Point(256, 228);
+      this.lblDelay59.Name = "lblDelay59";
+      this.lblDelay59.Size = new System.Drawing.Size(58, 13);
+      this.lblDelay59.TabIndex = 48;
+      this.lblDelay59.Text = "ms at 59hz";
+      // 
+      // tbDelay59
+      // 
+      this.tbDelay59.Location = new System.Drawing.Point(210, 225);
+      this.tbDelay59.Name = "tbDelay59";
+      this.tbDelay59.Size = new System.Drawing.Size(41, 20);
+      this.tbDelay59.TabIndex = 47;
+      this.tbDelay59.Text = "0";
+      this.tbDelay59.Validating += new System.ComponentModel.CancelEventHandler(this.tbDelay59_Validating);
       // 
       // ckDelay
       // 
@@ -3213,10 +3257,14 @@
     private System.Windows.Forms.TextBox tbBlackbarDetectionTime;
     private System.Windows.Forms.Label lblHintMenuButtons;
     private System.Windows.Forms.CheckBox ckBlackbarDetection;
-    private System.Windows.Forms.Label lblRefreshRate;
-    private System.Windows.Forms.TextBox tbRefreshRate;
-    private System.Windows.Forms.Label lblDelay;
-    private System.Windows.Forms.TextBox tbDelay;
+    private System.Windows.Forms.Label lblDelay23;
+    private System.Windows.Forms.TextBox tbDelay23;
+    private System.Windows.Forms.Label lblDelay24;
+    private System.Windows.Forms.TextBox tbDelay24;
+    private System.Windows.Forms.Label lblDelay50;
+    private System.Windows.Forms.TextBox tbDelay50;
+    private System.Windows.Forms.Label lblDelay59;
+    private System.Windows.Forms.TextBox tbDelay59;
     private System.Windows.Forms.CheckBox ckDelay;
     private System.Windows.Forms.Label lblMenuButton;
     private System.Windows.Forms.ComboBox cbMenuButton;

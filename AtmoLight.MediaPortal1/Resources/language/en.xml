@@ -74,7 +74,10 @@
     <string name="End">End:</string>
     <string name="DisableBetween">Disable LEDs between</string>
     <string name="Delay">LED Delay</string>
-    <string name="DelayAt">ms delay at</string>
+    <string name="MsAt23">ms at 23.976hz</string>
+    <string name="MsAt24">ms at 24hz</string>
+    <string name="MsAt50">ms at 50hz</string>
+    <string name="MsAt59">ms at 59hz</string>    
     <string name="RestartOnError">Auto-Reconnect on Error</string>
     <string name="TrueGrabbing">Use GUI data when video is minimized in MediaPortal Live Mode</string>        
     <string name="RefreshRate">Hz</string>
