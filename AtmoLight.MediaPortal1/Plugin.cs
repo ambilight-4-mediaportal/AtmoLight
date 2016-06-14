@@ -69,6 +69,9 @@ namespace AtmoLight
     private int delayRefresh50 = 0; // Helper for delay value 50 if set
     private int delayRefresh59 = 0;// Helper for delay value 59 if set
 
+    // Refresh rates
+    static int[] refreshRates = { 23, 24, 50, 59 };
+
     // SetupForm
     private SetupForm atmoLightSetupForm;
 
@@ -164,13 +167,14 @@ namespace AtmoLight
       // General settings
       if (Settings.delay)
       {
-        coreObject.EnableDelay();
         //initialist usuable settings for delay calculations
         if (Settings.delayReferenceTime23 > 0) delayRefresh23 = 23;
         if (Settings.delayReferenceTime24 > 0) delayRefresh24 = 24;
         if (Settings.delayReferenceTime50 > 0) delayRefresh50 = 50;
         if (Settings.delayReferenceTime59 > 0) delayRefresh59 = 59;
+        coreObject.EnableDelay();
       }
+
       coreObject.SetGIFPath(Settings.gifFile);
       coreObject.SetReInitOnError(Settings.restartOnError);
       coreObject.SetStaticColor(Settings.staticColorRed, Settings.staticColorGreen, Settings.staticColorBlue);
@@ -1123,21 +1127,24 @@ namespace AtmoLight
       // Toggle Blackbar Detection
       dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "BlackbarDetection")));
 
-      // Delay
-      if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+      // Toggle Delay and Change Delay
+      if (coreObject.IsDelayEnabled())
       {
-        // Toggle Delay and Change Delay
-        if (coreObject.IsDelayEnabled())
+        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "DelayOff")));
+
+        if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && coreObject.GetDelayTime() > 0)
         {
-          dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "DelayOff")));
-          dlg.Add(
-            new GUIListItem(Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() +
-                            Localization.Translate("Common", "MS") + ")"));
+          dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() +
+            Localization.Translate("Common", "MS") + ")"));
         }
         else
         {
-          dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "DelayOn")));
+          dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeDelay")));
         }
+      }
+      else
+      {
+        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "DelayOn")));
       }
 
       // Change Static Color
@@ -1393,16 +1400,78 @@ namespace AtmoLight
         }
       }
       // Change Delay
-      else if (dlg.SelectedLabelText ==
-               Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() +
-               Localization.Translate("Common", "MS") + ")")
+      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeDelay") || dlg.SelectedLabelText ==
+        Localization.Translate("ContextMenu", "ChangeDelay") + " (" + coreObject.GetDelayTime() +
+        Localization.Translate("Common", "MS") + ")")
       {
-        if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) &&
+
+        GUIDialogMenu dlgSetReferenceTime =
+          (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+        dlgSetReferenceTime.Reset();
+        dlgSetReferenceTime.SetHeading(Localization.Translate("ContextMenu", "SelectDelayReferenceTime"));
+
+        foreach (int refreshRate in refreshRates)
+        {
+          string formattedRefreshRate = "";
+          if(refreshRate == 23)
+          {
+            formattedRefreshRate = string.Format("{0}hz ({1})MS", refreshRate, Settings.delayReferenceTime23);
+          }
+          if (refreshRate == 24)
+          {
+            formattedRefreshRate = string.Format("{0}hz ({1})MS", refreshRate, Settings.delayReferenceTime24);
+          }
+          if (refreshRate == 50)
+          {
+            formattedRefreshRate = string.Format("{0}hz ({1})MS", refreshRate, Settings.delayReferenceTime50);
+          }
+          if (refreshRate == 59)
+          {
+            formattedRefreshRate = string.Format("{0}hz ({1})MS", refreshRate, Settings.delayReferenceTime59);
+          }
+
+          dlgSetReferenceTime.Add(formattedRefreshRate);
+        }
+
+        dlgSetReferenceTime.SelectedLabel = 0;
+        dlgSetReferenceTime.DoModal(GUIWindowManager.ActiveWindow);
+        int selectedRefreshrate = 0;
+        if (dlgSetReferenceTime.SelectedLabel >= 0)
+        {
+          string selectedItem = dlgSetReferenceTime.SelectedLabelText.Replace("hz", string.Empty).Replace(" (" + Settings.delayReferenceTime23 + ")MS", string.Empty)
+            .Replace(" (" + Settings.delayReferenceTime24 + ")MS", string.Empty).Replace(" (" + Settings.delayReferenceTime50 + ")MS", string.Empty)
+            .Replace(" (" + Settings.delayReferenceTime59 + ")MS", string.Empty).Trim();
+          bool isValidInteger = int.TryParse(selectedItem, out selectedRefreshrate);
+        }
+
+        if (selectedRefreshrate > 0 && (int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) &&
             (delayTimeHelper <= 1000))
         {
-          coreObject.SetDelay(delayTimeHelper);
-          Settings.delayReferenceTime =
-            (int)(((float)delayTimeHelper * (float)GetRefreshRate()) / Settings.delayReferenceRefreshRate);
+            switch (selectedRefreshrate)
+            {
+              case 23:
+                Settings.delayReferenceTime23 = delayTimeHelper;
+                Settings.SaveSpecificSetting("DelayTime23", delayTimeHelper.ToString());
+                Log.Debug("Set delay reference for 23hz to {0}ms", delayTimeHelper);
+                break;
+              case 24:
+                Settings.delayReferenceTime24 = delayTimeHelper;
+                Settings.SaveSpecificSetting("DelayTime24", delayTimeHelper.ToString());
+                Log.Debug("Set delay reference for 24hz to {0}ms", delayTimeHelper);
+                break;
+              case 50:
+                Settings.delayReferenceTime50 = delayTimeHelper;
+                Settings.SaveSpecificSetting("DelayTime50", delayTimeHelper.ToString());
+                Log.Debug("Set delay reference for 50hz to {0}ms", delayTimeHelper);
+                break;
+              case 59:
+                Settings.delayReferenceTime59 = delayTimeHelper;
+                Settings.SaveSpecificSetting("DelayTime59", delayTimeHelper.ToString());
+                Log.Debug("Set delay reference for 59hz to {0}ms", delayTimeHelper);
+                break;
+            }
+
+            UpdateDelay();
         }
         else
         {

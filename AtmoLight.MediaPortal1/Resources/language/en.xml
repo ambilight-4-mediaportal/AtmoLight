@@ -140,6 +140,7 @@
     <string name="BlackbarDetection2.35:1">Manual 2.35:1 (21x9)</string>
     <string name="Reinitialise">Reconnect to lost targets</string>
     <string name="AtmoLightDisabled">AtmoLight disabled</string>
+    <string name="SelectDelayReferenceTime">Select delay reference</string>
   </ContextMenu>
   <AmbiBox>
     <string name="AmbiBox">AmbiBox</string>
