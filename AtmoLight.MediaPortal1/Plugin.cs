@@ -420,12 +420,12 @@ namespace AtmoLight
           int CurrentRefreshRate = GetRefreshRate();
           int ReferenceDelay = 0;
           int ReferenceRefresh = 0;
-          //find how close we are to each configured refresh rate (delayRefresh values are either their refresh or 0 if unconfigured)
+          // Find how close we are to each configured refresh rate (delayRefresh values are either their refresh or 0 if unconfigured)
           int ClosestMatch = (Math.Min(Math.Abs(CurrentRefreshRate  - delayRefresh23),
               (Math.Min(Math.Abs(CurrentRefreshRate  - delayRefresh24),
               (Math.Min(Math.Abs(CurrentRefreshRate  - delayRefresh50),
               (Math.Abs(CurrentRefreshRate  - delayRefresh59))))))));
-          //which of these was it? in order of highest refresh first in case of a match
+          // Which of these was it? in order of highest refresh first in case of a match
           if (ClosestMatch == Math.Abs(CurrentRefreshRate - delayRefresh59))
           {
               ReferenceDelay = Settings.delayReferenceTime59;
@@ -443,7 +443,7 @@ namespace AtmoLight
               ReferenceDelay = Settings.delayReferenceTime23;
               ReferenceRefresh = 23;
           }
-          //if the current refresh is not an exact match, then use our best reference point in a ratio calculation
+          // If the current refresh is not an exact match, then use our best reference point in a ratio calculation
           if (ReferenceRefresh != CurrentRefreshRate)
           {
               ReferenceDelay = (int)(((float)ReferenceRefresh / (float)CurrentRefreshRate) * (float)ReferenceDelay);
@@ -1402,7 +1402,7 @@ namespace AtmoLight
         }
       }
       // Change Delay
-      else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeDelay") || dlg.SelectedLabelText == formattedDelayTitle)
+      else if ((dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeDelay") || dlg.SelectedLabelText == formattedDelayTitle) && !string.IsNullOrEmpty(formattedDelayTitle))
       {
         GUIDialogMenu dlgSetReferenceTime =
           (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
@@ -1462,7 +1462,6 @@ namespace AtmoLight
             .Replace(" (" + Settings.delayReferenceTime24 + ")MS", string.Empty).Replace(" (" + Settings.delayReferenceTime50 + ")MS", string.Empty)
             .Replace(" (" + Settings.delayReferenceTime59 + ")MS", string.Empty).Trim();
           bool isValidInteger = int.TryParse(selectedItem, out selectedRefreshrate);
-
 
           if ((int.TryParse(GetKeyboardString(""), out delayTimeHelper)) && (delayTimeHelper >= 0) &&
               (delayTimeHelper <= 1000))
