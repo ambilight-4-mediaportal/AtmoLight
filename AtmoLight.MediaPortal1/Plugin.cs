@@ -47,13 +47,6 @@ namespace AtmoLight
 
     private List<ContentEffect> supportedEffects;
 
-    // Internal DirectX capture
-    private static DxScreenCapture dxScreenCapture;
-    private bool dxscreenCaptureEnabled;
-    private bool dxScreenCaptureInitLock;
-    private bool errorDuringDirectXcapture;
-    private long errorDuringDirectXcaptureTime;
-
     // Frame Fields
     private Microsoft.DirectX.Direct3D.Surface rgbSurface = null; // RGB Surface
     private Int64 lastFrame = 0; // Tick count of the last frame
@@ -126,27 +119,8 @@ namespace AtmoLight
 
 
       // FrameGrabber Handler
-      // If renderer is MadVR use internal DirectX capture
-      if (Settings.useMadVideoRenderer && !Settings.useEVRenderer)
-      {
-        Log.Debug("Detected madVR video renderer, switching to internal AtmoLight DirectX capture.");
-
-        // Disable UI capture as it will conflict
-        Settings.trueGrabbing = false;
-
-        // Start DirectX capture thread
-        dxscreenCaptureEnabled = true;
-        Thread t = new Thread(DxScreenCaptureThread);
-        t.IsBackground = true;
-        t.Start();
-      }
-      else
-      {
-        Log.Debug("Detected standard video renderer and subscribing to Mediaportal core frame grabber");
-
-        MediaPortal.FrameGrabber.GetInstance().OnNewFrame +=
-          new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
-      }
+      MediaPortal.FrameGrabber.GetInstance().OnNewFrame +=
+        new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
 
       // Button Handler
       GUIWindowManager.OnNewAction += new OnActionHandler(OnNewAction);
@@ -337,9 +311,6 @@ namespace AtmoLight
       {
         coreObject.ChangeEffect(Settings.effectMPExit);
       }
-
-      // Stop DirectX screen capture if active.
-      dxscreenCaptureEnabled = false;
 
       coreObject.Dispose();
 
@@ -732,227 +703,6 @@ namespace AtmoLight
           rgbSurface.Dispose();
           rgbSurface = null;
         }
-      }
-    }
-
-    #endregion
-
-    #region DxScreen capture
-
-    private void DxScreenCaptureThread()
-    {
-      while (dxscreenCaptureEnabled)
-      {
-        try
-        {
-          if (errorDuringDirectXcapture && Math.Abs(DateTime.Now.Millisecond - errorDuringDirectXcaptureTime) < TimeSpan.FromSeconds(10).TotalMilliseconds)
-          {
-            Thread.Sleep(5);
-            continue;
-          }
-          else if (errorDuringDirectXcapture)
-          {
-            Thread.Sleep(5);
-            errorDuringDirectXcapture = false;
-          }
-
-          if (coreObject == null || dxScreenCaptureInitLock)
-          {
-            Thread.Sleep(5);
-            continue;
-          }
-
-          if (coreObject.GetCurrentEffect() != ContentEffect.MediaPortalLiveMode || !coreObject.IsConnected() ||
-              !coreObject.IsAtmoLightOn())
-          {
-            if (dxScreenCapture != null)
-            {
-              DisposeDxScreenCapture();
-            }
-            continue;
-          }
-
-          if (coreObject.GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
-          {
-
-            // Init capture device
-            if (dxScreenCapture == null)
-            {
-              InitDxScreenCapture();
-            }
-
-            // Check if capture device exists and send image
-            if (dxScreenCapture != null)
-            {
-              CaptureDxScreen();
-            }
-          }
-
-          // Default delay of 5ms to lower CPU usage during loop (limits it to 200FPS)
-          Thread.Sleep(5);
-        }
-        catch (Exception){
-        }
-      }
-
-      // Dispose of screen capture device
-      DisposeDxScreenCapture();
-    }
-
-    private void InitDxScreenCapture()
-    {
-      try
-      {
-        dxScreenCaptureInitLock = true;
-
-        int monitorIndex = 0;
-
-        if (dxScreenCapture == null)
-        {
-          uint deviceNum = 0;
-          MediaPortal.Player.Win32.DISPLAY_DEVICE displayDevice = new MediaPortal.Player.Win32.DISPLAY_DEVICE();
-          displayDevice.cb = (ushort)Marshal.SizeOf(displayDevice);
-
-          while (EnumDisplayDevices(null, deviceNum, displayDevice, 0) != 0)
-          {
-            if (displayDevice.DeviceName ==
-                Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].Information.DeviceName)
-            {
-              // Set new monitorIndex
-              monitorIndex = (int)deviceNum;
-              Log.Debug("Setting detected screen to new detected MonitorIndex: {0}", (int)deviceNum);
-            }
-            ++deviceNum;
-          }
-
-          Log.Debug("Creating DirectX capture device on monitor...");
-          dxScreenCapture = new DxScreenCapture(monitorIndex);
-          Log.Debug("Created DirectX capture device!");
-          Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
-        }
-
-        Thread.Sleep(500);
-
-        dxScreenCaptureInitLock = false;
-      }
-      catch (Exception ex)
-      {
-        Log.Error("Error in InitDxScreenCapture");
-        Log.Error("Exception: {0}", ex.ToString());
-        dxScreenCaptureInitLock = false;
-      }
-    }
-
-    private void ReInitDxScreenCapture()
-    {
-      dxScreenCaptureInitLock = true;
-
-      try
-      {
-        Log.Debug("Disposing of DirectX capture device...");
-        dxScreenCapture = null;
-        Log.Debug("Disposed of DirectX capture device!");
-
-        int monitorIndex = 0;
-        uint deviceNum = 0;
-        MediaPortal.Player.Win32.DISPLAY_DEVICE displayDevice = new MediaPortal.Player.Win32.DISPLAY_DEVICE();
-        displayDevice.cb = (ushort)Marshal.SizeOf(displayDevice);
-
-        while (EnumDisplayDevices(null, deviceNum, displayDevice, 0) != 0)
-        {
-          if (displayDevice.DeviceName ==
-              Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].Information.DeviceName)
-          {
-            // Set new monitorIndex
-            monitorIndex = (int)deviceNum;
-            Log.Debug("Setting detected screen to new detected MonitorIndex : {0}", (int)deviceNum);
-          }
-          ++deviceNum;
-        }
-
-        Log.Debug("Creating DirectX capture device on monitor..");
-        dxScreenCapture = new DxScreenCapture(monitorIndex);
-        Log.Debug("Created DirectX capture device!");
-
-        Log.Debug(string.Format("Refresh rate is: {0}hz", dxScreenCapture.refreshRate));
-
-        Thread.Sleep(500);
-
-        dxScreenCaptureInitLock = false;
-      }
-      catch (Exception ex)
-      {
-        Log.Error("Error in ReInitDxScreenCapture");
-        Log.Error("Exception: {0}", ex.ToString());
-        dxScreenCaptureInitLock = false;
-      }
-    }
-
-    private void DisposeDxScreenCapture()
-    {
-      try
-      {
-        dxScreenCaptureInitLock = true;
-        if (dxScreenCapture != null)
-        {
-          if (dxScreenCapture.device != null)
-          {
-            dxScreenCapture.device.Dispose();
-            dxScreenCapture.device = null;
-          }
-
-          dxScreenCapture = null;
-        }
-        Log.Debug("Disposed of DirectX capture device!");
-
-        dxScreenCaptureInitLock = false;
-      }
-      catch (Exception ex)
-      {
-        Log.Error("Error in DxScreenCaptureThread");
-        Log.Error("Exception: {0}", ex.ToString());
-        dxScreenCaptureInitLock = false;
-      }
-    }
-
-    private void CaptureDxScreen()
-    {
-      try
-      {
-        SlimDX.Direct3D9.Surface s = dxScreenCapture.CaptureScreen();
-
-        if (s == null)
-        {
-          errorDuringDirectXcapture = true;
-          errorDuringDirectXcaptureTime = DateTime.Now.Millisecond;
-          Log.Error("Error in CaptureDxScreen, no surface to read (wrong monitor index?)");
-          return;
-        }
-
-        DataStream ds = SlimDX.Direct3D9.Surface.ToStream(s, SlimDX.Direct3D9.ImageFileFormat.Bmp);
-
-        byte[] buffer = new byte[ds.Length];
-        using (MemoryStream stream = new MemoryStream())
-        {
-          int read;
-          while ((read = ds.Read(buffer, 0, buffer.Length)) > 0)
-          {
-            stream.Write(buffer, 0, read);
-          }
-
-          coreObject.CalculateBitmap(stream);
-        }
-
-        ds = null;
-        s = null;
-      }
-      catch (Exception ex)
-      {
-        Log.Error("Error in CaptureDxScreen");
-        Log.Error("Exception: {0}", ex.ToString());
-
-        // Try to re-init capture device
-        ReInitDxScreenCapture();
       }
     }
 
