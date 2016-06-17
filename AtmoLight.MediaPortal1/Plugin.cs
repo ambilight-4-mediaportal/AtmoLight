@@ -1141,7 +1141,8 @@ namespace AtmoLight
         }
         else
         {
-          dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeDelay")));
+          formattedDelayTitle = Localization.Translate("ContextMenu", "ChangeDelay");
+          dlg.Add(new GUIListItem(formattedDelayTitle));
         }
       }
       else
