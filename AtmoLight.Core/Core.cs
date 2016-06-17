@@ -142,8 +142,8 @@ namespace AtmoLight
     // Generic Fields
     private int captureWidth = 64; // Default fallback capture width
     private int captureHeight = 48; // Default fallback capture height
-    private Queue targetChangeImageQueue;
-    private int targetChangeImageQueueSize = 60;
+    private static int targetChangeImageQueueSize = 240;
+    private Queue targetChangeImageQueue = new Queue();
     private bool delayEnabled = false;
     private int delayTime = 0;
     private string gifPath = "";
@@ -440,15 +440,18 @@ namespace AtmoLight
     /// Changes the delay time.
     /// </summary>
     /// <param name="delay">Delay in ms.</param>
+    /// <param name="refreshrate">Refreshrate in hz.</param>
     /// <returns>true or false</returns>
     public bool SetDelay(int delay)
     {
       if (delay > 0)
       {
         Log.Debug("Changing delay to {0}ms.", delay);
+
         delayTime = delay;
         return true;
       }
+
       return false;
     }
 
@@ -556,6 +559,15 @@ namespace AtmoLight
     }
 
     /// <summary>
+    /// Returns the delay tick.
+    /// </summary>
+    /// <returns>delay tick in ms.</returns>
+    public long GetDelayTick()
+    {
+      return Win32API.GetTickCount();
+    }
+
+    /// <summary>
     /// Returns the static color.
     /// </summary>
     /// <returns>Static Color as int array</returns>
@@ -637,6 +649,26 @@ namespace AtmoLight
       }
       return false;
     }
+
+    /// <summary>
+    /// Returns if at least one target disallows the use of a delay
+    /// </summary>
+    /// <returns></returns>
+    public bool IsDisAllowDelayTargetPresent()
+    {
+      lock (targetsLock)
+      {
+        foreach (var target in targets)
+        {
+          if (!target.AllowDelay)
+          {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
     public ITargets GetTarget(Target target)
     {
       lock (targetsLock)
@@ -718,24 +750,24 @@ namespace AtmoLight
     /// <param name="force"></param>
     private void SendPixelData(byte[] pixelData, byte[] bmiInfoHeader, bool force = false)
     {
-      if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && GetCurrentEffect() != ContentEffect.GIFReader && GetCurrentEffect() != ContentEffect.VUMeter && GetCurrentEffect() != ContentEffect.VUMeterRainbow)
+      if (GetCurrentEffect() != ContentEffect.MediaPortalLiveMode && GetCurrentEffect() != ContentEffect.GIFReader && GetCurrentEffect()
+        != ContentEffect.VUMeter && GetCurrentEffect() != ContentEffect.VUMeterRainbow)
       {
         return;
       }
 
-      ChangeImageData data = new ChangeImageData(pixelData, bmiInfoHeader, Win32API.GetTickCount(), force);
+      if (targetChangeImageQueue.Count >= targetChangeImageQueueSize)
+      {
+        targetChangeImageQueue.Dequeue();
+      }
+      
+      ChangeImageData data = new ChangeImageData(pixelData, bmiInfoHeader, GetDelayTick(), force);
       targetChangeImageQueue.Enqueue(data);
     }
 
     private void TargetChangeImageWorker()
     {
       ChangeImageData data;
-      if (delayEnabled)
-      {
-        targetChangeImageQueueSize = delayTime;
-      }
-
-      targetChangeImageQueue = new Queue(targetChangeImageQueueSize);
 
       while (targetChangeImageEnabled)
       {
@@ -743,70 +775,90 @@ namespace AtmoLight
         {
           if (targetChangeImageQueue.Count == 0 || targets == null)
           {
-            // Check if delay was changed during runtime or is invalid
-            if (delayEnabled && targetChangeImageQueueSize != delayTime)
-            {
-              targetChangeImageQueueSize = delayTime;
-              targetChangeImageQueue.Clear();
-              targetChangeImageQueue = new Queue(targetChangeImageQueueSize);
-              Log.Debug("AtmoLight - target frame queue size set to delay size: " + targetChangeImageQueueSize);
-            }
-
             Thread.Sleep(1);
             continue;
           }
-          else if (GetCurrentEffect() == ContentEffect.LEDsDisabled & targetChangeImageQueue.Count > 0)
+          else if (GetCurrentEffect() == ContentEffect.LEDsDisabled && targetChangeImageQueue.Count > 0)
           {
             targetChangeImageQueue.Clear();
             continue;
           }
-          else if (targetChangeImageQueue.Count > targetChangeImageQueueSize)
-          {
-            targetChangeImageQueue.TrimToSize();
-          }
 
-          data = (ChangeImageData)targetChangeImageQueue.Peek();
-
-          if (IsDelayEnabled() && !data.force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
+          // Use optimized method if all targets support delay
+          if (!IsDisAllowDelayTargetPresent() && delayEnabled)
           {
-            bool frameTickMatched = false;
-            if (Win32API.GetTickCount() >= (data.tick + delayTime))
+            data = (ChangeImageData)targetChangeImageQueue.Dequeue();
+
+            // Delay if target allows for delay and delay was enabled
+            if (IsAllowDelayTargetPresent() && !data.force && delayEnabled)
             {
-              //Log.Debug("Frame tick matched -> {0} / {1}", Win32API.GetTickCount(), data.tick + delayTime);
-              targetChangeImageQueue.Dequeue();
-              frameTickMatched = true;
+              while (GetDelayTick() < (data.tick + delayTime))
+              {
+                Thread.Sleep(1);
+              }
+
+              //Log.Debug("Frame tick matched diff -> {0} | Queue size: {1}", Math.Abs(GetDelayTick() - data.tick - delayTime), targetChangeImageQueue.Count);
             }
 
             lock (targetsLock)
             {
               foreach (var target in targets)
               {
-                if (!target.AllowDelay && target.IsConnected())
+                if (target.AllowDelay && target.IsConnected() && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
                 {
                   target.ChangeImage(data.pixelData, data.bmiInfoHeader);
-                }
-                else if (target.IsConnected() && frameTickMatched)
-                {
-                  target.ChangeImage(data.pixelData, data.bmiInfoHeader);
-                }
-                else
-                {
-                  continue;
                 }
               }
             }
           }
           else
           {
-            data = (ChangeImageData)targetChangeImageQueue.Dequeue();
+            data = (ChangeImageData)targetChangeImageQueue.Peek();
 
-            lock (targetsLock)
+            if (IsDelayEnabled() && !data.force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
             {
-              foreach (var target in targets)
+              bool frameTickMatched = false;
+              long tickCount = Win32API.GetTickCount();
+
+              if (tickCount >= (data.tick + delayTime))
               {
-                if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
+                targetChangeImageQueue.Dequeue();
+                frameTickMatched = true;
+              }
+
+              lock (targetsLock)
+              {
+                foreach (var target in targets)
                 {
-                  target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                  if (!target.AllowDelay && target.IsConnected())
+                  {
+                    target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                  }
+                  else if (target.IsConnected() && frameTickMatched)
+                  {
+                    //Log.Debug("Frame tick matched  -> {0} / {1}", Win32API.GetTickCount(), data.tick + delayTime);
+                    target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                  }
+                  else
+                  {
+                    Thread.Sleep(5);
+                    continue;
+                  }
+                }
+              }
+            }
+            else if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+            {
+              data = (ChangeImageData)targetChangeImageQueue.Dequeue();
+
+              lock (targetsLock)
+              {
+                foreach (var target in targets)
+                {
+                  if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
+                  {
+                    target.ChangeImage(data.pixelData, data.bmiInfoHeader);
+                  }
                 }
               }
             }
@@ -815,7 +867,6 @@ namespace AtmoLight
         catch (Exception) { }
       }
     }
-
     private Stream BlackbarDetection(Stream stream)
     {
       if (!blackbarStopwatch.IsRunning)
@@ -851,7 +902,7 @@ namespace AtmoLight
               {
                 colorTemp = blackBarBitmap.GetPixel(x, y);
                 if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold ||
-                    colorTemp.B > blackbarDetectionThreshold)
+                  colorTemp.B > blackbarDetectionThreshold)
                 {
                   yTopBound = y;
                   if (blackbarDetectionLinkAreas)
@@ -866,7 +917,7 @@ namespace AtmoLight
               {
                 colorTemp = blackBarBitmap.GetPixel(x, blackBarBitmap.Height - 1 - y);
                 if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold ||
-                    colorTemp.B > blackbarDetectionThreshold)
+                  colorTemp.B > blackbarDetectionThreshold)
                 {
                   yBottomBound = blackBarBitmap.Height - y;
                   if (blackbarDetectionLinkAreas)
@@ -879,7 +930,6 @@ namespace AtmoLight
             }
           }
         }
-
         // Vertical Scan
         if (blackbarDetectionVertical)
         {
@@ -900,7 +950,7 @@ namespace AtmoLight
               {
                 colorTemp = blackBarBitmap.GetPixel(x, y);
                 if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold ||
-                    colorTemp.B > blackbarDetectionThreshold)
+                  colorTemp.B > blackbarDetectionThreshold)
                 {
                   xLeftBound = x;
                   if (blackbarDetectionLinkAreas)
@@ -915,7 +965,7 @@ namespace AtmoLight
               {
                 colorTemp = blackBarBitmap.GetPixel(blackBarBitmap.Width - 1 - x, y);
                 if (colorTemp.R > blackbarDetectionThreshold || colorTemp.G > blackbarDetectionThreshold ||
-                    colorTemp.B > blackbarDetectionThreshold)
+                  colorTemp.B > blackbarDetectionThreshold)
                 {
                   xRightBound = blackBarBitmap.Width - x;
                   if (blackbarDetectionLinkAreas)
@@ -928,15 +978,12 @@ namespace AtmoLight
             }
           }
         }
-        yTopBound = yTopBound == -1 ? 0 : yTopBound;
-        yBottomBound = yBottomBound == -1 ? blackBarBitmap.Height : yBottomBound;
-        xLeftBound = xLeftBound == -1 ? 0 : xLeftBound;
-        xRightBound = xRightBound == -1 ? blackBarBitmap.Width : xRightBound;
 
-        if (yTopBound != 0 || yBottomBound != blackBarBitmap.Height || xLeftBound != 0 || xRightBound != blackBarBitmap.Width)
+        if (yTopBound != -1 && yBottomBound != -1 && xLeftBound != -1 && xRightBound != -1)
         {
           blackbarDetectionRect = new Rectangle(xLeftBound, yTopBound, xRightBound - xLeftBound, yBottomBound - yTopBound);
         }
+
         blackBarBitmap.Dispose();
         blackbarStopwatch.Restart();
       }
