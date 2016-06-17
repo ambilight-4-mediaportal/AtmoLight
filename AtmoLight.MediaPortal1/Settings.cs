@@ -294,29 +294,35 @@ namespace AtmoLight
         lowCPU = reader.GetValueAsBool("atmolight", "lowCPU", false);
         lowCPUTime = reader.GetValueAsInt("atmolight", "lowCPUTime", 0);
         delay = reader.GetValueAsBool("atmolight", "Delay", false);
-          //old refresh delay settings
-        delayReferenceRefreshRate = reader.GetValueAsInt("atmolight", "DelayRefreshRate",0);
-        delayReferenceTime  = reader.GetValueAsInt("atmolight", "DelayTime",0);
-		//new
+        delayReferenceRefreshRate = reader.GetValueAsInt("atmolight", "DelayRefreshRate", 0);
+
+        // Legacy reference time
+        delayReferenceTime  = reader.GetValueAsInt("atmolight", "DelayTime", 0);
+
+        // New reference times
         delayReferenceTime23 = reader.GetValueAsInt("atmolight", "DelayTime23", 0);
         delayReferenceTime24 = reader.GetValueAsInt("atmolight", "DelayTime24", 0);
         delayReferenceTime50 = reader.GetValueAsInt("atmolight", "DelayTime50", 0);
         delayReferenceTime59 = reader.GetValueAsInt("atmolight", "DelayTime59", 0);
 
-          //if all of the specific refresh values are 0, assume upgrade setting from single rate
-        if (delayReferenceTime23 ==0 && delayReferenceTime24 == 0 && delayReferenceTime50 ==0 && delayReferenceTime59 == 0)
+        // If all of the specific refresh values are 0, assume upgrade setting from single rate
+        if (delayReferenceTime23 == 0 && delayReferenceTime24 == 0 && delayReferenceTime50 == 0 && delayReferenceTime59 == 0)
         {
-            switch (delayReferenceRefreshRate)
-            {
-                case 23: delayReferenceTime23 = delayReferenceTime;
-                    break;
-                case 24: delayReferenceTime24 = delayReferenceTime;
-                    break;
-                case 50: delayReferenceTime50 = delayReferenceTime;
-                    break;
-                case 59: delayReferenceTime59 = delayReferenceTime;
-                    break;
-            }
+          switch (delayReferenceRefreshRate)
+          {
+            case 23:
+              delayReferenceTime23 = delayReferenceTime;
+              break;
+            case 24: 
+              delayReferenceTime24 = delayReferenceTime;
+              break;
+            case 50: 
+              delayReferenceTime50 = delayReferenceTime;
+              break;
+            case 59: 
+              delayReferenceTime59 = delayReferenceTime;
+              break;
+          }
         }
         exitAtmoWin = reader.GetValueAsBool("atmolight", "ExitAtmoWin", true);
         startAtmoWin = reader.GetValueAsBool("atmolight", "StartAtmoWin", true);

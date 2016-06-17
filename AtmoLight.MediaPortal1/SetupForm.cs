@@ -62,6 +62,7 @@ namespace AtmoLight
       edExcludeStart.Text = Settings.excludeTimeStart.ToString("HH:mm");
       edExcludeEnd.Text = Settings.excludeTimeEnd.ToString("HH:mm");
       lowCpuTime.Text = Settings.lowCPUTime.ToString();
+
       tbDelay23.Text = Settings.delayReferenceTime23.ToString();
       tbDelay24.Text = Settings.delayReferenceTime24.ToString();
       tbDelay50.Text = Settings.delayReferenceTime50.ToString();
@@ -387,10 +388,11 @@ namespace AtmoLight
 
     private void btnSave_Click(object sender, EventArgs e)
     {
-      //Validate user input
+      /*
+      * Validate user input
+      */
 
-
-      //Time excluded Start
+      // Time excluded Start
       if (validatorDateTime(edExcludeStart.Text) == false)
       {
         MessageBox.Show(Localization.Translate("Common", "ErrorStartTime") + " - [" + lblStart.Text + "]",
@@ -398,7 +400,7 @@ namespace AtmoLight
         return;
       }
 
-      //Time excluded Stop
+      // Time excluded Stop
       if (validatorDateTime(edExcludeEnd.Text) == false)
       {
         MessageBox.Show(Localization.Translate("Common", "ErrorEndTime") + " - [" + lblEnd.Text + "]",
@@ -406,7 +408,7 @@ namespace AtmoLight
         return;
       }
 
-      //Low CPU
+      // Low CPU
       if (validatorInt(lowCpuTime.Text, 1, 0, false) == false)
       {
         if (ckLowCpu.Checked)
@@ -418,13 +420,13 @@ namespace AtmoLight
         else
 
         {
-          //Didn't pass validation so save cleanly with default value even if option isn't used
+          // Didn't pass validation so save cleanly with default value even if option isn't used
           lowCpuTime.Text = "0";
         }
       }
 
-      //LED delay
-      if (validatorInt(tbDelay23.Text, 1, 0, false) == false)
+      // LED delay
+      if (validatorInt(tbDelay23.Text, 0, 0, false) == false)
       {
         if (ckDelay.Checked)
         {
@@ -434,11 +436,11 @@ namespace AtmoLight
         }
         else
         {
-          //Didn't pass validation so save cleanly with default value even if option isn't used
+          // Didn't pass validation so save cleanly with default value even if option isn't used
           tbDelay23.Text = "0";
         }
       }
-      if (validatorInt(tbDelay24.Text, 1, 0, false) == false)
+      if (validatorInt(tbDelay24.Text, 0, 0, false) == false)
       {
           if (ckDelay.Checked)
           {
@@ -448,11 +450,11 @@ namespace AtmoLight
           }
           else
           {
-              //Didn't pass validation so save cleanly with default value even if option isn't used
+              // Didn't pass validation so save cleanly with default value even if option isn't used
               tbDelay24.Text = "0";
           }
       }
-      if (validatorInt(tbDelay50.Text, 1, 0, false) == false)
+      if (validatorInt(tbDelay50.Text, 0, 0, false) == false)
       {
           if (ckDelay.Checked)
           {
@@ -462,11 +464,11 @@ namespace AtmoLight
           }
           else
           {
-              //Didn't pass validation so save cleanly with default value even if option isn't used
+              // Didn't pass validation so save cleanly with default value even if option isn't used
               tbDelay50.Text = "0";
           }
       }
-      if (validatorInt(tbDelay59.Text, 1, 0, false) == false)
+      if (validatorInt(tbDelay59.Text, 0, 0, false) == false)
       {
           if (ckDelay.Checked)
           {
@@ -476,12 +478,12 @@ namespace AtmoLight
           }
           else
           {
-              //Didn't pass validation so save cleanly with default value even if option isn't used
+              // Didn't pass validation so save cleanly with default value even if option isn't used
               tbDelay59.Text = "0";
           }
       }
 
-      //Black bar detection
+      // Black bar detection
       if (validatorInt(tbBlackbarDetectionTime.Text, 1, 0, false) == false)
       {
         if (ckBlackbarDetection.Checked)
@@ -493,12 +495,12 @@ namespace AtmoLight
         }
         else
         {
-          //Didn't pass validation so save cleanly with default value even if option isn't used
+          // Didn't pass validation so save cleanly with default value even if option isn't used
           tbBlackbarDetectionTime.Text = "0";
         }
       }
 
-      //Static color RED
+      // Static color RED
       if (validatorInt(tbRed.Text, 0, 255, true) == false)
       {
         MessageBox.Show(
@@ -508,7 +510,7 @@ namespace AtmoLight
         return;
       }
 
-      //Static color GREEN
+      // Static color GREEN
       if (validatorInt(tbGreen.Text, 0, 255, true) == false)
       {
         MessageBox.Show(
@@ -518,7 +520,7 @@ namespace AtmoLight
         return;
       }
 
-      //Static color BLUE
+      // Static color BLUE
       if (validatorInt(tbBlue.Text, 0, 255, true) == false)
       {
         MessageBox.Show(
@@ -528,7 +530,7 @@ namespace AtmoLight
         return;
       }
 
-      //Menu buttons
+      // Menu buttons
       if ((cbMenuButton.SelectedIndex == comboBox1.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
           (cbMenuButton.SelectedIndex == comboBox2.SelectedIndex) && (cbMenuButton.SelectedIndex != 4) ||
           (comboBox1.SelectedIndex == comboBox2.SelectedIndex) && (comboBox1.SelectedIndex != 4))
@@ -538,7 +540,7 @@ namespace AtmoLight
         return;
       }
 
-      //GIF path
+      // GIF path
       if (validatorPath(tbGIF.Text) == false && string.IsNullOrEmpty(tbGIF.Text) == false)
       {
         MessageBox.Show(Localization.Translate("Common", "ErrorFileGeneric") + " - [" + grpGIF.Text + "]",
@@ -546,7 +548,7 @@ namespace AtmoLight
         return;
       }
 
-      //Atmowin path
+      // Atmowin path
       if (validatorPath(edFileAtmoWin.Text) == false && string.IsNullOrEmpty(edFileAtmoWin.Text) == false)
       {
         if (ckAtmowinEnabled.Checked)
@@ -558,14 +560,14 @@ namespace AtmoLight
         }
       }
 
-      //Hyperion IP
+      // Hyperion IP
       if (string.IsNullOrEmpty(tbHyperionIP.Text))
       {
         MessageBox.Show(Localization.Translate("Common", "ErrorIP") + " - [" + lblHyperionIP.Text + "]",
           Localization.Translate("Common", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
-      //Hue IP
+      // Hue IP
       if (validatorIPAdress(tbHueIP.Text) == false)
       {
         MessageBox.Show(Localization.Translate("Common", "ErrorIP") + " - [" + lblHueIP.Text + "]",
@@ -580,7 +582,7 @@ namespace AtmoLight
       int minValue = 0;
       int maxValue = 0;
 
-      //Capture width
+      // Capture width
       minValue = 1;
       maxValue = 0;
       if (validatorInt(tbCaptureWidth.Text, minValue, maxValue, false) == false)
@@ -592,7 +594,7 @@ namespace AtmoLight
         return;
       }
 
-      //Capture height
+      // Capture height
       minValue = 1;
       maxValue = 0;
       if (validatorInt(tbCaptureHeight.Text, minValue, maxValue, false) == false)
@@ -604,7 +606,7 @@ namespace AtmoLight
         return;
       }
 
-      //AtmoWin wake helper resume delay
+      // AtmoWin wake helper resume delay
       minValue = 0;
       maxValue = 999999;
       if (validatorInt(tbAtmoWakeHelperResumeDelay.Text, minValue, maxValue, true) == false)
@@ -613,7 +615,7 @@ namespace AtmoLight
         return;
       }
 
-      //AtmoWin wake helper disconnect delay
+      // AtmoWin wake helper disconnect delay
       minValue = 0;
       maxValue = 999999;
       if (validatorInt(tbAtmoWakeHelperDisconnectDelay.Text, minValue, maxValue, true) == false)
@@ -622,7 +624,7 @@ namespace AtmoLight
         return;
       }
 
-      //AtmoWin wake helper connect delay
+      // AtmoWin wake helper connect delay
       minValue = 0;
       maxValue = 999999;
       if (validatorInt(tbAtmoWakeHelperConnectDelay.Text, minValue, maxValue, true) == false)
@@ -631,7 +633,7 @@ namespace AtmoLight
         return;
       }
 
-      //AtmoWin wake helper reconnect delay
+      // AtmoWin wake helper reconnect delay
       minValue = 0;
       maxValue = 999999;
       if (validatorInt(tbAtmoWakeHelperReinitializationDelay.Text, minValue, maxValue, true) == false)
@@ -640,7 +642,7 @@ namespace AtmoLight
         return;
       }
       
-      //Hyperion port
+      // Hyperion port
       minValue = 1;
       maxValue = 65535;
       if (validatorInt(tbHyperionPort.Text, minValue, maxValue, true) == false)
@@ -653,7 +655,7 @@ namespace AtmoLight
         return;
       }
 
-      //Hyperion reconnect attempts
+      // Hyperion reconnect attempts
       minValue = 1;
       maxValue = 0;
       if (validatorInt(tbHyperionReconnectAttempts.Text, minValue, maxValue, false) == false)
@@ -665,7 +667,7 @@ namespace AtmoLight
         return;
       }
 
-      //Hyperion reconnect delay
+      // Hyperion reconnect delay
       minValue = 100;
       maxValue = 999999;
       if (validatorInt(tbHyperionReconnectDelay.Text, minValue, maxValue, true) == false)
@@ -678,7 +680,7 @@ namespace AtmoLight
         return;
       }
 
-      //Hyperion priority
+      // Hyperion priority
       minValue = 1;
       maxValue = 0;
       if (validatorInt(tbHyperionPriority.Text, minValue, maxValue, false) == false)
@@ -690,7 +692,7 @@ namespace AtmoLight
         return;
       }
 
-      //Hyperion priority static color
+      // Hyperion priority static color
       minValue = 1;
       maxValue = 0;
       if (validatorInt(tbHyperionPriorityStaticColor.Text, minValue, maxValue, false) == false)
@@ -702,7 +704,7 @@ namespace AtmoLight
         return;
       }
 
-      //Hue path
+      // Hue path
       if (validatorPath(edFileHue.Text) == false && string.IsNullOrEmpty(edFileHue.Text) == false)
       {
         if (ckHueEnabled.Checked)
@@ -713,7 +715,7 @@ namespace AtmoLight
         }
       }
 
-      //Hue port
+      // Hue port
       minValue = 1;
       maxValue = 65535;
       if (validatorInt(tbHuePort.Text, minValue, maxValue, true) == false)
@@ -726,7 +728,7 @@ namespace AtmoLight
         return;
       }
 
-      //Hue reconnect attempts
+      // Hue reconnect attempts
       minValue = 1;
       maxValue = 0;
       if (validatorInt(tbHueReconnectAttempts.Text, minValue, maxValue, false) == false)
@@ -738,7 +740,7 @@ namespace AtmoLight
         return;
       }
 
-      //Hue reconnect delay
+      // Hue reconnect delay
       minValue = 100;
       maxValue = 999999;
       if (validatorInt(tbHueReconnectDelay.Text, minValue, maxValue, true) == false)
@@ -1425,7 +1427,7 @@ namespace AtmoLight
 
     private void tbDelay23_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      int minValue = 1;
+      int minValue = 0;
       int maxValue = 0;
       if (validatorInt(tbDelay23.Text, minValue, maxValue, false) == false)
       {
@@ -1439,7 +1441,7 @@ namespace AtmoLight
 
     private void tbDelay24_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-        int minValue = 1;
+        int minValue = 0;
         int maxValue = 0;
         if (validatorInt(tbDelay24.Text, minValue, maxValue, false) == false)
         {
@@ -1452,7 +1454,7 @@ namespace AtmoLight
     }
     private void tbDelay50_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-        int minValue = 1;
+        int minValue = 0;
         int maxValue = 0;
         if (validatorInt(tbDelay50.Text, minValue, maxValue, false) == false)
         {
@@ -1465,7 +1467,7 @@ namespace AtmoLight
     }
     private void tbDelay59_Validating(object sender, System.ComponentModel.CancelEventArgs e)
     {
-        int minValue = 1;
+        int minValue = 0;
         int maxValue = 0;
         if (validatorInt(tbDelay59.Text, minValue, maxValue, false) == false)
         {

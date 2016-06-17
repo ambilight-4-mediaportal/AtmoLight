@@ -1553,7 +1553,7 @@
       // lblDelay24
       // 
       this.lblDelay24.AutoSize = true;
-      this.lblDelay24.Location = new System.Drawing.Point(256, 176);
+      this.lblDelay24.Location = new System.Drawing.Point(256, 175);
       this.lblDelay24.Name = "lblDelay24";
       this.lblDelay24.Size = new System.Drawing.Size(58, 13);
       this.lblDelay24.TabIndex = 44;
@@ -1561,17 +1561,17 @@
       // 
       // tbDelay24
       // 
-      this.tbDelay24.Location = new System.Drawing.Point(209, 173);
+      this.tbDelay24.Location = new System.Drawing.Point(209, 172);
       this.tbDelay24.Name = "tbDelay24";
       this.tbDelay24.Size = new System.Drawing.Size(41, 20);
-      this.tbDelay24.TabIndex = 43;
+      this.tbDelay24.TabIndex = 11;
       this.tbDelay24.Text = "0";
       this.tbDelay24.Validating += new System.ComponentModel.CancelEventHandler(this.tbDelay24_Validating);
       // 
       // lblDelay50
       // 
       this.lblDelay50.AutoSize = true;
-      this.lblDelay50.Location = new System.Drawing.Point(256, 202);
+      this.lblDelay50.Location = new System.Drawing.Point(256, 200);
       this.lblDelay50.Name = "lblDelay50";
       this.lblDelay50.Size = new System.Drawing.Size(58, 13);
       this.lblDelay50.TabIndex = 46;
@@ -1579,17 +1579,17 @@
       // 
       // tbDelay50
       // 
-      this.tbDelay50.Location = new System.Drawing.Point(209, 199);
+      this.tbDelay50.Location = new System.Drawing.Point(209, 197);
       this.tbDelay50.Name = "tbDelay50";
       this.tbDelay50.Size = new System.Drawing.Size(41, 20);
-      this.tbDelay50.TabIndex = 45;
+      this.tbDelay50.TabIndex = 12;
       this.tbDelay50.Text = "0";
       this.tbDelay50.Validating += new System.ComponentModel.CancelEventHandler(this.tbDelay50_Validating);
       // 
       // lblDelay59
       // 
       this.lblDelay59.AutoSize = true;
-      this.lblDelay59.Location = new System.Drawing.Point(256, 228);
+      this.lblDelay59.Location = new System.Drawing.Point(256, 225);
       this.lblDelay59.Name = "lblDelay59";
       this.lblDelay59.Size = new System.Drawing.Size(58, 13);
       this.lblDelay59.TabIndex = 48;
@@ -1597,10 +1597,10 @@
       // 
       // tbDelay59
       // 
-      this.tbDelay59.Location = new System.Drawing.Point(210, 225);
+      this.tbDelay59.Location = new System.Drawing.Point(210, 222);
       this.tbDelay59.Name = "tbDelay59";
       this.tbDelay59.Size = new System.Drawing.Size(41, 20);
-      this.tbDelay59.TabIndex = 47;
+      this.tbDelay59.TabIndex = 13;
       this.tbDelay59.Text = "0";
       this.tbDelay59.Validating += new System.ComponentModel.CancelEventHandler(this.tbDelay59_Validating);
       // 

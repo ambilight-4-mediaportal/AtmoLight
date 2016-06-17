@@ -440,7 +440,6 @@ namespace AtmoLight
     /// Changes the delay time.
     /// </summary>
     /// <param name="delay">Delay in ms.</param>
-    /// <param name="refreshrate">Refreshrate in hz.</param>
     /// <returns>true or false</returns>
     public bool SetDelay(int delay)
     {
@@ -547,15 +546,6 @@ namespace AtmoLight
     public bool IsDelayEnabled()
     {
       return delayEnabled;
-    }
-
-    /// <summary>
-    /// Returns the delay time.
-    /// </summary>
-    /// <returns>Delay in ms.</returns>
-    public int GetDelayTime()
-    {
-      return delayTime;
     }
 
     /// <summary>
@@ -1132,14 +1122,19 @@ namespace AtmoLight
     /// Enables the delay.
     /// </summary>
     /// <param name="delay">Delay in ms.</param>
-    public void EnableDelay(int delay = -1)
+    public void EnableDelay(int delay = 0)
     {
-      if (delay > 0)
-      {
-        delayTime = delay;
-      }
+      delayTime = delay;
       delayEnabled = true;
       Log.Info("Adding {0}ms delay to LEDs.", delayTime);
+    }
+
+    /// <summary>
+    /// Returns the delay.
+    /// </summary>
+    public int GetDelayTime()
+    {
+      return delayTime;
     }
 
     /// <summary>
