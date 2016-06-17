@@ -1097,7 +1097,7 @@ namespace AtmoLight
       GUIDialogMenu dlg = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
       dlg.Reset();
       dlg.SetHeading(Localization.Translate("Common", "AtmoLight"));
-      string formattedDelayTitle = "";
+      string formattedDelayTitle = Localization.Translate("ContextMenu", "ChangeDelay");
 
       // Toggle On/Off
       if (!coreObject.IsAtmoLightOn())
@@ -1141,7 +1141,6 @@ namespace AtmoLight
         }
         else
         {
-          formattedDelayTitle = Localization.Translate("ContextMenu", "ChangeDelay");
           dlg.Add(new GUIListItem(formattedDelayTitle));
         }
       }
@@ -1403,7 +1402,7 @@ namespace AtmoLight
         }
       }
       // Change Delay
-      else if ((dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeDelay") || dlg.SelectedLabelText == formattedDelayTitle) && !string.IsNullOrEmpty(formattedDelayTitle))
+      else if ((dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeDelay") || dlg.SelectedLabelText == formattedDelayTitle))
       {
         GUIDialogMenu dlgSetReferenceTime =
           (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
