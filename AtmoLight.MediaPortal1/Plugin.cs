@@ -371,13 +371,28 @@ namespace AtmoLight
     /// <returns>Current refresh rate.</returns>
     private int GetRefreshRate()
     {
+      int monitorIndex = 0;
+      uint deviceNum = 0;
+      MediaPortal.Player.Win32.DISPLAY_DEVICE displayDevice = new MediaPortal.Player.Win32.DISPLAY_DEVICE();
+      displayDevice.cb = (ushort)Marshal.SizeOf(displayDevice);
+
+      while (EnumDisplayDevices(null, deviceNum, displayDevice, 0) != 0)
+      {
+        if (displayDevice.DeviceName ==
+            Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].Information.DeviceName)
+        {
+          monitorIndex = (int)deviceNum;
+        }
+        ++deviceNum;
+      }
+
       if (GUIGraphicsContext.currentMonitorIdx == -1)
       {
         return Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].CurrentDisplayMode.RefreshRate;
       }
       else
       {
-        return Manager.Adapters[GUIGraphicsContext.currentMonitorIdx].CurrentDisplayMode.RefreshRate;
+        return Manager.Adapters[monitorIndex].CurrentDisplayMode.RefreshRate;
       }
     }
 
