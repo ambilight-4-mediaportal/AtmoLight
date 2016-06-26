@@ -74,10 +74,7 @@
     <string name="End">Einde:</string>
     <string name="DisableBetween">Schakel leds uit tussen</string>
     <string name="Delay">LED Vertraging</string>
-	<string name="MsAt23">ms op 23.976hz</string>
-	<string name="MsAt24">ms op 24hz</string>
-	<string name="MsAt50">ms op 50hz</string>
-	<string name="MsAt59">ms op 59hz</string>  
+    <string name="MsAt">ms op</string>
     <string name="DelayAt">ms vertraging op</string>
     <string name="RestartOnError">Automatisch herverbinden bij foutmelding</string>
     <string name="TrueGrabbing">Gebruik GUI data wanneer de video is geminimaliseerd in MediaPortal Live-modus</string>       

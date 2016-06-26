@@ -235,10 +235,10 @@ namespace AtmoLight
       lblBlackarDetectionMS.Text = Localization.Translate("SetupForm", "BlackbarDetectionThreshold");
       lblpowerModeChangedDelay.Text = Localization.Translate("SetupForm", "ResumeDelay");
       lblFrames.Text = Localization.Translate("SetupForm", "FramesBetween");
-      lblDelay23.Text = Localization.Translate("SetupForm", "MsAt23");
-      lblDelay24.Text = Localization.Translate("SetupForm", "MsAt24");
-      lblDelay50.Text = Localization.Translate("SetupForm", "MsAt50");
-      lblDelay59.Text = Localization.Translate("SetupForm", "MsAt59");
+      lblDelay23.Text = string.Format("{0} 23hz", Localization.Translate("SetupForm", "MsAt"));
+      lblDelay24.Text = string.Format("{0} 24hz", Localization.Translate("SetupForm", "MsAt"));
+      lblDelay50.Text = string.Format("{0} 50hz", Localization.Translate("SetupForm", "MsAt"));
+      lblDelay59.Text = string.Format("{0} 59hz", Localization.Translate("SetupForm", "MsAt"));
       lblpowerModeChangedDelayMS.Text = Localization.Translate("Common", "MS");
       ckMonitorScreensaverState.Text = Localization.Translate("SetupForm", "MonitorScreensaverState");
       ckMonitorWindowState.Text = Localization.Translate("SetupForm", "MonitorWindowState");

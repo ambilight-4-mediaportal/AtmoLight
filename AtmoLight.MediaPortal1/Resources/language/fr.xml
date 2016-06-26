@@ -75,6 +75,7 @@
     <string name="DisableBetween">Désactiver lEDs entre:</string>
     <string name="Delay">LED Délais</string>
     <string name="DelayAt">ms Délais à</string>
+    <string name="MsAt">ms à</string>
     <string name="RestartOnError">Reconnections-Auto si Erreur</string>
     <string name="TrueGrabbing">Utiliser les données de l'interface graphique lorsque la vidéo est minimisée dans MediaPortal mode Live</string>
     <string name="RefreshRate">Hz</string>
@@ -137,6 +138,7 @@
     <string name="BlackbarDetection2.35:1">Manuel 2.35:1 (21x9)</string>
     <string name="Reinitialise">Reconnections sur Equpt. perdu.</string>
     <string name="AtmoLightDisabled">AtmoLight désactivé</string>
+    <string name="SelectDelayReferenceTime">Choisir le délais de référence</string>
   </ContextMenu>
   <AmbiBox>
     <string name="AmbiBox">AmbiBox</string>
@@ -186,11 +188,14 @@
     <string name="DisableBridgeonSuspend">Eteindre le pont Hue à la mise en veille</string>
     <string name="HueTheaterEnabled">Activer Mode Théâtre</string>
     <string name="HueTheaterRestoreLights">Restaurer les leds apres une lecture arrêté</string>
+    <string name="HueTheaterEnabledVU">Utiliser mode cinema pendant l'effet VUmeter</string>
     <string name="AverageColor">Réglage couleur moyenne</string>
     <string name="All">Tout</string>
     <string name="Off">Off</string>
     <string name="LiveviewGroup">Hue - définir Vue en Temp Réel sur le groupe</string>
     <string name="DisableAllGroups">Désactiver pour tout les groupes</string>
+    <string name="ToggleTheatherModeOff">Hue -> mode cinema OFF</string>
+    <string name="ToggleTheatherModeOn">Hue -> mode cinema ON</string>
     <string name="StaticColorGroup">Hue - définir couleur statique du groupe</string>
     <string name="SelectStaticColorGroup">Hue - sélectionner couleur statique du groupe</string>
     <string name="Hint">Besoin d'avoir AtmoHue démarré sur l'IP et Port du dessus, ne pas indiquer vos infos. Hue Bridge</string>

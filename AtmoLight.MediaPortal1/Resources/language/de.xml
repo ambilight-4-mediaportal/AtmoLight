@@ -75,8 +75,9 @@
     <string name="DisableBetween">LEDs deaktivieren zwischen</string>
     <string name="Delay">LED Verzögerung</string>
     <string name="DelayAt">ms Verzögerung bei</string>
+    <string name="MsAt">ms bei</string>
     <string name="RestartOnError">Auto. wiederverbingung bei Fehler</string>
-	<string name="TrueGrabbing">Verwende Nutzeroberflächen Daten in MediaPortal Live Modus wenn Video minimiert ist</string>	
+    <string name="TrueGrabbing">Verwende Nutzeroberflächen Daten in MediaPortal Live Modus wenn Video minimiert ist</string>	
     <string name="RefreshRate">Hz</string>
     <string name="BlackbarDetection">Schw. Balken Erkennung alle</string>
     <string name="BlackbarDetectionThreshold">ms, mit Schwelle</string>
@@ -88,7 +89,7 @@
     <string name="VUMeterMaxHue">Max. hue:</string>
     <string name="VUMeterMinHue">Min. hue:</string>
     <string name="VUMeterMindB">Min. dB:</string>
-	<string name="MonitorScreensaverState">Schalte Leds aus wenn MediaPortal Bildschirmschoner aktiv ist</string>
+    <string name="MonitorScreensaverState">Schalte Leds aus wenn MediaPortal Bildschirmschoner aktiv ist</string>
     <string name="MonitorWindowState">Schalte Leds aus wenn MediaPortal minimiert oder angehalten ist</string>
     <string name="Language">Sprache:</string>
     <string name="MenuHint">Tipp: Sie können das Kontext Menü benutzten um den Effekt zu ändern, die LEDs an- bzw. auszuschalten und den 3D-SBS Modus zu ändern.</string>
@@ -131,6 +132,7 @@
     <string name="BlackbarDetectionOff">Schalte schwarze Balken Erkennung aus</string>
     <string name="Reinitialise">Wiederverbinden zu verlorenen Zielen</string>
     <string name="AtmoLightDisabled">AtmoLight ausgeschaltet</string>
+    <string name="SelectDelayReferenceTime">Wähle Verzögerungsreferenz</string>
   </ContextMenu>
   <AmbiBox>
     <string name="AmbiBox">AmbiBox</string>
@@ -178,13 +180,16 @@
     <string name="RemoteMachine">AtmoHue befindet sich auf einem anderem PC (Dateipfad Überprüfung überspringen)</string>
     <string name="EnableBridgeOnResume">Beim aufwachen aus Standby Hue Bridge aktivieren</string>
     <string name="DisableBridgeonSuspend">Hue Bridge deaktivieren wenn PC in Standby Modus geht</string>
-	<string name="HueTheaterEnabled">Kino Modus aktivieren</string>
-	<string name="HueTheaterRestoreLights">Lichter nach Videoende wieder einschalten</string>
+    <string name="HueTheaterEnabled">Kino Modus aktivieren</string>
+    <string name="HueTheaterRestoreLights">Lichter nach Videoende wieder einschalten</string>
+    <string name="HueTheaterEnabledVU">Aktiviere Theater-Modus während VUmeter Effekten</string>
     <string name="AverageColor">Durchschnittliche Farben Einstellungen</string>
     <string name="All">Alle</string>
     <string name="Off">Aus</string>
     <string name="LiveviewGroup">Hue - wähle aktive liveview Gruppe</string>
     <string name="DisableAllGroups">Alle Gruppen deaktivieren</string>
+    <string name="ToggleTheatherModeOff">Farbton - Schalte Theater-Modus AUS</string>
+    <string name="ToggleTheatherModeOn">Farbton - Schalte Theater-Modus AN</string>
     <string name="StaticColorGroup">Hue - setze statische Farbe für Gruppe</string>
     <string name="SelectStaticColorGroup">Hue - wähle statische Farbe für Gruppe</string>
     <string name="Hint">Tipp: AtmoHue muss an der oben angegeben IP und dem Port verfügbar sein. Bitte hier nicht die Hue Bridge Informationen eintragen.</string>

@@ -344,70 +344,65 @@ public class Script
       <Build>1</Build>
       <Revision>0</Revision>
     </Version>
-    <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-For this plugin to work you will also need AtmoWin. It will be installed automatically.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <ExtensionDescription>AtmoLight is a process plugin that interfaces with different Ambilight solutions and brings Ambilight to MediaPortal.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The main function is to send the needed data directly to your ambilight solution to reduce the CPU load drastically, making Ambilight and smooth playback possible.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+For this plugin to work you will also need AtmoWin. It will be installed automatically.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed.</ExtensionDescription>
-    <VersionDescription>Version 1.18.1.0
-
-- Frames are now queued into 1 worker, this has benefits to performance and resources as we no now longer stack frames in case a device is too slow or irresponsive (mostly AmbiBox) and process them at the speed the device can handle them.
-
-- Delay handling has been improved and merged into the new queue solution resulting in cleaner code and less threads running in background
-
-- Further AmbiBox improvements
-
-- Hue configuration now has a new option in its designated target tab to disable it for specific effects (currently VU only)
-
-- Hue theater can now be toggled on / off from the AtmoLight context menu, this setting is non-persistent so is restored to original after each Mediaportal restart
-
-- Improved madVR check to handle rare case where it could switch to internal DirectX capture incorrectly</VersionDescription>
+    <VersionDescription>Version 1.18.5.0
+
+- Frames are now queued into 1 background worker, this has benefits to performance and resources
+- Delay handling has been improved and allows multiple references in config and context menu
+- Delay timing changes done in context menu are now saved
+- Further AmbiBox improvements
+- Hue now has a new option in its designated configuration target tab to disable theater mode for specific effects (currently VU only)
+- Hue theater can now be toggled on / off from the AtmoLight context menu, this setting is non-persistent so is restored to original after each Mediaportal restart</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
-    <OnlineLocation>https://github.com/ambilight-4-mediaportal/Binaries/raw/master/AtmoLight%20for%20MediaPortal/AtmoLight_1.18.0.0.mpe1</OnlineLocation>
+    <OnlineLocation>https://github.com/ambilight-4-mediaportal/Binaries/raw/master/AtmoLight%20for%20MediaPortal/AtmoLight_1.18.5.0.mpe1</OnlineLocation>
     <ReleaseDate>2016-05-14T10:45:58</ReleaseDate>
     <Tags>atmowin, boblight, hue, hyperion, ambilight, leds, arduino, atmoduino, raspberry pi, sedu-board, teensy 2, ws2801, ws2811, ws2812, ws2812b, neopixels</Tags>
     <Location>..\Release\MP1\[Name]_[Version].mpe1</Location>
@@ -526,7 +521,7 @@ MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>image\atmolight.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{57f8cbec-0657-4099-b50e-567a1e6aae30}-atmolight.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{2092fe4d-30c0-47ab-88c9-4ce48ba8241b}-atmolight.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
