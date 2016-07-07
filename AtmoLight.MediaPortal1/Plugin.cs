@@ -277,12 +277,12 @@ namespace AtmoLight
       menuEffect = Settings.effectMenu;
       if (CheckForStartRequirements())
       {
-        coreObject.ChangeEffect(menuEffect, true);
+        ChangeEffectHandler(menuEffect, true);
         UpdateDelay();
       }
       else
       {
-        coreObject.ChangeEffect(ContentEffect.LEDsDisabled, true);
+        ChangeEffectHandler(ContentEffect.LEDsDisabled, true);
       }
 
       coreObject.Initialise();
@@ -309,7 +309,7 @@ namespace AtmoLight
 
       if (!coreObject.apiOverrideActive)
       {
-        coreObject.ChangeEffect(Settings.effectMPExit);
+        ChangeEffectHandler(Settings.effectMPExit);
       }
 
       coreObject.Dispose();
@@ -365,6 +365,43 @@ namespace AtmoLight
       }
     }
 
+    private void ChangeEffectHandler(ContentEffect effect, bool force = false, bool skipTargetsAndThreads = false, bool apiCommand = false)
+    {
+      switch (effect)
+      {
+        case ContentEffect.LEDsDisabled:
+          ToggleFrameGrabber(false);
+          break;
+        default:
+          ToggleFrameGrabber(true);
+          break;
+      }
+
+      coreObject.ChangeEffect(effect, force, skipTargetsAndThreads, apiCommand);
+    }
+
+    private void ToggleFrameGrabber(bool On)
+    {
+      try
+      {
+        if (On)
+        {
+          MediaPortal.FrameGrabber.GetInstance().OnNewFrame +=
+            new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+        }
+        else
+        {
+          MediaPortal.FrameGrabber.GetInstance().OnNewFrame -=
+            new MediaPortal.FrameGrabber.NewFrameHandler(AtmolightPlugin_OnNewFrame);
+        }
+      }
+      catch(Exception ex)
+      {
+        Log.Error("Error occured during ToggleFrameGrabber.");
+        Log.Error("Exception= {0}", ex.Message);
+      }
+    }
+
     /// <summary>
     /// Return the current refresh rate.
     /// </summary>
@@ -379,28 +416,7 @@ namespace AtmoLight
       }
       else
       {
-        try
-        {
-          uint deviceNum = 0;
-          MediaPortal.Player.Win32.DISPLAY_DEVICE displayDevice = new MediaPortal.Player.Win32.DISPLAY_DEVICE();
-          displayDevice.cb = (ushort)Marshal.SizeOf(displayDevice);
-
-          while (EnumDisplayDevices(null, deviceNum, displayDevice, 0) != 0)
-          {
-            if (displayDevice.DeviceName ==
-                Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].Information.DeviceName)
-            {
-              refreshRate = Manager.Adapters[(int)deviceNum].CurrentDisplayMode.RefreshRate;
-            }
-          }
-        }
-        catch(Exception){
-        }
-
-        if(refreshRate == 0)
-        {
-          refreshRate = Manager.Adapters[GUIGraphicsContext.currentMonitorIdx].CurrentDisplayMode.RefreshRate;
-        }
+        refreshRate = Manager.Adapters[GUIGraphicsContext.currentMonitorIdx].CurrentDisplayMode.RefreshRate;
       }
 
       return refreshRate;
@@ -546,14 +562,14 @@ namespace AtmoLight
 
         if (CheckForStartRequirements())
         {
-          coreObject.ChangeEffect(playbackEffect);
+          ChangeEffectHandler(playbackEffect);
           UpdateDelay();
         }
         else
         {
           if (!coreObject.apiOverrideActive)
           {
-            coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+            ChangeEffectHandler(ContentEffect.LEDsDisabled);
           }
         }
       }
@@ -579,14 +595,14 @@ namespace AtmoLight
       {
         if (CheckForStartRequirements())
         {
-          coreObject.ChangeEffect(menuEffect);
+          ChangeEffectHandler(menuEffect);
           UpdateDelay();
         }
         else
         {
           if (!coreObject.apiOverrideActive)
           {
-            coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+            ChangeEffectHandler(ContentEffect.LEDsDisabled);
           }
         }
       }
@@ -613,14 +629,14 @@ namespace AtmoLight
       {
         if (CheckForStartRequirements())
         {
-          coreObject.ChangeEffect(menuEffect);
+          ChangeEffectHandler(menuEffect);
           UpdateDelay();
         }
         else
         {
           if (!coreObject.apiOverrideActive)
           {
-            coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+            ChangeEffectHandler(ContentEffect.LEDsDisabled);
           }
         }
       }
@@ -780,18 +796,18 @@ namespace AtmoLight
         {
           if (g_Player.Playing)
           {
-            coreObject.ChangeEffect(playbackEffect);
+            ChangeEffectHandler(playbackEffect);
             UpdateDelay();
           }
           else
           {
-            coreObject.ChangeEffect(menuEffect);
+            ChangeEffectHandler(menuEffect);
             UpdateDelay();
           }
         }
         else
         {
-          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          ChangeEffectHandler(ContentEffect.LEDsDisabled);
         }
       }
 
@@ -978,18 +994,18 @@ namespace AtmoLight
         {
           if (g_Player.Playing)
           {
-            coreObject.ChangeEffect(playbackEffect);
+            ChangeEffectHandler(playbackEffect);
             UpdateDelay();
           }
           else
           {
-            coreObject.ChangeEffect(menuEffect);
+            ChangeEffectHandler(menuEffect);
             UpdateDelay();
           }
         }
         else
         {
-          coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+          ChangeEffectHandler(ContentEffect.LEDsDisabled);
         }
       }
       // Toggle LEDs for duration of Mediaportal runtime
@@ -999,18 +1015,18 @@ namespace AtmoLight
 
         if (g_Player.Playing)
         {
-          coreObject.ChangeEffect(playbackEffect);
+          ChangeEffectHandler(playbackEffect);
         }
         else
         {
-          coreObject.ChangeEffect(menuEffect);
+          ChangeEffectHandler(menuEffect);
         }
         UpdateDelay();
       }
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "AtmoLightOff"))
       {
         AtmoLightDisabledByUser = true;
-        coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+        ChangeEffectHandler(ContentEffect.LEDsDisabled);
       }
       // Change Effect
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeEffect"))
@@ -1057,7 +1073,7 @@ namespace AtmoLight
           {
             menuEffect = temp;
           }
-          coreObject.ChangeEffect(temp);
+          ChangeEffectHandler(temp);
           UpdateDelay();
         }
       }
@@ -1334,7 +1350,7 @@ namespace AtmoLight
             coreObject.SetStaticColor(255, 255, 0);
             break;
         }
-        coreObject.ChangeEffect(ContentEffect.StaticColor, true);
+        ChangeEffectHandler(ContentEffect.StaticColor, true);
       }
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "Reinitialise"))
       {
@@ -1542,11 +1558,11 @@ namespace AtmoLight
       {
         if (CheckForStartRequirements())
         {
-          coreObject.ChangeEffect(menuEffect, true, true);
+          ChangeEffectHandler(menuEffect, true, true);
         }
         else
         {
-          coreObject.ChangeEffect(ContentEffect.LEDsDisabled, true, true);
+          ChangeEffectHandler(ContentEffect.LEDsDisabled, true, true);
         }
       }
 
@@ -1574,7 +1590,7 @@ namespace AtmoLight
             if (currenContentEffect == ContentEffect.MediaPortalLiveMode ||
                 currenContentEffect == ContentEffect.ExternalLiveMode || currenContentEffect == ContentEffect.Undefined)
             {
-              coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+              ChangeEffectHandler(ContentEffect.LEDsDisabled);
               LEDsDisabledByMediaportalState = true;
               Log.Debug("LEDs should be deactivated. (Screensaver detected and/or window state is minimized/suspended)");
             }
@@ -1586,12 +1602,12 @@ namespace AtmoLight
 
             if (g_Player.Playing)
             {
-              coreObject.ChangeEffect(playbackEffect);
+              ChangeEffectHandler(playbackEffect);
               UpdateDelay();
             }
             else
             {
-              coreObject.ChangeEffect(menuEffect);
+              ChangeEffectHandler(menuEffect);
               UpdateDelay();
             }
 
