@@ -446,7 +446,7 @@ namespace AtmoLight.Targets
         .SetImageheight(coreObject.GetCaptureHeight())
         .SetImagewidth(coreObject.GetCaptureWidth())
         .SetPriority(coreObject.hyperionPriority)
-        .SetDuration(-1)
+        .SetDuration(5000)
         .Build();
 
       HyperionRequest request = HyperionRequest.CreateBuilder()
