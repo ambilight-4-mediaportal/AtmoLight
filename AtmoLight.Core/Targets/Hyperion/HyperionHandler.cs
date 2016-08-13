@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Diagnostics;
@@ -46,6 +46,7 @@ namespace AtmoLight.Targets
     private int hyperionReconnectCounter;
     private string hyperionpreviousHostname = "";
     private bool priorityCleared;
+    private bool priorityClearing;
 
     private Stopwatch liveReconnectSW = new Stopwatch();
 
@@ -305,76 +306,6 @@ namespace AtmoLight.Targets
       }
     }
 
-
-    public void ChangeColor(int red, int green, int blue)
-    {
-      if (!IsConnected())
-      {
-        return;
-      }
-
-      ColorRequest colorRequest = ColorRequest.CreateBuilder()
-        .SetRgbColor((red * 256 * 256) + (green * 256) + blue)
-        .SetPriority(coreObject.hyperionPriorityStaticColor)
-        .SetDuration(-1)
-        .Build();
-
-      HyperionRequest request = HyperionRequest.CreateBuilder()
-        .SetCommand(HyperionRequest.Types.Command.COLOR)
-        .SetExtension(ColorRequest.ColorRequest_, colorRequest)
-        .Build();
-
-      SendRequest(request);
-    }
-    public void ClearPriority(int priority)
-    {
-      try
-      {
-        if (!IsConnected())
-        {
-          return;
-        }
-
-        if (priority == coreObject.hyperionPriority)
-        {
-          priorityCleared = true;
-        }
-
-        ClearRequest clearRequest = ClearRequest.CreateBuilder()
-        .SetPriority(priority)
-        .Build();
-
-        HyperionRequest request = HyperionRequest.CreateBuilder()
-        .SetCommand(HyperionRequest.Types.Command.CLEAR)
-        .SetExtension(ClearRequest.ClearRequest_, clearRequest)
-        .Build();
-
-        SendRequest(request);
-      }
-      catch (Exception e)
-      {
-        Log.Error(string.Format("HyperionHandler - {0}", "Error clearing priority"));
-        Log.Error(string.Format("HyperionHandler - {0}", e.Message));
-      }
-    }
-    public void ClearAll()
-    {
-      if (!IsConnected())
-      {
-        return;
-      }
-      HyperionRequest request = HyperionRequest.CreateBuilder()
-      .SetCommand(HyperionRequest.Types.Command.CLEARALL)
-      .Build();
-
-      SendRequest(request);
-    }
-    public void ClearPrioritiesAtmoLight(int delay)
-    {
-      ClearPriority(coreObject.hyperionPriorityStaticColor);
-      Thread.Sleep(delay);
-      ClearPriority(coreObject.hyperionPriority);
-    }
     public bool ChangeEffect(ContentEffect effect)
     {
       if (!IsConnected())
@@ -419,9 +350,38 @@ namespace AtmoLight.Targets
     {
       return;
     }
-    public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
+
+    public void ChangeColor(int red, int green, int blue, int duration = -1, bool isStaticColorPriority = true)
     {
       if (!IsConnected())
+      {
+        return;
+      }
+
+      int priority = coreObject.hyperionPriorityStaticColor;
+
+      if (!isStaticColorPriority)
+      {
+        priority = coreObject.hyperionPriority;
+      }
+
+      ColorRequest colorRequest = ColorRequest.CreateBuilder()
+        .SetRgbColor((red * 256 * 256) + (green * 256) + blue)
+        .SetPriority(priority)
+        .SetDuration(duration)
+        .Build();
+
+      HyperionRequest request = HyperionRequest.CreateBuilder()
+        .SetCommand(HyperionRequest.Types.Command.COLOR)
+        .SetExtension(ColorRequest.ColorRequest_, colorRequest)
+        .Build();
+
+      SendRequest(request);
+    }
+
+    public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
+    {
+      if (!IsConnected() && !priorityClearing)
       {
         return;
       }
@@ -446,13 +406,75 @@ namespace AtmoLight.Targets
         .SetImageheight(coreObject.GetCaptureHeight())
         .SetImagewidth(coreObject.GetCaptureWidth())
         .SetPriority(coreObject.hyperionPriority)
-        .SetDuration(5000)
+        .SetDuration(2000)
         .Build();
 
       HyperionRequest request = HyperionRequest.CreateBuilder()
         .SetCommand(HyperionRequest.Types.Command.IMAGE)
         .SetExtension(ImageRequest.ImageRequest_, imageRequest)
         .Build();
+
+      SendRequest(request);
+    }
+
+    public void ClearPriority(int priority)
+    {
+      try
+      {
+        if (!IsConnected())
+        {
+          return;
+        }
+
+        if (priority == coreObject.hyperionPriority)
+        {
+          priorityCleared = true;
+        }
+
+        ClearRequest clearRequest = ClearRequest.CreateBuilder()
+        .SetPriority(priority)
+        .Build();
+
+        HyperionRequest request = HyperionRequest.CreateBuilder()
+        .SetCommand(HyperionRequest.Types.Command.CLEAR)
+        .SetExtension(ClearRequest.ClearRequest_, clearRequest)
+        .Build();
+
+        SendRequest(request);
+      }
+      catch (Exception e)
+      {
+        Log.Error(string.Format("HyperionHandler - {0}", "Error clearing priority"));
+        Log.Error(string.Format("HyperionHandler - {0}", e.Message));
+      }
+    }
+
+    public void ClearPrioritiesAtmoLight(int delay)
+    {
+      priorityClearing = true;
+
+      ClearPriority(coreObject.hyperionPriorityStaticColor);
+      Thread.Sleep(delay);
+      ClearPriority(coreObject.hyperionPriority);
+
+      // Temporarily set color to black to make sure everything is cleared, workaround for Hyperion 1.* bug
+      Thread.Sleep(delay);
+      ChangeColor(0, 0, 0, 1000);
+      Thread.Sleep(delay);
+      ChangeColor(0, 0, 0, 1000, false);
+
+      priorityClearing = false;
+    }
+
+    public void ClearAll()
+    {
+      if (!IsConnected())
+      {
+        return;
+      }
+      HyperionRequest request = HyperionRequest.CreateBuilder()
+      .SetCommand(HyperionRequest.Types.Command.CLEARALL)
+      .Build();
 
       SendRequest(request);
     }
