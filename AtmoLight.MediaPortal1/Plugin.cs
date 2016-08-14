@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Linq;
 using Microsoft.DirectX.Direct3D;
 using Microsoft.Win32;
 using MediaPortal.Dialogs;
@@ -805,7 +806,7 @@ namespace AtmoLight
                (action.wID == MediaPortal.GUI.Library.Action.ActionType.ACTION_REMOTE_BLUE_BUTTON &&
                 Settings.profileButton == 3))
       {
-        coreObject.ChangeProfile();
+        coreObject.ChangeProfile("");
       }
     }
 
@@ -887,7 +888,10 @@ namespace AtmoLight
       dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeEffect")));
 
       // Change Profile
-      dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeProfile")));
+      if (coreObject.GetTarget(Target.AmbiBox) != null || coreObject.GetTarget(Target.AtmoWin) != null)
+      {
+        dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "ChangeProfile")));
+      }
 
       // Toggle 3D Mode
       if (Settings.sbs3dOn)
@@ -1064,7 +1068,43 @@ namespace AtmoLight
       // Change Profile
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeProfile"))
       {
-        coreObject.ChangeProfile();
+        if (coreObject.GetTarget(Target.AmbiBox) != null)
+        {
+          GUIDialogMenu dlgAmbiboxSetActiveProfile =
+  (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+          dlgAmbiboxSetActiveProfile.Reset();
+          dlgAmbiboxSetActiveProfile.SetHeading("Select profile");
+          var ambiBoxTarget = coreObject.GetTarget(Target.AmbiBox) as AtmoLight.Targets.AmbiBoxHandler;
+
+          List<string> groups = ambiBoxTarget.GetAllProfiles();
+
+          if (groups.Any())
+          {
+            foreach (string group in groups)
+            {
+              dlgAmbiboxSetActiveProfile.Add(new GUIListItem(group));
+            }
+          }
+          else
+          {
+            dlgAmbiboxSetActiveProfile.Add(new GUIListItem("No Ambibox profiles found"));
+          }
+
+          dlgAmbiboxSetActiveProfile.SelectedLabel = 0;
+          dlgAmbiboxSetActiveProfile.DoModal(GUIWindowManager.ActiveWindow);
+
+          if (dlgAmbiboxSetActiveProfile.SelectedLabel == 0)
+          {
+            if (dlgAmbiboxSetActiveProfile.SelectedLabelText != "No Ambibox profiles found")
+            {
+              ambiBoxTarget.ChangeProfile(dlgAmbiboxSetActiveProfile.SelectedLabelText);
+            }
+          }
+        }
+        else
+        {
+          coreObject.ChangeProfile("");
+        }
       }
       // Toggle 3D
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "3DOn") ||

@@ -20,7 +20,6 @@ namespace AtmoLight.Targets
   public class HueHandler : ITargets
   {
     #region Fields
-
     public Target Name { get { return Target.Hue; } }
     public TargetType Type { get { return TargetType.Network; } }
     public bool AllowDelay { get { return false; } }
@@ -423,7 +422,7 @@ namespace AtmoLight.Targets
       string message = string.Format("{0},{1},{2}", "ATMOLIGHT - THEATER MODE", APIcommandType.Theater, action);
       sendAPIcommand(message);
     }
-    public void ChangeProfile()
+    public void ChangeProfile(string profileName)
     {
       return;
     }

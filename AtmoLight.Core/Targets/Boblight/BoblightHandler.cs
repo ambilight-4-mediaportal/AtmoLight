@@ -127,7 +127,7 @@ namespace AtmoLight
       }
     }
 
-    public void ChangeProfile()
+    public void ChangeProfile(string profileName)
     {
       return;
     }

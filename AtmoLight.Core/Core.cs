@@ -1104,7 +1104,7 @@ namespace AtmoLight
     /// Change profile.
     /// </summary>
     /// <returns>true or false</returns>
-    public void ChangeProfile()
+    public void ChangeProfile(string profileName)
     {
       lock (targetsLock)
       {
@@ -1112,7 +1112,7 @@ namespace AtmoLight
         {
           if (target.IsConnected())
           {
-            target.ChangeProfile();
+            target.ChangeProfile(profileName);
           }
         }
       }

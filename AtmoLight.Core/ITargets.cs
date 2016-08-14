@@ -17,7 +17,7 @@ namespace AtmoLight
     bool IsConnected();
     bool ChangeEffect(ContentEffect effect);
     void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader);
-    void ChangeProfile();
+    void ChangeProfile(string profileName);
     void PowerModeChanged(PowerModes powerMode);
   }
 }

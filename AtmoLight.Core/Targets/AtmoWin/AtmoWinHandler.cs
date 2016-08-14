@@ -235,7 +235,7 @@ namespace AtmoLight
     /// Change the AtmoWin profile.
     /// </summary>
     /// <returns>true or false</returns>
-    public void ChangeProfile()
+    public void ChangeProfile(string profileName)
     {
       if (!IsConnected())
       {

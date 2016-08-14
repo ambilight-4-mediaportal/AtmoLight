@@ -129,8 +129,9 @@ namespace AtmoLight.Targets
       }
     }
 
-    public void ChangeProfile()
+    public void ChangeProfile(string profileName)
     {
+      return;
     }
 
     public void PowerModeChanged(PowerModes powerMode)

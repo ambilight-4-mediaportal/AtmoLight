@@ -346,7 +346,7 @@ namespace AtmoLight.Targets
       }
       return true;
     }
-    public void ChangeProfile()
+    public void ChangeProfile(string profileName)
     {
       return;
     }

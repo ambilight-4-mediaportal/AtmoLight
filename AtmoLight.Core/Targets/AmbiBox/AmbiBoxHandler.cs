@@ -12,9 +12,9 @@ using System.Diagnostics;
 using Microsoft.Win32;
 using MinimalisticTelnet;
 
-namespace AtmoLight
+namespace AtmoLight.Targets
 {
-  class AmbiBoxHandler : ITargets
+  public class AmbiBoxHandler : ITargets
   {
     #region Fields
     public Target Name { get { return Target.AmbiBox; } }
@@ -159,21 +159,46 @@ namespace AtmoLight
           return true;
       }
     }
-    public void ChangeProfile()
+    public void ChangeProfile(string profileName)
     {
-      int pos = profileList.IndexOf(currentProfile);
-      if (pos != profileList.Count - 1)
+      try
       {
-        currentProfile = profileList[pos + 1];
+        if (string.IsNullOrEmpty(profileName))
+        {
+          int pos = profileList.IndexOf(currentProfile);
+          if (pos != profileList.Count - 1)
+          {
+            currentProfile = profileList[pos + 1];
+          }
+          else
+          {
+            currentProfile = profileList[0];
+          }
+        }
+        else
+        {
+          currentProfile = profileList.Find(s => s.Equals(profileName));
+        }
+
+        Log.Info("AmbiBoxHandler - Changing profile to: {0}", currentProfile);
+        SendCommand("lock");
+        SendCommand("setprofile:" + currentProfile);
+        SendCommand("unlock");
       }
-      else
+      catch (Exception e)
       {
-        currentProfile = profileList[0];
+        Log.Error("Error occurred durin AmbiBox ChangeProfile()");
+        Log.Error(e.Message);
       }
-      Log.Info("AmbiBoxHandler - Changing profile to: {0}", currentProfile);
-      SendCommand("lock");
-      SendCommand("setprofile:" + currentProfile);
-      SendCommand("unlock");
+    }
+
+    public string GetCurrentProfile()
+    {
+      return currentProfile;
+    }
+    public List<string> GetAllProfiles()
+    {
+      return profileList;
     }
 
     #region ChangeImage
@@ -327,6 +352,8 @@ namespace AtmoLight
       currentProfile = SendCommand("getprofile", true).Split(separators)[1];
 
       ledCount = int.Parse(SendCommand("getcountleds", true).Split(separators)[1]);
+      Log.Debug("AmbiBoxHandler - API reports led count: {0}", ledCount);
+
       if (ledCount <= 0)
       {
         return false;
