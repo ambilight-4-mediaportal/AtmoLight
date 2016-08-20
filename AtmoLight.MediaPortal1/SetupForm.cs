@@ -173,6 +173,7 @@ namespace AtmoLight
       ckMonitorWindowState.Checked = Settings.monitorWindowState;
       cbBlackbarDetectionLinkAreas.Checked = Settings.blackbarDetectionLinkAreas;
       cbRemoteApiServer.Checked = Settings.remoteApiServer;
+      ckDoNotShowConnectionErrorsDuringPlayback.Checked = Settings.doNotShowConnectionErrorsDuringPlayback;
       cbBlackbarDetectionHorizontal.Checked = Settings.blackbarDetectionHorizontal;
       cbBlackbarDetectionVertical.Checked = Settings.blackbarDetectionVertical;
     }
@@ -244,6 +245,7 @@ namespace AtmoLight
       ckMonitorWindowState.Text = Localization.Translate("SetupForm", "MonitorWindowState");
       cbBlackbarDetectionLinkAreas.Text = Localization.Translate("SetupForm", "BlackbarDetectionLinkAreas");
       cbRemoteApiServer.Text = Localization.Translate("SetupForm", "RemoteApiServer");
+      ckDoNotShowConnectionErrorsDuringPlayback.Text = Localization.Translate("SetupForm", "DoNotShowConnectionErrorsDuringPlayback");
       grpAdvancedOptions.Text = Localization.Translate("SetupForm", "AdvancedOptions");
       cbBlackbarDetectionHorizontal.Text = Localization.Translate("SetupForm", "BlackbarDetectionHorizontal");
       cbBlackbarDetectionVertical.Text = Localization.Translate("SetupForm", "BlackbarDetectionVertical");
@@ -1189,6 +1191,7 @@ namespace AtmoLight
       Settings.monitorWindowState = ckMonitorWindowState.Checked;
       Settings.blackbarDetectionLinkAreas = cbBlackbarDetectionLinkAreas.Checked;
       Settings.remoteApiServer = cbRemoteApiServer.Checked;
+      Settings.doNotShowConnectionErrorsDuringPlayback = ckDoNotShowConnectionErrorsDuringPlayback.Checked;
       Settings.blackbarDetectionHorizontal = cbBlackbarDetectionHorizontal.Checked;
       Settings.blackbarDetectionVertical = cbBlackbarDetectionVertical.Checked;
 

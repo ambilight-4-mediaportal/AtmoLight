@@ -294,6 +294,7 @@
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
       this.cbLanguage = new System.Windows.Forms.ComboBox();
       this.lblLanguage = new System.Windows.Forms.Label();
+      this.ckDoNotShowConnectionErrorsDuringPlayback = new System.Windows.Forms.CheckBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -1246,6 +1247,7 @@
       // 
       // grpPluginOption
       // 
+      this.grpPluginOption.Controls.Add(this.ckDoNotShowConnectionErrorsDuringPlayback);
       this.grpPluginOption.Controls.Add(this.ckMonitorWindowState);
       this.grpPluginOption.Controls.Add(this.cbBlackbarDetectionVertical);
       this.grpPluginOption.Controls.Add(this.cbBlackbarDetectionHorizontal);
@@ -1283,7 +1285,7 @@
       this.grpPluginOption.Controls.Add(this.lblLedsOnOff);
       this.grpPluginOption.Location = new System.Drawing.Point(370, 10);
       this.grpPluginOption.Name = "grpPluginOption";
-      this.grpPluginOption.Size = new System.Drawing.Size(460, 565);
+      this.grpPluginOption.Size = new System.Drawing.Size(460, 571);
       this.grpPluginOption.TabIndex = 11;
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
@@ -1341,7 +1343,7 @@
       // lblpowerModeChangedDelayMS
       // 
       this.lblpowerModeChangedDelayMS.AutoSize = true;
-      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(256, 437);
+      this.lblpowerModeChangedDelayMS.Location = new System.Drawing.Point(256, 460);
       this.lblpowerModeChangedDelayMS.Name = "lblpowerModeChangedDelayMS";
       this.lblpowerModeChangedDelayMS.Size = new System.Drawing.Size(20, 13);
       this.lblpowerModeChangedDelayMS.TabIndex = 35;
@@ -1350,7 +1352,7 @@
       // lblpowerModeChangedDelay
       // 
       this.lblpowerModeChangedDelay.AutoSize = true;
-      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(10, 434);
+      this.lblpowerModeChangedDelay.Location = new System.Drawing.Point(10, 460);
       this.lblpowerModeChangedDelay.Name = "lblpowerModeChangedDelay";
       this.lblpowerModeChangedDelay.Size = new System.Drawing.Size(101, 13);
       this.lblpowerModeChangedDelay.TabIndex = 34;
@@ -1367,7 +1369,7 @@
       // 
       // tbpowerModeChangedDelay
       // 
-      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(209, 434);
+      this.tbpowerModeChangedDelay.Location = new System.Drawing.Point(209, 457);
       this.tbpowerModeChangedDelay.Name = "tbpowerModeChangedDelay";
       this.tbpowerModeChangedDelay.Size = new System.Drawing.Size(41, 20);
       this.tbpowerModeChangedDelay.TabIndex = 33;
@@ -1393,7 +1395,7 @@
       this.grpCaptureDimensions.Controls.Add(this.lblCaptureWidth);
       this.grpCaptureDimensions.Controls.Add(this.tbCaptureWidth);
       this.grpCaptureDimensions.Controls.Add(this.tbCaptureHeight);
-      this.grpCaptureDimensions.Location = new System.Drawing.Point(226, 465);
+      this.grpCaptureDimensions.Location = new System.Drawing.Point(226, 483);
       this.grpCaptureDimensions.Name = "grpCaptureDimensions";
       this.grpCaptureDimensions.Size = new System.Drawing.Size(234, 80);
       this.grpCaptureDimensions.TabIndex = 31;
@@ -1460,7 +1462,7 @@
       this.grpDeactivate.Controls.Add(this.lblEnd);
       this.grpDeactivate.Controls.Add(this.edExcludeStart);
       this.grpDeactivate.Controls.Add(this.lblStart);
-      this.grpDeactivate.Location = new System.Drawing.Point(5, 465);
+      this.grpDeactivate.Location = new System.Drawing.Point(5, 483);
       this.grpDeactivate.Name = "grpDeactivate";
       this.grpDeactivate.Size = new System.Drawing.Size(215, 80);
       this.grpDeactivate.TabIndex = 8;
@@ -3096,6 +3098,16 @@
       this.lblLanguage.TabIndex = 103;
       this.lblLanguage.Text = "Language:";
       // 
+      // ckDoNotShowConnectionErrorsDuringPlayback
+      // 
+      this.ckDoNotShowConnectionErrorsDuringPlayback.AutoSize = true;
+      this.ckDoNotShowConnectionErrorsDuringPlayback.Location = new System.Drawing.Point(13, 434);
+      this.ckDoNotShowConnectionErrorsDuringPlayback.Name = "ckDoNotShowConnectionErrorsDuringPlayback";
+      this.ckDoNotShowConnectionErrorsDuringPlayback.Size = new System.Drawing.Size(249, 17);
+      this.ckDoNotShowConnectionErrorsDuringPlayback.TabIndex = 49;
+      this.ckDoNotShowConnectionErrorsDuringPlayback.Text = "Do not show connection errors during playback";
+      this.ckDoNotShowConnectionErrorsDuringPlayback.UseVisualStyleBackColor = true;
+      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3447,5 +3459,6 @@
     private System.Windows.Forms.ComboBox cbLanguage;
     private System.Windows.Forms.Label lblLanguage;
     private System.Windows.Forms.CheckBox ckHueTheaterEnableVU;
+    private System.Windows.Forms.CheckBox ckDoNotShowConnectionErrorsDuringPlayback;
   }
 }

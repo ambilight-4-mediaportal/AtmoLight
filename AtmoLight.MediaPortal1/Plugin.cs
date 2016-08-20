@@ -504,6 +504,11 @@ namespace AtmoLight
     /// </summary>
     private void OnNewConnectionLost(Target target)
     {
+      if (g_Player.Playing && Settings.doNotShowConnectionErrorsDuringPlayback)
+      {
+        return;
+      }
+
       // Wait until MediaPortal is ready to display a dialog
       Process mediaPortalProcess = Process.GetCurrentProcess();
       while (mediaPortalProcess.MainWindowHandle == IntPtr.Zero)

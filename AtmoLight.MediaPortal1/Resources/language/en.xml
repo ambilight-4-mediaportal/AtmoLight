@@ -99,6 +99,7 @@
     <string name="BlackbarDetectionVertical">Blackbar Detection vertical scan</string>
     <string name="AdvancedOptions">Advanced options</string>
     <string name="RemoteApiServer">Enable remote API server</string>
+    <string name="DoNotShowConnectionErrorsDuringPlayback">Do not show connection errors during playback</string>  
   </SetupForm>
   <ContextMenu>
     <string name="LEDsOn">Switch LEDs on</string>

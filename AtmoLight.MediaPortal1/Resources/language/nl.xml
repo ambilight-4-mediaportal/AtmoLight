@@ -100,6 +100,7 @@
     <string name="BlackbarDetectionVertical">Blackbar detectie verticale scan</string>
     <string name="AdvancedOptions">Geavanceerde opties</string>
     <string name="RemoteApiServer">Schakel remote API server in</string>
+    <string name="DoNotShowConnectionErrorsDuringPlayback">Toon geen verbinding foutmeldingen tijdens afspelen</string>
   </SetupForm>
   <ContextMenu>
     <string name="LEDsOn">Schakel LEDs in</string>
