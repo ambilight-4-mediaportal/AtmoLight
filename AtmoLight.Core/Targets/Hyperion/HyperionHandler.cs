@@ -406,7 +406,7 @@ namespace AtmoLight.Targets
         .SetImageheight(coreObject.GetCaptureHeight())
         .SetImagewidth(coreObject.GetCaptureWidth())
         .SetPriority(coreObject.hyperionPriority)
-        .SetDuration(2000)
+        .SetDuration(-1)
         .Build();
 
       HyperionRequest request = HyperionRequest.CreateBuilder()
@@ -536,7 +536,7 @@ namespace AtmoLight.Targets
     }
     #endregion
 
-    #region powerstate monitoring
+    #region Powerstate monitoring
     public void PowerModeChanged(PowerModes powerMode)
     {
       switch (powerMode)

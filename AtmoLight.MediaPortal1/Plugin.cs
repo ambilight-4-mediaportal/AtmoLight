@@ -372,40 +372,14 @@ namespace AtmoLight
     /// <returns>Current refresh rate.</returns>
     private int GetRefreshRate()
     {
-      int refreshRate = 0;
-
       if (GUIGraphicsContext.currentMonitorIdx == -1)
       {
-        refreshRate = Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].CurrentDisplayMode.RefreshRate;
-      }
-      else
-      {
-        try
-        {
-          uint deviceNum = 0;
-          MediaPortal.Player.Win32.DISPLAY_DEVICE displayDevice = new MediaPortal.Player.Win32.DISPLAY_DEVICE();
-          displayDevice.cb = (ushort)Marshal.SizeOf(displayDevice);
-
-          while (EnumDisplayDevices(null, deviceNum, displayDevice, 0) != 0)
-          {
-            if (displayDevice.DeviceName ==
-                Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].Information.DeviceName)
-            {
-              refreshRate = Manager.Adapters[(int)deviceNum].CurrentDisplayMode.RefreshRate;
-            }
-          }
-        }
-        catch(Exception){
-        }
-
-        if(refreshRate == 0)
-        {
-          refreshRate = Manager.Adapters[GUIGraphicsContext.currentMonitorIdx].CurrentDisplayMode.RefreshRate;
-        }
+        return Manager.Adapters[GUIGraphicsContext.DX9Device.DeviceCaps.AdapterOrdinal].CurrentDisplayMode.RefreshRate;
       }
 
-      return refreshRate;
+      return Manager.Adapters[GUIGraphicsContext.currentMonitorIdx].CurrentDisplayMode.RefreshRate;
     }
+
     /// <summary>
     /// Calculates the delay dependent on the refresh rate.
     /// </summary>
