@@ -62,6 +62,8 @@ namespace AtmoLight
      // MadVR
     public static bool useMadVideoRenderer;
     public static bool useEVRenderer;
+    public static bool useEVRMadVRForTV;
+    public static bool madVRRevertToEVR;
 
     // Atmowin
     public static bool atmoWinTarget;
@@ -429,6 +431,7 @@ namespace AtmoLight
 
         useMadVideoRenderer = reader.GetValueAsBool("general", "useMadVideoRenderer", false);
         useEVRenderer = reader.GetValueAsBool("general", "useEVRenderer", true);
+        useEVRMadVRForTV = reader.GetValueAsBool("general", "useEVRMadVRForTV", false);
       }
     }
     public static void SaveSettings()

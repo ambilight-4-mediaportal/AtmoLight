@@ -510,6 +510,16 @@ namespace AtmoLight
     {
       try
       {
+        // Check if MediaType is TV and MadVR has fallback to EVR enabled for it
+        if (Settings.useMadVideoRenderer && type == g_Player.MediaType.TV && Settings.useEVRMadVRForTV)
+        {
+          Settings.madVRRevertToEVR = true;
+        }
+        else
+        {
+          Settings.madVRRevertToEVR = false;
+        }
+
         if (type == g_Player.MediaType.Video || type == g_Player.MediaType.TV || type == g_Player.MediaType.Recording ||
             type == g_Player.MediaType.Unknown || (type == g_Player.MediaType.Music && filename.Contains(".mkv")))
         {
@@ -673,8 +683,15 @@ namespace AtmoLight
         }
       }
 
-      // Check if renderer is MadVR
-      _atmoLightDevice = Settings.useMadVideoRenderer ? GUIGraphicsContext.DX9DeviceMadVr : GUIGraphicsContext.DX9Device;
+      // Check if renderer is MadVR or EVR
+      if (Settings.useMadVideoRenderer && !Settings.madVRRevertToEVR)
+      {
+        _atmoLightDevice = GUIGraphicsContext.DX9DeviceMadVr;
+      }
+      else
+      {
+        _atmoLightDevice = GUIGraphicsContext.DX9Device;
+      }
 
       if (rgbSurface == null && _atmoLightDevice != null)
       {
