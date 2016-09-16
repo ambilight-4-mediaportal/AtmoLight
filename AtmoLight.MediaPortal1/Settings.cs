@@ -10,6 +10,7 @@ namespace AtmoLight
   public class Settings
   {
     #region Fields
+
     // Generic
     public static ContentEffect effectVideo;
     public static ContentEffect effectMusic;
@@ -57,6 +58,10 @@ namespace AtmoLight
     public static bool blackbarDetectionLinkAreas;
     public static bool remoteApiServer;
     public static bool doNotShowConnectionErrorsDuringPlayback;
+
+     // MadVR
+    public static bool useMadVideoRenderer;
+    public static bool useEVRenderer;
 
     // Atmowin
     public static bool atmoWinTarget;
@@ -420,6 +425,10 @@ namespace AtmoLight
         blackbarDetectionLinkAreas = reader.GetValueAsBool("atmolight", "blackbarDetectionLinkAreas", true);
         remoteApiServer = reader.GetValueAsBool("atmolight", "remoteApiServer", false);
         doNotShowConnectionErrorsDuringPlayback = reader.GetValueAsBool("atmolight", "doNotShowConnectionErrorsDuringPlayback", false);
+
+
+        useMadVideoRenderer = reader.GetValueAsBool("general", "useMadVideoRenderer", false);
+        useEVRenderer = reader.GetValueAsBool("general", "useEVRenderer", true);
       }
     }
     public static void SaveSettings()

@@ -72,6 +72,9 @@ namespace AtmoLight
     // Core object
     private Core coreObject;
 
+    // D3D Device
+    private Device _atmoLightDevice;
+
     #endregion
 
     #region Plugin Ctor/Start/Stop
@@ -670,9 +673,12 @@ namespace AtmoLight
         }
       }
 
-      if (rgbSurface == null)
+      // Check if renderer is MadVR
+      _atmoLightDevice = Settings.useMadVideoRenderer ? GUIGraphicsContext.DX9DeviceMadVr : GUIGraphicsContext.DX9Device;
+
+      if (rgbSurface == null && _atmoLightDevice != null)
       {
-        rgbSurface = GUIGraphicsContext.DX9Device.CreateRenderTarget(coreObject.GetCaptureWidth(),
+        rgbSurface = _atmoLightDevice.CreateRenderTarget(coreObject.GetCaptureWidth(),
           coreObject.GetCaptureHeight(), Microsoft.DirectX.Direct3D.Format.A8R8G8B8,
           MultiSampleType.None, 0, true);
       }
@@ -682,22 +688,33 @@ namespace AtmoLight
         {
           if (Settings.sbs3dOn)
           {
-            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width / 2, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
+            if (rgbSurface != null && _atmoLightDevice != null && pSurface != null)
+            {
+              VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width/2, height, (IntPtr) rgbSurface.UnmanagedComPointer,
+                coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
+            }
           }
           else
           {
-            VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr)rgbSurface.UnmanagedComPointer,
-              coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
+            if (rgbSurface != null && _atmoLightDevice != null && pSurface != null)
+            {
+              VideoSurfaceToRGBSurfaceExt(new IntPtr(pSurface), width, height, (IntPtr) rgbSurface.UnmanagedComPointer,
+                coreObject.GetCaptureWidth(), coreObject.GetCaptureHeight());
+            }
           }
 
-          Microsoft.DirectX.GraphicsStream stream =
-            SurfaceLoader.SaveToStream(Microsoft.DirectX.Direct3D.ImageFileFormat.Bmp, rgbSurface);
+          if (rgbSurface != null && _atmoLightDevice != null)
+          {
+            using (
+              Microsoft.DirectX.GraphicsStream stream =
+                SurfaceLoader.SaveToStream(Microsoft.DirectX.Direct3D.ImageFileFormat.Bmp, rgbSurface))
+            {
+              coreObject.CalculateBitmap(stream);
 
-          coreObject.CalculateBitmap(stream);
-
-          stream.Close();
-          stream.Dispose();
+              stream.Close();
+              stream.Dispose();
+            }
+          }
         }
         catch (Exception ex)
         {
