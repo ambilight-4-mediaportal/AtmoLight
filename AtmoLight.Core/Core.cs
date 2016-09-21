@@ -794,7 +794,7 @@ namespace AtmoLight
             {
               foreach (var target in targets)
               {
-                if (target.AllowDelay && target.IsConnected() && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+                if (target.AllowDelay && target.IsConnected())
                 {
                   target.ChangeImage(data.pixelData, data.bmiInfoHeader);
                 }
@@ -805,7 +805,7 @@ namespace AtmoLight
           {
             data = (ChangeImageData)targetChangeImageQueue.Peek();
 
-            if (IsDelayEnabled() && !data.force && GetCurrentEffect() == ContentEffect.MediaPortalLiveMode && IsAllowDelayTargetPresent())
+            if (IsDelayEnabled() && !data.force && IsAllowDelayTargetPresent())
             {
               bool frameTickMatched = false;
               long tickCount = Win32API.GetTickCount();
@@ -837,7 +837,7 @@ namespace AtmoLight
                 }
               }
             }
-            else if (GetCurrentEffect() == ContentEffect.MediaPortalLiveMode)
+            else
             {
               data = (ChangeImageData)targetChangeImageQueue.Dequeue();
 
@@ -845,7 +845,7 @@ namespace AtmoLight
               {
                 foreach (var target in targets)
                 {
-                  if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled() || GetCurrentEffect() != ContentEffect.MediaPortalLiveMode))
+                  if (target.IsConnected() && (target.AllowDelay || !data.force || !IsDelayEnabled()))
                   {
                     target.ChangeImage(data.pixelData, data.bmiInfoHeader);
                   }
