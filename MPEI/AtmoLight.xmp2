@@ -537,38 +537,17 @@ For this plugin to work you will also need AtmoWin. It will be installed automat
 
 
 MediaPortal Versions older than 1.6 also need the MPCoreChanger Plugin installed.</ExtensionDescription>
-    <VersionDescription>Version 1.18.5.0
+    <VersionDescription>Version 1.18.6.0
 
-
-
-
-
-
-
-- Frames are now queued into 1 background worker, this has benefits to performance and resources
-
-
-
-- Delay handling has been improved and allows multiple references in config and context menu
-
-
-
-- Delay timing changes done in context menu are now saved
-
-
-
-- Further AmbiBox improvements
-
-
-
-- Hue now has a new option in its designated configuration target tab to disable theater mode for specific effects (currently VU only)
-
-
-
-- Hue theater can now be toggled on / off from the AtmoLight context menu, this setting is non-persistent so is restored to original after each Mediaportal restart</VersionDescription>
+- Hyperion handler improvements related to priority clearing
+- No longer shows Change Profile option for handlers not supporting it
+- Ambibox now has profile overview in Change profile menu
+- New option AtmoLight configuration to toggle displaying errors while video is playing
+- Refresh rate detection now more reliable
+- Fixed VU meter effects</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
-    <OnlineLocation>https://github.com/ambilight-4-mediaportal/Binaries/raw/master/AtmoLight%20for%20MediaPortal/AtmoLight_1.18.5.0.mpe1</OnlineLocation>
-    <ReleaseDate>2016-05-14T10:45:58</ReleaseDate>
+    <OnlineLocation>https://github.com/ambilight-4-mediaportal/Binaries/raw/master/AtmoLight%20for%20MediaPortal/AtmoLight_1.18.6.0.mpe1</OnlineLocation>
+    <ReleaseDate>2016-09-21T10:45:58</ReleaseDate>
     <Tags>atmowin, boblight, hue, hyperion, ambilight, leds, arduino, atmoduino, raspberry pi, sedu-board, teensy 2, ws2801, ws2811, ws2812, ws2812b, neopixels</Tags>
     <Location>..\Release\MP1\[Name]_[Version].mpe1</Location>
     <Params>
