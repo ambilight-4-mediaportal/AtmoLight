@@ -100,6 +100,7 @@
     <string name="BlackbarDetectionVertical">Schw. Balken Erkennung Vertikaler Scan</string>
     <string name="AdvancedOptions">Erweiterte Optionen</string>
     <string name="RemoteApiServer">Aktivieren Sie Remote- API-Server</string>
+	<string name="DoNotShowConnectionErrorsDuringPlayback">Zeigen Sie keine Verbindungsfehler während der Wiedergabe</string>  
   </SetupForm>
   <ContextMenu>
     <string name="LEDsOn">Schalte LEDs an</string>

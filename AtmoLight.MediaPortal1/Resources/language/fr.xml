@@ -100,6 +100,7 @@
     <string name="BlackbarDetectionVertical">Blackbar Detection scan vertical</string>
     <string name="AdvancedOptions">Options avancées</string>
     <string name="RemoteApiServer">Autoriser le contrôle à distance</string>
+	<string name="DoNotShowConnectionErrorsDuringPlayback">Ne pas afficher les erreurs de connexion lors de la lecture</string>  
   </SetupForm>
   <ContextMenu>
     <string name="LEDsOn">LEDs > ON</string>

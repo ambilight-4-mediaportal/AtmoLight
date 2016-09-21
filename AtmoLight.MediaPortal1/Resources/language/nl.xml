@@ -194,8 +194,8 @@
     <string name="All">Alle</string>
     <string name="Off">Uit</string>
     <string name="LiveviewGroup">Hue - stel actieve live view groep in</string>
-    <string name="ToggleTheatherModeOff">Hue - turn OFF theater mode</string>
-    <string name="ToggleTheatherModeOn">Hue - turn ON theater mode</string>
+    <string name="ToggleTheatherModeOff">Hue - theater modus UIT</string>
+    <string name="ToggleTheatherModeOn">Hue - theater modus AAN</string>
     <string name="DisableAllGroups">Schakel uit voor alle groepen</string>
     <string name="StaticColorGroup">Hue - stel statische kleur in voor groep</string>
     <string name="SelectStaticColorGroup">Hue - selecteer statische kleur voor groep</string>
