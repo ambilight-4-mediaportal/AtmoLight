@@ -39,18 +39,19 @@ namespace AtmoLight.Targets
       }
     }
 
-    private static TcpClient Socket = new TcpClient();
-    private Stream Stream;
-    private bool isInit;
-    private volatile bool initLock;
-    private int hyperionReconnectCounter;
-    private string hyperionpreviousHostname = "";
-    private bool priorityCleared;
-    private bool priorityClearing;
+    private static TcpClient _socket = new TcpClient();
+    private Stream _stream;
+    private bool _isInit;
+    private bool _isSending = false;
+    private volatile bool _initLock;
+    private int _hyperionReconnectCounter;
+    private string _hyperionpreviousHostname = "";
+    private bool _priorityCleared;
+    private bool _priorityClearing;
 
-    private Stopwatch liveReconnectSW = new Stopwatch();
+    private readonly Stopwatch _liveReconnectSw = new Stopwatch();
 
-    private Core coreObject;
+    private readonly Core coreObject;
 
     #endregion
 
@@ -64,12 +65,12 @@ namespace AtmoLight.Targets
     {
       try
       {
-        if (!initLock)
+        if (!_initLock)
         {
           Log.Debug("HyperionHandler - Initialising");
-          hyperionReconnectCounter = 0;
-          initLock = true;
-          isInit = true;
+          _hyperionReconnectCounter = 0;
+          _initLock = true;
+          _isInit = true;
 
           // Check if Hyperion is IP or hostname and resolve
           HyperionHostnameCheckResolve();
@@ -117,7 +118,7 @@ namespace AtmoLight.Targets
     public void Dispose()
     {
       //If connected close any remaining sockets and enabled set effect.
-      if (Socket.Connected)
+      if (_socket.Connected)
       {
         if (coreObject.GetCurrentEffect() == ContentEffect.LEDsDisabled || coreObject.GetCurrentEffect() == ContentEffect.Undefined)
         {
@@ -134,12 +135,12 @@ namespace AtmoLight.Targets
     }
     public bool IsConnected()
     {
-      if (initLock)
+      if (_initLock)
       {
         return false;
       }
 
-      return Socket.Connected;
+      return _socket.Connected;
     }
 
     private void Connect()
@@ -156,15 +157,15 @@ namespace AtmoLight.Targets
         Log.Error("HyperionHandler - Exception: {0}", e.Message);
 
         //Reset Init lock
-        initLock = false;
-        isInit = false;
+        _initLock = false;
+        _isInit = false;
       }
     }
     private void liveReconnect()
     {
       try
       {
-        Thread t = new Thread(liveReconnectThread);
+        Thread t = new Thread(LiveReconnectThread);
         t.IsBackground = true;
         t.Start();
       }
@@ -174,8 +175,8 @@ namespace AtmoLight.Targets
         Log.Error("HyperionHandler - Exception: {0}", e.Message);
 
         //Reset Init lock
-        initLock = false;
-        isInit = false;
+        _initLock = false;
+        _isInit = false;
       }
     }
 
@@ -183,9 +184,9 @@ namespace AtmoLight.Targets
     {
       try
       {
-        while (hyperionReconnectCounter <= coreObject.hyperionReconnectAttempts)
+        while (_hyperionReconnectCounter <= coreObject.hyperionReconnectAttempts)
         {
-          if (!Socket.Connected)
+          if (!_socket.Connected)
           {
             try
             {
@@ -197,11 +198,11 @@ namespace AtmoLight.Targets
               //Close old socket and create new TCP client which allows it to reconnect when calling Connect()
               Disconnect();
 
-              Socket = new TcpClient();
-              Socket.SendTimeout = 5000;
-              Socket.ReceiveTimeout = 5000;
-              Socket.Connect(coreObject.hyperionIP, coreObject.hyperionPort);
-              Stream = Socket.GetStream();
+              _socket = new TcpClient();
+              _socket.SendTimeout = 5000;
+              _socket.ReceiveTimeout = 5000;
+              _socket.Connect(coreObject.hyperionIP, coreObject.hyperionPort);
+              _stream = _socket.GetStream();
 
               if (!coreObject.hyperionLiveReconnect)
               {
@@ -228,10 +229,10 @@ namespace AtmoLight.Targets
             else
             {
               //Increment times tried
-              hyperionReconnectCounter++;
+              _hyperionReconnectCounter++;
 
               //Show error if reconnect attempts exhausted
-              if (hyperionReconnectCounter > coreObject.hyperionReconnectAttempts && !Socket.Connected)
+              if (_hyperionReconnectCounter > coreObject.hyperionReconnectAttempts && !_socket.Connected)
               {
                 Log.Error("HyperionHandler - Error while connecting and connection attempts exhausted");
                 coreObject.NewConnectionLost(Name);
@@ -251,20 +252,20 @@ namespace AtmoLight.Targets
         }
 
         //Reset Init lock
-        initLock = false;
+        _initLock = false;
 
         //Reset counter when we have finished
-        hyperionReconnectCounter = 0;
+        _hyperionReconnectCounter = 0;
 
         //On first initialize set the effect after we are done trying to connect
-        if (isInit && Socket.Connected)
+        if (_isInit && _socket.Connected)
         {
           ChangeEffect(coreObject.GetCurrentEffect());
-          isInit = false;
+          _isInit = false;
         }
-        else if (isInit)
+        else if (_isInit)
         {
-          isInit = false;
+          _isInit = false;
         }
       }
       catch (Exception e)
@@ -273,31 +274,31 @@ namespace AtmoLight.Targets
         Log.Error("HyperionHandler - Exception: {0}", e.Message);
 
         //Reset Init lock
-        initLock = false;
-        isInit = false;
+        _initLock = false;
+        _isInit = false;
       }
     }
-    private void liveReconnectThread()
+    private void LiveReconnectThread()
     {
-      liveReconnectSW.Start();
+      _liveReconnectSw.Start();
 
       //Start live reconnect with set delay in config
       while (coreObject.hyperionLiveReconnect)
       {
-        if (liveReconnectSW.ElapsedMilliseconds >= coreObject.hyperionReconnectDelay && Socket.Connected == false)
+        if (_liveReconnectSw.ElapsedMilliseconds >= coreObject.hyperionReconnectDelay && _socket.Connected == false)
         {
           Connect();
-          liveReconnectSW.Restart();
+          _liveReconnectSw.Restart();
         }
       }
 
-      liveReconnectSW.Stop();
+      _liveReconnectSw.Stop();
     }
     private void Disconnect()
     {
       try
       {
-        Socket.Close();
+        _socket.Close();
       }
       catch (Exception e)
       {
@@ -316,7 +317,7 @@ namespace AtmoLight.Targets
       {
         case ContentEffect.StaticColor:
 
-          if (!priorityCleared)
+          if (!_priorityCleared)
           {
             //Clear live priority channel
             ClearPriority(coreObject.hyperionPriority);
@@ -334,7 +335,7 @@ namespace AtmoLight.Targets
           }
           break;
         case ContentEffect.MediaPortalLiveMode:
-          priorityCleared = false;
+          _priorityCleared = false;
           break;
         case ContentEffect.LEDsDisabled:
           ClearPrioritiesAtmoLight(250);
@@ -381,40 +382,47 @@ namespace AtmoLight.Targets
 
     public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
     {
-      if (!IsConnected() && !priorityClearing)
+      if (!IsConnected() && !_priorityClearing)
       {
         return;
       }
-      // Hyperion expects the bytestring to be the size of 3*width*height.
-      // So 3 bytes per pixel, as in RGB.
-      // Given pixeldata however is 4 bytes per pixel, as in RGBA.
-      // So we need to remove the last byte per pixel.
-      byte[] newpixeldata = new byte[coreObject.GetCaptureHeight() * coreObject.GetCaptureWidth() * 3];
-      int x = 0;
-      int i = 0;
-      while (i <= (newpixeldata.GetLength(0) - 2))
+
+      if (!_isSending)
       {
-        newpixeldata[i] = pixeldata[i + x + 2];
-        newpixeldata[i + 1] = pixeldata[i + x + 1];
-        newpixeldata[i + 2] = pixeldata[i + x];
-        i += 3;
-        x++;
+        _isSending = true;
+
+        // Hyperion expects the bytestring to be the size of 3*width*height.
+        // So 3 bytes per pixel, as in RGB.
+        // Given pixeldata however is 4 bytes per pixel, as in RGBA.
+        // So we need to remove the last byte per pixel.
+        byte[] newpixeldata = new byte[coreObject.GetCaptureHeight() * coreObject.GetCaptureWidth() * 3];
+        int x = 0;
+        int i = 0;
+        while (i <= (newpixeldata.GetLength(0) - 2))
+        {
+          newpixeldata[i] = pixeldata[i + x + 2];
+          newpixeldata[i + 1] = pixeldata[i + x + 1];
+          newpixeldata[i + 2] = pixeldata[i + x];
+          i += 3;
+          x++;
+        }
+
+        ImageRequest imageRequest = ImageRequest.CreateBuilder()
+          .SetImagedata(Google.ProtocolBuffers.ByteString.CopyFrom(newpixeldata))
+          .SetImageheight(coreObject.GetCaptureHeight())
+          .SetImagewidth(coreObject.GetCaptureWidth())
+          .SetPriority(coreObject.hyperionPriority)
+          .SetDuration(-1)
+          .Build();
+
+        HyperionRequest request = HyperionRequest.CreateBuilder()
+          .SetCommand(HyperionRequest.Types.Command.IMAGE)
+          .SetExtension(ImageRequest.ImageRequest_, imageRequest)
+          .Build();
+
+        Thread t = new Thread(() => SendRequest(request)) { IsBackground = true };
+        t.Start();
       }
-
-      ImageRequest imageRequest = ImageRequest.CreateBuilder()
-        .SetImagedata(Google.ProtocolBuffers.ByteString.CopyFrom(newpixeldata))
-        .SetImageheight(coreObject.GetCaptureHeight())
-        .SetImagewidth(coreObject.GetCaptureWidth())
-        .SetPriority(coreObject.hyperionPriority)
-        .SetDuration(-1)
-        .Build();
-
-      HyperionRequest request = HyperionRequest.CreateBuilder()
-        .SetCommand(HyperionRequest.Types.Command.IMAGE)
-        .SetExtension(ImageRequest.ImageRequest_, imageRequest)
-        .Build();
-
-      SendRequest(request);
     }
 
     public void ClearPriority(int priority)
@@ -428,7 +436,7 @@ namespace AtmoLight.Targets
 
         if (priority == coreObject.hyperionPriority)
         {
-          priorityCleared = true;
+          _priorityCleared = true;
         }
 
         ClearRequest clearRequest = ClearRequest.CreateBuilder()
@@ -451,7 +459,7 @@ namespace AtmoLight.Targets
 
     public void ClearPrioritiesAtmoLight(int delay)
     {
-      priorityClearing = true;
+      _priorityClearing = true;
 
       ClearPriority(coreObject.hyperionPriorityStaticColor);
       Thread.Sleep(delay);
@@ -463,7 +471,7 @@ namespace AtmoLight.Targets
       Thread.Sleep(delay);
       ChangeColor(0, 0, 0, 1000, false);
 
-      priorityClearing = false;
+      _priorityClearing = false;
     }
 
     public void ClearAll()
@@ -483,7 +491,7 @@ namespace AtmoLight.Targets
     {
       try
       {
-        if (Socket.Connected)
+        if (_socket.Connected)
         {
           int size = request.SerializedSize;
 
@@ -494,20 +502,24 @@ namespace AtmoLight.Targets
           header[3] = (byte)((size) & 0xFF);
 
           int headerSize = header.Count();
-          Stream.Write(header, 0, headerSize);
-          request.WriteTo(Stream);
-          Stream.Flush();
+          _stream.Write(header, 0, headerSize);
+          request.WriteTo(_stream);
+          _stream.Flush();
 
           // Enable reply message if needed (debugging only)
           //HyperionReply reply = receiveReply();
+          _isSending = false;
         }
       }
       catch (Exception e)
       {
         Log.Error("HyperionHandler - Error while sending proto request");
         Log.Error("HyperionHandler - Exception: {0}", e.Message);
-
-        ReInitialise(false);
+        ReInitialise();
+      }
+      finally
+      {
+        _isSending = false;
       }
     }
 
@@ -515,7 +527,7 @@ namespace AtmoLight.Targets
     {
       try
       {
-        Stream input = Socket.GetStream();
+        Stream input = _socket.GetStream();
         byte[] header = new byte[4];
         input.Read(header, 0, 4);
         int size = (header[0] << 24) | (header[1] << 16) | (header[2] << 8) | (header[3]);
@@ -566,13 +578,13 @@ namespace AtmoLight.Targets
         string ipOrHostname = "";
         //Log.Error("HyperionHandler - checking and resolving hostname to IP");
 
-        if (hyperionpreviousHostname == "")
+        if (_hyperionpreviousHostname == "")
         {
           ipOrHostname = coreObject.hyperionIP;
         }
         else
         {
-          ipOrHostname = hyperionpreviousHostname;
+          ipOrHostname = _hyperionpreviousHostname;
         }
 
         IPHostEntry hostEntry = Dns.GetHostEntry(ipOrHostname);
@@ -598,7 +610,7 @@ namespace AtmoLight.Targets
             }
 
             // Store current hostname in case we need it later to lookup on reInit (i.e. IP changed)
-            hyperionpreviousHostname = coreObject.hyperionIP;
+            _hyperionpreviousHostname = coreObject.hyperionIP;
 
             // Replace hostname with IP address
             coreObject.hyperionIP = resolvedIP;

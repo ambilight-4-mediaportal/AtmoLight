@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -281,6 +282,7 @@ namespace AtmoLight
     /// Generate all targets and initialise them.
     /// </summary>
     /// <returns></returns>
+    BackgroundWorker TargetChangeImageWorker = new BackgroundWorker();
 
     public void Initialise()
     {
@@ -294,9 +296,11 @@ namespace AtmoLight
 
       // Start Target change image worker thread
       targetChangeImageEnabled = true;
-      Thread t = new Thread(TargetChangeImageWorker);
-      t.IsBackground = true;
-      t.Start();
+
+      TargetChangeImageWorker.WorkerReportsProgress = false;
+      TargetChangeImageWorker.WorkerSupportsCancellation = true;
+      TargetChangeImageWorker.DoWork += TargetChangeDoWork;
+      TargetChangeImageWorker.RunWorkerAsync();
 
       // Start API server
       apiServerLock = false;
@@ -754,7 +758,7 @@ namespace AtmoLight
       ChangeImageData data = new ChangeImageData(pixelData, bmiInfoHeader, GetDelayTick(), force);
       targetChangeImageQueue.Enqueue(data);
     }
-    private void TargetChangeImageWorker()
+    private void TargetChangeDoWork(object sender, DoWorkEventArgs e)
     {
       ChangeImageData data;
 
