@@ -246,6 +246,8 @@ namespace AtmoLight
       coreObject.hyperionReconnectAttempts = Settings.hyperionReconnectAttempts;
       coreObject.hyperionPriorityStaticColor = Settings.hyperionPriorityStaticColor;
       coreObject.hyperionLiveReconnect = Settings.hyperionLiveReconnect;
+      coreObject.hyperionUseClearViaJSON = Settings.hyperionUseClearViaJSON;
+
       if (Settings.hyperionTarget)
       {
         coreObject.AddTarget(Target.Hyperion);
@@ -952,6 +954,12 @@ namespace AtmoLight
         dlg.Add(new GUIListItem(Localization.Translate("ContextMenu", "Reinitialise")));
       }
 
+      // Hyperion controls
+      if (coreObject.GetTarget(Target.Hyperion) != null)
+      {
+        dlg.Add(new GUIListItem("Hyperion"));
+      }
+
       // Hue set active liveview group
       if (coreObject.GetTarget(Target.Hue) != null)
       {
@@ -1028,6 +1036,9 @@ namespace AtmoLight
       {
         AtmoLightDisabledByUser = true;
         coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+        coreObject.targetChangeImageQueue.Clear();
+        coreObject.ChangeEffect(ContentEffect.LEDsDisabled);
+        coreObject.targetChangeImageQueue.Clear();
       }
       // Change Effect
       else if (dlg.SelectedLabelText == Localization.Translate("ContextMenu", "ChangeEffect"))
@@ -1394,9 +1405,41 @@ namespace AtmoLight
         coreObject.ReInitialise();
       }
 
-      // Hue set active liveview group
-      if (dlg.SelectedLabelText == Localization.Translate("Hue", "LiveviewGroup"))
+            // Hue set active liveview group
+      if (dlg.SelectedLabelText == "Hyperion")
       {
+        GUIDialogMenu dlgHyperionControl =
+          (GUIDialogMenu) GUIWindowManager.GetWindow((int) GUIWindow.Window.WINDOW_DIALOG_MENU);
+        dlgHyperionControl.Reset();
+        dlgHyperionControl.SetHeading("Hyperion");
+        dlgHyperionControl.Add(Localization.Translate("Hyperion", "ClearAllPriorities"));
+        dlgHyperionControl.Add(Localization.Translate("Hyperion", "ClearAtmoLightPriorities"));
+
+        dlgHyperionControl.SelectedLabel = 0;
+        dlgHyperionControl.DoModal(GUIWindowManager.ActiveWindow);
+
+        if (dlgHyperionControl.SelectedLabel >= 0)
+        {
+          var hyperionTarget = coreObject.GetTarget(Target.Hyperion) as AtmoLight.Targets.HyperionHandler;
+          if (hyperionTarget == null)
+            return;
+
+          switch (dlgHyperionControl.SelectedLabel)
+          {
+            case 0:
+              hyperionTarget.ClearAll();
+              hyperionTarget.ClearPriorityViaJson(true);
+              break;
+            case 1:
+              hyperionTarget.ClearPrioritiesAtmoLight(250);
+              break;
+          }
+        }
+      }
+
+      // Hue set active liveview group
+        if (dlg.SelectedLabelText == Localization.Translate("Hue", "LiveviewGroup"))
+        {
         GUIDialogMenu dlgHueSetActiveGroup =
           (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
         dlgHueSetActiveGroup.Reset();

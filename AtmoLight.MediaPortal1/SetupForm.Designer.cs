@@ -38,6 +38,7 @@
       this.openFileDialog3 = new System.Windows.Forms.OpenFileDialog();
       this.tabPageHyperion = new System.Windows.Forms.TabPage();
       this.grpHyperionPrioritySettings = new System.Windows.Forms.GroupBox();
+      this.chkHyperionAlternativeClearPriority = new System.Windows.Forms.CheckBox();
       this.lblHyperionPriorityStaticColor = new System.Windows.Forms.Label();
       this.tbHyperionPriorityStaticColor = new System.Windows.Forms.TextBox();
       this.lblHyperionPriority = new System.Windows.Forms.Label();
@@ -112,6 +113,7 @@
       this.cbVideo = new System.Windows.Forms.ComboBox();
       this.lblVidTvRec = new System.Windows.Forms.Label();
       this.grpPluginOption = new System.Windows.Forms.GroupBox();
+      this.ckDoNotShowConnectionErrorsDuringPlayback = new System.Windows.Forms.CheckBox();
       this.ckMonitorWindowState = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionVertical = new System.Windows.Forms.CheckBox();
       this.cbBlackbarDetectionHorizontal = new System.Windows.Forms.CheckBox();
@@ -294,7 +296,6 @@
       this.openFileDialog5 = new System.Windows.Forms.OpenFileDialog();
       this.cbLanguage = new System.Windows.Forms.ComboBox();
       this.lblLanguage = new System.Windows.Forms.Label();
-      this.ckDoNotShowConnectionErrorsDuringPlayback = new System.Windows.Forms.CheckBox();
       this.tabPageHyperion.SuspendLayout();
       this.grpHyperionPrioritySettings.SuspendLayout();
       this.grpHyperionNetworkSettings.SuspendLayout();
@@ -401,16 +402,26 @@
       // 
       // grpHyperionPrioritySettings
       // 
+      this.grpHyperionPrioritySettings.Controls.Add(this.chkHyperionAlternativeClearPriority);
       this.grpHyperionPrioritySettings.Controls.Add(this.lblHyperionPriorityStaticColor);
       this.grpHyperionPrioritySettings.Controls.Add(this.tbHyperionPriorityStaticColor);
       this.grpHyperionPrioritySettings.Controls.Add(this.lblHyperionPriority);
       this.grpHyperionPrioritySettings.Controls.Add(this.tbHyperionPriority);
       this.grpHyperionPrioritySettings.Location = new System.Drawing.Point(10, 175);
       this.grpHyperionPrioritySettings.Name = "grpHyperionPrioritySettings";
-      this.grpHyperionPrioritySettings.Size = new System.Drawing.Size(820, 75);
+      this.grpHyperionPrioritySettings.Size = new System.Drawing.Size(820, 103);
       this.grpHyperionPrioritySettings.TabIndex = 10;
       this.grpHyperionPrioritySettings.TabStop = false;
       this.grpHyperionPrioritySettings.Text = "Priority";
+      // 
+      // chkHyperionAlternativeClearPriority
+      // 
+      this.chkHyperionAlternativeClearPriority.Location = new System.Drawing.Point(13, 73);
+      this.chkHyperionAlternativeClearPriority.Name = "chkHyperionAlternativeClearPriority";
+      this.chkHyperionAlternativeClearPriority.Size = new System.Drawing.Size(517, 27);
+      this.chkHyperionAlternativeClearPriority.TabIndex = 10;
+      this.chkHyperionAlternativeClearPriority.Text = "Use alternative priority clearing (for troublesome setups)";
+      this.chkHyperionAlternativeClearPriority.UseVisualStyleBackColor = true;
       // 
       // lblHyperionPriorityStaticColor
       // 
@@ -1289,6 +1300,16 @@
       this.grpPluginOption.TabIndex = 11;
       this.grpPluginOption.TabStop = false;
       this.grpPluginOption.Text = "Plugin options";
+      // 
+      // ckDoNotShowConnectionErrorsDuringPlayback
+      // 
+      this.ckDoNotShowConnectionErrorsDuringPlayback.AutoSize = true;
+      this.ckDoNotShowConnectionErrorsDuringPlayback.Location = new System.Drawing.Point(13, 434);
+      this.ckDoNotShowConnectionErrorsDuringPlayback.Name = "ckDoNotShowConnectionErrorsDuringPlayback";
+      this.ckDoNotShowConnectionErrorsDuringPlayback.Size = new System.Drawing.Size(249, 17);
+      this.ckDoNotShowConnectionErrorsDuringPlayback.TabIndex = 49;
+      this.ckDoNotShowConnectionErrorsDuringPlayback.Text = "Do not show connection errors during playback";
+      this.ckDoNotShowConnectionErrorsDuringPlayback.UseVisualStyleBackColor = true;
       // 
       // ckMonitorWindowState
       // 
@@ -3098,16 +3119,6 @@
       this.lblLanguage.TabIndex = 103;
       this.lblLanguage.Text = "Language:";
       // 
-      // ckDoNotShowConnectionErrorsDuringPlayback
-      // 
-      this.ckDoNotShowConnectionErrorsDuringPlayback.AutoSize = true;
-      this.ckDoNotShowConnectionErrorsDuringPlayback.Location = new System.Drawing.Point(13, 434);
-      this.ckDoNotShowConnectionErrorsDuringPlayback.Name = "ckDoNotShowConnectionErrorsDuringPlayback";
-      this.ckDoNotShowConnectionErrorsDuringPlayback.Size = new System.Drawing.Size(249, 17);
-      this.ckDoNotShowConnectionErrorsDuringPlayback.TabIndex = 49;
-      this.ckDoNotShowConnectionErrorsDuringPlayback.Text = "Do not show connection errors during playback";
-      this.ckDoNotShowConnectionErrorsDuringPlayback.UseVisualStyleBackColor = true;
-      // 
       // SetupForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3460,5 +3471,6 @@
     private System.Windows.Forms.Label lblLanguage;
     private System.Windows.Forms.CheckBox ckHueTheaterEnableVU;
     private System.Windows.Forms.CheckBox ckDoNotShowConnectionErrorsDuringPlayback;
+    private System.Windows.Forms.CheckBox chkHyperionAlternativeClearPriority;
   }
 }

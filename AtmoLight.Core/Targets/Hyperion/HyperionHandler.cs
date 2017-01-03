@@ -18,7 +18,7 @@ using ProtoBuffer;
 
 namespace AtmoLight.Targets
 {
-  class HyperionHandler : ITargets
+  public class HyperionHandler : ITargets
   {
     #region Fields
 
@@ -465,11 +465,11 @@ namespace AtmoLight.Targets
       Thread.Sleep(delay);
       ClearPriority(coreObject.hyperionPriority);
 
-      // Temporarily set color to black to make sure everything is cleared, workaround for Hyperion 1.* bug
-      Thread.Sleep(delay);
-      ChangeColor(0, 0, 0, 1000);
-      Thread.Sleep(delay);
-      ChangeColor(0, 0, 0, 1000, false);
+      // Clear all priorities
+      if (coreObject.hyperionUseClearViaJSON)
+      {
+        ClearPriorityViaJson(true);
+      }
 
       _priorityClearing = false;
     }
@@ -485,6 +485,35 @@ namespace AtmoLight.Targets
       .Build();
 
       SendRequest(request);
+    }
+
+    public void ClearPriorityViaJson(bool clearAll)
+    {
+      try
+      {
+        using (var socket = new TcpClient(coreObject.hyperionIP, 19444))
+        {
+          byte[] body = Encoding.UTF8.GetBytes("{\"color\": [0, 0, 0], \"command\": \"color\", \"priority\": "+coreObject.hyperionPriority+"}" +
+                                     Environment.NewLine);
+
+          if (clearAll)
+            body = Encoding.UTF8.GetBytes("{ \"command\": \"clearall\"}" + Environment.NewLine);
+             
+
+          using (var stream = socket.GetStream())
+          {
+            stream.Write(body, 0, body.Length);
+            byte[] buffer = new byte[1024];
+            int bytesRead = stream.Read(buffer, 0, buffer.Length);
+            //string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+            //Log.Error(response);
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        Log.Error("Error occured in ClearPriorityViaJson(): " + ex);
+      }
     }
 
     private void SendRequest(HyperionRequest request)

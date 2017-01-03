@@ -101,6 +101,7 @@ namespace AtmoLight
     public static int hyperionReconnectAttempts;
     public static int hyperionPriorityStaticColor;
     public static bool hyperionLiveReconnect;
+    public static bool hyperionUseClearViaJSON;
 
     // Hue
     public static bool hueTarget;
@@ -353,6 +354,7 @@ namespace AtmoLight
         hyperionPriority = reader.GetValueAsInt("atmolight", "hyperionPriority", 1);
         hyperionPriorityStaticColor = reader.GetValueAsInt("atmolight", "hyperionStaticColorPriority", 1);
         hyperionLiveReconnect = reader.GetValueAsBool("atmolight", "hyperionLiveReconnect", false);
+        hyperionUseClearViaJSON = reader.GetValueAsBool("atmolight", "hyperionUseClearViaJSON", false);
         hueExe = reader.GetValueAsString("atmolight", "hueExe", "");
         hueStart = reader.GetValueAsBool("atmolight", "hueStart", true);
         hueIsRemoteMachine = reader.GetValueAsBool("atmolight", "hueIsRemoteMachine", false);
@@ -489,6 +491,7 @@ namespace AtmoLight
         reader.SetValue("atmolight", "hyperionReconnectAttempts", (int)hyperionReconnectAttempts);
         reader.SetValue("atmolight", "hyperionStaticColorPriority", (int)hyperionPriorityStaticColor);
         reader.SetValueAsBool("atmolight", "hyperionLiveReconnect", hyperionLiveReconnect);
+        reader.SetValueAsBool("atmolight", "hyperionUseClearViaJSON", hyperionUseClearViaJSON);
         reader.SetValue("atmolight", "hueExe", hueExe);
         reader.SetValueAsBool("atmolight", "hueStart", hueStart);
         reader.SetValueAsBool("atmolight", "hueIsRemoteMachine", hueIsRemoteMachine);

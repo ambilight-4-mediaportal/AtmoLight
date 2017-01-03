@@ -144,7 +144,7 @@ namespace AtmoLight
     private int captureWidth = 64; // Default fallback capture width
     private int captureHeight = 48; // Default fallback capture height
     private static int targetChangeImageQueueSize = 240;
-    private Queue targetChangeImageQueue = new Queue();
+    public Queue targetChangeImageQueue = new Queue();
     private bool delayEnabled = false;
     private int delayTime = 0;
     private string gifPath = "";
@@ -225,6 +225,7 @@ namespace AtmoLight
     public int hyperionReconnectAttempts;
     public int hyperionPriorityStaticColor;
     public bool hyperionLiveReconnect;
+    public bool hyperionUseClearViaJSON;
 
     // Hue Settings Fields
     public string huePath;

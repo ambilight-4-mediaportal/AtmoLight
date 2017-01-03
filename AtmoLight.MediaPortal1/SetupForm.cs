@@ -110,6 +110,7 @@ namespace AtmoLight
       ckHyperionEnabled.Checked = Settings.hyperionTarget;
       ckHueEnabled.Checked = Settings.hueTarget;
       ckHyperionLiveReconnect.Checked = Settings.hyperionLiveReconnect;
+      chkHyperionAlternativeClearPriority.Checked = Settings.hyperionUseClearViaJSON;
       ckBoblightEnabled.Checked = Settings.boblightTarget;
       tbBoblightIP.Text = Settings.boblightIP;
       tbBoblightPort.Text = Settings.boblightPort.ToString();
@@ -176,6 +177,7 @@ namespace AtmoLight
       ckDoNotShowConnectionErrorsDuringPlayback.Checked = Settings.doNotShowConnectionErrorsDuringPlayback;
       cbBlackbarDetectionHorizontal.Checked = Settings.blackbarDetectionHorizontal;
       cbBlackbarDetectionVertical.Checked = Settings.blackbarDetectionVertical;
+
     }
 
     private void UpdateLanguageOnControls()
@@ -377,6 +379,7 @@ namespace AtmoLight
       ckHyperionLiveReconnect.Text = Localization.Translate("Hyperion", "LiveReconnect");
       grpHyperionNetworkSettings.Text = Localization.Translate("Common", "NetworkSettings");
       grpHyperionPrioritySettings.Text = Localization.Translate("Hyperion", "Priority");
+      chkHyperionAlternativeClearPriority.Text = Localization.Translate("Hyperion", "AlternativeClearPriority");
     }
 
     #endregion
@@ -1120,6 +1123,7 @@ namespace AtmoLight
       Settings.hyperionReconnectAttempts = int.Parse(tbHyperionReconnectAttempts.Text);
       Settings.hyperionPriorityStaticColor = int.Parse(tbHyperionPriorityStaticColor.Text);
       Settings.hyperionLiveReconnect = ckHyperionLiveReconnect.Checked;
+      Settings.hyperionUseClearViaJSON = chkHyperionAlternativeClearPriority.Checked;
       Settings.captureWidth = int.Parse(tbCaptureWidth.Text);
       Settings.captureHeight = int.Parse(tbCaptureHeight.Text);
       Settings.hueExe = edFileHue.Text;
